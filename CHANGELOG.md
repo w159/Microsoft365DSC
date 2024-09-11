@@ -23,6 +23,10 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Fixes an issue with invalid parameter definition.
     FIXES [#5015](https://github.com/microsoft/Microsoft365DSC/issues/5015)
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes an issue where the property `ValidOperatingSystemBuildRanges` was
+    not exported properly.
+    FIXES [#5030](https://github.com/microsoft/Microsoft365DSC/issues/5030)
 * IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10
   * Add missing `AccessTokens` parameter to `Export-TargetResource`
     FIXES [#5034](https://github.com/microsoft/Microsoft365DSC/issues/5034)
@@ -37,7 +41,7 @@
 * DEPENDENCIES
   * Added dependencies on Az.Accounts, Az.Resources and Az.SecurityInsights
   * Updated DSCParser to version 2.0.0.9.
-  * Updated MSCloudLoginAssistant to version 1.1.23.
+  * Updated MSCloudLoginAssistant to version 1.1.24.
 
 # 1.24.904.1
 
