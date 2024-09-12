@@ -55,11 +55,21 @@ function Get-TargetResource
     {
         $results = @{
             IsSingleInstance      = 'Yes'
-            AdvancedClassificationEnabled = [Boolean]$instance.AdvancedClassificationEnabled
-            BandwidthLimitEnabled         = [Boolean]$instance.BandwidthLimitEnabled
-            DailyBandwidthLimitInMB       = [int]$instance.DailyBandwidthLimitInMB
-            PathExclusion                 = [Array]$instance.PathExclusion
-            MacPathExclusion              = [Array]$instance.MacPathExclusion
+            AdvancedClassificationEnabled = [Boolean]$instance.EndpointDlpGlobalSettings.AdvancedClassificationEnabled
+            BandwidthLimitEnabled         = [Boolean]$instance.EndpointDlpGlobalSettings.BandwidthLimitEnabled
+            DailyBandwidthLimitInMB       = [int]$instance.EndpointDlpGlobalSettings.DailyBandwidthLimitInMB
+            PathExclusion                 = [Array]$instance.EndpointDlpGlobalSettings.PathExclusion
+            MacPathExclusion              = [Array]$instance.EndpointDlpGlobalSettings.MacPathExclusion
+            EvidenceStoreSettings         = "" <#{
+                "FileEvidenceIsEnabled": false,
+                "NumberOfDaysToRetain": 60,
+                "StorageAccounts": [],
+                "Store": "CustomerManaged"
+              }#>
+              NetworkPathEnforcementEnabled = [boolean]$instance.EndpointDlpGlobalSettings.NetworkPathEnforcementEnabled
+              NetworkPathExclusion = $instance.EndpointDlpGlobalSettings.NetworkPathExclusion
+              DlpAppGroups = $instance.DlpAppGroups
+              UnallowedApp = [Array]$instance.UnallowedApp
             Ensure                = 'Present'
             Credential            = $Credential
             ApplicationId         = $ApplicationId
