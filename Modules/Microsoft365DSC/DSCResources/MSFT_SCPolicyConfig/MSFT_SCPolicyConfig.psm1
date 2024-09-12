@@ -8,8 +8,6 @@ function Get-TargetResource
         [System.String]
         $IsSingleInstance = 'Yes',
 
-        ##TODO - Add the list of Parameters
-
         [Parameter()]
         [System.Management.Automation.PSCredential]
         $Credential,
@@ -53,23 +51,265 @@ function Get-TargetResource
     $nullResult = $PSBoundParameters
     try
     {
+        $instance = Get-PolicyConfig -ErrorAction Stop
+        $EndpointDlpGlobalSettingsValue = ConvertFrom-Json $instance.EndpointDlpGlobalSettings
+        $DlpPrinterGroupsObject = ConvertFrom-Json $instance.DlpPrinterGroups
+        $DlpAppGroupsObject = ConvertFrom-Json $instance.DlpAppGroups
+        $SiteGroupsObject = ConvertFrom-Json $instance.SiteGroups
+        $DLPRemovableMediaGroupsObject = ConvertFrom-Json $instance.DLPRemovableMediaGroups
+        $DlpNetworkShareGroupsObject = ConvertFrom-Json $instance.DlpNetworkShareGroups
+
+        # AdvancedClassificationEnabled
+        $AdvancedClassificationEnabledValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'AdvancedClassificationEnabled'}).Value
+
+        # BandwidthLimitEnabled
+        $BandwidthLimitEnabledValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'BandwidthLimitEnabledValue'}).Value
+
+        # DailyBandwidthLimitInMB
+        $DailyBandwidthLimitInMBValue = [UInt32]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'DailyBandwidthLimitInMB'}).Value
+
+        # PathExclusion
+        $PathExclusionValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'PathExclusion'}).Value
+
+        # MacPathExclusion
+        $MacPathExclusionValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'MacPathExclusion'}).Value
+
+        # MacPathExclusion
+        $MacPathExclusionValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'MacPathExclusion'}).Value
+
+        #EvidenceStoreSettings
+        $entry = $EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'EvidenceStoreSettings'}
+        if ($null -ne $entry)
+        {
+            $entry = ConvertFrom-Json $entry.Value
+            $EvidenceStoreSettingsValue = @{
+                FileEvidenceIsEnabled = $entry.FileEvidenceIsEnabled
+                NumberOfDaysToRetain  = [Uint32]$entry.NumberOfDaysToRetain
+                StorageAccounts       = [Array]$entry.StorageAccounts
+                Store                 = $entry.Store
+            }
+        }
+
+        # NetworkPathEnforcementEnabled
+        $NetworkPathEnforcementEnabledValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'NetworkPathEnforcementEnabled'}).Value
+
+        # NetworkPathExclusion
+        $NetworkPathExclusionValue = ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'NetworkPathExclusion'}).Value
+
+        # DlpAppGroups
+        $appsValue = @()
+        foreach ($appEntry in $DlpAppGroupsObject.Apps)
+        {
+            $entry = @{
+                ExecutableName = $appEntry.ExecutableName
+                Name           = $appEntry.Name
+                Quarantine     = [Boolean]$appEntry.Quarantine
+            }
+            $appsValue += $entry
+        }
+        $DlpAppGroupsValue = @{
+            Apps = $appsValue
+        }
+
+        # UnallowedApp
+        $entries = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'UnallowedApp'})
+        $UnallowedAppValue = @()
+        foreach ($entry in $entries)
+        {
+            $current = @{
+                Value      = $entry.Value
+                Executable = $entry.Executable
+            }
+            $UnallowedAppValue += $current
+        }
+
+        # IncludePredefinedUnallowedBluetoothApps
+        $IncludePredefinedUnallowedBluetoothAppsValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'IncludePredefinedUnallowedBluetoothApps'}).Value
+
+        # UnallowedBluetoothApp
+        $entries = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'UnallowedBluetoothApp'})
+        $UnallowedBluetoothAppValue = @()
+        foreach ($entry in $entries)
+        {
+            $current = @{
+                Value      = $entry.Value
+                Executable = $entry.Executable
+            }
+            $UnallowedBluetoothAppValue += $current
+        }
+
+        # UnallowedBrowser
+        $entries = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'UnallowedBrowser'})
+        $UnallowedBrowserValue = @()
+        foreach ($entry in $entries)
+        {
+            $current = @{
+                Value      = $entry.Value
+                Executable = $entry.Executable
+            }
+            $UnallowedBrowserValue += $current
+        }
+
+        # CloudAppMode
+        $CloudAppModeValue = ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'CloudAppMode'}).Value
+
+        # CloudAppRestrictionList
+        $CloudAppRestrictionListValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'CloudAppRestrictionList'}).Value
+
+        # SiteGroups
+        $SiteGroupsValue = @()
+        foreach ($siteGroup in $SiteGroupsObject)
+        {
+            $entry = @{
+                Id = $siteGroup.Id
+                Name = $siteGroup.Name
+            }
+
+            $addresses = @()
+            foreach ($address in $siteGroup.Addresses)
+            {
+                $addresses += @{
+                    MatchType    = $address.MatchType
+                    Url          = $address.Url
+                    AddressLower = $address.AddressLower
+                    AddressUpper = $address.AddressUpper
+                }
+            }
+            $entry.Add('Addresses', $addresses)
+            $SiteGroupsValue += $entry
+        }
+
+        # CustomBusinessJustificationNotification
+        $CustomBusinessJustificationNotificationValue = [Uint32]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'CustomBusinessJustificationNotification'}).Value
+
+        # BusinessJustificationList
+        $entities = ConvertFrom-Json ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'BusinessJustificationList'}).Value
+        $BusinessJustificationListValue = @()
+        foreach ($entity in $entities)
+        {
+            $current = @{
+                Id                = $entity.Id
+                Enable            = [Boolean]$entity.Enable
+                justificationText = $entity.justificationText
+            }
+            $BusinessJustificationListValue += $current
+        }
+
+        # serverDlpEnabled
+        $serverDlpEnabledValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'serverDlpEnabled'}).Value
+
+        # AuditFileActivity
+        $AuditFileActivityValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'AuditFileActivity'}).Value
+
+        # DlpPrinterGroups
+        $DlpPrinterGroupsValue = @{
+            groups = @()
+        }
+        foreach ($group in $DlpPrinterGroupsObject.groups)
+        {
+            $entry = @{
+                groupName = $group.groupName
+                groupId   = $group.groupId
+            }
+
+            $printers = @()
+            foreach ($printer in $printers)
+            {
+                $current = @{
+                    universalPrinter = [Boolean]$printer.universalPrinter
+                    usbPrinter       = [Boolean]$printer.usbPrinter
+                    usbPrinterId     = $printer.usbPrinterPID
+                    name             = $printer.name
+                    alias            = $printer.alias
+                    usbPrinterVID    = $printer.usbPrinterVID
+                    ipRange          = @{
+                        from = $printer.ipRange.from
+                        to   = $printer.ipRange.to
+                    }
+                    corporatePrinter = [Boolean]$printer.CorporatePrinter
+                    printToLocal     = [Boolean]$printer.printToLocal
+                    printToFile      = [Boolean]$printer.printToFile
+                }
+
+                $printers += $current
+            }
+            $entry.Add('printers', $printers)
+            $DlpPrinterGroupsValue.groups += $entry
+        }
+
+        # DLPRemovableMediaGroups
+        $DLPRemovableMediaGroupsValue = @{
+            groups = @()
+        }
+        foreach ($group in $DLPRemovableMediaGroupsObject.groups)
+        {
+            $entry = @{
+                groupName = $group.groupName
+            }
+
+            $medias = @()
+            foreach ($media in $group.removableMedia)
+            {
+                $current = @{
+                    deviceId = $media.deviceId
+                    removableMediaVID = $media.removableMediaVID
+                    name              = $media.name
+                    alias             = $media.alias
+                    removableMediaPID = $media.removableMediaPID
+                    instancePathId    = $media.instancePathId
+                    serialNumberId    = $media.serialNumberId
+                    hardwareId        = $media.hardwareId
+                }
+                $medias += $current
+            }
+            $entry.Add('removableMedia', $medias)
+
+            $DLPRemovableMediaGroupsValue.groups += $entry
+        }
+
+        # DlpNetworkShareGroups
+        $DlpNetworkShareGroupsValue = @{
+            groups = @()
+        }
+        foreach ($group in $DlpNetworkShareGroupsObject.groups)
+        {
+            $entry = @{
+                groupName    = $group.groupName
+                groupId      = $group.groupId
+                networkPaths = [Array]$group.networkPaths
+            }
+            $DlpNetworkShareGroupsValue.groups += $entry
+        }
+
         $results = @{
-            IsSingleInstance      = 'Yes'
-            AdvancedClassificationEnabled = [Boolean]$instance.EndpointDlpGlobalSettings.AdvancedClassificationEnabled
-            BandwidthLimitEnabled         = [Boolean]$instance.EndpointDlpGlobalSettings.BandwidthLimitEnabled
-            DailyBandwidthLimitInMB       = [int]$instance.EndpointDlpGlobalSettings.DailyBandwidthLimitInMB
-            PathExclusion                 = [Array]$instance.EndpointDlpGlobalSettings.PathExclusion
-            MacPathExclusion              = [Array]$instance.EndpointDlpGlobalSettings.MacPathExclusion
-            EvidenceStoreSettings         = "" <#{
-                "FileEvidenceIsEnabled": false,
-                "NumberOfDaysToRetain": 60,
-                "StorageAccounts": [],
-                "Store": "CustomerManaged"
-              }#>
-              NetworkPathEnforcementEnabled = [boolean]$instance.EndpointDlpGlobalSettings.NetworkPathEnforcementEnabled
-              NetworkPathExclusion = $instance.EndpointDlpGlobalSettings.NetworkPathExclusion
-              DlpAppGroups = $instance.DlpAppGroups
-              UnallowedApp = [Array]$instance.UnallowedApp
+            IsSingleInstance                        = 'Yes'
+            AdvancedClassificationEnabled           = $AdvancedClassificationEnabledValue
+            BandwidthLimitEnabled                   = $BandwidthLimitEnabledValue
+            DailyBandwidthLimitInMB                 = $DailyBandwidthLimitInMBValue
+            PathExclusion                           = $PathExclusionValue
+            MacPathExclusion                        = $MacPathExclusionValue
+            EvidenceStoreSettings                   = $EvidenceStoreSettingsValue
+            NetworkPathEnforcementEnabled           = $NetworkPathEnforcementEnabledValue
+            NetworkPathExclusion                    = $NetworkPathExclusionValue
+            DlpAppGroups                            = $DlpAppGroupsValue
+            UnallowedApp                            = $UnallowedAppValue
+            IncludePredefinedUnallowedBluetoothApps = $IncludePredefinedUnallowedBluetoothAppsValue
+            UnallowedBluetoothApp                   = $UnallowedBluetoothAppValue
+            UnallowedBrowser                        = $UnallowedBrowserValue
+            CloudAppMode                            = $CloudAppModeValue
+            CloudAppRestrictionList                 = $CloudAppRestrictionListValue
+            SiteGroups                              = $SiteGroupsValue
+            CustomBusinessJustificationNotification = $CustomBusinessJustificationNotificationValue
+            BusinessJustificationList               = $BusinessJustificationListValue
+            serverDlpEnabled                        = $serverDlpEnabledValue
+            AuditFileActivity                       = $AuditFileActivityValue
+            DlpPrinterGroups                        = $DlpPrinterGroupsValue
+            DLPRemovableMediaGroups                 = $DLPRemovableMediaGroupsValue
+            DlpNetworkShareGroups                   = $DlpNetworkShareGroupsValue
+            
+              <#VPNSettings = [Array]$EndpointDlpGlobalSettingsValue.VPNSettings <#
+                serverAddress = @('address1.com', 'address2.com')
+              #>
             Ensure                = 'Present'
             Credential            = $Credential
             ApplicationId         = $ApplicationId
@@ -304,7 +544,10 @@ function Export-TargetResource
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
         }
-
+        if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+        {
+            $Global:M365DSCExportResourceInstancesCount++
+        }
         $Results = Get-TargetResource @Params
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
             -Results $Results
