@@ -294,7 +294,7 @@ function Get-TargetResource
             EvidenceStoreSettings                   = $EvidenceStoreSettingsValue
             NetworkPathEnforcementEnabled           = $NetworkPathEnforcementEnabledValue
             NetworkPathExclusion                    = $NetworkPathExclusionValue
-            DlpAppGroups                            = $DlpAppGroupsValue
+            DLPAppGroups                            = $DlpAppGroupsValue
             UnallowedApp                            = $UnallowedAppValue
             IncludePredefinedUnallowedBluetoothApps = $IncludePredefinedUnallowedBluetoothAppsValue
             UnallowedBluetoothApp                   = $UnallowedBluetoothAppValue
@@ -306,9 +306,9 @@ function Get-TargetResource
             BusinessJustificationList               = $BusinessJustificationListValue
             serverDlpEnabled                        = $serverDlpEnabledValue
             AuditFileActivity                       = $AuditFileActivityValue
-            DlpPrinterGroups                        = $DlpPrinterGroupsValue
+            DLPPrinterGroups                        = $DlpPrinterGroupsValue
             DLPRemovableMediaGroups                 = $DLPRemovableMediaGroupsValue
-            DlpNetworkShareGroups                   = $DlpNetworkShareGroupsValue
+            DLPNetworkShareGroups                   = $DlpNetworkShareGroupsValue
             VPNSettings                             = $VPNSettingsValue
             Ensure                                  = 'Present'
             Credential                              = $Credential
@@ -579,7 +579,8 @@ function Export-TargetResource
         if ($null -ne $Results.DLPAppGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                                                                -ParameterName 'DLPAppGroups'
+                                                                -ParameterName 'DLPAppGroups' `
+                                                                -IsCIMArray:$true
         }
 
         $dscContent += $currentDSCBlock
