@@ -97,7 +97,7 @@ function Get-TargetResource
         $NetworkPathExclusionValue = ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'NetworkPathExclusion'}).Value
 
         # DlpAppGroups
-        $appsValue = @()
+        $DlpAppGroupsValue = @()
         foreach ($appEntry in $DlpAppGroupsObject.Apps)
         {
             $entry = @{
@@ -105,10 +105,7 @@ function Get-TargetResource
                 Name           = $appEntry.Name
                 Quarantine     = [Boolean]$appEntry.Quarantine
             }
-            $appsValue += $entry
-        }
-        $DlpAppGroupsValue = @{
-            Apps = $appsValue
+            $DlpAppGroupsValue += $entry
         }
 
         # UnallowedApp
@@ -281,6 +278,12 @@ function Get-TargetResource
             $DlpNetworkShareGroupsValue.groups += $entry
         }
 
+        # VPNSettings
+        $entity = ConvertFrom-Json ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'VPNSettings'}).Value
+        $VPNSettingsValue = @{
+            serverAddress = [Array]$entity.serverAddress
+        }
+
         $results = @{
             IsSingleInstance                        = 'Yes'
             AdvancedClassificationEnabled           = $AdvancedClassificationEnabledValue
@@ -306,17 +309,14 @@ function Get-TargetResource
             DlpPrinterGroups                        = $DlpPrinterGroupsValue
             DLPRemovableMediaGroups                 = $DLPRemovableMediaGroupsValue
             DlpNetworkShareGroups                   = $DlpNetworkShareGroupsValue
-            
-              <#VPNSettings = [Array]$EndpointDlpGlobalSettingsValue.VPNSettings <#
-                serverAddress = @('address1.com', 'address2.com')
-              #>
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            VPNSettings                             = $VPNSettingsValue
+            Ensure                                  = 'Present'
+            Credential                              = $Credential
+            ApplicationId                           = $ApplicationId
+            TenantId                                = $TenantId
+            CertificateThumbprint                   = $CertificateThumbprint
+            ManagedIdentity                         = $ManagedIdentity.IsPresent
+            AccessTokens                            = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -549,6 +549,17 @@ function Export-TargetResource
             $Global:M365DSCExportResourceInstancesCount++
         }
         $Results = Get-TargetResource @Params
+
+        if ($null -ne $Results.BusinessJustificationList)
+        {
+            $Results.BusinessJustificationList = ConvertTo-BusinessJustificationListString -ObjectHash $Results.BusinessJustificationList
+        }
+
+        if ($null -ne $Results.DLPAppGroups)
+        {
+            $Results.DLPAppGroups = ConvertTo-DLPAppGroupsString -ObjectHash $Results.DLPAppGroups
+        }
+
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
             -Results $Results
 
@@ -557,6 +568,20 @@ function Export-TargetResource
             -ModulePath $PSScriptRoot `
             -Results $Results `
             -Credential $Credential
+
+        if ($null -ne $Results.BusinessJustificationList)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'BusinessJustificationList' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.DLPAppGroups)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'DLPAppGroups'
+        }
+
         $dscContent += $currentDSCBlock
         Save-M365DSCPartialExport -Content $currentDSCBlock `
             -FileName $Global:PartialExportFileName
@@ -576,6 +601,59 @@ function Export-TargetResource
 
         return ''
     }
+}
+
+function ConvertTo-BusinessJustificationListString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigBusinessJustificationList")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            Id                = '$($instance.Id)'")
+        [void]$content.AppendLine("            Enable            = `$$($instance.Enable)")
+        [void]$content.AppendLine("            justificationText = '$($instance.Id)'")
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+
+function ConvertTo-DLPAppGroupsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigDLPAppGroups")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            ExecutableName    = '$($instance.ExecutableName)'")
+        [void]$content.AppendLine("            Name              = '$($instance.Name)'")
+        [void]$content.AppendLine("            Quarantine        = `$$($instance.Quarantine)")
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
 }
 
 Export-ModuleMember -Function *-TargetResource
