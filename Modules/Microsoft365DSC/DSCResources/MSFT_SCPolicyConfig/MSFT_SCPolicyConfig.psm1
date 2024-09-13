@@ -5,8 +5,101 @@ function Get-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $IsSingleInstance = 'Yes',
+        $IsSingleInstance,
+
+        [Parameter()]
+        [System.Boolean]
+        $AdvancedClassificationEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AuditFileActivity,
+
+        [Parameter()]
+        [System.Boolean]
+        $BandwidthLimitEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $BusinessJustificationList,
+
+        [Parameter()]
+        [System.String]
+        $CloudAppMode,
+
+        [Parameter()]
+        [System.String[]]
+        $CloudAppRestrictionList,
+
+        [Parameter()]
+        [System.UInt32]
+        $CustomBusinessJustificationNotification,
+
+        [Parameter()]
+        [System.UInt32]
+        $DailyBandwidthLimitInMB,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPAppGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPNetworkShareGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPPrinterGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPRemovableMediaGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.String[]]
+        $MacPathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $NetworkPathEnforcementEnabled,
+
+        [Parameter()]
+        [System.String]
+        $NetworkPathExclusion,
+
+        [Parameter()]
+        [System.String[]]
+        $PathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $serverDlpEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $SiteGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBluetoothApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBrowser,
+
+        [Parameter()]
+        [System.String[]]
+        $VPNSettings,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -98,12 +191,23 @@ function Get-TargetResource
 
         # DlpAppGroups
         $DlpAppGroupsValue = @()
-        foreach ($appEntry in $DlpAppGroupsObject.Apps)
+        foreach ($group in $DlpAppGroupsObject)
         {
             $entry = @{
-                ExecutableName = $appEntry.ExecutableName
-                Name           = $appEntry.Name
-                Quarantine     = [Boolean]$appEntry.Quarantine
+                Name        = $group.Name
+                Id          = $group.Id
+                Description = $group.Description
+                Apps        = @()
+            }
+
+            foreach ($appEntry in $group.Apps)
+            {
+                $app = @{
+                    ExecutableName = $appEntry.ExecutableName
+                    Name           = $appEntry.Name
+                    Quarantine     = [Boolean]$appEntry.Quarantine
+                }
+                $entry.Apps += $app
             }
             $DlpAppGroupsValue += $entry
         }
@@ -199,9 +303,7 @@ function Get-TargetResource
         $AuditFileActivityValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'AuditFileActivity'}).Value
 
         # DlpPrinterGroups
-        $DlpPrinterGroupsValue = @{
-            groups = @()
-        }
+        $DlpPrinterGroupsValue = @()
         foreach ($group in $DlpPrinterGroupsObject.groups)
         {
             $entry = @{
@@ -210,7 +312,7 @@ function Get-TargetResource
             }
 
             $printers = @()
-            foreach ($printer in $printers)
+            foreach ($printer in $group.printers)
             {
                 $current = @{
                     universalPrinter = [Boolean]$printer.universalPrinter
@@ -220,8 +322,8 @@ function Get-TargetResource
                     alias            = $printer.alias
                     usbPrinterVID    = $printer.usbPrinterVID
                     ipRange          = @{
-                        from = $printer.ipRange.from
-                        to   = $printer.ipRange.to
+                        fromAddress = $printer.ipRange.from
+                        toAddress   = $printer.ipRange.to
                     }
                     corporatePrinter = [Boolean]$printer.CorporatePrinter
                     printToLocal     = [Boolean]$printer.printToLocal
@@ -231,13 +333,11 @@ function Get-TargetResource
                 $printers += $current
             }
             $entry.Add('printers', $printers)
-            $DlpPrinterGroupsValue.groups += $entry
+            $DlpPrinterGroupsValue += $entry
         }
 
         # DLPRemovableMediaGroups
-        $DLPRemovableMediaGroupsValue = @{
-            groups = @()
-        }
+        $DLPRemovableMediaGroupsValue = @()
         foreach ($group in $DLPRemovableMediaGroupsObject.groups)
         {
             $entry = @{
@@ -261,13 +361,11 @@ function Get-TargetResource
             }
             $entry.Add('removableMedia', $medias)
 
-            $DLPRemovableMediaGroupsValue.groups += $entry
+            $DLPRemovableMediaGroupsValue += $entry
         }
 
         # DlpNetworkShareGroups
-        $DlpNetworkShareGroupsValue = @{
-            groups = @()
-        }
+        $DlpNetworkShareGroupsValue = @()
         foreach ($group in $DlpNetworkShareGroupsObject.groups)
         {
             $entry = @{
@@ -275,14 +373,12 @@ function Get-TargetResource
                 groupId      = $group.groupId
                 networkPaths = [Array]$group.networkPaths
             }
-            $DlpNetworkShareGroupsValue.groups += $entry
+            $DlpNetworkShareGroupsValue += $entry
         }
 
         # VPNSettings
         $entity = ConvertFrom-Json ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'VPNSettings'}).Value
-        $VPNSettingsValue = @{
-            serverAddress = [Array]$entity.serverAddress
-        }
+        $VPNSettingsValue = [Array]$entity.serverAddress
 
         $results = @{
             IsSingleInstance                        = 'Yes'
@@ -310,7 +406,6 @@ function Get-TargetResource
             DLPRemovableMediaGroups                 = $DLPRemovableMediaGroupsValue
             DLPNetworkShareGroups                   = $DlpNetworkShareGroupsValue
             VPNSettings                             = $VPNSettingsValue
-            Ensure                                  = 'Present'
             Credential                              = $Credential
             ApplicationId                           = $ApplicationId
             TenantId                                = $TenantId
@@ -338,17 +433,102 @@ function Set-TargetResource
     [CmdletBinding()]
     param
     (
-        ##TODO - Replace the PrimaryKey
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $PrimaryKey,
-
-        ##TODO - Add the list of Parameters
+        $IsSingleInstance,
 
         [Parameter()]
-        [ValidateSet('Present', 'Absent')]
+        [System.Boolean]
+        $AdvancedClassificationEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AuditFileActivity,
+
+        [Parameter()]
+        [System.Boolean]
+        $BandwidthLimitEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $BusinessJustificationList,
+
+        [Parameter()]
         [System.String]
-        $Ensure = 'Present',
+        $CloudAppMode,
+
+        [Parameter()]
+        [System.String[]]
+        $CloudAppRestrictionList,
+
+        [Parameter()]
+        [System.UInt32]
+        $CustomBusinessJustificationNotification,
+
+        [Parameter()]
+        [System.UInt32]
+        $DailyBandwidthLimitInMB,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPAppGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPNetworkShareGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPPrinterGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPRemovableMediaGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.String[]]
+        $MacPathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $NetworkPathEnforcementEnabled,
+
+        [Parameter()]
+        [System.String]
+        $NetworkPathExclusion,
+
+        [Parameter()]
+        [System.String[]]
+        $PathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $serverDlpEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $SiteGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBluetoothApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBrowser,
+
+        [Parameter()]
+        [System.String[]]
+        $VPNSettings,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -387,28 +567,28 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $currentInstance = Get-TargetResource @PSBoundParameters
-
-    $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-
-    # CREATE
-    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
+    $DLPAppGroupsValue = @()
+    foreach ($group in $DLPAppGroups)
     {
-        ##TODO - Replace by the New cmdlet for the resource
-        New-Cmdlet @SetParameters
+        $entry = @{
+            Name = $group.Name
+            Id   = $group.Id
+            Description = $group.Description
+            Apps = @()
+        }
+        foreach ($app in $group.Apps)
+        {
+            $appEntry = @{
+                ExecutableName = $app.ExecutableName
+                Name           = $app.Name
+                Quarantine     = $app.Quarantine
+            }
+            $entry.Apps += $appEntry
+        }
+        $DLPAppGroupsValue += $entry
     }
-    # UPDATE
-    elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
-    {
-        ##TODO - Replace by the Update/Set cmdlet for the resource
-        Set-cmdlet @SetParameters
-    }
-    # REMOVE
-    elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
-    {
-        ##TODO - Replace by the Remove cmdlet for the resource
-        Remove-cmdlet @SetParameters
-    }
+    Write-Verbose -Message "Hola: $($DLPAppGroupsValue | Out-String)"
+    Set-PolicyConfig -DLPAppGroups $DLPAppGroupsValue
 }
 
 function Test-TargetResource
@@ -417,17 +597,102 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (
-        ##TODO - Replace the PrimaryKey
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $PrimaryKey,
-
-        ##TODO - Add the list of Parameters
+        $IsSingleInstance,
 
         [Parameter()]
-        [ValidateSet('Present', 'Absent')]
+        [System.Boolean]
+        $AdvancedClassificationEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AuditFileActivity,
+
+        [Parameter()]
+        [System.Boolean]
+        $BandwidthLimitEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $BusinessJustificationList,
+
+        [Parameter()]
         [System.String]
-        $Ensure = 'Present',
+        $CloudAppMode,
+
+        [Parameter()]
+        [System.String[]]
+        $CloudAppRestrictionList,
+
+        [Parameter()]
+        [System.UInt32]
+        $CustomBusinessJustificationNotification,
+
+        [Parameter()]
+        [System.UInt32]
+        $DailyBandwidthLimitInMB,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPAppGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPNetworkShareGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPPrinterGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DLPRemovableMediaGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.String[]]
+        $MacPathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $NetworkPathEnforcementEnabled,
+
+        [Parameter()]
+        [System.String]
+        $NetworkPathExclusion,
+
+        [Parameter()]
+        [System.String[]]
+        $PathExclusion,
+
+        [Parameter()]
+        [System.Boolean]
+        $serverDlpEnabled,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $SiteGroups,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBluetoothApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedBrowser,
+
+        [Parameter()]
+        [System.String[]]
+        $VPNSettings,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -560,6 +825,41 @@ function Export-TargetResource
             $Results.DLPAppGroups = ConvertTo-DLPAppGroupsString -ObjectHash $Results.DLPAppGroups
         }
 
+        if ($null -ne $Results.DLPNetworkShareGroups)
+        {
+            $Results.DLPNetworkShareGroups = ConvertTo-DLPNetworkShareGroupsString -ObjectHash $Results.DLPNetworkShareGroups
+        }
+
+        if ($null -ne $Results.DLPPrinterGroups)
+        {
+            $Results.DLPPrinterGroups = ConvertTo-DLPPrinterGroupsString -ObjectHash $Results.DLPPrinterGroups
+        }
+
+        if ($null -ne $Results.DLPRemovableMediaGroups)
+        {
+            $Results.DLPRemovableMediaGroups = ConvertTo-DLPRemovableMediaGroupsString -ObjectHash $Results.DLPRemovableMediaGroups
+        }
+
+        if ($null -ne $Results.SiteGroups)
+        {
+            $Results.SiteGroups = ConvertTo-SiteGroupsString -ObjectHash $Results.SiteGroups
+        }
+
+        if ($null -ne $Results.UnallowedApp)
+        {
+            $Results.UnallowedApp = ConvertTo-AppsString -ObjectHash $Results.UnallowedApp
+        }
+
+        if ($null -ne $Results.UnallowedBluetoothApp)
+        {
+            $Results.UnallowedBluetoothApp = ConvertTo-AppsString -ObjectHash $Results.UnallowedBluetoothApp
+        }
+
+        if ($null -ne $Results.UnallowedBrowser)
+        {
+            $Results.UnallowedBrowser = ConvertTo-AppsString -ObjectHash $Results.UnallowedBrowser
+        }
+
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
             -Results $Results
 
@@ -580,6 +880,55 @@ function Export-TargetResource
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                                                                 -ParameterName 'DLPAppGroups' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.DLPNetworkShareGroups)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'DLPNetworkShareGroups' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.DLPPrinterGroups)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'DLPPrinterGroups' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.DLPRemovableMediaGroups)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'DLPRemovableMediaGroups' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.SiteGroups)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'SiteGroups' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.UnallowedApp)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'UnallowedApp' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.UnallowedBluetoothApp)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'UnallowedBluetoothApp' `
+                                                                -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.UnallowedBrowser)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'UnallowedBrowser' `
                                                                 -IsCIMArray:$true
         }
 
@@ -645,11 +994,207 @@ function ConvertTo-DLPAppGroupsString
     [void]$content.Append('@(')
     foreach ($instance in $ObjectHash)
     {
-        [void]$content.AppendLine("        MSFT_PolicyConfigDLPAppGroups")
+        [void]$content.AppendLine("MSFT_PolicyConfigDLPAppGroups")
+        [void]$content.AppendLine("{")
+        [void]$content.AppendLine("    Name        = '$($instance.Name)'")
+        [void]$content.AppendLine("    Id          = '$($instance.Id)'")
+        [void]$content.AppendLine("    Description = '$($instance.Description)'")
+        [void]$content.AppendLine("    Apps = @(")
+        foreach ($app in $instance.Apps)
+        {
+            [void]$content.AppendLine("        MSFT_PolicyConfigDLPApp")
+            [void]$content.AppendLine("        {")
+            [void]$content.AppendLine("            ExecutableName    = '$($app.ExecutableName)'")
+            [void]$content.AppendLine("            Name              = '$($app.Name)'")
+            [void]$content.AppendLine("            Quarantine        = `$$($app.Quarantine)")
+            [void]$content.AppendLine("        }")
+        }
+        [void]$content.AppendLine(")}")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+
+function ConvertTo-DLPNetworkShareGroupsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigDLPNetworkShareGroups")
         [void]$content.AppendLine("        {")
-        [void]$content.AppendLine("            ExecutableName    = '$($instance.ExecutableName)'")
-        [void]$content.AppendLine("            Name              = '$($instance.Name)'")
-        [void]$content.AppendLine("            Quarantine        = `$$($instance.Quarantine)")
+        [void]$content.AppendLine("            groupName    = '$($instance.groupName)'")
+        [void]$content.AppendLine("            groupId      = '$($instance.groupId)'")
+        [void]$content.Append("            networkPaths = @(")
+        $countPath = 1
+        foreach ($path in $instance.networkPaths)
+        {
+            [void]$content.Append("'$path'")
+            if ($countPath -lt $instance.networkPaths.Length)
+            {
+                [void]$content.Append(',')
+            }
+            $countPath++
+        }
+        [void]$content.AppendLine(')')
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+
+function ConvertTo-DLPPrinterGroupsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigDLPPrinterGroups")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            groupName    = '$($instance.groupName)'")
+        [void]$content.AppendLine("            groupId      = '$($instance.groupId)'")
+        [void]$content.AppendLine("            printers = @(")
+        foreach ($printer in $instance.printers)
+        {
+            [void]$content.AppendLine("                MSFT_PolicyConfigPrinter")
+            [void]$content.AppendLine("                {")
+            [void]$content.AppendLine("                    universalPrinter = `$$($printer.universalPrinter)")
+            [void]$content.AppendLine("                    usbPrinter       = `$$($printer.usbPrinter)")
+            [void]$content.AppendLine("                    usbPrinterId     = '$($printer.usbPrinterId)'")
+            [void]$content.AppendLine("                    name             = '$($printer.name)'")
+            [void]$content.AppendLine("                    alias            = '$($printer.alias)'")
+            [void]$content.AppendLine("                    usbPrinterVID    = '$($printer.usbPrinterVID)'")
+            [void]$content.AppendLine("                    ipRange          = MSFT_PolicyConfigIPRange")
+            [void]$content.AppendLine("                        {")
+            [void]$content.AppendLine("                            fromAddress = '$($printer.ipRange.fromAddress)'")
+            [void]$content.AppendLine("                            toAddress   = '$($printer.ipRange.toAddress)'")
+            [void]$content.AppendLine("                        }")
+            [void]$content.AppendLine("                    corporatePrinter = `$$($printer.corporatePrinter)")
+            [void]$content.AppendLine("                    printToLocal     = `$$($printer.printToLocal)")
+            [void]$content.AppendLine("                    printToFile      = `$$($printer.printToFile)")
+            [void]$content.AppendLine("                }")
+        }
+        [void]$content.AppendLine("            )")
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+
+function ConvertTo-DLPRemovableMediaGroupsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigDLPRemovableMediaGroups")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            groupName = '$($instance.groupName)'")
+        [void]$content.AppendLine("            medias    = @(")
+        foreach ($media in $instance.removableMedia)
+        {
+            [void]$content.AppendLine("                MSFT_PolicyConfigRemovableMedia")
+            [void]$content.AppendLine("                {")
+            [void]$content.AppendLine("                    deviceId          = '$($media.deviceId)'")
+            [void]$content.AppendLine("                    removableMediaVID = '$($media.removableMediaVID)'")
+            [void]$content.AppendLine("                    name              = '$($media.name)'")
+            [void]$content.AppendLine("                    alias             = '$($media.alias)'")
+            [void]$content.AppendLine("                    removableMediaPID = '$($media.removableMediaPID)'")
+            [void]$content.AppendLine("                    instancePathId    = '$($media.instancePathId)'")
+            [void]$content.AppendLine("                    serialNumberId    = '$($media.serialNumberId)'")
+            [void]$content.AppendLine("                    hardwareId        = '$($media.hardwareId)'")
+            [void]$content.AppendLine("                }")
+        }
+        [void]$content.AppendLine("                ")
+        [void]$content.AppendLine("            )")
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+function ConvertTo-SiteGroupsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigDLPSiteGroups")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            Id        = '$($instance.Id)'")
+        [void]$content.AppendLine("            Name      = '$($instance.Name)'")
+        [void]$content.AppendLine("            addresses = @(")
+        foreach ($address in $instance.addresses)
+        {
+            [void]$content.AppendLine("                MSFT_PolicyConfigSiteGroupAddress")
+            [void]$content.AppendLine("                {")
+            [void]$content.AppendLine("                    MatchType    = '$($address.MatchType)'")
+            [void]$content.AppendLine("                    Url          = '$($address.MatchType)'")
+            [void]$content.AppendLine("                    AddressLower = '$($address.MatchType)'")
+            [void]$content.AppendLine("                    AddressUpper = '$($address.MatchType)'")
+            [void]$content.AppendLine("                }")
+        }
+        [void]$content.AppendLine("            )")
+        [void]$content.AppendLine("        }")
+    }
+    [void]$content.Append(')')
+    $result = $content.ToString()
+    return $result
+}
+
+function ConvertTo-AppsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+
+    [void]$content.Append('@(')
+    foreach ($instance in $ObjectHash)
+    {
+        [void]$content.AppendLine("        MSFT_PolicyConfigApp")
+        [void]$content.AppendLine("        {")
+        [void]$content.AppendLine("            Value        = '$($instance.Value)'")
+        [void]$content.AppendLine("            Executable   = '$($instance.Executable)'")
         [void]$content.AppendLine("        }")
     }
     [void]$content.Append(')')
