@@ -73,20 +73,20 @@ class MSFT_PolicyConfigDLPNetworkShareGroups
 };
 
 [ClassVersion("1.0.0")]
+class MSFT_PolicyConfigDLPApp
+{
+    [Write, Description("")] String ExecutableName;
+    [Write, Description("")] String Name;
+    [Write, Description("")] Boolean Quarantine;
+};
+
+[ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPAppGroups
 {
     [Write, Description("")] String Id;
     [Write, Description("")] String Name;
     [Write, Description("")] String Description;
     [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPApp")] String Apps[];
-};
-
-[ClassVersion("1.0.0")]
-class MSFT_PolicyConfigDLPApp
-{
-    [Write, Description("")] String ExecutableName;
-    [Write, Description("")] String Name;
-    [Write, Description("")] Boolean Quarantine;
 };
 
 [ClassVersion("1.0.0")]
