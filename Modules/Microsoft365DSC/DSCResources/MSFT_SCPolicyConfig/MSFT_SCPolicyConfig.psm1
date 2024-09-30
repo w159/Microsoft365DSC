@@ -102,6 +102,14 @@ function Get-TargetResource
         $VPNSettings,
 
         [Parameter()]
+        [System.Boolean]
+        $EnableLabelCoauth,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSpoAipMigration,
+
+        [Parameter()]
         [System.Management.Automation.PSCredential]
         $Credential,
 
@@ -406,6 +414,8 @@ function Get-TargetResource
             DLPRemovableMediaGroups                 = $DLPRemovableMediaGroupsValue
             DLPNetworkShareGroups                   = $DlpNetworkShareGroupsValue
             VPNSettings                             = $VPNSettingsValue
+            EnableLabelCoauth                       = $instance.EnableLabelCoauth
+            EnableSpoAipMigration                   = $instance.EnableSpoAipMigration
             Credential                              = $Credential
             ApplicationId                           = $ApplicationId
             TenantId                                = $TenantId
@@ -531,6 +541,14 @@ function Set-TargetResource
         $VPNSettings,
 
         [Parameter()]
+        [System.Boolean]
+        $EnableLabelCoauth,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSpoAipMigration,
+
+        [Parameter()]
         [System.Management.Automation.PSCredential]
         $Credential,
 
@@ -591,7 +609,13 @@ function Set-TargetResource
         $DLPAppGroupsValue += $entry
     }
     Write-Verbose -Message "Hola: $($DLPAppGroupsValue | Out-String)"
-    Set-PolicyConfig -DLPAppGroups $DLPAppGroupsValue
+
+    $params = @{
+        DLPAppGroups          = $DLPAppGroupsValue
+        EnableLabelCoauth     = $EnableLabelCoauth
+        EnableSpoAipMigration = $EnableSpoAipMigration
+    }
+    Set-PolicyConfig @parameters
 }
 
 function Test-TargetResource
@@ -696,6 +720,14 @@ function Test-TargetResource
         [Parameter()]
         [System.String[]]
         $VPNSettings,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableLabelCoauth,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSpoAipMigration,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]

@@ -132,6 +132,8 @@ class MSFT_SCPolicyConfig : OMI_BaseResource
     [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBluetoothApp[];
     [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBrowser[];
     [Write, Description("")] String VPNSettings[];
+    [Write, Description("")] Boolean EnableLabelCoauth;
+    [Write, Description("")] Boolean EnableSpoAipMigration;
     [Write, Description("Credentials of the workload's Admin"), EmbeddedInstance("MSFT_Credential")] string Credential;
     [Write, Description("Id of the Azure Active Directory application to authenticate with.")] String ApplicationId;
     [Write, Description("Id of the Azure Active Directory tenant used for authentication.")] String TenantId;
