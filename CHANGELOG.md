@@ -8,6 +8,10 @@
   * Added KeyCredentials
   * Added PaswordCredentials
   * Added PreAuthorizationApplications
+* AADAuthenticationMethodPolicy
+  * Added ReportSuspiciousActivitySettings
+* AADAuthenticationMethodPolicyHardware
+  * Initial release.
 * AADEntitlementManagementSettings
   * Initial release.
 * AADFeatureRolloutPolicy
@@ -31,16 +35,19 @@
   * Initial release.
 * EXOArcConfig
   * Initial Release.
+* EXODnssecForVerifiedDomain
+  * Initial Release.
 * EXOEmailTenantSettings
   * Initial Release.
 * EXOFocusedInbox
   * Initial Release.
 * EXOMailboxCalendarConfiguration
   * Initial Release.
+* EXOMailboxIRMAccess
+  * Initial Release.
 * EXOMailboxFolderPermission
   * Initial Release.
 * EXOMailboxIRMAccess
-  * Initial Release.
 * EXOManagementScope
   * Initial Release.
 * EXORetenionPolicy
@@ -69,6 +76,8 @@
 * SCDeviceConfigurationRule
   * Initial release.
 * SCInsiderRiskEntityList
+  * Initial release.
+* SCInsiderRiskPolicy
   * Initial release.
 * SCRoleGroup
   * Fixes an issue with creation without specifying Displayname
