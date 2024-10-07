@@ -292,16 +292,19 @@ function Get-TargetResource
         $CustomBusinessJustificationNotificationValue = [Uint32]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'CustomBusinessJustificationNotification'}).Value
 
         # BusinessJustificationList
-        $entities = ConvertFrom-Json ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'BusinessJustificationList'}).Value
-        $BusinessJustificationListValue = @()
-        foreach ($entity in $entities)
+        if (-not [System.String]::IsNullOrEmpty($EndpointDlpGlobalSettingsValue.Setting))
         {
-            $current = @{
-                Id                = $entity.Id
-                Enable            = [Boolean]$entity.Enable
-                justificationText = $entity.justificationText
+            $entities = ConvertFrom-Json ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'BusinessJustificationList'}).Value
+            $BusinessJustificationListValue = @()
+            foreach ($entity in $entities)
+            {
+                $current = @{
+                    Id                = $entity.Id
+                    Enable            = [Boolean]$entity.Enable
+                    justificationText = $entity.justificationText
+                }
+                $BusinessJustificationListValue += $current
             }
-            $BusinessJustificationListValue += $current
         }
 
         # serverDlpEnabled
