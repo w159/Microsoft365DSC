@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADAdminConsentRequestPolicy
+  * Initial release.
+* AADApplication
+  * Fixed an issue trying to retrieve the beta instance.
 * AADDeviceRegistrationPolicy
   * Initial release.
 * AADEntitlementManagementSettings
