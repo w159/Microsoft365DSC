@@ -6,134 +6,164 @@ class MSFT_PolicyConfigApp
 };
 
 [ClassVersion("1.0.0")]
+class MSFT_PolicyConfigStorageAccount
+{
+    [Write, Description("TBD")] String Name;
+    [Write, Description("TBD")] String BlobUri;
+};
+
+[ClassVersion("1.0.0")]
 class MSFT_PolicyConfigSiteGroupAddress
 {
-    [Write, Description("")] String MatchType;
-    [Write, Description("")] String Url;
-    [Write, Description("")] String AddressLower;
-    [Write, Description("")] String AddressUpper;
+    [Write, Description("TBD")] String MatchType;
+    [Write, Description("TBD")] String Url;
+    [Write, Description("TBD")] String AddressLower;
+    [Write, Description("TBD")] String AddressUpper;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPSiteGroups
 {
-    [Write, Description("")] String Id;
-    [Write, Description("")] String Name;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigSiteGroupAddress")] String addresses[];
+    [Write, Description("TBD")] String Id;
+    [Write, Description("TBD")] String Name;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigSiteGroupAddress")] String addresses[];
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigRemovableMedia
 {
-    [Write, Description("")] String deviceId;
-    [Write, Description("")] String removableMediaVID;
-    [Write, Description("")] String name;
-    [Write, Description("")] String alias;
-    [Write, Description("")] String removableMediaPID;
-    [Write, Description("")] String instancePathId;
-    [Write, Description("")] String serialNumberId;
-    [Write, Description("")] String hardwareId;
+    [Write, Description("TBD")] String deviceId;
+    [Write, Description("TBD")] String removableMediaVID;
+    [Write, Description("TBD")] String name;
+    [Write, Description("TBD")] String alias;
+    [Write, Description("TBD")] String removableMediaPID;
+    [Write, Description("TBD")] String instancePathId;
+    [Write, Description("TBD")] String serialNumberId;
+    [Write, Description("TBD")] String hardwareId;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPRemovableMediaGroups
 {
-    [Write, Description("")] String groupName;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigRemovableMedia")] String medias[];
+    [Write, Description("TBD")] String groupName;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigRemovableMedia")] String medias[];
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigIPRange
 {
-    [Write, Description("")] String fromAddress;
-    [Write, Description("")] String toAddress;
+    [Write, Description("TBD")] String fromAddress;
+    [Write, Description("TBD")] String toAddress;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigPrinter
 {
-    [Write, Description("")] Boolean universalPrinter;
-    [Write, Description("")] Boolean usbPrinter;
-    [Write, Description("")] String usbPrinterId;
-    [Write, Description("")] String name;
-    [Write, Description("")] String alias;
-    [Write, Description("")] String usbPrinterVID;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigIPRange")] String ipRange;
-    [Write, Description("")] Boolean corporatePrinter;
-    [Write, Description("")] Boolean printToLocal;
-    [Write, Description("")] Boolean printToFile;
+    [Write, Description("TBD")] Boolean universalPrinter;
+    [Write, Description("TBD")] Boolean usbPrinter;
+    [Write, Description("TBD")] String usbPrinterId;
+    [Write, Description("TBD")] String name;
+    [Write, Description("TBD")] String alias;
+    [Write, Description("TBD")] String usbPrinterVID;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigIPRange")] String ipRange;
+    [Write, Description("TBD")] Boolean corporatePrinter;
+    [Write, Description("TBD")] Boolean printToLocal;
+    [Write, Description("TBD")] Boolean printToFile;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPNetworkShareGroups
 {
-    [Write, Description("")] String groupName;
-    [Write, Description("")] String groupId;
-    [Write, Description("")] String networkPaths[];
+    [Write, Description("TBD")] String groupName;
+    [Write, Description("TBD")] String groupId;
+    [Write, Description("TBD")] String networkPaths[];
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPApp
 {
-    [Write, Description("")] String ExecutableName;
-    [Write, Description("")] String Name;
-    [Write, Description("")] Boolean Quarantine;
+    [Write, Description("TBD")] String ExecutableName;
+    [Write, Description("TBD")] String Name;
+    [Write, Description("TBD")] Boolean Quarantine;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPAppGroups
 {
-    [Write, Description("")] String Id;
-    [Write, Description("")] String Name;
-    [Write, Description("")] String Description;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPApp")] String Apps[];
+    [Write, Description("TBD")] String Id;
+    [Write, Description("TBD")] String Name;
+    [Write, Description("TBD")] String Description;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPApp")] String Apps[];
+};
+
+[ClassVersion("1.0.0")]
+class MSFT_PolicyConfigEvidenceStoreSettings
+{
+    [Write, Description("TBD")] Boolean FileEvidenceIsEnabled;
+    [Write, Description("TBD")] UInt32 NumberOfDaysToRetain;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigStorageAccount")] String StorageAccounts[];
+    [Write, Description("TBD")] String Store;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigBusinessJustificationList
 {
-    [Write, Description("")] String Id;
-    [Write, Description("")] String justificationText;
-    [Write, Description("")] Boolean Enable;
+    [Write, Description("TBD")] String Id;
+    [Write, Description("TBD")] String justificationText;
+    [Write, Description("TBD")] Boolean Enable;
 };
 
 [ClassVersion("1.0.0")]
 class MSFT_PolicyConfigDLPPrinterGroups
 {
-    [Write, Description("")] String groupName;
-    [Write, Description("")] String groupId;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigPrinter")] String printers[];
+    [Write, Description("TBD")] String groupName;
+    [Write, Description("TBD")] String groupId;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigPrinter")] String printers[];
+};
+
+[ClassVersion("1.0.0")]
+class MSFT_PolicyConfigQuarantineParameters
+{
+    [Write, Description("TBD")] Boolean EnableQuarantineForCloudSyncApps;
+    [Write, Description("TBD")] String QuarantinePath;
+    [Write, Description("TBD")] String MacQuarantinePath;
+    [Write, Description("TBD")] Boolean ShouldReplaceFile;
+    [Write, Description("TBD")] String FileReplacementText;
 };
 
 [ClassVersion("1.0.0.0"), FriendlyName("SCPolicyConfig")]
 class MSFT_SCPolicyConfig : OMI_BaseResource
 {
     [Key, Description(""), ValueMap{"Yes"}, Values{"Yes"}] String IsSingleInstance;
-    [Write, Description("")] Boolean AdvancedClassificationEnabled;
-    [Write, Description("")] Boolean AuditFileActivity;
-    [Write, Description("")] Boolean BandwidthLimitEnabled;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigBusinessJustificationList")] String BusinessJustificationList[];
-    [Write, Description("")] String CloudAppMode;
-    [Write, Description("")] String CloudAppRestrictionList[];
-    [Write, Description("")] UInt32 CustomBusinessJustificationNotification;
-    [Write, Description("")] UInt32 DailyBandwidthLimitInMB;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPAppGroups")] String DLPAppGroups[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPNetworkShareGroups")] String DLPNetworkShareGroups[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPPrinterGroups")] String DLPPrinterGroups[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPRemovableMediaGroups")] String DLPRemovableMediaGroups[];
-    [Write, Description("")] Boolean IncludePredefinedUnallowedBluetoothApps;
-    [Write, Description("")] String MacPathExclusion[];
-    [Write, Description("")] Boolean NetworkPathEnforcementEnabled;
-    [Write, Description("")] String NetworkPathExclusion;
-    [Write, Description("")] String PathExclusion[];
-    [Write, Description("")] Boolean serverDlpEnabled;
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigDLPSiteGroups")] String SiteGroups[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedApp[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBluetoothApp[];
-    [Write, Description(""), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBrowser[];
-    [Write, Description("")] String VPNSettings[];
-    [Write, Description("")] Boolean EnableLabelCoauth;
-    [Write, Description("")] Boolean EnableSpoAipMigration;
+    [Write, Description("TBD")] Boolean AdvancedClassificationEnabled;
+    [Write, Description("TBD")] Boolean AuditFileActivity;
+    [Write, Description("TBD")] Boolean BandwidthLimitEnabled;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigBusinessJustificationList")] String BusinessJustificationList[];
+    [Write, Description("TBD")] String CloudAppMode;
+    [Write, Description("TBD")] String CloudAppRestrictionList[];
+    [Write, Description("TBD")] UInt32 CustomBusinessJustificationNotification;
+    [Write, Description("TBD")] UInt32 DailyBandwidthLimitInMB;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPAppGroups")] String DLPAppGroups[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPNetworkShareGroups")] String DLPNetworkShareGroups[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPPrinterGroups")] String DLPPrinterGroups[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPRemovableMediaGroups")] String DLPRemovableMediaGroups[];
+    [Write, Description("TBD")] Boolean IncludePredefinedUnallowedBluetoothApps;
+    [Write, Description("TBD")] Boolean MacDefaultPathExclusionsEnabled;
+    [Write, Description("TBD")] String MacPathExclusion[];
+    [Write, Description("TBD")] Boolean NetworkPathEnforcementEnabled;
+    [Write, Description("TBD")] String NetworkPathExclusion;
+    [Write, Description("TBD")] String PathExclusion[];
+    [Write, Description("TBD")] Boolean serverDlpEnabled;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigEvidenceStoreSettings")] String EvidenceStoreSettings;
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigDLPSiteGroups")] String SiteGroups[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedApp[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedCloudSyncApp[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBluetoothApp[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigApp")] String UnallowedBrowser[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigQuarantineParameters")] String QuarantineParameters;
+    [Write, Description("TBD")] String VPNSettings[];
+    [Write, Description("TBD")] Boolean EnableLabelCoauth;
+    [Write, Description("TBD")] Boolean EnableSpoAipMigration;
     [Write, Description("Credentials of the workload's Admin"), EmbeddedInstance("MSFT_Credential")] string Credential;
     [Write, Description("Id of the Azure Active Directory application to authenticate with.")] String ApplicationId;
     [Write, Description("Id of the Azure Active Directory tenant used for authentication.")] String TenantId;

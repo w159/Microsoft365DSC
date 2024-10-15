@@ -58,8 +58,16 @@ function Get-TargetResource
         $DLPRemovableMediaGroups,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EvidenceStoreSettings,
+
+        [Parameter()]
         [System.Boolean]
         $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $MacDefaultPathExclusionsEnabled,
 
         [Parameter()]
         [System.String[]]
@@ -91,6 +99,10 @@ function Get-TargetResource
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedCloudSyncApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $UnallowedBluetoothApp,
 
         [Parameter()]
@@ -108,6 +120,10 @@ function Get-TargetResource
         [Parameter()]
         [System.Boolean]
         $EnableSpoAipMigration,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $QuarantineParameters,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -175,8 +191,8 @@ function Get-TargetResource
         # MacPathExclusion
         $MacPathExclusionValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'MacPathExclusion'}).Value
 
-        # MacPathExclusion
-        $MacPathExclusionValue = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'MacPathExclusion'}).Value
+        # MacDefaultPathExclusionsEnabled
+        $MacDefaultPathExclusionsEnabledValue = [Boolean]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'MacDefaultPathExclusionsEnabled'}).Value
 
         #EvidenceStoreSettings
         $entry = $EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'EvidenceStoreSettings'}
@@ -230,6 +246,18 @@ function Get-TargetResource
                 Executable = $entry.Executable
             }
             $UnallowedAppValue += $current
+        }
+
+        # UnallowedCloudSyncApp
+        $entries = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'UnallowedCloudSyncApp'})
+        $UnallowedCloudSyncAppValue = @()
+        foreach ($entry in $entries)
+        {
+            $current = @{
+                Value      = $entry.Value
+                Executable = $entry.Executable
+            }
+            $UnallowedCloudSyncAppValue += $current
         }
 
         # IncludePredefinedUnallowedBluetoothApps
@@ -291,11 +319,11 @@ function Get-TargetResource
         # CustomBusinessJustificationNotification
         $CustomBusinessJustificationNotificationValue = [Uint32]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'CustomBusinessJustificationNotification'}).Value
 
-        # EndpointDlpGlobalSettings
         if (-not [System.String]::IsNullOrEmpty($EndpointDlpGlobalSettingsValue.Setting))
         {
-            $entities = $EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'BusinessJustificationList'}
+            $entities = $EndpointDlpGlobalSettingsValue | Where-Object -FilterScript {$_.Setting -eq 'BusinessJustificationList'}
 
+            # BusinessJustificationList
             if ($null -ne $entities)
             {
                 $entities = ConvertFrom-Json ($entities.value)
@@ -400,6 +428,20 @@ function Get-TargetResource
             $DlpNetworkShareGroupsValue += $entry
         }
 
+        $QuarantineParametersValue = @()
+        if ($null -ne ($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'QuarantineParameters'}))
+        {
+            $quarantineInfo = [Array]($EndpointDlpGlobalSettingsValue | Where-Object {$_.Setting -eq 'QuarantineParameters'}).Value
+            $quarantineInfo = ConvertFrom-Json $quarantineInfo[0]
+            $QuarantineParametersValue = @{
+                EnableQuarantineForCloudSyncApps = $quarantineInfo.EnableQuarantineForCloudSyncApps
+                QuarantinePath                   = $quarantineInfo.QuarantinePath
+                MacQuarantinePath                = $quarantineInfo.MacQuarantinePath
+                ShouldReplaceFile                = $quarantineInfo.ShouldReplaceFile
+                FileReplacementText              = $quarantineInfo.FileReplacementText
+            }
+        }
+
         $results = @{
             IsSingleInstance                        = 'Yes'
             AdvancedClassificationEnabled           = $AdvancedClassificationEnabledValue
@@ -407,11 +449,13 @@ function Get-TargetResource
             DailyBandwidthLimitInMB                 = $DailyBandwidthLimitInMBValue
             PathExclusion                           = $PathExclusionValue
             MacPathExclusion                        = $MacPathExclusionValue
+            MacDefaultPathExclusionsEnabled         = $MacDefaultPathExclusionsEnabledValue
             EvidenceStoreSettings                   = $EvidenceStoreSettingsValue
             NetworkPathEnforcementEnabled           = $NetworkPathEnforcementEnabledValue
             NetworkPathExclusion                    = $NetworkPathExclusionValue
             DLPAppGroups                            = $DlpAppGroupsValue
             UnallowedApp                            = $UnallowedAppValue
+            UnallowedCloudSyncApp                   = $UnallowedCloudSyncAppValue
             IncludePredefinedUnallowedBluetoothApps = $IncludePredefinedUnallowedBluetoothAppsValue
             UnallowedBluetoothApp                   = $UnallowedBluetoothAppValue
             UnallowedBrowser                        = $UnallowedBrowserValue
@@ -428,6 +472,7 @@ function Get-TargetResource
             VPNSettings                             = $VPNSettingsValue
             EnableLabelCoauth                       = $instance.EnableLabelCoauth
             EnableSpoAipMigration                   = $instance.EnableSpoAipMigration
+            QuarantineParameters                    = $QuarantineParametersValue
             Credential                              = $Credential
             ApplicationId                           = $ApplicationId
             TenantId                                = $TenantId
@@ -509,8 +554,16 @@ function Set-TargetResource
         $DLPRemovableMediaGroups,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EvidenceStoreSettings,
+
+        [Parameter()]
         [System.Boolean]
         $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $MacDefaultPathExclusionsEnabled,
 
         [Parameter()]
         [System.String[]]
@@ -542,6 +595,10 @@ function Set-TargetResource
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedCloudSyncApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $UnallowedBluetoothApp,
 
         [Parameter()]
@@ -559,6 +616,10 @@ function Set-TargetResource
         [Parameter()]
         [System.Boolean]
         $EnableSpoAipMigration,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $QuarantineParameters,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -600,34 +661,283 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
+    $SiteGroupsValue = @()
+    foreach ($site in $SiteGroups)
+    {
+        $entry = @{
+            Name        = $site.Name
+            Description = $site.Description
+        }
+
+        $addressesValue = @()
+        foreach ($address in $site.Addresses)
+        {
+            $addressesValue += @{
+                MatchType    = $address.MatchType
+                Url          = $address.Url
+                AddressLower = $address.AddressLower
+                AddressUpper = $address.AddressUpper
+            }
+        }
+
+        $entry.Add('Addresses', (ConvertTo-Json $addressesValue -Compress -Depth 10))
+        $SiteGroupsValue += $entry
+    }
+
+    $EndpointDlpGlobalSettingsValue = @()
+    if ($null -ne $AdvancedClassificationEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'AdvancedClassificationEnabled'
+            Value   = "$($AdvancedClassificationEnabled.ToString().ToLower())"
+        }
+    }
+
+    if ($null -ne $BandwidthLimitEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'BandwidthLimitEnabled'
+            Value   = "$($BandwidthLimitEnabled.ToString().ToLower())"
+        }
+    }
+
+    if ($null -ne $DailyBandwidthLimitInMB -and $BandwidthLimitEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'DailyBandwidthLimitInMB'
+            Value   = "$($DailyBandwidthLimitInMB.ToString().ToLower())"
+        }
+    }
+
+    if ($null -ne $EvidenceStoreSettings)
+    {
+        $entry += @{
+            Setting = 'EvidenceStoreSettings'
+            Value   = @{
+                FileEvidenceIsEnabled = $EvidenceStoreSettings.FileEvidenceIsEnabled
+                Store                 = $EvidenceStoreSettings.Store
+                NumberOfDaysToRetain  = $EvidenceStoreSettings.NumberOfDaysToRetain
+            }
+        }
+
+        $StorageAccountsValue = @()
+        foreach ($storageAccount in $EvidenceStoreSettings.StorageAccounts)
+        {
+            $StorageAccountsValue += @{
+                Name    = $storageAccount.Name
+                BlobUri = $storageAccount.BlobUri
+            }
+        }
+        $entry.Value.Add('StorageAccounts', $StorageAccountsValue)
+        $entry.Value = ConvertTo-Json $entry.Value -Depth 10 -Compress
+
+        $EndpointDlpGlobalSettingsValue += $entry
+    }
+
+    if ($null -ne $MacDefaultPathExclusionsEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'MacDefaultPathExclusionsEnabled'
+            Value   = "$($MacDefaultPathExclusionsEnabled.ToString().ToLower())"
+        }
+    }
+
+    foreach ($path in $PathExclusion)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'PathExclusion'
+            Value   = "$($path.ToString())"
+        }
+    }
+
+    foreach ($path in $MacPathExclusion)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'MacPathExclusion'
+            Value   = "$($path.ToString())"
+        }
+    }
+
+    foreach ($app in $UnallowedApp)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting    = 'UnallowedApp'
+            Value      = "$($app.Value.ToString())"
+            Executable = "$($app.Executable.ToString())"
+        }
+    }
+
+    foreach ($app in $UnallowedCloudSyncApp)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting    = 'UnallowedCloudSyncApp'
+            Value      = "$($app.Value.ToString())"
+            Executable = "$($app.Executable.ToString())"
+        }
+    }
+
+    if ($null -ne $NetworkPathEnforcementEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'NetworkPathEnforcementEnabled'
+            Value   = "$($NetworkPathEnforcementEnabled.ToString().ToLower())"
+        }
+    }
+
+    if ($null -ne $NetworkPathExclusion)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'NetworkPathExclusion'
+            Value   = "$($NetworkPathExclusion.ToString())"
+        }
+    }
+
+    if ($null -ne $QuarantineParameters)
+    {
+        $entry = @{
+            Setting = 'QuarantineParameters'
+            Value   = @{
+                EnableQuarantineForCloudSyncApps = $QuarantineParameters.EnableQuarantineForCloudSyncApps
+                QuarantinePath                   = $QuarantineParameters.QuarantinePath
+                MacQuarantinePath                = $QuarantineParameters.MacQuarantinePath
+                ShouldReplaceFile                = $QuarantineParameters.ShouldReplaceFile
+                FileReplacementText              = $QuarantineParameters.FileReplacementText
+            }
+        }
+        $entry.Value = (ConvertTo-Json $entry.Value -Depth 10 -Compress)
+        $EndpointDlpGlobalSettingsValue += $entry
+    }
+
+    if ($null -ne $IncludePredefinedUnallowedBluetoothApps)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'IncludePredefinedUnallowedBluetoothApps'
+            Value   = "$($IncludePredefinedUnallowedBluetoothApps.ToString())"
+        }
+    }
+
+    foreach ($app in  $UnallowedBluetoothApp)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting    = 'UnallowedBluetoothApp'
+            Value      = "$($app.Value.ToString())"
+            Executable = "$($app.Executable.ToString())"
+        }
+    }
+
+    foreach ($app in  $UnallowedBrowser)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting    = 'UnallowedBrowser'
+            Value      = "$($app.Value.ToString())"
+            Executable = "$($app.Executable.ToString())"
+        }
+    }
+
+    foreach ($domain in  $CloudAppRestrictionList)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting    = 'CloudAppRestrictionList'
+            Value      = "$($domain.ToString())"
+        }
+    }
+
+    if ($null -ne $CloudAppMode)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'CloudAppMode'
+            Value   = "$($CloudAppMode.ToString())"
+        }
+    }
+
+    if ($null -ne $CustomBusinessJustificationNotification)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'CustomBusinessJustificationNotification'
+            Value   = "$($CustomBusinessJustificationNotification.ToString())"
+        }
+    }
+
+    if ($null -ne $BusinessJustificationList)
+    {
+        $valueEntry = @()
+        foreach ($justification in $BusinessJustificationList)
+        {
+            $valueEntry += @{
+                Id                = $justification.Id
+                Enable            = $justification.Enable
+                justificationText = @($justification.justificationText)
+            }
+        }
+
+        $entry = @{
+            Setting = 'BusinessJustificationList'
+            Value   = (ConvertTo-Json $valueEntry -Depth 10 -Compress)
+        }
+        $EndpointDlpGlobalSettingsValue += $entry
+    }
+
+    if ($null -ne $VPNSettings)
+    {
+        $entry = @{
+            Setting = 'VPNSettings'
+            Value = @{
+                serverAddress = @()
+            }
+        }
+        foreach ($vpnAddress in $VPNSettings)
+        {
+            $entry.Value.serverAddress += $vpnAddress
+        }
+        $EndpointDlpGlobalSettingsValue += $entry
+    }
+
+    if ($null -ne $serverDlpEnabled)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'serverDlpEnabled'
+            Value   = "$($serverDlpEnabled.ToString().ToLower())"
+        }
+    }
+
+    if ($null -ne $AuditFileActivity)
+    {
+        $EndpointDlpGlobalSettingsValue += @{
+            Setting = 'AuditFileActivity'
+            Value   = "$($AuditFileActivity.ToString().ToLower())"
+        }
+    }
+
     $DLPAppGroupsValue = @()
     foreach ($group in $DLPAppGroups)
     {
         $entry = @{
-            Name = $group.Name
-            Id   = $group.Id
-            Description = $group.Description
-            Apps = @()
+            Name        = "$($group.Name.ToString())"
+            Description = "$($group.Description.ToString())"
         }
+
+        $appsValues = @()
         foreach ($app in $group.Apps)
         {
-            $appEntry = @{
-                ExecutableName = $app.ExecutableName
+            $appsValues += @{
                 Name           = $app.Name
+                ExecutableName = $app.ExecutableName
                 Quarantine     = $app.Quarantine
             }
-            $entry.Apps += $appEntry
         }
+        $entry.Add('Apps', (ConvertTo-Json $appsValues -Depth 10 -Compress))
         $DLPAppGroupsValue += $entry
     }
-    Write-Verbose -Message "Hola: $($DLPAppGroupsValue | Out-String)"
 
     $params = @{
-        DLPAppGroups          = $DLPAppGroupsValue
-        EnableLabelCoauth     = $EnableLabelCoauth
-        EnableSpoAipMigration = $EnableSpoAipMigration
+        SiteGroups                = $SiteGroupsValue
+        EnableLabelCoauth         = $EnableLabelCoauth
+        DlpAppGroups              = $DLPAppGroupsValue
+        #EnableSpoAipMigration = $EnableSpoAipMigration
+        EndpointDlpGlobalSettings = $EndpointDlpGlobalSettingsValue
     }
-    Set-PolicyConfig @parameters
+    Write-Verbose -Message "Updating policy config with values:`r`n$(Convert-M365DscHashtableToString -Hashtable $params)"
+    Set-PolicyConfig @params
 }
 
 function Test-TargetResource
@@ -690,8 +1000,16 @@ function Test-TargetResource
         $DLPRemovableMediaGroups,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EvidenceStoreSettings,
+
+        [Parameter()]
         [System.Boolean]
         $IncludePredefinedUnallowedBluetoothApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $MacDefaultPathExclusionsEnabled,
 
         [Parameter()]
         [System.String[]]
@@ -723,6 +1041,10 @@ function Test-TargetResource
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
+        $UnallowedCloudSyncApp,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $UnallowedBluetoothApp,
 
         [Parameter()]
@@ -740,6 +1062,10 @@ function Test-TargetResource
         [Parameter()]
         [System.Boolean]
         $EnableSpoAipMigration,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $QuarantineParameters,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -887,6 +1213,11 @@ function Export-TargetResource
             $Results.DLPRemovableMediaGroups = ConvertTo-DLPRemovableMediaGroupsString -ObjectHash $Results.DLPRemovableMediaGroups
         }
 
+        if ($null -ne $Results.EvidenceStoreSettings)
+        {
+            $Results.EvidenceStoreSettings = ConvertTo-EvidenceStoreSettingsString -ObjectHash $Results.EvidenceStoreSettings
+        }
+
         if ($null -ne $Results.SiteGroups)
         {
             $Results.SiteGroups = ConvertTo-SiteGroupsString -ObjectHash $Results.SiteGroups
@@ -895,6 +1226,11 @@ function Export-TargetResource
         if ($null -ne $Results.UnallowedApp -and -not [System.String]::IsNullOrEmpty($Results.UnallowedApp))
         {
             $Results.UnallowedApp = ConvertTo-AppsString -ObjectHash $Results.UnallowedApp
+        }
+
+        if ($null -ne $Results.UnallowedCloudSyncApp -and -not [System.String]::IsNullOrEmpty($Results.UnallowedCloudSyncApp))
+        {
+            $Results.UnallowedCloudSyncApp = ConvertTo-AppsString -ObjectHash $Results.UnallowedCloudSyncApp
         }
 
         if ($null -ne $Results.UnallowedBluetoothApp -and -not [System.String]::IsNullOrEmpty($Results.UnallowedBluetoothApp))
@@ -907,6 +1243,11 @@ function Export-TargetResource
             $Results.UnallowedBrowser = ConvertTo-AppsString -ObjectHash $Results.UnallowedBrowser
         }
 
+        if ($null -ne $Results.QuarantineParameters -and -not [System.String]::IsNullOrEmpty($Results.QuarantineParameters))
+        {
+            $Results.QuarantineParameters = ConvertTo-QuarantineParametersString -ObjectHash $Results.QuarantineParameters
+        }
+
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
             -Results $Results
 
@@ -915,6 +1256,13 @@ function Export-TargetResource
             -ModulePath $PSScriptRoot `
             -Results $Results `
             -Credential $Credential
+
+        if ($null -ne $Results.QuarantineParameters)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'QuarantineParameters' `
+                                                                -IsCIMArray:$true
+        }
 
         if ($null -ne $Results.BusinessJustificationList)
         {
@@ -965,6 +1313,13 @@ function Export-TargetResource
                                                                 -IsCIMArray:$true
         }
 
+        if ($null -ne $Results.UnallowedCloudSyncApp)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'UnallowedCloudSyncApp' `
+                                                                -IsCIMArray:$true
+        }
+
         if ($null -ne $Results.UnallowedBluetoothApp)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
@@ -977,6 +1332,13 @@ function Export-TargetResource
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                                                                 -ParameterName 'UnallowedBrowser' `
                                                                 -IsCIMArray:$true
+        }
+
+        if ($null -ne $Results.EvidenceStoreSettings)
+        {
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                                                                -ParameterName 'EvidenceStoreSettings' `
+                                                                -IsCIMArray:$false
         }
 
         $dscContent += $currentDSCBlock
@@ -1000,6 +1362,28 @@ function Export-TargetResource
     }
 }
 
+function ConvertTo-QuarantineParametersString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Array]
+        $ObjectHash
+    )
+
+    $content = [System.Text.StringBuilder]::new()
+    [void]$content.AppendLine("                MSFT_PolicyConfigQuarantineParameters")
+    [void]$content.AppendLine("                {")
+    [void]$content.AppendLine("                    EnableQuarantineForCloudSyncApps = `$$($ObjectHash.EnableQuarantineForCloudSyncApps)")
+    [void]$content.AppendLine("                    QuarantinePath                   = '$($ObjectHash.QuarantinePath.ToString())'")
+    [void]$content.AppendLine("                    MacQuarantinePath                = '$($ObjectHash.MacQuarantinePath)'")
+    [void]$content.AppendLine("                    ShouldReplaceFile                = `$$($ObjectHash.ShouldReplaceFile.ToString())")
+    [void]$content.AppendLine("                    FileReplacementText              = '$($ObjectHash.FileReplacementText)'")
+    [void]$content.AppendLine("                }")
+    return $content.ToString()
+}
+
 function ConvertTo-BusinessJustificationListString
 {
     [CmdletBinding()]
@@ -1019,7 +1403,7 @@ function ConvertTo-BusinessJustificationListString
         [void]$content.AppendLine("                {")
         [void]$content.AppendLine("                    Id                = '$($instance.Id)'")
         [void]$content.AppendLine("                    Enable            = `$$($instance.Enable)")
-        [void]$content.AppendLine("                    justificationText = '$($instance.Id)'")
+        [void]$content.AppendLine("                    justificationText = '$($instance.justificationText)'")
         [void]$content.AppendLine("                }")
     }
     [void]$content.Append('                )')
@@ -1092,12 +1476,41 @@ function ConvertTo-DLPNetworkShareGroupsString
             }
             $countPath++
         }
-        [void]$content.AppendLine('                )')
+        [void]$content.AppendLine(')')
         [void]$content.AppendLine("                }")
     }
     [void]$content.Append('                )')
     $result = $content.ToString()
     return $result
+}
+
+function ConvertTo-EvidenceStoreSettingsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [Hashtable]
+        $ObjectHash
+    )
+    $content = [System.Text.StringBuilder]::new()
+    [void]$content.AppendLine("                MSFT_PolicyConfigEvidenceStoreSettings")
+    [void]$content.AppendLine("                {")
+    [void]$content.AppendLine("                    FileEvidenceIsEnabled = `$$($ObjectHash.FileEvidenceIsEnabled)")
+    [void]$content.AppendLine("                    NumberOfDaysToRetain  = $($ObjectHash.NumberOfDaysToRetain)")
+    [void]$content.AppendLine("                    StorageAccounts       = @(")
+    foreach ($storageAccount in $ObjectHash.StorageAccounts)
+    {
+        [void]$content.AppendLine("                        MSFT_PolicyConfigStorageAccount")
+        [void]$content.AppendLine("                        {")
+        [void]$content.AppendLine("                            Name    = '$($storageAccount.Name)'")
+        [void]$content.AppendLine("                            BlobUri = '$($storageAccount.BlobUri)'")
+        [void]$content.AppendLine("                        }")
+    }
+    [void]$content.AppendLine("                    )")
+    [void]$content.AppendLine("                    Store                 = '$($ObjectHash.Store)'")
+    [void]$content.AppendLine("                }")
+    return $content.ToString()
 }
 
 function ConvertTo-DLPPrinterGroupsString
@@ -1200,25 +1613,25 @@ function ConvertTo-SiteGroupsString
     [void]$content.Append('@(')
     foreach ($instance in $ObjectHash)
     {
-        [void]$content.AppendLine("MSFT_PolicyConfigDLPSiteGroups")
-        [void]$content.AppendLine("{")
-        [void]$content.AppendLine("    Id        = '$($instance.Id)'")
-        [void]$content.AppendLine("    Name      = '$($instance.Name)'")
-        [void]$content.AppendLine("    addresses = @(")
+        [void]$content.AppendLine("                MSFT_PolicyConfigDLPSiteGroups")
+        [void]$content.AppendLine("                {")
+        [void]$content.AppendLine("                    Id        = '$($instance.Id)'")
+        [void]$content.AppendLine("                    Name      = '$($instance.Name)'")
+        [void]$content.AppendLine("                    Addresses = @(")
         foreach ($address in $instance.addresses)
         {
-            [void]$content.AppendLine("        MSFT_PolicyConfigSiteGroupAddress")
-            [void]$content.AppendLine("        {")
-            [void]$content.AppendLine("            MatchType    = '$($address.MatchType)'")
-            [void]$content.AppendLine("            Url          = '$($address.MatchType)'")
-            [void]$content.AppendLine("            AddressLower = '$($address.MatchType)'")
-            [void]$content.AppendLine("            AddressUpper = '$($address.MatchType)'")
-            [void]$content.AppendLine("        }")
+            [void]$content.AppendLine("                        MSFT_PolicyConfigSiteGroupAddress")
+            [void]$content.AppendLine("                        {")
+            [void]$content.AppendLine("                            MatchType    = '$($address.MatchType)'")
+            [void]$content.AppendLine("                            Url          = '$($address.Url)'")
+            [void]$content.AppendLine("                            AddressLower = '$($address.AddressLower)'")
+            [void]$content.AppendLine("                            AddressUpper = '$($address.AddressUpper)'")
+            [void]$content.AppendLine("                        }")
         }
-        [void]$content.AppendLine("    )")
-        [void]$content.AppendLine("}")
+        [void]$content.AppendLine("                    )")
+        [void]$content.AppendLine("                }")
     }
-    [void]$content.Append(')')
+    [void]$content.Append('                )')
     $result = $content.ToString()
     return $result
 }
@@ -1237,11 +1650,11 @@ function ConvertTo-AppsString
     [void]$content.Append('@(')
     foreach ($instance in $ObjectHash)
     {
-        [void]$content.AppendLine("MSFT_PolicyConfigApp")
-        [void]$content.AppendLine("{")
-        [void]$content.AppendLine("    Value        = '$($instance.Value)'")
-        [void]$content.AppendLine("    Executable   = '$($instance.Executable)'")
-        [void]$content.AppendLine("}")
+        [void]$content.AppendLine("                MSFT_PolicyConfigApp")
+        [void]$content.AppendLine("                {")
+        [void]$content.AppendLine("                    Value        = '$($instance.Value)'")
+        [void]$content.AppendLine("                    Executable   = '$($instance.Executable)'")
+        [void]$content.AppendLine("                }")
     }
     [void]$content.Append(')')
     $result = $content.ToString()
