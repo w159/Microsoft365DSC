@@ -2,8 +2,6 @@
 
 # UNRELEASED
 
-* IntuneDerivedCredential
-  * Initial release.
 * AADAdminConsentRequestPolicy
   * Initial release.
 * AADApplication
@@ -40,6 +38,8 @@
     FIXES [#3028](https://github.com/microsoft/Microsoft365DSC/issues/3028)
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
+* IntuneDerivedCredential
+  * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp
@@ -51,6 +51,8 @@
 * PPDLPPolicyConnectorConfigurations
   * Initial release.
 * PPPowerAppPolicyUrlPatterns
+  * Initial release.
+* SCPolicyConfig
   * Initial release.
 * TeamsUpgradePolicy
   * Added support for tenant wide changes using the * value for users.

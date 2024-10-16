@@ -1110,6 +1110,27 @@ function Test-TargetResource
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
+    #Compare Cim instances
+    $testResult = $true
+    foreach ($key in $PSBoundParameters.Keys)
+    {
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
+        {
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
+
+            if (-not $testResult)
+            {
+                break
+            }
+
+            $ValuesToCheck.Remove($key) | Out-Null
+        }
+    }
+
     $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
         -Source $($MyInvocation.MyCommand.Source) `
         -DesiredValues $PSBoundParameters `
@@ -1577,7 +1598,7 @@ function ConvertTo-DLPRemovableMediaGroupsString
         [void]$content.AppendLine("                MSFT_PolicyConfigDLPRemovableMediaGroups")
         [void]$content.AppendLine("                {")
         [void]$content.AppendLine("                    groupName = '$($instance.groupName)'")
-        [void]$content.AppendLine("                    medias    = @(")
+        [void]$content.AppendLine("                    removableMedia    = @(")
         foreach ($media in $instance.removableMedia)
         {
             [void]$content.AppendLine("                        MSFT_PolicyConfigRemovableMedia")

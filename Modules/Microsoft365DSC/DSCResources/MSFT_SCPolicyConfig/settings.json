@@ -1,12 +1,12 @@
 ﻿{
     "resourceName": "SCPolicyConfig",
-    "description": "Description of what the resource is about.",
+    "description": "Configures the Data Loss Prevention settings in Purview.",
     "roles": {
         "read": [
-            "Role"
+            "Global Reader"
         ],
         "update": [
-            "Role"
+            "Compliance Administrator"
         ]
     },
     "permissions": {
@@ -16,16 +16,8 @@
                 "update": []
             },
             "application": {
-                "read": [
-                    {
-                        "name": "Permission for Monitoring and Export"
-                    }
-                ],
-                "update": [
-                    {
-                        "name": "Permission for deploying"
-                    }
-                ]
+                "read": [],
+                "update": []
             }
         }
     }
