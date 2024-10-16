@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* IntuneDerivedCredential
+  * Initial release.
 * AADAdminConsentRequestPolicy
   * Initial release.
 * AADApplication
@@ -42,12 +44,21 @@
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp
   * Initial release
+* IntuneMobileAppsWindowsOfficeSuiteApp
+  * Initial release
+* IntuneSecurityBaselineMicrosoft365AppsForEnterprise
+  * Initial release
+* IntuneSecurityBaselineMicrosoftEdge
+  * Initial release
 * PPAdminDLPPolicy
   * Initial release.
 * PPDLPPolicyConnectorConfigurations
   * Initial release.
 * PPPowerAppPolicyUrlPatterns
   * Initial release.
+* TeamsUpgradePolicy
+  * Added support for tenant wide changes using the * value for users.
+    FIXES [#5174](https://github.com/microsoft/Microsoft365DSC/issues/5174)
 * M365DSCDRGUtil
   * Fixes an issue for the handling of skipped one-property elements in the
     Settings Catalog. FIXES [#5086](https://github.com/microsoft/Microsoft365DSC/issues/5086)
