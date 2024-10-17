@@ -2,14 +2,14 @@
 
 # UNRELEASED
 
-* IntuneDerivedCredential
-  * Initial release.
 * AADAdminConsentRequestPolicy
   * Initial release.
 * AADApplication
   * Fixed an issue trying to retrieve the beta instance.
   * Added support for OnPremisesPublishing.
   * Added support for ApplicationTemplate.
+  * Fixes an issue where trying to apply permissions complained about
+    duplicate entries.
 * AADAuthenticationRequirement
   * Initial release.
 * AADConnectorGroupApplicationProxy
@@ -24,6 +24,8 @@
   * Initial release.
 * AADLifecycleWorkflowSettings
   * Initial release.
+* AADServicePrincipal
+  * Adding Delegated Permission Classification Property
 * ADOPermissionGroupSettings
   * Initial release.
 * EXOATPBuiltInProtectionRule
@@ -38,6 +40,8 @@
 * IntuneAppAndBrowserIsolationPolicyWindows10
   * Initial release.
     FIXES [#3028](https://github.com/microsoft/Microsoft365DSC/issues/3028)
+* IntuneDerivedCredential
+  * Initial release.
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
@@ -56,6 +60,10 @@
   * Initial release.
 * PPPowerAppPolicyUrlPatterns
   * Initial release.
+* TeamsClientConfiguration
+  * Fixed bug where RestrictedSenderList was always empty in the MSFT_TeamsClientConfiguration resource
+    FIXES [#5190](https://github.com/microsoft/Microsoft365DSC/issues/5190)
+  * Changed Set-TargetResource to always use semicolon as separator as mentioned in the MS documentation
 * TeamsUpgradePolicy
   * Added support for tenant wide changes using the * value for users.
     FIXES [#5174](https://github.com/microsoft/Microsoft365DSC/issues/5174)
