@@ -4,16 +4,22 @@
 
 * AADAccessReviewDefinition
   * Initial release.
+* AADAuthenticationMethodPolicyExternal
+  * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADIdentityB2XUserFlow
   * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * Intune workload
   * Fixed missing permissions in settings.json
+* SentinelThreatIntelligenceIndicator
+  * Initial release.
 * SPOTenantSettings
   * Added support for AllowSelectSGsInODBListInTenant,
     DenySelectSGsInODBListInTenant, DenySelectSecurityGroupsInSPSitesList,
@@ -43,6 +49,8 @@
 * AADAuthenticationRequirement
   * Initial release.
 * AADConnectorGroupApplicationProxy
+  * Initial release.
+* AADCustomAuthenticationExtension
   * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Initial release.
