@@ -535,8 +535,8 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:getInstances = Get-MgBetaDeviceAppManagementMobileApp `
-            -Filter "isof('microsoft.graph.officeSuiteApp')" `
+        [array] $Script:getInstances = Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting `
+            -Filter "isof('microsoft.graph.androidManagedStoreAccountEnterpriseSettings')" `
             -ErrorAction Stop
 
         $i = 1
@@ -577,102 +577,11 @@ function Export-TargetResource
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
 
-            #region complex types
-            if ($null -ne $Results.Categories)
-            {
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.Categories `
-                    -CIMInstanceName 'DeviceManagementMobileAppCategory'
-
-                if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                {
-                    $Results.Categories = $complexTypeStringResult
-                }
-                else
-                {
-                    $Results.Remove('Categories') | Out-Null
-                }
-            }
-
-            if ($null -ne $Results.ExcludedApps)
-            {
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.ExcludedApps `
-                    -CIMInstanceName 'DeviceManagementMobileAppExcludedApp'
-
-                if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                {
-                    $Results.ExcludedApps = $complexTypeStringResult
-                }
-                else
-                {
-                    $Results.Remove('ExcludedApps') | Out-Null
-                }
-            }
-
-            # if ($null -ne $Results.LargeIcon)
-            # {
-            #     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-            #         -ComplexObject $Results.LargeIcon `
-            #         -CIMInstanceName 'DeviceManagementMimeContent'
-
-            #     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
-            #     {
-            #         $Results.LargeIcon = $complexTypeStringResult
-            #     }
-            #     else
-            #     {
-            #         $Results.Remove('LargeIcon') | Out-Null
-            #     }
-            # }
-
-            if ($null -ne $Results.Assignments)
-            {
-                if ($Results.Assignments)
-                {
-                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                        -ComplexObject $Results.Assignments `
-                        -CIMInstanceName DeviceManagementMobileAppAssignment
-
-                    if ($complexTypeStringResult)
-                    {
-                        $Results.Assignments = $complexTypeStringResult
-                    }
-                    else
-                    {
-                        $Results.Remove('Assignments') | Out-Null
-                    }
-                }
-            }
-            #endregion complex types
-
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
-
-            #region complex types
-            if ($null -ne $Results.Categories)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Categories' -IsCIMArray:$true
-            }
-
-            if ($null -ne $Results.ExcludedApps)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExcludedApps' -IsCIMArray:$false
-            }
-
-            # if ($null -ne $Results.LargeIcon)
-            # {
-            #     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'LargeIcon' -IsCIMArray:$false
-            # }
-
-            if ($null -ne $Results.Assignments)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
-            }
-            #endregion complex types
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
