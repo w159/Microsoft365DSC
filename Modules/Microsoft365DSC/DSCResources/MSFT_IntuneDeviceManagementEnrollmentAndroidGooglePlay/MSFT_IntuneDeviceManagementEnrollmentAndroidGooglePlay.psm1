@@ -421,7 +421,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Intune Windows Suite App with Id {$Id} and DisplayName {$DisplayName}"
+    Write-Verbose -Message "Testing configuration of the Intune Device Management Android Google Play Enrollment with Id {$Id} and DisplayName {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
@@ -536,7 +536,6 @@ function Export-TargetResource
     {
         $Script:ExportMode = $true
         [array] $Script:getInstances = Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting `
-            -Filter "isof('microsoft.graph.androidManagedStoreAccountEnterpriseSettings')" `
             -ErrorAction Stop
 
         $i = 1
@@ -562,7 +561,6 @@ function Export-TargetResource
 
             $params = @{
                 Id                    = $config.Id
-                DisplayName           = $config.DisplayName
                 Ensure                = 'Present'
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
