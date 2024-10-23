@@ -10,10 +10,6 @@ function Get-TargetResource
         [System.String]
         $Id,
 
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
-
         [Parameter()]
         [System.String]
         $BindStatus,
@@ -93,117 +89,34 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        $instance = Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MobileAppId $Id `
-            -ExpandProperty "categories" `
-            -ErrorAction SilentlyContinue
+        $allSettings = Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting
+        $specificSetting = $allSettings | Where-Object { $_.id -eq $Id }
 
-        if ($null -eq $instance)
-        {
-            Write-Verbose -Message "Could not find an Intune Windows Office Suite App with Id {$Id}."
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
-            {
-                $instance = Get-MgBetaDeviceAppManagementMobileApp `
-                    -Filter "(isof('microsoft.graph.officeSuiteApp') and displayName eq '$DisplayName')" `
-                    -ErrorAction SilentlyContinue
-            }
-
-            if ($null -ne $instance)
-            {
-                $instance = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $instance.Id `
-                    -ExpandProperty "categories" `
-                    -ErrorAction SilentlyContinue
-                $Id = $instance.Id
-            }
+        if (-not $specificSetting) {
+            Write-Verbose "No Android Managed Store Account Enterprise Setting found with Id $Id."
+            return $null
         }
 
-        if ($null -eq $instance)
-        {
-            Write-Verbose -Message "Could not find an Intune Windows Office Suite App with DisplayName {$DisplayName} was found."
-            return $nullResult
+        $result = @{
+            Id                                        = $specificSetting.id
+            BindStatus                                = $specificSetting.bindStatus
+            OwnerUserPrincipalName                    = $specificSetting.ownerUserPrincipalName
+            OwnerOrganizationName                     = $specificSetting.ownerOrganizationName
+            EnrollmentTarget                          = $specificSetting.enrollmentTarget
+            DeviceOwnerManagementEnabled              = $specificSetting.deviceOwnerManagementEnabled
+            AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $specificSetting.androidDeviceOwnerFullyManagedEnrollmentEnabled
+            Ensure                                    = 'Present'
+            Credential                                = $Credential
+            ApplicationId                             = $ApplicationId
+            TenantId                                  = $TenantId
+            CertificateThumbprint                     = $CertificateThumbprint
+            ApplicationSecret                         = $ApplicationSecret
+            ManagedIdentity                           = $ManagedIdentity.IsPresent
+            AccessTokens                              = $AccessTokens
         }
 
-        Write-Verbose "An Intune Windows Office Suite App with Id {$Id} and DisplayName {$DisplayName} was found."
+        return $result
 
-        #region complex types
-        $complexCategories = @()
-        foreach ($category in $instance.Categories)
-        {
-            $myCategory = @{}
-            $myCategory.Add('Id', $category.id)
-            $myCategory.Add('DisplayName', $category.displayName)
-            $complexCategories += $myCategory
-        }
-
-        $complexExcludedApps = @{}
-        if ($null -ne $instance.AdditionalProperties.excludedApps)
-        {
-            $instance.AdditionalProperties.excludedApps.GetEnumerator() | Foreach-Object {
-                $complexExcludedApps.Add($_.Key, $_.Value)
-            }
-        }
-
-        # $complexLargeIcon = @{}
-        # if ($null -ne $instance.LargeIcon.Value)
-        # {
-        #     $complexLargeIcon.Add('Value', [System.Convert]::ToBase64String($instance.LargeIcon.Value))
-        #     $complexLargeIcon.Add('Type', $instance.LargeIcon.Type)
-        # }
-
-        $results = @{
-            Id                              = $instance.Id
-            DisplayName                     = $instance.DisplayName
-            Description                     = $instance.Description
-            IsFeatured                      = $instance.IsFeatured
-            PrivacyInformationUrl           = $instance.PrivacyInformationUrl
-            InformationUrl                  = $instance.InformationUrl
-            Notes                           = $instance.Notes
-            RoleScopeTagIds                 = $instance.RoleScopeTagIds
-            AutoAcceptEula                  = $instance.AdditionalProperties.autoAcceptEula
-            ProductIds                      = $instance.AdditionalProperties.productIds
-            UseSharedComputerActivation     = $instance.AdditionalProperties.useSharedComputerActivation
-            UpdateChannel                   = $instance.AdditionalProperties.updateChannel
-            OfficeSuiteAppDefaultFileFormat = $instance.AdditionalProperties.officeSuiteAppDefaultFileFormat
-            OfficePlatformArchitecture      = $instance.AdditionalProperties.officePlatformArchitecture
-            LocalesToInstall                = $instance.AdditionalProperties.localesToInstall
-            InstallProgressDisplayLevel     = $instance.AdditionalProperties.installProgressDisplayLevel
-            ShouldUninstallOlderVersionsOfOffice = $instance.AdditionalProperties.shouldUninstallOlderVersionsOfOffice
-            TargetVersion                   = $instance.AdditionalProperties.targetVersion
-            UpdateVersion                   = $instance.AdditionalProperties.updateVersion
-            OfficeConfigurationXml          = $instance.AdditionalProperties.officeConfigurationXml
-            # LargeIcon                       = $complexLargeIcon
-            ExcludedApps                    = $complexExcludedApps
-            Categories                      = $complexCategories
-            Ensure                          = 'Present'
-            Credential                      = $Credential
-            ApplicationId                   = $ApplicationId
-            TenantId                        = $TenantId
-            CertificateThumbprint           = $CertificateThumbprint
-            ApplicationSecret               = $ApplicationSecret
-            ManagedIdentity                 = $ManagedIdentity.IsPresent
-            AccessTokens                    = $AccessTokens
-        }
-
-        #Assignments
-        $resultAssignments = @()
-        $appAssignments = Get-MgBetaDeviceAppManagementMobileAppAssignment -MobileAppId $instance.Id
-        if ($null -ne $appAssignments -and $appAssignments.count -gt 0)
-        {
-            $convertedAssignments = ConvertFrom-IntuneMobileAppAssignment `
-                                    -IncludeDeviceFilter:$true `
-                                    -Assignments ($appAssignments)
-
-            # Filter out 'source' from the assignment objects
-            foreach ($assignment in $convertedAssignments) {
-                if ($assignment.ContainsKey('source')) {
-                    $assignment.Remove('source')
-                }
-            }
-
-            $resultAssignments += $convertedAssignments
-        }
-        $results.Add('Assignments', $resultAssignments)
-        return [System.Collections.Hashtable] $results
     }
     catch
     {
@@ -228,10 +141,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Id,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
 
         [Parameter()]
         [System.String]
@@ -439,10 +348,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $Id,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
 
         [Parameter()]
         [System.String]
