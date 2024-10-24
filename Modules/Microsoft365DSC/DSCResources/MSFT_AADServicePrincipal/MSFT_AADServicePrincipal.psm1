@@ -33,6 +33,14 @@ function Get-TargetResource
         $AppRoleAssignmentRequired,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $CustomSecurityAttributes,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DelegatedPermissionClassifications,
+
+        [Parameter()]
         [System.String]
         $ErrorUrl,
 
@@ -212,32 +220,49 @@ function Get-TargetResource
                 }
             }
 
+            [Array]$complexDelegatedPermissionClassifications = @()
+            $permissionClassifications = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/v1.0/servicePrincipals(appId='$AppId')/delegatedPermissionClassifications" -Method Get
+            foreach ($permissionClassification in $permissionClassifications.Value){
+                $hashtable = @{
+                    classification = $permissionClassification.Classification
+                    permissionName = $permissionClassification.permissionName
+                }
+                $complexDelegatedPermissionClassifications += $hashtable
+            }
+
+            $complexCustomSecurityAttributes = [Array](Get-CustomSecurityAttributes -AppId $AppId)
+            if ($null -eq $complexCustomSecurityAttributes) {
+                $complexCustomSecurityAttributes = @()
+            }
+
             $result = @{
-                AppId                     = $AADServicePrincipal.AppId
-                AppRoleAssignedTo         = $AppRoleAssignedToValues
-                ObjectID                  = $AADServicePrincipal.Id
-                DisplayName               = $AADServicePrincipal.DisplayName
-                AlternativeNames          = $AADServicePrincipal.AlternativeNames
-                AccountEnabled            = [boolean]$AADServicePrincipal.AccountEnabled
-                AppRoleAssignmentRequired = $AADServicePrincipal.AppRoleAssignmentRequired
-                ErrorUrl                  = $AADServicePrincipal.ErrorUrl
-                Homepage                  = $AADServicePrincipal.Homepage
-                LogoutUrl                 = $AADServicePrincipal.LogoutUrl
-                Owners                    = $ownersValues
-                PublisherName             = $AADServicePrincipal.PublisherName
-                ReplyURLs                 = $AADServicePrincipal.ReplyURLs
-                SamlMetadataURL           = $AADServicePrincipal.SamlMetadataURL
-                ServicePrincipalNames     = $AADServicePrincipal.ServicePrincipalNames
-                ServicePrincipalType      = $AADServicePrincipal.ServicePrincipalType
-                Tags                      = $AADServicePrincipal.Tags
-                Ensure                    = 'Present'
-                Credential                = $Credential
-                ApplicationId             = $ApplicationId
-                ApplicationSecret         = $ApplicationSecret
-                TenantId                  = $TenantId
-                CertificateThumbprint     = $CertificateThumbprint
-                Managedidentity           = $ManagedIdentity.IsPresent
-                AccessTokens              = $AccessTokens
+                AppId                              = $AADServicePrincipal.AppId
+                AppRoleAssignedTo                  = $AppRoleAssignedToValues
+                ObjectID                           = $AADServicePrincipal.Id
+                DisplayName                        = $AADServicePrincipal.DisplayName
+                AlternativeNames                   = $AADServicePrincipal.AlternativeNames
+                AccountEnabled                     = [boolean]$AADServicePrincipal.AccountEnabled
+                AppRoleAssignmentRequired          = $AADServicePrincipal.AppRoleAssignmentRequired
+                CustomSecurityAttributes           = $complexCustomSecurityAttributes
+                DelegatedPermissionClassifications = [Array]$complexDelegatedPermissionClassifications
+                ErrorUrl                           = $AADServicePrincipal.ErrorUrl
+                Homepage                           = $AADServicePrincipal.Homepage
+                LogoutUrl                          = $AADServicePrincipal.LogoutUrl
+                Owners                             = $ownersValues
+                PublisherName                      = $AADServicePrincipal.PublisherName
+                ReplyURLs                          = $AADServicePrincipal.ReplyURLs
+                SamlMetadataURL                    = $AADServicePrincipal.SamlMetadataURL
+                ServicePrincipalNames              = $AADServicePrincipal.ServicePrincipalNames
+                ServicePrincipalType               = $AADServicePrincipal.ServicePrincipalType
+                Tags                               = $AADServicePrincipal.Tags
+                Ensure                             = 'Present'
+                Credential                         = $Credential
+                ApplicationId                      = $ApplicationId
+                ApplicationSecret                  = $ApplicationSecret
+                TenantId                           = $TenantId
+                CertificateThumbprint              = $CertificateThumbprint
+                Managedidentity                    = $ManagedIdentity.IsPresent
+                AccessTokens                       = $AccessTokens
             }
             Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
             return $result
@@ -288,6 +313,14 @@ function Set-TargetResource
         [Parameter()]
         [System.Boolean]
         $AppRoleAssignmentRequired,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $CustomSecurityAttributes,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DelegatedPermissionClassifications,
 
         [Parameter()]
         [System.String]
@@ -391,6 +424,13 @@ function Set-TargetResource
     $currentParameters.Remove('ApplicationSecret') | Out-Null
     $currentParameters.Remove('AccessTokens') | Out-Null
 
+    # update the custom security attributes to be cmdlet comsumable
+    if ($null -ne $currentParameters.CustomSecurityAttributes -and $currentParameters.CustomSecurityAttributes -gt 0) {
+        $currentParameters.CustomSecurityAttributes = Get-M365DSCAADServicePrincipalCustomSecurityAttributesAsCmdletHashtable -CustomSecurityAttributes $currentParameters.CustomSecurityAttributes
+    } else {
+        $currentParameters.Remove('CustomSecurityAttributes')
+    }
+
     # ServicePrincipal should exist but it doesn't
     if ($Ensure -eq 'Present' -and $currentAADServicePrincipal.Ensure -eq 'Absent')
     {
@@ -398,6 +438,8 @@ function Set-TargetResource
         {
             $currentParameters.AppRoleAssignedTo = $AppRoleAssignedToValue
         }
+        # removing Delegated permission classifications from this new call, as adding below separately
+        $currentParameters.Remove('DelegatedPermissionClassifications') | Out-Null
         $ObjectGuid = [System.Guid]::empty
         if (-not [System.Guid]::TryParse($AppId, [System.Management.Automation.PSReference]$ObjectGuid))
         {
@@ -419,6 +461,17 @@ function Set-TargetResource
             Write-Verbose -Message "Adding new owner {$owner}"
             $newOwner = New-MgServicePrincipalOwnerByRef -ServicePrincipalId $newSP.Id -BodyParameter $body
         }
+
+        #adding delegated permissions classifications
+        if($null -ne $DelegatedPermissionClassifications){
+            foreach ($permissionClassification in $DelegatedPermissionClassifications){
+                $params = @{
+                    classification = $permissionClassification.Classification
+                    permissionName = $permissionClassification.permissionName
+                }
+                Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/v1.0/servicePrincipals(appId='$($currentParameters.AppId)')/delegatedPermissionClassifications" -Method Post -Body $params
+            }
+        }
     }
     # ServicePrincipal should exist and will be configured to desired state
     elseif ($Ensure -eq 'Present' -and $currentAADServicePrincipal.Ensure -eq 'Present')
@@ -434,6 +487,17 @@ function Set-TargetResource
         Write-Verbose -Message "ServicePrincipalID: $($currentAADServicePrincipal.ObjectID)"
         $currentParameters.Remove('AppRoleAssignedTo') | Out-Null
         $currentParameters.Remove('Owners') | Out-Null
+        $currentParameters.Remove('DelegatedPermissionClassifications') | Out-Null
+
+        #removing the current custom security attributes
+        if ($currentAADServicePrincipal.CustomSecurityAttributes.Count -gt 0) {
+            $currentAADServicePrincipal.CustomSecurityAttributes = Get-M365DSCAADServicePrincipalCustomSecurityAttributesAsCmdletHashtable -CustomSecurityAttributes $currentAADServicePrincipal.CustomSecurityAttributes -GetForDelete $true
+            $CSAParams = @{
+                customSecurityAttributes = $currentAADServicePrincipal.CustomSecurityAttributes
+            }
+            Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals(appId='$($currentParameters.AppId)')" -Method Patch -Body $CSAParams
+        }
+
         Update-MgServicePrincipal -ServicePrincipalId $currentAADServicePrincipal.ObjectID @currentParameters
 
         if ($AppRoleAssignedTo)
@@ -546,6 +610,26 @@ function Set-TargetResource
                                                     -DirectoryObjectId $userInfo.Id | Out-Null
             }
         }
+
+        Write-Verbose -Message "Checking if DelegatedPermissionClassifications need to be updated..."
+
+        if ($null -ne $DelegatedPermissionClassifications)
+        {
+            # removing old perm classifications
+            $permissionClassificationList = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/v1.0/servicePrincipals(appId='$($currentParameters.AppId)')/delegatedPermissionClassifications" -Method Get
+            foreach($permissionClassification in $permissionClassificationList.Value){
+                Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/v1.0/servicePrincipals(appId='$($currentParameters.AppId)')/delegatedPermissionClassifications/$($permissionClassification.Id)" -Method Delete
+            }
+
+            # adding new perm classifications
+            foreach ($permissionClassification in $DelegatedPermissionClassifications){
+                $params = @{
+                    classification = $permissionClassification.Classification
+                    permissionName = $permissionClassification.permissionName
+                }
+                Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/v1.0/servicePrincipals(appId='$($currentParameters.AppId)')/delegatedPermissionClassifications" -Method Post -Body $params
+            }
+        }
     }
     # ServicePrincipal exists but should not
     elseif ($Ensure -eq 'Absent' -and $currentAADServicePrincipal.Ensure -eq 'Present')
@@ -588,6 +672,14 @@ function Test-TargetResource
         [Parameter()]
         [System.Boolean]
         $AppRoleAssignmentRequired,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $CustomSecurityAttributes,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $DelegatedPermissionClassifications,
 
         [Parameter()]
         [System.String]
@@ -677,21 +769,49 @@ function Test-TargetResource
 
     Write-Verbose -Message 'Testing configuration of Azure AD ServicePrincipal'
 
+    $testTargetResource = $true
     $CurrentValues = Get-TargetResource @PSBoundParameters
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
+
+    #Compare Cim instances
+    foreach ($key in $PSBoundParameters.Keys)
+    {
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+
+        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
+        {
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
+
+            if (-not $testResult)
+            {
+                $testTargetResource = $false
+            }
+            else {
+                $ValuesToCheck.Remove($key) | Out-Null
+            }
+        }
+    }
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
 
-    $ValuesToCheck = $PSBoundParameters
-
     $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-        -Source $($MyInvocation.MyCommand.Source) `
-        -DesiredValues $PSBoundParameters `
-        -ValuesToCheck $ValuesToCheck.Keys
+    -Source $($MyInvocation.MyCommand.Source) `
+    -DesiredValues $PSBoundParameters `
+    -ValuesToCheck $ValuesToCheck.Keys `
+    -IncludedDrifts $driftedParams
 
-    Write-Verbose -Message "Test-TargetResource returned $TestResult"
+    if(-not $TestResult)
+    {
+        $testTargetResource = $false
+    }
 
-    return $TestResult
+    Write-Verbose -Message "Test-TargetResource returned $testTargetResource"
+
+    return $testTargetResource
 }
 
 function Export-TargetResource
@@ -785,6 +905,14 @@ function Export-TargetResource
                 {
                     $Results.AppRoleAssignedTo = Get-M365DSCAzureADServicePrincipalAssignmentAsString -Assignments $Results.AppRoleAssignedTo
                 }
+                if ($Results.DelegatedPermissionClassifications.Count -gt 0)
+                {
+                    $Results.DelegatedPermissionClassifications = Get-M365DSCAzureADServicePrincipalDelegatedPermissionClassifications -PermissionClassifications $Results.DelegatedPermissionClassifications
+                }
+                if ($Results.CustomSecurityAttributes.Count -gt 0)
+                {
+                    $Results.CustomSecurityAttributes = Get-M365DSCAADServicePrincipalCustomSecurityAttributesAsString -CustomSecurityAttributes $Results.CustomSecurityAttributes
+                }
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $PSScriptRoot `
@@ -794,6 +922,16 @@ function Export-TargetResource
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                         -ParameterName 'AppRoleAssignedTo'
+                }
+                if ($null -ne $Results.DelegatedPermissionClassifications)
+                {
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                        -ParameterName 'DelegatedPermissionClassifications'
+                }
+                if ($null -ne $Results.CustomSecurityAttributes)
+                {
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                        -ParameterName 'CustomSecurityAttributes'
                 }
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -819,6 +957,195 @@ function Export-TargetResource
     }
 }
 
+function Get-M365DSCAADServicePrincipalCustomSecurityAttributesAsCmdletHashtable
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Collections.ArrayList]
+        $CustomSecurityAttributes,
+
+        [Parameter()]
+        [System.Boolean]
+        $GetForDelete = $false
+    )
+
+    # logic to update the custom security attributes to be cmdlet comsumable
+    $updatedCustomSecurityAttributes = @{}
+    foreach ($attributeSet in $CustomSecurityAttributes) {
+        $attributeSetKey = $attributeSet.AttributeSetName
+
+        $valuesHashtable = @{}
+        $valuesHashtable.Add('@odata.type', '#Microsoft.DirectoryServices.CustomSecurityAttributeValue')
+        foreach ($attribute in $attributeSet.AttributeValues) {
+            $attributeKey = $attribute.AttributeName
+            # supply attributeName = $null in the body, if you want to delete this attribute
+            if ($GetForDelete -eq $true) {
+                $valuesHashtable.Add($attributeKey, $null)
+                continue
+            }
+
+            $odataKey = $attributeKey + '@odata.type'
+
+            if ($null -ne $attribute.StringArrayValue) {
+                $valuesHashtable.Add($odataKey, "#Collection(String)")
+                $attributeValue = $attribute.StringArrayValue
+            }
+            elseif ($null -ne $attribute.IntArrayValue) {
+                $valuesHashtable.Add($odataKey, "#Collection(Int32)")
+                $attributeValue = $attribute.IntArrayValue
+            }
+            elseif ($null -ne $attribute.StringValue) {
+                $valuesHashtable.Add($odataKey, "#String")
+                $attributeValue = $attribute.StringValue
+            }
+            elseif ($null -ne $attribute.IntValue) {
+                $valuesHashtable.Add($odataKey, "#Int32")
+                $attributeValue = $attribute.IntValue
+            }
+            elseif ($null -ne $attribute.BoolValue) {
+                $attributeValue = $attribute.BoolValue
+            }
+
+            $valuesHashtable.Add($attributeKey, $attributeValue)
+        }
+        $updatedCustomSecurityAttributes.Add($attributeSetKey, $valuesHashtable)
+    }
+    return $updatedCustomSecurityAttributes
+}
+
+# Function to create MSFT_AttributeValue
+function Create-AttributeValue {
+    param (
+        [string]$AttributeName,
+        [object]$Value
+    )
+
+    $attributeValue = @{
+        AttributeName = $AttributeName
+        StringArrayValue = $null
+        IntArrayValue = $null
+        StringValue = $null
+        IntValue = $null
+        BoolValue = $null
+    }
+
+    # Handle different types of values
+    if ($Value -is [string]) {
+        $attributeValue.StringValue = $Value
+    }
+    elseif ($Value -is [System.Int32] -or $Value -is [System.Int64]) {
+        $attributeValue.IntValue = $Value
+    }
+    elseif ($Value -is [bool]) {
+        $attributeValue.BoolValue = $Value
+    }
+    elseif ($Value -is [array]) {
+        if ($Value[0] -is [string]) {
+            $attributeValue.StringArrayValue = $Value
+        }
+        elseif ($Value[0] -is [System.Int32] -or $Value[0] -is [System.Int64]) {
+            $attributeValue.IntArrayValue = $Value
+        }
+    }
+
+    return $attributeValue
+}
+
+
+function Get-CustomSecurityAttributes {
+    [OutputType([System.Array])]
+    param (
+        [String]$AppId
+    )
+
+    $customSecurityAttributes = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals(appId='$AppId')`?`$select=customSecurityAttributes" -Method Get
+    $customSecurityAttributes = $customSecurityAttributes.customSecurityAttributes
+    $newCustomSecurityAttributes = @()
+
+    foreach ($key in $customSecurityAttributes.Keys) {
+        $attributeSet = @{
+            AttributeSetName = $key
+            AttributeValues  = @()
+        }
+
+        foreach ($attribute in $customSecurityAttributes[$key].Keys) {
+            # Skip properties that end with '@odata.type'
+            if ($attribute -like "*@odata.type") {
+                continue
+            }
+
+            $value = $customSecurityAttributes[$key][$attribute]
+            $attributeName = $attribute # Keep the attribute name as it is
+
+            # Create the attribute value and add it to the set
+            $attributeSet.AttributeValues += Create-AttributeValue -AttributeName $attributeName -Value $value
+        }
+
+        #Add the attribute set to the final structure
+        $newCustomSecurityAttributes += $attributeSet
+    }
+
+    # Display the new structure
+    return [Array]$newCustomSecurityAttributes
+}
+
+function Get-M365DSCAADServicePrincipalCustomSecurityAttributesAsString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Collections.ArrayList]
+        $CustomSecurityAttributes
+    )
+
+    $StringContent = "@(`r`n"
+    foreach ($customSecurityAttribute in $CustomSecurityAttributes)
+    {
+        $StringContent += "                MSFT_AADServicePrincipalAttributeSet {`r`n"
+        $StringContent += "                     AttributeSetName = '" + $customSecurityAttribute.AttributeSetName + "'`r`n"
+        if ($customSecurityAttribute.AttributeValues.Length -gt 0)
+        {
+            $StringContent += "                     AttributeValues        = @(`r`n"
+            foreach ($attributeValue in $customSecurityAttribute.AttributeValues)
+            {
+                $StringContent += "                        MSFT_AADServicePrincipalAttributeValue {`r`n"
+                $StringContent += "                            AttributeName  = '" + $attributeValue.AttributeName + "'`r`n"
+                if ($null -ne $attributeValue.BoolValue){
+                    $StringContent += "                            BoolValue = $" + $attributeValue.BoolValue + "`r`n"
+                }
+                elseif ($null -ne $attributeValue.StringValue){
+                    $StringContent += "                            StringValue = '" + $attributeValue.StringValue + "'`r`n"
+                }
+                elseif ($null -ne $attributeValue.IntValue){
+                    $StringContent += "                            IntValue = " + $attributeValue.IntValue + "`r`n"
+                }
+                elseif ($null -ne $attributeValue.StringArrayValue){
+                    $StringContent += "                            StringArrayValue = @("
+                    $StringContent += ($attributeValue.StringArrayValue | ForEach-Object { "'$_'" }) -join ","
+                    $StringContent += ")`r`n"
+                }
+                elseif ($null -ne $attributeValue.IntArrayValue){
+                    $StringContent += "                            IntArrayValue = @("
+                    $StringContent += $attributeValue.IntArrayValue -join ","
+                    $StringContent += ")`r`n"
+                }
+                $StringContent += "                        }`r`n"
+            }
+            $StringContent += "                    )`r`n"
+        }
+        else
+        {
+            $StringContent += "                    AttributeValues         = @()`r`n"
+        }
+        $StringContent += "                }`r`n"
+    }
+    $StringContent += '            )'
+    return $StringContent
+}
+
 function Get-M365DSCAzureADServicePrincipalAssignmentAsString
 {
     [CmdletBinding()]
@@ -836,6 +1163,28 @@ function Get-M365DSCAzureADServicePrincipalAssignmentAsString
         $StringContent += "                PrincipalType = '" + $assignment.PrincipalType + "'`r`n"
         $StringContent += "                Identity      = '" + $assignment.Identity + "'`r`n"
         $StringContent += "            }`r`n"
+    }
+    $StringContent += '            )'
+    return $StringContent
+}
+
+function Get-M365DSCAzureADServicePrincipalDelegatedPermissionClassifications
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Collections.ArrayList]
+        $PermissionClassifications
+    )
+
+    $StringContent = "@(`r`n"
+    foreach ($permissionClassification in $PermissionClassifications)
+    {
+        $StringContent += "                MSFT_AADServicePrincipalDelegatedPermissionClassification {`r`n"
+        $StringContent += "                     Classification = '" + $PermissionClassification.Classification + "'`r`n"
+        $StringContent += "                     PermissionName = '" + $PermissionClassification.PermissionName + "'`r`n"
+        $StringContent += "                }`r`n"
     }
     $StringContent += '            )'
     return $StringContent

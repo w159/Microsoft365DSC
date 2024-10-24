@@ -2,15 +2,80 @@
 
 # UNRELEASED
 
+* AADAccessReviewDefinition
+  * Initial release.
+* AADAccessReviewPolicy
+  * Initial release.
+* AADAuthenticationMethodPolicyExternal
+  * Initial release.
+* AADCustomSecurityAttributeDefinition
+  * Fixed missing permissions in settings.json
+* AADIdentityB2XUserFlow
+  * Initial release.
+* AADIdentityGovernanceProgram
+  * Initial release.
+* AADIdentityAPIConnector
+  * Initial release.
+* AADNetworkAccessForwardingProfile
+  * Initial release.
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Initial release.
+* AADSocialIdentityProvider
+  * Fixed missing permissions in settings.json
+* EXOMailboxAuditBypassAssociation
+  * Initial release.
+* EXOTenantAllowBlockListItems
+  * Fixed `Test-TargetResource` to correctly mark when this resource is removed
+* IntuneAppCategory
+  * Fixed retrieval of resource which could then result in multiple categories
+    being created with same name.
+* IntuneDerivedCredential
+  * Fixed export and deployment when `NotificationType` had more than one option
+    selected
+  * Fixed retrieval of resource when it cannot be found by `Id`
+  * Added a few verbose messages
+* IntuneEndpointDetectionAndResponsePolicyWindows10
+  * Fixes an issue with `AutoFromConnector` as the Configuration package type.
+    FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* Intune workload
+  * Fixed missing permissions in settings.json
+* SCPolicyConfig
+  * Initial release.
+* SentinelAlertRule
+  * Initial release.
+* SentinelThreatIntelligenceIndicator
+  * Initial release.
+* SPOTenantSettings
+  * Added support for AllowSelectSGsInODBListInTenant,
+    DenySelectSGsInODBListInTenant, DenySelectSecurityGroupsInSPSitesList,
+    AllowSelectSecurityGroupsInSPSitesList,
+    ExemptNativeUsersFromTenantLevelRestricedAccessControl properties.
+  * TenantDefaultTimezone changed to String instead of Array.
+* M365DSCDRGUtil
+  * Fixes an issue where non-unique properties were not combined
+    properly with their respective parent setting.
+* DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.6.0.
+  * Updated Microsoft.Graph to version 2.24.0.
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
+  * Updated MSCloudLoginAssistant to version 1.1.27
+  * Updated MicrosoftTeams to version 6.6.0.
+
+# 1.24.1016.1
+
 * AADAdminConsentRequestPolicy
   * Initial release.
 * AADApplication
   * Fixed an issue trying to retrieve the beta instance.
   * Added support for OnPremisesPublishing.
   * Added support for ApplicationTemplate.
+  * Fixes an issue where trying to apply permissions complained about
+    duplicate entries.
 * AADAuthenticationRequirement
   * Initial release.
 * AADConnectorGroupApplicationProxy
+  * Initial release.
+* AADCustomAuthenticationExtension
   * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Initial release.
@@ -22,6 +87,9 @@
   * Initial release.
 * AADLifecycleWorkflowSettings
   * Initial release.
+* AADServicePrincipal
+  * Added Delegated Permission Classification Property
+  * Added Custom Security Attributes Property
 * ADOPermissionGroupSettings
   * Initial release.
 * EXOATPBuiltInProtectionRule
@@ -36,6 +104,8 @@
 * IntuneAppAndBrowserIsolationPolicyWindows10
   * Initial release.
     FIXES [#3028](https://github.com/microsoft/Microsoft365DSC/issues/3028)
+* IntuneDerivedCredential
+  * Initial release.
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
 * IntuneDerivedCredential
@@ -44,7 +114,11 @@
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp
   * Initial release
+* IntuneMobileAppsWindowsOfficeSuiteApp
+  * Initial release
 * IntuneSecurityBaselineMicrosoft365AppsForEnterprise
+  * Initial release
+* IntuneSecurityBaselineMicrosoftEdge
   * Initial release
 * PPAdminDLPPolicy
   * Initial release.
@@ -52,11 +126,15 @@
   * Initial release.
 * PPPowerAppPolicyUrlPatterns
   * Initial release.
-* SCPolicyConfig
-  * Initial release.
+* TeamsClientConfiguration
+  * Fixed bug where RestrictedSenderList was always empty in the MSFT_TeamsClientConfiguration resource
+    FIXES [#5190](https://github.com/microsoft/Microsoft365DSC/issues/5190)
+  * Changed Set-TargetResource to always use semicolon as separator as mentioned in the MS documentation
 * TeamsUpgradePolicy
   * Added support for tenant wide changes using the * value for users.
     FIXES [#5174](https://github.com/microsoft/Microsoft365DSC/issues/5174)
+* TeamsGroupPolicyAssignments
+  * FIXES [#5179](https://github.com/microsoft/Microsoft365DSC/issues/5179)
 * M365DSCDRGUtil
   * Fixes an issue for the handling of skipped one-property elements in the
     Settings Catalog. FIXES [#5086](https://github.com/microsoft/Microsoft365DSC/issues/5086)

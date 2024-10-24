@@ -21,6 +21,8 @@
 | **ServicePrincipalNames** | Write | StringArray[] | Specifies an array of service principal names. Based on the identifierURIs collection, plus the application's appId property, these URIs are used to reference an application's service principal. | |
 | **ServicePrincipalType** | Write | String | The type of the service principal. | |
 | **Tags** | Write | StringArray[] | Tags linked to this service principal.Note that if you intend for this service principal to show up in the All Applications list in the admin portal, you need to set this value to {WindowsAzureActiveDirectoryIntegratedApp} | |
+| **DelegatedPermissionClassifications** | Write | MSFT_AADServicePrincipalDelegatedPermissionClassification[] | The permission classifications for delegated permissions exposed by the app that this service principal represents. | |
+| **CustomSecurityAttributes** | Write | MSFT_AADServicePrincipalAttributeSet[] | The list of custom security attributes attached to this SPN | |
 | **Ensure** | Write | String | Specify if the Azure AD App should exist or not. | `Present`, `Absent` |
 | **ApplicationId** | Write | String | Id of the Azure Active Directory application to authenticate with. | |
 | **TenantId** | Write | String | Id of the Azure Active Directory tenant used for authentication. | |
@@ -38,6 +40,37 @@
 | --- | --- | --- | --- | --- |
 | **PrincipalType** | Write | String | Type of principal. Accepted values are User or Group | `Group`, `User` |
 | **Identity** | Write | String | Unique identity representing the principal. | |
+
+### MSFT_AADServicePrincipalDelegatedPermissionClassification
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **Classification** | Write | String | Classification of the delegated permission | `low`, `medium`, `high` |
+| **PermissionName** | Write | String | Name of the permission | |
+
+### MSFT_AADServicePrincipalAttributeValue
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **AttributeName** | Write | String | Name of the Attribute | |
+| **StringArrayValue** | Write | StringArray[] | If the attribute has a string array value | |
+| **IntArrayValue** | Write | UInt32Array[] | If the attribute has a int array value | |
+| **StringValue** | Write | String | If the attribute has a string value | |
+| **IntValue** | Write | UInt32 | If the attribute has a int value | |
+| **BoolValue** | Write | Boolean | If the attribute has a boolean value | |
+
+### MSFT_AADServicePrincipalAttributeSet
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **AttributeSetName** | Write | String | Attribute Set Name. | |
+| **AttributeValues** | Write | MSFT_AADServicePrincipalAttributeValue[] | List of attribute values. | |
 
 ## Description
 

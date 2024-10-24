@@ -967,7 +967,15 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
             -Workload $Workload `
             -CmdLetNoun $CmdLetNoun `
             -ApiVersion $ApiVersion `
-            -UpdateVerb $updateVerb).permissions | ConvertTo-Json -Depth 20
+            -UpdateVerb $updateVerb).permissions
+        if ($ResourceName -like "Intune*")
+        {
+            $resourcePermissions.application.read += @{ name = 'Group.Read.All' }
+            $resourcePermissions.application.update += @{ name = 'Group.Read.All' }
+            $resourcePermissions.delegated.read += @{ name = 'Group.Read.All' }
+            $resourcePermissions.delegated.update += @{ name = 'Group.Read.All' }
+        }
+        $resourcePermissions = $resourcePermissions | ConvertTo-Json -Depth 20
         $resourcePermissions = '    ' + $resourcePermissions
         Write-TokenReplacement -Token '<ResourceFriendlyName>' -Value $ResourceName -FilePath $settingsFilePath
         Write-TokenReplacement -Token '<ResourceDescription>' -Value $resourceDescription -FilePath $settingsFilePath
@@ -3880,8 +3888,16 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
         $parentSetting = Get-ParentSettingDefinition -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
         if ($null -ne $parentSetting)
         {
-            $combinationMatchesWithParent = $settingsWithSameName | Where-Object -FilterScript {
-                "$($parentSetting.Name)_$($_.Name)" -eq "$($parentSetting.Name)_$settingName"
+            $combinationMatchesWithParent = @()
+            $settingsWithSameName | ForEach-Object {
+                $innerParentSetting = Get-ParentSettingDefinition -SettingDefinition $_ -AllSettingDefinitions $AllSettingDefinitions
+                if ($null -ne $innerParentSetting)
+                {
+                    if ("$($innerParentSetting.Name)_$($_.Name)" -eq "$($parentSetting.Name)_$settingName")
+                    {
+                        $combinationMatchesWithParent += $_
+                    }
+                }
             }
             # If the combination of parent setting and setting name is unique, add the parent setting name to the setting name
             if ($combinationMatchesWithParent.Count -eq 1)
@@ -3955,11 +3971,13 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
             'visio16v2~Policy~L_MicrosoftVisio~L_VisioOptions~*' { $settingName = $settingName.Replace('visio16v2~Policy~L_MicrosoftVisio~L_VisioOptions', 'MicrosoftVisio_') }
             'pub16v2~Policy~L_MicrosoftOfficePublisher~*' { $settingName = $settingName.Replace('pub16v2~Policy~L_MicrosoftOfficePublisher', 'MicrosoftPublisherV2_') }
             'pub16v3~Policy~L_MicrosoftOfficePublisher~*' { $settingName = $settingName.Replace('pub16v3~Policy~L_MicrosoftOfficePublisher', 'MicrosoftPublisherV3_') }
+            'microsoft_edge~Policy~microsoft_edge~*' { $settingName = $settingName.Replace('microsoft_edge~Policy~microsoft_edge', 'MicrosoftEdge_') }
             '*~L_Security~*' { $settingName = $settingName.Replace('~L_Security', 'Security') }
             '*~L_TrustCenter*' { $settingName = $settingName.Replace('~L_TrustCenter', '_TrustCenter') }
             '*~L_ProtectedView_*' { $settingName = $settingName.Replace('~L_ProtectedView', 'ProtectedView') }
             '*~L_FileBlockSettings_*' { $settingName = $settingName.Replace('~L_FileBlockSettings', 'FileBlockSettings') }
             '*~L_TrustedLocations*' { $settingName = $settingName.Replace('~L_TrustedLocations', 'TrustedLocations') }
+            '*~HTTPAuthentication_*' { $settingName = $settingName.Replace('~HTTPAuthentication', 'HTTPAuthentication') }
         }
     }
 
@@ -4033,6 +4051,12 @@ function Get-SettingDefinitionNameWithParentFromOffsetUri {
     {
         $splittedOffsetUri = $splittedOffsetUri[1..($splittedOffsetUri.Length - 1)]
     }
+
+    if ($Skip -gt $splittedOffsetUri.Length - 1)
+    {
+        return $SettingName
+    }
+
     $splittedOffsetUri = $splittedOffsetUri[0..($splittedOffsetUri.Length - 1 - $Skip)]
     $traversed = $false
     while (-not $traversed -and $splittedOffsetUri.Length -gt 1) # Prevent adding the first element of the OffsetUri
