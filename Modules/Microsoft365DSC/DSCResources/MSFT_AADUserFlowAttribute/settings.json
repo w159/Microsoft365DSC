@@ -1,0 +1,68 @@
+﻿{
+    "resourceName": "AADUSerflowAttribute",
+    "description": "This resource configures an Azure User Flow attribute..",
+    "roles": {
+        "read": [],
+        "update": [
+            "Privileged Role Administrator"
+        ]
+    },
+    "permissions": {
+        "graph": {
+            "delegated": {
+                "read": [
+                    {
+                        "name": "Group.Read.All"
+                    },
+                    {
+                        "name": "RoleManagement.Read.Directory"
+                    },
+                    {
+                        "name": "RoleManagementPolicy.Read.Directory"
+                    },
+                    {
+                        "name": "User.Read.All"
+                    }
+                ],
+                "update": [
+                    {
+                        "name": "Group.Read.All"
+                    },
+                    {
+                        "name": "RoleManagementPolicy.Read.Directory"
+                    },
+                    {
+                        "name": "User.Read.All"
+                    }
+                ]
+            },
+            "application": {
+                "read": [
+                    {
+                        "name": "Group.Read.All"
+                    },
+                    {
+                        "name": "RoleManagement.Read.Directory"
+                    },
+                    {
+                        "name": "RoleManagementPolicy.Read.Directory"
+                    },
+                    {
+                        "name": "User.Read.All"
+                    }
+                ],
+                "update": [
+                    {
+                        "name": "Group.Read.All"
+                    },
+                    {
+                        "name": "RoleManagementPolicy.Read.Directory"
+                    },
+                    {
+                        "name": "User.Read.All"
+                    }
+                ]
+            }
+        }
+    }
+}
