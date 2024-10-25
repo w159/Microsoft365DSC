@@ -2070,7 +2070,6 @@ function Get-ComplexTypeConstructorToString
                         $complexString.AppendLine($spacing + "`$$tempPropertyName.Add('" +  $nestedPropertyName + "', `$$referencePrefix$AssignedPropertyName)" ) | Out-Null
                     }
                 }
-
             }
         }
     }

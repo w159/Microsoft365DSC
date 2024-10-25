@@ -14,6 +14,17 @@
 
     $settingsWithSameName = $AllSettingDefinitions | Where-Object -FilterScript { $_.Name -eq $settingName }
 
+    # Edge case where the same setting is defined twice in the template, with the same name and id
+    # Example is RDVAllowBDE_Name from the IntuneDiskEncryptionWindows10 resource
+    if ($settingsWithSameName.Count -eq 2)
+    {
+        if ($settingsWithSameName[0].Id -eq $settingsWithSameName[1].Id -and `
+            $settingsWithSameName[0].Name -eq $settingsWithSameName[1].Name)
+        {
+            $settingsWithSameName = $settingsWithSameName[0]
+        }
+    }
+
     if ($settingsWithSameName.Count -gt 1)
     {
         # Get the parent setting of the current setting
