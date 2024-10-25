@@ -35,10 +35,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
             }
+
             Mock -CommandName New-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
             }
+
             Mock -CommandName Update-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
             }
+
             Mock -CommandName Remove-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
             }
 

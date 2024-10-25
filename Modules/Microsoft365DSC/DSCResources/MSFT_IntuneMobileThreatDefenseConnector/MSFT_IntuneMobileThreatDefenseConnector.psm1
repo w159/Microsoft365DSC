@@ -221,7 +221,7 @@ function Set-TargetResource
     (
         #region Intune parameters
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Id,
 
@@ -353,12 +353,12 @@ function Set-TargetResource
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Update-MgBetaDeviceManagementMobileThreatDefenseConnector -MobileThreatDefenseConnectorId $Id @SetParameters
+        Update-MgBetaDeviceManagementMobileThreatDefenseConnector -MobileThreatDefenseConnectorId $currentInstance.Id @SetParameters
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Remove-MgBetaDeviceManagementMobileThreatDefenseConnector -MobileThreatDefenseConnectorId $Id -Confirm:$false
+        Remove-MgBetaDeviceManagementMobileThreatDefenseConnector -MobileThreatDefenseConnectorId $currentInstance.Id -Confirm:$false
     }
 }
 
