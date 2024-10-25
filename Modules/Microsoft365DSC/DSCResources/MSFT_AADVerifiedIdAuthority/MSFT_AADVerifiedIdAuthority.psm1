@@ -232,7 +232,7 @@ function Set-TargetResource
 
         Write-Warning -Message "You can only update Name of the VerifiedId Authority, if you want to update other properties, please delete and recreate the VerifiedId Authority."
         $body = @{
-            Name = $Name
+            name = $Name
         }
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'PATCH' -Body $body
     }
