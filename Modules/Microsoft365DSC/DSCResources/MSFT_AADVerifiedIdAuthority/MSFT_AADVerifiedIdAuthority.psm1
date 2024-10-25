@@ -211,18 +211,18 @@ function Set-TargetResource
         Write-Verbose -Message "Creating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
 
         $body = @{
-            Name = $Name
-            LinkedDomainUrl = $LinkedDomainUrl
-            DidMethod = $DidMethod
-            KeyVaultMetadata     = @{
-                SubscriptionId = $KeyVaultMetadata.SubscriptionId
-                ResourceGroup = $KeyVaultMetadata.ResourceGroup
-                ResourceName = $KeyVaultMetadata.ResourceName
-                ResourceUrl = $KeyVaultMetadata.ResourceUrl
+            name = $Name
+            linkedDomainUrl = $LinkedDomainUrl
+            didMethod = $DidMethod
+            keyVaultMetadata     = @{
+                subscriptionId = $KeyVaultMetadata.SubscriptionId
+                resourceGroup = $KeyVaultMetadata.ResourceGroup
+                resourceName = $KeyVaultMetadata.ResourceName
+                resourceUrl = $KeyVaultMetadata.ResourceUrl
             }
         }
+        Write-Verbose -Message "Creating VerifiedId Authority with body $($body | ConvertTo-Json -Depth 5)"
 
-        Write-Verbose -Message "Body: $(Convert-M365DscHashtableToString -Hashtable $body)"
         $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities" 
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'POST' -Body $body
     }
@@ -568,9 +568,17 @@ function Invoke-M365DSCVerifiedIdWebRequest
 
     $headers = @{
         Authorization = $Global:MSCloudLoginConnectionProfile.AdminAPI.AccessToken
+        "Content-Type" = "application/json"
     }
 
-    $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers -Body $Body
+    if($Method -eq 'PATCH' -or $Method -eq 'POST')
+    {
+        $BodyJson = $body | ConvertTo-Json 
+        $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers -Body $BodyJson
+    }
+    else {
+        $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers 
+    }
 
     if($Method -eq 'DELETE')
     {
