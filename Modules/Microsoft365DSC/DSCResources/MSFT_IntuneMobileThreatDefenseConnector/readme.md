@@ -1,6 +1,6 @@
 
-# IntuneMobileAppsMacOSLobApp
+# IntuneMobileThreatDefenseConnector
 
 ## Description
 
-This resouce configures a connection to Mobile Threat Defense partner.
+This resource configures a connection to Mobile Threat Defense partner.

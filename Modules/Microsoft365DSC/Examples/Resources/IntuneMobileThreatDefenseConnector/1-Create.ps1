@@ -43,6 +43,9 @@ Configuration Example
             WindowsDeviceBlockedOnMissingPartnerData            = $False;
             WindowsEnabled                                      = $False;
             Ensure                                              = "Present";
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

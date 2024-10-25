@@ -1,6 +1,6 @@
 ﻿{
     "resourceName": "IntuneMobileThreatDefenseConnector",
-    "description": "This resouce configures a connection to Mobile Threat Defense partner.",
+    "description": "This resource configures a connection to Mobile Threat Defense partner.",
     "permissions": {
         "graph": {
             "delegated": {

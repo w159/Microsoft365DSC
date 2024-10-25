@@ -18,7 +18,9 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
+
     node localhost
     {
         IntuneMobileThreatDefenseConnector "IntuneMobileThreatDefenseConnector-Microsoft Defender for Endpoint"
@@ -41,6 +43,9 @@ Configuration Example
             WindowsDeviceBlockedOnMissingPartnerData            = $False;
             WindowsEnabled                                      = $False;
             Ensure                                              = "Absent";
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }
