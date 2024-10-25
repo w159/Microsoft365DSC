@@ -278,6 +278,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PartnerUnsupportedOSVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
+                        LastHeartbeatDateTime                               = "1/1/0001 12:00:00 AM";
                     }
                 }
             }
