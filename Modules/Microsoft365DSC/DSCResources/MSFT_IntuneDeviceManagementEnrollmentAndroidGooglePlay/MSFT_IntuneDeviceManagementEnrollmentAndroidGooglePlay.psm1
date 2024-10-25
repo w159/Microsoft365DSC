@@ -243,8 +243,8 @@ function Set-TargetResource
         #         hostName = "intune.microsoft.com"
         #     } -ContentType "application/json"
 
-            return $nullResult
-        }
+            # return $nullResult
+        # }
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
