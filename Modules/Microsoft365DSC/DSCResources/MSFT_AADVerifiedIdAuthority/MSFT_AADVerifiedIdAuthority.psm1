@@ -7,11 +7,11 @@ function Get-TargetResource
         [System.String]
         $Id,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $LinkedDomainUrl,
 
@@ -91,7 +91,7 @@ function Get-TargetResource
             return $nullResult
         }
 
-        $instance = Get-M365DSCVerifiedIdAuthorityObject -Authority ($instances | Where-Object -FilterScript {$_.Name -eq $Name})
+        $instance = Get-M365DSCVerifiedIdAuthorityObject -Authority ($instances | Where-Object -FilterScript {$_.didModel.linkedDomainUrls[0] -eq $LinkedDomainUrl})
         if ($null -eq $instance)
         {
             return $nullResult
@@ -134,239 +134,11 @@ function Set-TargetResource
         [System.String]
         $Id,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
-        [Parameter()]
-        [System.String]
-        $LinkedDomainUrl,
-
-        [Parameter()]
-        [System.String]
-        $DidMethod,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance]
-        $KeyVaultMetadata,
-
-        [Parameter()]
-        [System.String]
-        [ValidateSet('Absent', 'Present')]
-        $Ensure = 'Present',
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    # #Ensure the proper dependencies are installed in the current environment.
-    # Confirm-M365DSCDependencies
-
-    # #region Telemetry
-    # $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    # $CommandName = $MyInvocation.MyCommand
-    # $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-    #     -CommandName $CommandName `
-    #     -Parameters $PSBoundParameters
-    # Add-M365DSCTelemetryEvent -Data $data
-    # #endregion
-
-    # $currentInstance = Get-TargetResource @PSBoundParameters
-
-    # $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-
-    # if($StageSettings -ne $null)
-    # {
-    #     Write-Verbose -Message "StageSettings cannot be updated after creation of access review definition."
-
-    #     if($currentInstance.Ensure -ne 'Absent') {
-    #         Write-Verbose -Message "Removing the Azure AD Access Review Definition with Id {$($currentInstance.Id)}"
-    #         Remove-MgBetaIdentityGovernanceAccessReviewDefinition -AccessReviewScheduleDefinitionId $currentInstance.Id
-    #     }
-
-    #     Write-Verbose -Message "Creating an Azure AD Access Review Definition with DisplayName {$DisplayName}"
-
-    #     $createParameters = ([Hashtable]$BoundParameters).Clone()
-
-    #     $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
-    #     $createParameters.Remove('Id') | Out-Null
-
-    #     $createParameters.Add('Scope', $createParameters.ScopeValue)
-    #     $createParameters.Remove('ScopeValue') | Out-Null
-
-    #     $createParameters.Add('Settings', $createParameters.SettingsValue)
-    #     $createParameters.Remove('SettingsValue') | Out-Null
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         $propertyToRemove = 'DependsOnValue'
-    #         $newProperty = 'DependsOn'
-    #         if ($hashtable.ContainsKey($propertyToRemove)) {
-    #             $value = $hashtable[$propertyToRemove]
-    #             $hashtable[$newProperty] = $value
-    #             $hashtable.Remove($propertyToRemove)
-    #         }
-    #     }
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         $keys = (([Hashtable]$hashtable).Clone()).Keys
-    #         foreach ($key in $keys)
-    #         {
-    #             $value = $hashtable.$key
-    #             $hashtable.Remove($key)
-    #             $hashtable.Add($key.Substring(0,1).ToLower() + $key.Substring(1), $value)
-    #         }
-    #     }
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         Write-Verbose -Message "Priting Values: $(Convert-M365DscHashtableToString -Hashtable $hashtable)"
-    #     }
-
-    #     $keys = (([Hashtable]$createParameters).Clone()).Keys
-    #     foreach ($key in $keys)
-    #     {
-    #         if ($null -ne $createParameters.$key -and $createParameters.$key.GetType().Name -like '*CimInstance*')
-    #         {
-    #             $createParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $createParameters.$key
-    #         }
-    #     }
-    #     $createParameters.Add("@odata.type", "#microsoft.graph.AccessReviewScheduleDefinition")
-    #     $policy = New-MgBetaIdentityGovernanceAccessReviewDefinition -BodyParameter $createParameters
-    #     return;
-    # }
-
-    # if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
-    # {
-    #     Write-Verbose -Message "Creating an Azure AD Access Review Definition with DisplayName {$DisplayName}"
-
-    #     $createParameters = ([Hashtable]$BoundParameters).Clone()
-
-    #     $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
-
-    #     $createParameters.Remove('Id') | Out-Null
-
-    #     $createParameters.Add('Scope', $createParameters.ScopeValue)
-    #     $createParameters.Remove('ScopeValue') | Out-Null
-
-    #     $createParameters.Add('Settings', $createParameters.SettingsValue)
-    #     $createParameters.Remove('SettingsValue') | Out-Null
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         $propertyToRemove = 'DependsOnValue'
-    #         $newProperty = 'DependsOn'
-    #         if ($hashtable.ContainsKey($propertyToRemove)) {
-    #             $value = $hashtable[$propertyToRemove]
-    #             $hashtable[$newProperty] = $value
-    #             $hashtable.Remove($propertyToRemove)
-    #         }
-    #     }
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         $keys = (([Hashtable]$hashtable).Clone()).Keys
-    #         foreach ($key in $keys)
-    #         {
-    #             $value = $hashtable.$key
-    #             $hashtable.Remove($key)
-    #             $hashtable.Add($key.Substring(0,1).ToLower() + $key.Substring(1), $value)
-    #         }
-    #     }
-
-    #     foreach ($hashtable in $createParameters.StageSettings) {
-    #         Write-Verbose -Message "Priting Values: $(Convert-M365DscHashtableToString -Hashtable $hashtable)"
-    #     }
-
-    #     $keys = (([Hashtable]$createParameters).Clone()).Keys
-    #     foreach ($key in $keys)
-    #     {
-    #         if ($null -ne $createParameters.$key -and $createParameters.$key.GetType().Name -like '*CimInstance*')
-    #         {
-    #             $createParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $createParameters.$key
-    #         }
-    #     }
-    #     #region resource generator code
-    #     $createParameters.Add("@odata.type", "#microsoft.graph.AccessReviewScheduleDefinition")
-    #     $policy = New-MgBetaIdentityGovernanceAccessReviewDefinition -BodyParameter $createParameters
-    #     #endregion
-    # }
-    # elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
-    # {
-    #     Write-Verbose -Message "Updating the Azure AD Access Review Definition with Id {$($currentInstance.Id)}"
-
-    #     $updateParameters = ([Hashtable]$BoundParameters).Clone()
-    #     $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
-
-    #     $updateParameters.Remove('Id') | Out-Null
-
-    #     $updateParameters.Add('Scope', $updateParameters.ScopeValue)
-    #     $updateParameters.Remove('ScopeValue') | Out-Null
-
-    #     $updateParameters.Add('Settings', $updateParameters.SettingsValue)
-    #     $updateParameters.Remove('SettingsValue') | Out-Null
-
-
-    #     $keys = (([Hashtable]$updateParameters).Clone()).Keys
-    #     foreach ($key in $keys)
-    #     {
-    #         if ($null -ne $pdateParameters.$key -and $updateParameters.$key.GetType().Name -like '*CimInstance*')
-    #         {
-    #             $updateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.AccessReviewScheduleDefinitionId
-    #         }
-    #     }
-
-    #     #region resource generator code
-    #     $UpdateParameters.Add("@odata.type", "#microsoft.graph.AccessReviewScheduleDefinition")
-    #     Set-MgBetaIdentityGovernanceAccessReviewDefinition `
-    #         -AccessReviewScheduleDefinitionId $currentInstance.Id `
-    #         -BodyParameter $UpdateParameters
-    #     #endregion
-    # }
-    # elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
-    # {
-    #     Write-Verbose -Message "Removing the Azure AD Access Review Definition with Id {$($currentInstance.Id)}"
-    #     #region resource generator code
-    #     Remove-MgBetaIdentityGovernanceAccessReviewDefinition -AccessReviewScheduleDefinitionId $currentInstance.Id
-    #     #endregion
-    # }
-}
-
-function Test-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
-        [System.String]
-        $Name,
-
-        [Parameter()]
         [System.String]
         $LinkedDomainUrl,
 
@@ -424,7 +196,116 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Azure AD Access Review Definition with Id {$Id} and DisplayName {$DisplayName}"
+    New-M365DSCConnection -Workload 'AdminAPI' `
+        -InboundParameters $PSBoundParameters | Out-Null
+
+    $currentInstance = Get-TargetResource @PSBoundParameters
+
+    $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+
+    $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/" + $currentInstance.Id
+    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
+    {
+        Write-Verbose -Message "Creating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
+
+        $body = @{
+            Name = $Name
+            LinkedDomainUrl = $LinkedDomainUrl
+            DidMethod = $DidMethod
+            KeyVaultMetadata     =  $KeyVaultMetadata
+        }
+        Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'POST' -Body $body
+    }
+    elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
+    {
+        Write-Verbose -Message "Updating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
+
+        Write-Warning -Message "You can only update Name of the VerifiedId Authority, if you want to update other properties, please delete and recreate the VerifiedId Authority."
+        $body = @{
+            Name = $Name
+        }
+        Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'PATCH' -Body $body
+    }
+    elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
+    {
+        Write-Verbose -Message "Removing VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
+
+        Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'DELETE'
+    }
+}
+
+function Test-TargetResource
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $LinkedDomainUrl,
+
+        [Parameter()]
+        [System.String]
+        $DidMethod,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $KeyVaultMetadata,
+
+        [Parameter()]
+        [System.String]
+        [ValidateSet('Absent', 'Present')]
+        $Ensure = 'Present',
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
+    )
+
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+
+    Write-Verbose -Message "Testing configuration of the AADVerifiedIdAuthority with Id {$Id} and Name {$Name}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
@@ -542,9 +423,9 @@ function Export-TargetResource
                 $Global:M365DSCExportResourceInstancesCount++
             }
 
-            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $($authority.Name)" -NoNewline
+            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $($authority.didModel.linkedDomainUrls[0])" -NoNewline
             $Params = @{
-                Name                  = $authority.Name
+                LinkedDomainUrl       = $authority.didModel.linkedDomainUrls[0]
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint
@@ -636,6 +517,7 @@ function Get-M365DSCVerifiedIdAuthorityObject
     Write-Verbose -Message "Retrieving values for authority {$($Authority.Name)}"
     $did = ($Authority.didModel.did -split ":")[1]
     $values = @{
+        Id                 = $Authority.Id
         Name               = $Authority.Name
         LinkedDomainUrl    = $Authority.didModel.linkedDomainUrls[0]
         DidMethod          = $did
@@ -652,6 +534,33 @@ function Get-M365DSCVerifiedIdAuthorityObject
         $values.Add('KeyVaultMetadata', $KeyVaultMetadata)
     }
     return $values
+}
+
+function Invoke-M365DSCVerifiedIdWebRequest
+{
+    [OutputType([PSCustomObject])]
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Uri,
+
+        [Parameter()]
+        [System.String]
+        $Method = 'GET',
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $Body
+    )
+
+    $headers = @{
+        Authorization = $Global:MSCloudLoginConnectionProfile.AdminAPI.AccessToken
+    }
+
+    $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers -Body $Body
+    $result = ConvertFrom-Json $response.Content
+    return $result
 }
 
 Export-ModuleMember -Function *-TargetResource
