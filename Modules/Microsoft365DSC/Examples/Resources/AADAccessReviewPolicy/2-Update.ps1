@@ -23,11 +23,11 @@ Configuration Example
     {
         AADAccessReviewPolicy "AADAccessReviewPolicy"
         {
-            ApplicationId                 = $ConfigurationData.NonNodeData.ApplicationId;
-            CertificateThumbprint         = $ConfigurationData.NonNodeData.CertificateThumbprint;
             IsGroupOwnerManagementEnabled = $False;
             IsSingleInstance              = "Yes";
-            TenantId                      = $OrganizationName;
+            ApplicationId                 = $ApplicationId
+            TenantId                      = $TenantId
+            CertificateThumbprint         = $CertificateThumbprint
         }
 
     }

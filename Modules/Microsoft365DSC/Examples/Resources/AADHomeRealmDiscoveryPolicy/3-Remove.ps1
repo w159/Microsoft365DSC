@@ -23,8 +23,6 @@ Configuration Example
     {
         AADHomeRealmDiscoveryPolicy "AADHomeRealmDiscoveryPolicy-displayName-value"
         {
-            ApplicationId         = $ConfigurationData.NonNodeData.ApplicationId;
-            CertificateThumbprint = $ConfigurationData.NonNodeData.CertificateThumbprint;
             Definition            = @(
                 MSFT_AADHomeRealDiscoveryPolicyDefinition {
                     PreferredDomain       = 'federated.example.edu'
@@ -37,7 +35,9 @@ Configuration Example
             DisplayName           = "displayName-value";
             Ensure                = "Absent";
             IsOrganizationDefault = $False;
-            TenantId              = $OrganizationName;
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }
