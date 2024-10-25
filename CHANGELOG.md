@@ -26,6 +26,8 @@
   * Fixed missing permissions in settings.json
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
+* AzureBillingAccountsRoleAssignment
+  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOTenantAllowBlockListItems
