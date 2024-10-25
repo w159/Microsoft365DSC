@@ -3,4 +3,4 @@
 
 ## Description
 
-Test Intune Security Baseline Defender For Endpoint
+Intune Security Baseline Defender For Endpoint
