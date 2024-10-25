@@ -103,7 +103,7 @@ function Get-TargetResource
             LinkedDomainUrl                                                       = $instance.LinkedDomainUrl
             DidMethod                                                             = $instance.DidMethod
             KeyVaultMetadata                                                      = $instance.KeyVaultMetadata
-            Ensure                                                                = $Ensure
+            Ensure                                                                = 'Present'
             Credential                                                            = $Credential
             ApplicationId                                                         = $ApplicationId
             TenantId                                                              = $TenantId
@@ -201,9 +201,11 @@ function Set-TargetResource
 
     $currentInstance = Get-TargetResource @PSBoundParameters
 
+    Write-Verbose -Message "Retrieved current instance: $($currentInstance.Name) with Id $($currentInstance.Id)"
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
     $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/" + $currentInstance.Id
+
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
@@ -212,8 +214,16 @@ function Set-TargetResource
             Name = $Name
             LinkedDomainUrl = $LinkedDomainUrl
             DidMethod = $DidMethod
-            KeyVaultMetadata     =  $KeyVaultMetadata
+            KeyVaultMetadata     = @{
+                SubscriptionId = $KeyVaultMetadata.SubscriptionId
+                ResourceGroup = $KeyVaultMetadata.ResourceGroup
+                ResourceName = $KeyVaultMetadata.ResourceName
+                ResourceUrl = $KeyVaultMetadata.ResourceUrl
+            }
         }
+
+        Write-Verbose -Message "Body: $(Convert-M365DscHashtableToString -Hashtable $body)"
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities" 
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'POST' -Body $body
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -230,6 +240,7 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Removing VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
 
+        $uri = "https://verifiedid.did.msidentity.com/beta/verifiableCredentials/authorities/" + $currentInstance.Id
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'DELETE'
     }
 }
@@ -297,7 +308,7 @@ function Test-TargetResource
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
     $CommandName = $MyInvocation.MyCommand
     $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
         -CommandName $CommandName `
@@ -305,24 +316,20 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the AADVerifiedIdAuthority with Id {$Id} and Name {$Name}"
+    Write-Verbose -Message 'Testing configuration of AADVerifiedIdAuthority'
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
+
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
 
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        Write-Verbose -Message "Test-TargetResource returned $false"
-        return $false
-    }
-    $testResult = $true
+    $testTargetResource = $true
 
     #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)
     {
         $source = $PSBoundParameters.$key
         $target = $CurrentValues.$key
-        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
+        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*' -and $source -notlike '*Permission*')
         {
             $testResult = Compare-M365DSCComplexObject `
                 -Source ($source) `
@@ -330,30 +337,35 @@ function Test-TargetResource
 
             if (-not $testResult)
             {
-                break
+                Write-Verbose "TestResult returned False for $source"
+                $testTargetResource = $false
             }
-
-            $ValuesToCheck.Remove($key) | Out-Null
+            else {
+                $ValuesToCheck.Remove($key) | Out-Null
+            }
         }
     }
 
-    $ValuesToCheck.Remove('Id') | Out-Null
-    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
-
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
-    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
+    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
 
-    if ($testResult)
+    $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+    -Source $($MyInvocation.MyCommand.Source) `
+    -DesiredValues $PSBoundParameters `
+    -ValuesToCheck $ValuesToCheck.Keys `
+    -IncludedDrifts $driftedParams
+
+    if(-not $TestResult)
     {
-        $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -DesiredValues $PSBoundParameters `
-            -ValuesToCheck $ValuesToCheck.Keys
+        $testTargetResource = $false
     }
 
-    Write-Verbose -Message "Test-TargetResource returned $testResult"
 
-    return $testResult
+    Write-Verbose -Message "Test-TargetResource returned $testTargetResource"
+
+    return $testTargetResource
+
+
 }
 
 function Export-TargetResource
@@ -514,7 +526,7 @@ function Get-M365DSCVerifiedIdAuthorityObject
         return $null
     }
 
-    Write-Verbose -Message "Retrieving values for authority {$($Authority.Name)}"
+    Write-Verbose -Message "Retrieving values for authority {$($Authority.didModel.linkedDomainUrls[0])}"
     $did = ($Authority.didModel.did -split ":")[1]
     $values = @{
         Id                 = $Authority.Id
@@ -559,6 +571,11 @@ function Invoke-M365DSCVerifiedIdWebRequest
     }
 
     $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers -Body $Body
+
+    if($Method -eq 'DELETE')
+    {
+        return $null
+    }
     $result = ConvertFrom-Json $response.Content
     return $result
 }
