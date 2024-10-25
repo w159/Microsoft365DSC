@@ -6,23 +6,23 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
         $BillingAccount,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AssociatedTenantId,
+        $PrincipalName,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $BillingManagementState,
+        $PrincipalType,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $ProvisioningManagementState,
+        $RoleDefinition,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalTenantId,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -57,6 +57,9 @@ function Get-TargetResource
     New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters | Out-Null
 
+    New-M365DSCConnection -Workload 'MicrosoftGraph' `
+        -InboundParameters $PSBoundParameters | Out-Null
+
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
@@ -78,8 +81,18 @@ function Get-TargetResource
 
         if ($null -ne $currentAccount)
         {
-            $instances = Get-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $currentAccount.Name -ErrorAction Stop
-            $instance = $instances.value | Where-Object -FilterScript {$_.properties.displayName -eq $DisplayName}
+            $instances = Get-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $currentAccount.Name -ErrorAction Stop
+            $PrincipalIdValue = Get-M365DSCPrincipalIdFromName -PrincipalName $PrincipalName `
+                                                               -PrincipalType $PrincipalType
+            $instance = $instances.value | Where-Object -FilterScript {$_.properties.principalId -eq $PrincipalIdValue}
+
+            if ($null -ne $instance)
+            {
+                $roleDefinitionId = $instance.properties.roleDefinitionId.Split('/')
+                $roleDefinitionId = $roleDefinitionId[$roleDefinitionId.Length -1]
+                $RoleDefinitionValue = Get-M365DSCAzureBillingAccountsRoleDefinition -BillingAccountId $currentAccount.Name `
+                                                                                     -RoleDefinitionId $roleDefinitionId
+            }
         }
         if ($null -eq $instance)
         {
@@ -87,18 +100,18 @@ function Get-TargetResource
         }
 
         $results = @{
-            BillingAccount              = $BillingAccount
-            DisplayName                 = $DisplayName
-            AssociatedTenantId          = $instance.properties.tenantId
-            BillingManagementState      = $instance.properties.billingManagementState
-            ProvisioningManagementState = $instance.properties.provisioningManagementState
-            Ensure                      = 'Present'
-            Credential                  = $Credential
-            ApplicationId               = $ApplicationId
-            TenantId                    = $TenantId
-            CertificateThumbprint       = $CertificateThumbprint
-            ManagedIdentity             = $ManagedIdentity.IsPresent
-            AccessTokens                = $AccessTokens
+            BillingAccount        = $BillingAccount
+            PrincipalName         = $PrincipalName
+            PrincipalType         = $PrincipalType
+            PrincipalTenantId     = $instance.properties.principalTenantId
+            RoleDefinition        = $RoleDefinitionValue.properties.roleName
+            Ensure                = 'Present'
+            Credential            = $Credential
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
+            ManagedIdentity       = $ManagedIdentity.IsPresent
+            AccessTokens          = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -122,23 +135,23 @@ function Set-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
         $BillingAccount,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AssociatedTenantId,
+        $PrincipalName,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $BillingManagementState,
+        $PrincipalType,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $ProvisioningManagementState,
+        $RoleDefinition,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalTenantId,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -183,39 +196,43 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
+
+    $currentInstance = Get-TargetResource @PSBoundParameters
     $billingAccounts = Get-M365DSCAzureBillingAccount
     $account = $billingAccounts.value | Where-Object -FilterScript {$_.properties.displayName -eq $BillingAccount}
-
+    $PrincipalIdValue = Get-M365DSCPrincipalIdFromName -PrincipalName $PrincipalName `
+                                                       -PrincipalType $PrincipalType
+    $RoleDefinitionValues = Get-M365DSCAzureBillingAccountsRoleDefinition -BillingAccountId $account.Name
+    $roleDefinitionInstance = $RoleDefinitionValues.value | Where-Object -FilterScript {$_.properties.roleName -eq $currentInstance.RoleDefinition}
     $instanceParams = @{
-        properties = @{
-            displayName                 = $DisplayName
-            tenantId                    = $AssociatedTenantId
-            billingManagementState      = $BillingManagementState
-            provisioningManagementState = $ProvisioningManagementState
-        }
+        principalId       = $PrincipalIdValue
+        principalTenantId = $currentInstance.PrincipalTenantId
+        roleDefinitionId  = $roleDefinitionInstance.id
     }
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Adding associated tenant {$AssociatedTenantId}"
-        New-M365DSCAzureBillingAccountsAssociatedTenant  -BillingAccountId $account.Name `
-                                                         -AssociatedTenantId $AssociatedTenantId `
-                                                         -Body $instanceParams
+        Write-Verbose -Message "Adding new role assignment for user {$PrincipalName} for role {$RoleDefinition}"
+        New-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $account.Name `
+                                                      -Body $instanceParams
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating associated tenant {$AssociatedTenantId}"
-        New-M365DSCAzureBillingAccountsAssociatedTenant  -BillingAccountId $account.Name `
-                                                         -AssociatedTenantId $AssociatedTenantId `
-                                                         -Body $instanceParams
+        Write-Verbose -Message "Updating role assignment for user {$PrincipalName} for role {$RoleDefinition}"
+        New-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $account.Name `
+                                                      -Body $instanceParams
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing associated tenant {$AssociatedTenantId}"
-        Remove-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $account.Name `
-                                                           -AssociatedTenantId $AssociatedTenantId
+        $instances = Get-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $account.Name -ErrorAction Stop
+        $instance = $instances.value | Where-Object -FilterScript {$_.properties.principalId -eq $PrincipalIdValue}
+        $AssignmentId = $instance.Id.Split('/')
+        $AssignmentId = $AssignmentId[$roleDefinitionId.Length -1]
+        Write-Verbose -Message "Removing role assignment for user {$PrincipalName} for role {$RoleDefinition}"
+        Remove-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $account.Name `
+                                                         -AssignmentId $AssignmentId
     }
 }
 
@@ -227,23 +244,23 @@ function Test-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
         $BillingAccount,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AssociatedTenantId,
+        $PrincipalName,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $BillingManagementState,
+        $PrincipalType,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $ProvisioningManagementState,
+        $RoleDefinition,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalTenantId,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -341,6 +358,9 @@ function Export-TargetResource
     $ConnectionMode = New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters
 
+    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+        -InboundParameters $PSBoundParameters
+
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
@@ -370,26 +390,33 @@ function Export-TargetResource
         {
             Write-Host "`r`n" -NoNewline
         }
-        [array] $Script:exportedInstances = @()
         foreach ($config in $accounts.value)
         {
             $displayedKey = $config.properties.displayName
             Write-Host "    |---[$i/$($accounts.Count)] $displayedKey"
 
-            $associatedTenants += Get-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $config.name
+            $assignments = Get-M365DSCAzureBillingAccountsRoleAssignment -BillingAccountId $config.name
 
             $j = 1
-            foreach ($associatedTenant in $associatedTenants.value)
+            foreach ($assignment in $assignments.value)
             {
                 if ($null -ne $Global:M365DSCExportResourceInstancesCount)
                 {
                     $Global:M365DSCExportResourceInstancesCount++
                 }
-                Write-Host "        |---[$j/$($associatedTenants.value.Length)] $($associatedTenant.properties.DisplayName)" -NoNewline
+
+                $PrincipalNameValue = Get-M365DSCPrincipalNameFromId -PrincipalId $assignment.properties.principalId `
+                                                                     -PrincipalType $assignment.properties.principalType
+                $roleDefinitionId = $assignment.properties.roleDefinitionId.Split('/')
+                $roleDefinitionId = $roleDefinitionId[$roleDefinitionId.Length -1]
+
+                Write-Host "        |---[$j/$($assignments.value.Length)] $($assignment.properties.principalId)" -NoNewline
                 $params = @{
                     BillingAccount        = $config.properties.displayName
-                    DisplayName           = $associatedTenant.properties.displayName
-                    AssociatedTenantId    = $associatedTenant.properties.tenantId
+                    PrincipalName         = $PrincipalNameValue
+                    PrincipalType         = $assignment.properties.principalType
+                    PrincipalTenantId     = $assignment.properties.principalTenantId
+                    RoleDefinition        = "AnyRole"
                     Credential            = $Credential
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
@@ -429,6 +456,92 @@ function Export-TargetResource
 
         return ''
     }
+}
+
+function Get-M365DSCPrincipalNameFromId
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalId,
+
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalType
+    )
+
+    $result = $null
+    if ($PrincipalType -eq 'User')
+    {
+        $userInfo = Get-MgUser -UserId $PrincipalId
+        if ($null -ne $userInfo)
+        {
+            $result = $userInfo.UserPrincipalName
+        }
+    }
+    elseif ($PrincipalType -eq 'ServicePrincipal')
+    {
+        $spnInfo = Get-MgServicePrincipal -ServicePrincipalId $PrincipalId
+        if ($null -ne $spnInfo)
+        {
+            $result = $spnInfo.DisplayName
+        }
+    }
+    elseif ($PrincipalType -eq 'Group')
+    {
+        $groupInfo = Get-MgGroup -GroupId $PrincipalId
+        if ($null -ne $groupInfo)
+        {
+            $result = $groupInfo.DisplayName
+        }
+    }
+    return $result
+}
+
+function Get-M365DSCPrincipalIdFromName
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalName,
+
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalType
+    )
+
+    $result = $null
+    if ($PrincipalType -eq 'User')
+    {
+        $userInfo = Get-MgUser -Filter "UserPrincipalName eq '$PrincipalName'"
+        if ($null -ne $userInfo)
+        {
+            $result = $userInfo.Id
+        }
+    }
+    elseif ($PrincipalType -eq 'ServicePrincipal')
+    {
+        $spnInfo = Get-MgServicePrincipal -Filter "DisplayName eq '$PrincipalName'"
+        if ($null -ne $spnInfo)
+        {
+            $result = $spnInfo.Id
+        }
+    }
+    elseif ($PrincipalType -eq 'Group')
+    {
+        $groupInfo = Get-MgGroup -Filter "DisplayName eq '$PrincipalName'"
+        if ($null -ne $groupInfo)
+        {
+            $result = $groupInfo.Id
+        }
+    }
+    return $result
 }
 
 Export-ModuleMember -Function *-TargetResource
