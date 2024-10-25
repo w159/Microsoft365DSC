@@ -232,101 +232,25 @@ function Set-TargetResource
         }
 
         # Request enrollment signup URL if necessary
-        if ($BindStatus -eq 'notBound') {
-            Write-Verbose -Message "Requesting signup URL for enrollment..."
-            $params = @{
-                hostName = "intune.microsoft.com"
-            }
+        # TO DO: Once Android team has added adjusted code, uncomment the following code block
+        # if ($BindStatus -eq 'notBound') {
+        #     Write-Verbose -Message "Requesting signup URL for enrollment..."
+        #     $params = @{
+        #         hostName = "intune.microsoft.com"
+        #     }
 
-            # Request-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingSignupUrl -BodyParameter $params
-            # $body = @{
-            #     hostName = "intune.microsoft.com"
-            # }
+        #     $signupUrl = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/requestSignupUrl" -Method 'POST' -Body @{
+        #         hostName = "intune.microsoft.com"
+        #     } -ContentType "application/json"
 
-            # $url = "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/requestSignupUrl"
-            # $signupUrl = Invoke-MgGraphRequest -Uri $url -Method POST -Body ($body | ConvertTo-Json -Compress) -ContentType "application/json"
-            # Write-Host "Signup URL: $signupUrl"
-
-            # $signupUrl = Invoke-MgGraphRequest -Uri "/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/requestSignupUrl" -Method 'POST' -Body @{
-            #     '@odata.id' = "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/requestSignupUrl"
-            # } -ContentType "application/json"
-
-            $signupUrl = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/requestSignupUrl" -Method 'POST' -Body @{
-                hostName = "intune.microsoft.com"
-            } -ContentType "application/json"
-
-
-            # Invoke-MgGraphRequest -Uri "/beta/deviceAppManagement/mobileApps/$($app.Id)/categories/`$ref" -Method 'POST' -Body @{
-            #     '@odata.id' = "https://graph.microsoft.com/beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
-            # }
             return $nullResult
         }
     }
-    # elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
-    # {
-    #     Write-Host "Updating the Intune Windows Office Suite App with DisplayName {$DisplayName}"
-    #     $BoundParameters.Remove('Assignments') | Out-Null
-
-    #     $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-    #     $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-    #     $UpdateParameters.Remove('Id') | Out-Null
-    #     $UpdateParameters.Remove('Categories') | Out-Null
-    #     $UpdateParameters.Remove('OfficePlatformArchitecture') | Out-Null
-
-    #     foreach ($key in ($UpdateParameters.Clone()).Keys)
-    #     {
-    #         if ($null -ne $UpdateParameters.$key -and $UpdateParameters.$key.GetType().Name -like '*CimInstance*')
-    #         {
-    #             $UpdateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters.$key
-    #         }
-    #     }
-
-    #     $UpdateParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
-    #     Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $UpdateParameters
-
-    #     [array]$referenceObject = if ($null -ne $currentInstance.Categories.DisplayName) { $currentInstance.Categories.DisplayName } else { ,@() }
-    #     [array]$differenceObject = if ($null -ne $Categories.DisplayName) { $Categories.DisplayName } else { ,@() }
-    #     $delta = Compare-Object -ReferenceObject $referenceObject -DifferenceObject $differenceObject -PassThru
-    #     foreach ($diff in $delta)
-    #     {
-    #         if ($diff.SideIndicator -eq '=>')
-    #         {
-    #             $category = $Categories | Where-Object { $_.DisplayName -eq $diff }
-    #             if ($category.Id)
-    #             {
-    #                 $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $category.Id
-    #             }
-    #             else
-    #             {
-    #                 $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -Filter "displayName eq '$($category.DisplayName)'"
-    #             }
-
-    #             if ($null -eq $currentCategory)
-    #             {
-    #                 throw "Mobile App Category with DisplayName $($category.DisplayName) not found."
-    #             }
-
-    #             Invoke-MgGraphRequest -Uri "/beta/deviceAppManagement/mobileApps/$($currentInstance.Id)/categories/`$ref" -Method 'POST' -Body @{
-    #                 '@odata.id' = "https://graph.microsoft.com/beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
-    #             }
-    #         }
-    #         else
-    #         {
-    #             $category = $currentInstance.Categories | Where-Object { $_.DisplayName -eq $diff }
-    #             Invoke-MgGraphRequest -Uri "/beta/deviceAppManagement/mobileApps/$($currentInstance.Id)/categories/$($category.Id)/`$ref" -Method 'DELETE'
-    #         }
-    #     }
-
-    #     #Assignments
-    #     $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
-    #     Update-DeviceAppManagementPolicyAssignment -AppManagementPolicyId $currentInstance.Id `
-    #         -Assignments $assignmentsHash
-    # }
-    # elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
-    # {
-    #     Write-Host "Remove the Intune Windows Office Suite App with Id {$($currentInstance.Id)}"
-    #     Remove-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -Confirm:$false
-    # }
+    elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
+    {
+            Write-Host "Remove the Intune Device Management Android Google Play Enrollment with Id {$($currentInstance.Id)}"
+        $unbindResult = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/unbind" -Method 'POST' -Body @{} -ContentType "application/json"
+    }
 }
 
 function Test-TargetResource
