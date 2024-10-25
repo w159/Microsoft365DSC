@@ -24,6 +24,9 @@
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* EXOArcConfig
+  * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
+    when it has an array
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOTenantAllowBlockListItems
