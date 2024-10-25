@@ -1,7 +1,7 @@
 [ClassVersion("1.0.0.0"), FriendlyName("IntuneMobileThreatDefenseConnector")]
 class MSFT_IntuneMobileThreatDefenseConnector : OMI_BaseResource
 {
-    [Write, Description("The unique identifier for an entity. Read-only.")] String Id;
+    [Key, Description("The unique identifier for an entity. Read-only.")] String Id;
     [Write, Description("The DisplayName of the Mobile Threat Defense Connector partner. NOTE: Hard coded for convenience, not returned by the Graph API.")] String DisplayName;
 
     [Write, Description("When TRUE, indicates the Mobile Threat Defense partner may collect metadata about installed applications from Intune for IOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about installed applications from Intune for IOS devices. Default value is FALSE.")] Boolean AllowPartnerToCollectIosApplicationMetadata;

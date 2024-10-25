@@ -9,7 +9,7 @@ function Get-TargetResource
     (
         #region Intune parameters
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Id,
 
@@ -370,7 +370,7 @@ function Test-TargetResource
     (
         #region Intune parameters
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Id,
 
