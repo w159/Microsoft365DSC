@@ -26,6 +26,8 @@
   * Fixed missing permissions in settings.json
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
+* AzureBillingAccountsRoleAssignment
+  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOTenantAllowBlockListItems
@@ -41,6 +43,8 @@
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
     FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* IntuneSecurityBaselineDefenderForEndpoint
+  * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
 * SentinelAlertRule
