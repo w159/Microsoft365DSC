@@ -7,15 +7,9 @@
                                     "read":  [
                                                  {
                                                      "name":  "Policy.Read.All"
-                                                 },
-                                                 {
-                                                     "name":  "Policy.Read.ApplicationConfiguration"
                                                  }
                                              ],
                                     "update":  [
-                                                   {
-                                                       "name":  "Policy.Read.ApplicationConfiguration"
-                                                   },
                                                    {
                                                        "name":  "Policy.ReadWrite.ApplicationConfiguration"
                                                    }
@@ -25,15 +19,9 @@
                                       "read":  [
                                                    {
                                                        "name":  "Policy.Read.All"
-                                                   },
-                                                   {
-                                                       "name":  "Policy.Read.ApplicationConfiguration"
                                                    }
                                                ],
                                       "update":  [
-                                                     {
-                                                         "name":  "Policy.Read.ApplicationConfiguration"
-                                                     },
                                                      {
                                                          "name":  "Policy.ReadWrite.ApplicationConfiguration"
                                                      }
