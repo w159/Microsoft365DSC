@@ -10,6 +10,8 @@
   * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
+* AADHomeRealmDiscoveryPolicy
+  * Initial Release
 * AADIdentityB2XUserFlow
   * Initial release.
 * AADIdentityGovernanceProgram
