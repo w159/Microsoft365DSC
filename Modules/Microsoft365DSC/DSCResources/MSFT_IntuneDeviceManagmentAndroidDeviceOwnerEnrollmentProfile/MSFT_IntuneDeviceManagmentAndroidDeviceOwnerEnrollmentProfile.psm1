@@ -62,6 +62,14 @@ function Get-TargetResource
         $TokenValue,
 
         [Parameter()]
+        [System.String]
+        $TokenCreationDateTime,
+
+        [Parameter()]
+        [System.String]
+        $TokenExpirationDateTime,
+
+        [Parameter()]
         [System.Boolean]
         $WifiHidden,
 
@@ -128,15 +136,18 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        $androidDeviceOwnerEnrollmentProfile = Get-MgAndroidDeviceOwnerEnrollmentProfile `
-        -Filter "displayName eq '$DisplayName')"
-        -ErrorAction SilentlyContinue | Where-Object
-
+        if (-not [System.String]::IsNullOrEmpty($Id))
+        {
+            Write-Verbose -Message "Trying to retrieve profile by Id"
+            $androidDeviceOwnerEnrollmentProfile = Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile `
+                -AndroidDeviceOwnerEnrollmentProfileId $Id
+        }
         if ($null -eq $androidDeviceOwnerEnrollmentProfile)
         {
-            Write-Verbose -Message "No AndroidDeviceOwnerEnrollmentProfiles with DisplayName {$DisplayName} was found. Search with DisplayName."
-            $androidDeviceOwnerEnrollmentProfile = Get-MgAndroidDeviceOwnerEnrollmentProfile
-                -ProfileId $Id
+            Write-Verbose -Message "Trying to retrieve profile by DisplayName"
+            $androidDeviceOwnerEnrollmentProfile = Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile `
+                -Filter "displayName eq '$DisplayName'" `
+                -ErrorAction SilentlyContinue
         }
 
         if ($null -eq $androidDeviceOwnerEnrollmentProfile)
@@ -146,32 +157,34 @@ function Get-TargetResource
         }
 
         $results = @{
-            Id                    = $androidDeviceOwnerEnrollmentProfile.Id
-            DisplayName           = $androidDeviceOwnerEnrollmentProfile.DisplayName
-            AccountId             = $androidDeviceOwnerEnrollmentProfile.AccountId
-            ConfigureWifi         = $androidDeviceOwnerEnrollmentProfile.ConfigureWifi
-            Description           = $androidDeviceOwnerEnrollmentProfile.Description
-            EnrolledDeviceCount   = $androidDeviceOwnerEnrollmentProfile.EnrolledDeviceCount
-            EnrollmentMode        = $androidDeviceOwnerEnrollmentProfile.EnrollmentMode
-            EnrollmentTokenType   = $androidDeviceOwnerEnrollmentProfile.EnrollmentTokenType
+            Id                        = $androidDeviceOwnerEnrollmentProfile.Id
+            DisplayName               = $androidDeviceOwnerEnrollmentProfile.DisplayName
+            AccountId                 = $androidDeviceOwnerEnrollmentProfile.AccountId
+            ConfigureWifi             = $androidDeviceOwnerEnrollmentProfile.ConfigureWifi
+            Description               = $androidDeviceOwnerEnrollmentProfile.Description
+            EnrolledDeviceCount       = $androidDeviceOwnerEnrollmentProfile.EnrolledDeviceCount
+            EnrollmentMode            = $androidDeviceOwnerEnrollmentProfile.EnrollmentMode.ToString()
+            EnrollmentTokenType       = $androidDeviceOwnerEnrollmentProfile.EnrollmentTokenType.ToString()
             EnrollmentTokenUsageCount = $androidDeviceOwnerEnrollmentProfile.EnrollmentTokenUsageCount
-            IsTeamsDeviceProfile  = $androidDeviceOwnerEnrollmentProfile.IsTeamsDeviceProfile
-            QrCodeContent         = $androidDeviceOwnerEnrollmentProfile.QrCodeContent
-            QrCodeImage           = $androidDeviceOwnerEnrollmentProfile.QrCodeImage
-            RoleScopeTagIds       = $androidDeviceOwnerEnrollmentProfile.RoleScopeTagIds
-            TokenValue            = $androidDeviceOwnerEnrollmentProfile.TokenValue
-            WifiHidden            = $androidDeviceOwnerEnrollmentProfile.WifiHidden
-            WifiPassword          = $androidDeviceOwnerEnrollmentProfile.WifiPassword
-            WifiSecurityType      = $androidDeviceOwnerEnrollmentProfile.WifiSecurityType
-            WifiSsid              = $androidDeviceOwnerEnrollmentProfile.WifiSsid
+            IsTeamsDeviceProfile      = $androidDeviceOwnerEnrollmentProfile.IsTeamsDeviceProfile
+            QrCodeContent             = $androidDeviceOwnerEnrollmentProfile.QrCodeContent
+            QrCodeImage               = $androidDeviceOwnerEnrollmentProfile.QrCodeImage
+            RoleScopeTagIds           = $androidDeviceOwnerEnrollmentProfile.RoleScopeTagIds
+            TokenCreationDateTime     = $androidDeviceOwnerEnrollmentProfile.TokenCreationDateTime.ToString()
+            TokenExpirationDateTime   = $androidDeviceOwnerEnrollmentProfile.TokenExpirationDateTime.ToString()
+            TokenValue                = $androidDeviceOwnerEnrollmentProfile.TokenValue
+            WifiHidden                = $androidDeviceOwnerEnrollmentProfile.WifiHidden
+            WifiPassword              = $androidDeviceOwnerEnrollmentProfile.WifiPassword
+            WifiSecurityType          = $androidDeviceOwnerEnrollmentProfile.WifiSecurityType.ToString()
+            WifiSsid                  = $androidDeviceOwnerEnrollmentProfile.WifiSsid
 
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            Ensure                    = 'Present'
+            Credential                = $Credential
+            ApplicationId             = $ApplicationId
+            TenantId                  = $TenantId
+            CertificateThumbprint     = $CertificateThumbprint
+            ManagedIdentity           = $ManagedIdentity.IsPresent
+            AccessTokens              = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -251,6 +264,14 @@ function Set-TargetResource
         $TokenValue,
 
         [Parameter()]
+        [System.String]
+        $TokenCreationDateTime,
+
+        [Parameter()]
+        [System.String]
+        $TokenExpirationDateTime,
+
+        [Parameter()]
         [System.Boolean]
         $WifiHidden,
 
@@ -310,46 +331,30 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
-    $PSBoundParameters.Remove('Ensure') | Out-Null
-    $PSBoundParameters.Remove('Credential') | Out-Null
-    $PSBoundParameters.Remove('ApplicationId') | Out-Null
-    $PSBoundParameters.Remove('ApplicationSecret') | Out-Null
-    $PSBoundParameters.Remove('TenantId') | Out-Null
-    $PSBoundParameters.Remove('CertificateThumbprint') | Out-Null
-    $PSBoundParameters.Remove('ManagedIdentity') | Out-Null
-    $PSBoundParameters.Remove('AccessTokens') | Out-Null
-
     $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Host "Create AndroidDeviceOwnerEnrollmentProfile: $DisplayName with Enrollment Mode: $EnrollmentMode"
+        Write-Verbose -Message "Create AndroidDeviceOwnerEnrollmentProfile: $DisplayName with Enrollment Mode: $EnrollmentMode"
 
-        $CreateParameters.remove('Id') | Out-Null
-        $CreateParameters.remove('Ensure') | Out-Null
-        $CreateParameters.Remove('Verbose') | Out-Null
-
-        New-MgAndroidDeviceOwnerEnrollmentProfile @CreateParameters
+        $setParameters.remove('Id') | Out-Null
+        $setParameters.remove('Ensure') | Out-Null
+        $setParameters.Remove('Verbose') | Out-Null
+        $response = New-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile @setParameters
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Host "Update AndroidDeviceOwnerEnrollmentProfile: $DisplayName"
-
-        $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
-        $UpdateParameters.Remove('Id') | Out-Null
-        $UpdateParameters.Remove('Verbose') | Out-Null
-
-        Update-MgAndroidDeviceOwnerEnrollmentProfile -ProfileId $currentInstance.Id @UpdateParameters
-        Write-Host "Updated AndroidDeviceOwnerEnrollmentProfile: $DisplayName"
+        Write-Verbose -Message "Updating AndroidDeviceOwnerEnrollmentProfile: $DisplayName"        
+        Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -AndroidDeviceOwnerEnrollmentProfileId $currentInstance.Id -Confirm:$false
+        $response = New-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile @setParameters
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Host "Remove AndroidDeviceOwnerEnrollmentProfile: $DisplayName"
-
-        Remove-MgAndroidDeviceOwnerEnrollmentProfile -ProfileId $currentInstance.Id -Confirm:$false
+        Write-Verbose -Message "Removing AndroidDeviceOwnerEnrollmentProfile: $DisplayName"
+        Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -AndroidDeviceOwnerEnrollmentProfileId $currentInstance.Id -Confirm:$false
     }
 }
 
@@ -417,6 +422,14 @@ function Test-TargetResource
         $TokenValue,
 
         [Parameter()]
+        [System.String]
+        $TokenCreationDateTime,
+
+        [Parameter()]
+        [System.String]
+        $TokenExpirationDateTime,
+
+        [Parameter()]
         [System.Boolean]
         $WifiHidden,
 
@@ -477,29 +490,16 @@ function Test-TargetResource
 
     Write-Verbose -Message "Testing configuration of AndroidDeviceOwnerEnrollmentProfile: {$DisplayName}"
 
+    $ValuesToCheck = $PSBoundParameters
+    $ValuesToCheck.Remove('WifiPassword') | Out-Null
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    if (-not (Test-M365DSCAuthenticationParameter -BoundParameters $CurrentValues))
-    {
-        Write-Verbose "An error occured in Get-TargetResource, the enrollmentProfile {$displayName} will not be processed"
-        throw "An error occured in Get-TargetResource, the enrollmentProfile {$displayName} will not be processed. Refer to the event viewer logs for more information."
-    }
-    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
-    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
-    $ValuesToCheck.Remove('Id') | Out-Null
-
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        Write-Verbose -Message "Test-TargetResource returned $false"
-        return $false
-    }
-
     $TestResult = Test-M365DSCParameterState `
-            -CurrentValues $CurrentValues
-            -Source $($MyInvocation.MyCommand.Source)
-            -DesiredValues $PSBoundParameters
+            -CurrentValues $CurrentValues `
+            -Source $($MyInvocation.MyCommand.Source) `
+            -DesiredValues $PSBoundParameters `
             -ValuesToCheck $ValuesToCheck.Keys
 
             Write-Verbose -Message "Test-TargetResource returned $TestResult"
@@ -560,8 +560,7 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgAndroidDeviceOwnerEnrollmentProfile `
-         -ErrorAction Stop
+        [array] $Script:exportedInstances = Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -ErrorAction Stop
 
         $i = 1
         $dscContent = ''
@@ -575,30 +574,29 @@ function Export-TargetResource
         }
         foreach ($config in $Script:exportedInstances)
         {
-            $displayedKey = $config.Id
+            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            {
+                $Global:M365DSCExportResourceInstancesCount++
+            }
+            $displayedKey = $config.DisplayName
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
-            Id                    = $androidDeviceOwnerEnrollmentProfile.Id
-            DisplayName           = $androidDeviceOwnerEnrollmentProfile.DisplayName
+                Id                    = $config.Id
+                DisplayName           = $config.DisplayName
 
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+                Ensure                = 'Present'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                CertificateThumbprint = $CertificateThumbprint
+                ManagedIdentity       = $ManagedIdentity.IsPresent
+                AccessTokens          = $AccessTokens
             }
 
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
 
-                if (-not (Test-M365DSCAuthenticationParameter -BoundParameters $Results))
-            {
-                Write-Verbose "An error occured in Get-TargetResource, the app {$($params.displayName)} will not be processed."
-                throw "An error occured in Get-TargetResource, the app {$($params.displayName)} will not be processed. Refer to the event viewer logs for more information."
-            }
 
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `

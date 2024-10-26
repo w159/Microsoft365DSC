@@ -35,11 +35,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return "Credentials"
             }
 
-            Mock -CommandName Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -MockWith {
-            }
             Mock -CommandName New-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -MockWith {
-            }
-            Mock -CommandName Update-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -MockWith {
             }
             Mock -CommandName Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -MockWith {
             }
@@ -47,6 +43,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
             }
+            $userName = "Whatever"
             $Script:exportedInstances =$null
             $Script:ExportMode = $false
         }
@@ -62,7 +59,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     QrCodeContent           = "your-qr-code-content"
                     WifiSsid                = "your-wifi-ssid"
-                    WifiPassword            = "your-wifi-password"
+                    WifiPassword            = New-Object System.Management.Automation.PSCredential ($userName, (ConvertTo-SecureString "your-wifi-password" -AsPlainText -Force))
                     WifiSecurityType        = "wpa"
                     Ensure                  = 'Present'
                     Credential              = $Credential;
@@ -96,7 +93,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     QrCodeContent           = "your-qr-code-content"
                     WifiSsid                = "your-wifi-ssid"
-                    WifiPassword            = "your-wifi-password"
+                    WifiPassword            = New-Object System.Management.Automation.PSCredential ($userName, (ConvertTo-SecureString "your-wifi-password" -AsPlainText -Force))
                     WifiSecurityType        = "wpa"
                     Ensure                  = 'Absent'
                     Credential              = $Credential;
@@ -106,10 +103,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                         DisplayName             = "Android Owner Enrollment Profile"
-                        Description             = "Profile for enrolling Android devices"
+                        Description             = "Profile for enrolling Android"
                         TokenExpirationDateTime = "2024-12-31T23:59:59Z"
+                        TokenCreationDateTime   = "2024-12-31T23:59:59Z"
                         TokenValue              = "your-token-value"
                         EnrollmentMode          = "corporateOwnedWorkProfile"
+                        EnrollmentTokenType     = 'TokenType'
                         QrCodeContent           = "your-qr-code-content"
                         WifiSsid                = "your-wifi-ssid"
                         WifiPassword            = "your-wifi-password"
@@ -126,6 +125,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should remove the instance from the Set method' {
+                Set-TargetResource @testParams
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -Exactly 1
             }
         }
@@ -141,7 +141,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     QrCodeContent           = "your-qr-code-content"
                     WifiSsid                = "your-wifi-ssid"
-                    WifiPassword            = "your-wifi-password"
+                    WifiPassword            = New-Object System.Management.Automation.PSCredential ($userName, (ConvertTo-SecureString "your-wifi-password" -AsPlainText -Force))
                     WifiSecurityType        = "wpa"
                     Ensure                  = 'Present'
                     Credential              = $Credential;
@@ -153,12 +153,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName             = "Android Owner Enrollment Profile"
                         Description             = "Profile for enrolling Android devices"
                         TokenExpirationDateTime = "2024-12-31T23:59:59Z"
+                        TokenCreationDateTime   = "2024-12-31T23:59:59Z"
                         TokenValue              = "your-token-value"
                         EnrollmentMode          = "corporateOwnedWorkProfile"
+                        EnrollmentTokenType     = 'TokenType'
                         QrCodeContent           = "your-qr-code-content"
                         WifiSsid                = "your-wifi-ssid"
                         WifiPassword            = "your-wifi-password"
                         WifiSecurityType        = "wpa"
+                        Ensure                  = 'Present'
                     }
                 }
             }
@@ -173,13 +176,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
-                    Description             = "Profile for enrolling Android devices"
+                    Description             = "Profile for enrolling Android" # Drift
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     TokenValue              = "your-token-value"
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     QrCodeContent           = "your-qr-code-content"
                     WifiSsid                = "your-wifi-ssid"
-                    WifiPassword            = "your-wifi-password"
+                    WifiPassword            = New-Object System.Management.Automation.PSCredential ($userName, (ConvertTo-SecureString "your-wifi-password" -AsPlainText -Force))
                     WifiSecurityType        = "wpa"
                     Ensure                  = 'Present'
                     Credential              = $Credential;
@@ -188,15 +191,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -MockWith {
                     return @{
                         Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
-                        DisplayName             = "INCORRECT Android Owner Enrollment Profile Name"
+                        DisplayName             = "Android Owner Enrollment Profile"
                         Description             = "Profile for enrolling Android devices"
                         TokenExpirationDateTime = "2024-12-31T23:59:59Z"
+                        TokenCreationDateTime   = "2024-12-31T23:59:59Z"
                         TokenValue              = "your-token-value"
                         EnrollmentMode          = "corporateOwnedWorkProfile"
+                        EnrollmentTokenType     = 'TokenType'
                         QrCodeContent           = "your-qr-code-content"
                         WifiSsid                = "your-wifi-ssid"
                         WifiPassword            = "your-wifi-password"
                         WifiSecurityType        = "wpa"
+                        Ensure                  = 'Present'
                     }
                 }
             }
@@ -211,7 +217,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Update-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -Exactly 1
+                Should -Invoke -CommandName Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -Exactly 1
+                Should -Invoke -CommandName New-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile -Exactly 1
             }
         }
 
@@ -227,14 +234,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                         DisplayName             = "Android Owner Enrollment Profile"
-                        Description             = "Profile for enrolling Android devices"
+                        Description             = "Profile for enrolling Android"
                         TokenExpirationDateTime = "2024-12-31T23:59:59Z"
+                        TokenCreationDateTime   = "2024-12-31T23:59:59Z"
                         TokenValue              = "your-token-value"
                         EnrollmentMode          = "corporateOwnedWorkProfile"
+                        EnrollmentTokenType     = 'TokenType'
                         QrCodeContent           = "your-qr-code-content"
                         WifiSsid                = "your-wifi-ssid"
                         WifiPassword            = "your-wifi-password"
                         WifiSecurityType        = "wpa"
+                        Ensure                  = 'Present'
                     }
                 }
             }

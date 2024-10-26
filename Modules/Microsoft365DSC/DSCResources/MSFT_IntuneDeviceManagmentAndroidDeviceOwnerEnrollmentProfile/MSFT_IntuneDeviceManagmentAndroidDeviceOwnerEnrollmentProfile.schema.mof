@@ -1,8 +1,15 @@
+[ClassVersion("1.0.0.0")]
+class MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfileQRImage
+{
+    [Write, Description("Indicates the content mime type.")] String type;
+    [Write, Description("The byte array that contains the actual content.")] String value;
+};
+
 [ClassVersion("1.0.0.0"), FriendlyName("IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile")]
 class MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile : OMI_BaseResource
 {
     [Key, Description("Display name for the enrollment profile.")] String DisplayName;
-    [Write, Description("Unique GUID for the enrollment profile. Read-Only.)] String Id;
+    [Write, Description("Unique GUID for the enrollment profile. Read-Only.")] String Id;
 
     [Write, Description("Intune AccountId GUID the enrollment profile belongs to.")] String AccountId;
     [Write, Description("Description for the enrollment profile.")] String Description;
@@ -11,8 +18,8 @@ class MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile : OMI_BaseRe
     [Write, Description("Value of the most recently created token for this enrollment profile.")] String TokenValue;
     [Write, Description("Date time the most recently created token was created.")] String TokenCreationDateTime;
     [Write, Description("Date time the most recently created token will expire.")] String TokenExpirationDateTime;
-    [Write, Description("Total number of Android devices that have enrolled using this enrollment profile.")] Int32 EnrolledDeviceCount;
-    [Write, Description("Total number of AOSP devices that have enrolled using the current token. Valid values 0 to 20000")] Int32 EnrollmentTokenUsageCount;
+    [Write, Description("Total number of Android devices that have enrolled using this enrollment profile.")] UInt32 EnrolledDeviceCount;
+    [Write, Description("Total number of AOSP devices that have enrolled using the current token. Valid values 0 to 20000")] UInt32 EnrollmentTokenUsageCount;
     [Write, Description("String used to generate a QR code for the token.")] String QrCodeContent;
     [Write, Description("String used to generate a QR code for the token.")] String QrCodeImage;
     [Write, Description("List of Scope Tags for this Entity instance.")] String RoleScopeTagIds[];

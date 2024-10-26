@@ -22,22 +22,26 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile 'CreateProfile'
+        IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile "IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
         {
-            Id                      = "164655f7-1232-4d56-ae8f-b095196a0309"
-            DisplayName             = "Android Owner Enrollment Profile"
-            Description             = "Profile for enrolling Android devices"
-            TokenExpirationDateTime = "2024-12-31T23:59:59Z"
-            TokenValue              = "your-token-value"
-            EnrollmentMode          = "corporateOwnedWorkProfile"
-            QrCodeContent           = "your-qr-code-content"
-            WifiSsid                = "your-wifi-ssid"
-            WifiPassword            = "your-wifi-password"
-            WifiSecurityType        = "wpa"
-            Ensure                  = "Present"
-            ApplicationId           = $ApplicationId
-            TenantId                = $TenantId
-            CertificateThumbprint   = $CertificateThumbprint;
+            AccountId                 = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
+            ApplicationId             = $ApplicationId;
+            CertificateThumbprint     = $CertificateThumbprint;
+            ConfigureWifi             = $True;
+            Description               = "This is my enrollment profile";
+            DisplayName               = "MyTestEnrollmentProfile";
+            EnrolledDeviceCount       = 0;
+            EnrollmentMode            = "corporateOwnedDedicatedDevice";
+            EnrollmentTokenType       = "default";
+            EnrollmentTokenUsageCount = 0;
+            Ensure                    = "Present";
+            IsTeamsDeviceProfile      = $False;
+            RoleScopeTagIds           = @("0");
+            TenantId                  = $TenantId;
+            TokenCreationDateTime     = "10/26/2024 1:02:29 AM";
+            TokenExpirationDateTime   = "10/31/2024 3:59:59 AM";
+            WifiHidden                = $False;
+            WifiSecurityType          = "none";
         }
     }
 }
