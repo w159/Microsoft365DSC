@@ -1,6 +1,6 @@
 
-# AADAccessReviewDefinition
+# AADVerifiedIdAuthority
 
 ## Description
 
-Azure AD Access Review Definition
+Azure AD Verified Identity Authority

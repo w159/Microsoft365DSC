@@ -1,12 +1,12 @@
 {
-    "resourceName": "AADAccessReviewDefinition",
-    "description": "This resource configures an Azure AD Access Review Definition.",
+    "resourceName": "AADVerifiedIdAuthority",
+    "description": "This resource configures an Azure AD Verified Identity Authority.",
     "permissions":    {
     "graph":  {
                   "delegated":  {
                                     "read":  [
                                                  {
-                                                     "name":  "AccessReview.Read.All"
+                                                     "name":  "VerifiableCredential.Authority.ReadWrite"
                                                  }
                                              ],
                                     "update":  [
@@ -16,7 +16,7 @@
                   "application":  {
                                       "read":  [
                                                    {
-                                                       "name":  "AccessReview.Read.All"
+                                                       "name":  "VerifiableCredential.Authority.ReadWrite"
                                                    }
                                                ],
                                       "update":  [

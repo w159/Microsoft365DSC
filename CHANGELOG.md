@@ -18,6 +18,8 @@
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AADVerifiedIdAuthority
+  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * IntuneDerivedCredential
