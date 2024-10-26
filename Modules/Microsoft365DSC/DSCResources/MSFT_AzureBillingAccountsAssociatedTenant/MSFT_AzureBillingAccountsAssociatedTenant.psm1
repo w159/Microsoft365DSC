@@ -4,17 +4,25 @@ function Get-TargetResource
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
         $DisplayName,
 
-        #endregion Intune params
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $BillingAccount,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AssociatedTenantId,
+
+        [Parameter()]
+        [System.String]
+        $BillingManagementState,
+
+        [Parameter()]
+        [System.String]
+        $ProvisioningManagementState,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -38,10 +46,6 @@ function Get-TargetResource
         $CertificateThumbprint,
 
         [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
         [Switch]
         $ManagedIdentity,
 
@@ -50,7 +54,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters | Out-Null
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -67,49 +71,34 @@ function Get-TargetResource
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
-
     try
     {
-        $instance = $null
-        if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
-        {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
-        }
+        $accounts = Get-M365DSCAzureBillingAccount
+        $currentAccount = $accounts.value | Where-Object -FilterScript {$_.properties.displayName -eq $BillingAccount}
 
+        if ($null -ne $currentAccount)
+        {
+            $instances = Get-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $currentAccount.Name -ErrorAction Stop
+            $instance = $instances.value | Where-Object -FilterScript {$_.properties.displayName -eq $DisplayName}
+        }
         if ($null -eq $instance)
         {
-            $instance = Get-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $Id -ErrorAction SilentlyContinue
-
-            if ($null -eq $instance)
-            {
-                Write-Verbose -Message "Could not find MobileAppCategory by Id {$Id}."
-
-                if (-Not [string]::IsNullOrEmpty($DisplayName))
-                {
-                    $instance = Get-MgBetaDeviceAppManagementMobileAppCategory `
-                        -Filter "DisplayName eq '$DisplayName'" `
-                        -ErrorAction SilentlyContinue
-                }
-            }
-
-            if ($null -eq $instance)
-            {
-                Write-Verbose -Message "Could not find MobileAppCategory by DisplayName {$DisplayName}."
-                return $nullResult
-            }
+            return $nullResult
         }
 
         $results = @{
-            Id                    = $instance.Id
-            DisplayName           = $instance.DisplayName
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ApplicationSecret     = $ApplicationSecret
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            BillingAccount              = $BillingAccount
+            DisplayName                 = $DisplayName
+            AssociatedTenantId          = $instance.properties.tenantId
+            BillingManagementState      = $instance.properties.billingManagementState
+            ProvisioningManagementState = $instance.properties.provisioningManagementState
+            Ensure                      = 'Present'
+            Credential                  = $Credential
+            ApplicationId               = $ApplicationId
+            TenantId                    = $TenantId
+            CertificateThumbprint       = $CertificateThumbprint
+            ManagedIdentity             = $ManagedIdentity.IsPresent
+            AccessTokens                = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -131,17 +120,25 @@ function Set-TargetResource
     [CmdletBinding()]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
         $DisplayName,
 
-        #endregion Intune params
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $BillingAccount,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AssociatedTenantId,
+
+        [Parameter()]
+        [System.String]
+        $BillingManagementState,
+
+        [Parameter()]
+        [System.String]
+        $ProvisioningManagementState,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -163,10 +160,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [Switch]
@@ -190,30 +183,39 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
+    $billingAccounts = Get-M365DSCAzureBillingAccount
+    $account = $billingAccounts.value | Where-Object -FilterScript {$_.properties.displayName -eq $BillingAccount}
 
-    $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-    $setParameters.Remove('Id') | Out-Null
-
+    $instanceParams = @{
+        properties = @{
+            displayName                 = $DisplayName
+            tenantId                    = $AssociatedTenantId
+            billingManagementState      = $BillingManagementState
+            provisioningManagementState = $ProvisioningManagementState
+        }
+    }
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an Intune App Category with DisplayName {$DisplayName}"
-
-        New-MgBetaDeviceAppManagementMobileAppCategory @SetParameters
+        Write-Verbose -Message "Adding associated tenant {$AssociatedTenantId}"
+        New-M365DSCAzureBillingAccountsAssociatedTenant  -BillingAccountId $account.Name `
+                                                         -AssociatedTenantId $AssociatedTenantId `
+                                                         -Body $instanceParams
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating the Intune App Category with DisplayName {$DisplayName}"
-
-        Update-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $currentInstance.Id @SetParameters
+        Write-Verbose -Message "Updating associated tenant {$AssociatedTenantId}"
+        New-M365DSCAzureBillingAccountsAssociatedTenant  -BillingAccountId $account.Name `
+                                                         -AssociatedTenantId $AssociatedTenantId `
+                                                         -Body $instanceParams
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing the Intune App Category with DisplayName {$DisplayName}"
-
-        Remove-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $currentInstance.Id -Confirm:$false
+        Write-Verbose -Message "Removing associated tenant {$AssociatedTenantId}"
+        Remove-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $account.Name `
+                                                           -AssociatedTenantId $AssociatedTenantId
     }
 }
 
@@ -223,17 +225,25 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
         $DisplayName,
 
-        #endregion Intune params
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $BillingAccount,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AssociatedTenantId,
+
+        [Parameter()]
+        [System.String]
+        $BillingManagementState,
+
+        [Parameter()]
+        [System.String]
+        $ProvisioningManagementState,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -255,10 +265,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [Switch]
@@ -284,26 +290,13 @@ function Test-TargetResource
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
 
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        Write-Verbose -Message "Test-TargetResource returned $false"
-        return $false
-    }
-    $testResult = $true
-
-    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
-    $ValuesToCheck.Remove('Id') | Out-Null
-
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
-    if ($testResult)
-    {
-        $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -DesiredValues $PSBoundParameters `
-            -ValuesToCheck $ValuesToCheck.Keys
-    }
+    $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+        -Source $($MyInvocation.MyCommand.Source) `
+        -DesiredValues $PSBoundParameters `
+        -ValuesToCheck $ValuesToCheck.Keys
 
     Write-Verbose -Message "Test-TargetResource returned $testResult"
 
@@ -329,12 +322,12 @@ function Export-TargetResource
         $TenantId,
 
         [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
         [System.Management.Automation.PSCredential]
         $ApplicationSecret,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
 
         [Parameter()]
         [Switch]
@@ -345,7 +338,7 @@ function Export-TargetResource
         $AccessTokens
     )
 
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -363,7 +356,9 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgBetaDeviceAppManagementMobileAppCategory -ErrorAction Stop
+
+        #Get all billing account
+        $accounts = Get-M365DSCAzureBillingAccount
 
         $i = 1
         $dscContent = ''
@@ -375,37 +370,50 @@ function Export-TargetResource
         {
             Write-Host "`r`n" -NoNewline
         }
-        foreach ($config in $Script:exportedInstances)
+        [array] $Script:exportedInstances = @()
+        foreach ($config in $accounts.value)
         {
-            $displayedKey = $config.Id
-            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
-            $params = @{
-                Id                    = $config.Id
-                DisplayName           = $config.DisplayName
-                Ensure                = 'Present'
-                Credential            = $Credential
-                ApplicationId         = $ApplicationId
-                TenantId              = $TenantId
-                CertificateThumbprint = $CertificateThumbprint
-                ApplicationSecret     = $ApplicationSecret
-                ManagedIdentity       = $ManagedIdentity.IsPresent
-                AccessTokens          = $AccessTokens
+            $displayedKey = $config.properties.displayName
+            Write-Host "    |---[$i/$($accounts.Count)] $displayedKey"
+
+            $associatedTenants += Get-M365DSCAzureBillingAccountsAssociatedTenant -BillingAccountId $config.name
+
+            $j = 1
+            foreach ($associatedTenant in $associatedTenants.value)
+            {
+                if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+                {
+                    $Global:M365DSCExportResourceInstancesCount++
+                }
+                Write-Host "        |---[$j/$($associatedTenants.value.Length)] $($associatedTenant.properties.DisplayName)" -NoNewline
+                $params = @{
+                    BillingAccount        = $config.properties.displayName
+                    DisplayName           = $associatedTenant.properties.displayName
+                    AssociatedTenantId    = $associatedTenant.properties.tenantId
+                    Credential            = $Credential
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                    ManagedIdentity       = $ManagedIdentity.IsPresent
+                    AccessTokens          = $AccessTokens
+                }
+
+                $Results = Get-TargetResource @Params
+                $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
+                    -Results $Results
+
+                $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
+                    -ConnectionMode $ConnectionMode `
+                    -ModulePath $PSScriptRoot `
+                    -Results $Results `
+                    -Credential $Credential
+                $dscContent += $currentDSCBlock
+                Save-M365DSCPartialExport -Content $currentDSCBlock `
+                    -FileName $Global:PartialExportFileName
+                $j++
+                Write-Host $Global:M365DSCEmojiGreenCheckMark
             }
-
-            $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
-
-            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
-            $dscContent += $currentDSCBlock
-            Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
             $i++
-            Write-Host $Global:M365DSCEmojiGreenCheckMark
         }
         return $dscContent
     }

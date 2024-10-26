@@ -4,22 +4,13 @@ function Get-TargetResource
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        #endregion Intune params
+        $IsSingleInstance,
 
         [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
+        [System.Boolean]
+        $IsGroupOwnerManagementEnabled,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -36,10 +27,6 @@ function Get-TargetResource
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [Switch]
@@ -66,50 +53,23 @@ function Get-TargetResource
     #endregion
 
     $nullResult = $PSBoundParameters
-    $nullResult.Ensure = 'Absent'
-
     try
     {
-        $instance = $null
-        if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
-        {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
-        }
-
+        $instance = Get-MgBetaPolicyAccessReviewPolicy -ErrorAction Stop
         if ($null -eq $instance)
         {
-            $instance = Get-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $Id -ErrorAction SilentlyContinue
-
-            if ($null -eq $instance)
-            {
-                Write-Verbose -Message "Could not find MobileAppCategory by Id {$Id}."
-
-                if (-Not [string]::IsNullOrEmpty($DisplayName))
-                {
-                    $instance = Get-MgBetaDeviceAppManagementMobileAppCategory `
-                        -Filter "DisplayName eq '$DisplayName'" `
-                        -ErrorAction SilentlyContinue
-                }
-            }
-
-            if ($null -eq $instance)
-            {
-                Write-Verbose -Message "Could not find MobileAppCategory by DisplayName {$DisplayName}."
-                return $nullResult
-            }
+            throw 'Could not retrieve the Access Review Policy'
         }
 
         $results = @{
-            Id                    = $instance.Id
-            DisplayName           = $instance.DisplayName
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ApplicationSecret     = $ApplicationSecret
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            IsSingleInstance              = 'Yes'
+            IsGroupOwnerManagementEnabled = $instance.IsGroupOwnerManagementEnabled
+            Credential                    = $Credential
+            ApplicationId                 = $ApplicationId
+            TenantId                      = $TenantId
+            CertificateThumbprint         = $CertificateThumbprint
+            ManagedIdentity               = $ManagedIdentity.IsPresent
+            AccessTokens                  = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -131,22 +91,13 @@ function Set-TargetResource
     [CmdletBinding()]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        #endregion Intune params
+        $IsSingleInstance,
 
         [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
+        [System.Boolean]
+        $IsGroupOwnerManagementEnabled,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -163,10 +114,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [Switch]
@@ -189,32 +136,13 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $currentInstance = Get-TargetResource @PSBoundParameters
-
-    $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-    $setParameters.Remove('Id') | Out-Null
-
-    # CREATE
-    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
-    {
-        Write-Verbose -Message "Creating an Intune App Category with DisplayName {$DisplayName}"
-
-        New-MgBetaDeviceAppManagementMobileAppCategory @SetParameters
+    $updateParameters = @{
+        IsGroupOwnerManagementEnabled = $IsGroupOwnerManagementEnabled
     }
-    # UPDATE
-    elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
-    {
-        Write-Verbose -Message "Updating the Intune App Category with DisplayName {$DisplayName}"
 
-        Update-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $currentInstance.Id @SetParameters
-    }
-    # REMOVE
-    elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
-    {
-        Write-Verbose -Message "Removing the Intune App Category with DisplayName {$DisplayName}"
-
-        Remove-MgBetaDeviceAppManagementMobileAppCategory -MobileAppCategoryId $currentInstance.Id -Confirm:$false
-    }
+    $updateJSON = ConvertTo-Json $updateParameters
+    Write-Verbose -Message "Updating the Entra Id Access Review Policy with values: $updateJSON"
+    Update-MgBetaPolicyAccessReviewPolicy -BodyParameter $updateParameters
 }
 
 function Test-TargetResource
@@ -223,22 +151,13 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (
-        #region Intune params
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
         [Parameter(Mandatory = $true)]
         [System.String]
-        $DisplayName,
-
-        #endregion Intune params
+        $IsSingleInstance,
 
         [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
+        [System.Boolean]
+        $IsGroupOwnerManagementEnabled,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -255,10 +174,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [Switch]
@@ -284,26 +199,13 @@ function Test-TargetResource
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
 
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        Write-Verbose -Message "Test-TargetResource returned $false"
-        return $false
-    }
-    $testResult = $true
-
-    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
-    $ValuesToCheck.Remove('Id') | Out-Null
-
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
-    if ($testResult)
-    {
-        $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -DesiredValues $PSBoundParameters `
-            -ValuesToCheck $ValuesToCheck.Keys
-    }
+    $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+        -Source $($MyInvocation.MyCommand.Source) `
+        -DesiredValues $PSBoundParameters `
+        -ValuesToCheck $ValuesToCheck.Keys
 
     Write-Verbose -Message "Test-TargetResource returned $testResult"
 
@@ -329,12 +231,12 @@ function Export-TargetResource
         $TenantId,
 
         [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
         [System.Management.Automation.PSCredential]
         $ApplicationSecret,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
 
         [Parameter()]
         [Switch]
@@ -363,7 +265,7 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgBetaDeviceAppManagementMobileAppCategory -ErrorAction Stop
+        [array] $Script:exportedInstances = Get-MgBetaPolicyAccessReviewPolicy -ErrorAction Stop
 
         $i = 1
         $dscContent = ''
@@ -377,17 +279,19 @@ function Export-TargetResource
         }
         foreach ($config in $Script:exportedInstances)
         {
-            $displayedKey = $config.Id
+            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            {
+                $Global:M365DSCExportResourceInstancesCount++
+            }
+
+            $displayedKey = 'Access Review Policy'
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
-                Id                    = $config.Id
-                DisplayName           = $config.DisplayName
-                Ensure                = 'Present'
+                IsSingleInstance      = 'Yes'
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint
-                ApplicationSecret     = $ApplicationSecret
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
