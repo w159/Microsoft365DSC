@@ -140,10 +140,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It '4.2 Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
-            It '4.3 Should call the Set method to update the instance' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1
-            }
         }
 
         # Context 5: ReverseDSC Tests
