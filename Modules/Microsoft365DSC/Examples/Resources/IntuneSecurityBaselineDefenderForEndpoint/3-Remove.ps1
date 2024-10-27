@@ -19,16 +19,16 @@ Configuration Example
         $CertificateThumbprint
     )
     Import-DscResource -ModuleName Microsoft365DSC
+
     node localhost
     {
-        AADAccessReviewPolicy "AADAccessReviewPolicy"
+        IntuneSecurityBaselineDefenderForEndpoint 'mySecurityBaselineDefenderForEndpoint'
         {
-            IsGroupOwnerManagementEnabled = $False;
-            IsSingleInstance              = "Yes";
-            ApplicationId                 = $ApplicationId
-            TenantId                      = $TenantId
-            CertificateThumbprint         = $CertificateThumbprint
+            DisplayName           = 'test'
+            Ensure                = 'Absent'
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
-
     }
 }

@@ -127,11 +127,11 @@
                 }
                 AADAccessReviewPolicy 'AADAccessReviewPolicy'
                 {
-                    ApplicationId                 = $ConfigurationData.NonNodeData.ApplicationId;
-                    CertificateThumbprint         = $ConfigurationData.NonNodeData.CertificateThumbprint;
                     IsGroupOwnerManagementEnabled = $False;
                     IsSingleInstance              = "Yes";
-                    TenantId                      = $OrganizationName;
+                    ApplicationId                 = $ApplicationId
+                    TenantId                      = $TenantId
+                    CertificateThumbprint         = $CertificateThumbprint
                 }
                 AADAdminConsentRequestPolicy 'AADAdminConsentRequestPolicy'
                 {
@@ -1009,6 +1009,24 @@
                     GuestUsageGuidelinesUrl       = "https://contoso.com/guestusage"
                     UsageGuidelinesUrl            = "https://contoso.com/usage"
                     Ensure                        = "Present"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADHomeRealmDiscoveryPolicy 'AADHomeRealmDiscoveryPolicy-displayName-value'
+                {
+                    Definition            = @(
+                        MSFT_AADHomeRealDiscoveryPolicyDefinition {
+                            PreferredDomain       = 'federated.example.edu'
+                            AccelerateToFederatedDomain         = $True # updating here
+                            AlternateIdLogin = MSFT_AADHomeRealDiscoveryPolicyDefinitionAlternateIdLogin {
+                                Enabled = $True
+                            }
+                        }
+                    );
+                    DisplayName           = "displayName-value";
+                    Ensure                = "Present";
+                    IsOrganizationDefault = $False;
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
