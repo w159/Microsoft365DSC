@@ -1,6 +1,6 @@
 
-# ResourceName
+# IntuneDeviceManagementEnrollmentAndroidGooglePlay
 
 ## Description
 
-##TODO - Provide a short description of what the resource is set to configure.
+This resource configures Android Enterprise enrollment settings for device management within Microsoft Intune.

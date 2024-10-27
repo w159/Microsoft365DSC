@@ -18655,6 +18655,45 @@ function Get-MgBetaDeviceManagement
         $Break
     )
 }
+
+function Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.String]
+        $BindStatus,
+
+        [Parameter()]
+        [System.String]
+        $OwnerUserPrincipalName,
+
+        [Parameter()]
+        [System.String]
+        $OwnerOrganizationName,
+
+        [Parameter()]
+        [System.String]
+        $EnrollmentTarget,
+
+        [Parameter()]
+        [System.Boolean]
+        $DeviceOwnerManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceOwnerFullyManagedEnrollmentEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present'
+    )
+}
+
 function Get-MgBetaDeviceManagementAssignmentFilter
 {
     [CmdletBinding()]
