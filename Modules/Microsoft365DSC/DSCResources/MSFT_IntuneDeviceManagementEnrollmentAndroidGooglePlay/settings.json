@@ -1,29 +1,29 @@
 ﻿{
-    "resourceName": "ResourceName",
-    "description": "Description of what the resource is about.",
-    "roles": {
-        "read": [
-            "Role"
-        ],
-        "update": [
-            "Role"
-        ]
-    },
+    "resourceName": "IntuneDeviceManagementEnrollmentAndroidGooglePlay",
+    "description": "This resource configures Intune Android enrollment settings.",
     "permissions": {
         "graph": {
             "delegated": {
-                "read": [],
-                "update": []
-            },
-            "application": {
                 "read": [
                     {
-                        "name": "Permission for Monitoring and Export"
+                        "name": "DeviceManagementConfiguration.Read.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "Permission for deploying"
+                        "name": "DeviceManagementConfiguration.ReadWrite.All"
+                    }
+                ]
+            },
+            "application": {
+                "read": [
+                    {
+                        "name": "DeviceManagementConfiguration.Read.All"
+                    }
+                ],
+                "update": [
+                    {
+                        "name": "DeviceManagementConfiguration.ReadWrite.All"
                     }
                 ]
             }
