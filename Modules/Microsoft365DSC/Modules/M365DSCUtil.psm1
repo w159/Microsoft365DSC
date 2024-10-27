@@ -1829,7 +1829,7 @@ function New-M365DSCConnection
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('Azure', 'AzureDevOPS', 'Defender', 'ExchangeOnline', 'Fabric', 'Intune', `
+        [ValidateSet('AdminAPI', 'Azure', 'AzureDevOPS', 'Defender', 'ExchangeOnline', 'Fabric', 'Intune', `
                 'SecurityComplianceCenter', 'PnP', 'PowerPlatforms', `
                 'MicrosoftTeams', 'MicrosoftGraph', 'SharePointOnlineREST', 'Tasks')]
         [System.String]
