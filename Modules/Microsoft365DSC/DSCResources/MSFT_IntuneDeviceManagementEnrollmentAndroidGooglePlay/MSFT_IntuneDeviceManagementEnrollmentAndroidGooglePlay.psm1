@@ -94,7 +94,7 @@ function Get-TargetResource
 
         if (-not $specificSetting) {
             Write-Verbose "No Android Managed Store Account Enterprise Setting found with Id $Id."
-            return $null
+            return $nullResult
         }
 
         $result = @{

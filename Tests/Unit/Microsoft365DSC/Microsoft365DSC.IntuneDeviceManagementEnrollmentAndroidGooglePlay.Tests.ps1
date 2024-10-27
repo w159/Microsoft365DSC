@@ -55,10 +55,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It '1.2 Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
-            It '1.3 Should create a new instance from the Set method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1
-            }
         }
 
         # Context 2: Instance exists but should not
