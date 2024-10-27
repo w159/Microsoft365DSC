@@ -67,6 +67,7 @@
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
+  * Exponential performance improvements by reducing complexity and roundtrips.
 * DEPENDENCIES
   * Updated ExchangeOnlineManagement to version 3.6.0.
   * Updated Microsoft.Graph to version 2.24.0.
