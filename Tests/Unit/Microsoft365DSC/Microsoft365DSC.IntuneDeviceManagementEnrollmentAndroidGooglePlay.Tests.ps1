@@ -2,14 +2,14 @@
 param(
 )
 $M365DSCTestFolder = Join-Path -Path $PSScriptRoot `
-                        -ChildPath '..\..\Unit' `
-                        -Resolve
+    -ChildPath '..\..\Unit' `
+    -Resolve
 $CmdletModule = (Join-Path -Path $M365DSCTestFolder `
-            -ChildPath '\Stubs\Microsoft365.psm1' `
-            -Resolve)
+        -ChildPath '\Stubs\Microsoft365.psm1' `
+        -Resolve)
 $GenericStubPath = (Join-Path -Path $M365DSCTestFolder `
-    -ChildPath '\Stubs\Generic.psm1' `
-    -Resolve)
+        -ChildPath '\Stubs\Generic.psm1' `
+        -Resolve)
 Import-Module -Name (Join-Path -Path $M365DSCTestFolder `
         -ChildPath '\UnitTestHelper.psm1' `
         -Resolve)
@@ -47,16 +47,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    Id                                          = "androidManagedStoreAccountEnterpriseSettings"
+                    BindStatus                                   = "notBound"
+                    OwnerUserPrincipalName                       = "testuser@domain.com"
+                    OwnerOrganizationName                        = "Test Organization"
+                    EnrollmentTarget                             = "targetedAsEnrollmentRestrictions"
+                    DeviceOwnerManagementEnabled                 = $False
+                    AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $False
+                    Ensure                                       = 'Present'
+                    Credential                                   = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return $null
-                Mock -CommandName Get-Cmdlet -MockWith {
-                    return $null
-                }
+                Mock -CommandName Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MockWith { return $null }
             }
+
             It 'Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Absent'
             }
@@ -65,9 +69,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should create a new instance from the Set method' {
-                ##TODO - Replace the New-Cmdlet by the appropriate one
+                Mock -CommandName Invoke-MgGraphRequest -MockWith { }
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1
             }
         }
 
