@@ -19787,6 +19787,19 @@ function Get-MgBetaDeviceManagementDerivedCredential {
     )
 }
 
+function Remove-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Confirm = $true
+    )
+}
+
 function Remove-MgBetaDeviceManagementDerivedCredential
 {
     [CmdletBinding()]
