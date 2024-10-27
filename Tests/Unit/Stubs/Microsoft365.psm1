@@ -19168,6 +19168,18 @@ function Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate
         $HttpPipelineAppend
     )
 }
+function Get-MgBetaDeviceManagementDataSharingConsent {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $DataSharingConsentId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Granted
+    )
+}
 function Get-MgBetaDeviceManagementDeviceCategory
 {
     [CmdletBinding()]
