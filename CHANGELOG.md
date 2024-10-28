@@ -20,6 +20,8 @@
   * Initial release.
 * AADIdentityAPIConnector
   * Initial release.
+* AADIdentityProtectionPolicySettings
+  * Initial release.
 * AADNetworkAccessForwardingProfile
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
