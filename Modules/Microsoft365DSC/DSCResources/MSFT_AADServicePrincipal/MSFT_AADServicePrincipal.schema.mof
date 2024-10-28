@@ -42,4 +42,6 @@ class MSFT_AADServicePrincipal : OMI_BaseResource
     [Write, Description("Credentials of the Azure AD Admin"), EmbeddedInstance("MSFT_Credential")] string Credential;
     [Write, Description("Managed ID being used for authentication.")] Boolean ManagedIdentity;
     [Write, Description("Access token used for authentication.")] String AccessTokens[];
+    [Write, Description("The collection of password credentials associated with the service principal. Not nullable."), EmbeddedInstance("MSFT_MicrosoftGraphpasswordCredential")] String PasswordCredentials[];
+    [Write, Description("The collection of key credentials associated with the service principal. Not nullable. Supports $filter (eq, NOT, ge, le)."), EmbeddedInstance("MSFT_MicrosoftGraphkeyCredential")] String KeyCredentials[];
 };
