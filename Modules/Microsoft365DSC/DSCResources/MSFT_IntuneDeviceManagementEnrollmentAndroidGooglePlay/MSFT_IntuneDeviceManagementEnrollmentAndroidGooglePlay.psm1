@@ -217,8 +217,7 @@ function Set-TargetResource
     $currentInstance = Get-TargetResource @PSBoundParameters
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    # if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
-    if ($Ensure -eq 'Present')
+    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Intune Device Management Android Google Play Enrollment with id {$Id}"
         # Check data sharing consent status

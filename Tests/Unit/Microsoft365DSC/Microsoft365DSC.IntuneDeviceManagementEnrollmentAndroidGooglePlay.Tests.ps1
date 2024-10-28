@@ -97,15 +97,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
-            It '2.1 Should return Values from the Get method' {
+            It '2.1 Should confirm testParams Ensure is Absent' {
+                # Verify that Ensure is set to 'Absent' in the test parameters
+                $testParams.Ensure | Should -Be 'Absent'
+            }
+
+            It '2.2 Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
             }
 
-            It '2.2 Should return false from the Test method' {
+            It '2.3 Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
-            It '2.3 Should call Invoke-MgGraphRequest to remove the instance from Set method' {
+            It '2.4 Should call Invoke-MgGraphRequest to remove the instance from Set method' {
                 Set-TargetResource @testParams
 
                 # Verify if unbind was called
