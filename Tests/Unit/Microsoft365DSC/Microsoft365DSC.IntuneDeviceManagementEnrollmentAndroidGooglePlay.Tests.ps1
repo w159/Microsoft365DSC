@@ -85,10 +85,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Test-TargetResource @testParams | Should -Be $false
             }
             It '2.3 Should remove the instance from the Set method' {
+                # Adding Verbose Preference to track
+                $VerbosePreference = 'Continue'
+
+                # Run the Set-TargetResource function
                 Set-TargetResource @testParams
+
+                # Verify if Invoke-MgGraphRequest was called with specific parameters
                 Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter {
                     $_.Uri -eq "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/unbind" -and
-                    $_.Method -eq 'POST'
+                    $_.Method -eq 'POST' -and
+                    $_.Body -eq @{}
                 }
             }
         }
