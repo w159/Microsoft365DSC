@@ -6,16 +6,11 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        [ValidateSet('Yes')]
         $IsSingleInstance,
 
         [Parameter()]
-        [System.UInt32]
-        $DeviceComplianceCheckinThresholdDays,
-
-        [Parameter()]
         [System.Boolean]
-        $SecureByDefault,
+        $IsUserRiskClearedOnPasswordReset,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -30,10 +25,6 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -46,15 +37,14 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Checking for the Intune Device Management Compliance Settings"
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-        -InboundParameters $PSBoundParameters
+    New-M365DSCConnection -Workload 'MicrosoftGraph' `
+        -InboundParameters $PSBoundParameters | Out-Null
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
     $CommandName = $MyInvocation.MyCommand
     $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
         -CommandName $CommandName `
@@ -65,31 +55,35 @@ function Get-TargetResource
     $nullResult = $PSBoundParameters
     try
     {
-        $uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'beta/deviceManagement/settings'
-        $settings = Invoke-MgGraphRequest -Method 'GET' -Uri $uri
-        $results = @{
-            IsSingleInstance                     = 'Yes'
-            DeviceComplianceCheckinThresholdDays = $settings.deviceComplianceCheckinThresholdDays
-            SecureByDefault                      = [Boolean]$settings.secureByDefault
-            Credential                           = $Credential
-            ApplicationId                        = $ApplicationId
-            TenantId                             = $TenantId
-            ApplicationSecret                    = $ApplicationSecret
-            CertificateThumbprint                = $CertificateThumbprint
-            Managedidentity                      = $ManagedIdentity.IsPresent
-            AccessTokens                         = $AccessTokens
+         $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+        $instance = Invoke-MgGraphRequest -Method Get -Uri $url
+
+        if ($null -eq $instance)
+        {
+            throw 'Could not retrieve the AAD Identity Protection Policy settings.'
         }
 
+        $results = @{
+            IsSingleInstance                 = 'Yes'
+            IsUserRiskClearedOnPasswordReset = $instance.IsUserRiskClearedOnPasswordReset
+            Credential                       = $Credential
+            ApplicationId                    = $ApplicationId
+            TenantId                         = $TenantId
+            CertificateThumbprint            = $CertificateThumbprint
+            ManagedIdentity                  = $ManagedIdentity.IsPresent
+            AccessTokens                     = $AccessTokens
+        }
         return [System.Collections.Hashtable] $results
     }
     catch
     {
+        Write-Verbose -Message $_
         New-M365DSCLogEntry -Message 'Error retrieving data:' `
             -Exception $_ `
             -Source $($MyInvocation.MyCommand.Source) `
             -TenantId $TenantId `
             -Credential $Credential
-        $nullResult = Clear-M365DSCAuthenticationParameter -BoundParameters $nullResult
+
         return $nullResult
     }
 }
@@ -97,21 +91,15 @@ function Get-TargetResource
 function Set-TargetResource
 {
     [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
     param
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        [ValidateSet('Yes')]
         $IsSingleInstance,
 
         [Parameter()]
-        [System.UInt32]
-        $DeviceComplianceCheckinThresholdDays,
-
-        [Parameter()]
         [System.Boolean]
-        $SecureByDefault,
+        $IsUserRiskClearedOnPasswordReset,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -126,10 +114,6 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -142,15 +126,11 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Updating the Intune Device Management Compliance Settings"
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-        -InboundParameters $PSBoundParameters
-
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
     $CommandName = $MyInvocation.MyCommand
     $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
         -CommandName $CommandName `
@@ -158,31 +138,30 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $settings = @{
-        deviceComplianceCheckinThresholdDays = $DeviceComplianceCheckinThresholdDays
-        secureByDefault                      = $SecureByDefault
+    $updateParameters = @{
+        IsUserRiskClearedOnPasswordReset = $IsUserRiskClearedOnPasswordReset
     }
-    Update-MgBetaDeviceManagement -Settings $settings
+
+    $updateJSON = ConvertTo-Json $updateParameters
+    Write-Verbose -Message "Updating the AAD Identity Protection Policy settings with values: $updateJSON"
+     $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+
+    Invoke-MgGraphRequest -Method PATCH -Uri $url -Body $updateJSON
 }
 
 function Test-TargetResource
 {
     [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
+    [OutputType([System.Boolean])]
     param
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        [ValidateSet('Yes')]
         $IsSingleInstance,
 
         [Parameter()]
-        [System.UInt32]
-        $DeviceComplianceCheckinThresholdDays,
-
-        [Parameter()]
         [System.Boolean]
-        $SecureByDefault,
+        $IsUserRiskClearedOnPasswordReset,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -195,10 +174,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -217,7 +192,7 @@ function Test-TargetResource
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
     $CommandName = $MyInvocation.MyCommand
     $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
         -CommandName $CommandName `
@@ -225,20 +200,20 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $ValuesToCheck = $PSBoundParameters
-    Write-Verbose -Message "Testing configuration of Intune Device Management Compliance Settings"
-
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
-    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
 
-    $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+    Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
+    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
+
+    $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
         -Source $($MyInvocation.MyCommand.Source) `
         -DesiredValues $PSBoundParameters `
         -ValuesToCheck $ValuesToCheck.Keys
-    Write-Verbose -Message "Test-TargetResource returned $TestResult"
 
-    return $TestResult
+    Write-Verbose -Message "Test-TargetResource returned $testResult"
+
+    return $testResult
 }
 
 function Export-TargetResource
@@ -248,10 +223,6 @@ function Export-TargetResource
     param
     (
         [Parameter()]
-        [System.String]
-        $Filter,
-
-        [Parameter()]
         [System.Management.Automation.PSCredential]
         $Credential,
 
@@ -279,6 +250,7 @@ function Export-TargetResource
         [System.String[]]
         $AccessTokens
     )
+
     $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
         -InboundParameters $PSBoundParameters
 
@@ -286,7 +258,7 @@ function Export-TargetResource
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
     $CommandName = $MyInvocation.MyCommand
     $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
         -CommandName $CommandName `
@@ -296,49 +268,66 @@ function Export-TargetResource
 
     try
     {
-        $params = @{
-            IsSingleInstance      = 'Yes'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            ApplicationSecret     = $ApplicationSecret
-            CertificateThumbprint = $CertificateThumbprint
-            Managedidentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
-        }
-        $Results = Get-TargetResource @params
-        $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                       -Results $Results
+        $Script:ExportMode = $true
 
-        $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
+         $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+        [array] $Script:exportedInstances = Invoke-MgGraphRequest -Method Get -Uri $url
+
+        $i = 1
+        $dscContent = ''
+        if ($Script:exportedInstances.Length -eq 0)
+        {
+            Write-Host $Global:M365DSCEmojiGreenCheckMark
+        }
+        else
+        {
+            Write-Host "`r`n" -NoNewline
+        }
+        foreach ($config in $Script:exportedInstances)
+        {
+            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            {
+                $Global:M365DSCExportResourceInstancesCount++
+            }
+
+            $displayedKey = 'AAD Identity Protection Policy Settings'
+            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
+            $params = @{
+                IsSingleInstance      = 'Yes'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                CertificateThumbprint = $CertificateThumbprint
+                ManagedIdentity       = $ManagedIdentity.IsPresent
+                AccessTokens          = $AccessTokens
+            }
+
+            $Results = Get-TargetResource @Params
+            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
+                -Results $Results
+
+            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
-
-        Save-M365DSCPartialExport -Content $currentDSCBlock `
+            $dscContent += $currentDSCBlock
+            Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName
-
-        Write-Host $Global:M365DSCEmojiGreenCheckMark
-        return $currentDSCBlock
+            $i++
+            Write-Host $Global:M365DSCEmojiGreenCheckMark
+        }
+        return $dscContent
     }
     catch
     {
-        if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
-        {
-            Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
-        }
-        else
-        {
-            Write-Host $Global:M365DSCEmojiRedX
+        Write-Host $Global:M365DSCEmojiRedX
 
-            New-M365DSCLogEntry -Message 'Error during Export:' `
-                -Exception $_ `
-                -Source $($MyInvocation.MyCommand.Source) `
-                -TenantId $TenantId `
-                -Credential $Credential
-        }
+        New-M365DSCLogEntry -Message 'Error during Export:' `
+            -Exception $_ `
+            -Source $($MyInvocation.MyCommand.Source) `
+            -TenantId $TenantId `
+            -Credential $Credential
 
         return ''
     }
