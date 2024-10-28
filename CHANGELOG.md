@@ -2,8 +2,6 @@
 
 # UNRELEASED
 
-* IntuneMobileThreatDefenseConnector
-  * Initial release.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
@@ -14,11 +12,11 @@
   * Fixed missing permissions in settings.json
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
+* AADIdentityAPIConnector
+  * Initial release.
 * AADIdentityB2XUserFlow
   * Initial release.
 * AADIdentityGovernanceProgram
-  * Initial release.
-* AADIdentityAPIConnector
   * Initial release.
 * AADIdentityProtectionPolicySettings
   * Initial release.
@@ -56,6 +54,8 @@
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
     FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* IntuneMobileThreatDefenseConnector
+  * Initial release.
 * IntuneSecurityBaselineDefenderForEndpoint
   * Initial release.
 * Intune workload
