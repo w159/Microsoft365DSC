@@ -1,3 +1,0 @@
-﻿#region Microsoft.Graph.Authentication
-#endregion
-
