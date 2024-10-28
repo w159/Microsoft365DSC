@@ -312,6 +312,36 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADHomeRealmDiscoveryPolicy 'AADHomeRealmDiscoveryPolicy-displayName-value'
+                {
+                    Definition            = @(
+                        MSFT_AADHomeRealDiscoveryPolicyDefinition {
+                            PreferredDomain       = 'federated.example.edu'
+                            AccelerateToFederatedDomain         = $False
+                            AlternateIdLogin = MSFT_AADHomeRealDiscoveryPolicyDefinitionAlternateIdLogin {
+                                Enabled = $True
+                            }
+                        }
+                    );
+                    DisplayName           = "displayName-value";
+                    Ensure                = "Absent";
+                    IsOrganizationDefault = $False;
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADIdentityAPIConnector 'AADIdentityAPIConnector-TestConnector'
+                {
+                    DisplayName           = "NewTestConnector";
+                    Id                    = "RestApi_NewTestConnector";
+                    Username              = "anexas";
+                    Password              = New-Object System.Management.Automation.PSCredential('Password', (ConvertTo-SecureString "anexas" -AsPlainText -Force));
+                    TargetUrl             = "https://graph.microsoft.com";
+                    Ensure                = "Absent"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
                 AADIdentityB2XUserFlow 'AADIdentityB2XUserFlow-B2X_1_TestFlow'
                 {
                     ApplicationId             = $ApplicationId
@@ -447,6 +477,31 @@
                     UserPrincipalName  = "John.Smith@$TenantId"
                     DisplayName        = "John J. Smith"
                     Ensure             = "Absent"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADUserFlowAttribute 'SaiTest'
+                {
+                    Id                 = "testIdSai"
+                    DisplayName        = "saitest"
+                    Ensure             = "Absent"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADVerifiedIdAuthority 'AADVerifiedIdAuthority-Contoso'
+                {
+                    DidMethod            = "web";
+                    Ensure               = "Absent";
+                    KeyVaultMetadata     = MSFT_AADVerifiedIdAuthorityKeyVaultMetadata{
+                        SubscriptionId = '2ff65b89-ab22-4489-b84d-e60d1dc30a62'
+                        ResourceName = 'xtakeyvault'
+                        ResourceUrl = 'https://xtakeyvault.vault.azure.net/'
+                        ResourceGroup = 'TBD'
+                    };
+                    LinkedDomainUrl      = "https://nik-charlebois.com/";
+                    Name                 = "Contoso";
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
