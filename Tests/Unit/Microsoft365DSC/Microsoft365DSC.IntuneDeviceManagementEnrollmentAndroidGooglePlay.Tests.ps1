@@ -83,11 +83,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         }
                     )
                 }
-
-                # Mock to simulate the unbind action with Invoke-MgGraphRequest
-                Mock -CommandName Invoke-MgGraphRequest -MockWith {
-                    @{ status = "Success" }
-                }
             }
 
             It '2.1 Should return Values from the Get method' {
