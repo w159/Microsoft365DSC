@@ -8,6 +8,8 @@
   * Initial release.
 * AADAuthenticationMethodPolicyExternal
   * Initial release.
+* AADConditionalAccessPolicy
+  * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADHomeRealmDiscoveryPolicy
@@ -62,6 +64,8 @@
   * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
+* SCPolicyConfig
+  * Initial release.
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
@@ -82,7 +86,6 @@
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
 * DEPENDENCIES
-  * Updated ExchangeOnlineManagement to version 3.6.0.
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
   * Updated MSCloudLoginAssistant to version 1.1.27
@@ -135,6 +138,8 @@
   * Initial release.
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
+* IntuneDerivedCredential
+  * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp
