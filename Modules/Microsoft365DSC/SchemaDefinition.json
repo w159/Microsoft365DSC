@@ -8285,6 +8285,71 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AzureVerifiedIdFaceCheck",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "SubscriptionId",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ResourceGroupName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "VerifiedIdAuthorityId",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "FaceCheckEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "VerifiedIdAuthorityLocation",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_DefenderSubscriptionPlan",
         "Parameters":  [
                            {
