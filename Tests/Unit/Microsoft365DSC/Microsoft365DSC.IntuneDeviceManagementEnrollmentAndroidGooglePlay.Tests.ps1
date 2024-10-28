@@ -87,6 +87,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                 }
 
+                # Ensure mock for Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting is correctly set up
+                $currentInstance = Get-TargetResource @testParams
+                Write-Host "CurrentInstance Ensure: $($currentInstance.Ensure), BindStatus: $($currentInstance.BindStatus)"
+                Write-Output "::debug::Ensure parameter: $Ensure, CurrentInstance Ensure: $($currentInstance.Ensure), BindStatus: $($currentInstance.BindStatus)"
                 # Mock to simulate the unbind action with Invoke-MgGraphRequest
                 Mock -CommandName Invoke-MgGraphRequest -MockWith {
                     @{ status = "Success" }
