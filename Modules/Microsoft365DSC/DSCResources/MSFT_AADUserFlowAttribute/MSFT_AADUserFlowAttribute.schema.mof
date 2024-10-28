@@ -1,8 +1,8 @@
-[ClassVersion("1.0.0.0"), FriendlyName("AADRoleSetting")]
-class MSFT_AADRoleSetting : OMI_BaseResource
+[ClassVersion("1.0.0.0"), FriendlyName("AADUserFlowAttribute")]
+class MSFT_AADUserFlowAttribute : OMI_BaseResource
 {
-    [Key, Description("User flow attribute Id.")] String Id;
-    [Write, Description("Display name of the user flow attribute.")] String DisplayName;
+    [Write, Description("User flow attribute Id.")] String Id;
+    [Key, Description("Display name of the user flow attribute.")] String DisplayName;
     [Write, Description("Description of the user flow attribute.")] String Description;
     [Write, Description("Defines the user flow attribute type.")] String UserFlowAttributeType;
     [Write, Description("Defines the user flow attribute data type.")] String DataType;

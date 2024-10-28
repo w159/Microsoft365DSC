@@ -25,7 +25,7 @@ function Get-TargetResource
         $DataType,
 
         [Parameter()]
-        [ValidateSet('Present')]
+        [ValidateSet('Present', 'Absent')]
         [System.String]
         $Ensure = 'Present',
 
@@ -79,10 +79,10 @@ function Get-TargetResource
     $nullReturn = $PSBoundParameters
     $nullReturn.Ensure = 'Absent'
 
-    $RoleDefintion = $null
+    $userFlowAttribute = $null
     if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
     {
-        $RoleDefinition = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
+        $userFlowAttribute = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
     }
     elseif (-not [System.String]::IsNullOrEmpty($Id))
     {
@@ -164,7 +164,7 @@ function Set-TargetResource
         $DataType,
 
         [Parameter()]
-        [ValidateSet('Present')]
+        [ValidateSet('Present', 'Absent')]
         [System.String]
         $Ensure = 'Present',
 
@@ -236,10 +236,14 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentUserFlowAttribute.Ensure -eq 'Present')
     {
         Write-Verbose -Message "User flow attribute '$($DisplayNameName)' already exists. Updating settings"
-        $parameters = Sync-M365DSCParameter -Command (Get-Command -Name Set-MailContact) -Parameters $PSBoundParameters
-        Write-Verbose -Message "Updating Mail Contact '$($Name)' with values: $(Convert-M365DscHashtableToString -Hashtable $parameters)"
-        $parameters.Identity = $Name
-        Set-MailContact @parameters
+
+        if ($currentUserFlowAttribute.DisplayName -ne $DisplayName -or $currentUserFlowAttribute.DataType -ne $DataType)
+        {
+            Write-Warning -Message "There is a deviation in display name and data type for the resource with ID '$($Id)' but these values are not settable so cannot update them."
+        }
+
+        Write-Verbose -Message "Updating description of user flow attribute with display name '$($DisplayName)'"
+        Update-MgBetaIdentityUserFlowAttribute -IdentityUserFlowAttributeId $Id -Description $Description
     }
 }
 
@@ -259,170 +263,18 @@ function Test-TargetResource
 
         [Parameter()]
         [System.String]
-        $ActivationMaxDuration,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActivationReqJustification,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActivationReqTicket,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActivationReqMFA,
-
-        [Parameter()]
-        [System.Boolean]
-        $ApprovaltoActivate,
-
-        [Parameter()]
-        [System.String[]]
-        $ActivateApprover,
-
-        [Parameter()]
-        [System.Boolean]
-        $PermanentEligibleAssignmentisExpirationRequired,
+        $Description,
 
         [Parameter()]
         [System.String]
-        $ExpireEligibleAssignment,
-
-        [Parameter()]
-        [System.Boolean]
-        $PermanentActiveAssignmentisExpirationRequired,
+        $UserFlowAttributeType,
 
         [Parameter()]
         [System.String]
-        $ExpireActiveAssignment,
+        $DataType,
 
         [Parameter()]
-        [System.Boolean]
-        $AssignmentReqMFA,
-
-        [Parameter()]
-        [System.Boolean]
-        $AssignmentReqJustification,
-
-        [Parameter()]
-        [System.Boolean]
-        $ElegibilityAssignmentReqMFA,
-
-        [Parameter()]
-        [System.Boolean]
-        $ElegibilityAssignmentReqJustification,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAlertNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $EligibleAlertNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAlertNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssigneeNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $EligibleAssigneeNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssigneeNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleApproveNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $EligibleApproveNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleApproveNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveAlertNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $ActiveAlertNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveAlertNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveAssigneeNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $ActiveAssigneeNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveAssigneeNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveApproveNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $ActiveApproveNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $ActiveApproveNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssignmentAlertNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $EligibleAssignmentAlertNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssignmentAlertNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssignmentAssigneeNotificationDefaultRecipient,
-
-        [Parameter()]
-        [System.String[]]
-        $EligibleAssignmentAssigneeNotificationAdditionalRecipient,
-
-        [Parameter()]
-        [System.Boolean]
-        $EligibleAssignmentAssigneeNotificationOnlyCritical,
-
-        [Parameter()]
-        [System.Boolean]
-        $AuthenticationContextRequired,
-
-        [Parameter()]
-        [System.String]
-        $AuthenticationContextId,
-
-        [Parameter()]
-        [System.String]
-        $AuthenticationContextName,
-
-        [Parameter()]
-        [ValidateSet('Present')]
+        [ValidateSet('Present', 'Absent')]
         [System.String]
         $Ensure = 'Present',
 
@@ -468,7 +320,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of Role Assignment: $DisplayName"
+    Write-Verbose -Message "Testing configuration of User flow attribute : $DisplayName"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
@@ -540,37 +392,24 @@ function Export-TargetResource
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
-
-    try
-    {
-        Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter "scopeId eq '/' and scopeType eq 'DirectoryRole'" -ErrorAction Stop | Out-Null
-    }
-    catch
-    {
-        if ($_.ErrorDetails.Message -like "*The tenant needs to have Microsoft Entra*")
-        {
-            Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) AAD Premium License is required to get the role."
-            return ''
-        }
-    }
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter $Filter -Sort DisplayName -ErrorAction Stop
+        [array] $Script:exportedInstances = Get-MgBetaIdentityUserFlowAttribute -Filter "userFlowAttributeType ne 'builtIn'" -Sort DisplayName -ErrorAction Stop
         $i = 1
         $dscContent = ''
         Write-Host "`r`n" -NoNewline
-        foreach ($role in $Script:exportedInstances)
+        foreach ($userFlowAttribute in $Script:exportedInstances)
         {
             if ($null -ne $Global:M365DSCExportResourceInstancesCount)
             {
                 $Global:M365DSCExportResourceInstancesCount++
             }
 
-            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $($role.DisplayName)" -NoNewline
+            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $($userFlowAttribute.DisplayName)" -NoNewline
             $Params = @{
-                Id                    = $role.Id
-                DisplayName           = $role.DisplayName
+                Id                    = $userFlowAttribute.Id
+                DisplayName           = $userFlowAttribute.DisplayName
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint

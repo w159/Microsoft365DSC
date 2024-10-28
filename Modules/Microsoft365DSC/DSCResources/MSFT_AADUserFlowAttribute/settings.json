@@ -1,5 +1,5 @@
 ﻿{
-    "resourceName": "AADUSerflowAttribute",
+    "resourceName": "AADUserflowAttribute",
     "description": "This resource configures an Azure User Flow attribute..",
     "roles": {
         "read": [],
