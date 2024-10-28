@@ -73,7 +73,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     @(
                         @{
                             Id                                = "androidManagedStoreAccountEnterpriseSettings"
-                            BindStatus                        = "boundAndValidated"  # Required for unbinding
+                            BindStatus                        = "bound"  # Required for unbinding
                             LastAppSyncDateTime               = "2024-10-28T01:24:41.5529479Z"
                             LastAppSyncStatus                 = "success"
                             OwnerUserPrincipalName            = "admin@m365x22684512.onmicrosoft.com"
