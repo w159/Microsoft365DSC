@@ -1831,7 +1831,7 @@ function New-M365DSCConnection
         [Parameter(Mandatory = $true)]
         [ValidateSet('AdminAPI', 'Azure', 'AzureDevOPS', 'Defender', 'ExchangeOnline', 'Fabric', 'Intune', `
                 'SecurityComplianceCenter', 'PnP', 'PowerPlatforms', `
-                'MicrosoftTeams', 'MicrosoftGraph', 'SharePointOnlineREST', 'Tasks')]
+                'MicrosoftTeams', 'MicrosoftGraph', 'SharePointOnlineREST', 'Tasks', 'AdminAPI')]
         [System.String]
         $Workload,
 

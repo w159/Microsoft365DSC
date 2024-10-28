@@ -28,6 +28,8 @@
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AADVerifiedIdAuthority
+  * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
 * AzureBillingAccountsRoleAssignment
