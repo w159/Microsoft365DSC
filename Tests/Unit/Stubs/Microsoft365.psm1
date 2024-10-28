@@ -27610,7 +27610,245 @@ function Update-MgBetaRoleManagement
         $DeviceManagement
     )
 }
+
+function Get-MgBetaDeviceManagementMobileThreatDefenseConnector
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $MobileThreatDefenseConnectorId,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosPersonalApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastHeartbeatDateTime,
+
+        [Parameter()]
+        [System.Boolean]
+        $MicrosoftDefenderForEndpointAttachEnabled,
+
+        [Parameter()]
+        [System.String]
+        $PartnerState,
+
+        [Parameter()]
+        [System.Int32]
+        $PartnerUnresponsivenessThresholdInDays,
+
+        [Parameter()]
+        [System.Boolean]
+        $PartnerUnsupportedOSVersionBlocked,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsEnabled
+    )
+}
+
+function New-MgBetaDeviceManagementMobileThreatDefenseConnector
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $MobileThreatDefenseConnectorId,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosPersonalApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastHeartbeatDateTime,
+
+        [Parameter()]
+        [System.Boolean]
+        $MicrosoftDefenderForEndpointAttachEnabled,
+
+        [Parameter()]
+        [System.String]
+        $PartnerState,
+
+        [Parameter()]
+        [System.Int32]
+        $PartnerUnresponsivenessThresholdInDays,
+
+        [Parameter()]
+        [System.Boolean]
+        $PartnerUnsupportedOSVersionBlocked,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsEnabled
+    )
+}
+
+function Update-MgBetaDeviceManagementMobileThreatDefenseConnector
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $MobileThreatDefenseConnectorId,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowPartnerToCollectIosPersonalApplicationMetadata,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $IosMobileApplicationManagementEnabled,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastHeartbeatDateTime,
+
+        [Parameter()]
+        [System.Boolean]
+        $MicrosoftDefenderForEndpointAttachEnabled,
+
+        [Parameter()]
+        [System.String]
+        $PartnerState,
+
+        [Parameter()]
+        [System.Int32]
+        $PartnerUnresponsivenessThresholdInDays,
+
+        [Parameter()]
+        [System.Boolean]
+        $PartnerUnsupportedOSVersionBlocked,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsDeviceBlockedOnMissingPartnerData,
+
+        [Parameter()]
+        [System.Boolean]
+        $WindowsEnabled
+    )
+}
+
+function Remove-MgBetaDeviceManagementMobileThreatDefenseConnector
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $MobileThreatDefenseConnectorId,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
 #endregion
+
 #region Microsoft.Graph.Beta.Identity.DirectoryManagement
 function Get-MgBetaDevice
 {
@@ -35030,6 +35268,80 @@ function Update-MgBetaRoleManagementDirectoryRoleDefinition
 }
 #endregion
 #region Microsoft.Graph.Beta.Identity.SignIns
+
+#region Microsoft.Graph.Authentication
+function Get-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Sort
+    )
+}
+function New-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName
+    )
+}
+function Update-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Id
+    )
+}
+function Remove-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId
+    )
+}
+#endregion
+
+
 function Get-MgBetaIdentityConditionalAccess
 {
     [CmdletBinding()]
@@ -99504,6 +99816,319 @@ function Get-PolicyConfig
     )
 }
 function Set-PolicyConfig
+#region MgBetaPolicyHomeRealmDiscoveryPolicy
+function Get-MgBetaPolicyHomeRealmDiscoveryPolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $HomeRealmDiscoveryPolicyId,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Search,
+
+        [Parameter()]
+        [System.Int32]
+        $Skip,
+
+        [Parameter()]
+        [System.String[]]
+        $Sort,
+
+        [Parameter()]
+        [System.Int32]
+        $Top,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Int32]
+        $PageSize,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
+
+        [Parameter()]
+        [System.String]
+        $CountVariable
+    )
+}
+
+function New-MgBetaPolicyHomeRealmDiscoveryPolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [PSObject[]]
+        $AppliesTo,
+
+        [Parameter()]
+        [System.String[]]
+        $Definition,
+
+        [Parameter()]
+        [System.DateTime]
+        $DeletedDateTime,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsOrganizationDefault,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+function Remove-MgBetaPolicyHomeRealmDiscoveryPolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $HomeRealmDiscoveryPolicyId,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PassThru,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+function Update-MgBetaPolicyHomeRealmDiscoveryPolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $HomeRealmDiscoveryPolicyId,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [PSObject[]]
+        $AppliesTo,
+
+        [Parameter()]
+        [System.String[]]
+        $Definition,
+
+        [Parameter()]
+        [System.DateTime]
+        $DeletedDateTime,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsOrganizationDefault,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [PSObject[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+#endregion
+
+#region Microsoft.Graph.Authentication
+function Get-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile
 {
     [CmdletBinding()]
     param(
@@ -99530,6 +100155,121 @@ function Set-PolicyConfig
         [Parameter()]
         [System.Boolean]
         $EnableSpoAipMigration,
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.String]
+        $AndroidDeviceOwnerEnrollmentProfileId,
+
+        [Parameter()]
+        [System.Int32]
+        $PageSize,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Int32]
+        $Skip,
+
+        [Parameter()]
+        [System.Int32]
+        $Top,
+
+        [Parameter()]
+        [System.String]
+        $CountVariable,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.String[]]
+        $Sort,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.String]
+        $Search,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend
+    )
+}
+function New-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [PSObject]
+        $WifiSecurityType,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $WifiSsid,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastModifiedDateTime,
+
+        [Parameter()]
+        [System.DateTime]
+        $CreatedDateTime,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ConfigureWifi,
+
+        [Parameter()]
+        [System.String]
+        $TokenValue,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -99646,5 +100386,167 @@ function Set-PolicyConfig
         [Parameter()]
         [System.String[]]
         $MessageHeadersToRetainInOutlook
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.DateTime]
+        $TokenCreationDateTime,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $WifiHidden,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.String]
+        $WifiPassword,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [PSObject]
+        $EnrollmentMode,
+
+        [Parameter()]
+        [PSObject]
+        $QrCodeImage,
+
+        [Parameter()]
+        [System.String]
+        $AccountId,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [PSObject]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.DateTime]
+        $TokenExpirationDateTime,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Int32]
+        $EnrolledDeviceCount,
+
+        [Parameter()]
+        [PSObject]
+        $EnrollmentTokenType,
+
+        [Parameter()]
+        [System.String]
+        $QrCodeContent,
+
+        [Parameter()]
+        [System.String[]]
+        $RoleScopeTagIds,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Int32]
+        $EnrollmentTokenUsageCount,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsTeamsDeviceProfile,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend
+    )
+}
+function Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PassThru,
+
+        [Parameter()]
+        [System.String]
+        $IfMatch,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.String]
+        $AndroidDeviceOwnerEnrollmentProfileId,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break
+    )
+}
+#endregion
+
+function Get-AzResourceGroup
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Id
     )
 }

@@ -10,11 +10,15 @@
   * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
+* AADHomeRealmDiscoveryPolicy
+  * Initial Release
+* AADIdentityAPIConnector
+  * Initial release.
 * AADIdentityB2XUserFlow
   * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
-* AADIdentityAPIConnector
+* AADIdentityProtectionPolicySettings
   * Initial release.
 * AADNetworkAccessForwardingProfile
   * Initial release.
@@ -22,6 +26,19 @@
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AADVerifiedIdAuthority
+  * Initial release.
+* AzureBillingAccountsAssociatedTenant
+  * Initial release.
+* AzureBillingAccountsRoleAssignment
+  * Initial release.
+* AzureVerifiedIdFaceCheck
+  * Initial release.
+* EXOArcConfig
+  * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
+    when it has an array
+* AADUserFlowAttribute
+  * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOTenantAllowBlockListItems
@@ -34,9 +51,15 @@
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
+* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+  * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
     FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* IntuneMobileThreatDefenseConnector
+  * Initial release.
+* IntuneSecurityBaselineDefenderForEndpoint
+  * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
 * SCPolicyConfig
@@ -51,6 +74,12 @@
     AllowSelectSecurityGroupsInSPSitesList,
     ExemptNativeUsersFromTenantLevelRestricedAccessControl properties.
   * TenantDefaultTimezone changed to String instead of Array.
+* TeamsMeetingPolicy
+  * Added new parameters: AllowExternalNonTrustedMeetingChat, AttendeeIdentityMasking,
+    AutomaticallyStartCopilot, AutoRecording, ConnectToMeetingControls,
+    ContentSharingInExternalMeetings, Copilot, CopyRestriction,
+    DetectSensitiveContentDuringScreenSharing, ExternalMeetingJoin, ParticipantNameChange,
+    VoiceIsolation
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
