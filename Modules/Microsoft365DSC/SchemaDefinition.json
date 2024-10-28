@@ -3149,6 +3149,26 @@
                            },
                            {
                                "CIMType":  "String[]",
+                               "Name":  "IncludeServicePrincipals",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "ExcludeServicePrincipals",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ServicePrincipalFilterMode",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ServicePrincipalFilterRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
                                "Name":  "IncludePlatforms",
                                "Option":  "Write"
                            },
