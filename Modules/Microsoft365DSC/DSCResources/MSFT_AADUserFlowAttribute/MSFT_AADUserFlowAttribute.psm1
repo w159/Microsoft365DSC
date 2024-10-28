@@ -211,7 +211,7 @@ function Set-TargetResource
 
         try
         {
-            New-MgBetaIdentityUserFlowAttribute -Id $Id -DataType $DataType -Description $Description -DisplayName $DisplayName
+            New-MgBetaIdentityUserFlowAttribute -DataType $DataType -Description $Description -DisplayName $DisplayName
         }
         catch
         {
