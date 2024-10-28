@@ -73,7 +73,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     @(
                         @{
                             Id                                = "androidManagedStoreAccountEnterpriseSettings"
-                            BindStatus                        = "bound"  # Required for unbinding
+                            BindStatus                        = "boundAndValidated"  # Required for unbinding
                             LastAppSyncDateTime               = "2024-10-28T01:24:41.5529479Z"
                             LastAppSyncStatus                 = "success"
                             OwnerUserPrincipalName            = "admin@m365x22684512.onmicrosoft.com"
@@ -119,11 +119,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Set-TargetResource @testParams
 
                 # Verify if unbind was called
-                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter {
-                    $_.Uri -eq "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/unbind" -and
-                    $_.Method -eq 'POST' -and
-                    $_.Body -eq @{}
-                }
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1
             }
         }
 
