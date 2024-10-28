@@ -25,7 +25,7 @@
         }
     }
 
-    if ($settingsWithSameName.Count -gt 1)
+    if ($settingsWithSameName -is [array] -and $settingsWithSameName.Count -gt 1)
     {
         # Get the parent setting of the current setting
         $parentSetting = Get-ParentSettingDefinition -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
