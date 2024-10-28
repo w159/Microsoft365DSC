@@ -18,10 +18,6 @@ function Get-TargetResource
 
         [Parameter()]
         [System.String]
-        $UserFlowAttributeType,
-
-        [Parameter()]
-        [System.String]
         $DataType,
 
         [Parameter()]
@@ -112,7 +108,6 @@ function Get-TargetResource
             Id                                                        = $UserFlowAttribute.Id
             DisplayName                                               = $UserFlowAttribute.DisplayName
             Description                                               = $UserFlowAttribute.Description
-            UserFlowAttributeType                                     = $UserFlowAttribute.UserFlowAttributeType
             DataType                                                  = $UserFlowAttribute.DataType
             Ensure                                                    = 'Present'
             ApplicationId                                             = $ApplicationId
@@ -154,10 +149,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Description,
-
-        [Parameter()]
-        [System.String]
-        $UserFlowAttributeType,
 
         [Parameter()]
         [System.String]
@@ -220,7 +211,7 @@ function Set-TargetResource
 
         try
         {
-            New-MgBetaIdentityUserFlowAttribute -Id $Id -DataType $DataType -Description $Description -UserFlowAttributeType $UserFlowAttributeType -DisplayName $DisplayName
+            New-MgBetaIdentityUserFlowAttribute -Id $Id -DataType $DataType -Description $Description -DisplayName $DisplayName
         }
         catch
         {
@@ -264,10 +255,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $Description,
-
-        [Parameter()]
-        [System.String]
-        $UserFlowAttributeType,
 
         [Parameter()]
         [System.String]

@@ -4,7 +4,6 @@ class MSFT_AADUserFlowAttribute : OMI_BaseResource
     [Write, Description("User flow attribute Id.")] String Id;
     [Key, Description("Display name of the user flow attribute.")] String DisplayName;
     [Write, Description("Description of the user flow attribute.")] String Description;
-    [Write, Description("Defines the user flow attribute type.")] String UserFlowAttributeType;
     [Write, Description("Defines the user flow attribute data type.")] String DataType;
     [Write, Description("Specify if the Azure AD role setting should exist or not."), ValueMap{"Present"}, Values{"Present"}] String Ensure;
     [Write, Description("Credentials for the Microsoft Graph delegated permissions."), EmbeddedInstance("MSFT_Credential")] string Credential;

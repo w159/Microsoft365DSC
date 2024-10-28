@@ -2,6 +2,4 @@
 
 ## Description
 
-This resource configure existing Azure roles. All UI parameters can be configured using this resource like:
-- Notifications
-- require approval / ticket / justification / MFA
+This resource configure User flow attributes which are custom attributes that you can define and use in your user flows, which are predefined, configurable policies that control the user experience during sign-up, sign-in, and profile editing processes.

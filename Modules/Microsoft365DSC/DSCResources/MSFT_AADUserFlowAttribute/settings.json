@@ -4,7 +4,7 @@
     "roles": {
         "read": [],
         "update": [
-            "Privileged Role Administrator"
+            "External ID User Flow Attribute Administrator"
         ]
     },
     "permissions": {
@@ -12,54 +12,15 @@
             "delegated": {
                 "read": [
                     {
-                        "name": "Group.Read.All"
+                        "name": "IdentityUserFlow.Read.All"
                     },
                     {
-                        "name": "RoleManagement.Read.Directory"
-                    },
-                    {
-                        "name": "RoleManagementPolicy.Read.Directory"
-                    },
-                    {
-                        "name": "User.Read.All"
+                        "name": "IdentityUserFlow.ReadWrite.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "Group.Read.All"
-                    },
-                    {
-                        "name": "RoleManagementPolicy.Read.Directory"
-                    },
-                    {
-                        "name": "User.Read.All"
-                    }
-                ]
-            },
-            "application": {
-                "read": [
-                    {
-                        "name": "Group.Read.All"
-                    },
-                    {
-                        "name": "RoleManagement.Read.Directory"
-                    },
-                    {
-                        "name": "RoleManagementPolicy.Read.Directory"
-                    },
-                    {
-                        "name": "User.Read.All"
-                    }
-                ],
-                "update": [
-                    {
-                        "name": "Group.Read.All"
-                    },
-                    {
-                        "name": "RoleManagementPolicy.Read.Directory"
-                    },
-                    {
-                        "name": "User.Read.All"
+                        "name": "IdentityUserFlow.ReadWrite.All"
                     }
                 ]
             }
