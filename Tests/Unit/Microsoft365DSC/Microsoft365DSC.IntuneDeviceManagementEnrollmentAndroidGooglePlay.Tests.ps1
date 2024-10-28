@@ -63,35 +63,45 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "2. The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Id                                          = "androidManagedStoreAccountEnterpriseSettings"
-                    Ensure                                       = 'Absent'
-                    Credential                                   = $Credential;
+                    Id        = "androidManagedStoreAccountEnterpriseSettings"
+                    Ensure    = 'Absent'
+                    Credential = $Credential
                 }
 
+                # Mock to simulate a "bound" state as a prerequisite
                 Mock -CommandName Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MockWith {
-                    return @{
-                        Id                                        = "androidManagedStoreAccountEnterpriseSettings"
-                        BindStatus                                = "bound"
-                        OwnerUserPrincipalName                    = "existingUser@domain.com"
-                        Ensure                                    = 'Present'
-                    }
+                    @(
+                        @{
+                            Id                      = "androidManagedStoreAccountEnterpriseSettings"
+                            BindStatus              = "bound"
+                            OwnerUserPrincipalName  = "existingUser@domain.com"
+                            OwnerOrganizationName   = "TestOrg"
+                            EnrollmentTarget        = "corporate"
+                            DeviceOwnerManagementEnabled = $true
+                            AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $true
+                            Ensure                  = 'Present'
+                        }
+                    )
+                }
+
+                # Mock to simulate the unbind action with Invoke-MgGraphRequest
+                Mock -CommandName Invoke-MgGraphRequest -MockWith {
+                    @{ status = "Success" }
                 }
             }
 
             It '2.1 Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
             }
+
             It '2.2 Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
-            It '2.3 Should remove the instance from the Set method' {
-                # Adding Verbose Preference to track
-                $VerbosePreference = 'Continue'
 
-                # Run the Set-TargetResource function
+            It '2.3 Should call Invoke-MgGraphRequest to remove the instance from Set method' {
                 Set-TargetResource @testParams
 
-                # Verify if Invoke-MgGraphRequest was called with specific parameters
+                # Verify if unbind was called
                 Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter {
                     $_.Uri -eq "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/unbind" -and
                     $_.Method -eq 'POST' -and
