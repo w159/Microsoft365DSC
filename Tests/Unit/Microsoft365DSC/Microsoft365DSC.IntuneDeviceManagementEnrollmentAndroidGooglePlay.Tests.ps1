@@ -63,8 +63,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "2. The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Id        = "androidManagedStoreAccountEnterpriseSettings"
-                    Ensure    = 'Absent'
+                    Id         = "androidManagedStoreAccountEnterpriseSettings"
+                    Ensure     = 'Absent'
                     Credential = $Credential
                 }
 
@@ -73,7 +73,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     @(
                         @{
                             Id                                = "androidManagedStoreAccountEnterpriseSettings"
-                            BindStatus                        = "boundAndValidated"
+                            BindStatus                        = "boundAndValidated"  # Required for unbinding
                             LastAppSyncDateTime               = "2024-10-28T01:24:41.5529479Z"
                             LastAppSyncStatus                 = "success"
                             OwnerUserPrincipalName            = "admin@m365x22684512.onmicrosoft.com"
@@ -87,10 +87,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                 }
 
-                # Ensure mock for Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting is correctly set up
+                # Retrieve current instance to verify bindStatus and ensure values
                 $currentInstance = Get-TargetResource @testParams
-                Write-Host "CurrentInstance Ensure: $($currentInstance.Ensure), BindStatus: $($currentInstance.BindStatus)"
-                Write-Output "::debug::Ensure parameter: $Ensure, CurrentInstance Ensure: $($currentInstance.Ensure), BindStatus: $($currentInstance.BindStatus)"
+
                 # Mock to simulate the unbind action with Invoke-MgGraphRequest
                 Mock -CommandName Invoke-MgGraphRequest -MockWith {
                     @{ status = "Success" }
@@ -102,15 +101,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams.Ensure | Should -Be 'Absent'
             }
 
-            It '2.2 Should return Values from the Get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+            It '2.2 Should confirm CurrentInstance Ensure is Present' {
+                # Verify that Ensure is set to 'Present' in the current instance
+                $currentInstance.Ensure | Should -Be 'Present'
             }
 
-            It '2.3 Should return false from the Test method' {
+            It '2.3 Should confirm CurrentInstance BindStatus is boundAndValidated' {
+                # Verify that bindStatus is 'boundAndValidated' in the current instance
+                $currentInstance.BindStatus | Should -Be 'boundAndValidated'
+            }
+
+            It '2.4 Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
-            It '2.4 Should call Invoke-MgGraphRequest to remove the instance from Set method' {
+            It '2.5 Should call Invoke-MgGraphRequest to remove the instance from Set method' {
                 Set-TargetResource @testParams
 
                 # Verify if unbind was called
@@ -121,7 +126,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
         }
-
 
         # Context 3: Instance exists and values are already in the desired state
         Context -Name "3. The instance exists and values are already in the desired state" -Fixture {
