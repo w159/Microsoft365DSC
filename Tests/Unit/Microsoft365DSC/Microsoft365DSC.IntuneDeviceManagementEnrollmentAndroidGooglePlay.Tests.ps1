@@ -68,20 +68,28 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
 
-                # Mock to simulate a "bound" state as a prerequisite
+                # Mock to simulate a "boundAndValidated" state as a prerequisite for unbinding
                 Mock -CommandName Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MockWith {
                     @(
                         @{
-                            Id                      = "androidManagedStoreAccountEnterpriseSettings"
-                            BindStatus              = "bound"
-                            OwnerUserPrincipalName  = "existingUser@domain.com"
-                            OwnerOrganizationName   = "TestOrg"
-                            EnrollmentTarget        = "corporate"
-                            DeviceOwnerManagementEnabled = $true
-                            AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $true
-                            Ensure                  = 'Present'
+                            Id                                = "androidManagedStoreAccountEnterpriseSettings"
+                            BindStatus                        = "boundAndValidated"
+                            LastAppSyncDateTime               = "2024-10-28T01:24:41.5529479Z"
+                            LastAppSyncStatus                 = "success"
+                            OwnerUserPrincipalName            = "admin@m365x22684512.onmicrosoft.com"
+                            OwnerOrganizationName             = "Contoso"
+                            LastModifiedDateTime              = "2024-10-28T01:24:39.1855089Z"
+                            EnrollmentTarget                  = "targetedAsEnrollmentRestrictions"
+                            DeviceOwnerManagementEnabled      = $true
+                            AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $false
+                            Ensure                            = 'Present'
                         }
                     )
+                }
+
+                # Mock to simulate the unbind action with Invoke-MgGraphRequest
+                Mock -CommandName Invoke-MgGraphRequest -MockWith {
+                    @{ status = "Success" }
                 }
             }
 
@@ -104,6 +112,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
         }
+
 
         # Context 3: Instance exists and values are already in the desired state
         Context -Name "3. The instance exists and values are already in the desired state" -Fixture {
