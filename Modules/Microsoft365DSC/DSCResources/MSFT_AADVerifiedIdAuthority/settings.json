@@ -4,24 +4,12 @@
     "permissions":    {
     "graph":  {
                   "delegated":  {
-                                    "read":  [
-                                                 {
-                                                     "name":  "VerifiableCredential.Authority.ReadWrite"
-                                                 }
-                                             ],
-                                    "update":  [
-
-                                               ]
+                                    "read":  [],
+                                    "update":  []
                                 },
                   "application":  {
-                                      "read":  [
-                                                   {
-                                                       "name":  "VerifiableCredential.Authority.ReadWrite"
-                                                   }
-                                               ],
-                                      "update":  [
-
-                                                 ]
+                                      "read":  [],
+                                      "update":  []
                                   }
               }
 }
