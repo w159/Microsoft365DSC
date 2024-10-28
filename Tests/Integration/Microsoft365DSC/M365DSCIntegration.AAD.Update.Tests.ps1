@@ -1329,6 +1329,22 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADVerifiedIdAuthority 'AADVerifiedIdAuthority-Contoso'
+                {
+                    DidMethod            = "web";
+                    Ensure               = "Present";
+                    KeyVaultMetadata     = MSFT_AADVerifiedIdAuthorityKeyVaultMetadata{
+                        SubscriptionId = '2ff65b89-ab22-4489-b84d-e60d1dc30a62'
+                        ResourceName = 'xtakeyvault'
+                        ResourceUrl = 'https://xtakeyvault.vault.azure.net/'
+                        ResourceGroup = 'TBD'
+                    };
+                    LinkedDomainUrl      = "https://nik-charlebois.com/";
+                    Name                 = "Contoso 2"; # drift
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
         }
     }
 
