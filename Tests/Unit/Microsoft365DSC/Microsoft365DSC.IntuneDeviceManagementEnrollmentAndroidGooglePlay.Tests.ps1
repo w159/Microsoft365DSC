@@ -23,7 +23,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MockWith {}
             Mock -CommandName Invoke-MgGraphRequest -MockWith {}
             Mock -CommandName Remove-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -MockWith {}
-
+            Mock -CommandName Invoke-MgGraphRequest -MockWith {
+                @{ status = "Success" }
+            }
             # Hide Write-Host output during the tests
             Mock -CommandName Write-Host -MockWith {}
 
@@ -84,7 +86,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             It '2.3 Should remove the instance from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Remove-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting -Exactly 1
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter {
+                    $_.Uri -eq "https://graph.microsoft.com/beta/deviceManagement/androidManagedStoreAccountEnterpriseSettings/unbind" -and
+                    $_.Method -eq 'POST'
+                }
             }
         }
 
