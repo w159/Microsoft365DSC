@@ -929,11 +929,84 @@ function Set-TargetResource
         $DLPAppGroupsValue += $entry
     }
 
+    $DlpPrinterGroupsValue = @{
+        groups = @()
+    }
+    $groupCount = 0
+    foreach ($group in $DLPPrinterGroups)
+    {
+        $entry = @{
+            groupName = "$($group.groupName.ToString())"
+            printers  = @()
+        }
+
+        foreach ($printer in $group.printers)
+        {
+            $entry.printers += @{
+                alias            = $printer.alias
+                name             = $printer.name
+                usbPrinterPID    = $printer.usbPrinterId
+                usbPrinterVID    = $printer.usbPrinterVID
+                universalPrinter = "$($printer.universalPrinter.Tostring().ToLower())"
+                corporatePrinter = "$($printer.corporatePrinter.Tostring().ToLower())"
+                printToFile      = "$($printer.printToFile.Tostring().ToLower())"
+                printToLocal     = "$($printer.printToLocal.Tostring().ToLower())"
+                ipRange          = @(
+                    @{
+                        from = $printer.ipRange.fromAddress
+                        to   = $printer.ipRange.toAddress
+                    }
+                )
+            }
+        }
+        $DlpPrinterGroupsValue.groups += $entry
+        $groupCount++
+    }
+    if ($groupCount -eq 0)
+    {
+        $DlpPrinterGroupsValue = $null
+    }
+
+    $DLPRemovableMediaGroupsValue = @{
+        groups = @()
+    }
+    $groupCount = 0
+    foreach ($group in $DLPRemovableMediaGroups)
+    {
+        $entry = @{
+            groupName = $group.groupName
+            removableMedia = @(
+            )
+        }
+
+        foreach ($media in $group.removableMedia)
+        {
+            $entry.removableMedia += @{
+                alias             = $media.alias
+                name              = $media.name
+                removableMediaPID = $media.removableMediaPID
+                removableMediaVID = $media.removableMediaVID
+                serialNumberId    = $media.serialNumberId
+                deviceId          = $media.deviceId
+                instancePathId    = $media.instancePathId
+                hardwareId        = $media.hardwareId
+            }
+        }
+        $DLPRemovableMediaGroupsValue.groups += $entry
+        $groupCount++
+    }
+    if ($groupCount -eq 0)
+    {
+        $DLPRemovableMediaGroupsValue = $null
+    }
+
     $params = @{
         SiteGroups                = $SiteGroupsValue
         EnableLabelCoauth         = $EnableLabelCoauth
         DlpAppGroups              = $DLPAppGroupsValue
-        #EnableSpoAipMigration = $EnableSpoAipMigration
+        DlpPrinterGroups          = ConvertTo-Json $DlpPrinterGroupsValue -Depth 10 -Compress
+        DLPRemovableMediaGroups   = ConvertTo-Json $DLPRemovableMediaGroupsValue -Depth 10 -Compress
+        EnableSpoAipMigration     = $EnableSpoAipMigration
         EndpointDlpGlobalSettings = $EndpointDlpGlobalSettingsValue
     }
     Write-Verbose -Message "Updating policy config with values:`r`n$(Convert-M365DscHashtableToString -Hashtable $params)"
@@ -1224,7 +1297,7 @@ function Export-TargetResource
             $Results.DLPNetworkShareGroups = ConvertTo-DLPNetworkShareGroupsString -ObjectHash $Results.DLPNetworkShareGroups
         }
 
-        if ($null -ne $Results.DLPPrinterGroups)
+        if ($null -ne $Results.DLPPrinterGroups -and $Results.DLPPrinterGroups.Length -gt 0)
         {
             $Results.DLPPrinterGroups = ConvertTo-DLPPrinterGroupsString -ObjectHash $Results.DLPPrinterGroups
         }
@@ -1598,7 +1671,7 @@ function ConvertTo-DLPRemovableMediaGroupsString
         [void]$content.AppendLine("                MSFT_PolicyConfigDLPRemovableMediaGroups")
         [void]$content.AppendLine("                {")
         [void]$content.AppendLine("                    groupName = '$($instance.groupName)'")
-        [void]$content.AppendLine("                    removableMedia    = @(")
+        [void]$content.AppendLine("                    removableMedias   = @(")
         foreach ($media in $instance.removableMedia)
         {
             [void]$content.AppendLine("                        MSFT_PolicyConfigRemovableMedia")

@@ -46,7 +46,7 @@ class MSFT_PolicyConfigRemovableMedia
 class MSFT_PolicyConfigDLPRemovableMediaGroups
 {
     [Write, Description("TBD")] String groupName;
-    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigRemovableMedia")] String removableMedias[];
+    [Write, Description("TBD"), EmbeddedInstance("MSFT_PolicyConfigRemovableMedia")] String removableMedia[];
 };
 
 [ClassVersion("1.0.0")]
