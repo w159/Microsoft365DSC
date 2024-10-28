@@ -35280,7 +35280,11 @@ function Get-MgBetaIdentityUserFlowAttribute
 
         [Parameter()]
         [System.String]
-        $Filter
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Sort
     )
 }
 function New-MgBetaIdentityUserFlowAttribute
