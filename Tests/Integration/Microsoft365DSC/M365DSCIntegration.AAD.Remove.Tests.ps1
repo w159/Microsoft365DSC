@@ -481,6 +481,15 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADUserFlowAttribute 'SaiTest'
+                {
+                    Id                 = "testIdSai"
+                    DisplayName        = "saitest"
+                    Ensure             = "Absent"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
                 AADVerifiedIdAuthority 'AADVerifiedIdAuthority-Contoso'
                 {
                     DidMethod            = "web";
