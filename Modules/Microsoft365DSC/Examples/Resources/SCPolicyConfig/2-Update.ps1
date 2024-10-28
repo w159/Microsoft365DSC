@@ -117,7 +117,7 @@ Configuration Example
                 MSFT_PolicyConfigDLPRemovableMediaGroups
                 {
                     groupName = 'My Removable USB device group'
-                    medias    = @(
+                    removablemedia    = @(
                         MSFT_PolicyConfigRemovableMedia
                         {
                             deviceId          = 'Nik'
