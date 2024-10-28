@@ -24,11 +24,11 @@ Configuration Example
     {
         EXOServicePrincipal 'ServicePrincipal'
         {
-            AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
-            AppName              = "Portfolios";
-            DisplayName          = "Aditya";
+            AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+            AppName              = "ISV Portal";
+            DisplayName          = "Arpita";
             Ensure               = "Present";
-            Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+            Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;

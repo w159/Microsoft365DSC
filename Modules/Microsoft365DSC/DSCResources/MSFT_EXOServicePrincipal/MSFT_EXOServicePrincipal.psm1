@@ -53,7 +53,7 @@ function Get-TargetResource
     New-M365DSCConnection -Workload 'ExchangeOnline' `
         -InboundParameters $PSBoundParameters | Out-Null
 
-    New-M365DSCConnection -Workload 'MSGraph' `
+    New-M365DSCConnection -Workload 'MicrosoftGraph' `
         -InboundParameters $PSBoundParameters | Out-Null
 
     Confirm-M365DSCDependencies
@@ -69,24 +69,29 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
+        $servicePrincipal = Get-MgBetaServicePrincipal -Filter "DisplayName eq '$($AppName)'"
+
+        if ($null -eq $servicePrincipal)
+        {
+            return $nullResult
+        }
+
         if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
         {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Identity -eq $Identity}
+            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.AppId -eq $servicePrincipal.AppId}
         }
         else
         {
-            $instance = Get-ServicePrincipal -Identity $Identity -ErrorAction Stop
+            $instance = Get-ServicePrincipal -Identity $servicePrincipal.Id -ErrorAction Stop
         }
         if ($null -eq $instance)
         {
             return $nullResult
         }
 
-        $servicePrincipal = Get-MgBetaServicePrincipal -Filter "AppId eq '$instance.AppId'"
-
         $results = @{
             Identity              = $servicePrincipal.Id
-            AppName               = $servicePrincipal.DisplayName
+            AppName               = $servicePrincipal.AppDisplayName
             DisplayName           = $instance.DisplayName
             AppId                 = $instance.AppId
             ObjectId              = $instance.ObjectId
@@ -179,7 +184,7 @@ function Set-TargetResource
 
     $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    $servicePrincipal = Get-MgBetaServicePrincipal -Filter "AppId eq '$instance.AppId'"
+    $servicePrincipal = Get-MgBetaServicePrincipal -Filter "DisplayName eq '$($AppName)'"
 
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -191,7 +196,7 @@ function Set-TargetResource
     {
         $setParameters.Remove("AppId")
         $setParameters.Remove("ObjectId")
-        Set-ServicePrincipal @SetParameters
+        Set-ServicePrincipal -DisplayName $DisplayName -Identity $servicePrincipal.Id
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
@@ -318,6 +323,9 @@ function Export-TargetResource
     $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
         -InboundParameters $PSBoundParameters
 
+    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+        -InboundParameters $PSBoundParameters
+
     Confirm-M365DSCDependencies
 
     #region Telemetry
@@ -346,10 +354,12 @@ function Export-TargetResource
         }
         foreach ($config in $Script:exportedInstances)
         {
-            $displayedKey = $config.Identity
+            $servicePrincipal = Get-MgBetaServicePrincipal -ServicePrincipalId $config.Identity
+
+            $displayedKey = $servicePrincipal.AppDisplayName
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
-                Identity              = $config.Identity
+                AppName               = $servicePrincipal.AppDisplayName
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId

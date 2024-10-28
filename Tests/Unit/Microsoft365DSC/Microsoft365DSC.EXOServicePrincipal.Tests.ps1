@@ -54,11 +54,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
                     Credential           = $Credscredential;
-                    DisplayName          = "Aditya";
+                    AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                    AppName              = "ISV Portal";
+                    DisplayName          = "Arpita";
                     Ensure               = "Present";
-                    Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                    Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
                 }
 
                 Mock -CommandName Get-ServicePrincipal -MockWith {
@@ -81,20 +82,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
                     Credential           = $Credscredential;
-                    DisplayName          = "Aditya";
+                    AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                    AppName              = "ISV Portal";
+                    DisplayName          = "Arpita";
                     Ensure               = "Absent";
-                    Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                    Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
                 }
 
                 Mock -CommandName Get-ServicePrincipal -MockWith {
                     return @{
-                        AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
                         Credential           = $Credscredential;
-                        DisplayName          = "Aditya";
+                        AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                        AppName              = "ISV Portal";
+                        DisplayName          = "Arpita";
                         Ensure               = "Present";
-                        Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                        Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
                     }
                 }
 
@@ -115,20 +118,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
                     Credential           = $Credscredential;
-                    DisplayName          = "Aditya";
+                    AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                    AppName              = "ISV Portal";
+                    DisplayName          = "Arpita";
                     Ensure               = "Present";
-                    Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                    Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
                 }
 
                 Mock -CommandName Get-ServicePrincipal -MockWith {
                     return @{
-                        AppId                = "703005d9-c467-413e-a085-295c3e09e6cb";
                         Credential           = $Credscredential;
-                        DisplayName          = "Aditya";
+                        AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                        AppName              = "ISV Portal";
+                        DisplayName          = "Arpita";
                         Ensure               = "Present";
-                        Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                        Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
                     }
                 }
             }
@@ -146,6 +151,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName          = "Aditya Mukund";  #Drift
                     Ensure               = "Present";
                     Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                    AppName              = "ISV Portal";
                 }
 
                 Mock -CommandName Get-ServicePrincipal -MockWith {
@@ -155,6 +161,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName          = "Aditya";
                         Ensure               = "Present";
                         Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                        AppName              = "ISV Portal";
                     }
                 }
             }
@@ -189,6 +196,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName          = "Aditya";
                         Ensure               = "Present";
                         Identity             = "6dfb8885-0297-42e6-9c81-7bf7ee15551d";
+                        AppName              = "ISV Portal";
                     }
                 }
             }
