@@ -100409,3 +100409,158 @@ function Get-AzResourceGroup
         $Id
     )
 }
+
+#region Microsoft.Graph.Authentication
+function Set-PolicyConfig
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Object[]]
+        $DlpAppGroups,
+
+        [Parameter()]
+        [System.Object]
+        $OnPremisesWorkload,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableAdvancedRuleBuilder,
+
+        [Parameter()]
+        [System.Object[]]
+        $DlpAppGroupsPsws,
+
+        [Parameter()]
+        [System.Boolean]
+        $ReservedForFutureUse,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSpoAipMigration,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.String]
+        $ComplianceUrl,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $MigrateLabelScheme,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsDlpSimulationOptedIn,
+
+        [Parameter()]
+        [System.Object]
+        $InformationBarrierPeopleSearchRestriction,
+
+        [Parameter()]
+        [System.String]
+        $TextExtractionConfig,
+
+        [Parameter()]
+        [System.Object]
+        $DocumentIsUnsupportedSeverity,
+
+        [Parameter()]
+        [System.Object[]]
+        $EndpointDlpGlobalSettingsPsws,
+
+        [Parameter()]
+        [System.Object]
+        $ProcessingLimitExceededSeverity,
+
+        [Parameter()]
+        [System.Boolean]
+        $ExtendTeamsDlpPoliciesToSharePointOneDrive,
+
+        [Parameter()]
+        [System.Object[]]
+        $EndpointDlpGlobalSettings,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsEventFoldingOnDlpAlertsOptedOut,
+
+        [Parameter()]
+        [System.Object]
+        $DlpRemovableMediaGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $RetentionForwardCrawl,
+
+        [Parameter()]
+        [System.String]
+        $JitEnforcementSettings,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableLabelCoauth,
+
+        [Parameter()]
+        [System.Object]
+        $SenderAddressLocation,
+
+        [Parameter()]
+        [System.Object[]]
+        $SiteGroupsPsws,
+
+        [Parameter()]
+        [System.Object]
+        $RuleErrorAction,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsDefaultMlDlpPoliciesOptedOut,
+
+        [Parameter()]
+        [System.Object]
+        $DlpNetworkShareGroups,
+
+        [Parameter()]
+        [System.Object]
+        $DlpExtensionGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $PurviewLabelConsent,
+
+        [Parameter()]
+        [System.Object]
+        $DlpPrinterGroups,
+
+        [Parameter()]
+        [System.Object]
+        $InformationBarrierMode,
+
+        [Parameter()]
+        [System.Object[]]
+        $SiteGroups,
+
+        [Parameter()]
+        [System.Object]
+        $ClassificationScheme,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSensitivityLabelingForPdf,
+
+        [Parameter()]
+        [System.String[]]
+        $MessageHeadersToRetainInOutlook
+    )
+}
+function Get-PolicyConfig
+{
+    [CmdletBinding()]
+    param(
+
+    )
+}
+#endregion
