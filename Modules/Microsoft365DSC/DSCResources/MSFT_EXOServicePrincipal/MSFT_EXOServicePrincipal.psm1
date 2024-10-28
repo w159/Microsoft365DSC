@@ -6,6 +6,10 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
+        $AppName,
+
+        [Parameter()]
+        [System.String]
         $DisplayName,
 
         [Parameter()]
@@ -49,6 +53,9 @@ function Get-TargetResource
     New-M365DSCConnection -Workload 'ExchangeOnline' `
         -InboundParameters $PSBoundParameters | Out-Null
 
+    New-M365DSCConnection -Workload 'MSGraph' `
+        -InboundParameters $PSBoundParameters | Out-Null
+
     Confirm-M365DSCDependencies
 
     $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
@@ -75,8 +82,11 @@ function Get-TargetResource
             return $nullResult
         }
 
+        $servicePrincipal = Get-MgBetaServicePrincipal -Filter "AppId eq '$instance.AppId'"
+
         $results = @{
-            Identity              = $instance.Identity
+            Identity              = $servicePrincipal.Id
+            AppName               = $servicePrincipal.DisplayName
             DisplayName           = $instance.DisplayName
             AppId                 = $instance.AppId
             ObjectId              = $instance.ObjectId
@@ -108,6 +118,10 @@ function Set-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.String]
+        $AppName,
+
+        [Parameter()]
         [System.String]
         $DisplayName,
 
@@ -165,10 +179,12 @@ function Set-TargetResource
 
     $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
+    $servicePrincipal = Get-MgBetaServicePrincipal -Filter "AppId eq '$instance.AppId'"
+
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        New-ServicePrincipal -AppId $AppId -ObjectId $Identity
+        New-ServicePrincipal -AppId $AppId -ObjectId $servicePrincipal.Id
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -180,7 +196,7 @@ function Set-TargetResource
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Remove-ServicePrincipal -Identity $Identity
+        Remove-ServicePrincipal -Identity $servicePrincipal.Id
     }
 }
 
@@ -191,6 +207,10 @@ function Test-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.String]
+        $AppName,
+
+        [Parameter()]
         [System.String]
         $DisplayName,
 

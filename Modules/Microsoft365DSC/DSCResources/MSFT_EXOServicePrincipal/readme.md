@@ -7,6 +7,7 @@ Use the ServicePrincipal cmdlets to create, change service principals in your cl
 ## Parameters
 
 - Identity: The Identity parameter specifies the service principal that you want to modify. You can use any value that uniquely identifies the service principal. For example: Name, Distinguished name (DN), GUID, AppId, ObjectId
+- AppName: The AppName parameter specifies the corresponding friendly name of the unique AppId GUID value for the service principal.
 - DisplayName: The DisplayName parameter specifies the friendly name of the service principal. If the name contains spaces, enclose the name in quotation marks (").
 - AppId: The AppId parameter specifies the unique AppId GUID value for the service principal.
 - ObjectId: The ObjectId parameter specifies the unique ObjectId GUID value for the service principal.
