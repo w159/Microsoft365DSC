@@ -1149,6 +1149,14 @@
                     DisplayName             = "Example";
                     Ensure                  = "Present";
                 }
+                AADIdentityProtectionPolicySettings 'AADIdentityProtectionPolicySettings'
+                {
+                    IsUserRiskClearedOnPasswordReset = $false; #drift
+                    IsSingleInstance              = "Yes";
+                    ApplicationId                 = $ApplicationId
+                    TenantId                      = $TenantId
+                    CertificateThumbprint         = $CertificateThumbprint
+                }
                 AADLifecycleWorkflowSettings 'AADLifecycleWorkflowSettings'
                 {
                     ApplicationId                   = $ApplicationId;
