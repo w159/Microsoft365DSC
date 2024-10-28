@@ -138,8 +138,8 @@
   * Initial release.
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
-* IntuneDerivedCredential
-  * Initial release.
+* IntuneDeviceManagementEnrollmentAndroidGooglePlay
+  * Initial release
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp

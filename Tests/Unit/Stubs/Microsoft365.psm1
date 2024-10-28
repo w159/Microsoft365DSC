@@ -18655,6 +18655,45 @@ function Get-MgBetaDeviceManagement
         $Break
     )
 }
+
+function Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.String]
+        $BindStatus,
+
+        [Parameter()]
+        [System.String]
+        $OwnerUserPrincipalName,
+
+        [Parameter()]
+        [System.String]
+        $OwnerOrganizationName,
+
+        [Parameter()]
+        [System.String]
+        $EnrollmentTarget,
+
+        [Parameter()]
+        [System.Boolean]
+        $DeviceOwnerManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceOwnerFullyManagedEnrollmentEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present'
+    )
+}
+
 function Get-MgBetaDeviceManagementAssignmentFilter
 {
     [CmdletBinding()]
@@ -19127,6 +19166,18 @@ function Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate
         [Parameter()]
         [PSObject]
         $HttpPipelineAppend
+    )
+}
+function Get-MgBetaDeviceManagementDataSharingConsent {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $DataSharingConsentId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Granted
     )
 }
 function Get-MgBetaDeviceManagementDeviceCategory
@@ -19733,6 +19784,19 @@ function Get-MgBetaDeviceManagementDerivedCredential {
         [ValidateSet('none', 'email', 'companyPortal')]
         [System.String]
         $NotificationType = 'none'
+    )
+}
+
+function Remove-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Confirm = $true
     )
 }
 
