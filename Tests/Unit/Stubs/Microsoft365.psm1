@@ -35276,7 +35276,11 @@ function Get-MgBetaIdentityUserFlowAttribute
     param(
         [Parameter()]
         [System.String]
-        $IdentityUserFlowAttributeId
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
     )
 }
 function New-MgBetaIdentityUserFlowAttribute
