@@ -30,6 +30,8 @@
   * Initial release.
 * AzureBillingAccountsRoleAssignment
   * Initial release.
+* AzureVerifiedIdFaceCheck
+  * Initial release.
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array

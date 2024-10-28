@@ -100325,3 +100325,13 @@ function Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile
     )
 }
 #endregion
+
+function Get-AzResourceGroup
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Id
+    )
+}
