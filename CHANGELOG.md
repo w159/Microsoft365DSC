@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* IntuneMobileThreatDefenseConnector
+  * Initial release.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
@@ -10,27 +12,48 @@
   * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
+* AADHomeRealmDiscoveryPolicy
+  * Initial Release
 * AADIdentityB2XUserFlow
   * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
 * AADIdentityAPIConnector
   * Initial release.
+* AADNetworkAccessForwardingProfile
+  * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AzureBillingAccountsAssociatedTenant
+  * Initial release.
+* AzureBillingAccountsRoleAssignment
+  * Initial release.
+* EXOArcConfig
+  * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
+    when it has an array
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOServicePrincipal
   * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
+* IntuneAppCategory
+  * Fixed retrieval of resource which could then result in multiple categories
+    being created with same name.
 * IntuneDerivedCredential
   * Fixed export and deployment when `NotificationType` had more than one option
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
+* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+  * Initial release.
+* IntuneEndpointDetectionAndResponsePolicyWindows10
+  * Fixes an issue with `AutoFromConnector` as the Configuration package type.
+    FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* IntuneSecurityBaselineDefenderForEndpoint
+  * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
 * SentinelAlertRule

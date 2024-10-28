@@ -312,6 +312,24 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADHomeRealmDiscoveryPolicy 'AADHomeRealmDiscoveryPolicy-displayName-value'
+                {
+                    Definition            = @(
+                        MSFT_AADHomeRealDiscoveryPolicyDefinition {
+                            PreferredDomain       = 'federated.example.edu'
+                            AccelerateToFederatedDomain         = $False
+                            AlternateIdLogin = MSFT_AADHomeRealDiscoveryPolicyDefinitionAlternateIdLogin {
+                                Enabled = $True
+                            }
+                        }
+                    );
+                    DisplayName           = "displayName-value";
+                    Ensure                = "Absent";
+                    IsOrganizationDefault = $False;
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
                 AADIdentityAPIConnector 'AADIdentityAPIConnector-TestConnector'
                 {
                     DisplayName           = "NewTestConnector";
