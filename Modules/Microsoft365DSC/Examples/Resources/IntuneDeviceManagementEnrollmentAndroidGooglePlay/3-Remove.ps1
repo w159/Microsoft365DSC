@@ -18,9 +18,17 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        
+        IntuneDeviceManagementEnrollmentAndroidGooglePlay "RemoveAndroidGooglePlayEnrollment"
+        {
+            Id                    = "androidManagedStoreAccountEnterpriseSettings"
+            Ensure                = "Absent"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
+        }
     }
 }
