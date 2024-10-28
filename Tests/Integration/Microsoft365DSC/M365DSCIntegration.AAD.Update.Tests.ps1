@@ -125,6 +125,14 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADAccessReviewPolicy 'AADAccessReviewPolicy'
+                {
+                    IsGroupOwnerManagementEnabled = $False;
+                    IsSingleInstance              = "Yes";
+                    ApplicationId                 = $ApplicationId
+                    TenantId                      = $TenantId
+                    CertificateThumbprint         = $CertificateThumbprint
+                }
                 AADAdminConsentRequestPolicy 'AADAdminConsentRequestPolicy'
                 {
                     ApplicationId         = $ApplicationId;
@@ -1001,6 +1009,24 @@
                     GuestUsageGuidelinesUrl       = "https://contoso.com/guestusage"
                     UsageGuidelinesUrl            = "https://contoso.com/usage"
                     Ensure                        = "Present"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADHomeRealmDiscoveryPolicy 'AADHomeRealmDiscoveryPolicy-displayName-value'
+                {
+                    Definition            = @(
+                        MSFT_AADHomeRealDiscoveryPolicyDefinition {
+                            PreferredDomain       = 'federated.example.edu'
+                            AccelerateToFederatedDomain         = $True # updating here
+                            AlternateIdLogin = MSFT_AADHomeRealDiscoveryPolicyDefinitionAlternateIdLogin {
+                                Enabled = $True
+                            }
+                        }
+                    );
+                    DisplayName           = "displayName-value";
+                    Ensure                = "Present";
+                    IsOrganizationDefault = $False;
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
