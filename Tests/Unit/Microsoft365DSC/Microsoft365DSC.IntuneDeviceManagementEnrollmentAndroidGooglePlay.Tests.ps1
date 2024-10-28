@@ -39,11 +39,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Id                                          = "androidManagedStoreAccountEnterpriseSettings"
                     BindStatus                                   = "notBound"
-                    OwnerUserPrincipalName                       = "testuser@domain.com"
-                    OwnerOrganizationName                        = "Test Organization"
-                    EnrollmentTarget                             = "targetedAsEnrollmentRestrictions"
-                    DeviceOwnerManagementEnabled                 = $False
-                    AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $False
+                    # OwnerUserPrincipalName                       = "testuser@domain.com"
+                    # OwnerOrganizationName                        = "Test Organization"
+                    # EnrollmentTarget                             = "targetedAsEnrollmentRestrictions"
+                    # DeviceOwnerManagementEnabled                 = $False
+                    # AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $False
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
