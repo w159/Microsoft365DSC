@@ -129,7 +129,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Id                                          = "androidManagedStoreAccountEnterpriseSettings"
                     BindStatus                                   = "bound"
-                    OwnerUserPrincipalName                       = "existingUser@domain.com"
+                    # OwnerUserPrincipalName                       = "existingUser@domain.com"
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
@@ -138,7 +138,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         Id                                        = "androidManagedStoreAccountEnterpriseSettings"
                         BindStatus                                = "bound"
-                        OwnerUserPrincipalName                    = "existingUser@domain.com"
+                        # OwnerUserPrincipalName                    = "existingUser@domain.com"
                         Ensure                                    = 'Present'
                     }
                 }
