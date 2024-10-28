@@ -134,7 +134,7 @@ class MSFT_PolicyConfigQuarantineParameters
 [ClassVersion("1.0.0.0"), FriendlyName("SCPolicyConfig")]
 class MSFT_SCPolicyConfig : OMI_BaseResource
 {
-    [Key, Description(""), ValueMap{"Yes"}, Values{"Yes"}] String IsSingleInstance;
+    [Key, Description("Accepted value is 'Yes'."), ValueMap{"Yes"}, Values{"Yes"}] String IsSingleInstance;
     [Write, Description("TBD")] Boolean AdvancedClassificationEnabled;
     [Write, Description("TBD")] Boolean AuditFileActivity;
     [Write, Description("TBD")] Boolean BandwidthLimitEnabled;
