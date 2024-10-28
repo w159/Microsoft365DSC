@@ -35268,6 +35268,80 @@ function Update-MgBetaRoleManagementDirectoryRoleDefinition
 }
 #endregion
 #region Microsoft.Graph.Beta.Identity.SignIns
+
+#region Microsoft.Graph.Authentication
+function Get-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Sort
+    )
+}
+function New-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName
+    )
+}
+function Update-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Id
+    )
+}
+function Remove-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId
+    )
+}
+#endregion
+
+
 function Get-MgBetaIdentityConditionalAccess
 {
     [CmdletBinding()]

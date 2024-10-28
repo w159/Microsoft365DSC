@@ -39,6 +39,8 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
+* AADUserFlowAttribute
+  * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOTenantAllowBlockListItems
