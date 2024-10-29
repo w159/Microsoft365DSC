@@ -30,6 +30,8 @@
   * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
   * Initial release.
+* AADNetworkAccessSettingCrossTenantAccess
+  * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider

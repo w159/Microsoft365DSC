@@ -6,19 +6,11 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance = 'Yes',
+        $IsSingleInstance,
 
         [Parameter()]
         [System.String]
-        $Exchange,
-
-        [Parameter()]
-        [System.String]
-        $SharePoint,
-
-        [Parameter()]
-        [System.String]
-        $Teams,
+        $NetworkPacketTaggingStatus,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -59,22 +51,20 @@ function Get-TargetResource
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
-    $nullResults = $PSBoundParameters
+
+    $nullResult = $PSBoundParameters
     try
     {
-        $instance = Get-MgBetaNetworkAccessSettingEnrichedAuditLog
-
+        $instance = Get-MgBetaNetworkAccessSettingCrossTenantAccess
         $results = @{
-            IsSingleInstance      = 'Yes'
-            Exchange              = $instance.Exchange.Status
-            SharePoint            = $instance.SharePoint.Status
-            Teams                 = $instance.Teams.Status
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            IsSingleInstance           = 'Yes'
+            NetworkPacketTaggingStatus = $instance.NetworkPacketTaggingStatus
+            Credential                 = $Credential
+            ApplicationId              = $ApplicationId
+            TenantId                   = $TenantId
+            CertificateThumbprint      = $CertificateThumbprint
+            ManagedIdentity            = $ManagedIdentity.IsPresent
+            AccessTokens               = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -98,19 +88,11 @@ function Set-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance = 'Yes',
+        $IsSingleInstance,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $Exchange,
-
-        [Parameter()]
-        [System.String]
-        $SharePoint,
-
-        [Parameter()]
-        [System.String]
-        $Teams,
+        $NetworkPacketTaggingStatus,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -137,6 +119,9 @@ function Set-TargetResource
         $AccessTokens
     )
 
+    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+        -InboundParameters $PSBoundParameters
+
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
@@ -149,25 +134,8 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message 'Updating Enriched Audit Logs settings'
-
-    $values = @{
-        "@odata.type" = "#microsoft.graph.networkaccess.enrichedAuditLogs"
-        exchange = @{
-            "@odata.type" = "#microsoft.graph.networkaccess.enrichedAuditLogsSettings"
-            status = $ExchangeOnline
-        }
-        sharepoint = @{
-            "@odata.type" = "#microsoft.graph.networkaccess.enrichedAuditLogsSettings"
-            status = $SharePoint
-        }
-        teams = @{
-            "@odata.type" = "#microsoft.graph.networkaccess.enrichedAuditLogsSettings"
-            status = $Teams
-        }
-    }
-    $body = ConvertTo-Json $values -Depth 10 -Compress
-    Invoke-MgGraphRequest -Uri 'https://graph.microsoft.com/beta/networkAccess/settings/enrichedAuditLogs' -Method PATCH -Body $body
+    Write-Verbose -Message "Updating the Cross Tenant Access Settings"
+    Update-MgBetaNetworkAccessSettingCrossTenantAccess -NetworkPacketTaggingStatus $NetworkPacketTaggingStatus
 }
 
 function Test-TargetResource
@@ -178,19 +146,11 @@ function Test-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance = 'Yes',
+        $IsSingleInstance,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $Exchange,
-
-        [Parameter()]
-        [System.String]
-        $SharePoint,
-
-        [Parameter()]
-        [System.String]
-        $Teams,
+        $NetworkPacketTaggingStatus,
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -299,8 +259,6 @@ function Export-TargetResource
     {
         $Script:ExportMode = $true
 
-        $i = 1
-        $dscContent = ''
         if ($null -ne $Global:M365DSCExportResourceInstancesCount)
         {
             $Global:M365DSCExportResourceInstancesCount++
@@ -314,7 +272,7 @@ function Export-TargetResource
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
-         }
+        }
 
         $Results = Get-TargetResource @Params
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
