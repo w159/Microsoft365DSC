@@ -109,11 +109,12 @@ function Get-TargetResource
         }
 
         $PolicyValue = @()
-        if ($null -ne $Policies -and $Polices.Length -gt 0)
+        if ($null -ne $instance.Policies -and $instance.Policies.Length -gt 0)
         {
-            foreach ($policy in $Policies)
+            $policyLinks = Get-MgBetaNetworkAccessFilteringProfilePolicy -FilteringProfileId $instance.Id -ExpandProperty Policy
+            foreach ($link in $policyLinks)
             {
-                $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -FilteringPolicyId $policy.Id
+                $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -FilteringPolicyId $link.Policy.Id
                 if ($null -ne $policyInfo)
                 {
                     $PolicyValue += $policyInfo.Name
