@@ -30,11 +30,15 @@
   * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
   * Initial release.
+* AADNetworkAccessSettingCrossTenantAccess
+  * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
+  * Initial release.
+* AADVerifiedIdAuthorityContract
   * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
