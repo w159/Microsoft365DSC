@@ -1,6 +1,6 @@
 
-# ResourceName
+# AADFilteringPolicyRule
 
 ## Description
 
-##TODO - Provide a short description of what the resource is set to configure.
+Configures filtering rules in Entra Id.
