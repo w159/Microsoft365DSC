@@ -2,37 +2,49 @@
 
 # UNRELEASED
 
-* IntuneMobileThreatDefenseConnector
-  * Initial release.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
   * Initial release.
 * AADAuthenticationMethodPolicyExternal
   * Initial release.
+* AADConditionalAccessPolicy
+  * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
+* AADIdentityAPIConnector
+  * Initial release.
 * AADIdentityB2XUserFlow
+  * Initial release.
+* AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension
   * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
-* AADIdentityAPIConnector
+* AADIdentityProtectionPolicySettings
   * Initial release.
+* AADNamedLocationPolicy
+  * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AADVerifiedIdAuthority
+  * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
 * AzureBillingAccountsRoleAssignment
   * Initial release.
+* AzureVerifiedIdFaceCheck
+  * Initial release.
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
+* AADUserFlowAttribute
+  * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOServicePrincipal
@@ -52,10 +64,17 @@
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
     FIXES [#5246](https://github.com/microsoft/Microsoft365DSC/issues/5246)
+* IntuneMobileThreatDefenseConnector
+  * Initial release.
 * IntuneSecurityBaselineDefenderForEndpoint
   * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
+* SCPolicyConfig
+  * Initial release.
+* SCSensitivityLabel
+  * Fixed issue with setting label priority
+    FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
@@ -66,11 +85,16 @@
     AllowSelectSecurityGroupsInSPSitesList,
     ExemptNativeUsersFromTenantLevelRestricedAccessControl properties.
   * TenantDefaultTimezone changed to String instead of Array.
+* TeamsMeetingPolicy
+  * Added new parameters: AllowExternalNonTrustedMeetingChat, AttendeeIdentityMasking,
+    AutomaticallyStartCopilot, AutoRecording, ConnectToMeetingControls,
+    ContentSharingInExternalMeetings, Copilot, CopyRestriction,
+    DetectSensitiveContentDuringScreenSharing, ExternalMeetingJoin, ParticipantNameChange,
+    VoiceIsolation
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
 * DEPENDENCIES
-  * Updated ExchangeOnlineManagement to version 3.6.0.
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
   * Updated MSCloudLoginAssistant to version 1.1.27
@@ -123,6 +147,8 @@
   * Initial release.
 * IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
   * Added deprecation notice.
+* IntuneDeviceManagementEnrollmentAndroidGooglePlay
+  * Initial release
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Migrate to new Settings Catalog cmdlets.
 * IntuneMobileAppsMacOSLobApp

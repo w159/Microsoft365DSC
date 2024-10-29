@@ -18723,6 +18723,45 @@ function Get-MgBetaDeviceManagement
         $Break
     )
 }
+
+function Get-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.String]
+        $BindStatus,
+
+        [Parameter()]
+        [System.String]
+        $OwnerUserPrincipalName,
+
+        [Parameter()]
+        [System.String]
+        $OwnerOrganizationName,
+
+        [Parameter()]
+        [System.String]
+        $EnrollmentTarget,
+
+        [Parameter()]
+        [System.Boolean]
+        $DeviceOwnerManagementEnabled,
+
+        [Parameter()]
+        [System.Boolean]
+        $AndroidDeviceOwnerFullyManagedEnrollmentEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present'
+    )
+}
+
 function Get-MgBetaDeviceManagementAssignmentFilter
 {
     [CmdletBinding()]
@@ -19195,6 +19234,18 @@ function Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate
         [Parameter()]
         [PSObject]
         $HttpPipelineAppend
+    )
+}
+function Get-MgBetaDeviceManagementDataSharingConsent {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $DataSharingConsentId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Granted
     )
 }
 function Get-MgBetaDeviceManagementDeviceCategory
@@ -19801,6 +19852,19 @@ function Get-MgBetaDeviceManagementDerivedCredential {
         [ValidateSet('none', 'email', 'companyPortal')]
         [System.String]
         $NotificationType = 'none'
+    )
+}
+
+function Remove-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSetting {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AndroidManagedStoreAccountEnterpriseSettingsId,
+
+        [Parameter()]
+        [System.Boolean]
+        $Confirm = $true
     )
 }
 
@@ -35336,6 +35400,80 @@ function Update-MgBetaRoleManagementDirectoryRoleDefinition
 }
 #endregion
 #region Microsoft.Graph.Beta.Identity.SignIns
+
+#region Microsoft.Graph.Authentication
+function Get-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Sort
+    )
+}
+function New-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName
+    )
+}
+function Update-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId,
+
+        [Parameter()]
+        [System.String]
+        $Id
+    )
+}
+function Remove-MgBetaIdentityUserFlowAttribute
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter()]
+        [System.String]
+        $IdentityUserFlowAttributeId
+    )
+}
+#endregion
+
+
 function Get-MgBetaIdentityConditionalAccess
 {
     [CmdletBinding()]
@@ -100390,6 +100528,510 @@ function Remove-MgBetaDeviceManagementAndroidDeviceOwnerEnrollmentProfile
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $Break
+    )
+}
+#endregion
+
+function Get-AzResourceGroup
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Id
+    )
+}
+
+#region Microsoft.Graph.Authentication
+function Set-PolicyConfig
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Object[]]
+        $DlpAppGroups,
+
+        [Parameter()]
+        [System.Object]
+        $OnPremisesWorkload,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableAdvancedRuleBuilder,
+
+        [Parameter()]
+        [System.Object[]]
+        $DlpAppGroupsPsws,
+
+        [Parameter()]
+        [System.Boolean]
+        $ReservedForFutureUse,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSpoAipMigration,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.String]
+        $ComplianceUrl,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $MigrateLabelScheme,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsDlpSimulationOptedIn,
+
+        [Parameter()]
+        [System.Object]
+        $InformationBarrierPeopleSearchRestriction,
+
+        [Parameter()]
+        [System.String]
+        $TextExtractionConfig,
+
+        [Parameter()]
+        [System.Object]
+        $DocumentIsUnsupportedSeverity,
+
+        [Parameter()]
+        [System.Object[]]
+        $EndpointDlpGlobalSettingsPsws,
+
+        [Parameter()]
+        [System.Object]
+        $ProcessingLimitExceededSeverity,
+
+        [Parameter()]
+        [System.Boolean]
+        $ExtendTeamsDlpPoliciesToSharePointOneDrive,
+
+        [Parameter()]
+        [System.Object[]]
+        $EndpointDlpGlobalSettings,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsEventFoldingOnDlpAlertsOptedOut,
+
+        [Parameter()]
+        [System.Object]
+        $DlpRemovableMediaGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $RetentionForwardCrawl,
+
+        [Parameter()]
+        [System.String]
+        $JitEnforcementSettings,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableLabelCoauth,
+
+        [Parameter()]
+        [System.Object]
+        $SenderAddressLocation,
+
+        [Parameter()]
+        [System.Object[]]
+        $SiteGroupsPsws,
+
+        [Parameter()]
+        [System.Object]
+        $RuleErrorAction,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsDefaultMlDlpPoliciesOptedOut,
+
+        [Parameter()]
+        [System.Object]
+        $DlpNetworkShareGroups,
+
+        [Parameter()]
+        [System.Object]
+        $DlpExtensionGroups,
+
+        [Parameter()]
+        [System.Boolean]
+        $PurviewLabelConsent,
+
+        [Parameter()]
+        [System.Object]
+        $DlpPrinterGroups,
+
+        [Parameter()]
+        [System.Object]
+        $InformationBarrierMode,
+
+        [Parameter()]
+        [System.Object[]]
+        $SiteGroups,
+
+        [Parameter()]
+        [System.Object]
+        $ClassificationScheme,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableSensitivityLabelingForPdf,
+
+        [Parameter()]
+        [System.String[]]
+        $MessageHeadersToRetainInOutlook
+    )
+}
+function Get-PolicyConfig
+{
+    [CmdletBinding()]
+    param(
+
+    )
+}
+#endregion
+
+#region Microsoft.Graph.Authentication
+function Update-MgBetaIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [PSObject]
+        $CallbackConfiguration,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastModifiedDateTime,
+
+        [Parameter()]
+        [System.DateTime]
+        $CreatedDateTime,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AuthenticationConfiguration,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $EndpointConfiguration,
+
+        [Parameter()]
+        [PSObject]
+        $ClientConfiguration,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [PSObject]
+        $CreatedBy,
+
+        [Parameter()]
+        [System.String]
+        $CustomTaskExtensionId,
+
+        [Parameter()]
+        [PSObject]
+        $LastModifiedBy,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [PSObject]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend
+    )
+}
+function New-MgBetaIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [PSObject]
+        $CallbackConfiguration,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.DateTime]
+        $LastModifiedDateTime,
+
+        [Parameter()]
+        [System.DateTime]
+        $CreatedDateTime,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AuthenticationConfiguration,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $EndpointConfiguration,
+
+        [Parameter()]
+        [PSObject]
+        $ClientConfiguration,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [PSObject]
+        $CreatedBy,
+
+        [Parameter()]
+        [PSObject]
+        $LastModifiedBy,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [PSObject]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend
+    )
+}
+function Remove-MgBetaIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PassThru,
+
+        [Parameter()]
+        [System.String]
+        $IfMatch,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.String]
+        $CustomTaskExtensionId,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break
+    )
+}
+function Get-MgBetaIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Int32]
+        $PageSize,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Int32]
+        $Skip,
+
+        [Parameter()]
+        [System.Int32]
+        $Top,
+
+        [Parameter()]
+        [System.String]
+        $CustomTaskExtensionId,
+
+        [Parameter()]
+        [System.String]
+        $CountVariable,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.String[]]
+        $Sort,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.String]
+        $Search,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [PSObject]
+        $HttpPipelineAppend
     )
 }
 #endregion
