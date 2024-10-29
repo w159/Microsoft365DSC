@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADServicePrincipal
+  * Added support for KeyCredentials and PasswordCredentials.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
