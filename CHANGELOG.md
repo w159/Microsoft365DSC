@@ -22,6 +22,8 @@
   * Initial release.
 * AADIdentityProtectionPolicySettings
   * Initial release.
+* AADNamedLocationPolicy
+  * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
@@ -66,6 +68,9 @@
   * Fixed missing permissions in settings.json
 * SCPolicyConfig
   * Initial release.
+* SCSensitivityLabel
+  * Fixed issue with setting label priority
+    FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
