@@ -89,8 +89,9 @@ class MSFT_AADVerifiedIdAuthorityContractRulesModel {
 class MSFT_AADVerifiedIdAuthorityContract : OMI_BaseResource
 {
     [Write, Description("Id of the Verified ID Authority Contract.")] String id;
-    [Write, Description("URL of the linked domain of the authority.")] String linkedDomainUrl;
-    [Write, Description("Name of the Verified ID Authority Contract.")] String name;
+    [Key, Description("URL of the linked domain of the authority.")] String linkedDomainUrl;
+    [Write, Description("Id of the Verified ID Authority.")] String authorityId;
+    [Key, Description("Name of the Verified ID Authority Contract.")] String name;
     [Write, Description(""), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractDisplayModel")] String displays[];
     [Write, Description(""), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractRulesModel")] String rules;
     [Write, Description("Present ensures the policy exists, absent ensures it is removed."), ValueMap{"Present","Absent"}, Values{"Present","Absent"}] string Ensure;

@@ -8,11 +8,15 @@ function Get-TargetResource
         [System.String]
         $id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $linkedDomainUrl,
 
         [Parameter()]
+        [System.String]
+        $authorityId,
+
+        [Parameter(Mandatory = $true)]
         [System.String]
         $name,
 
@@ -116,6 +120,7 @@ function Get-TargetResource
             id                                                                    = $contract.id
             name                                                                  = $contract.name
             linkedDomainUrl                                                       = $linkedDomainUrl
+            authorityId                                                           = $authority.Id
             displays                                                              = $contract.displays
             rules                                                                 = $contract.rules
             Ensure                                                                = 'Present'
@@ -150,11 +155,15 @@ function Set-TargetResource
         [System.String]
         $id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $linkedDomainUrl,
 
         [Parameter()]
+        [System.String]
+        $authorityId,
+
+        [Parameter(Mandatory = $true)]
         [System.String]
         $name,
 
@@ -220,44 +229,31 @@ function Set-TargetResource
     Write-Verbose -Message "Retrieved current instance: $($currentInstance.Name) with Id $($currentInstance.Id)"
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/" + $currentInstance.Id
+    $rulesHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $rules
+    $displaysHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $displays
+    $body = @{
+        name = $Name
+        rules = $rulesHashmap
+        displays = $displaysHashmap
+    }
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
+        Write-Verbose -Message "Creating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authorityId)"
 
-        $body = @{
-            name = $Name
-            linkedDomainUrl = $LinkedDomainUrl
-            didMethod = $DidMethod
-            keyVaultMetadata     = @{
-                subscriptionId = $KeyVaultMetadata.SubscriptionId
-                resourceGroup = $KeyVaultMetadata.ResourceGroup
-                resourceName = $KeyVaultMetadata.ResourceName
-                resourceUrl = $KeyVaultMetadata.ResourceUrl
-            }
-        }
-        Write-Verbose -Message "Creating VerifiedId Authority with body $($body | ConvertTo-Json -Depth 5)"
-
-        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities" 
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authorityId)/contracts"
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'POST' -Body $body
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating an VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
-
-        Write-Warning -Message "You can only update Name of the VerifiedId Authority, if you want to update other properties, please delete and recreate the VerifiedId Authority."
-        $body = @{
-            name = $Name
-        }
+        Write-Verbose -Message "Updating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authorityId)"
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authorityId)/contracts/$($id)"
+        $body.Remove('name') | Out-Null
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'PATCH' -Body $body
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing VerifiedId Authority with Name {$Name} and Id $($currentInstance.Id)"
-
-        $uri = "https://verifiedid.did.msidentity.com/beta/verifiableCredentials/authorities/" + $currentInstance.Id
-        Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'DELETE'
+        Write-Warning -Message "Removal of Contracts is not supported"
     }
 }
 
@@ -271,11 +267,15 @@ function Test-TargetResource
         [System.String]
         $id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $linkedDomainUrl,
 
         [Parameter()]
+        [System.String]
+        $authorityId,
+
+        [Parameter(Mandatory = $true)]
         [System.String]
         $name,
 
@@ -333,7 +333,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message 'Testing configuration of AADVerifiedIdAuthority'
+    Write-Verbose -Message 'Testing configuration of AADVerifiedIdAuthorityContract'
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
@@ -346,7 +346,7 @@ function Test-TargetResource
     {
         $source = $PSBoundParameters.$key
         $target = $CurrentValues.$key
-        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*' -and $source -notlike '*Permission*')
+        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
         {
             $testResult = Compare-M365DSCComplexObject `
                 -Source ($source) `
@@ -713,7 +713,7 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
                         outputClaim = $map.outputClaim
                         inputClaim = $map.inputClaim
                         required = $map.required
-                        indexer = $map.indexer
+                        indexed = $map.indexed
                         type = $map.type
                     }
                 }
@@ -738,7 +738,7 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
                         outputClaim = $map.outputClaim
                         inputClaim = $map.inputClaim
                         required = $map.required
-                        indexer = $map.indexer
+                        indexed = $map.indexed
                         type = $map.type
                     }
                 }
@@ -766,7 +766,7 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
                         outputClaim = $map.outputClaim
                         inputClaim = $map.inputClaim
                         required = $map.required
-                        indexer = $map.indexer
+                        indexed = $map.indexed
                         type = $map.type
                     }
                 }
@@ -792,7 +792,7 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
                         outputClaim = $map.outputClaim
                         inputClaim = $map.inputClaim
                         required = $map.required
-                        indexer = $map.indexer
+                        indexed = $map.indexed
                         type = $map.type
                     }
                 }
@@ -816,7 +816,7 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
                         outputClaim = $map.outputClaim
                         inputClaim = $map.inputClaim
                         required = $map.required
-                        indexer = $map.indexer
+                        indexed = $map.indexed
                         type = $map.type
                     }
                 }
@@ -903,7 +903,7 @@ function Invoke-M365DSCVerifiedIdWebRequest
 
     if($Method -eq 'PATCH' -or $Method -eq 'POST')
     {
-        $BodyJson = $body | ConvertTo-Json 
+        $BodyJson = $body | ConvertTo-Json -Depth 10
         $response = Invoke-WebRequest -Method $Method -Uri $Uri -Headers $headers -Body $BodyJson
     }
     else {
