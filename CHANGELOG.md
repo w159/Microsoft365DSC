@@ -36,6 +36,8 @@
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
   * Initial release.
+* AADVerifiedIdAuthorityContract
+  * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
 * AzureBillingAccountsRoleAssignment
