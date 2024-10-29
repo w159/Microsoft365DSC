@@ -35,7 +35,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return "Credentials"
             }
 
-            ##TODO - Mock any Remove/Set/New cmdlets
+            Mock -CommandName New-MgBetaNetworkAccessFilteringPolicy -MockWith {}
+            Mock -CommandName Update-MgBetaNetworkAccessFilteringPolicy -MockWith {}
+            Mock -CommandName Remove-MgBetaNetworkAccessFilteringPolicy -MockWith {}
 
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
@@ -47,13 +49,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    Action                = "block";
+                    Description           = "This is a demo policy";
+                    Ensure                = "Present";
+                    Name                  = "MyPolicy";
+                    Credential            = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return $null
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith {
                     return $null
                 }
             }
@@ -65,24 +68,27 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should create a new instance from the Set method' {
-                ##TODO - Replace the New-Cmdlet by the appropriate one
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-Cmdlet -Exactly 1
+                Should -Invoke -CommandName New-MgBetaNetworkAccessFilteringPolicy -Exactly 1
             }
         }
 
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
-                    Ensure              = 'Absent'
-                    Credential          = $Credential;
+                    Action                = "block";
+                    Description           = "This is a demo policy";
+                    Ensure                = "Absent";
+                    Name                  = "MyPolicy";
+                    Credential            = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith {
                     return @{
-
+                        name        = 'MyPolicy'
+                        description = 'This is a demo policy'
+                        action      = 'block'
+                        id          = '12345-12345-12345-12345-12345'
                     }
                 }
             }
@@ -95,23 +101,26 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should remove the instance from the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Remove-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Remove-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Remove-MgBetaNetworkAccessFilteringPolicy -Exactly 1
             }
         }
 
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    Action                = "block";
+                    Description           = "This is a demo policy";
+                    Ensure                = "Present";
+                    Name                  = "MyPolicy";
+                    Credential            = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return the desired values
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith {
                     return @{
-
+                        name        = 'MyPolicy'
+                        description = 'This is a demo policy'
+                        action      = 'block'
+                        id          = '12345-12345-12345-12345-12345'
                     }
                 }
             }
@@ -124,15 +133,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    Action                = "allow"; #Drift
+                    Description           = "This is a demo policy";
+                    Ensure                = "Absent";
+                    Name                  = "MyPolicy";
+                    Credential            = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return a drift
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith {
                     return @{
-
+                        name        = 'MyPolicy'
+                        description = 'This is a demo policy'
+                        action      = 'block'
+                        id          = '12345-12345-12345-12345-12345'
                     }
                 }
             }
@@ -147,8 +160,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Update-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Update-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Update-MgBetaNetworkAccessFilteringPolicy -Exactly 1
             }
         }
 
@@ -160,10 +172,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith {
                     return @{
-
+                        name        = 'MyPolicy'
+                        description = 'This is a demo policy'
+                        action      = 'block'
+                        id          = '12345-12345-12345-12345-12345'
                     }
                 }
             }

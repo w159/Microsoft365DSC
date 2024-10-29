@@ -21,6 +21,15 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        
+        AADFilteringPolicy "AADFilteringPolicy-MyPolicy"
+        {
+            Action                = "block";
+            ApplicationId         = $ApplicationId;
+            CertificateThumbprint = $CertificateThumbprint;
+            Description           = "This is a demo policy";
+            Ensure                = "Present";
+            Name                  = "MyPolicy";
+            TenantId              = $TenantId;
+        }
     }
 }
