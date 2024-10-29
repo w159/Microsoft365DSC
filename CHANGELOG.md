@@ -22,6 +22,8 @@
   * Initial release.
 * AADNetworkAccessForwardingProfile
   * Initial release.
+* AADNetworkAccessForwardingPolicy
+  * Initial Release
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider
