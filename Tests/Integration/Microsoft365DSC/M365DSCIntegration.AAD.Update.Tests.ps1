@@ -965,6 +965,56 @@
                     IsAppliedToOrganization = $False;
                     IsEnabled               = $False;
                 }
+                AADFilteringPolicy 'AADFilteringPolicy-MyPolicy'
+                {
+                    Action                = "allow"; #drift
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "This is a demo policy";
+                    Ensure                = "Present";
+                    Name                  = "MyPolicy";
+                    TenantId              = $TenantId;
+                }
+                AADFilteringPolicyRule 'AADFilteringPolicyRule-FQDN'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Destinations          = @(
+                        MSFT_AADFilteringPolicyRuleDestination{
+                            value = 'contoso.com' #Drift
+                        }
+                    );
+                    Ensure                = "Present";
+                    Name                  = "MyFQDN";
+                    Policy                = "AMyPolicy";
+                    RuleType              = "fqdn";
+                    TenantId              = $TenantId;
+                }
+                AADFilteringProfile 'AADFilteringProfile-My Profile'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "Description of profile";
+                    Ensure                = "Present";
+                    Name                  = "My PRofile";
+                    Policies              = @(
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 100
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyPolicyChoseBine'
+                            State = 'enabled'
+                        }
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        }
+                    );
+                    Priority              = 130; #Drift
+                    State                 = "enabled";
+                    TenantId              = $TenantId;
+                }
                 AADGroup 'MyGroups'
                 {
                     DisplayName      = "DSCGroup"
