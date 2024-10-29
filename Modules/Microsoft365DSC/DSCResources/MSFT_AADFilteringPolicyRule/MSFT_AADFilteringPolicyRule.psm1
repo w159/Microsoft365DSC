@@ -213,7 +213,7 @@ function Set-TargetResource
     $currentInstance = Get-TargetResource @PSBoundParameters
     $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter {$_.Name -eq $Policy}
 
-    if ($RuleType-eq 'webCategory')
+    if ($RuleType -eq 'webCategory')
     {
         $instanceParams = @{
             "@odata.type" = "#microsoft.graph.networkaccess.webCategoryFilteringRule"
@@ -230,7 +230,7 @@ function Set-TargetResource
             }
         }
     }
-    elseif ($RuleType-eq 'fqdn')
+    elseif ($RuleType -eq 'fqdn')
     {
         $instanceParams = @{
             "@odata.type" = "#microsoft.graph.networkaccess.fqdnFilteringRule"

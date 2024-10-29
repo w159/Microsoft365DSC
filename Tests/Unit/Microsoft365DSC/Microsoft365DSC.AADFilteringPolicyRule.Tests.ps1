@@ -101,11 +101,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicyRule -MockWith {
                     return @{
-                        Name = 'MyPolicy'
+                        Name = 'MyFQDN'
                         Id   = '12345-12345-12345-12345-12345'
                         AdditionalProperties = @{
+                            ruleType = 'fqdn'
                             destinations = @(
-                                value = 'Microsoft365DSC.com'
+                                @{
+                                    value = 'Microsoft365DSC.com'
+                                }
                             )
                         }
                     }
@@ -141,11 +144,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                     Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicyRule -MockWith {
                         return @{
-                            Name = 'MyPolicy'
+                            Name = 'MyFQDN'
                             Id   = '12345-12345-12345-12345-12345'
                             AdditionalProperties = @{
+                                ruleType = 'fqdn'
                                 destinations = @(
+                                @{
                                     value = 'Microsoft365DSC.com'
+                                }
                                 )
                             }
                         }
@@ -168,17 +174,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Name                  = "MyFQDN";
                     Policy                = "MyPolicy";
                     RuleType              = "fqdn";
-                    Ensure                = 'Absent'
+                    Ensure                = 'Present'
                     Credential            = $Credential;
                 }
 
                 Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicyRule -MockWith {
                     return @{
-                        Name = 'MyPolicy'
+                        Name = 'MyFQDN'
                         Id   = '12345-12345-12345-12345-12345'
                         AdditionalProperties = @{
+                            ruleType = 'fqdn'
                             destinations = @(
-                                value = 'Microsoft365DSC.com'
+                                @{
+                                    value = 'Microsoft365DSC.com'
+                                }
                             )
                         }
                     }
@@ -209,11 +218,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicyRule -MockWith {
                     return @{
-                        Name = 'MyPolicy'
+                        Name = 'MyFQDN'
                         Id   = '12345-12345-12345-12345-12345'
                         AdditionalProperties = @{
+                            ruleType = 'fqdn'
                             destinations = @(
-                                value = 'Microsoft365DSC.com'
+                                @{
+                                    value = 'Microsoft365DSC.com'
+                                }
                             )
                         }
                     }
