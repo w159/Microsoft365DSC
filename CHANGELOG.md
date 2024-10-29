@@ -18,6 +18,8 @@
   * Initial release.
 * AADFilteringPolicy
   * Initial release.
+* AADFilteringPolicyRule
+  * Initial release.
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
 * AADIdentityAPIConnector
