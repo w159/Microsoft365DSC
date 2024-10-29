@@ -3045,6 +3045,191 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationInputParameter",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Value",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DataType",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationOutputClaims",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ClaimTypeReferenceId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TransformationClaimType",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformation",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TransformationMethod",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationInputParameter[]",
+                               "Name":  "InputParameters",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationOutputClaims[]",
+                               "Name":  "OutputClaims",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Source",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "SamlClaimType",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicy",
+        "Parameters":  [
+                           {
+                               "CIMType":  "uint32",
+                               "Name":  "Version",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "IncludeBasicClaimSet",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema[]",
+                               "Name":  "ClaimsSchema",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformation[]",
+                               "Name":  "ClaimsTransformation",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicyDefinition",
+        "Parameters":  [
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinitionMappingPolicy",
+                               "Name":  "ClaimsMappingPolicy",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADClaimsMappingPolicy",
+        "Parameters":  [
+                           {
+                               "CIMType":  "MSFT_AADClaimsMappingPolicyDefinition[]",
+                               "Name":  "Definition",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "IsOrganizationDefault",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Description",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisplayName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "ApplicationSecret",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_AADConditionalAccessPolicy",
         "Parameters":  [
                            {
