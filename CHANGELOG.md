@@ -53,6 +53,8 @@
   * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
+* EXOServicePrincipal
+  * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
 * IntuneAppCategory
