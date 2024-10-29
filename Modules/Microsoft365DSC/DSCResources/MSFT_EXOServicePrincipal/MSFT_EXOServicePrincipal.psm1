@@ -69,7 +69,7 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        $servicePrincipal = Get-MgBetaServicePrincipal -Filter "DisplayName eq '$($AppName)'"
+        $servicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq '$($AppName)'"
 
         if ($null -eq $servicePrincipal)
         {
@@ -184,12 +184,12 @@ function Set-TargetResource
 
     $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    $servicePrincipal = Get-MgBetaServicePrincipal -Filter "DisplayName eq '$($AppName)'"
+    $servicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq '$($AppName)'"
 
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        New-ServicePrincipal -AppId $AppId -ObjectId $servicePrincipal.Id
+        New-ServicePrincipal -AppId $servicePrincipal.AppId -ObjectId $servicePrincipal.Id
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -354,7 +354,7 @@ function Export-TargetResource
         }
         foreach ($config in $Script:exportedInstances)
         {
-            $servicePrincipal = Get-MgBetaServicePrincipal -ServicePrincipalId $config.Identity
+            $servicePrincipal = Get-MgServicePrincipal -ServicePrincipalId $config.Identity
 
             $displayedKey = $servicePrincipal.AppDisplayName
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
