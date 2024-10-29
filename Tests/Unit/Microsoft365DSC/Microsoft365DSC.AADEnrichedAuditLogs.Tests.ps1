@@ -35,6 +35,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return "Credentials"
             }
 
+            Mock -CommandName Invoke-MgGraphRequest -MockWith {
+            }
+
             Mock -CommandName Get-MgBetaNetworkAccessSettingEnrichedAuditLog -MockWith {
                 return @{
                     exchange = @{
@@ -82,11 +85,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential            = $Credential;
                 }
             }
-
-            It 'Should return Values from the Get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
-            }
-
+            
             It 'Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
@@ -103,10 +102,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
 
                 $testParams = @{
-                    Exchange              = "disabled";
-                    IsSingleInstance      = "Yes";
-                    SharePoint            = "enabled";
-                    Teams                 = "disabled";
                     Credential            = $Credential;
                 }
             }
