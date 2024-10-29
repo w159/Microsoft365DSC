@@ -6150,6 +6150,131 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionClientConfiguration",
+        "Parameters":  [
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "timeoutInMilliseconds",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "maximumRetries",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionEndpointConfiguration",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "logicAppWorkflowName",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "resourceGroupName",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "subscriptionId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "url",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionCallbackConfiguration",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "timeoutDuration",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "authorizedApps",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisplayName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Description",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionClientConfiguration",
+                               "Name":  "ClientConfiguration",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionEndpointConfiguration",
+                               "Name":  "EndpointConfiguration",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionCallbackConfiguration",
+                               "Name":  "CallbackConfiguration",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_AADIdentityGovernanceProgram",
         "Parameters":  [
                            {
