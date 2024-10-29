@@ -231,23 +231,40 @@ function Set-TargetResource
 
     $rulesHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $rules
     $displaysHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $displays
+    if($rulesHashmap.attestations.idTokens -ne $null)
+    {
+        foreach($idToken in $rulesHashmap.attestations.idTokens)
+        {
+            if($idToken.scopeValue -ne $null)
+            {
+                $idToken.Add('scope', $idToken.scopeValue)
+                $idToken.Remove('scopeValue') | Out-Null
+            }
+        }
+
+    }
+
     $body = @{
         name = $Name
         rules = $rulesHashmap
         displays = $displaysHashmap
     }
-
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authorityId)"
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities"
+        $response = Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'GET'
+        $authorities = $response.value
+        $authority = Get-M365DSCVerifiedIdAuthorityObject -Authority ($authorities | Where-Object -FilterScript {$_.didModel.linkedDomainUrls[0] -eq $linkedDomainUrl})
 
-        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authorityId)/contracts"
+        Write-Verbose -Message "Creating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authority.Id)"
+
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authority.Id)/contracts"
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'POST' -Body $body
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authorityId)"
-        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authorityId)/contracts/$($id)"
+        Write-Verbose -Message "Updating an VerifiedId Authority Contract with Name {$name} for Authority Id $($authority.Id)"
+        $uri = "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/authorities/$($authority.Id)/contracts/$($currentInstance.id)"
         $body.Remove('name') | Out-Null
         Invoke-M365DSCVerifiedIdWebRequest -Uri $uri -Method 'PATCH' -Body $body
     }

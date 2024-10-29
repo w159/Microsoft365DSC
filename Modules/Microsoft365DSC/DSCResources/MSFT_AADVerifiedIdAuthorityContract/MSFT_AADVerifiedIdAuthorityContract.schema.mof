@@ -59,11 +59,11 @@ class MSFT_AADVerifiedIdAuthorityContractAttestationValues {
 
 [ClassVersion("1.0.0")]
 class MSFT_AADVerifiedIdAuthorityContractAttestations {
-    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("")] String idTokenHints[];
-    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("")] String idTokens[];
-    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("")] String presentations[];
-    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("")] String selfIssued[];
-    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("")] String accessTokens[];
+    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("Id token hints attestations.")] String idTokenHints[];
+    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("Id token attestations.")] String idTokens[];
+    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("Presentations attestations.")] String presentations[];
+    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("Self Issued attestations.")] String selfIssued[];
+    [Write, EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractAttestationValues"), Description("Access Token attestations.")] String accessTokens[];
 };
 
 [ClassVersion("1.0.0")]
@@ -92,8 +92,8 @@ class MSFT_AADVerifiedIdAuthorityContract : OMI_BaseResource
     [Key, Description("URL of the linked domain of the authority.")] String linkedDomainUrl;
     [Write, Description("Id of the Verified ID Authority.")] String authorityId;
     [Key, Description("Name of the Verified ID Authority Contract.")] String name;
-    [Write, Description(""), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractDisplayModel")] String displays[];
-    [Write, Description(""), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractRulesModel")] String rules;
+    [Write, Description("Display settings of the Authority Contract."), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractDisplayModel")] String displays[];
+    [Write, Description("Rules settings of the Authority Contract."), EmbeddedInstance("MSFT_AADVerifiedIdAuthorityContractRulesModel")] String rules;
     [Write, Description("Present ensures the policy exists, absent ensures it is removed."), ValueMap{"Present","Absent"}, Values{"Present","Absent"}] string Ensure;
     [Write, Description("Credentials of the Admin"), EmbeddedInstance("MSFT_Credential")] string Credential;
     [Write, Description("Id of the Azure Active Directory application to authenticate with.")] String ApplicationId;
