@@ -12,6 +12,8 @@
   * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
+* AADEnrichedAuditLogs
+  * Initial release.
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
 * AADIdentityAPIConnector
@@ -33,6 +35,8 @@
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
+  * Initial release.
+* AADVerifiedIdAuthorityContract
   * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
