@@ -25,7 +25,7 @@ function Get-TargetResource
         $Priority,
 
         [Parameter()]
-        [System.String[]]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $Policies,
 
         [Parameter()]
@@ -95,12 +95,12 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
                 Write-Verbose -Message "Retrieving profile by Id {$Id}"
-                $instance = Get-MgBetaNetworkAccessFilteringProfile -FilteringProfileId $Id -Expand 'Policies' -ErrorAction SilentlyContinue
+                $instance = Get-MgBetaNetworkAccessFilteringProfile -ExpandProperty Policies -FilteringProfileId $Id -ErrorAction SilentlyContinue
             }
             if ($null -eq $instance)
             {
                 Write-Verbose -Message "Retrieving profile by Name {$Name}"
-                $instance = Get-MgBetaNetworkAccessFilteringProfile -All -Expand 'Policies' | Where-Object -FilterScript {$_.Name -eq $Name}
+                $instance = Get-MgBetaNetworkAccessFilteringProfile -All -ExpandProperty Policies | Where-Object -FilterScript {$_.Name -eq $Name}
             }
         }
         if ($null -eq $instance)
@@ -117,7 +117,13 @@ function Get-TargetResource
                 $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -FilteringPolicyId $link.Policy.Id
                 if ($null -ne $policyInfo)
                 {
-                    $PolicyValue += $policyInfo.Name
+                    $entry = @{
+                        State        = $link.State
+                        Priority     = $link.AdditionalProperties.priority
+                        LoggingState = $link.AdditionalProperties.loggingState
+                        PolicyName   = $policyInfo.Name
+                    }
+                    $PolicyValue += $entry
                 }
             }
         }
@@ -178,7 +184,7 @@ function Set-TargetResource
         $Priority,
 
         [Parameter()]
-        [System.String[]]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $Policies,
 
         [Parameter()]
@@ -225,25 +231,51 @@ function Set-TargetResource
 
     $currentInstance = Get-TargetResource @PSBoundParameters
 
-    $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+    $instanceParams = @{
+        description = $Description
+        name        = $Name
+        priority    = $Priority
+        state       = $State
+        policies    = @()
+    }
+
+    foreach ($policy in $Policies)
+    {
+        $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -All | Where-Object -FilterScript {$_.Name -eq $policy.PolicyName}
+        if ($null -ne $policyInfo)
+        {
+            $entry = @{
+                "@odata.type" = "#microsoft.graph.networkaccess.filteringPolicyLink"
+                loggingState  = $policy.LoggingState
+                priority      = $policy.Priority
+                state         = $policy.State
+                policy        = @{
+                    "@odata.type" = "#microsoft.graph.networkaccess.filteringPolicy"
+                    id            = $policyInfo.Id
+                }
+            }
+            $instanceParams.policies += $entry
+        }
+    }
 
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        ##TODO - Replace by the New cmdlet for the resource
-        New-Cmdlet @SetParameters
+        Write-Verbose -Message "Creating new filtering profile {$Name}"
+        New-MgBetaNetworkAccessFilteringProfile -BodyParameter $instanceParams
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        ##TODO - Replace by the Update/Set cmdlet for the resource
-        Set-cmdlet @SetParameters
+        Write-Verbose -Message "Updating filtering profile {$Name} by removing and recreating"
+        Remove-MgBetaNetworkAccessFilteringProfile -FilteringProfileId $currentInstance.Id
+        New-MgBetaNetworkAccessFilteringProfile -BodyParameter $instanceParams
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        ##TODO - Replace by the Remove cmdlet for the resource
-        Remove-cmdlet @SetParameters
+        Write-Verbose -Message "Removing filtering profile {$Name}"
+        Remove-MgBetaNetworkAccessFilteringProfile -FilteringProfileId $currentInstance.Id
     }
 }
 
@@ -274,7 +306,7 @@ function Test-TargetResource
         $Priority,
 
         [Parameter()]
-        [System.String[]]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $Policies,
 
         [Parameter()]
@@ -325,10 +357,36 @@ function Test-TargetResource
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
-    $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-        -Source $($MyInvocation.MyCommand.Source) `
-        -DesiredValues $PSBoundParameters `
-        -ValuesToCheck $ValuesToCheck.Keys
+    $testResult = $true
+
+    #Compare Cim instances
+    foreach ($key in $PSBoundParameters.Keys)
+    {
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+        if ($source.getType().Name -like '*CimInstance*')
+        {
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
+
+            if (-Not $testResult)
+            {
+                $testResult = $false
+                break
+            }
+
+            $ValuesToCheck.Remove($key) | Out-Null
+        }
+    }
+
+    if ($testResult)
+    {
+        $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+            -Source $($MyInvocation.MyCommand.Source) `
+            -DesiredValues $PSBoundParameters `
+            -ValuesToCheck $ValuesToCheck.Keys
+    }
 
     Write-Verbose -Message "Test-TargetResource returned $testResult"
 
@@ -388,7 +446,7 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgBetaNetworkAccessFilteringProfile -Expand 'Policies' -All -ErrorAction Stop
+        [array] $Script:exportedInstances = Get-MgBetaNetworkAccessFilteringProfile -ExpandProperty Policies -All -ErrorAction Stop
 
         $i = 1
         $dscContent = ''
@@ -424,11 +482,29 @@ function Export-TargetResource
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
 
+            if ($Results.Policies)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Policies -CIMInstanceName AADFilteringProfilePolicyLink
+                if ($complexTypeStringResult)
+                {
+                    $Results.Policies = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('Policies') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
+
+            if ($Results.Policies)
+            {
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Policies' -IsCIMArray:$true
+            }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName

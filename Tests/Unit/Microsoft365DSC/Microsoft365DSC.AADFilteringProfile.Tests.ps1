@@ -35,7 +35,32 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return "Credentials"
             }
 
-            ##TODO - Mock any Remove/Set/New cmdlets
+            Mock -CommandName New-MgBetaNetworkAccessFilteringProfile -MockWith{}
+            Mock -CommandName Remove-MgBetaNetworkAccessFilteringProfile -MockWith{}
+            Mock -CommandName Get-MgBetaNetworkAccessFilteringPolicy -MockWith{
+                return @(
+                    @{
+                        id   = '12345-12345-12345-12345-12346'
+                        name = 'MyTopPolicy'
+                    }
+                )
+            }
+
+            Mock -CommandName Get-MgBetaNetworkAccessFilteringProfilePolicy -MockWith {
+                return @(
+                    @{
+                        Policy = @{
+                            id = '12345-12345-12345-12345-12345'
+                            name = 'MyTopPolicy'
+                        }
+                        AdditionalProperties = @{
+                            priority = 200
+                            loggingState = 'enabled'
+                        }
+                        State = 'enabled'
+                    }
+                )
+            }
 
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
@@ -47,13 +72,23 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    Description           = "Description of profile";
+                    Name                  = "My Profile";
+                    Policies              = @(
+                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        } -ClientOnly)
+                    );
+                    Priority              = 120;
+                    State                 = "enabled";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return $null
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringProfile -MockWith {
                     return $null
                 }
             }
@@ -65,24 +100,47 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should create a new instance from the Set method' {
-                ##TODO - Replace the New-Cmdlet by the appropriate one
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-Cmdlet -Exactly 1
+                Should -Invoke -CommandName New-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
         }
 
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    Description           = "Description of profile";
+                    Name                  = "My Profile";
+                    Policies              = @(
+                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        } -ClientOnly)
+                    );
+                    Priority              = 120;
+                    State                 = "enabled";
                     Ensure              = 'Absent'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringProfile -MockWith {
                     return @{
-
+                        Id          = '22222-22222-22222-22222-22222'
+                        Name        = 'My Profile'
+                        Description = 'Description of profile'
+                        State       = 'enabled'
+                        Priority    = 120
+                        Policies    = @(
+                            @{
+                                Id                   = '11111-22222-33333-44444-55556'
+                                State                = 'enabled'
+                                AdditionalProperties = @{
+                                    priority     = 200
+                                    loggingState = 'enabled'
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -95,23 +153,46 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should remove the instance from the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Remove-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Remove-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Remove-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
         }
 
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    Description           = "Description of profile";
+                    Name                  = "My Profile";
+                    Policies              = @(
+                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        } -ClientOnly)
+                    );
+                    Priority              = 120;
+                    State                 = "enabled";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return the desired values
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringProfile -MockWith {
                     return @{
-
+                        Id          = '22222-22222-22222-22222-22222'
+                        Name        = 'My Profile'
+                        Description = 'Description of profile'
+                        State       = 'enabled'
+                        Priority    = 120
+                        Policies    = @(
+                            @{
+                                Id                   = '11111-22222-33333-44444-55556'
+                                State                = 'enabled'
+                                AdditionalProperties = @{
+                                    priority     = 200
+                                    loggingState = 'enabled'
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -124,15 +205,39 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    Description           = "Description of profile";
+                    Name                  = "My Profile";
+                    Policies              = @(
+                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        } -ClientOnly)
+                    );
+                    Priority              = 122; # Drift
+                    State                 = "enabled";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return a drift
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringProfile -MockWith {
                     return @{
-
+                        Id          = '22222-22222-22222-22222-22222'
+                        Name        = 'My Profile'
+                        Description = 'Description of profile'
+                        State       = 'enabled'
+                        Priority    = 120
+                        Policies    = @(
+                            @{
+                                Id                   = '11111-22222-33333-44444-55556'
+                                State                = 'enabled'
+                                AdditionalProperties = @{
+                                    priority     = 200
+                                    loggingState = 'enabled'
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -147,8 +252,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Update-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Update-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Remove-MgBetaNetworkAccessFilteringProfile -Exactly 1
+                Should -Invoke -CommandName New-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
         }
 
@@ -160,10 +265,23 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Get-MgBetaNetworkAccessFilteringProfile -MockWith {
                     return @{
-
+                        Id          = '22222-22222-22222-22222-22222'
+                        Name        = 'My Profile'
+                        Description = 'Description of profile'
+                        State       = 'enabled'
+                        Priority    = 120
+                        Policies    = @(
+                            @{
+                                Id                   = '11111-22222-33333-44444-55556'
+                                State                = 'enabled'
+                                AdditionalProperties = @{
+                                    priority     = 200
+                                    loggingState = 'enabled'
+                                }
+                            }
+                        )
                     }
                 }
             }
