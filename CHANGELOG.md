@@ -14,6 +14,8 @@
   * Fixed missing permissions in settings.json
 * AADEnrichedAuditLogs
   * Initial release.
+* AADFilteringPolicyRule
+  * Initial release.
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
 * AADIdentityAPIConnector
