@@ -965,6 +965,21 @@
                     IsAppliedToOrganization = $False;
                     IsEnabled               = $False;
                 }
+                AADFilteringPolicyRule 'AADFilteringPolicyRule-FQDN'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Destinations          = @(
+                        MSFT_AADFilteringPolicyRuleDestination{
+                            value = 'contoso.com' #Drift
+                        }
+                    );
+                    Ensure                = "Present";
+                    Name                  = "MyFQDN";
+                    Policy                = "AMyPolicy";
+                    RuleType              = "fqdn";
+                    TenantId              = $TenantId;
+                }
                 AADGroup 'MyGroups'
                 {
                     DisplayName      = "DSCGroup"
