@@ -101186,47 +101186,30 @@ function Update-MgBetaNetworkAccessSettingCrossTenantAccess
     )
 }
 #endregion
-
 #region Microsoft.Graph.Authentication
-function Remove-MgBetaNetworkAccessFilteringPolicy
+function Get-MgBetaDeviceManagementApplePushNotificationCertificate
 {
     [CmdletBinding()]
     param(
         [Parameter()]
         [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [PSObject]
         $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $FilteringPolicyId,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $PassThru,
-
-        [Parameter()]
-        [System.String]
-        $IfMatch,
 
         [Parameter()]
         [System.Uri]
         $Proxy,
 
         [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
 
         [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm,
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
 
         [Parameter()]
         [PSObject]
@@ -101241,18 +101224,18 @@ function Remove-MgBetaNetworkAccessFilteringPolicy
         $Headers,
 
         [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $Break
     )
 }
-function Get-MgBetaNetworkAccessFilteringPolicy
+function Get-MgBetaDeviceManagementDataSharingConsent
 {
     [CmdletBinding()]
     param(
-        [Parameter()]
-        [System.String]
-        $FilteringPolicyId,
-
         [Parameter()]
         [System.String[]]
         $Property,
@@ -101294,8 +101277,8 @@ function Get-MgBetaNetworkAccessFilteringPolicy
         $Sort,
 
         [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $All,
+        [System.String]
+        $DataSharingConsentId,
 
         [Parameter()]
         [System.String]
@@ -101308,6 +101291,10 @@ function Get-MgBetaNetworkAccessFilteringPolicy
         [Parameter()]
         [System.String]
         $Search,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
 
         [Parameter()]
         [System.String]
@@ -101330,33 +101317,13 @@ function Get-MgBetaNetworkAccessFilteringPolicy
         $HttpPipelineAppend
     )
 }
-function New-MgBetaNetworkAccessFilteringPolicy
+function Update-MgBetaDeviceManagementApplePushNotificationCertificate
 {
     [CmdletBinding()]
     param(
         [Parameter()]
-        [PSObject]
-        $PolicyRules,
-
-        [Parameter()]
         [System.String]
-        $Description,
-
-        [Parameter()]
-        [System.DateTime]
-        $LastModifiedDateTime,
-
-        [Parameter()]
-        [System.DateTime]
-        $CreatedDateTime,
-
-        [Parameter()]
-        [System.String]
-        $Action,
-
-        [Parameter()]
-        [System.String]
-        $Name,
+        $AppleIdentifier,
 
         [Parameter()]
         [System.Collections.Hashtable]
@@ -101372,56 +101339,7 @@ function New-MgBetaNetworkAccessFilteringPolicy
 
         [Parameter()]
         [System.String]
-        $Version,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [PSObject]
-        $BodyParameter,
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelineAppend
-    )
-}
-function Update-MgBetaNetworkAccessFilteringPolicy
-{
-    [CmdletBinding()]
-    param(
-        [Parameter()]
-        [PSObject]
-        $PolicyRules,
-
-        [Parameter()]
-        [System.String]
-        $Description,
+        $CertificateUploadFailureReason,
 
         [Parameter()]
         [System.DateTime]
@@ -101429,51 +101347,27 @@ function Update-MgBetaNetworkAccessFilteringPolicy
 
         [Parameter()]
         [System.String]
-        $FilteringPolicyId,
+        $Certificate,
+
+        [Parameter()]
+        [System.String]
+        $TopicIdentifier,
+
+        [Parameter()]
+        [PSObject]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
 
         [Parameter()]
         [System.DateTime]
-        $CreatedDateTime,
-
-        [Parameter()]
-        [System.String]
-        $Action,
-
-        [Parameter()]
-        [System.String]
-        $Name,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.Collections.Hashtable]
-        $AdditionalProperties,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.String]
-        $Version,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [PSObject]
-        $BodyParameter,
-
-        [Parameter()]
-        [System.String]
-        $Id,
+        $ExpirationDateTime,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -101492,75 +101386,8 @@ function Update-MgBetaNetworkAccessFilteringPolicy
         $Break,
 
         [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelineAppend
-    )
-}
-#endregion
-#region Microsoft.Graph.Authentication
-function Update-MgBetaNetworkAccessFilteringPolicyRule
-{
-    [CmdletBinding()]
-    param(
-        [Parameter()]
         [System.String]
-        $FilteringPolicyId,
-
-        [Parameter()]
-        [System.String]
-        $Name,
-
-        [Parameter()]
-        [System.Collections.Hashtable]
-        $AdditionalProperties,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.String]
-        $PolicyRuleId,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [PSObject]
-        $BodyParameter,
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
+        $CertificateUploadStatus,
 
         [Parameter()]
         [System.Collections.IDictionary]
@@ -101569,221 +101396,6 @@ function Update-MgBetaNetworkAccessFilteringPolicyRule
         [Parameter()]
         [PSObject]
         $HttpPipelineAppend
-    )
-}
-function Get-MgBetaNetworkAccessFilteringPolicyRule
-{
-    [CmdletBinding()]
-    param(
-        [Parameter()]
-        [System.String]
-        $FilteringPolicyId,
-
-        [Parameter()]
-        [System.String[]]
-        $Property,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Int32]
-        $PageSize,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.String]
-        $PolicyRuleId,
-
-        [Parameter()]
-        [System.Int32]
-        $Skip,
-
-        [Parameter()]
-        [System.Int32]
-        $Top,
-
-        [Parameter()]
-        [System.String]
-        $CountVariable,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.String[]]
-        $Sort,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $All,
-
-        [Parameter()]
-        [System.String]
-        $Filter,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $Search,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.String[]]
-        $ExpandProperty,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelineAppend
-    )
-}
-function New-MgBetaNetworkAccessFilteringPolicyRule
-{
-    [CmdletBinding()]
-    param(
-        [Parameter()]
-        [System.String]
-        $FilteringPolicyId,
-
-        [Parameter()]
-        [System.String]
-        $Name,
-
-        [Parameter()]
-        [System.Collections.Hashtable]
-        $AdditionalProperties,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [PSObject]
-        $BodyParameter,
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelineAppend
-    )
-}
-function Remove-MgBetaNetworkAccessFilteringPolicyRule
-{
-    [CmdletBinding()]
-    param(
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.String]
-        $FilteringPolicyId,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $PassThru,
-
-        [Parameter()]
-        [System.String]
-        $IfMatch,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm,
-
-        [Parameter()]
-        [PSObject]
-        $HttpPipelineAppend,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [System.String]
-        $PolicyRuleId,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break
     )
 }
 #endregion

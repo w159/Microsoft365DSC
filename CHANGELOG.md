@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADServicePrincipal
+  * Added support for KeyCredentials and PasswordCredentials.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
@@ -62,6 +64,8 @@
 * IntuneAppCategory
   * Fixed retrieval of resource which could then result in multiple categories
     being created with same name.
+* IntuneAppleMDMPushNotificationCertificate
+  * Initial release.
 * IntuneDerivedCredential
   * Fixed export and deployment when `NotificationType` had more than one option
     selected
