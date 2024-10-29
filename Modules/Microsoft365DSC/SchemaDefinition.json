@@ -5455,6 +5455,101 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AADFilteringProfilePolicyLink",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "LoggingState",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "Priority",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "State",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "PolicyName",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADFilteringProfile",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Name",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Description",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "State",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "Priority",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADFilteringProfilePolicyLink[]",
+                               "Name":  "Policies",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_AADGroupLicense",
         "Parameters":  [
                            {
@@ -6695,6 +6790,86 @@
                            {
                                "CIMType":  "MSFT_Credential",
                                "Name":  "ApplicationSecret",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Name",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ActionValue",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "RuleType",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32[]",
+                               "Name":  "Ports",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Protocol",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "Destinations",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADNetworkAccessForwardingPolicy",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Name",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule[]",
+                               "Name":  "PolicyRules",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
                                "Option":  "Write"
                            },
                            {
