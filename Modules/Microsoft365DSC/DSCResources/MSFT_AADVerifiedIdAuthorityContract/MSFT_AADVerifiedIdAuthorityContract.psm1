@@ -21,6 +21,10 @@ function Get-TargetResource
         $displays,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $rules,
+
+        [Parameter()]
         [System.String]
         [ValidateSet('Absent', 'Present')]
         $Ensure = 'Present',
@@ -113,6 +117,7 @@ function Get-TargetResource
             name                                                                  = $contract.name
             linkedDomainUrl                                                       = $linkedDomainUrl
             displays                                                              = $contract.displays
+            rules                                                                 = $contract.rules
             Ensure                                                                = 'Present'
             Credential                                                            = $Credential
             ApplicationId                                                         = $ApplicationId
@@ -156,6 +161,10 @@ function Set-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $displays,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $rules,
 
         [Parameter()]
         [System.String]
@@ -273,6 +282,10 @@ function Test-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $displays,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $rules,
 
         [Parameter()]
         [System.String]
@@ -478,6 +491,26 @@ function Export-TargetResource
                                 CimInstanceName = 'AADVerifiedIdAuthorityContractDisplayModel'
                                 IsRequired = $False
                             }
+                            @{
+                                Name = 'logo'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractDisplayCredentialLogo'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'card'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractDisplayCard'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'consent'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractDisplayConsent'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'claims'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractDisplayClaims'
+                                IsRequired = $False
+                            }
                         )
                         $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.displays `
@@ -495,6 +528,76 @@ function Export-TargetResource
                     }
 
 
+                    if ($null -ne $Results.rules)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'rules'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractRulesModel'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'attestations'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestations'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'vc'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractVcType'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'customStatusEndpoint'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractCustomStatusEndpoint'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'idTokenHints'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestationValues'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'idTokens'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestationValues'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'presentations'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestationValues'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'selfIssued'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestationValues'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'accessTokens'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractAttestationValues'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'mapping'
+                                CimInstanceName = 'AADVerifiedIdAuthorityContractClaimMapping'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.rules`
+                        -CIMInstanceName 'AADVerifiedIdAuthorityContractRulesModel' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.rules = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('rules') | Out-Null
+                        }
+                    }
+
+
                     $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $PSScriptRoot `
@@ -504,6 +607,11 @@ function Export-TargetResource
                     if ($Results.displays)
                     {
                         $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "displays" -IsCIMArray:$true
+                    }
+
+                    if ($Results.rules)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "rules" -IsCIMArray:$false
                     }
 
                     $dscContent.Append($currentDSCBlock) | Out-Null
@@ -555,17 +663,181 @@ function Get-M365DSCVerifiedIdAuthorityContractObject
         $displays = @()
         foreach ($display in $Contract.displays)
         {
+            $claims = @()
+            foreach ($claim in $display.claims)
+            {
+                $claims += @{
+                    claim = $claim.claim
+                    label = $claim.label
+                    type = $claim.type
+                }
+            }
             $displays += @{
                 locale = $display.locale
-                credential = @{
+                card = @{
+                    title = $display.card.title
+                    issuedBy = $display.card.issuedBy
+                    backgroundColor = $display.card.backgroundColor
+                    textColor = $display.card.textColor
+                    logo = @{
+                        uri = $display.card.logo.uri
+                        description = $display.card.logo.description
+                    }
+                    description = $display.card.description
                 }
                 consent = @{
+                    title = $display.consent.title
+                    instructions = $display.consent.instructions
                 }
+                claims = $claims
             }
         }
 
         $values.Add('displays', $displays)
     }
+
+
+    if ($null -ne $Contract.rules)
+    {
+        $rules = @{}
+        $attestations = @{}
+        if($null -ne $Contract.rules.attestations.idTokenHints)
+        {
+            $idTokenHints = @()
+            foreach($idTokenHint in $Contract.rules.attestations.idTokenHints)
+            {
+                $mapping = @()
+                foreach($map in $idTokenHint.mapping)
+                {
+                    $mapping += @{
+                        outputClaim = $map.outputClaim
+                        inputClaim = $map.inputClaim
+                        required = $map.required
+                        indexer = $map.indexer
+                        type = $map.type
+                    }
+                }
+                $idTokenHints += @{
+                    required = $idTokenHint.required
+                    mapping = $mapping
+                    trustedIssuers = $idTokenHint.trustedIssuers
+                }
+            }
+            $attestations.Add('idTokenHints', $idTokenHints)
+        }
+
+        if($null -ne $Contract.rules.attestations.idTokens)
+        {
+            $idTokens = @()
+            foreach($idToken in $Contract.rules.attestations.idTokens)
+            {
+                $mapping = @()
+                foreach($map in $idToken.mapping)
+                {
+                    $mapping += @{
+                        outputClaim = $map.outputClaim
+                        inputClaim = $map.inputClaim
+                        required = $map.required
+                        indexer = $map.indexer
+                        type = $map.type
+                    }
+                }
+                $idTokens += @{
+                    required = $idToken.required
+                    mapping = $mapping
+                    configuration = $idToken.configuration
+                    clientId = $idToken.clientId
+                    redirectUri = $idToken.redirectUri
+                    scopeValue = $idToken.scope
+                }
+            }
+            $attestations.Add('idTokens', $idTokens)
+        }
+
+        if($null -ne $Contract.rules.attestations.presentations)
+        {
+            $presentations = @()
+            foreach($presentation in $Contract.rules.attestations.presentations)
+            {
+                $mapping = @()
+                foreach($map in $presentation.mapping)
+                {
+                    $mapping += @{
+                        outputClaim = $map.outputClaim
+                        inputClaim = $map.inputClaim
+                        required = $map.required
+                        indexer = $map.indexer
+                        type = $map.type
+                    }
+                }
+                $presentations += @{
+                    required = $presentation.required
+                    mapping = $mapping
+                    trustedIssuers = $presentation.trustedIssuers
+                    credentialType = $presentation.credentialType
+                }
+            }
+            $attestations.Add('presentations', $presentations)
+        }
+
+        if($null -ne $Contract.rules.attestations.selfIssued)
+        {
+            $mySelfIssueds = @()
+            foreach($mySelfIssued in $Contract.rules.attestations.selfIssued)
+            {
+                $mapping = @()
+                foreach($map in $mySelfIssued.mapping)
+                {
+                    $mapping += @{
+                        outputClaim = $map.outputClaim
+                        inputClaim = $map.inputClaim
+                        required = $map.required
+                        indexer = $map.indexer
+                        type = $map.type
+                    }
+                }
+                $mySelfIssueds += @{
+                    required = $mySelfIssued.required
+                    mapping = $mapping
+                }
+            }
+            $attestations.Add('selfIssued', $mySelfIssueds)
+        }
+
+        if($null -ne $Contract.rules.attestations.accessTokens)
+        {
+            $accessTokens = @()
+            foreach($accessToken in $Contract.rules.attestations.accessTokens)
+            {
+                $mapping = @()
+                foreach($map in $accessToken.mapping)
+                {
+                    $mapping += @{
+                        outputClaim = $map.outputClaim
+                        inputClaim = $map.inputClaim
+                        required = $map.required
+                        indexer = $map.indexer
+                        type = $map.type
+                    }
+                }
+                $accessTokens += @{
+                    required = $accessToken.required
+                    mapping = $mapping
+                }
+            }
+            $attestations.Add('accessTokens', $accessTokens)
+        }
+
+
+        $rules.Add('attestations', $attestations)
+        $rules.Add('vc', @{
+            type = $Contract.rules.vc.type
+        })
+        $rules.Add('validityInterval', $Contract.rules.validityInterval)
+
+        $values.Add('rules', $rules)
+    }
+
     return $values
 }
 
