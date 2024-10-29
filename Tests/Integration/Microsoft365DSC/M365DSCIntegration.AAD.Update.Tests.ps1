@@ -1211,6 +1211,14 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADNetworkAccessSettingCrossTenantAccess 'AADNetworkAccessSettingCrossTenantAccess'
+                {
+                    ApplicationId              = $ApplicationId;
+                    CertificateThumbprint      = $CertificateThumbprint;
+                    IsSingleInstance           = "Yes";
+                    NetworkPacketTaggingStatus = "enabled";
+                    TenantId                   = $TenantId;
+                }
                 AADRoleDefinition 'AADRoleDefinition1'
                 {
                     DisplayName                   = "DSCRole1"
