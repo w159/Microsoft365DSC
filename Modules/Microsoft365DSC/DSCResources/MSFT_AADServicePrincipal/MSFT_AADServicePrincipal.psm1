@@ -990,17 +990,33 @@ function Export-TargetResource
                 {
                     $Results.DelegatedPermissionClassifications = Get-M365DSCAzureADServicePrincipalDelegatedPermissionClassifications -PermissionClassifications $Results.DelegatedPermissionClassifications
                 }
-                if ($Results.KeyCredentials.Count -gt 0)
+                if ($null -ne $Results.KeyCredentials)
                 {
-                    $Results.KeyCredentials = Get-M365DSCDRGComplexTypeToString `
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.KeyCredentials `
                     -CIMInstanceName 'MicrosoftGraphkeyCredential'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.KeyCredentials = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('KeyCredentials') | Out-Null
+                    }
                 }
-                if ($Results.PasswordCredentials -gt 0)
+                if ($null -ne $Results.PasswordCredentials)
                 {
-                    $Results.PasswordCredentials = Get-M365DSCDRGComplexTypeToString `
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.PasswordCredentials `
                     -CIMInstanceName 'MicrosoftGraphpasswordCredential'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.PasswordCredentials = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('PasswordCredentials') | Out-Null
+                    }
                 }
                 if ($Results.CustomSecurityAttributes.Count -gt 0)
                 {
@@ -1032,13 +1048,13 @@ function Export-TargetResource
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                         -ParameterName "PasswordCredentials" -IsCIMArray:$True
                 }
-                
+
                 if ($null -ne $Results.CustomSecurityAttributes)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                         -ParameterName 'CustomSecurityAttributes'
                 }
-                
+
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
                     -FileName $Global:PartialExportFileName
