@@ -1,0 +1,45 @@
+{
+    "resourceName": "AADClaimsMappingPolicy",
+    "description": "This resource configures an Azure AD Claims Mapping Policy.",
+    "permissions":    {
+    "graph":  {
+                  "delegated":  {
+                                    "read":  [
+                                                 {
+                                                     "name":  "Policy.Read.All"
+                                                 },
+                                                 {
+                                                     "name":  "Policy.Read.ApplicationConfiguration"
+                                                 }
+                                             ],
+                                    "update":  [
+                                                   {
+                                                       "name":  "Policy.Read.ApplicationConfiguration"
+                                                   },
+                                                   {
+                                                       "name":  "Policy.ReadWrite.ApplicationConfiguration"
+                                                   }
+                                               ]
+                                },
+                  "application":  {
+                                      "read":  [
+                                                   {
+                                                       "name":  "Policy.Read.All"
+                                                   },
+                                                   {
+                                                       "name":  "Policy.Read.ApplicationConfiguration"
+                                                   }
+                                               ],
+                                      "update":  [
+                                                     {
+                                                         "name":  "Policy.Read.ApplicationConfiguration"
+                                                     },
+                                                     {
+                                                         "name":  "Policy.ReadWrite.ApplicationConfiguration"
+                                                     }
+                                                 ]
+                                  }
+              }
+}
+
+}
