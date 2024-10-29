@@ -18,6 +18,8 @@
   * Initial release.
 * AADIdentityB2XUserFlow
   * Initial release.
+* AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+  * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
 * AADIdentityProtectionPolicySettings
