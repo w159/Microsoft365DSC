@@ -166,8 +166,8 @@ function Set-TargetResource
             status = $Teams
         }
     }
-    Update-MgBetaNetworkAccessSettingEnrichedAuditLog -BodyParameter $values
-
+    $body = ConvertTo-Json $values -Depth 10 -Compress
+    Invoke-MgGraphRequest -Uri 'https://graph.microsoft.com/beta/networkAccess/settings/enrichedAuditLogs' -Method PATCH -Body $body
 }
 
 function Test-TargetResource

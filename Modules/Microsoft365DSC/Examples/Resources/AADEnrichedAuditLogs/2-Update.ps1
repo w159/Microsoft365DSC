@@ -21,6 +21,15 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        
+        AADEnrichedAuditLogs "AADEnrichedAuditLogs"
+        {
+            ApplicationId         = $ApplicationId;
+            CertificateThumbprint = $CertificateThumbprint;
+            Exchange              = "disabled";
+            IsSingleInstance      = "Yes";
+            SharePoint            = "enabled";
+            Teams                 = "disabled";
+            TenantId              = $TenantId;
+        }
     }
 }
