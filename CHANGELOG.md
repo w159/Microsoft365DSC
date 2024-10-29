@@ -6,8 +6,6 @@
   * Initial release.
 * AADAuthenticationMethodPolicyExternal
   * Initial release.
-* AADClaimsMappingPolicy
-  * Initial release.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADIdentityB2XUserFlow
