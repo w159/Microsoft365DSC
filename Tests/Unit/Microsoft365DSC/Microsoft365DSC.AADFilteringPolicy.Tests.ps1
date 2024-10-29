@@ -135,7 +135,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Action                = "allow"; #Drift
                     Description           = "This is a demo policy";
-                    Ensure                = "Absent";
+                    Ensure                = "Present";
                     Name                  = "MyPolicy";
                     Credential            = $Credential;
                 }
