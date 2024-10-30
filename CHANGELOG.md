@@ -60,6 +60,8 @@
   * Initial release.
 * AzureBillingAccountsRoleAssignment
   * Initial release.
+* AzureDiagnosticSettings
+  * Initial release.
 * AzureVerifiedIdFaceCheck
   * Initial release.
 * EXOArcConfig
