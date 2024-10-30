@@ -62,6 +62,8 @@
   * Initial release.
 * AzureDiagnosticSettings
   * Initial release.
+* AzureDiagnosticSettingsCustomSecurityAttribute
+  * Initial release.
 * AzureVerifiedIdFaceCheck
   * Initial release.
 * EXOArcConfig

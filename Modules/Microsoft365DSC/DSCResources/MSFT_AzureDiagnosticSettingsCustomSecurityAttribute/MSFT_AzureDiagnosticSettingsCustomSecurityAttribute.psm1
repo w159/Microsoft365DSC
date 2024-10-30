@@ -87,7 +87,7 @@ function Get-TargetResource
         }
         else
         {
-            $response = Invoke-AzRest -Uri 'https://management.azure.com/providers/microsoft.aadiam/diagnosticsettings?api-version=2017-04-01-preview' `
+            $response = Invoke-AzRest -Uri 'https://management.azure.com/providers/microsoft.AadCustomSecurityAttributesDiagnosticSettings/diagnosticsettings?api-version=2017-04-01-preview' `
                                       -Method Get
             $instances = (ConvertFrom-Json $response.Content).value
             $instance = $instances | Where-Object -FilterScript {$_.name -eq $Name}
@@ -262,15 +262,16 @@ function Set-TargetResource
         {
             Write-Verbose -Message "Updating diagnostic setting {$Name}"
         }
-        $response = Invoke-AzRest -Uri "https://management.azure.com/providers/microsoft.aadiam/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
+        $response = Invoke-AzRest -Uri "https://management.azure.com/providers/microsoft.AadCustomSecurityAttributesDiagnosticSettings/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
                                   -Method PUT `
                                   -Payload $payload
+        Write-Verbose -Message "RESPONSE: $($response.Content)"
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Removing diagnostic setting {$Name}"
-        $response = Invoke-AzRest -Uri "https://management.azure.com/providers/microsoft.aadiam/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
+        $response = Invoke-AzRest -Uri "https://management.azure.com/providers/microsoft.AadCustomSecurityAttributesDiagnosticSettings/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
                                   -Method DELETE
     }
 }
@@ -446,7 +447,7 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        $response = Invoke-AzRest -Uri 'https://management.azure.com/providers/microsoft.aadiam/diagnosticsettings?api-version=2017-04-01-preview' `
+        $response = Invoke-AzRest -Uri 'https://management.azure.com/providers/microsoft.AadCustomSecurityAttributesDiagnosticSettings/diagnosticsettings?api-version=2017-04-01-preview' `
                                   -Method Get
         [array] $Script:exportedInstances = (ConvertFrom-Json $response.Content).value
         $i = 1
@@ -484,7 +485,7 @@ function Export-TargetResource
 
             if ($Results.Categories)
             {
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Categories -CIMInstanceName AzureDiagnosticSettingsCategory
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Categories -CIMInstanceName AzureDiagnosticSettingsCustomSecurityAttributeCategory
                 if ($complexTypeStringResult)
                 {
                     $Results.Categories = $complexTypeStringResult
