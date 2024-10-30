@@ -242,26 +242,60 @@ function Set-TargetResource
         '@odata.type' =  $ruleType
     }
 
-
-    $updateParameters = ([Hashtable]$BoundParameters).Clone()
-    $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
-    $updateParameters.Remove('Id') | Out-Null
-
-    $keys = (([Hashtable]$updateParameters).Clone()).Keys
-    foreach ($key in $keys)
+    if($ruleType -eq '#microsoft.graph.unifiedRoleManagementPolicyExpirationRule')
     {
-        if ($null -ne $pdateParameters.$key -and $updateParameters.$key.GetType().Name -like '*CimInstance*')
+        $expirationRuleHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $expirationRule
+        # add all the properties to the body
+        foreach($key in $expirationRuleHashmap.Keys)
         {
-            $updateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.UnifiedRoleManagementPolicyRuleId
+            $body.Add($key, $expirationRuleHashmap.$key)
         }
     }
 
-    #region resource generator code
-    $UpdateParameters.Add("@odata.type", "#microsoft.graph.unifiedRoleManagementPolicyApprovalRule")
+    if($ruleType -eq '#microsoft.graph.unifiedRoleManagementPolicyNotificationRule')
+    {
+        $notificationRuleHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $notificationRule
+        # add all the properties to the body
+        foreach($key in $notificationRuleHashmap.Keys)
+        {
+            $body.Add($key, $notificationRuleHashmap.$key)
+        }
+    }
+
+    if($ruleType -eq '#microsoft.graph.unifiedRoleManagementPolicyEnablementRule')
+    {
+        $enablementRuleHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $enablementRule
+        # add all the properties to the body
+        foreach($key in $enablementRuleHashmap.Keys)
+        {
+            $body.Add($key, $enablementRuleHashmap.$key)
+        }
+    }
+
+    if($ruleType -eq '#microsoft.graph.unifiedRoleManagementPolicyApprovalRule')
+    {
+        $approvalRuleHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $approvalRule
+        # add all the properties to the body
+        foreach($key in $approvalRuleHashmap.Keys)
+        {
+            $body.Add($key, $approvalRuleHashmap.$key)
+        }
+    }
+
+    if($ruleType -eq '#microsoft.graph.unifiedRoleManagementPolicyAuthenticationContextRule')
+    {
+        $authenticationContextRuleHashmap = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $authenticationContextRule
+        # add all the properties to the body
+        foreach($key in $authenticationContextRuleHashmap.Keys)
+        {
+            $body.Add($key, $authenticationContextRuleHashmap.$key)
+        }
+    }
+
     Update-MgBetaPolicyRoleManagementPolicyRule `
     -UnifiedRoleManagementPolicyId $currentInstance.policyId `
     -UnifiedRoleManagementPolicyRuleId $currentInstance.Id `
-    -BodyParameter $UpdateParameters
+    -BodyParameter $body
     #endregion
 }
 
