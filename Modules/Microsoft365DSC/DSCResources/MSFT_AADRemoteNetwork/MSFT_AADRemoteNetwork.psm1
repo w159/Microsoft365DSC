@@ -80,7 +80,7 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        if (-not [System.String]::IsNullOrEmpty($Name)) {
+        if (-not [System.String]::IsNullOrEmpty($Id)) {
             $getValue = Get-MgBetaNetworkAccessConnectivityRemoteNetwork -RemoteNetworkId $Id -ErrorAction SilentlyContinue
         }
 
@@ -215,92 +215,63 @@ function Set-TargetResource
 
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
+    # creating the device links property
     $deviceLinksHashtable = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $BoundParameters.DeviceLinks
+    # renames the odataType property to @odata.type
+    $deviceLinksHashtable = Rename-M365DSCCimInstanceParameter -Properties $deviceLinksHashtable
+
+    #creating the forwarding policies list by getting the ids
+    $allForwardingProfiles = Get-MgBetaNetworkAccessForwardingProfile
+    $forwardingProfilesList = @()
+    foreach ($profileName in $BoundParameters.ForwardingProfiles) {
+        $matchedProfile = $allForwardingProfiles | Where-Object { $_.Name -eq $profileName }
+        $forwardingProfilesList += @{
+            id = $matchedProfile.Id
+        }
+    }
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Azure AD Remote Network with Name {$Name}"
-
-        $createParameters = ([Hashtable]$BoundParameters).Clone()
-
-        $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
-
-        $createParameters.Remove('Id') | Out-Null
-
-        $createParameters.Add('Scope', $createParameters.ScopeValue)
-        $createParameters.Remove('ScopeValue') | Out-Null
-
-        $createParameters.Add('Settings', $createParameters.SettingsValue)
-        $createParameters.Remove('SettingsValue') | Out-Null
-
-        foreach ($hashtable in $createParameters.StageSettings) {
-            $propertyToRemove = 'DependsOnValue'
-            $newProperty = 'DependsOn'
-            if ($hashtable.ContainsKey($propertyToRemove)) {
-                $value = $hashtable[$propertyToRemove]
-                $hashtable[$newProperty] = $value
-                $hashtable.Remove($propertyToRemove)
-            }
+        $params = @{
+            name = $BoundParameters.Name
+            region = $BoundParameters.Region
+            deviceLinks = [Array]$deviceLinksHashtable
+            forwardingProfiles = [Array]$forwardingProfilesList
         }
 
-        foreach ($hashtable in $createParameters.StageSettings) {
-            $keys = (([Hashtable]$hashtable).Clone()).Keys
-            foreach ($key in $keys)
-            {
-                $value = $hashtable.$key
-                $hashtable.Remove($key)
-                $hashtable.Add($key.Substring(0,1).ToLower() + $key.Substring(1), $value)
-            }
-        }
-
-        foreach ($hashtable in $createParameters.StageSettings) {
-            Write-Verbose -Message "Priting Values: $(Convert-M365DscHashtableToString -Hashtable $hashtable)"
-        }
-
-        $keys = (([Hashtable]$createParameters).Clone()).Keys
-        foreach ($key in $keys)
-        {
-            if ($null -ne $createParameters.$key -and $createParameters.$key.GetType().Name -like '*CimInstance*')
-            {
-                $createParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $createParameters.$key
-            }
-        }
-        #region resource generator code
-        $createParameters.Add("@odata.type", "#microsoft.graph.AccessReviewScheduleDefinition")
-        $policy = New-MgBetaIdentityGovernanceAccessReviewDefinition -BodyParameter $createParameters
-        #endregion
+        New-MgBetaNetworkAccessConnectivityRemoteNetwork -BodyParameter $params
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Azure AD Remote Network with Id {$($currentInstance.Id)}"
+        $currentRemoteNetwork = Get-MgBetaNetworkAccessConnectivityRemoteNetwork -RemoteNetworkId $currentInstance.Id
 
-        $updateParameters = ([Hashtable]$BoundParameters).Clone()
-        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
-
-        $updateParameters.Remove('Id') | Out-Null
-
-        $updateParameters.Add('Scope', $updateParameters.ScopeValue)
-        $updateParameters.Remove('ScopeValue') | Out-Null
-
-        $updateParameters.Add('Settings', $updateParameters.SettingsValue)
-        $updateParameters.Remove('SettingsValue') | Out-Null
-
-
-        $keys = (([Hashtable]$updateParameters).Clone()).Keys
-        foreach ($key in $keys)
-        {
-            if ($null -ne $pdateParameters.$key -and $updateParameters.$key.GetType().Name -like '*CimInstance*')
-            {
-                $updateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.RemoteNetworkId
-            }
+        #removing the old device links
+        foreach ($deviceLinkItem in $currentRemoteNetwork.DeviceLinks) {
+            Remove-MgBetaNetworkAccessConnectivityRemoteNetworkDeviceLink -RemoteNetworkId $currentInstance.Id -DeviceLinkId $deviceLinkItem.Id
+        }
+        # updating the list of device links
+        foreach ($deviceLinkItem in $deviceLinksHashtable) {
+            Write-Verbose "Device Link Hashtable: $deviceLinksItem"
+            New-MgBetaNetworkAccessConnectivityRemoteNetworkDeviceLink -RemoteNetworkId $currentInstance.Id -BodyParameter $deviceLinkItem
         }
 
-        #region resource generator code
-        $UpdateParameters.Add("@odata.type", "#microsoft.graph.AccessReviewScheduleDefinition")
-        Set-MgBetaIdentityGovernanceAccessReviewDefinition `
-            -RemoteNetworkId $currentInstance.Id `
-            -BodyParameter $UpdateParameters
-        #endregion
+        # removing forwarding profiles
+        $params = @{
+            "@context" = '#$delta'
+            value = @(@{})
+        }
+        Invoke-MgGraphRequest -Uri https://graph.microsoft.com/beta/networkAccess/connectivity/remoteNetworks/$($currentInstance.Id)/forwardingProfiles -Method Patch -Body $params
+
+        #adding forwarding profiles if required
+        if ($forwardingProfilesList.Count -gt 0) {
+            $params = @{
+                "@context" = '#$delta'
+                value = $forwardingProfilesList
+            }
+            Invoke-MgGraphRequest -Uri https://graph.microsoft.com/beta/networkAccess/connectivity/remoteNetworks/$($currentInstance.Id)/forwardingProfiles -Method Patch -Body $params
+        }
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
@@ -628,6 +599,7 @@ function Get-MicrosoftGraphRemoteNetworkDeviceLinksHashtable {
                 if ($deviceLink.TunnelConfiguration.AdditionalProperties.ikeIntegrity) { $tunnelConfig["IKEIntegrity"] = $deviceLink.TunnelConfiguration.AdditionalProperties.ikeIntegrity }
                 if ($deviceLink.TunnelConfiguration.AdditionalProperties.dhGroup) { $tunnelConfig["DHGroup"] = $deviceLink.TunnelConfiguration.AdditionalProperties.dhGroup }
                 if ($deviceLink.TunnelConfiguration.AdditionalProperties.pfsGroup) { $tunnelConfig["PFSGroup"] = $deviceLink.TunnelConfiguration.AdditionalProperties.pfsGroup }
+                if ($deviceLink.TunnelConfiguration.AdditionalProperties["@odata.type"]) { $tunnelConfig["ODataType"] = $deviceLink.TunnelConfiguration.AdditionalProperties["@odata.type"] }
             }
 
             if ($tunnelConfig.Count -gt 0) { $newDeviceLink["TunnelConfiguration"] = $tunnelConfig }
@@ -694,6 +666,7 @@ function Get-MicrosoftGraphRemoteNetworkDeviceLinksHashtableAsString {
             if ($deviceLink.TunnelConfiguration.IkeIntegrity) { $StringContent.Append("                        IKEIntegrity               = '" + $deviceLink.TunnelConfiguration.IkeIntegrity + "'`r`n") | Out-Null; $tunnelConfigAdded = $true }
             if ($deviceLink.TunnelConfiguration.DhGroup) { $StringContent.Append("                        DHGroup                    = '" + $deviceLink.TunnelConfiguration.DhGroup + "'`r`n") | Out-Null; $tunnelConfigAdded = $true }
             if ($deviceLink.TunnelConfiguration.PfsGroup) { $StringContent.Append("                        PFSGroup                   = '" + $deviceLink.TunnelConfiguration.PfsGroup + "'`r`n") | Out-Null; $tunnelConfigAdded = $true }
+            if ($deviceLink.TunnelConfiguration.ODataType) { $StringContent.Append("                        ODataType                  = '" + $deviceLink.TunnelConfiguration.ODataType + "'`r`n") | Out-Null; $tunnelConfigAdded = $true }
             if ($tunnelConfigAdded) { $StringContent.Append("                    }`r`n") | Out-Null }
         }
 

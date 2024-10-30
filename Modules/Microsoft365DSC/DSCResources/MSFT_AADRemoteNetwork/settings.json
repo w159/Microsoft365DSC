@@ -1,29 +1,29 @@
 ﻿{
     "resourceName": "AADRemoteNetwork",
     "description": "Use this resource to manage the Entra's Network Access Remote Networks, and related Device links.",
-    "roles": {
-        "read": [
-            "Role"
-        ],
-        "update": [
-            "Role"
-        ]
-    },
     "permissions": {
         "graph": {
             "delegated": {
-                "read": [],
-                "update": []
-            },
-            "application": {
                 "read": [
                     {
-                        "name": "Permission for Monitoring and Export"
+                        "name": "NetworkAccess.Read.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "Permission for deploying"
+                        "name": "NetworkAccess.ReadWrite.All"
+                    }
+                ]
+            },
+            "application": {
+                "read": [
+                    {
+                        "name": "NetworkAccess.Read.All"
+                    }
+                ],
+                "update": [
+                    {
+                        "name": "NetworkAccess.ReadWrite.All"
                     }
                 ]
             }

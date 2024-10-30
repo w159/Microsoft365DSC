@@ -25,6 +25,7 @@ class MSFT_AADRemoteNetworkDeviceLinkTunnelConfiguration
 	[Write, Description("IkeIntegrity")] String IKEIntegrity;
 	[Write, Description("DhGroup")] String DHGroup;
 	[Write, Description("PfsGroup")] String PFSGroup;
+    [Write, Description("ODataType")] String ODataType;
 };
 
 [ClassVersion("1.0.0")]
