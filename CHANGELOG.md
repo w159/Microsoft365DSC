@@ -16,7 +16,11 @@
   * Fixed missing permissions in settings.json
 * AADEnrichedAuditLogs
   * Initial release.
+* AADFilteringPolicy
+  * Initial release.
 * AADFilteringPolicyRule
+  * Initial release.
+* AADFilteringProfile
   * Initial release.
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
@@ -33,6 +37,10 @@
 * AADNamedLocationPolicy
   * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
+  * Initial release.
+* AADNetworkAccessForwardingPolicy
+  * Initial release.
+* AADNetworkAccessSettingConditionalAccess
   * Initial release.
 * AADNetworkAccessSettingCrossTenantAccess
   * Initial release.

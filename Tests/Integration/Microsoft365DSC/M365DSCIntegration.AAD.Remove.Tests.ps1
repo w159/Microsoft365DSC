@@ -274,6 +274,16 @@
                     DisplayName             = "CertificateBasedAuthentication rollout policy";
                     Ensure                  = "Absent";
                 }
+                AADFilteringPolicy 'AADFilteringPolicy-MyPolicy'
+                {
+                    Action                = "block";
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "This is a demo policy";
+                    Ensure                = "Absent";
+                    Name                  = "MyPolicy";
+                    TenantId              = $TenantId;
+                }
                 AADFilteringPolicyRule 'AADFilteringPolicyRule-FQDN'
                 {
                     ApplicationId         = $ApplicationId;
@@ -302,6 +312,31 @@
                     Name                  = "MyWebContentRule";
                     Policy                = "MyPolicy";
                     RuleType              = "webCategory";
+                    TenantId              = $TenantId;
+                }
+                AADFilteringProfile 'AADFilteringProfile-My Profile'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "Description of profile";
+                    Ensure                = "Absent";
+                    Name                  = "My PRofile";
+                    Policies              = @(
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 100
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyPolicyChoseBine'
+                            State = 'enabled'
+                        }
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        }
+                    );
+                    Priority              = 120;
+                    State                 = "enabled";
                     TenantId              = $TenantId;
                 }
                 AADGroup 'MyGroups'
