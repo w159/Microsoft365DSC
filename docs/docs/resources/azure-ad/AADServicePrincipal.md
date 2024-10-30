@@ -22,6 +22,7 @@
 | **ServicePrincipalType** | Write | String | The type of the service principal. | |
 | **Tags** | Write | StringArray[] | Tags linked to this service principal.Note that if you intend for this service principal to show up in the All Applications list in the admin portal, you need to set this value to {WindowsAzureActiveDirectoryIntegratedApp} | |
 | **DelegatedPermissionClassifications** | Write | MSFT_AADServicePrincipalDelegatedPermissionClassification[] | The permission classifications for delegated permissions exposed by the app that this service principal represents. | |
+| **CustomSecurityAttributes** | Write | MSFT_AADServicePrincipalAttributeSet[] | The list of custom security attributes attached to this SPN | |
 | **Ensure** | Write | String | Specify if the Azure AD App should exist or not. | `Present`, `Absent` |
 | **ApplicationId** | Write | String | Id of the Azure Active Directory application to authenticate with. | |
 | **TenantId** | Write | String | Id of the Azure Active Directory tenant used for authentication. | |
@@ -30,6 +31,8 @@
 | **Credential** | Write | PSCredential | Credentials of the Azure AD Admin | |
 | **ManagedIdentity** | Write | Boolean | Managed ID being used for authentication. | |
 | **AccessTokens** | Write | StringArray[] | Access token used for authentication. | |
+| **PasswordCredentials** | Write | MSFT_MicrosoftGraphpasswordCredential[] | The collection of password credentials associated with the service principal. Not nullable. | |
+| **KeyCredentials** | Write | MSFT_MicrosoftGraphkeyCredential[] | The collection of key credentials associated with the service principal. Not nullable. Supports $filter (eq, NOT, ge, le). | |
 
 ### MSFT_AADServicePrincipalRoleAssignment
 
@@ -48,6 +51,55 @@
 | --- | --- | --- | --- | --- |
 | **Classification** | Write | String | Classification of the delegated permission | `low`, `medium`, `high` |
 | **PermissionName** | Write | String | Name of the permission | |
+
+### MSFT_AADServicePrincipalAttributeValue
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **AttributeName** | Write | String | Name of the Attribute | |
+| **StringArrayValue** | Write | StringArray[] | If the attribute has a string array value | |
+| **IntArrayValue** | Write | UInt32Array[] | If the attribute has a int array value | |
+| **StringValue** | Write | String | If the attribute has a string value | |
+| **IntValue** | Write | UInt32 | If the attribute has a int value | |
+| **BoolValue** | Write | Boolean | If the attribute has a boolean value | |
+
+### MSFT_AADServicePrincipalAttributeSet
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **AttributeSetName** | Write | String | Attribute Set Name. | |
+| **AttributeValues** | Write | MSFT_AADServicePrincipalAttributeValue[] | List of attribute values. | |
+
+### MSFT_MicrosoftGraphKeyCredential
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **CustomKeyIdentifier** | Write | String | A 40-character binary type that can be used to identify the credential. Optional. When not provided in the payload, defaults to the thumbprint of the certificate. | |
+| **DisplayName** | Write | String | Friendly name for the key. Optional. | |
+| **EndDateTime** | Write | String | The date and time at which the credential expires. The DateTimeOffset type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. | |
+| **KeyId** | Write | String | The unique identifier (GUID) for the key. | |
+| **Key** | Write | String | The certificate's raw data in byte array converted to Base64 string. | |
+| **StartDateTime** | Write | String | The date and time at which the credential becomes valid.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. | |
+| **Type** | Write | String | The type of key credential for example, Symmetric, AsymmetricX509Cert. | |
+| **Usage** | Write | String | A string that describes the purpose for which the key can be used for example, Verify. | |
+
+### MSFT_MicrosoftGraphPasswordCredential
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **DisplayName** | Write | String | Friendly name for the password. Optional. | |
+| **EndDateTime** | Write | String | The date and time at which the password expires represented using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Optional. | |
+| **Hint** | Write | String | Contains the first three characters of the password. Read-only. | |
+| **KeyId** | Write | String | The unique identifier for the password. | |
+| **StartDateTime** | Write | String | The date and time at which the password becomes valid. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Optional. | |
 
 ## Description
 
