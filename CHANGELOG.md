@@ -49,7 +49,9 @@
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADRemoteNetwork
-  * InitialRelease
+  * Initial release.
+* AADRoleManagementPolicyRule
+  * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
