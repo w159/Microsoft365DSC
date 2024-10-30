@@ -48,6 +48,8 @@
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
+* AADRemoteNetwork
+  * Initial release.
 * AADRoleManagementPolicyRule
   * Initial release.
 * AADSocialIdentityProvider
@@ -59,6 +61,10 @@
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
 * AzureBillingAccountsRoleAssignment
+  * Initial release.
+* AzureDiagnosticSettings
+  * Initial release.
+* AzureDiagnosticSettingsCustomSecurityAttribute
   * Initial release.
 * AzureVerifiedIdFaceCheck
   * Initial release.
