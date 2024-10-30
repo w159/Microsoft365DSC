@@ -48,6 +48,8 @@
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
+* AADRemoteNetwork
+  * Initial release.
 * AADRoleManagementPolicyRule
   * Initial release.
 * AADSocialIdentityProvider
