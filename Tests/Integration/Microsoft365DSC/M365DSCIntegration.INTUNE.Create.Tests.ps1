@@ -196,6 +196,17 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneAppleMDMPushNotificationCertificate 'IntuneAppleMDMPushNotificationCertificate-66f4ec83-754f-4a59-a73d-e3182cc636a5'
+                {
+                    AppleIdentifier          = "Apple ID";
+        	        Certificate 	         = "FakeCertMIIFdjCCBF6gAwIBAgIIMVIk4qQ3QnQwDQYJKoZIhvcNAQELBQAwgYwxQDA+BgNVBAMMN0FwcGxlIEFwcGxpY2F0aW9uIEludGVncmF0aW9uIDIgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRMwEQYDVQQKDApBcHBsZSBJbmMuMQswCQYDVQQGEwJVUzAeFw0yNDEwMjUxODE0NThaFw0yNTEwMjUxODE0NTdaMIGPMUwwSgYKCZImiZPyLGQBAQw8Y29tLmFwcGxlLm1nbXQuRXh0ZXJuYWwuMDA1NWU3ZTktNDkyYi00ZDQ2LTk2N2EtMjhmYzVkNDllZGI2MTIwMAYDVQQDDClBUFNQOjAwNTVlN2U5LTQ5MmItNGQ0Ni05NjdhLTI4ZmM1ZDQ5ZWRiNjELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDrEk6ojXS2lXZCW0P6Wtkv36ko7E1pDlu90IbKN+tesevGhghARFrGNJaRnCjjh7m430KMx2HmwuH08VHpevne2ANdSBOgbVD/8tbkfLN4GeO7Z+E0O5WvEKJ0h0IloV4PjhfZm367n7WDBGmAEXp/aUU91TDIGvAlwUB6M/s7WDypfKenpU7VI7BBNHOn/LwaeNyyTsr8/bn+D7CRDPb6UBYPc5wyQoEjgEjByprUB4qkICfjjvDqg0S+x/gkk4U6QDhjFcUb439EpUyUhbYFH/Opjq5uJ22xueTX3FLQII6ZFoPcC/NJLpwdEDGOOHEHb62ahrwTxzYNGoOG5v/NAgMBAAGjggHVMIIB0TAJBgNVHRMEAjAAMB8GA1UdIwQYMBaAFPe+fCFgkds9G3vYOjKBad+ebH+bMIIBHAYDVR0gBIIBEzCCAQ8wggELBgkqhkiG92NkBQEwgf0wgcMGCCsGAQUFBwICMIG2DIGzUmVsaWFuY2Ugb24gdGhpcyBjZXJ0aWZpY2F0ZSBieSBhbnkgcGFydHkgYXNzdW1lcyBhY2NlcHRhbmNlIG9mIHRoZSB0aGVuIGFwcGxpY2FibGUgc3RhbmRhcmQgdGVybXMgYW5kIGNvbmRpdGlvbnMgb2YgdXNlLCBjZXJ0aWZpY2F0ZSBwb2xpY3kgYW5kIGNlcnRpZmljYXRpb24gcHJhY3RpY2Ugc3RhdGVtZW50cy4wNQYIKwYBBQUHAgEWKWh0dHA6Ly93d3cuYXBwbGUuY29tL2NlcnRpZmljYXRlYXV0aG9yaXR5MBMGA1UdJQQMMAoGCCsGAQUFBwMCMDAGA1UdHwQpMCcwJaAjoCGGH2h0dHA6Ly9jcmwuYXBwbGUuY29tL2FhaTJjYS5jcmwwHQYDVR0OBBYEFE1pV3J04vJkpwqxzg040WR6U/7IMAsGA1UdDwQEAwIHgDAQBgoqhkiG92NkBgMCBAIFADANBgkqhkiG9w0BAQsFAAOCAQEAPVKFj5stCpsUT+lcC36hzR2wh8/fys/QFNFuFn57x4oe9kBvvyAXqLBhPm/J3lC+0oU/AJf3EYXwTGNxo2gCiPhJcomX3WXnbYrZHU/TH8umhtVgGqd6Xlke9iFwypidHC9dHWmwud4V42oAMZ9FHItSwh5o6rQMoZop7uKD72vxSuunEWFymF9S22DJ0oums1Ya8JmUpNfMzkyGVMMZs1OCYpzQxYpuwC+sMAVfGucp1IRLutccRGYeSV4LTN4CwfWreCPnPGjkBEmGqmusn5t/THirGjRBykUARWFpthx1wmJqHFqeAv4nhbcR/+Fu4gQQQaayX0dauBcU0T57==";
+                    DataSharingConsetGranted = $True;
+        
+                    Ensure                   = "Present";
+                    ApplicationId            = $ApplicationId;
+                    TenantId                 = $TenantId;
+                    CertificateThumbprint    = $CertificateThumbprint;
+                }
                 IntuneApplicationControlPolicyWindows10 'ConfigureApplicationControlPolicyWindows10'
                 {
                     DisplayName                      = 'Windows 10 Desktops'
@@ -2237,6 +2248,27 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile 'IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile'
+                {
+                    AccountId                 = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
+                    ApplicationId             = $ApplicationId;
+                    CertificateThumbprint     = $CertificateThumbprint;
+                    ConfigureWifi             = $True;
+                    Description               = "This is my enrollment profile";
+                    DisplayName               = "MyTestEnrollmentProfile";
+                    EnrolledDeviceCount       = 0;
+                    EnrollmentMode            = "corporateOwnedDedicatedDevice";
+                    EnrollmentTokenType       = "default";
+                    EnrollmentTokenUsageCount = 0;
+                    Ensure                    = "Present";
+                    IsTeamsDeviceProfile      = $False;
+                    RoleScopeTagIds           = @("0");
+                    TenantId                  = $TenantId;
+                    TokenCreationDateTime     = "10/26/2024 1:02:29 AM";
+                    TokenExpirationDateTime   = "10/31/2024 3:59:59 AM";
+                    WifiHidden                = $False;
+                    WifiSecurityType          = "none";
+                }
                 IntuneDeviceRemediation 'ConfigureDeviceRemediation'
                 {
                     Assignments              = @(
@@ -2598,6 +2630,30 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                IntuneMobileThreatDefenseConnector 'IntuneMobileThreatDefenseConnector-Microsoft Defender for Endpoint'
+                {
+                    AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                    AndroidDeviceBlockedOnMissingPartnerData            = $False;
+                    AndroidEnabled                                      = $False;
+                    AndroidMobileApplicationManagementEnabled           = $False;
+                    DisplayName                                         = "Microsoft Defender for Endpoint";
+                    Id                                                  = "fc780465-2017-40d4-a0c5-307022471b92";
+                    IosDeviceBlockedOnMissingPartnerData                = $False;
+                    IosEnabled                                          = $False;
+                    IosMobileApplicationManagementEnabled               = $False;
+                    LastHeartbeatDateTime                               = "1/1/0001 12:00:00 AM";
+                    MicrosoftDefenderForEndpointAttachEnabled           = $False;
+                    PartnerState                                        = "notSetUp";
+                    PartnerUnresponsivenessThresholdInDays              = 7;
+                    PartnerUnsupportedOSVersionBlocked                  = $False;
+                    WindowsDeviceBlockedOnMissingPartnerData            = $False;
+                    WindowsEnabled                                      = $False;
+                    Ensure                                              = "Present";
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 IntunePolicySets 'Example'
                 {
                     Assignments          = @(
@@ -2655,6 +2711,25 @@
                     notallowedResourceActions = @()
                     roleScopeTagIds           = @('0', '1')
                     Ensure                    = 'Present'
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneSecurityBaselineDefenderForEndpoint 'mySecurityBaselineDefenderForEndpoint'
+                {
+                    DisplayName           = 'test'
+                    DeviceSettings = MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBaselineDefenderForEndpoint
+                    {
+                        BlockExecutionOfPotentiallyObfuscatedScripts = 'off'
+                        AllowRealtimeMonitoring = '1'
+                        BlockWin32APICallsFromOfficeMacros = 'warn'
+                        CloudBlockLevel = '2'
+                    }
+                    UserSettings = MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineDefenderForEndpoint
+                    {
+                        DisableSafetyFilterOverrideForAppRepUnknown = '1'
+                    }
+                    Ensure                = 'Present'
                     ApplicationId         = $ApplicationId;
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
