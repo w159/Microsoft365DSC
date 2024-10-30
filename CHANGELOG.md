@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADServicePrincipal
+  * Added support for KeyCredentials and PasswordCredentials.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
@@ -14,23 +16,43 @@
   * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
+* AADEnrichedAuditLogs
+  * Initial release.
+* AADFilteringPolicy
+  * Initial release.
+* AADFilteringPolicyRule
+  * Initial release.
+* AADFilteringProfile
+  * Initial release.
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
 * AADIdentityAPIConnector
   * Initial release.
 * AADIdentityB2XUserFlow
   * Initial release.
+* AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension
+  * Initial release.
 * AADIdentityGovernanceProgram
   * Initial release.
 * AADIdentityProtectionPolicySettings
   * Initial release.
+* AADNamedLocationPolicy
+  * Fixed issue where duplicate names were not detected correctly.
 * AADNetworkAccessForwardingProfile
+  * Initial release.
+* AADNetworkAccessForwardingPolicy
+  * Initial release.
+* AADNetworkAccessSettingConditionalAccess
+  * Initial release.
+* AADNetworkAccessSettingCrossTenantAccess
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
+  * Initial release.
+* AADVerifiedIdAuthorityContract
   * Initial release.
 * AzureBillingAccountsAssociatedTenant
   * Initial release.
@@ -45,11 +67,15 @@
   * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
+* EXOServicePrincipal
+  * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
 * IntuneAppCategory
   * Fixed retrieval of resource which could then result in multiple categories
     being created with same name.
+* IntuneAppleMDMPushNotificationCertificate
+  * Initial release.
 * IntuneDerivedCredential
   * Fixed export and deployment when `NotificationType` had more than one option
     selected
@@ -68,6 +94,9 @@
   * Fixed missing permissions in settings.json
 * SCPolicyConfig
   * Initial release.
+* SCSensitivityLabel
+  * Fixed issue with setting label priority
+    FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator

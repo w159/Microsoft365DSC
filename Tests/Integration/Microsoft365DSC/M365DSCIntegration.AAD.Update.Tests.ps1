@@ -905,6 +905,16 @@
                     PasswordValidityPeriodInDays     = 2147483647;
                     TenantId                         = $TenantId;
                 }
+                AADEnrichedAuditLogs 'AADEnrichedAuditLogs'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Exchange              = "disabled";
+                    IsSingleInstance      = "Yes";
+                    SharePoint            = "enabled";
+                    Teams                 = "disabled";
+                    TenantId              = $TenantId;
+                }
                 AADEntitlementManagementAccessPackage 'myAccessPackage'
                 {
                     AccessPackagesIncompatibleWith = @();
@@ -1019,6 +1029,56 @@
                     Ensure                  = "Present";
                     IsAppliedToOrganization = $False;
                     IsEnabled               = $False;
+                }
+                AADFilteringPolicy 'AADFilteringPolicy-MyPolicy'
+                {
+                    Action                = "allow"; #drift
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "This is a demo policy";
+                    Ensure                = "Present";
+                    Name                  = "MyPolicy";
+                    TenantId              = $TenantId;
+                }
+                AADFilteringPolicyRule 'AADFilteringPolicyRule-FQDN'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Destinations          = @(
+                        MSFT_AADFilteringPolicyRuleDestination{
+                            value = 'contoso.com' #Drift
+                        }
+                    );
+                    Ensure                = "Present";
+                    Name                  = "MyFQDN";
+                    Policy                = "AMyPolicy";
+                    RuleType              = "fqdn";
+                    TenantId              = $TenantId;
+                }
+                AADFilteringProfile 'AADFilteringProfile-My Profile'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Description           = "Description of profile";
+                    Ensure                = "Present";
+                    Name                  = "My PRofile";
+                    Policies              = @(
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 100
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyPolicyChoseBine'
+                            State = 'enabled'
+                        }
+                        MSFT_AADFilteringProfilePolicyLink{
+                            Priority = 200
+                            LoggingState = 'enabled'
+                            PolicyName = 'MyTopPolicy'
+                            State = 'enabled'
+                        }
+                    );
+                    Priority              = 130; #Drift
+                    State                 = "enabled";
+                    TenantId              = $TenantId;
                 }
                 AADGroup 'MyGroups'
                 {
@@ -1205,6 +1265,29 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension 'AADIdentityGovernanceLifecycleWorkflowCustomTaskExtension-My Custom'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    CallbackConfiguration = MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionCallbackConfiguration{
+                        TimeoutDuration = 'PT34M'
+                        AuthorizedApps = @('M365DSC')
+                    };
+                    ClientConfiguration   = MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionClientConfiguration{
+                        MaximumRetries = 1
+                        TimeoutInMilliseconds = 1000
+                    };
+                    Description           = "My Drifted Description"; # Drift
+                    DisplayName           = "My Custom Extension";
+                    EndpointConfiguration = MSFT_AADIdentityGovernanceLifecycleWorkflowCustomTaskExtensionEndpointConfiguration{
+                        SubscriptionId =       '63e62ab2-fd92-46ce-a393-2cb338039cc7'
+                        logicAppWorkflowName = 'MyTestApp'
+                        resourceGroupName =    'TestRG'
+                        url = 'https://prod-35.eastus.logic.azure.com:443/workflows/xxxxxxxxxxx/triggers/manual/paths/invoke?api-version=2016-10-01'
+                    };
+                    Ensure                = "Present";
+                    TenantId              = $TenantId;
+                }
                 AADIdentityGovernanceProgram 'AADIdentityGovernanceProgram-Example'
                 {
                     ApplicationId           = $ApplicationId
@@ -1242,6 +1325,57 @@
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
+                }
+                AADNetworkAccessForwardingPolicy 'AADNetworkAccessForwardingPolicy-Custom Bypass'
+                {
+                    Name                  = "Custom Bypass";
+                    PolicyRules           = @(
+                        MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule {
+                            Name           = 'Custom policy internet rule'
+                            ActionValue    = 'bypass'
+                            RuleType       = 'fqdn'
+                            Protocol       = 'tcp'
+                            Ports          = @(80, 443)
+                            Destinations   = @('www.microsoft.com')
+                        }
+        
+                        MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule {
+                            Name           = 'Custom policy internet rule'
+                            ActionValue    = 'bypass'
+                            RuleType       = 'ipAddress'
+                            Protocol       = 'tcp'
+                            Ports          = @(80, 443)
+                            Destinations   = @('192.168.1.1')
+                        }
+        
+                        MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule {
+                            Name           = 'Custom policy internet rule'
+                            ActionValue    = 'bypass'
+                            RuleType       = 'ipSubnet'
+                            Protocol       = 'tcp'
+                            Ports          = @(80, 443)
+                            Destinations   = @('192.164.0.0/24')
+                        }
+                    );
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADNetworkAccessSettingConditionalAccess 'AADNetworkAccessSettingConditionalAccess'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    IsSingleInstance      = "Yes";
+                    SignalingStatus       = "disabled";
+                    TenantId              = $TenantId;
+                }
+                AADNetworkAccessSettingCrossTenantAccess 'AADNetworkAccessSettingCrossTenantAccess'
+                {
+                    ApplicationId              = $ApplicationId;
+                    CertificateThumbprint      = $CertificateThumbprint;
+                    IsSingleInstance           = "Yes";
+                    NetworkPacketTaggingStatus = "enabled";
+                    TenantId                   = $TenantId;
                 }
                 AADRoleDefinition 'AADRoleDefinition1'
                 {
@@ -1417,6 +1551,77 @@
                     };
                     LinkedDomainUrl      = "https://nik-charlebois.com/";
                     Name                 = "Contoso 2"; # drift
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                AADVerifiedIdAuthorityContract 'AADVerifiedIdAuthorityContract-Sample Custom Verified Credentials'
+                {
+                    displays             = @(
+                        MSFT_AADVerifiedIdAuthorityContractDisplayModel{
+                            consent = MSFT_AADVerifiedIdAuthorityContractDisplayConsent{
+                                instructions = 'Sign in with your account to get your card.'
+                                title = 'Do you want to get your sample Verified Credential?' #drift
+                            }
+                            card = MSFT_AADVerifiedIdAuthorityContractDisplayCard{
+                                description = 'Use your verified credential to prove to anyone that you know all about verifiable credentials.'
+                                issuedBy = 'Microsoft'
+                                backgroundColor = '#000000'
+                                textColor = '#ffffff'
+                                logo = MSFT_AADVerifiedIdAuthorityContractDisplayCredentialLogo{
+                                    uri = 'https://didcustomerplayground.z13.web.core.windows.net/VerifiedCredentialExpert_icon.png'
+                                    description = 'Verified Credential Expert Logo'
+                                }
+                                title = 'Verified Credential Expert'
+                            }
+                            locale = 'en-US'
+                            claims = @(
+                                MSFT_AADVerifiedIdAuthorityContractDisplayClaims{
+                                    label = 'First name'
+                                    claim = 'vc.credentialSubject.firstName'
+                                    type = 'String'
+                                }
+                                MSFT_AADVerifiedIdAuthorityContractDisplayClaims{
+                                    label = 'Last name'
+                                    claim = 'vc.credentialSubject.lastName'
+                                    type = 'String'
+                                }
+                            )
+        
+                        }
+                    );
+                    Ensure               = "Present";
+                    linkedDomainUrl      = "https://$OrganizationName/";
+                    name                 = "Sample Custom Verified Credentials";
+                    rules                = MSFT_AADVerifiedIdAuthorityContractRulesModel{
+                        validityInterval = 2592000
+                        vc = MSFT_AADVerifiedIdAuthorityContractVcType{
+                            type = @('VerifiedCredentialExpert')
+                        }
+                                    attestations = MSFT_AADVerifiedIdAuthorityContractAttestations{
+                            idTokenHints = @(
+                                MSFT_AADVerifiedIdAuthorityContractAttestationValues{
+                                    mapping = @(
+                                        MSFT_AADVerifiedIdAuthorityContractClaimMapping{
+                                            inputClaim = '$.given_name'
+                                            indexed = $False
+                                            outputClaim = 'firstName'
+                                            required = $True
+                                        }
+                                        MSFT_AADVerifiedIdAuthorityContractClaimMapping{
+                                            inputClaim = '$.family_name'
+                                            indexed = $True
+                                            outputClaim = 'lastName'
+                                            required = $True
+                                        }
+                                    )
+                                    required = $False
+                                }
+                            )
+        
+                        }
+                    
+                    };
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
