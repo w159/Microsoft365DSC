@@ -47634,6 +47634,21 @@
                                "Option":  "Required"
                            },
                            {
+                               "CIMType":  "Boolean",
+                               "Name":  "ProvisionDatabase",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "LanguageName",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CurrencyName",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "String",
                                "Name":  "Ensure",
                                "Option":  "Write"

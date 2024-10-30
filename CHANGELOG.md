@@ -107,6 +107,8 @@
 * SCSensitivityLabel
   * Fixed issue with setting label priority
     FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
+* PPPowerAppsEnvironment
+  * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
@@ -126,6 +128,7 @@
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
+  * Exponential performance improvements by reducing complexity and roundtrips.
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
