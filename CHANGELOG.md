@@ -68,6 +68,8 @@
   * Initial release.
 * AzureVerifiedIdFaceCheck
   * Initial release.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Initial release.
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
