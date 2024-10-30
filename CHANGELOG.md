@@ -48,6 +48,8 @@
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
+* AADRemoteNetwork
+  * InitialRelease
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
