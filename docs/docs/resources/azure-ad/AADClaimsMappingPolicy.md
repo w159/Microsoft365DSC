@@ -92,7 +92,7 @@ To authenticate with the Microsoft Graph API, this resource required the followi
 
 - **Read**
 
-    - Policy.Read.All, Policy.Read.ApplicationConfiguration
+    - Policy.Read.All
 
 - **Update**
 
@@ -102,7 +102,7 @@ To authenticate with the Microsoft Graph API, this resource required the followi
 
 - **Read**
 
-    - Policy.Read.All, Policy.Read.ApplicationConfiguration
+    - Policy.Read.All
 
 - **Update**
 
