@@ -488,130 +488,231 @@ function Export-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
+    $dscContent = [System.Text.StringBuilder]::new()
+    $i = 1
+    Write-Host "`r`n" -NoNewline
     try
     {
-        #region resource generator code
-        [array]$getValue = Get-MgBetaPolicyRoleManagementPolicyRule `
-            -Filter $Filter `
-            -All `
-            -ErrorAction Stop | Where-Object `
-            -FilterScript {
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.unifiedRoleManagementPolicyApprovalRule'
-            }
-        #endregion
-
-        $i = 1
-        $dscContent = ''
-        if ($getValue.Length -eq 0)
+        [array] $roles = Get-MgBetaRoleManagementDirectoryRoleDefinition -All 
+        foreach ($role in $roles)
         {
-            Write-Host $Global:M365DSCEmojiGreenCheckMark
+
+            $assignment = Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter "RoleDefinitionId eq '$($role.Id)' and scopeId eq '/' and scopeType eq 'DirectoryRole'"
+            $policyId = $assignment.PolicyId
+            $rules = Get-MgBetaPolicyRoleManagementPolicyRule `
+                -UnifiedRoleManagementPolicyId $policyId
+            foreach($rule in $rules)
+            {
+                #TODO
+                if($i -gt 12)
+                {
+                    break
+                }
+                Write-Host "    |---[$i/$($rules.Count)] $($role.displayName)_$($rule.id)" -NoNewline
+                $Params = @{
+                    roleDisplayName       = $role.displayName
+                    id                    = $rule.id
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                    ApplicationSecret     = $ApplicationSecret
+                    Credential            = $Credential
+                    Managedidentity       = $ManagedIdentity.IsPresent
+                    AccessTokens          = $AccessTokens
+                }
+
+                $Results = Get-TargetResource @Params
+
+                if ($Results.Ensure -eq 'Present')
+                {
+                    $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
+                    -Results $Results
+
+                    if ($null -ne $Results.expirationRule)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'expirationRule'
+                                CimInstanceName = 'AADRoleManagementPolicyExpirationRule'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.expirationRule`
+                        -CIMInstanceName 'AADRoleManagementPolicyExpirationRule' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.expirationRule = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('expirationRule') | Out-Null
+                        }
+                    }
+
+                    if ($null -ne $Results.notificationRule)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'notificationRule'
+                                CimInstanceName = 'AADRoleManagementPolicyNotificationRule'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.notificationRule`
+                        -CIMInstanceName 'AADRoleManagementPolicyNotificationRule' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.notificationRule = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('notificationRule') | Out-Null
+                        }
+                    }
+
+
+                    if ($null -ne $Results.enablementRule)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'enablementRule'
+                                CimInstanceName = 'AADRoleManagementPolicyEnablementRule'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.enablementRule`
+                        -CIMInstanceName 'AADRoleManagementPolicyEnablementRule' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.enablementRule = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('enablementRule') | Out-Null
+                        }
+                    }
+
+                    if ($null -ne $Results.authenticationContextRule)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'authenticationContextRule'
+                                CimInstanceName = 'AADRoleManagementPolicyAuthenticationContextRule'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.authenticationContextRule`
+                        -CIMInstanceName 'AADRoleManagementPolicyAuthenticationContextRule' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.authenticationContextRule = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('authenticationContextRule') | Out-Null
+                        }
+                    }
+
+                    if ($null -ne $Results.approvalRule)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name = 'approvalRule'
+                                CimInstanceName = 'AADRoleManagementPolicyApprovalRule'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'setting'
+                                CimInstanceName = 'AADRoleManagementPolicyApprovalSettings'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'approvalStages'
+                                CimInstanceName = 'AADRoleManagementPolicyApprovalStage'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'escalationApprovers'
+                                CimInstanceName = 'AADRoleManagementPolicySubjectSet'
+                                IsRequired = $False
+                            }
+                            @{
+                                Name = 'primaryApprovers'
+                                CimInstanceName = 'AADRoleManagementPolicySubjectSet'
+                                IsRequired = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.approvalRule`
+                        -CIMInstanceName 'AADRoleManagementPolicyApprovalRule' `
+                        -ComplexTypeMapping $complexMapping
+
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.approvalRule = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('approvalRule') | Out-Null
+                        }
+                    }
+
+                    $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
+                    -ConnectionMode $ConnectionMode `
+                    -ModulePath $PSScriptRoot `
+                    -Results $Results `
+                    -Credential $Credential
+
+                    if ($Results.expirationRule)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "expirationRule" -IsCIMArray:$false
+                    }
+
+
+                    if ($Results.notificationRule)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "notificationRule" -IsCIMArray:$false
+                    }
+
+
+                    if ($Results.enablementRule)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "enablementRule" -IsCIMArray:$false
+                    }
+
+                    if ($Results.approvalRule)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "approvalRule" -IsCIMArray:$false
+                    }
+
+                    if ($Results.authenticationContextRule)
+                    {
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "authenticationContextRule" -IsCIMArray:$false
+                    }
+                    $dscContent.Append($currentDSCBlock) | Out-Null
+                    Save-M365DSCPartialExport -Content $currentDSCBlock `
+                    -FileName $Global:PartialExportFileName
+                    Write-Host $Global:M365DSCEmojiGreenCheckMark
+                    $i++
+                }
+            }
+            #TODO
+            break
+        
         }
-        else
-        {
-            Write-Host "`r`n" -NoNewline
-        }
-        foreach ($config in $getValue)
-        {
-            $displayedKey = $config.Id
-            if (-not [String]::IsNullOrEmpty($config.displayName))
-            {
-                $displayedKey = $config.displayName
-            }
-            elseif (-not [string]::IsNullOrEmpty($config.name))
-            {
-                $displayedKey = $config.name
-            }
-            Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
-            $params = @{
-                Id = $config.Id
-                DisplayName           =  $config.DisplayName
-                Ensure = 'Present'
-                Credential = $Credential
-                ApplicationId = $ApplicationId
-                TenantId = $TenantId
-                ApplicationSecret = $ApplicationSecret
-                CertificateThumbprint = $CertificateThumbprint
-                ManagedIdentity = $ManagedIdentity.IsPresent
-                AccessTokens = $AccessTokens
-            }
-
-            $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
-            if ($null -ne $Results.Setting)
-            {
-                $complexMapping = @(
-                    @{
-                        Name = 'Setting'
-                        CimInstanceName = 'MicrosoftGraphApprovalSettings1'
-                        IsRequired = $False
-                    }
-                    @{
-                        Name = 'ApprovalStages'
-                        CimInstanceName = 'MicrosoftGraphApprovalStage'
-                        IsRequired = $True
-                    }
-                    @{
-                        Name = 'EscalationApprovers'
-                        CimInstanceName = 'MicrosoftGraphUserSet1'
-                        IsRequired = $False
-                    }
-                    @{
-                        Name = 'PrimaryApprovers'
-                        CimInstanceName = 'MicrosoftGraphUserSet1'
-                        IsRequired = $False
-                    }
-                )
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.Setting `
-                    -CIMInstanceName 'MicrosoftGraphapprovalSettings1' `
-                    -ComplexTypeMapping $complexMapping
-
-                if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                {
-                    $Results.Setting = $complexTypeStringResult
-                }
-                else
-                {
-                    $Results.Remove('Setting') | Out-Null
-                }
-            }
-            if ($null -ne $Results.Target)
-            {
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.Target `
-                    -CIMInstanceName 'MicrosoftGraphunifiedRoleManagementPolicyRuleTarget'
-                if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                {
-                    $Results.Target = $complexTypeStringResult
-                }
-                else
-                {
-                    $Results.Remove('Target') | Out-Null
-                }
-            }
-
-            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
-            if ($Results.Setting)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Setting" -IsCIMArray:$False
-            }
-            if ($Results.Target)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Target" -IsCIMArray:$False
-            }
-
-            $dscContent += $currentDSCBlock
-            Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
-            $i++
-            Write-Host $Global:M365DSCEmojiGreenCheckMark
-        }
-        return $dscContent
+        return $dscContent.ToString()
     }
     catch
     {
