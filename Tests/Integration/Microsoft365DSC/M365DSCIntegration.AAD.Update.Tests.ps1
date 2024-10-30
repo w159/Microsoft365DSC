@@ -1296,6 +1296,14 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADNetworkAccessSettingConditionalAccess 'AADNetworkAccessSettingConditionalAccess'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    IsSingleInstance      = "Yes";
+                    SignalingStatus       = "disabled";
+                    TenantId              = $TenantId;
+                }
                 AADNetworkAccessSettingCrossTenantAccess 'AADNetworkAccessSettingCrossTenantAccess'
                 {
                     ApplicationId              = $ApplicationId;

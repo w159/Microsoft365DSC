@@ -40,6 +40,8 @@
   * Initial release.
 * AADNetworkAccessForwardingPolicy
   * Initial release.
+* AADNetworkAccessSettingConditionalAccess
+  * Initial release.
 * AADNetworkAccessSettingCrossTenantAccess
   * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
