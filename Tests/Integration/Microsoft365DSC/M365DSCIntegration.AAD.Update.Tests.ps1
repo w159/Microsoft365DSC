@@ -1410,6 +1410,19 @@
                             }
                     };
                 }
+                AADRoleManagementPolicyRule 'AADRoleManagementPolicyRule-Expiration_Admin_Eligibility'
+                {
+                    expirationRule       = MSFT_AADRoleManagementPolicyExpirationRule{
+                        isExpirationRequired = $False
+                        maximumDuration = 'P180D'
+                    };
+                    id                   = "Expiration_Admin_Eligibility";
+                    roleDisplayName      = "Global Administrator";
+                    ruleType             = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule";
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
                 AADRoleSetting '28b253d8-cde5-471f-a331-fe7320023cdd'
                 {
                     ActivateApprover                                          = @();
