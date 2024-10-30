@@ -7730,6 +7730,246 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AADRoleManagementPolicyExpirationRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isExpirationRequired",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "maximumDuration",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyNotificationRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "notificationType",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "recipientType",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "notificationLevel",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isDefaultRecipientsEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "notificationRecipients",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyEnablementRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "enabledRules",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicySubjectSet",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "odataType",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyApprovalStage",
+        "Parameters":  [
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "approvalStageTimeOutInDays",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "escalationTimeInMinutes",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isApproverJustificationRequired",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isEscalationEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicySubjectSet[]",
+                               "Name":  "escalationApprovers",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicySubjectSet[]",
+                               "Name":  "primaryApprovers",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyApprovalSettings",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "approvalMode",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyApprovalStage[]",
+                               "Name":  "approvalStages",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isApprovalRequired",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isApprovalRequiredForExtension",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isRequestorJustificationRequired",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyApprovalRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyApprovalSettings",
+                               "Name":  "setting",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyAuthenticationContextRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "claimValue",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
+        "ClassName":  "MSFT_AADRoleManagementPolicyRule",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "id",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "roleDisplayName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ruleType",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "policyId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyExpirationRule",
+                               "Name":  "expirationRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyNotificationRule",
+                               "Name":  "notificationRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyEnablementRule",
+                               "Name":  "enablementRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyApprovalRule",
+                               "Name":  "approvalRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_AADRoleManagementPolicyAuthenticationContextRule",
+                               "Name":  "authenticationContextRule",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "ApplicationSecret",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_AADRoleSetting",
         "Parameters":  [
                            {
