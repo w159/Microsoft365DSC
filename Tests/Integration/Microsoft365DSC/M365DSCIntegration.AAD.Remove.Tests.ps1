@@ -160,15 +160,6 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
-                AADClaimsMappingPolicy 'AADClaimsMappingPolicy-Test1234'
-                {
-                    ApplicationId         = $ApplicationId
-                    TenantId              = $TenantId
-                    CertificateThumbprint = $CertificateThumbprint
-                    DisplayName           = "Test1234";
-                    Ensure                = "Absent";
-                    Id                    = "fd0dc3f3-cfdf-4d56-bb03-e18161a5ac93";
-                }
                 AADConditionalAccessPolicy 'ConditionalAccessPolicy'
                 {
                     DisplayName                          = 'Example CAP'
