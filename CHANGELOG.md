@@ -10,6 +10,8 @@
   * Initial release.
 * AADAuthenticationMethodPolicyExternal
   * Initial release.
+* AADClaimsMappingPolicy
+  * Initial release.
 * AADConditionalAccessPolicy
   * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
 * AADCustomSecurityAttributeDefinition
