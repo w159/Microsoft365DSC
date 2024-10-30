@@ -600,6 +600,71 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                AADClaimsMappingPolicy 'AADClaimsMappingPolicy-Test1234'
+                {
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                    Definition            = @(
+                        MSFT_AADClaimsMappingPolicyDefinition{
+                            ClaimsMappingPolicy = MSFT_AADClaimsMappingPolicyDefinitionMappingPolicy{
+                                ClaimsSchema = @(
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema{
+                                        SamlClaimType = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+                                        Source = 'user'
+                                        Id = 'userprincipalname'
+                                    }
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema{
+                                        SamlClaimType = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'
+                                        Source = 'user'
+                                        Id = 'givenname'
+                                    }
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema{
+                                        SamlClaimType = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+                                        Source = 'user'
+                                        Id = 'displayname'
+                                    }
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema{
+                                        SamlClaimType = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname'
+                                        Source = 'user'
+                                        Id = 'surname'
+                                    }
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsSchema{
+                                        SamlClaimType = 'username'
+                                        Source = 'user'
+                                        Id = 'userprincipalname'
+                                    }
+                                )
+                                ClaimsTransformation = @(
+                                    MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformation{
+                                        OutputClaims = @(
+                                            MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationOutputClaims{
+                                                ClaimTypeReferenceId = 'TOS'
+                                                TransformationClaimType = 'createdClaim'
+                                            }
+                                        )
+                                        Id = 'CreateTermsOfService'
+                                        InputParameters = @(
+                                            MSFT_AADClaimsMappingPolicyDefinitionMappingPolicyClaimsTransformationInputParameter{
+                                                DataType = 'string'
+                                                Id = 'value'
+                                                Value = 'sandbox'
+                                            }
+                                        )
+                                        TransformationMethod = 'CreateStringClaim'
+                                    }
+                                )
+                                IncludeBasicClaimSet = $True
+                                Version = 1
+                            }
+        
+                        }
+                    );
+                    DisplayName           = "Test1234";
+                    Ensure                = "Present";
+                    Id                    = "fd0dc3f3-cfdf-4d56-bb03-e18161a5ac93";
+                    IsOrganizationDefault = $False;
+                }
                 AADConditionalAccessPolicy 'ConditionalAccessPolicy'
                 {
                     BuiltInControls                          = @("mfa");
@@ -1344,6 +1409,19 @@
                                 type        = 'afterDateTime'
                             }
                     };
+                }
+                AADRoleManagementPolicyRule 'AADRoleManagementPolicyRule-Expiration_Admin_Eligibility'
+                {
+                    expirationRule       = MSFT_AADRoleManagementPolicyExpirationRule{
+                        isExpirationRequired = $False
+                        maximumDuration = 'P180D'
+                    };
+                    id                   = "Expiration_Admin_Eligibility";
+                    roleDisplayName      = "Global Administrator";
+                    ruleType             = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule";
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
                 }
                 AADRoleSetting '28b253d8-cde5-471f-a331-fe7320023cdd'
                 {
