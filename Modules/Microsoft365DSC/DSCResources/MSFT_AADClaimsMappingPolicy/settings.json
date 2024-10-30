@@ -14,9 +14,6 @@
                                              ],
                                     "update":  [
                                                    {
-                                                       "name":  "Policy.Read.ApplicationConfiguration"
-                                                   },
-                                                   {
                                                        "name":  "Policy.ReadWrite.ApplicationConfiguration"
                                                    }
                                                ]
@@ -31,9 +28,6 @@
                                                    }
                                                ],
                                       "update":  [
-                                                     {
-                                                         "name":  "Policy.Read.ApplicationConfiguration"
-                                                     },
                                                      {
                                                          "name":  "Policy.ReadWrite.ApplicationConfiguration"
                                                      }
