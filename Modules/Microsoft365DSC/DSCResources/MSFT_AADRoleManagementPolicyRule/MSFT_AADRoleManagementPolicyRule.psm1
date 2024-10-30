@@ -699,12 +699,6 @@ function Export-TargetResource
                 $i++
             }
             $j++
-            # TODO
-            if($j -gt 1)
-            {
-                break
-            }
-        
         }
         return $dscContent.ToString()
     }
