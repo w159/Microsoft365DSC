@@ -14,6 +14,7 @@
   * Initial release.
 * AADConditionalAccessPolicy
   * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
+  * Added support for InsiderRiskLevels.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADEnrichedAuditLogs
@@ -130,12 +131,12 @@
     properly with their respective parent setting.
 * MISC
   * Fixed references to graph.microsoft.com with dynamic domain name based on target cloud.
-   Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup, 
-   AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10, 
+   Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup,
+   AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10,
    IntuneAccountProtectionLocalUsersGroupMembershipPolicy, IntuneAccountProtectionPolicy,
    IntuneAppProtectionPolicyiOS,IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10,
    IntuneDeviceConfigurationSCEPCertificatePolicyWindows10, IntuneDeviceConfigurationWiredNetworkPolicyWindows10,
-   IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets, 
+   IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
    IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
   * Exponential performance improvements by reducing complexity and roundtrips.
 * DEPENDENCIES
