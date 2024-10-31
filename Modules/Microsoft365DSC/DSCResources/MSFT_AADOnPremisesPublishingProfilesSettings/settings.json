@@ -14,7 +14,7 @@
             "application": {
                 "read": [
                     {
-                        "name": "Permission for Monitoring and Export"
+                        "name": "Directory.Read.All"
                     }
                 ],
                 "update": [
