@@ -78,6 +78,9 @@
   * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
+* EXOMailboxSettings
+  * Added support for AddressBookPolicy, RetentionPolicy, RoleAssignmentPolicy
+    and SharingPolicy.
 * EXOServicePrincipal
   * Initial release.
 * EXOTenantAllowBlockListItems
