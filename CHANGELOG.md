@@ -19,6 +19,8 @@
   * Fixed missing permissions in settings.json
 * AADEnrichedAuditLogs
   * Initial release.
+* AADFederationConfiguration
+  * Initial release.
 * AADFilteringPolicy
   * Initial release.
 * AADFilteringPolicyRule
@@ -78,6 +80,9 @@
   * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
+* EXOMailboxSettings
+  * Added support for AddressBookPolicy, RetentionPolicy, RoleAssignmentPolicy
+    and SharingPolicy.
 * EXOServicePrincipal
   * Initial release.
 * EXOTenantAllowBlockListItems
@@ -112,6 +117,8 @@
     FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
 * PPPowerAppsEnvironment
   * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
+* PPTenantSettings
+  * Updated to support latest settings.
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
