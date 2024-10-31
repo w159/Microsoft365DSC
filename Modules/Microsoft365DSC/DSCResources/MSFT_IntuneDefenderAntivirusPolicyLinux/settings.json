@@ -1,0 +1,45 @@
+{
+    "resourceName": "IntuneDefenderAntivirusPolicyLinux",
+    "description": "This resource configures an Intune Defender Antivirus Policy Linux.",
+    "permissions":    {
+  "graph": {
+    "delegated": {
+      "read": [
+        {
+          "name": "DeviceManagementConfiguration.Read.All"
+        },
+        {
+          "name": "Group.Read.All"
+        }
+      ],
+      "update": [
+        {
+          "name": "DeviceManagementConfiguration.ReadWrite.All"
+        },
+        {
+          "name": "Group.Read.All"
+        }
+      ]
+    },
+    "application": {
+      "read": [
+        {
+          "name": "DeviceManagementConfiguration.Read.All"
+        },
+        {
+          "name": "Group.Read.All"
+        }
+      ],
+      "update": [
+        {
+          "name": "DeviceManagementConfiguration.ReadWrite.All"
+        },
+        {
+          "name": "Group.Read.All"
+        }
+      ]
+    }
+  }
+}
+
+}

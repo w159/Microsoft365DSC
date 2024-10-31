@@ -57,9 +57,13 @@ function New-M365DSCResource
         $DateFormat = "o",
 
         # SettingTemplates for DeviceManagementConfigurationPolicy
-        [Parameter()]
+        [Parameter(ParameterSetName = 'SettingsCatalog')]
         [System.Array]
         $SettingsCatalogSettingTemplates,
+
+        [Parameter(ParameterSetName = 'SettingsCatalog')]
+        [switch]
+        $SkipPlatformsAndTechnologies,
 
         # Use this switch with caution.
         # Navigation Properties could cause the DRG to enter an infinite loop
@@ -212,6 +216,12 @@ function New-M365DSCResource
             {
                 $addIntuneAssignments = $true
                 $ParametersToSkip += 'Assignments'
+            }
+
+            if ($SkipPlatformsAndTechnologies)
+            {
+                $ParametersToSkip += 'Platforms'
+                $ParametersToSkip += 'Technologies'
             }
         }
         $parameterInformation = $parameterInformation | Where-Object -FilterScript {$_.Name -notin $ParametersToSkip}
@@ -3945,7 +3955,7 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
         ChildSettings    = $innerChildSettings
     }
 
-    if ($type -eq "GroupCollectionCollection" -and $childSettings.Count -eq 1)
+    if ($type -eq "GroupCollectionCollection" -and $childSettings.Count -eq 1 -and $SettingDefinition.AdditionalProperties.maximumCount -eq 1)
     {
         # Reset type and make child setting a collection
         $setting.Type = "GroupCollection"

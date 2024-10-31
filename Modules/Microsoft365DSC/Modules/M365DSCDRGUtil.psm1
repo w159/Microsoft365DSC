@@ -1665,7 +1665,16 @@ function Get-IntuneSettingCatalogPolicySetting
         {
             $settingValueType = $settingValueType.Replace('ValueTemplate', 'Value')
         }
+
         $settingValueTemplateId = $settingInstanceTemplate.AdditionalProperties."$($settingValueName)Template".settingValueTemplateId
+
+        # Only happened on property ThreatTypeSettings from IntuneDefenderAntivirusPolicyLinux
+        # SettingValueTemplateIds are from the child settings and not from the parent setting because it is a groupSettingCollection
+        if ($settingValueTemplateId -is [array])
+        {
+            $settingValueTemplateId = $null
+        }
+        #>
 
         # Get all the values in the setting instance
         $settingValue = Get-IntuneSettingCatalogPolicySettingInstanceValue `
@@ -1767,7 +1776,7 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
 
             $instanceCount = 1
             if (($Level -ge 2 -and $groupSettingCollectionDefinitionChildren.Count -gt 1) -or 
-                ($Level -eq 1 -and $groupSettingCollectionDefinitionChildren.Count -gt 1 -and $SettingDefinition.AdditionalProperties.maximumCount -gt 1)) 
+                ($Level -eq 1 -and $groupSettingCollectionDefinitionChildren.Count -ge 1 -and $SettingDefinition.AdditionalProperties.maximumCount -gt 1))
             {
                 $SettingInstanceName += Get-SettingsCatalogSettingName -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
                 $cimDSCParams = @()
@@ -1785,7 +1794,10 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                     $newInstanceDSCParams = @{}
                     # Preserve CIM instances when converting to hashtable
                     foreach ($property in $instance.CimInstanceProperties) {
-                        $newInstanceDSCParams.Add($property.Name, $property.Value)
+                        if ($property.IsValueModified)
+                        {
+                            $newInstanceDSCParams.Add($property.Name, $property.Value)
+                        }
                     }
                     $newDSCParams.$cimDSCParamsName += $newInstanceDSCParams
                 }
@@ -1825,11 +1837,13 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                     $childSettingValueType = "#microsoft.graph.deviceManagementConfiguration$($childSettingValueName)"
                     $childSettingValueName = $childSettingValueName.Substring(0, 1).ToLower() + $childSettingValueName.Substring(1, $childSettingValueName.length - 1 )
                     $childSettingInstanceTemplate = if ($null -ne $SettingInstanceTemplate.AdditionalProperties) { 
-                        $SettingInstanceTemplate.AdditionalProperties.groupSettingCollectionValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id }
+                        $SettingInstanceTemplate.AdditionalProperties.groupSettingCollectionValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id } | Select-Object -First 1
                     } else {
-                        $SettingInstanceTemplate.groupSettingCollectionValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id }
+                        $SettingInstanceTemplate.groupSettingCollectionValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id } | Select-Object -First 1
                     }
+
                     $childSettingValueTemplateId = $childSettingInstanceTemplate."$($childSettingValueName)Template".settingValueTemplateId
+
                     $childSettingValue = Get-IntuneSettingCatalogPolicySettingInstanceValue `
                         -DSCParams $currentDSCParams `
                         -SettingDefinition $childDefinition `
@@ -1886,7 +1900,7 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                             }
                             if (-not [string]::IsNullOrEmpty($childSettingInstanceTemplate.settingInstanceTemplateId))
                             {
-                                $childSettingValue.Add('settingInstanceTemplateReference', @{'settingInstanceTemplateId' = $childSettingInstanceTemplate.settingInstanceTemplateId })
+                                $childSettingValue.Add('settingInstanceTemplateReference', @{'settingInstanceTemplateId' = $childSettingInstanceTemplate.settingInstanceTemplateId | Select-Object -First 1 })
                             }
                             $childSettingValue.Add('@odata.type', $childSettingType)
                             $groupSettingCollectionValueChildren += $childSettingValue
@@ -1922,30 +1936,31 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                     ($_.AdditionalProperties.options.dependentOn.Count -gt 0 -and $_.AdditionalProperties.options.dependentOn.parentSettingId.Contains($SettingDefinition.Id))
                 }
             }
-            if ($CurrentInstanceDefinitions.Count -eq 5)
-            {
-                Write-Host "blub"
-            }
+
             foreach ($childDefinition in $choiceSettingDefinitionChildren)
             {
                 $childSettingType = $childDefinition.AdditionalProperties.'@odata.type'.Replace('Definition', 'Instance')
                 $childSettingValueName = $childSettingType.Replace('#microsoft.graph.deviceManagementConfiguration', '').Replace('Instance', 'Value')
                 $childSettingValueType = "#microsoft.graph.deviceManagementConfiguration$($childSettingValueName)"
                 $childSettingValueName = $childSettingValueName.Substring(0, 1).ToLower() + $childSettingValueName.Substring(1, $childSettingValueName.Length - 1 )
-                <# There are no child instance templates under a choice setting instance
-                $childSettingInstanceTemplate = $SettingTemplates.SettingInstanceTemplate | Where-Object { $_.SettingDefinitionId -eq $childDefinition.Id }
-                $childSettingValueTemplateId = $childSettingInstanceTemplate.AdditionalProperties."$($childSettingValueName)Template".settingValueTemplateId
-                #>
+                $childSettingInstanceTemplate = if ($null -ne $SettingInstanceTemplate.AdditionalProperties) { 
+                    $SettingInstanceTemplate.AdditionalProperties.choiceSettingValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id }
+                } else {
+                    $SettingInstanceTemplate.choiceSettingValueTemplate.children | Where-Object { $_.settingDefinitionId -eq $childDefinition.Id }
+                }
+                $childSettingValueTemplateId = $childSettingInstanceTemplate."$($childSettingValueName)Template" | Where-Object {
+                    $_.settingDefinitionId -eq $childDefinition.Id
+                } | Select-Object -ExpandProperty settingValueTemplateId
                 $childSettingValue = Get-IntuneSettingCatalogPolicySettingInstanceValue `
                     -DSCParams $DSCParams `
                     -SettingDefinition $childDefinition `
                     -AllSettingDefinitions $AllSettingDefinitions `
                     -CurrentInstanceDefinitions $CurrentInstanceDefinitions `
-                    -SettingInstanceTemplate $SettingInstanceTemplate `
+                    -SettingInstanceTemplate $childSettingInstanceTemplate `
                     -SettingType $childDefinition.AdditionalProperties.'@odata.type' `
                     -SettingValueName $childSettingValueName `
                     -SettingValueType $childSettingValueType `
-                    -SettingValueTemplateId $null `
+                    -SettingValueTemplateId $childSettingValueTemplateId `
                     -SettingInstanceName $SettingInstanceName
 
                 if ($childSettingValue.Keys.Count -gt 0)
@@ -2206,6 +2221,9 @@ function Export-IntuneSettingCatalogPolicySettings
             Mandatory = $true,
             ParameterSetName = 'Setting'
         )]
+        [Parameter(
+            ParameterSetName = 'Start'
+        )]
         [System.Array]
         $AllSettingDefinitions,
 
@@ -2228,18 +2246,39 @@ function Export-IntuneSettingCatalogPolicySettings
             $deviceSettings = $Settings | Where-Object -FilterScript {
                 $_.SettingInstance.settingDefinitionId.StartsWith("device_")
             }
+            if ($AllSettingDefinitions.Count -eq 0)
+            {
+                $allDeviceSettingDefinitions = $deviceSettings.SettingDefinitions
+            }
+            else
+            {
+                $allDeviceSettingDefinitions = $AllSettingDefinitions | Where-Object -FilterScript {
+                    $_.Id.StartsWith("device_")
+                }
+            }
             foreach ($setting in $deviceSettings)
             {
-                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $deviceSettingsReturnHashtable -AllSettingDefinitions $deviceSettings.SettingDefinitions -IsRoot
+                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $deviceSettingsReturnHashtable -AllSettingDefinitions $allDeviceSettingDefinitions -IsRoot
             }
 
+            $userSettingsReturnHashtable = @{}
             $userSettings = $Settings | Where-Object -FilterScript {
                 $_.SettingInstance.settingDefinitionId.StartsWith("user_")
             }
-            $userSettingsReturnHashtable = @{}
+            if ($AllSettingDefinitions.Count -eq 0)
+            {
+                $allUserSettingDefinitions = $userSettings.SettingDefinitions
+            }
+            else
+            {
+                $allUserSettingDefinitions = $AllSettingDefinitions | Where-Object -FilterScript {
+                    $_.Id.StartsWith("user_")
+                }
+            }
+            
             foreach ($setting in $userSettings)
             {
-                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $userSettingsReturnHashtable -AllSettingDefinitions $userSettings.SettingDefinitions -IsRoot
+                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $userSettingsReturnHashtable -AllSettingDefinitions $allUserSettingDefinitions -IsRoot
             }
 
             if ($deviceSettingsReturnHashtable.Keys.Count -gt 0)
@@ -2253,9 +2292,13 @@ function Export-IntuneSettingCatalogPolicySettings
         }
         else
         {
+            if ($AllSettingDefinitions.Count -eq 0)
+            {
+                $AllSettingDefinitions = $Settings.SettingDefinitions
+            }
             foreach ($setting in $Settings)
             {
-                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $ReturnHashtable -AllSettingDefinitions $Settings.SettingDefinitions -IsRoot
+                Export-IntuneSettingCatalogPolicySettings -SettingInstance $setting.SettingInstance -SettingDefinitions $setting.SettingDefinitions -ReturnHashtable $ReturnHashtable -AllSettingDefinitions $AllSettingDefinitions -IsRoot
             }
         }
         return $ReturnHashtable
@@ -2311,15 +2354,26 @@ function Export-IntuneSettingCatalogPolicySettings
                 }
                 $addToParameters = $false
             }
-            elseif (-not $IsRoot -and $childSettingDefinitions.Count -gt 1)
+            elseif ($childSettingDefinitions.Count -gt 1)
             {
                 $childValue = $null
-                $parentSettingDefinition = $SettingDefinitions | Where-Object -FilterScript { $_.Id -eq $settingDefinition.AdditionalProperties.dependentOn.parentSettingId }
-                if ($settingDefinition.AdditionalProperties.maximumCount -gt 1 -or
-                    $parentSettingDefinition.AdditionalProperties.maximumCount -gt 1)
+                if (-not $IsRoot)
                 {
-                    $childValue = @()
+                    $parentSettingDefinition = $SettingDefinitions | Where-Object -FilterScript { $_.Id -eq $settingDefinition.AdditionalProperties.dependentOn.parentSettingId }
+                    if ($settingDefinition.AdditionalProperties.maximumCount -gt 1 -or
+                        $parentSettingDefinition.AdditionalProperties.maximumCount -gt 1)
+                    {
+                        $childValue = @()
+                    }
                 }
+                else
+                {
+                    if ($settingDefinition.AdditionalProperties.maximumCount -gt 1)
+                    {
+                        $childValue = @()
+                    }
+                }
+
                 foreach ($child in $groupSettingCollectionValue)
                 {
                     $childHashtable = @{}
@@ -2419,7 +2473,7 @@ function Update-IntuneDeviceConfigurationPolicy
             'settings'          = $Settings
         }
         $body = $policy | ConvertTo-Json -Depth 20
-        #Write-Verbose -Message $body
+        Write-Verbose -Message $body -Verbose
         Invoke-MgGraphRequest -Method PUT -Uri $Uri -Body $body -ErrorAction Stop
     }
     catch
