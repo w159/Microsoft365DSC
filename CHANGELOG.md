@@ -47,6 +47,8 @@
   * Initial release.
 * AADNetworkAccessSettingCrossTenantAccess
   * Initial release.
+* AADOnPremisesPublishingProfilesSettings
+  * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADRemoteNetwork
