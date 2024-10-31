@@ -147,7 +147,7 @@ function Get-TargetResource
                 Managedidentity                 = $ManagedIdentity.IsPresent
                 AccessTokens                    = $AccessTokens
             }
-            if (-not [System.String]::IsNulorEmpty($valueNewUnifiedGroupWritebackDefault.Value))
+            if (-not [System.String]::IsNullOrEmpty($valueNewUnifiedGroupWritebackDefault.Value))
             {
             $result.Add('NewUnifiedGroupWritebackDefault', [Boolean]::Parse($valueNewUnifiedGroupWritebackDefault.Value))
             }
