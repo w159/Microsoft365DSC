@@ -5505,6 +5505,81 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_AADFederationConfiguration",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisplayName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "IssuerUri",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "MetadataExchangeUri",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "PassiveSignInUri",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "PreferredAuthenticationProtocol",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "SigningCertificate",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "Domains",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_AADFilteringPolicy",
         "Parameters":  [
                            {
