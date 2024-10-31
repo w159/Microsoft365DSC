@@ -124,6 +124,7 @@ function Get-TargetResource
         AddressBookPolicy     = $mailboxInfo.AddressBookPolicy
         RoleAssignmentPolicy  = $mailboxInfo.RoleAssignmentPolicy
         SharingPolicy         = $mailboxInfo.SharingPolicy
+        Ensure                = "Present"
         Credential            = $Credential
         ApplicationId         = $ApplicationId
         CertificateThumbprint = $CertificateThumbprint
