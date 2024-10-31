@@ -15755,6 +15755,26 @@
                            },
                            {
                                "CIMType":  "string",
+                               "Name":  "RetentionPolicy",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "AddressBookPolicy",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "RoleAssignmentPolicy",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "SharingPolicy",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
                                "Name":  "TimeZone",
                                "Option":  "Write"
                            },
