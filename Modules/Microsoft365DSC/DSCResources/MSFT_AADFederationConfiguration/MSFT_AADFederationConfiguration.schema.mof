@@ -2,7 +2,7 @@
 class MSFT_AADFederationConfiguration : OMI_BaseResource
 {
     [Key, Description("The display name of the SAML/WS-Fed based identity provider. Inherited from identityProviderBase.")] String DisplayName;
-    [Write, Description("Issuer URI of the federation server. Inherited from samlOrWsFedProvider.")] String IssuerId;
+    [Write, Description("Issuer URI of the federation server. Inherited from samlOrWsFedProvider.")] String IssuerUri;
     [Write, Description("URI of the metadata exchange endpoint used for authentication from rich client applications. Inherited from samlOrWsFedProvider.")] String MetadataExchangeUri;
     [Write, Description("URI that web-based clients are directed to when signing in to Microsoft Entra services. Inherited from samlOrWsFedProvider.")] String PassiveSignInUri;
     [Write, Description("Preferred authentication protocol. The possible values are: wsFed, saml. Inherited from samlOrWsFedProvider.")] String PreferredAuthenticationProtocol;
