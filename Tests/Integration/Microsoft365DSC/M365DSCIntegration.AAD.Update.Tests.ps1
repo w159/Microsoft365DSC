@@ -1377,6 +1377,14 @@
                     NetworkPacketTaggingStatus = "enabled";
                     TenantId                   = $TenantId;
                 }
+                AADOnPremisesPublishingProfilesSettings 'AADOnPremisesPublishingProfilesSettings'
+                {
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    IsEnabled             = $False;
+                    IsSingleInstance      = "Yes";
+                    TenantId              = $TenantId;
+                }
                 AADRemoteNetwork 'AADRemoteNetwork-Test Remote Network'
                 {
                     Ensure                = "Present";
