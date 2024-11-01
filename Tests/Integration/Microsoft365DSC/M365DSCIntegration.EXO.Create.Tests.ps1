@@ -965,6 +965,17 @@
                     Identity             = "_Exe:SecOpsOverrid:ca3c51ac-925c-49f4-af42-43e26b874245";
                     Policy               = "40528418-717d-4368-a1ae-7912918f8a1f";
                 }
+                EXOServicePrincipal 'ServicePrincipal'
+                {
+                    AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                    AppName              = "ISV Portal";
+                    DisplayName          = "Arpita";
+                    Ensure               = "Present";
+                    Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 EXOSharedMailbox 'SharedMailbox'
                 {
                     DisplayName        = "Integration"
@@ -1015,6 +1026,17 @@
                     Notes                 = "Test block";
                     SubmissionID          = "Non-Submission";
                     Value                 = "example.com";
+                }
+                EXOTenantAllowBlockListSpoofItems 'EXOTenantAllowBlockListSpoofItems-b66ffa0c-ad85-df9d-0a16-ad3cb9956f71'
+                {
+                    Action                = "Allow";
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Ensure                = "Present";
+                    SendingInfrastructure = "121.0.0.7";
+                    SpoofedUser           = "contoso.com";
+                    SpoofType             = "Internal";
+                    TenantId              = $TenantId;
                 }
                 EXOTransportRule 'ConfigureTransportRule'
                 {

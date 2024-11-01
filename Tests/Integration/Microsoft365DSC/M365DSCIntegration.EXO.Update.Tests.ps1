@@ -607,6 +607,14 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                EXOMailboxAuditBypassAssociation 'EXOMailboxAuditBypassAssociation-Test'
+                {
+                    AuditBypassEnabled   = $True;  #Updated Property
+                    Identity             = "TestMailbox109";
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 EXOMailboxAutoReplyConfiguration 'EXOMailboxAutoReplyConfiguration'
                 {
                     AutoDeclineFutureRequestsWhenOOF = $False;
@@ -1393,6 +1401,17 @@
                     TenantId                                 = $TenantId
                     CertificateThumbprint                    = $CertificateThumbprint
                 }
+                EXOServicePrincipal 'ServicePrincipal'
+                {
+                    AppId                = "c6871074-3ded-4935-a5dc-b8f8d91d7d06";
+                    AppName              = "ISV Portal";
+                    DisplayName          = "Kartikeya";
+                    Ensure               = "Present";
+                    Identity             = "00f6b0e4-1d00-427b-9a5b-ce6c43c43fc7";
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 EXOSharedMailbox 'SharedMailbox'
                 {
                     DisplayName        = "Integration"
@@ -1443,6 +1462,17 @@
                     Notes                 = "Test block with updated notes";
                     SubmissionID          = "Non-Submission";
                     Value                 = "example.com";
+                }
+                EXOTenantAllowBlockListSpoofItems 'EXOTenantAllowBlockListSpoofItems-b66ffa0c-ad85-df9d-0a16-ad3cb9956f71'
+                {
+                    Action                = "Block"; #Drift
+                    ApplicationId         = $ApplicationId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                    Ensure                = "Present";
+                    SendingInfrastructure = "121.0.0.7";
+                    SpoofedUser           = "contoso.com";
+                    SpoofType             = "Internal";
+                    TenantId              = $TenantId;
                 }
                 EXOTransportConfig 'EXOTransportConfig '
                 {
