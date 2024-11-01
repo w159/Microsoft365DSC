@@ -51954,6 +51954,21 @@
                                "Option":  "Write"
                            },
                            {
+                               "CIMType":  "UInt32",
+                               "Name":  "GPUUtilizationLimit",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "UInt32",
+                               "Name":  "CPUUtilizationLimit",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "MDATPTriageStatus",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "string",
                                "Name":  "Ensure",
                                "Option":  "Write"
