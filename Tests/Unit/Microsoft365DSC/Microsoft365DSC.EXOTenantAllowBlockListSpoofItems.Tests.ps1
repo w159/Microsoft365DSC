@@ -167,7 +167,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Update-TenantAllowBlockListSpoofItems -Exactly 1
+                Should -Invoke -CommandName Set-TenantAllowBlockListSpoofItems -Exactly 1
             }
         }
 
