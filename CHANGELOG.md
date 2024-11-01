@@ -154,6 +154,8 @@
    IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
    IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
   * Exponential performance improvements by reducing complexity and roundtrips.
+  * Changed the logic that appends GUID in the resource name when primary key is not found during an
+    export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
