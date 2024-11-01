@@ -57,6 +57,8 @@
   * Initial release.
 * AADRoleManagementPolicyRule
   * Initial release.
+* AADServicePrincipal
+  * Added the notes field.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
