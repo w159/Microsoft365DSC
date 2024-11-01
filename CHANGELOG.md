@@ -110,6 +110,12 @@
   * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
+* M365DSCRuleEvaluation
+  * Changed the name of the Key property from ResourceName to ResourceTypeName.
+    While this is considered a breaking change, the old property name was
+    breaking the DSCParser process. The impact of this breaking the parsing
+    process is important enough to justify an out-of-band breaking change of
+    this resource.
 * SCPolicyConfig
   * Initial release.
 * SCSensitivityLabel
@@ -148,6 +154,8 @@
    IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
    IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
   * Exponential performance improvements by reducing complexity and roundtrips.
+  * Changed the logic that appends GUID in the resource name when primary key is not found during an
+    export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
