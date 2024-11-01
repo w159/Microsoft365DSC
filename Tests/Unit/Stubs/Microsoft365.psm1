@@ -103328,5 +103328,69 @@ function Update-MgBetaPolicyClaimMappingPolicy
         $Confirm
     )
 }
+#endregion
+#region Microsoft.Graph.Authentication
+function New-TenantAllowBlockListSpoofItems
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Action,
 
+        [Parameter()]
+        [System.String]
+        $SendingInfrastructure,
+
+        [Parameter()]
+        [System.String]
+        $SpoofType,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $SpoofedUser
+    )
+}
+function Remove-TenantAllowBlockListSpoofItems
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.String[]]
+        $Ids
+    )
+}
+function Get-TenantAllowBlockListSpoofItems
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Action,
+
+        [Parameter()]
+        [System.String]
+        $SpoofType,
+
+        [Parameter()]
+        [System.Object]
+        $Identity
+    )
+}
 #endregion

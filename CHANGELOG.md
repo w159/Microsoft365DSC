@@ -87,6 +87,8 @@
   * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
+* EXOTenantAllowBlockListSpoofItems
+  * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
   * Initial release.
 * IntuneAppCategory
