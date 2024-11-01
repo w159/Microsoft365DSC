@@ -120,6 +120,9 @@
     breaking the DSCParser process. The impact of this breaking the parsing
     process is important enough to justify an out-of-band breaking change of
     this resource.
+* SCInsiderRiskPolicy
+  * Added support for property MDATPTriageStatus.
+  * Added support for GPUUtilizationLimit and CPUUtilizationLimit.
 * SCPolicyConfig
   * Initial release.
 * SCSensitivityLabel
