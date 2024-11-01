@@ -22,7 +22,7 @@ Configuration Example
 
     node localhost
     {
-        IntuneDefenderAntivirusPolicyLinux 'myIntuneDefenderAntivirusPolicyLinux'
+        IntuneAntivirusPolicyLinux 'myIntuneAntivirusPolicyLinux'
         {
             allowedThreats                     = @("Threat 1");
             Assignments                        = @();

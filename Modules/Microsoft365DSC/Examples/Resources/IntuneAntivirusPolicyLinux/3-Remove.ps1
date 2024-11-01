@@ -22,7 +22,7 @@ Configuration Example
 
     node localhost
     {
-        IntuneDefenderAntivirusPolicyLinux 'myIntuneDefenderAntivirusPolicyLinux'
+        IntuneAntivirusPolicyLinux 'myIntuneAntivirusPolicyLinux'
         {
             DisplayName           = 'test'
             Ensure                = 'Absent'

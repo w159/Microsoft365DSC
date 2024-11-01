@@ -1668,13 +1668,12 @@ function Get-IntuneSettingCatalogPolicySetting
 
         $settingValueTemplateId = $settingInstanceTemplate.AdditionalProperties."$($settingValueName)Template".settingValueTemplateId
 
-        # Only happened on property ThreatTypeSettings from IntuneDefenderAntivirusPolicyLinux
+        # Only happened on property ThreatTypeSettings from IntuneAntivirusPolicyLinux
         # SettingValueTemplateIds are from the child settings and not from the parent setting because it is a groupSettingCollection
         if ($settingValueTemplateId -is [array])
         {
             $settingValueTemplateId = $null
         }
-        #>
 
         # Get all the values in the setting instance
         $settingValue = Get-IntuneSettingCatalogPolicySettingInstanceValue `
@@ -1775,8 +1774,8 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
             }
 
             $instanceCount = 1
-            if (($Level -ge 2 -and $groupSettingCollectionDefinitionChildren.Count -gt 1) -or 
-                ($Level -eq 1 -and $groupSettingCollectionDefinitionChildren.Count -ge 1 -and $SettingDefinition.AdditionalProperties.maximumCount -gt 1))
+            if (($Level -gt 1 -and $groupSettingCollectionDefinitionChildren.Count -gt 1) -or 
+                ($Level -eq 1 -and $groupSettingCollectionDefinitionChildren.Count -ge 1 -and $groupSettingCollectionDefinitionChildren.AdditionalProperties.'@odata.type' -notcontains "#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition"))
             {
                 $SettingInstanceName += Get-SettingsCatalogSettingName -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
                 $cimDSCParams = @()
@@ -1882,12 +1881,14 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                                     )
                                     settingDefinitionId = $childDefinition.Id
                                 }
+                                <# GroupSettingCollection do not have a setting instance template reference
                                 if (-not [string]::IsNullOrEmpty($childSettingInstanceTemplate.settingInstanceTemplateId))
                                 {
                                     $childSettingValueInner.children[0].groupSettingCollectionValue.settingInstanceTemplateReference = @{
                                         'settingInstanceTemplateId' = $childSettingInstanceTemplate.settingInstanceTemplateId
                                     }
                                 }
+                                #>
                                 $childSettingValue += $childSettingValueInner
                             }
                             $groupSettingCollectionValue += $childSettingValue
@@ -1898,10 +1899,12 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
                             {
                                 $childSettingValue.Add('settingDefinitionId', $childDefinition.Id)
                             }
+                            <# GroupSettingCollection do not have a setting instance template reference
                             if (-not [string]::IsNullOrEmpty($childSettingInstanceTemplate.settingInstanceTemplateId))
                             {
                                 $childSettingValue.Add('settingInstanceTemplateReference', @{'settingInstanceTemplateId' = $childSettingInstanceTemplate.settingInstanceTemplateId | Select-Object -First 1 })
                             }
+                            #>
                             $childSettingValue.Add('@odata.type', $childSettingType)
                             $groupSettingCollectionValueChildren += $childSettingValue
                         }
@@ -2473,7 +2476,7 @@ function Update-IntuneDeviceConfigurationPolicy
             'settings'          = $Settings
         }
         $body = $policy | ConvertTo-Json -Depth 20
-        Write-Verbose -Message $body -Verbose
+        #Write-Verbose -Message $body
         Invoke-MgGraphRequest -Method PUT -Uri $Uri -Body $body -ErrorAction Stop
     }
     catch

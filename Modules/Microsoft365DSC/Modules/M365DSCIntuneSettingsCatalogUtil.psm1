@@ -77,7 +77,7 @@
             }
             else
             {
-                # Can happen if both settings have the same name and the same OffsetUri, e.g. "enforcementLevel" in the IntuneDefenderAntivirusPolicyLinux resource
+                # Can happen if both settings have the same name and the same OffsetUri, e.g. "enforcementLevel" in the IntuneAntivirusPolicyLinux resource
                 # Potential risk of overwriting settings with the same name but different OffsetUri
                 $settingIdWithoutName = $SettingDefinition.Id -replace "_$settingName", ""
                 $settingIdWithoutNameSplitted = $settingIdWithoutName.Split("_")[-1]

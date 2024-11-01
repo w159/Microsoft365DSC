@@ -1,6 +1,6 @@
 {
-    "resourceName": "IntuneDefenderAntivirusPolicyLinux",
-    "description": "This resource configures an Intune Defender Antivirus Policy Linux.",
+    "resourceName": "IntuneAntivirusPolicyLinux",
+    "description": "This resource configures an Intune Antivirus Policy Linux.",
     "permissions":    {
   "graph": {
     "delegated": {
