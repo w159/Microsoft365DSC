@@ -110,6 +110,12 @@
   * Initial release.
 * Intune workload
   * Fixed missing permissions in settings.json
+* M365DSCRuleEvaluation
+  * Changed the name of the Key property from ResourceName to ResourceTypeName.
+    While this is considered a breaking change, the old property name was
+    breaking the DSCParser process. The impact of this breaking the parsing
+    process is important enough to justify an out-of-band breaking change of
+    this resource.
 * SCPolicyConfig
   * Initial release.
 * SCSensitivityLabel
