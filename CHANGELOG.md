@@ -17,6 +17,8 @@
     properly with their respective parent setting.
 * Fixed refrences to graph.microsoft.com with dynamic domain name based on target cloud
   * Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup, AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10, IntuneAccountProtectionLocalUsersGroupMembershipPolicy, IntuneAccountProtectionPolicy,IntuneAppProtectionPolicyiOS,IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10,IntuneDeviceConfigurationSCEPCertificatePolicyWindows10, IntuneDeviceConfigurationWiredNetworkPolicyWindows10,IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets, IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
+* Add check in AADGroupSettings for NewUnifiedGroupWritebackDefault not existing in Government by default
+  * FIXES [#5213](https://github.com/microsoft/Microsoft365DSC/issues/5213)
 
 # 1.24.1016.1
 
