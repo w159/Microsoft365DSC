@@ -57,6 +57,8 @@
   * Initial release.
 * AADRoleManagementPolicyRule
   * Initial release.
+* AADServicePrincipal
+  * Added the notes field.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
@@ -87,6 +89,8 @@
   * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
+* EXOTenantAllowBlockListSpoofItems
+  * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
   * Initial release.
 * IntuneAppCategory
@@ -116,6 +120,9 @@
     breaking the DSCParser process. The impact of this breaking the parsing
     process is important enough to justify an out-of-band breaking change of
     this resource.
+* SCInsiderRiskPolicy
+  * Added support for property MDATPTriageStatus.
+  * Added support for GPUUtilizationLimit and CPUUtilizationLimit.
 * SCPolicyConfig
   * Initial release.
 * SCSensitivityLabel
