@@ -2357,8 +2357,10 @@ function Export-IntuneSettingCatalogPolicySettings
                 }
                 $addToParameters = $false
             }
-            elseif ($childSettingDefinitions -is [array] -and $childSettingDefinitions.Count -gt 1)
+            elseif ($settingDefinition.AdditionalProperties.maximumCount -gt 1 -and $childSettingDefinitions -is [array] -and $childSettingDefinitions.Count -gt 1)
             {
+                # If the GroupSettingCollection can appear multiple times, we need to add its name as a property
+                # and the child settings as its value
                 $childValue = $null
                 if (-not $IsRoot)
                 {
@@ -2390,6 +2392,7 @@ function Export-IntuneSettingCatalogPolicySettings
             }
             else
             {
+                # Skip GroupSettingCollection that only appears once, go straight to the child properties
                 $childSettings = $groupSettingCollectionValue.children
                 foreach ($value in $childSettings)
                 {
