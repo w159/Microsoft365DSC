@@ -46655,7 +46655,7 @@
         "Parameters":  [
                            {
                                "CIMType":  "String",
-                               "Name":  "ResourceName",
+                               "Name":  "ResourceTypeName",
                                "Option":  "Key"
                            },
                            {
