@@ -103393,4 +103393,26 @@ function Get-TenantAllowBlockListSpoofItems
         $Identity
     )
 }
+function Set-TenantAllowBlockListSpoofItems
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Action,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.String[]]
+        $Ids
+    )
+}
+
 #endregion
