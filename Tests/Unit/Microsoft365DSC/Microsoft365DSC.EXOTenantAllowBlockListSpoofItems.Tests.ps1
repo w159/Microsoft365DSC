@@ -70,7 +70,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should create a new instance from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-TenantAllowBlockListSpoofItems-Exactly 1
+                Should -Invoke -CommandName New-TenantAllowBlockListSpoofItems -Exactly 1
             }
         }
 
