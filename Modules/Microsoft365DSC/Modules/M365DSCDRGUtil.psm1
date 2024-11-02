@@ -2340,9 +2340,10 @@ function Export-IntuneSettingCatalogPolicySettings
         '#microsoft.graph.deviceManagementConfigurationGroupSettingCollectionInstance'
         {
             $groupSettingCollectionValue = if ($IsRoot) { $SettingInstance.AdditionalProperties.groupSettingCollectionValue } else { $SettingInstance.groupSettingCollectionValue }
-            $childSettingDefinitions = $SettingDefinitions | Where-Object -FilterScript {
+            [array]$childSettingDefinitions = $SettingDefinitions | Where-Object -FilterScript {
                 $settingDefinition.AdditionalProperties.childIds -contains $_.Id
             }
+            $parentSettingDefinition = $SettingDefinitions | Where-Object -FilterScript { $_.Id -eq $settingDefinition.AdditionalProperties.dependentOn.parentSettingId }
 
             if ($settingDefinition.AdditionalProperties.maximumCount -gt 1 -and $childSettingDefinitions.Count -eq 1)
             {
@@ -2357,9 +2358,9 @@ function Export-IntuneSettingCatalogPolicySettings
                 }
                 $addToParameters = $false
             }
-            elseif ($settingDefinition.AdditionalProperties.maximumCount -gt 1 -and $childSettingDefinitions -is [array] -and $childSettingDefinitions.Count -gt 1)
+            elseif (($settingDefinition.AdditionalProperties.maximumCount -gt 1 -or $parentSettingDefinition.AdditionalProperties.maximumCount -gt 1) -and $childSettingDefinitions.Count -gt 1)
             {
-                # If the GroupSettingCollection can appear multiple times, we need to add its name as a property
+                # If the GroupSettingCollection can appear multiple times (either itself or from the parent), we need to add its name as a property
                 # and the child settings as its value
                 $childValue = $null
                 if (-not $IsRoot)
