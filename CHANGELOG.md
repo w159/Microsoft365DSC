@@ -112,6 +112,8 @@
   * Initial release.
 * IntuneSecurityBaselineDefenderForEndpoint
   * Initial release.
+* IntuneSettingCatalogCustomPolicyWindows10
+  * Fixes an issue with limited results when more than 25 results are present.
 * Intune workload
   * Fixed missing permissions in settings.json
 * M365DSCRuleEvaluation
