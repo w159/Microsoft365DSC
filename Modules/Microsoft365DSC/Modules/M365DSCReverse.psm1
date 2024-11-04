@@ -41,7 +41,7 @@ function Start-M365DSCConfigurationExtract
         $MaxProcesses = 16,
 
         [Parameter()]
-        [ValidateSet('AAD', 'FABRIC', 'SPO', 'EXO', 'INTUNE', 'SC', 'OD', 'O365', 'TEAMS', 'PP', 'PLANNER')]
+        [ValidateSet('AAD', 'FABRIC', 'SPO', 'DEFENDER','EXO', 'INTUNE', 'SC', 'SENTINEL', 'OD', 'O365', 'TEAMS', 'PP', 'PLANNER')]
         [System.String[]]
         $Workloads,
 
@@ -691,7 +691,7 @@ function Start-M365DSCConfigurationExtract
 
         # Azure Automation Check
         $AzureAutomation = $false
-        if ('AzureAutomation/' -eq $env:AZUREPS_HOST_ENVIRONMENT)
+        if ($env:AZUREPS_HOST_ENVIRONMENT -like 'AzureAutomation*')
         {
             $AzureAutomation = $true
         }

@@ -170,7 +170,7 @@ function Get-TargetResource
 
         [Parameter()]
         [ValidateSet('unspecified', 'unmanaged', 'mdm', 'androidEnterprise')]
-        [System.String]
+        [System.String[]]
         $TargetedAppManagementLevels,
 
         [Parameter()]
@@ -393,7 +393,7 @@ function Get-TargetResource
             PinRequiredInsteadOfBiometricTimeout           = $myPinRequiredInsteadOfBiometricTimeout
             AllowedOutboundClipboardSharingExceptionLength = $policy.AllowedOutboundClipboardSharingExceptionLength
             NotificationRestriction                        = [String]$policy.NotificationRestriction
-            TargetedAppManagementLevels                    = [String]$policy.TargetedAppManagementLevels
+            TargetedAppManagementLevels                    = [String[]]$policy.TargetedAppManagementLevels.ToString().Split(',')
             ExemptedAppProtocols                           = $exemptedAppProtocolsArray
             MinimumWipeSdkVersion                          = $policy.MinimumWipeSdkVersion
             AllowedIosDeviceModels                         = $policy.AllowedIosDeviceModels
@@ -594,7 +594,7 @@ function Set-TargetResource
 
         [Parameter()]
         [ValidateSet('unspecified', 'unmanaged', 'mdm', 'androidEnterprise')]
-        [System.String]
+        [System.String[]]
         $TargetedAppManagementLevels,
 
         [Parameter()]
@@ -707,9 +707,10 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Creating new iOS App Protection Policy {$DisplayName}"
         $createParameters = ([Hashtable]$PSBoundParameters).clone()
-        $createParameters.remove('Identity')
-        $createParameters.remove('Assignments')
-        $createParameters.remove('Apps')
+        $createParameters.Remove('Identity')
+        $createParameters.Remove('Assignments')
+        $createParameters.Remove('Apps')
+        $createParameters.TargetedAppManagementLevels = $createParameters.TargetedAppManagementLevels -join ','
 
         $myApps = Get-IntuneAppProtectionPolicyiOSAppsToHashtable -Parameters $PSBoundParameters
         $myAssignments = Get-IntuneAppProtectionPolicyiOSAssignmentToHashtable -Parameters $PSBoundParameters
@@ -758,9 +759,10 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Updating existing iOS App Protection Policy {$DisplayName}"
         $updateParameters = ([Hashtable]$PSBoundParameters).clone()
-        $updateParameters.remove('Identity')
-        $updateParameters.remove('Assignments')
-        $updateParameters.remove('Apps')
+        $updateParameters.Remove('Identity')
+        $updateParameters.Remove('Assignments')
+        $updateParameters.Remove('Apps')
+        $updateParameters.TargetedAppManagementLevels = $updateParameters.TargetedAppManagementLevels -join ','
 
         $myApps = Get-IntuneAppProtectionPolicyiOSAppsToHashtable -Parameters $PSBoundParameters
         $myAssignments = Get-IntuneAppProtectionPolicyiOSAssignmentToHashtable -Parameters $PSBoundParameters
@@ -982,7 +984,7 @@ function Test-TargetResource
 
         [Parameter()]
         [ValidateSet('unspecified', 'unmanaged', 'mdm', 'androidEnterprise')]
-        [System.String]
+        [System.String[]]
         $TargetedAppManagementLevels,
 
         [Parameter()]
@@ -1300,7 +1302,7 @@ function Get-IntuneAppProtectionPolicyiOSAssignment
 
     try
     {
-        $Url = "https://graph.microsoft.com/beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assignments"
+        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assignments"
         $response = Invoke-MgGraphRequest -Method Get `
             -Uri $Url
         return $response.value
@@ -1331,7 +1333,7 @@ function Update-IntuneAppProtectionPolicyiOSAssignment
     )
     try
     {
-        $Url = "https://graph.microsoft.com/beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assign"
+        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assign"
         # Write-Verbose -Message "Group Assignment for iOS App Protection policy with JSON payload: `r`n$JSONContent"
         Invoke-MgGraphRequest -Method POST `
             -Uri $Url `
@@ -1364,7 +1366,7 @@ function Update-IntuneAppProtectionPolicyiOSApp
 
     try
     {
-        $Url = "https://graph.microsoft.com/beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/targetApps"
+        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/targetApps"
         # Write-Verbose -Message "Group Assignment for iOS App Protection policy with JSON payload: `r`n$JSONContent"
         Invoke-MgGraphRequest -Method POST `
             -Uri $Url `

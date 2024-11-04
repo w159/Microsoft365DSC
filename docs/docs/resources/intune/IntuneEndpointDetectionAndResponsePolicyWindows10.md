@@ -6,6 +6,7 @@
 | --- | --- | --- | --- | --- |
 | **Identity** | Write | String | Identity of the endpoint detection and response policy for Windows 10. | |
 | **DisplayName** | Key | String | Display name of the endpoint detection and response policy for Windows 10. | |
+| **RoleScopeTagIds** | Write | StringArray[] | List of Scope Tags for this Entity instance. | |
 | **Description** | Write | String | Description of the endpoint detection and response policy for Windows 10. | |
 | **Assignments** | Write | MSFT_DeviceManagementConfigurationPolicyAssignments[] | Assignments of the endpoint detection and response policy for Windows 10. | |
 | **SampleSharing** | Write | String | Return or set Windows Defender Advanced Threat Protection Sample Sharing configuration parameter: 0 - none, 1 - All | `0`, `1` |
@@ -48,21 +49,21 @@ To authenticate with the Microsoft Graph API, this resource required the followi
 
 - **Read**
 
-    - DeviceManagementConfiguration.Read.All
+    - Group.Read.All, DeviceManagementConfiguration.Read.All
 
 - **Update**
 
-    - DeviceManagementConfiguration.ReadWrite.All
+    - Group.Read.All, DeviceManagementConfiguration.ReadWrite.All
 
 #### Application permissions
 
 - **Read**
 
-    - DeviceManagementConfiguration.Read.All
+    - Group.Read.All, DeviceManagementConfiguration.Read.All
 
 - **Update**
 
-    - DeviceManagementConfiguration.ReadWrite.All
+    - Group.Read.All, DeviceManagementConfiguration.ReadWrite.All
 
 ## Examples
 
@@ -100,6 +101,9 @@ Configuration Example
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;
+            ConfigurationBlob = "Blob"
+            ConfigurationType = "onboard"
+            SampleSharing = 1
         }
     }
 }
@@ -139,6 +143,9 @@ Configuration Example
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;
+            ConfigurationBlob = "Blob"
+            ConfigurationType = "onboard"
+            SampleSharing = 1
         }
     }
 }

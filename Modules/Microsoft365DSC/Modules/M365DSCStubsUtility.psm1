@@ -19,7 +19,11 @@ function New-M365DSCStubFiles
 
         [Parameter()]
         [System.Collections.Hashtable[]]
-        $Workloads
+        $Workloads,
+
+        [Parameter()]
+        [String[]]
+        $CmdletsList
     )
 
     if ($null -eq $Credential)
@@ -52,6 +56,7 @@ function New-M365DSCStubFiles
             @{Name = 'ExchangeOnline'; ModuleName = 'ExchangeOnlineManagement'; CommandName = 'Get-Mailbox' }, # This is the EXO Proxy
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Applications'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Authentication'},
+            @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Applications'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.DeviceManagement'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Devices.CorporateManagement'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.DeviceManagement.Administration'},
@@ -59,6 +64,7 @@ function New-M365DSCStubFiles
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Identity.DirectoryManagement'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Identity.Governance'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Identity.SignIns'},
+            @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Search'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Beta.Teams'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.DeviceManagement.Administration'},
             @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.DirectoryObjects'},
@@ -73,46 +79,67 @@ function New-M365DSCStubFiles
             @{Name = 'MicrosoftTeams'; ModuleName = 'MicrosoftTeams'; }
         )
     }
+    if ($null -ne $CmdletsList -and $CmdletsList.Length -gt 0)
+    {
+        $workloads = @{Name = 'MicrosoftGraph'; ModuleName = 'Microsoft.Graph.Authentication'}
+    }
 
     foreach ($Module in $workloads)
     {
-        Write-Host "Connecting to {$($Module.Name)}"
-        $ConnectionMode = New-M365DSCConnection -Workload ($Module.Name) `
-            -InboundParameters $PSBoundParameters
-
-        Write-Host "Generating Stubs for {$($Module.ModuleName)}..."
-        $CurrentModuleName = $Module.ModuleName
-
-        if ($null -eq $CurrentModuleName -or $Module.CommandName)
+        if ($null -eq $CmdletsList -or $CmdletsList.Length -eq 0)
         {
-            Write-Host "Loading proxy for $($Module.ModuleName)"
-            $foundModule = Get-Module | Where-Object -FilterScript { $_.ExportedCommands.Values.Name -ccontains $Module.CommandName }
-            $CurrentModuleName = $foundModule.Name
-            Import-Module $CurrentModuleName -Force -Global -ErrorAction SilentlyContinue
+            Write-Host "Connecting to {$($Module.Name)}"
+            $ConnectionMode = New-M365DSCConnection -Workload ($Module.Name) `
+                -InboundParameters $PSBoundParameters
+
+            Write-Host "Generating Stubs for {$($Module.ModuleName)}..."
+            $CurrentModuleName = $Module.ModuleName
+
+            if ($null -eq $CurrentModuleName -or $Module.CommandName)
+            {
+                Write-Host "Loading proxy for $($Module.ModuleName)"
+                $foundModule = Get-Module | Where-Object -FilterScript { $_.ExportedCommands.Values.Name -ccontains $Module.CommandName }
+                $CurrentModuleName = $foundModule.Name
+                Import-Module $CurrentModuleName -Force -Global -ErrorAction SilentlyContinue
+            }
+            else
+            {
+                Import-Module $CurrentModuleName -Force -Global -ErrorAction SilentlyContinue
+                $ConnectionMode = New-M365DSCConnection -Workload $Module.Name `
+                    -InboundParameters $PSBoundParameters
+            }
+
+            $cmdlets = Get-Command -CommandType 'Cmdlet' | Where-Object -FilterScript { $_.Source -eq $CurrentModuleName }
+            if ($null -eq $cmdlets -or $Module.ModuleName -eq 'MicrosoftTeams')
+            {
+                $cmdlets += Get-Command -CommandType 'Function' -Module $CurrentModuleName
+            }
+
+            try
+            {
+                $aliases = Get-Command -CommandType 'Alias' | Where-Object -FilterScript { $_.Source -eq $CurrentModuleName }
+                $cmdlets += $aliases
+                $cmdlets = $cmdlets | Select-Object -Unique
+            }
+            catch
+            {
+                Write-Verbose -Message $_
+            }
         }
         else
         {
-            Import-Module $CurrentModuleName -Force -Global -ErrorAction SilentlyContinue
-            $ConnectionMode = New-M365DSCConnection -Workload $Module.Name `
-                -InboundParameters $PSBoundParameters
+            $cmdlets = @()
+            foreach ($entry in $CmdletsList)
+            {
+                $command = Get-Command $entry -ErrorAction SilentlyContinue
+                if ($null -ne $command)
+                {
+                    $CurrentModuleName = $command.ModuleName
+                    $cmdlets += $command
+                }
+            }
         }
 
-        $cmdlets = Get-Command -CommandType 'Cmdlet' | Where-Object -FilterScript { $_.Source -eq $CurrentModuleName }
-        if ($null -eq $cmdlets -or $Module.ModuleName -eq 'MicrosoftTeams')
-        {
-            $cmdlets += Get-Command -CommandType 'Function' -Module $CurrentModuleName
-        }
-
-        try
-        {
-            $aliases = Get-Command -CommandType 'Alias' | Where-Object -FilterScript { $_.Source -eq $CurrentModuleName }
-            $cmdlets += $aliases
-            $cmdlets = $cmdlets | Select-Object -Unique
-        }
-        catch
-        {
-            Write-Verbose -Message $_
-        }
         $StubContent = [System.Text.StringBuilder]::New()
         $i = 1
         foreach ($cmdlet in $cmdlets)

@@ -1,4 +1,3 @@
-
 function New-M365DSCResource
 {
     param (
@@ -84,6 +83,9 @@ function New-M365DSCResource
     $graphWorkloads = @('MicrosoftGraph','Intune')
     if ($Workload -in $graphWorkloads)
     {
+        Write-Verbose "Import Intune Settings Catalog Helper module"
+        Import-Module ..\Modules\Microsoft365DSC\Modules\M365DSCIntuneSettingsCatalogUtil.psm1 -Force
+
         $Global:CIMInstancesAlreadyFound = @()
         $GetcmdletName = "Get-$CmdLetNoun"
         $commandDetails = Find-MgGraphCommand -Command $GetcmdletName -ApiVersion $APIVersion -ErrorAction SilentlyContinue
@@ -245,18 +247,123 @@ function New-M365DSCResource
             }
 
             $templateSettings = @()
-            foreach ($settingTemplate in $SettingsCatalogSettingTemplates)
+            $deviceSettingsCatalogTemplates = $SettingsCatalogSettingTemplates | Where-Object -FilterScript { $_.SettingInstanceTemplate.SettingDefinitionId.StartsWith("device_") }
+            $deviceSettingDefinitions = $deviceSettingsCatalogTemplates.SettingDefinitions
+
+            $userSettingsCatalogTemplates = $SettingsCatalogSettingTemplates | Where-Object -FilterScript { $_.SettingInstanceTemplate.SettingDefinitionId.StartsWith("user_") }
+            $userSettingDefinitions = $userSettingsCatalogTemplates.SettingDefinitions
+
+            $defaultSettingsCatalogTemplates = $SettingsCatalogSettingTemplates | Where-Object -FilterScript {
+                -not $_.SettingInstanceTemplate.SettingDefinitionId.StartsWith("device_") -and
+                -not $_.SettingInstanceTemplate.SettingDefinitionId.StartsWith("user_")
+            }
+            $defaultSettingDefinitions = $defaultSettingsCatalogTemplates.SettingDefinitions
+
+            $containsDeviceAndUserSettings = $false
+            if ($deviceSettingDefinitions.Count -gt 0 -and $userSettingDefinitions.Count -gt 0)
             {
-                $templateSettings += New-SettingsCatalogSettingDefinitionSettingsFromTemplate `
-                    -FromRoot `
-                    -SettingTemplate $settingTemplate
+                $containsDeviceAndUserSettings = $true
             }
 
-            $definitionSettings = @()
-            foreach ($templateSetting in $templateSettings)
+            $deviceTemplateSettings = @()
+            foreach ($deviceSettingTemplate in $deviceSettingsCatalogTemplates)
             {
-                $definitionSettings += New-ParameterDefinitionFromSettingsCatalogTemplateSetting `
-                    -TemplateSetting $templateSetting
+                $deviceTemplateSettings += New-SettingsCatalogSettingDefinitionSettingsFromTemplate `
+                    -FromRoot `
+                    -SettingTemplate $deviceSettingTemplate `
+                    -AllSettingDefinitions $deviceSettingDefinitions
+            }
+
+            $userTemplateSettings = @()
+            foreach ($userSettingTemplate in $userSettingsCatalogTemplates)
+            {
+                $userTemplateSettings += New-SettingsCatalogSettingDefinitionSettingsFromTemplate `
+                    -FromRoot `
+                    -SettingTemplate $userSettingTemplate `
+                    -AllSettingDefinitions $userSettingDefinitions
+            }
+
+            $defaultTemplateSettings = @()
+            foreach ($defaultSettingTemplate in $defaultSettingsCatalogTemplates)
+            {
+                $defaultTemplateSettings += New-SettingsCatalogSettingDefinitionSettingsFromTemplate `
+                    -FromRoot `
+                    -SettingTemplate $defaultSettingTemplate `
+                    -AllSettingDefinitions $defaultSettingDefinitions
+            }
+
+            $deviceDefinitionSettings = @()
+            foreach ($deviceTemplateSetting in $deviceTemplateSettings)
+            {
+                foreach ($deviceChildSetting in $deviceTemplateSetting.ChildSettings)
+                {
+                    $deviceChildSetting.DisplayName += " - Depends on $($deviceTemplateSetting.Name)"
+                }
+                $deviceDefinitionSettings += New-ParameterDefinitionFromSettingsCatalogTemplateSetting `
+                    -TemplateSetting $deviceTemplateSetting
+            }
+
+            $userDefinitionSettings = @()
+            foreach ($userTemplateSetting in $userTemplateSettings)
+            {
+                foreach ($userChildSetting in $userTemplateSetting.ChildSettings)
+                {
+                    $userChildSetting.DisplayName += " - Depends on $($userTemplateSetting.Name)"
+                }
+                $userDefinitionSettings += New-ParameterDefinitionFromSettingsCatalogTemplateSetting `
+                    -TemplateSetting $userTemplateSetting
+            }
+
+            $defaultDefinitionSettings = @()
+            foreach ($defaultTemplateSetting in $defaultTemplateSettings)
+            {
+                foreach ($defaultChildSetting in $defaultTemplateSetting.ChildSettings)
+                {
+                    $defaultChildSetting.DisplayName += " - Depends on $($defaultTemplateSetting.Name)"
+                }
+                $defaultDefinitionSettings += New-ParameterDefinitionFromSettingsCatalogTemplateSetting `
+                    -TemplateSetting $defaultTemplateSetting
+            }
+
+            Write-Verbose -Message "* Check the description for the parameters. CIM types might include a 'Depends on' information, although it is not required."
+
+            if ($containsDeviceAndUserSettings)
+            {
+                $definitionSettings = @{
+                    PowerShell = @(
+
+@"
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        `$DeviceSettings
+"@,
+@"
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        `$UserSettings
+"@
+                    )
+                    MOFInstance = @(
+@"
+[ClassVersion("1.0.0.0")]
+class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_$($ResourceName)
+{
+$($deviceDefinitionSettings.MOF -join "`r`n")
+};
+"@,
+@"
+[ClassVersion("1.0.0.0")]
+class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_$($ResourceName)
+{
+$($userDefinitionSettings.MOF -join "`r`n")
+};
+"@
+                    )
+                }
+            }
+            else
+            {
+                $definitionSettings = $deviceDefinitionSettings + $userDefinitionSettings + $defaultDefinitionSettings
             }
 
             $parameterString += $definitionSettings.PowerShell -join ",`r`n`r`n"
@@ -267,13 +374,13 @@ function New-M365DSCResource
             {
                 $parameter -match '\$.*$'
                 $parameterName = $Matches[0].Replace('$', '')
-                $parameterType = 'IntuneSettingsCatalog' + $parameterName
-                $cimInstance = $definitionSettings.MOFInstance | Where-Object -FilterScript { $_ -like "*$parameterType`n*" }
+                $parameterType = 'IntuneSettingsCatalog' + $parameterName + $(if ($parameterName -in @('DeviceSettings', 'UserSettings')) { "_$ResourceName" })
+                $cimInstance = $definitionSettings.MOFInstance | Where-Object -FilterScript { $_ -like "*$parameterType`n*" -or $_ -like "*$parameterType`r`n*" }
                 $rowFilter = '\[.*;'
                 $cimRows = [regex]::Matches($cimInstance, $rowFilter) | Foreach-Object {
                     $_.Value
                 }
-                $cimPropertyNamequery = '[a-zA-Z_]+[\[\]]*;'
+                $cimPropertyNamequery = '[a-zA-Z0-9_]+[\[\]]*;'
                 $cimProperties = @()
                 foreach ($row in $cimRows)
                 {
@@ -295,7 +402,7 @@ function New-M365DSCResource
                     Name = $parameterName
                     IsComplexType = $true
                     IsMandatory = $false
-                    IsArray = $true
+                    IsArray = $parameter -match '\[.*\[\]\]'
                     Type = $parameterType
                     Properties = $cimProperties
                 }
@@ -470,10 +577,11 @@ function New-M365DSCResource
         [array]`$settings = Get-$($CmdLetNoun)Setting ``
             -DeviceManagementConfigurationPolicyId `$Id ``
             -ExpandProperty 'settingDefinitions' ``
+            -All ``
             -ErrorAction Stop
 
         `$policySettings = @{}
-        `$policySettings = Export-IntuneSettingCatalogPolicySettings -Settings `$settings -ReturnHashtable `$policySettings `r`n
+        `$policySettings = Export-IntuneSettingCatalogPolicySettings -Settings `$settings -ReturnHashtable `$policySettings$(if ($containsDeviceAndUserSettings) { ' -ContainsDeviceAndUserSettings' })`r`n
 "@
             $settingsCatalogAddSettings = "        `$results += `$policySettings`r`n`r`n"
         }
@@ -593,7 +701,7 @@ function New-M365DSCResource
             $defaultCreateParameters = @"
         `$settings = Get-IntuneSettingCatalogPolicySetting ``
             -DSCParams ([System.Collections.Hashtable]`$BoundParameters) ``
-            -TemplateId `$templateReferenceId
+            -TemplateId `$templateReferenceId$(if ($containsDeviceAndUserSettings) { " ```r`n            -ContainsDeviceAndUserSettings" })
 
         `$createParameters = @{
             Name              = `$DisplayName
@@ -716,7 +824,7 @@ function New-M365DSCResource
             $defaultUpdateParameters = @"
         `$settings = Get-IntuneSettingCatalogPolicySetting ``
             -DSCParams ([System.Collections.Hashtable]`$BoundParameters) ``
-            -TemplateId `$templateReferenceId
+            -TemplateId `$templateReferenceId$(if ($containsDeviceAndUserSettings) { " ```r`n            -ContainsDeviceAndUserSettings" })
 
         Update-IntuneDeviceConfigurationPolicy ``
             -DeviceConfigurationPolicyId `$currentInstance.Id ``
@@ -889,7 +997,15 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
             -Workload $Workload `
             -CmdLetNoun $CmdLetNoun `
             -ApiVersion $ApiVersion `
-            -UpdateVerb $updateVerb).permissions | ConvertTo-Json -Depth 20
+            -UpdateVerb $updateVerb).permissions
+        if ($ResourceName -like "Intune*")
+        {
+            $resourcePermissions.graph.application.read += @{ name = 'Group.Read.All' }
+            $resourcePermissions.graph.application.update += @{ name = 'Group.Read.All' }
+            $resourcePermissions.graph.delegated.read += @{ name = 'Group.Read.All' }
+            $resourcePermissions.graph.delegated.update += @{ name = 'Group.Read.All' }
+        }
+        $resourcePermissions = $resourcePermissions | ConvertTo-Json -Depth 20
         $resourcePermissions = '    ' + $resourcePermissions
         Write-TokenReplacement -Token '<ResourceFriendlyName>' -Value $ResourceName -FilePath $settingsFilePath
         Write-TokenReplacement -Token '<ResourceDescription>' -Value $resourceDescription -FilePath $settingsFilePath
@@ -911,10 +1027,24 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
     }
     else
     {
-        $ParametersToFilterOut = @('Verbose', 'Debug', 'ErrorAction', 'WarningAction', 'InformationAction', 'ErrorVariable', 'WarningVariable', 'InformationVariable', 'OutVariable', 'OutBuffer', 'PipelineVariable', 'WhatIf', 'Confirm')
+        $ParametersToFilterOut = @('Verbose', 'Debug', 'ErrorAction', 'WarningAction', 'InformationAction', 'ErrorVariable', 'WarningVariable', 'InformationVariable', 'OutVariable', 'OutBuffer', 'PipelineVariable', 'WhatIf', 'Confirm', 'ProgressAction')
         $cmdlet = Get-Command ($cmdletVerb + "-" + $cmdletNoun)
 
         $defaultParameterSetProperties = $cmdlet.ParameterSets | Where-Object -FilterScript {$_.IsDefault}
+
+        if ($null -eq $defaultParameterSetProperties)
+        {
+            # No default parameter set, if there is only a single parameter set then use that
+            if ($cmdlet.ParameterSets.Count -eq 1)
+            {
+                $defaultParameterSetProperties = $cmdlet.ParameterSets[0]
+            }
+            else
+            {
+                throw "CmdLet '$($cmdletVerb + "-" + $cmdletNoun)' does not have a default parameter set"
+            }
+        }
+
         $properties = $defaultParameterSetProperties.Parameters | Where-Object -FilterScript {-not $ParametersToFilterOut.Contains($_.Name) -and -not $_.Name.StartsWith('MsftInternal')}
 
         #region Get longest parametername
@@ -1128,6 +1258,12 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
 
             $propertyValue = $null
             $propertyDriftValue = $null
+
+            if ($null -eq $fakeValues.$key)
+            {
+                continue
+            }
+
             switch ($fakeValues.$key.GetType().Name)
             {
                 "String"
@@ -1934,7 +2070,6 @@ function Get-ComplexTypeConstructorToString
                         $complexString.AppendLine($spacing + "`$$tempPropertyName.Add('" +  $nestedPropertyName + "', `$$referencePrefix$AssignedPropertyName)" ) | Out-Null
                     }
                 }
-
             }
         }
     }
@@ -3688,7 +3823,7 @@ function Get-SettingsCatalogSettingDefinitionValueType {
     # Type can be Choice, Simple or *Collection
     $type = $SettingDefinition.AdditionalProperties.'@odata.type'.Replace($settingDefinitionOdataTypeBase, "").Replace("Setting", "").Replace("Definition", "")
     if ($type -eq 'Simple') {
-        $type += $SettingDefinition.AdditionalProperties.defaultValue.'@odata.type'.Replace($settingDefinitionOdataTypeBase, "").Replace("SettingValue", "")
+        $type += $SettingDefinition.AdditionalProperties.valueDefinition.'@odata.type'.Replace($settingDefinitionOdataTypeBase, "").Replace("SettingValueDefinition", "")
     } elseif ($type -eq 'SimpleCollection') {
         if ($null -ne $SettingDefinition.AdditionalProperties.defaultValue) {
             $type = $type.Replace("Collection", $SettingDefinition.AdditionalProperties.defaultValue.'@odata.type'.Replace($settingDefinitionOdataTypeBase, "").Replace("SettingValue", "") + "Collection")
@@ -3729,6 +3864,10 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
         [Parameter(ParameterSetName = "Start")]
         [switch] $FromRoot,
 
+        [Parameter(Mandatory = $true)]
+        [System.Array]
+        $AllSettingDefinitions,
+
         [Parameter(ParameterSetName = "ParseChild")]
         [System.String]$ParentInstanceName,
 
@@ -3746,7 +3885,8 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
         return New-SettingsCatalogSettingDefinitionSettingsFromTemplate `
             -SettingTemplate $SettingTemplate `
             -RootSettingDefinitions $RootSettingDefinitions `
-            -SettingDefinitionIdPrefix $settingDefinitionIdPrefix
+            -SettingDefinitionIdPrefix $settingDefinitionIdPrefix `
+            -AllSettingDefinitions $AllSettingDefinitions
     }
 
     if ($PSCmdlet.ParameterSetName -eq "ParseRoot") {
@@ -3757,7 +3897,8 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
                 -SettingDefinition $RootSettingDefinition `
                 -SettingDefinitionIdPrefix $settingDefinitionIdPrefix `
                 -Level 1 `
-                -ParentInstanceName "MSFT_MicrosoftGraphIntuneSettingsCatalog"
+                -ParentInstanceName "MSFT_MicrosoftGraphIntuneSettingsCatalog" `
+                -AllSettingDefinitions $AllSettingDefinitions
         }
         return $settings
     }
@@ -3767,43 +3908,7 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
     $options          = Get-SettingsCatalogSettingDefinitionValueOption -SettingDefinition $SettingDefinition -SettingDefinitionOdataTypeBase $settingDefinitionOdataTypeBase
     $valueRestriction = Get-SettingsCatalogSettingDefinitionValueDefinition -SettingDefinition $SettingDefinition -SettingDefinitionOdataTypeBase $settingDefinitionOdataTypeBase
 
-    $settingName = $SettingDefinition.Name
-
-    $settingsWithSameName = $SettingTemplate.SettingDefinitions | Where-Object -FilterScript { $_.Name -eq $settingName }
-    if ($settingsWithSameName.Count -gt 1) {
-        # Get the parent setting of the current setting
-        if ($SettingDefinition.AdditionalProperties.dependentOn.parentSettingId.Count -gt 0)
-        {
-            $parentSetting = $SettingTemplate.SettingDefinitions | Where-Object -FilterScript {
-                $_.Id -eq ($SettingDefinition.AdditionalProperties.dependentOn.parentSettingId | Select-Object -Unique -First 1)
-            }
-        }
-        elseif ($SettingDefinition.AdditionalProperties.options.dependentOn.parentSettingId.Count -gt 0)
-        {
-            $parentSetting = $SettingTemplate.SettingDefinitions | Where-Object -FilterScript {
-                $_.Id -eq ($SettingDefinition.AdditionalProperties.options.dependentOn.parentSettingId | Select-Object -Unique -First 1)
-            }
-        }
-
-        $combinationMatches = $SettingTemplate.SettingDefinitions | Where-Object -FilterScript {
-            $_.Name -eq $settingName -and
-            (($_.AdditionalProperties.dependentOn.Count -gt 0 -and $_.AdditionalProperties.dependentOn.parentSettingId -contains $parentSetting.Id) -or
-            ($_.AdditionalProperties.options.dependentOn.Count -gt 0 -and $_.AdditionalProperties.options.dependentOn.parentSettingId -contains $parentSetting.Id))
-        }
-
-        # If the combination of parent setting and setting name is unique, add the parent setting name to the setting name
-        if ($combinationMatches.Count -eq 1) {
-            $settingName = $parentSetting.Name + "_" + $settingName
-        }
-        # If the combination of parent setting and setting name is still not unique, get the last part of the setting id as the name
-        else
-        {
-            $parentSettingIdProperty = $parentSetting.Id.Split('_')[-1]
-            $parentSettingIdWithoutProperty = $parentSetting.Id.Replace("_$parentSettingIdProperty", "")
-            # We can't use the entire setting here, because the child setting id does not have to come after the parent setting id
-            $settingName = $SettingDefinition.Id.Replace($parentSettingIdWithoutProperty + "_", "").Replace($parentSettingIdProperty + "_", "")
-        }
-    }
+    $settingName = Get-SettingsCatalogSettingName -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
 
     $childSettings = @()
     $childSettings += $SettingTemplate.SettingDefinitions | Where-Object -FilterScript {
@@ -3813,9 +3918,9 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
     }
 
     $instanceName = "MSFT_MicrosoftGraphIntuneSettingsCatalog"
-    if ($Level -gt 1 -and $type -like "GroupCollection*" -and $childSettings.Count -gt 1)
+    if (($Level -gt 1 -and $type -like "GroupCollection*" -and $childSettings.Count -gt 1) -or ($Level -eq 1 -and $type -like "GroupCollection*" -and $SettingDefinition.AdditionalProperties.maximumCount -gt 1))
     {
-        $instanceName = $ParentInstanceName + $SettingDefinition.Name
+        $instanceName = $ParentInstanceName + $settingName
     }
 
     $innerChildSettings = @()
@@ -3825,7 +3930,8 @@ function New-SettingsCatalogSettingDefinitionSettingsFromTemplate {
             -SettingDefinition $childSetting `
             -SettingDefinitionIdPrefix $SettingDefinitionIdPrefix `
             -Level $($Level + 1) `
-            -ParentInstanceName $instanceName
+            -ParentInstanceName $instanceName `
+            -AllSettingDefinitions $AllSettingDefinitions
     }
 
     $setting = [ordered]@{
@@ -3896,7 +4002,7 @@ class <ClassName>
         $<Name>
 "@
 
-    $mofDefinition = $mofParameterTemplate.Replace("<DisplayName>", $TemplateSetting.DisplayName)
+    $mofDefinition = $mofParameterTemplate.Replace("<DisplayName>", $TemplateSetting.DisplayName.Replace("`r`n", ""))
     $optionsString = ""
     $valueMapString = ""
     if ($TemplateSetting.Options) {
