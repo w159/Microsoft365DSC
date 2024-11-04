@@ -13,8 +13,8 @@ function Get-TargetResource
         $Id,
 
         [Parameter()]
-        [System.Boolean]
-        $Enabled,
+        [System.String]
+        $State,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -95,7 +95,7 @@ function Get-TargetResource
         $results = @{
             Name                  = $instance.Name
             Id                    = $instance.Id
-            Enabled               = $instance.Enabled
+            State                 = $instance.State
             Ensure                = 'Present'
             Credential            = $Credential
             ApplicationId         = $ApplicationId
@@ -133,8 +133,8 @@ function Set-TargetResource
         $Id,
 
         [Parameter()]
-        [System.Boolean]
-        $Enabled,
+        [System.String]
+        $State,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -188,12 +188,14 @@ function Set-TargetResource
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        if ($Enabled)
+        if ($State -eq 'Enabled')
         {
+            Write-Verbose -Message "Enabling subscription {$Name}"
             Enable-AzSubscription -Id $currentInstance.Id | Out-Null
         }
         elseif (-not $Enabled)
         {
+            Write-Verbose -Message "Disabling subscription {$Name}"
             Disable-AzSubscription -Id $currentInstance.Id | Out-Null
         }
     }
@@ -219,8 +221,8 @@ function Test-TargetResource
         $Id,
 
         [Parameter()]
-        [System.Boolean]
-        $Enabled,
+        [System.String]
+        $State,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -315,8 +317,7 @@ function Export-TargetResource
         $AccessTokens
     )
 
-    ##TODO - Replace workload
-    $ConnectionMode = New-M365DSCConnection -Workload 'Workload' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -348,6 +349,10 @@ function Export-TargetResource
         }
         foreach ($config in $Script:exportedInstances)
         {
+            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            {
+                $Global:M365DSCExportResourceInstancesCount++
+            }
             $displayedKey = $config.Name
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
