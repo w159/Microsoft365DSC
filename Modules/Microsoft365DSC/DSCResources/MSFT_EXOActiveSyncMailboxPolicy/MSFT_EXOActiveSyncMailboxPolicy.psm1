@@ -4,6 +4,7 @@
     [OutputType([System.Collections.Hashtable])]
     param
     (
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -368,6 +369,7 @@ function Set-TargetResource
     [CmdletBinding()]
     param
     (
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -661,6 +663,7 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (        
+        [Parameter()]
         [System.String]
         $Name,
 
