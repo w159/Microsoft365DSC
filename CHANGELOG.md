@@ -73,6 +73,8 @@
   * Initial release.
 * AzureDiagnosticSettingsCustomSecurityAttribute
   * Initial release.
+* AzureSubscription
+  * Renamed parameters and added logic flow to create new subscriptions.
 * AzureVerifiedIdFaceCheck
   * Initial release.
 * EXOArcConfig
