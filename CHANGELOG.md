@@ -91,6 +91,9 @@
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
 * EXOTenantAllowBlockListSpoofItems
   * Initial release.
+* IntuneAccountProtectionLocalUserGroupMembershipPolicy
+  * Updates values in `UserSelectionType`.
+    FIXES [#5318](https://github.com/microsoft/Microsoft365DSC/issues/5318)
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
   * Initial release.
 * IntuneAppCategory
