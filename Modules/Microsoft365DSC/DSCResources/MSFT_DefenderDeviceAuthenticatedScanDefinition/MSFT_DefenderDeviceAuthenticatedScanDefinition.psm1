@@ -33,6 +33,10 @@ function Get-TargetResource
         $ScannerAgent,
 
         [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $ScanAuthenticationParams,
+
+        [Parameter()]
         [ValidateSet('Present', 'Absent')]
         [System.String]
         $Ensure = 'Present',
@@ -119,22 +123,41 @@ function Get-TargetResource
                 machineName = $instance.scannerAgent.machineName
             }
         }
+        $ScanAuthenticationParamsValue = $null
+        if ($null -ne $instance.scanAuthenticationParams)
+        {
+            $ScanAuthenticationParamsValue = @{
+                "@odata.context"   = $instance.scanAuthenticationParams."@odata.context"
+                Type               = $instance.scanAuthenticationParams.type
+                KeyVaultUrl        = $instance.scanAuthenticationParams.keyVaultUrl
+                KeyVaultSecretName = $instance.scanAuthenticationParams.keyVaultSecretName
+                Domain             = $instance.scanAuthenticationParams.Domain
+                Username           = $instance.scanAuthenticationParams.Username
+                IsGMSAUser         = $instance.scanAuthenticationParams.IsGMSAUser
+                CommunityString    = $instance.scanAuthenticationParams.CommunityString
+                AuthProtocol       = $instance.scanAuthenticationParams.AuthProtocol
+                AuthPassword       = $instance.scanAuthenticationParams.AuthPassword
+                PrivProtocol       = $instance.scanAuthenticationParams.PrivProtocol
+                PrivPassword       = $instance.scanAuthenticationParams.PrivPassword
+            }
+        }
 
         $results = @{
-            Name                  = $instance.scanName
-            Id                    = $instance.id
-            IntervalInHours       = $instance.intervalInHours
-            Target                = $instance.Target
-            IsActive              = $instance.isActive
-            ScanType              = $instance.scanType
-            ScannerAgent          = $ScannerAgentValue
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            Name                     = $instance.scanName
+            Id                       = $instance.id
+            IntervalInHours          = $instance.intervalInHours
+            Target                   = $instance.Target
+            IsActive                 = $instance.isActive
+            ScanType                 = $instance.scanType
+            ScannerAgent             = $ScannerAgentValue
+            ScanAuthenticationParams = $ScanAuthenticationParamsValue
+            Ensure                   = 'Present'
+            Credential               = $Credential
+            ApplicationId            = $ApplicationId
+            TenantId                 = $TenantId
+            CertificateThumbprint    = $CertificateThumbprint
+            ManagedIdentity          = $ManagedIdentity.IsPresent
+            AccessTokens             = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -183,6 +206,10 @@ function Set-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance]
         $ScannerAgent,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $ScanAuthenticationParams,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -235,7 +262,8 @@ function Set-TargetResource
         target          = $Target
         intervalInHours = $IntervalInHours
         scannerAgent    = @{
-            machineId = $ScannerAgent.machineId
+            machineName = $ScannerAgent.machineName
+            id          = $ScannerAgent.id
         }
         targetType = 'Ip'
         scanAuthenticationParams = @{}
@@ -243,7 +271,7 @@ function Set-TargetResource
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating new device authenticated scan definition {$Name}"
+        Write-Verbose -Message "Creating new device authenticated scan definition {$Name} with payload:`r`n$(ConvertTo-Json $instanceParams -Depth 10)"
         $response = Invoke-M365DSCDefenderREST -Uri 'https://api.securitycenter.microsoft.com/api/DeviceAuthenticatedScanDefinitions' `
                                                -Method POST `
                                                -Body $instanceParams
@@ -295,6 +323,10 @@ function Test-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance]
         $ScannerAgent,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $ScanAuthenticationParams,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -482,11 +514,35 @@ function Export-TargetResource
                     $Results.Remove('ScannerAgent') | Out-Null
                 }
             }
+
+            if ($Results.ScanAuthenticationParams)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.ScanAuthenticationParams -CIMInstanceName DefenderDeviceAuthenticatedScanDefinitionAuthenticationParams
+                if ($complexTypeStringResult)
+                {
+                    $Results.ScanAuthenticationParams = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('ScanAuthenticationParams') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
+
+            if ($Results.ScanAuthenticationParams)
+            {
+                $isCIMArray = $false
+                if ($Results.ScanAuthenticationParams.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScanAuthenticationParams' -IsCIMArray:$isCIMArray
+            }
 
             if ($Results.ScannerAgent)
             {
@@ -497,6 +553,7 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScannerAgent' -IsCIMArray:$isCIMArray
             }
+
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName
