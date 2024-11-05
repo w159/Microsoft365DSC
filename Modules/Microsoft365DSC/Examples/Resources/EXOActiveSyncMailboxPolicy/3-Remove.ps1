@@ -49,7 +49,6 @@ Configuration Example
             AlphanumericDevicePasswordRequired       = $False;
             ApprovedApplicationList                  = @();
             AttachmentsEnabled                       = $True;
-            Credential                               = $Credscredential;
             DeviceEncryptionEnabled                  = $False;
             DevicePasswordEnabled                    = $False;
             DevicePasswordExpiration                 = "Unlimited";
