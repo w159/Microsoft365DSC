@@ -14,9 +14,12 @@
   * Initial release.
 * AADConditionalAccessPolicy
   * FIXES [#5282](https://github.com/microsoft/Microsoft365DSC/issues/5282)
+  * Added support for InsiderRiskLevels.
 * AADCustomSecurityAttributeDefinition
   * Fixed missing permissions in settings.json
 * AADEnrichedAuditLogs
+  * Initial release.
+* AADFederationConfiguration
   * Initial release.
 * AADFilteringPolicy
   * Initial release.
@@ -46,12 +49,16 @@
   * Initial release.
 * AADNetworkAccessSettingCrossTenantAccess
   * Initial release.
+* AADOnPremisesPublishingProfilesSettings
+  * Initial release.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Initial release.
 * AADRemoteNetwork
   * Initial release.
 * AADRoleManagementPolicyRule
   * Initial release.
+* AADServicePrincipal
+  * Added the notes field.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
@@ -66,9 +73,13 @@
   * Initial release.
 * AzureDiagnosticSettingsCustomSecurityAttribute
   * Initial release.
+* AzureSubscription
+  * Renamed parameters and added logic flow to create new subscriptions.
 * AzureVerifiedIdFaceCheck
   * Initial release.
 * DefenderDeviceAuthenticatedScanDefinition
+  * Initial release.
+* EXOActiveSyncMailboxPolicy
   * Initial release.
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
@@ -77,10 +88,15 @@
   * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
+* EXOMailboxSettings
+  * Added support for AddressBookPolicy, RetentionPolicy, RoleAssignmentPolicy
+    and SharingPolicy.
 * EXOServicePrincipal
   * Initial release.
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
+* EXOTenantAllowBlockListSpoofItems
+  * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
   * Initial release.
 * IntuneAppCategory
@@ -102,13 +118,28 @@
   * Initial release.
 * IntuneSecurityBaselineDefenderForEndpoint
   * Initial release.
+* IntuneSettingCatalogCustomPolicyWindows10
+  * Fixes an issue with limited results when more than 25 results are present.
 * Intune workload
   * Fixed missing permissions in settings.json
+* M365DSCRuleEvaluation
+  * Changed the name of the Key property from ResourceName to ResourceTypeName.
+    While this is considered a breaking change, the old property name was
+    breaking the DSCParser process. The impact of this breaking the parsing
+    process is important enough to justify an out-of-band breaking change of
+    this resource.
+* SCInsiderRiskPolicy
+  * Added support for property MDATPTriageStatus.
+  * Added support for GPUUtilizationLimit and CPUUtilizationLimit.
 * SCPolicyConfig
   * Initial release.
 * SCSensitivityLabel
   * Fixed issue with setting label priority
     FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
+* PPPowerAppsEnvironment
+  * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
+* PPTenantSettings
+  * Updated to support latest settings.
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
@@ -128,6 +159,18 @@
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
+* MISC
+  * Fixed references to graph.microsoft.com with dynamic domain name based on target cloud.
+   Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup,
+   AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10,
+   IntuneAccountProtectionLocalUsersGroupMembershipPolicy, IntuneAccountProtectionPolicy,
+   IntuneAppProtectionPolicyiOS,IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10,
+   IntuneDeviceConfigurationSCEPCertificatePolicyWindows10, IntuneDeviceConfigurationWiredNetworkPolicyWindows10,
+   IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
+   IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
+  * Exponential performance improvements by reducing complexity and roundtrips.
+  * Changed the logic that appends GUID in the resource name when primary key is not found during an
+    export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
