@@ -64,6 +64,7 @@
   * Initial release.
 * AADServicePrincipal
   * Added the notes field.
+  * FIXES [#5312](https://github.com/microsoft/Microsoft365DSC/issues/5312)
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority

@@ -237,7 +237,7 @@ function Get-TargetResource
             }
 
             [Array]$complexDelegatedPermissionClassifications = @()
-            $Uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/servicePrincipals(appId='$AppId')/delegatedPermissionClassifications"
+            $Uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/servicePrincipals/$($AADServicePrincipal.Id)/delegatedPermissionClassifications"
             $permissionClassifications = Invoke-MgGraphRequest -Uri $Uri -Method Get
             foreach ($permissionClassification in $permissionClassifications.Value){
                 $hashtable = @{
@@ -301,13 +301,13 @@ function Get-TargetResource
                 }
             }
 
-            $complexCustomSecurityAttributes = [Array](Get-CustomSecurityAttributes -AppId $AppId)
+            $complexCustomSecurityAttributes = [Array](Get-CustomSecurityAttributes -ServicePrincipalId $AADServicePrincipal.Id)
             if ($null -eq $complexCustomSecurityAttributes) {
                 $complexCustomSecurityAttributes = @()
             }
 
             $result = @{
-                AppId                              = $AADServicePrincipal.AppId
+                AppId                              = $appInstance.DisplayName
                 AppRoleAssignedTo                  = $AppRoleAssignedToValues
                 ObjectID                           = $AADServicePrincipal.Id
                 DisplayName                        = $AADServicePrincipal.DisplayName
@@ -1220,10 +1220,10 @@ function Create-AttributeValue {
 function Get-CustomSecurityAttributes {
     [OutputType([System.Array])]
     param (
-        [String]$AppId
+        [String]$ServicePrincipalId
     )
 
-    $customSecurityAttributes = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals(appId='$AppId')`?`$select=customSecurityAttributes" -Method Get
+    $customSecurityAttributes = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($ServicePrincipalId)`?`$select=customSecurityAttributes" -Method Get
     $customSecurityAttributes = $customSecurityAttributes.customSecurityAttributes
     $newCustomSecurityAttributes = @()
 
