@@ -100,6 +100,8 @@
 * IntuneAccountProtectionLocalUserGroupMembershipPolicy
   * Updates values in `UserSelectionType`.
     FIXES [#5318](https://github.com/microsoft/Microsoft365DSC/issues/5318)
+* IntuneAntivirusPolicyLinux
+  * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
   * Initial release.
 * IntuneAppCategory
