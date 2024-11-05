@@ -159,6 +159,9 @@
     ContentSharingInExternalMeetings, Copilot, CopyRestriction,
     DetectSensitiveContentDuringScreenSharing, ExternalMeetingJoin, ParticipantNameChange,
     VoiceIsolation
+* TeamsOrgWideAppSettings
+  * Fixed an issue where ManagedIdentity wasn't define in the methods' signatures.
+    FIXES [#5188](https://github.com/microsoft/Microsoft365DSC/issues/5188)
 * M365DSCDRGUtil
   * Fixes an issue where non-unique properties were not combined
     properly with their respective parent setting.
