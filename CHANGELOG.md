@@ -73,7 +73,13 @@
   * Initial release.
 * AzureDiagnosticSettingsCustomSecurityAttribute
   * Initial release.
+* AzureSubscription
+  * Renamed parameters and added logic flow to create new subscriptions.
 * AzureVerifiedIdFaceCheck
+  * Initial release.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Initial release.
+* EXOActiveSyncMailboxPolicy
   * Initial release.
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
@@ -91,6 +97,9 @@
   * Fixed `Test-TargetResource` to correctly mark when this resource is removed
 * EXOTenantAllowBlockListSpoofItems
   * Initial release.
+* IntuneAccountProtectionLocalUserGroupMembershipPolicy
+  * Updates values in `UserSelectionType`.
+    FIXES [#5318](https://github.com/microsoft/Microsoft365DSC/issues/5318)
 * IntuneAntivirusPolicyLinux
   * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
@@ -114,6 +123,8 @@
   * Initial release.
 * IntuneSecurityBaselineDefenderForEndpoint
   * Initial release.
+* IntuneSettingCatalogCustomPolicyWindows10
+  * Fixes an issue with limited results when more than 25 results are present.
 * Intune workload
   * Fixed missing permissions in settings.json
 * M365DSCRuleEvaluation
