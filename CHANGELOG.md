@@ -4,6 +4,8 @@
 
 * AADServicePrincipal
   * Added support for KeyCredentials and PasswordCredentials.
+  * Added support for SAML.
+  * Fixed issue with Owners.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
