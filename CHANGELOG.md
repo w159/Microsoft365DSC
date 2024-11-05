@@ -60,6 +60,9 @@
   * Initial release.
 * AADRemoteNetwork
   * Initial release.
+* AADRoleEligibilityScheduleRequest
+  * Fixes for Custom roles.
+    FIXES [#5330](https://github.com/microsoft/Microsoft365DSC/issues/5330)
 * AADRoleManagementPolicyRule
   * Initial release.
 * AADServicePrincipal
@@ -67,6 +70,8 @@
   * FIXES [#5312](https://github.com/microsoft/Microsoft365DSC/issues/5312)
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
+* AADUserFlowAttribute
+  * Initial Release
 * AADVerifiedIdAuthority
   * Initial release.
 * AADVerifiedIdAuthorityContract
@@ -90,8 +95,6 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
-* AADUserFlowAttribute
-  * Initial Release
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOMailboxSettings
