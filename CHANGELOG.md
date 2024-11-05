@@ -77,6 +77,8 @@
   * Renamed parameters and added logic flow to create new subscriptions.
 * AzureVerifiedIdFaceCheck
   * Initial release.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Initial release.
 * EXOActiveSyncMailboxPolicy
   * Initial release.
 * EXOArcConfig
