@@ -8763,6 +8763,11 @@
                                "Option":  "Write"
                            },
                            {
+                               "CIMType":  "String",
+                               "Name":  "PreferredSingleSignOnMode",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "String[]",
                                "Name":  "ReplyUrls",
                                "Option":  "Write"
