@@ -29,6 +29,9 @@
   * Initial release.
 * AADFilteringProfile
   * Initial release.
+* AADGroup
+  * Added support for custom roles assignment.
+    FIXES [#5322](https://github.com/microsoft/Microsoft365DSC/issues/5322)
 * AADHomeRealmDiscoveryPolicy
   * Initial Release
 * AADIdentityAPIConnector
@@ -61,6 +64,7 @@
   * Initial release.
 * AADServicePrincipal
   * Added the notes field.
+  * FIXES [#5312](https://github.com/microsoft/Microsoft365DSC/issues/5312)
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADVerifiedIdAuthority
