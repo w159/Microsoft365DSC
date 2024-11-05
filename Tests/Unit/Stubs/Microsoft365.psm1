@@ -18,6 +18,24 @@ function Invoke-AzRest
 }
 #endregion
 
+#region M365
+function Get-M365DataAtRestEncryptionPolicyAssignment
+{
+    [CmdletBinding()]
+    param()
+}
+
+function Set-M365DataAtRestEncryptionPolicyAssignment
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataEncryptionPolicy
+    )
+}
+#endregion
+
 function Get-MgBetaPolicyDeviceRegistrationPolicy
 {
     [CmdletBinding()]
