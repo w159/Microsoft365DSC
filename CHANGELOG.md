@@ -139,6 +139,13 @@
     breaking the DSCParser process. The impact of this breaking the parsing
     process is important enough to justify an out-of-band breaking change of
     this resource.
+* ODSettings
+  * Deprecated property NotifyOwnersWhenInvitationsAccepted.
+    FIXES [#4979](https://github.com/microsoft/Microsoft365DSC/issues/4979)
+* PPPowerAppsEnvironment
+  * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
+* PPTenantSettings
+  * Updated to support latest settings.
 * SCInsiderRiskPolicy
   * Added support for property MDATPTriageStatus.
   * Added support for GPUUtilizationLimit and CPUUtilizationLimit.
@@ -147,14 +154,13 @@
 * SCSensitivityLabel
   * Fixed issue with setting label priority
     FIXES [#5266](https://github.com/microsoft/Microsoft365DSC/issues/5266)
-* PPPowerAppsEnvironment
-  * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
-* PPTenantSettings
-  * Updated to support latest settings.
 * SentinelAlertRule
   * Initial release.
 * SentinelThreatIntelligenceIndicator
   * Initial release.
+* SPOSharingSettings
+  * Deprecated property RequireAcceptingAccountMatchInvitedAccount.
+    FIXES [#4979](https://github.com/microsoft/Microsoft365DSC/issues/4979)
 * SPOTenantSettings
   * Added support for AllowSelectSGsInODBListInTenant,
     DenySelectSGsInODBListInTenant, DenySelectSecurityGroupsInSPSitesList,
