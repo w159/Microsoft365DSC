@@ -179,6 +179,8 @@
   * Exponential performance improvements by reducing complexity and roundtrips.
   * Changed the logic that appends GUID in the resource name when primary key is not found during an
     export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
+  * Add check in AADGroupSettings for NewUnifiedGroupWritebackDefault not existing in Government by default
+    FIXES [#5213](https://github.com/microsoft/Microsoft365DSC/issues/5213)
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
