@@ -190,7 +190,7 @@
                         $schedule = $instance
                     }
                 }
-                [Array]$request = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Filter "PrincipalId eq '$PrincipalId' and RoleDefinitionId eq '$RoleDefinitionId'" | Sort-Object -Property CompletedDateTime -Descending
+                [Array]$request = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Filter "PrincipalId eq '$PrincipalId' and RoleDefinitionId eq '$($schedule.RoleDefinitionId)'" | Sort-Object -Property CompletedDateTime -Descending
 `
                 if ($request.Length -gt 1)
                 {
@@ -200,6 +200,7 @@
         }
         else
         {
+            Write-Verbose -Message "Request is not null: $request"
             $ObjectGuid = [System.Guid]::empty
             if ($PrincipalType -eq 'User')
             {

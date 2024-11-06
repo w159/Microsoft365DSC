@@ -63,6 +63,8 @@
 * AADRoleEligibilityScheduleRequest
   * Fixes for Custom roles.
     FIXES [#5330](https://github.com/microsoft/Microsoft365DSC/issues/5330)
+  * Fixes to remove elegibility schedule for custom roles.
+    FIXES [#5331](https://github.com/microsoft/Microsoft365DSC/issues/5331)
 * AADRoleManagementPolicyRule
   * Initial release.
 * AADServicePrincipal
