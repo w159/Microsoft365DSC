@@ -111,6 +111,9 @@
 * IntuneAccountProtectionLocalUserGroupMembershipPolicy
   * Updates values in `UserSelectionType`.
     FIXES [#5318](https://github.com/microsoft/Microsoft365DSC/issues/5318)
+* IntuneAppProtectionPolicyiOS
+  * Fixes an issue that could cause multiple instances to be created when multiple
+    instances with the same display name exist.
 * IntuneAntivirusPolicyLinux
   * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
