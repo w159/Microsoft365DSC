@@ -204,6 +204,10 @@
     AADAuthenticationMethodPolicyExternal, AADEnrichedAuditLogs
     FIXES [#5340](https://github.com/microsoft/Microsoft365DSC/issues/5340)
     IntuneDeviceManagementEnrollmentAndroidGooglePlay, IntuneAppleMDMPushNotificationCertificate
+  * Fixes static OData refrences to graph.microsoft.com
+    AADApplication, AADEntitlementManagementAccessPackage, AADEntitlementManagementConnectedOrganization
+    AADServicePrincipal
+    FIXES [#5342] (https://github.com/microsoft/Microsoft365DSC/issues/534)
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.

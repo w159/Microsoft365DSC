@@ -548,7 +548,7 @@ function Set-TargetResource
         {
             $userInfo = Get-MgUser -UserId $owner
             $body = @{
-                '@odata.id' = "https://graph.microsoft.com/v1.0/directoryObjects/$($userInfo.Id)"
+                '@odata.id' = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/directoryObjects/$($userInfo.Id)"
             }
             Write-Verbose -Message "Adding new owner {$owner}"
             $newOwner = New-MgServicePrincipalOwnerByRef -ServicePrincipalId $newSP.Id -BodyParameter $body
@@ -701,7 +701,7 @@ function Set-TargetResource
             if ($diff.SideIndicator -eq '=>')
             {
                 $body = @{
-                    '@odata.id' = "https://graph.microsoft.com/v1.0/directoryObjects/$($userInfo.Id)"
+                    '@odata.id' = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/directoryObjects/$($userInfo.Id)"
                 }
                 Write-Verbose -Message "Adding owner {$($userInfo.Id)}"
                 New-MgServicePrincipalOwnerByRef -ServicePrincipalId $currentAADServicePrincipal.ObjectId `
