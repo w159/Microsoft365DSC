@@ -1,11 +1,7 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1106.1
 
-* AADServicePrincipal
-  * Added support for KeyCredentials and PasswordCredentials.
-  * Added support for SAML.
-  * Fixed issue with Owners.
 * AADAccessReviewDefinition
   * Initial release.
 * AADAccessReviewPolicy
@@ -46,9 +42,9 @@
   * Initial release.
 * AADNamedLocationPolicy
   * Fixed issue where duplicate names were not detected correctly.
-* AADNetworkAccessForwardingProfile
-  * Initial release.
 * AADNetworkAccessForwardingPolicy
+  * Initial release.
+* AADNetworkAccessForwardingProfile
   * Initial release.
 * AADNetworkAccessSettingConditionalAccess
   * Initial release.
@@ -69,7 +65,10 @@
   * Initial release.
 * AADServicePrincipal
   * Added the notes field.
-  * FIXES [#5312](https://github.com/microsoft/Microsoft365DSC/issues/5312)
+    FIXES [#5312](https://github.com/microsoft/Microsoft365DSC/issues/5312)
+  * Added support for KeyCredentials and PasswordCredentials.
+  * Added support for SAML.
+  * Fixed issue with Owners.
 * AADSocialIdentityProvider
   * Fixed missing permissions in settings.json
 * AADUserFlowAttribute
@@ -111,9 +110,6 @@
 * IntuneAccountProtectionLocalUserGroupMembershipPolicy
   * Updates values in `UserSelectionType`.
     FIXES [#5318](https://github.com/microsoft/Microsoft365DSC/issues/5318)
-* IntuneAppProtectionPolicyiOS
-  * Fixes an issue that could cause multiple instances to be created when multiple
-    instances with the same display name exist.
 * IntuneAntivirusPolicyLinux
   * Initial release.
 * IntuneAppAndBrowserIsolationPolicyWindows10ConfigMgr
@@ -123,6 +119,9 @@
     being created with same name.
 * IntuneAppleMDMPushNotificationCertificate
   * Initial release.
+* IntuneAppProtectionPolicyiOS
+  * Fixes an issue that could cause multiple instances to be created when multiple
+    instances with the same display name exist.
 * IntuneDerivedCredential
   * Fixed export and deployment when `NotificationType` had more than one option
     selected
@@ -151,7 +150,8 @@
   * Deprecated property NotifyOwnersWhenInvitationsAccepted.
     FIXES [#4979](https://github.com/microsoft/Microsoft365DSC/issues/4979)
 * PPPowerAppsEnvironment
-  * FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
+  * Add ProvisionDatabase attribute
+    FIXES [#5207](https://github.com/microsoft/Microsoft365DSC/issues/5207)
 * PPTenantSettings
   * Updated to support latest settings.
 * SCInsiderRiskPolicy
@@ -189,13 +189,13 @@
     properly with their respective parent setting.
 * MISC
   * Fixed references to graph.microsoft.com with dynamic domain name based on target cloud.
-   Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup,
-   AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10,
-   IntuneAccountProtectionLocalUsersGroupMembershipPolicy, IntuneAccountProtectionPolicy,
-   IntuneAppProtectionPolicyiOS,IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10,
-   IntuneDeviceConfigurationSCEPCertificatePolicyWindows10, IntuneDeviceConfigurationWiredNetworkPolicyWindows10,
-   IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
-   IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
+    Impacted AADAdminConsentRequestPolicy, AADApplication, AADConditionalAccessPolicy, AADGroup,
+    AADNamedLocationPolicy, AADServiePrincipal, IntuneASRRulesPolicyWindows10,
+    IntuneAccountProtectionLocalUsersGroupMembershipPolicy, IntuneAccountProtectionPolicy,
+    IntuneAppProtectionPolicyiOS,IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10,
+    IntuneDeviceConfigurationSCEPCertificatePolicyWindows10, IntuneDeviceConfigurationWiredNetworkPolicyWindows10,
+    IntuneDeviceEnrollmentStatusPageWindows10, IntuneDiskEncryptionMacOS, IntunePolicySets,
+    IntuneSettingCatalogCustomPolicyWindows10, M365DSCRGUtil
   * Exponential performance improvements by reducing complexity and roundtrips.
   * Changed the logic that appends GUID in the resource name when primary key is not found during an
     export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
