@@ -198,6 +198,12 @@
     export. We will only append a GUID if the IsSingleInstance property is not found on the resource.
   * Add check in AADGroupSettings for NewUnifiedGroupWritebackDefault not existing in Government by default
     FIXES [#5213](https://github.com/microsoft/Microsoft365DSC/issues/5213)
+  * Fix static refrences to graph.microsoft.com
+    FIXES [#5339](https://github.com/microsoft/Microsoft365DSC/issues/5339)
+    AADNetworkAccessForwardingPolicy. AADOrganizationCertificateBasedAuthConfiguration,
+    AADAuthenticationMethodPolicyExternal, AADEnrichedAuditLogs
+    FIXES [#5340](https://github.com/microsoft/Microsoft365DSC/issues/5340)
+    IntuneDeviceManagementEnrollmentAndroidGooglePlay, IntuneAppleMDMPushNotificationCertificate
 * DEPENDENCIES
   * Updated Microsoft.Graph to version 2.24.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.199.
