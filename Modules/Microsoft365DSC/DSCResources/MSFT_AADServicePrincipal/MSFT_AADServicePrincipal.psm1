@@ -548,7 +548,7 @@ function Set-TargetResource
         {
             $userInfo = Get-MgUser -UserId $owner
             $body = @{
-                '@odata.id' = "https://graph.microsoft.com/v1.0/directoryObjects/$($userInfo.Id)"
+                '@odata.id' = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/directoryObjects/$($userInfo.Id)"
             }
             Write-Verbose -Message "Adding new owner {$owner}"
             $newOwner = New-MgServicePrincipalOwnerByRef -ServicePrincipalId $newSP.Id -BodyParameter $body
@@ -593,7 +593,7 @@ function Set-TargetResource
             $CSAParams = @{
                 customSecurityAttributes = $currentAADServicePrincipal.CustomSecurityAttributes
             }
-            Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals(appId='$($currentParameters.AppId)')" -Method Patch -Body $CSAParams
+            Invoke-MgGraphRequest -Uri $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/servicePrincipals(appId='$($currentParameters.AppId)')" -Method Patch -Body $CSAParams
         }
 
         Update-MgServicePrincipal -ServicePrincipalId $currentAADServicePrincipal.ObjectID @currentParameters
@@ -701,7 +701,7 @@ function Set-TargetResource
             if ($diff.SideIndicator -eq '=>')
             {
                 $body = @{
-                    '@odata.id' = "https://graph.microsoft.com/v1.0/directoryObjects/$($userInfo.Id)"
+                    '@odata.id' = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "v1.0/directoryObjects/$($userInfo.Id)"
                 }
                 Write-Verbose -Message "Adding owner {$($userInfo.Id)}"
                 New-MgServicePrincipalOwnerByRef -ServicePrincipalId $currentAADServicePrincipal.ObjectId `
@@ -1223,7 +1223,7 @@ function Get-CustomSecurityAttributes {
         [String]$ServicePrincipalId
     )
 
-    $customSecurityAttributes = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($ServicePrincipalId)`?`$select=customSecurityAttributes" -Method Get
+    $customSecurityAttributes = Invoke-MgGraphRequest -Uri $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/servicePrincipals/$($ServicePrincipalId)`?`$select=customSecurityAttributes" -Method Get
     $customSecurityAttributes = $customSecurityAttributes.customSecurityAttributes
     $newCustomSecurityAttributes = @()
 
