@@ -16,7 +16,7 @@ function Get-TargetResource
         [System.Boolean]
         $Enabled,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -84,11 +84,10 @@ function Get-TargetResource
         }
 
         $results = @{
-            Identity                = [System.String]$instance.Identity
+            Identity                = $Identity
             Description             = [System.String]$instance.Description
             Enabled                 = [System.Boolean]$instance.Enabled
             Name                    = [System.String]$instance.Name
-            Refresh                 = [System.Boolean]$instance.Refresh
             AzureKeyIDs             = [System.String[]]$instance.AzureKeyIDs
             Ensure                  = 'Present'
             Credential              = $Credential
@@ -129,7 +128,7 @@ function Set-TargetResource
         [System.Boolean]
         $Enabled,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -187,19 +186,18 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         $setParameters.Remove('Identity')
-        $setParameters.Remove('Refresh')
         New-M365DataAtRestEncryptionPolicy @SetParameters
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         $setParameters.Remove('AzureKeyIDs')
+        $setParameters.Remove('Name')
         Set-M365DataAtRestEncryptionPolicy @SetParameters
     }
-    # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Remove-M365DataAtRestEncryptionPolicy -Identity $Identity
+        Write-Warning "Removal of M365DataAtRestEncryptionPolicy is not supported."
     }
 }
 
@@ -221,7 +219,7 @@ function Test-TargetResource
         [System.Boolean]
         $Enabled,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -357,7 +355,6 @@ function Export-TargetResource
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
                 Identity              = $config.Identity
-                Name                  = $config.Name
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
