@@ -2,7 +2,7 @@
 class MSFT_M365DataAtRestEncryptionPolicy : OMI_BaseResource
 {
     [Key, Description("The Identity parameter specifies the data-at-rest encryption policy that you want to modify.")] String Identity;
-    [Required, Description("The Name parameter specifies a unique name for the Microsoft 365 data-at-rest encryption policy.")] String Name;
+    [Write, Description("The Name parameter specifies a unique name for the Microsoft 365 data-at-rest encryption policy.")] String Name;
     [Write, Description("The Description parameter specifies an optional description for the policy.")] String Description;
     [Write, Description("The Enabled parameter specifies whether the policy is enabled or disabled. ")] Boolean Enabled;
     [Write, Description("The AzureKeyIDs parameter specifies the URL of the encryption key in the Azure Key Vault that's used for encryption.")] String AzureKeyIDs[];
