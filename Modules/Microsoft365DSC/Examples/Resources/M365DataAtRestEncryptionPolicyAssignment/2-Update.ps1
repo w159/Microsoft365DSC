@@ -23,7 +23,7 @@ Configuration Example
     {
         M365DataAtRestEncryptionPolicyAssignment "M365DataAtRestEncryptionPolicyAssignment"
         {
-            DataEncryptionPolicy          = "TestEncryptionPolicy"
+            DataEncryptionPolicy          = "Riyansh_Policy"
             IsSingleInstance              = "Yes";
             ApplicationId                 = $ApplicationId
             TenantId                      = $TenantId
