@@ -197,7 +197,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Warning "Removal of M365DataAtRestEncryptionPolicy is not supported."
+        Write-Warning "Removal of EXOM365DataAtRestEncryptionPolicy is not supported."
     }
 }
 

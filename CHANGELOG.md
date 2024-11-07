@@ -1,6 +1,9 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1106.2
+
+* MISC
+  * Fixed issues with API Url's parsing.
 
 # 1.24.1106.1
 
@@ -98,6 +101,8 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
+* EXOM365DataAtRestEncryptionPolicy
+  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOMailboxSettings
@@ -142,8 +147,6 @@
   * Fixes an issue with limited results when more than 25 results are present.
 * Intune workload
   * Fixed missing permissions in settings.json
-* M365DataAtRestEncryptionPolicy
-  * Initial release.
 * M365DSCRuleEvaluation
   * Changed the name of the Key property from ResourceName to ResourceTypeName.
     While this is considered a breaking change, the old property name was
