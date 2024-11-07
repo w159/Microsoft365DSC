@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneAntivirusExclusionsPolicyMacOS
+  * Initial release.
+
 # 1.24.1106.3
 
 * AzureBillingAccountScheduledAction
@@ -18,7 +23,6 @@
   * Initial release.
 * MISC
   * Fixed issues with API Url's parsing.
-
 
 # 1.24.1106.1
 
