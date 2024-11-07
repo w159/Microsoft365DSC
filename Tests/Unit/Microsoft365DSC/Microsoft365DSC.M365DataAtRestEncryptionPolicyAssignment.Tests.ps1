@@ -56,7 +56,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-M365DataAtRestEncryptionPolicyAssignment -MockWith {
                     return @{
-                        DataEncryptionPolicy = 'FakeStringValue';
+                        Name                 = 'FakeStringValue';
                         Credential           = $Credential;
                     }
                 }
@@ -77,7 +77,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-M365DataAtRestEncryptionPolicyAssignment -MockWith {
                     return @{
-                        DataEncryptionPolicy = 'FakeStringValue';
+                        Name                 = 'FakeStringValue';
                         Credential           = $Credential;
                     }
                 }
@@ -104,7 +104,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-M365DataAtRestEncryptionPolicyAssignment -MockWith {
                     return @{
-                        DataEncryptionPolicy = 'FakeStringValue';
+                        Name                 = 'FakeStringValue';
                         Credential           = $Credential;
                     }
                 }

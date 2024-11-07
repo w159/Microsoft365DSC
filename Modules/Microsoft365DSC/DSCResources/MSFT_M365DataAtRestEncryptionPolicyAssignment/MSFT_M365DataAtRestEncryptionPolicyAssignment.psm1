@@ -59,7 +59,7 @@
         }
 
         $results = @{
-            DataEncryptionPolicy   = [System.String]$instance.DataEncryptionPolicy
+            DataEncryptionPolicy   = [System.String]$instance.Name
             IsSingleInstance       = 'Yes'
             Credential             = $Credential
             ApplicationId          = $ApplicationId
