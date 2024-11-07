@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* IntuneAntivirusPolicyMacOS
+  * Initial release.
+
 # 1.24.1106.1
 
 * AADAccessReviewDefinition
