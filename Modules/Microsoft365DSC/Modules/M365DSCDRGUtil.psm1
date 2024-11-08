@@ -992,14 +992,14 @@ function ConvertTo-IntunePolicyAssignment
                     {
                         $message = "Skipping assignment for the group with DisplayName {$($assignment.groupDisplayName)} as it could not be found in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or groupDisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $target = $null
                     }
                     if ($group -and $group.Count -gt 1)
                     {
                         $message = "Skipping assignment for the group with DisplayName {$($assignment.groupDisplayName)} as it is not unique in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $group = $null
                         $target = $null
                     }
@@ -1008,7 +1008,7 @@ function ConvertTo-IntunePolicyAssignment
                 {
                     $message = "Skipping assignment for the group with Id {$($assignment.groupId)} as it could not be found in the directory.`r`n"
                     $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                    Write-Verbose -Message $message
+                    Write-Warning -Message $message
                     $target = $null
                 }
             }
@@ -1165,14 +1165,14 @@ function ConvertTo-IntuneMobileAppAssignment
                     {
                         $message = "Skipping assignment for the group with DisplayName {$($assignment.groupDisplayName)} as it could not be found in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or groupDisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $target = $null
                     }
                     if ($group -and $group.Count -gt 1)
                     {
                         $message = "Skipping assignment for the group with DisplayName {$($assignment.groupDisplayName)} as it is not unique in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $group = $null
                         $target = $null
                     }
@@ -1181,7 +1181,7 @@ function ConvertTo-IntuneMobileAppAssignment
                 {
                     $message = "Skipping assignment for the group with Id {$($assignment.groupId)} as it could not be found in the directory.`r`n"
                     $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                    Write-Verbose -Message $message
+                    Write-Warning -Message $message
                     $target = $null
                 }
             }
@@ -1329,14 +1329,14 @@ function Update-DeviceConfigurationPolicyAssignment
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it could not be found in the directory.`r`n"
                             $message += "Please update your DSC resource extract with the correct groupId or groupDisplayName."
-                            Write-Verbose -Message $message
+                            Write-Warning -Message $message
                             $target = $null
                         }
                         if ($group -and $group.count -gt 1)
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it is not unique in the directory.`r`n"
                             $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                            Write-Verbose -Message $message
+                            Write-Warning -Message $message
                             $group = $null
                             $target = $null
                         }
@@ -1345,7 +1345,7 @@ function Update-DeviceConfigurationPolicyAssignment
                     {
                         $message = "Skipping assignment for the group with Id {$($target.groupId)} as it could not be found in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $target = $null
                     }
                 }
@@ -1452,14 +1452,14 @@ function Update-DeviceAppManagementPolicyAssignment
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it could not be found in the directory.`r`n"
                             $message += "Please update your DSC resource extract with the correct groupId or groupDisplayName."
-                            Write-Verbose -Message $message
+                            Write-Warning -Message $message
                             $target = $null
                         }
                         if ($group -and $group.count -gt 1)
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it is not unique in the directory.`r`n"
                             $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                            Write-Verbose -Message $message
+                            Write-Warning -Message $message
                             $group = $null
                             $target = $null
                         }
@@ -1468,7 +1468,7 @@ function Update-DeviceAppManagementPolicyAssignment
                     {
                         $message = "Skipping assignment for the group with Id {$($target.groupId)} as it could not be found in the directory.`r`n"
                         $message += "Please update your DSC resource extract with the correct groupId or a unique group DisplayName."
-                        Write-Verbose -Message $message
+                        Write-Warning -Message $message
                         $target = $null
                     }
                 }

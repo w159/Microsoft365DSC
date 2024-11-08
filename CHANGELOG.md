@@ -12,6 +12,8 @@
   * Initial release.
 * IntuneAntivirusExclusionsPolicyLinux
   * Initial release.
+* M365DSCDRGUtil
+  * Switch log type for not found Intune assignments to `Warning`.
 * MISC
   * Fixed issues with API Url's parsing.
 
