@@ -116,7 +116,7 @@ function Get-TargetResource
         }
         else
         {
-            $instance = Get-MigrationBatch -Identity $Identity -ErrorAction Stop
+            $instance = Get-MigrationBatch -Identity $Identity -ErrorAction SilentlyContinue
         }
         if ($null -eq $instance)
         {
@@ -277,8 +277,11 @@ function Set-TargetResource
         # Define the path for the CSV file to store the migration users
         $csvFilePath = "$env:TEMP\MigrationUsers.csv"
 
-        # Convert the list of users to a CSV format and save it
-        $MigrationUsers | Export-Csv -Path $csvFilePath -NoTypeInformation -Force
+        # Convert each item in the array to a custom object with an EmailAddress property
+        $csvContent = $MigrationUsers | ForEach-Object { [PSCustomObject]@{EmailAddress = $_} }
+
+        # Export to CSV with the header "EmailAddress"
+        $csvContent | Export-Csv -Path $csvFilePath -NoTypeInformation -Force
 
         $BatchParams = @{
             Name              = $Identity  # Use the existing Identity as the new batch name
@@ -327,26 +330,26 @@ function Set-TargetResource
 
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        # Get the list of migration users for the current batch
-        $migrationUsers = Get-MigrationUser -BatchId $currentInstance.Identity | Select-Object -ExpandProperty Identity
-
         # Define the path for the CSV file to store the migration users
         $csvFilePath = "$env:TEMP\MigrationUsers.csv"
 
-        # Convert the list of users to a CSV format and save it
-        $migrationUsers | Export-Csv -Path $csvFilePath -NoTypeInformation -Force
+        # Convert each item in the array to a custom object with an EmailAddress property
+        $csvContent = $MigrationUsers | ForEach-Object { [PSCustomObject]@{EmailAddress = $_} }
+
+        # Export to CSV with the header "EmailAddress"
+        $csvContent | Export-Csv -Path $csvFilePath -NoTypeInformation -Force
 
         $BatchParams = @{
             Identity          = $Identity  # Use the existing Identity as the new batch name
             CSVData           = [System.IO.File]::ReadAllBytes($csvFilePath)  # Load the CSV as byte array
             NotificationEmails = $NotificationEmails  # Use the same notification emails if provided
-            CompleteAfter     = $currentInstance.CompleteAfter
-            StartAfter        = $currentInstance.StartAfter
-            BadItemLimit      = [System.String]$currentInstance.BadItemLimit
-            LargeItemLimit    = $currentInstance.LargeItemLimit
-            MoveOptions       = $currentInstance.MoveOptions
-            SkipMerging       = $currentInstance.SkipMerging
-            SourceEndpoint    = $SourceEndpoint
+            CompleteAfter     = $CompleteAfter
+            StartAfter        = $StartAfter
+            BadItemLimit      = [System.String]$BadItemLimit
+            LargeItemLimit    = $LargeItemLimit
+            SkipMerging       = $SkipMerging
+            Update            = $Update
+            AddUsers          = $AddUsers
         }
 
         Set-MigrationBatch @BatchParams
