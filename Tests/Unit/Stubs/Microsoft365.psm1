@@ -18,6 +18,73 @@ function Invoke-AzRest
 }
 #endregion
 
+#region M365DataAtRestEncryptionPolicy
+function Get-M365DataAtRestEncryptionPolicy
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Identity
+    )
+}
+
+function Set-M365DataAtRestEncryptionPolicy
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.Boolean]
+        $Enabled
+    )
+}
+
+function New-M365DataAtRestEncryptionPolicy
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.Boolean]
+        $Enabled,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.String[]]
+        $AzureKeyIDs
+    )
+}
+function Get-M365DataAtRestEncryptionPolicyAssignment
+{
+    [CmdletBinding()]
+    param()
+}
+
+function Set-M365DataAtRestEncryptionPolicyAssignment
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DataEncryptionPolicy
+    )
+}
+#endregion
+
 function Get-MgBetaPolicyDeviceRegistrationPolicy
 {
     [CmdletBinding()]

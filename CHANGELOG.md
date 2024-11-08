@@ -1,5 +1,14 @@
 # Change log for Microsoft365DSC
 
+# 1.24.1106.2
+
+* EXODataAtRestEncryptionPolicyAssignment
+  * Initial release.
+* EXODataAtRestEncryptionPolicy
+  * Initial release.
+* MISC
+  * Fixed issues with API Url's parsing.
+
 # 1.24.1106.1
 
 * AADAccessReviewDefinition
@@ -96,6 +105,8 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
+* EXOM365DataAtRestEncryptionPolicy
+  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOMailboxSettings
