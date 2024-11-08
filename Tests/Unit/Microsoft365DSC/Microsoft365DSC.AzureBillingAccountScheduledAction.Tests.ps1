@@ -35,8 +35,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return "Credentials"
             }
 
-            ##TODO - Mock any Remove/Set/New cmdlets
-
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
             }
@@ -47,13 +45,29 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    BillingAccount        = "1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31";
+                    DisplayName           = "MyAction";
+                    Notification          = (New-CimInstance -ClassName MSFT_AzureBillingAccountScheduledActionNotification -Property @{
+                        subject = 'Cost Alert'
+                        message = 'This is my demo message!'
+                        to = @('john.smith@contoso.com')
+                    } -ClientOnly)
+                    NotificationEmail     = "alert@contoso.com";
+                    Schedule              = (New-CIMInstance -ClassName MSFT_AzureBillingAccountScheduledActionSchedule -Property @{
+                        daysOfWeek = @('Wednesday')
+                        startDate = '2024-11-06T13:00:00Z'
+                        endDate = '2025-11-06T05:00:00Z'
+                        frequency = 'Weekly'
+                        dayOfMonth = 0
+                        hourOfDay = 13
+                    } -ClientOnly)
+                    Status                = "Enabled";
+                    View                  = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return $null
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Invoke-AzRest -MockWith {
                     return $null
                 }
             }
@@ -65,24 +79,69 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should create a new instance from the Set method' {
-                ##TODO - Replace the New-Cmdlet by the appropriate one
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Invoke-AzRest -Exactly 2
             }
         }
 
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    BillingAccount        = "1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31";
+                    DisplayName           = "MyAction";
+                    Notification          = (New-CimInstance -ClassName MSFT_AzureBillingAccountScheduledActionNotification -Property @{
+                        subject = 'Cost Alert'
+                        message = 'This is my demo message!'
+                        to = @('john.smith@contoso.com')
+                    } -ClientOnly)
+                    NotificationEmail     = "alert@contoso.com";
+                    Schedule              = (New-CIMInstance -ClassName MSFT_AzureBillingAccountScheduledActionSchedule -Property @{
+                        daysOfWeek = @('Wednesday')
+                        startDate = '2024-11-06T13:00:00Z'
+                        endDate = '2025-11-06T05:00:00Z'
+                        frequency = 'Weekly'
+                        dayOfMonth = 0
+                        hourOfDay = 13
+                    } -ClientOnly)
+                    Status                = "Enabled";
+                    View                  = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
                     Ensure              = 'Absent'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Invoke-AzRest -MockWith {
                     return @{
-
+                        content = ConvertTo-Json(
+                            @{
+                                value = @(
+                                @{
+                                    id = "12345-12345-12345-12345-12345"
+                                    name = 'MyAction'
+                                    kind = "Email"
+                                    properties = @{
+                                        displayName = "MyAction"
+                                        scope = "/providers/Microsoft.Billing/billingAccounts/1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31"
+                                        status = "Enabled"
+                                        viewId = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
+                                        schedule = @{
+                                            daysOfWeek = @('Wednesday')
+                                            startDate = '2024-11-06T13:00:00Z'
+                                            endDate = '2025-11-06T05:00:00Z'
+                                            frequency = 'Weekly'
+                                            dayOfMonth = 0
+                                            hourOfDay = 13
+                                        }
+                                        notification = @{
+                                            subject = 'Cost Alert'
+                                            message = 'This is my demo message!'
+                                            to = @('john.smith@contoso.com')
+                                        }
+                                        notificationEmail = "alert@contoso.com";
+                                    }
+                                }
+                                )
+                            }
+                        ) -Depth 10 -Compress
                     }
                 }
             }
@@ -95,23 +154,68 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should remove the instance from the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Remove-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Remove-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Invoke-AzRest -Exactly 2
             }
         }
 
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    BillingAccount        = "1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31";
+                    DisplayName           = "MyAction";
+                    Notification          = (New-CimInstance -ClassName MSFT_AzureBillingAccountScheduledActionNotification -Property @{
+                        subject = 'Cost Alert'
+                        message = 'This is my demo message!'
+                        to = @('john.smith@contoso.com')
+                    } -ClientOnly)
+                    NotificationEmail     = "alert@contoso.com";
+                    Schedule              = (New-CIMInstance -ClassName MSFT_AzureBillingAccountScheduledActionSchedule -Property @{
+                        daysOfWeek = @('Wednesday')
+                        startDate = '2024-11-06T13:00:00Z'
+                        endDate = '2025-11-06T05:00:00Z'
+                        frequency = 'Weekly'
+                        dayOfMonth = 0
+                        hourOfDay = 13
+                    } -ClientOnly)
+                    Status                = "Enabled";
+                    View                  = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return the desired values
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Invoke-AzRest -MockWith {
                     return @{
-
+                        content = ConvertTo-Json(
+                            @{
+                                value = @(
+                                @{
+                                    id = "12345-12345-12345-12345-12345"
+                                    name = 'MyAction'
+                                    kind = "Email"
+                                    properties = @{
+                                        displayName = "MyAction"
+                                        scope = "/providers/Microsoft.Billing/billingAccounts/1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31"
+                                        status = "Enabled"
+                                        viewId = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
+                                        schedule = @{
+                                            daysOfWeek = @('Wednesday')
+                                            startDate = '2024-11-06T13:00:00Z'
+                                            endDate = '2025-11-06T05:00:00Z'
+                                            frequency = 'Weekly'
+                                            dayOfMonth = 0
+                                            hourOfDay = 13
+                                        }
+                                        notification = @{
+                                            subject = 'Cost Alert'
+                                            message = 'This is my demo message!'
+                                            to = @('john.smith@contoso.com')
+                                        }
+                                        notificationEmail = "alert@contoso.com";
+                                    }
+                                }
+                                )
+                            }
+                        ) -Depth 10 -Compress
                     }
                 }
             }
@@ -124,15 +228,61 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ##TODO - Add Parameters
+                    BillingAccount        = "1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31";
+                    DisplayName           = "MyAction";
+                    Notification          = (New-CimInstance -ClassName MSFT_AzureBillingAccountScheduledActionNotification -Property @{
+                        subject = 'Cost Alert'
+                        message = 'This is my demo message!'
+                        to = @('john.smith@contoso.com')
+                    } -ClientOnly)
+                    NotificationEmail     = "alert@contoso.com";
+                    Schedule              = (New-CIMInstance -ClassName MSFT_AzureBillingAccountScheduledActionSchedule -Property @{
+                        daysOfWeek = @('Wednesday')
+                        startDate = '2024-11-06T13:00:00Z'
+                        endDate = '2025-11-06T05:00:00Z'
+                        frequency = 'Weekly'
+                        dayOfMonth = 0
+                        hourOfDay = 13
+                    } -ClientOnly)
+                    Status                = "Disabled"; # Drift
+                    View                  = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return a drift
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Invoke-AzRest -MockWith {
                     return @{
-
+                        content = ConvertTo-Json(
+                            @{
+                                value = @(
+                                @{
+                                    id = "12345-12345-12345-12345-12345"
+                                    name = 'MyAction'
+                                    kind = "Email"
+                                    properties = @{
+                                        displayName = "MyAction"
+                                        scope = "/providers/Microsoft.Billing/billingAccounts/1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31"
+                                        status = "Enabled"
+                                        viewId = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
+                                        schedule = @{
+                                            daysOfWeek = @('Wednesday')
+                                            startDate = '2024-11-06T13:00:00Z'
+                                            endDate = '2025-11-06T05:00:00Z'
+                                            frequency = 'Weekly'
+                                            dayOfMonth = 0
+                                            hourOfDay = 13
+                                        }
+                                        notification = @{
+                                            subject = 'Cost Alert'
+                                            message = 'This is my demo message!'
+                                            to = @('john.smith@contoso.com')
+                                        }
+                                        notificationEmail = "alert@contoso.com";
+                                    }
+                                }
+                                )
+                            }
+                        ) -Depth 10 -Compress
                     }
                 }
             }
@@ -147,8 +297,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                ##TODO - Replace the Update-Cmdlet by the appropriate one
-                Should -Invoke -CommandName Update-Cmdlet -Exactly 1
+                Should -Invoke -CommandName Invoke-AzRest -Exactly 2
             }
         }
 
@@ -160,10 +309,39 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential;
                 }
 
-                ##TODO - Mock the Get-Cmdlet to return an instance
-                Mock -CommandName Get-Cmdlet -MockWith {
+                Mock -CommandName Invoke-AzRest -MockWith {
                     return @{
-
+                        content = ConvertTo-Json(
+                            @{
+                                value = @(
+                                @{
+                                    id = "12345-12345-12345-12345-12345"
+                                    name = 'MyAction'
+                                    kind = "Email"
+                                    properties = @{
+                                        displayName = "MyAction"
+                                        scope = "/providers/Microsoft.Billing/billingAccounts/1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31"
+                                        status = "Enabled"
+                                        viewId = "/providers/Microsoft.Billing/billingAccounts/xxxxx:xxxxx_xxxxx/providers/Microsoft.CostManagement/views/ms:AccumulatedCosts";
+                                        schedule = @{
+                                            daysOfWeek = @('Wednesday')
+                                            startDate = '2024-11-06T13:00:00Z'
+                                            endDate = '2025-11-06T05:00:00Z'
+                                            frequency = 'Weekly'
+                                            dayOfMonth = 0
+                                            hourOfDay = 13
+                                        }
+                                        notification = @{
+                                            subject = 'Cost Alert'
+                                            message = 'This is my demo message!'
+                                            to = @('john.smith@contoso.com')
+                                        }
+                                        notificationEmail = "alert@contoso.com";
+                                    }
+                                }
+                                )
+                            }
+                        ) -Depth 10 -Compress
                     }
                 }
             }
