@@ -2,6 +2,10 @@
 
 # 1.24.1106.2
 
+* EXODataAtRestEncryptionPolicyAssignment
+  * Initial release.
+* EXODataAtRestEncryptionPolicy
+  * Initial release.
 * MISC
   * Fixed issues with API Url's parsing.
 
