@@ -309,6 +309,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential;
                 }
 
+                Mock -CommandName Get-M365DSCAzureBillingAccount -MockWith {
+                    return @{
+                        value = @{
+                            name = "1e5b9e50-a1ea-581e-fb3a-778b93a06854:6487d5cf-0a7b-42e6-9549-23cavvvvvvv_2019-05-31"
+                            properties = @{
+                                displayName = "MyBillingAccount"
+                            }
+                        }
+                    }
+                }
                 Mock -CommandName Invoke-AzRest -MockWith {
                     return @{
                         content = ConvertTo-Json(
