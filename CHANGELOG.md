@@ -4,6 +4,8 @@
 
 * AzureBillingAccountScheduledAction
   * Initial release.
+* AzureSubscription
+  * Added the ability to delete subscriptions.
 * EXODataAtRestEncryptionPolicyAssignment
   * Initial release.
 * EXODataAtRestEncryptionPolicy
