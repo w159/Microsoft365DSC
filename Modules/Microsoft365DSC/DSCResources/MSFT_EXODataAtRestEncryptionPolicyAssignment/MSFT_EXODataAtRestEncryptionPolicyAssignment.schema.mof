@@ -1,5 +1,5 @@
-﻿[ClassVersion("1.0.0.0"), FriendlyName("M365DataAtRestEncryptionPolicyAssignment")]
-class MSFT_M365DataAtRestEncryptionPolicyAssignment : OMI_BaseResource
+﻿[ClassVersion("1.0.0.0"), FriendlyName("EXODataAtRestEncryptionPolicyAssignment")]
+class MSFT_EXODataAtRestEncryptionPolicyAssignment : OMI_BaseResource
 {
     [Key, Description("Only valid value is 'Yes'."), ValueMap{"Yes"}, Values{"Yes"}] String IsSingleInstance;
     [Write, Description("The DataEncryptionPolicy parameter specifies the Microsoft 365 data-at-rest encryption policy.")] String DataEncryptionPolicy;

@@ -21,7 +21,7 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        M365DataAtRestEncryptionPolicyAssignment "M365DataAtRestEncryptionPolicyAssignment"
+        EXODataAtRestEncryptionPolicyAssignment "M365DataAtRestEncryptionPolicyAssignment"
         {
             DataEncryptionPolicy          = "Riyansh_Policy"
             IsSingleInstance              = "Yes";

@@ -1,4 +1,4 @@
-﻿# M365DataAtRestEncryptionPolicyAssignment
+﻿# EXODataAtRestEncryptionPolicyAssignment
 
 ## Description
 

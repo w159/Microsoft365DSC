@@ -22,7 +22,7 @@ Configuration Example
 
     node localhost
     {
-        M365DataAtRestEncryptionPolicy "M365DataAtRestEncryptionPolicy-Riyansh_Policy"
+        EXODataAtRestEncryptionPolicy "M365DataAtRestEncryptionPolicy-Riyansh_Policy"
         {
             AzureKeyIDs          = @("https://m365dataatrestencryption.vault.azure.net/keys/EncryptionKey","https://m365datariyansh.vault.azure.net/keys/EncryptionRiyansh");
             Description          = "Tenant default policy 2"; # drift
