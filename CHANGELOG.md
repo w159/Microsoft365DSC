@@ -9,6 +9,9 @@
 * MISC
   * Fixed issues with API Url's parsing.
 
+* IntuneAntivirusExclusionsPolicyLinux
+  * Initial release.
+
 # 1.24.1106.1
 
 * AADAccessReviewDefinition
