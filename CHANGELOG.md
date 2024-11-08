@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# 1.24.1106.2
+# 1.24.1106.3
 
 * AzureBillingAccountScheduledAction
   * Initial release.
@@ -10,16 +10,15 @@
   * Initial release.
 * EXODataAtRestEncryptionPolicy
   * Initial release.
+* IntuneAntivirusPolicyMacOS
+  * Initial release.
 * IntuneAntivirusExclusionsPolicyLinux
+  * Initial release.
+* IntuneFirewallRulesPolicyWindows10
   * Initial release.
 * MISC
   * Fixed issues with API Url's parsing.
 
-* IntuneFirewallRulesPolicyWindows10
-  * Initial release.
-
-* IntuneAntivirusPolicyMacOS
-  * Initial release.
 
 # 1.24.1106.1
 
