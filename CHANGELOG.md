@@ -142,7 +142,9 @@
   * Fixes an issue with limited results when more than 25 results are present.
 * Intune workload
   * Fixed missing permissions in settings.json
-* M365DataAtRestEncryptionPolicy
+* EXODataAtRestEncryptionPolicyAssignment
+  * Initial release.
+* EXODataAtRestEncryptionPolicy
   * Initial release.
 * M365DSCRuleEvaluation
   * Changed the name of the Key property from ResourceName to ResourceTypeName.

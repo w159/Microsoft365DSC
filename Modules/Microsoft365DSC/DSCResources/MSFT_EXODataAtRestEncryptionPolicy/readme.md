@@ -1,4 +1,4 @@
-# EXOM365DataAtRestEncryptionPolicy
+# EXODataAtRestEncryptionPolicy
 
 ## Description
 
