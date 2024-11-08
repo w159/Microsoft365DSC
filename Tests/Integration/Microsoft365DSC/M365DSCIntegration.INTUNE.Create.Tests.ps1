@@ -2648,6 +2648,37 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneFirewallRulesPolicyWindows10 'myIntuneFirewallRulesPolicyWindows10'
+                {
+                    Assignments           = @(
+                        MSFT_DeviceManagementConfigurationPolicyAssignments{
+                            deviceAndAppManagementAssignmentFilterType = 'none'
+                            dataType = '#microsoft.graph.groupAssignmentTarget'
+                            groupId = '11111111-1111-1111-1111-111111111111'
+                        }
+                    );
+                    FirewallRuleName = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName{
+                            Direction = 'out'
+                            InterfaceTypes = @('lan')
+                            RemotePortRanges = @('0-100')
+                            Name = 'Rule1'
+                            FilePath = 'C:\Temp'
+                            Protocol = 80
+                            ServiceName = 'mysvc'
+                            Enabled = '1'
+                            Type = '1'
+                        }
+                    )
+                    Description           = 'Description'
+                    DisplayName           = "Intune Firewall Rules Policy Windows10";
+                    Ensure                = "Present";
+                    Id                    = '00000000-0000-0000-0000-000000000000'
+                    RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 IntuneMobileAppsMacOSLobApp 'IntuneMobileAppsMacOSLobApp-TeamsForBusinessInstaller'
                 {
                     Id                    = "8d027f94-0682-431e-97c1-827d1879fa79";
