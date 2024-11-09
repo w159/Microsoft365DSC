@@ -27,9 +27,9 @@ function Get-TargetResource
         $enabled,
 
         [Parameter()]
-        [ValidateSet('none', 'safe', 'all')]
+        [ValidateSet('false', 'true')]
         [System.String]
-        $automaticSampleSubmissionConsent,
+        $automaticSampleSubmission,
 
         [Parameter()]
         [ValidateSet('0', '1')]
@@ -80,17 +80,24 @@ function Get-TargetResource
         $threatTypeSettingsMergePolicy,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $allowedThreats,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $disallowedThreatActions,
 
         [Parameter()]
+        [ValidateRange(1, 64)]
+        [System.Int32]
+        $maximumOnDemandScanThreads,
+
+        [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $scanArchives,
+        $enableFileHashComputation,
 
         [Parameter()]
         [ValidateSet('false', 'true')]
@@ -100,36 +107,32 @@ function Get-TargetResource
         [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $enableFileHashComputation,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $behaviorMonitoring,
-
-        [Parameter()]
-        [ValidateSet('normal', 'moderate', 'high', 'plus', 'tolerance')]
-        [System.String]
-        $cloudBlockLevel,
-
-        [Parameter()]
-        [ValidateRange(1, 64)]
-        [System.Int32]
-        $maximumOnDemandScanThreads,
+        $scanArchives,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
         [System.String]
-        $networkprotection_enforcementLevel,
+        $enforcementLevel,
 
         [Parameter()]
-        [System.String[]]
-        $unmonitoredFilesystems,
+        [ValidateSet('0', '1', '2')]
+        [System.String]
+        $enforcementLevel_tamperProtection,
 
         [Parameter()]
         [ValidateSet('0', '1')]
         [System.String]
-        $nonExecMountPolicy,
+        $consumerExperience,
+
+        [Parameter()]
+        [ValidateSet('false', 'true')]
+        [System.String]
+        $hideStatusMenuIcon,
+
+        [Parameter()]
+        [ValidateSet('0', '1')]
+        [System.String]
+        $userInitiatedFeedback,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
@@ -201,23 +204,24 @@ function Get-TargetResource
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy Linux with Id {$Id}"
+            Write-Verbose -Message "Could not find an Intune Antivirus Policy for macOS with Id {$Id}"
 
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
                     -Filter "Name eq '$DisplayName'" `
+                    -All `
                     -ErrorAction SilentlyContinue
             }
         }
         #endregion
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy Linux with Name {$DisplayName}."
+            Write-Verbose -Message "Could not find an Intune Antivirus Policy for macOS with Name {$DisplayName}."
             return $nullResult
         }
         $Id = $getValue.Id
-        Write-Verbose -Message "An Intune Antivirus Policy Linux with Id {$Id} and Name {$DisplayName} was found"
+        Write-Verbose -Message "An Intune Antivirus Policy for macOS with Id {$Id} and Name {$DisplayName} was found"
 
         # Retrieve policy specific settings
         [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
@@ -248,6 +252,10 @@ function Get-TargetResource
             {
                 $myExclusions.Add('Exclusions_item_extension', $currentExclusions.exclusions_item_extension)
             }
+            if ($null -ne $currentExclusions.exclusions_item_isDirectory)
+            {
+                $myExclusions.Add('Exclusions_item_isDirectory', $currentExclusions.exclusions_item_isDirectory)
+            }
             if ($null -ne $currentExclusions.exclusions_item_name)
             {
                 $myExclusions.Add('Exclusions_item_name', $currentExclusions.exclusions_item_name)
@@ -256,35 +264,25 @@ function Get-TargetResource
             {
                 $myExclusions.Add('Exclusions_item_path', $currentExclusions.exclusions_item_path)
             }
-            if ($null -ne $currentExclusions.exclusions_item_isDirectory)
-            {
-                $myExclusions.Add('Exclusions_item_isDirectory', $currentExclusions.exclusions_item_isDirectory)
-            }
             if ($myExclusions.values.Where({$null -ne $_}).Count -gt 0)
             {
                 $complexExclusions += $myExclusions
             }
         }
-        $policySettings.Remove('exclusions') | Out-Null
+        $policySettings.Remove('exclusions')
 
         $complexThreatTypeSettings = @()
         foreach ($currentThreatTypeSettings in $policySettings.threatTypeSettings)
         {
             $myThreatTypeSettings = @{}
-            if ($null -ne $currentThreatTypeSettings.threatTypeSettings_item_key)
-            {
-                $myThreatTypeSettings.Add('ThreatTypeSettings_item_key', $currentThreatTypeSettings.threatTypeSettings_item_key)
-            }
-            if ($null -ne $currentThreatTypeSettings.threatTypeSettings_item_value)
-            {
-                $myThreatTypeSettings.Add('ThreatTypeSettings_item_value', $currentThreatTypeSettings.threatTypeSettings_item_value)
-            }
+            $myThreatTypeSettings.Add('ThreatTypeSettings_item_key', $currentThreatTypeSettings.threatTypeSettings_item_key)
+            $myThreatTypeSettings.Add('ThreatTypeSettings_item_value', $currentThreatTypeSettings.threatTypeSettings_item_value)
             if ($myThreatTypeSettings.values.Where({$null -ne $_}).Count -gt 0)
             {
                 $complexThreatTypeSettings += $myThreatTypeSettings
             }
         }
-        $policySettings.Remove('threatTypeSettings') | Out-Null
+        $policySettings.Remove('threatTypeSettings')
         #endregion
 
         $results = @{
@@ -356,9 +354,9 @@ function Set-TargetResource
         $enabled,
 
         [Parameter()]
-        [ValidateSet('none', 'safe', 'all')]
+        [ValidateSet('false', 'true')]
         [System.String]
-        $automaticSampleSubmissionConsent,
+        $automaticSampleSubmission,
 
         [Parameter()]
         [ValidateSet('0', '1')]
@@ -409,17 +407,24 @@ function Set-TargetResource
         $threatTypeSettingsMergePolicy,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $allowedThreats,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $disallowedThreatActions,
 
         [Parameter()]
+        [ValidateRange(1, 64)]
+        [System.Int32]
+        $maximumOnDemandScanThreads,
+
+        [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $scanArchives,
+        $enableFileHashComputation,
 
         [Parameter()]
         [ValidateSet('false', 'true')]
@@ -429,36 +434,32 @@ function Set-TargetResource
         [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $enableFileHashComputation,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $behaviorMonitoring,
-
-        [Parameter()]
-        [ValidateSet('normal', 'moderate', 'high', 'plus', 'tolerance')]
-        [System.String]
-        $cloudBlockLevel,
-
-        [Parameter()]
-        [ValidateRange(1, 64)]
-        [System.Int32]
-        $maximumOnDemandScanThreads,
+        $scanArchives,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
         [System.String]
-        $networkprotection_enforcementLevel,
+        $enforcementLevel,
 
         [Parameter()]
-        [System.String[]]
-        $unmonitoredFilesystems,
+        [ValidateSet('0', '1', '2')]
+        [System.String]
+        $enforcementLevel_tamperProtection,
 
         [Parameter()]
         [ValidateSet('0', '1')]
         [System.String]
-        $nonExecMountPolicy,
+        $consumerExperience,
+
+        [Parameter()]
+        [ValidateSet('false', 'true')]
+        [System.String]
+        $hideStatusMenuIcon,
+
+        [Parameter()]
+        [ValidateSet('0', '1')]
+        [System.String]
+        $userInitiatedFeedback,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
@@ -469,7 +470,6 @@ function Set-TargetResource
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
         #endregion
-
         [Parameter()]
         [System.String]
         [ValidateSet('Absent', 'Present')]
@@ -520,13 +520,13 @@ function Set-TargetResource
 
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    $templateReferenceId = '4cfd164c-5e8a-4ea9-b15d-9aa71e4ffff4_1'
-    $platforms = 'linux'
-    $technologies = 'microsoftSense'
+    $templateReferenceId = '2d345ec2-c817-49e5-9156-3ed416dc972a_1'
+    $platforms = 'macOS'
+    $technologies = 'mdm,microsoftSense'
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an Intune Antivirus Policy Linux with Name {$DisplayName}"
+        Write-Verbose -Message "Creating an Intune Antivirus Policy for macOS with Name {$DisplayName}"
         $BoundParameters.Remove("Assignments") | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
@@ -557,7 +557,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating the Intune Antivirus Policy Linux with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Updating the Intune Antivirus Policy for macOS with Id {$($currentInstance.Id)}"
         $BoundParameters.Remove("Assignments") | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
@@ -583,7 +583,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing the Intune Antivirus Policy Linux with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Removing the Intune Antivirus Policy for macOS with Id {$($currentInstance.Id)}"
         #region resource generator code
         Remove-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $currentInstance.Id
         #endregion
@@ -619,9 +619,9 @@ function Test-TargetResource
         $enabled,
 
         [Parameter()]
-        [ValidateSet('none', 'safe', 'all')]
+        [ValidateSet('false', 'true')]
         [System.String]
-        $automaticSampleSubmissionConsent,
+        $automaticSampleSubmission,
 
         [Parameter()]
         [ValidateSet('0', '1')]
@@ -672,17 +672,24 @@ function Test-TargetResource
         $threatTypeSettingsMergePolicy,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $allowedThreats,
 
         [Parameter()]
+        [ValidateLength(0, 1032)]
         [System.String[]]
         $disallowedThreatActions,
 
         [Parameter()]
+        [ValidateRange(1, 64)]
+        [System.Int32]
+        $maximumOnDemandScanThreads,
+
+        [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $scanArchives,
+        $enableFileHashComputation,
 
         [Parameter()]
         [ValidateSet('false', 'true')]
@@ -692,36 +699,32 @@ function Test-TargetResource
         [Parameter()]
         [ValidateSet('false', 'true')]
         [System.String]
-        $enableFileHashComputation,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $behaviorMonitoring,
-
-        [Parameter()]
-        [ValidateSet('normal', 'moderate', 'high', 'plus', 'tolerance')]
-        [System.String]
-        $cloudBlockLevel,
-
-        [Parameter()]
-        [ValidateRange(1, 64)]
-        [System.Int32]
-        $maximumOnDemandScanThreads,
+        $scanArchives,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
         [System.String]
-        $networkprotection_enforcementLevel,
+        $enforcementLevel,
 
         [Parameter()]
-        [System.String[]]
-        $unmonitoredFilesystems,
+        [ValidateSet('0', '1', '2')]
+        [System.String]
+        $enforcementLevel_tamperProtection,
 
         [Parameter()]
         [ValidateSet('0', '1')]
         [System.String]
-        $nonExecMountPolicy,
+        $consumerExperience,
+
+        [Parameter()]
+        [ValidateSet('false', 'true')]
+        [System.String]
+        $hideStatusMenuIcon,
+
+        [Parameter()]
+        [ValidateSet('0', '1')]
+        [System.String]
+        $userInitiatedFeedback,
 
         [Parameter()]
         [ValidateSet('0', '1', '2')]
@@ -779,7 +782,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Intune Antivirus Policy Linux with Id {$Id} and Name {$DisplayName}"
+    Write-Verbose -Message "Testing configuration of the Intune Antivirus Policy for macOS with Id {$Id} and Name {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     [Hashtable]$ValuesToCheck = @{}
@@ -900,7 +903,7 @@ function Export-TargetResource
     try
     {
         #region resource generator code
-        $policyTemplateID = "4cfd164c-5e8a-4ea9-b15d-9aa71e4ffff4_1"
+        $policyTemplateID = "2d345ec2-c817-49e5-9156-3ed416dc972a_1"
         [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
             -Filter $Filter `
             -All `
@@ -952,7 +955,7 @@ function Export-TargetResource
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.exclusions `
-                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogExclusions' -IsArray
+                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogexclusions'
                 if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.exclusions = $complexTypeStringResult
@@ -966,7 +969,7 @@ function Export-TargetResource
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.threatTypeSettings `
-                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogThreatTypeSettings' -IsArray
+                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogthreatTypeSettings'
                 if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.threatTypeSettings = $complexTypeStringResult

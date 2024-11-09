@@ -1,13 +1,24 @@
 # Change log for Microsoft365DSC
 
-# 1.24.1106.2
+# 1.24.1106.3
 
+* AzureBillingAccountScheduledAction
+  * Initial release.
+* AzureSubscription
+  * Added the ability to delete subscriptions.
 * EXODataAtRestEncryptionPolicyAssignment
   * Initial release.
 * EXODataAtRestEncryptionPolicy
   * Initial release.
+* IntuneAntivirusPolicyMacOS
+  * Initial release.
+* IntuneAntivirusExclusionsPolicyLinux
+  * Initial release.
+* IntuneFirewallRulesPolicyWindows10
+  * Initial release.
 * MISC
   * Fixed issues with API Url's parsing.
+
 
 # 1.24.1106.1
 
