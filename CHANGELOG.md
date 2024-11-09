@@ -1,6 +1,11 @@
 # Change log for Microsoft365DSC
 
-# 1.24.1106.2
+# UNRELEASED
+
+* M365DSCDRGUtil
+  * Switch log type for not found Intune assignments to `Warning`.
+
+# 1.24.1106.3
 
 * AzureBillingAccountScheduledAction
   * Initial release.
@@ -10,18 +15,14 @@
   * Initial release.
 * EXODataAtRestEncryptionPolicy
   * Initial release.
-* IntuneAntivirusExclusionsPolicyLinux
-  * Initial release.
-* M365DSCDRGUtil
-  * Switch log type for not found Intune assignments to `Warning`.
-* MISC
-  * Fixed issues with API Url's parsing.
-
-* IntuneFirewallRulesPolicyWindows10
-  * Initial release.
-
 * IntuneAntivirusPolicyMacOS
   * Initial release.
+* IntuneAntivirusExclusionsPolicyLinux
+  * Initial release.
+* IntuneFirewallRulesPolicyWindows10
+  * Initial release.
+* MISC
+  * Fixed issues with API Url's parsing.
 
 # 1.24.1106.1
 
