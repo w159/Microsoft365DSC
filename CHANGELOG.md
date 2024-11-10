@@ -1,5 +1,13 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneAntivirusPolicyWindows10SettingCatalog
+  * Update properties to be upper-case.
+    Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
+* M365DSCDRGUtil
+  * Restrict CIM instance access to properties that appear multiple times.
+
 # 1.24.1106.3
 
 * AzureBillingAccountScheduledAction

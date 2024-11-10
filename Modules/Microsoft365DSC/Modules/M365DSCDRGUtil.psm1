@@ -1775,7 +1775,7 @@ function Get-IntuneSettingCatalogPolicySettingInstanceValue
 
             $instanceCount = 1
             if (($Level -gt 1 -and $groupSettingCollectionDefinitionChildren.Count -gt 1) -or
-                ($Level -eq 1 -and $groupSettingCollectionDefinitionChildren.Count -ge 1 -and $groupSettingCollectionDefinitionChildren.AdditionalProperties.'@odata.type' -notcontains "#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition"))
+                ($Level -eq 1 -and $SettingDefinition.AdditionalProperties.maximumCount -gt 1 -and $groupSettingCollectionDefinitionChildren.Count -ge 1 -and $groupSettingCollectionDefinitionChildren.AdditionalProperties.'@odata.type' -notcontains "#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition"))
             {
                 $SettingInstanceName += Get-SettingsCatalogSettingName -SettingDefinition $SettingDefinition -AllSettingDefinitions $AllSettingDefinitions
                 $cimDSCParams = @()
@@ -2480,7 +2480,7 @@ function Update-IntuneDeviceConfigurationPolicy
             'settings'          = $Settings
         }
         $body = $policy | ConvertTo-Json -Depth 20
-        #Write-Verbose -Message $body
+        Write-Verbose -Message $body -Verbose
         Invoke-MgGraphRequest -Method PUT -Uri $Uri -Body $body -ErrorAction Stop
     }
     catch
