@@ -116,8 +116,6 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
-* EXOM365DataAtRestEncryptionPolicy
-  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOMailboxSettings
