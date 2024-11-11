@@ -125,7 +125,6 @@ function Get-TargetResource
 
             if ($currentomaSettings.isEncrypted -eq $true)
             {
-                write-verbose ("IsEncrypted = true -- $($currentomaSettings.displayName)")
                 $SecretReferenceValueId = $currentomaSettings.secretReferenceValueId
                 $OmaSettingPlainTextValue = Get-OmaSettingPlainTextValue -SecretReferenceValueId $SecretReferenceValueId
                 if (![String]::IsNullOrEmpty($OmaSettingPlainTextValue))
