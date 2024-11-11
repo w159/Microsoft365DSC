@@ -4,6 +4,14 @@
 
 * AzureBillingAccountPolicy
   * Initial release.
+* IntuneAntivirusExclusionsPolicyMacOS
+  * Initial release.
+* IntuneAntivirusPolicyWindows10SettingCatalog
+  * Update properties to be upper-case.
+    Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
+* M365DSCDRGUtil
+  * Restrict CIM instance access to properties that appear multiple times.
+  * Switch log type for not found Intune assignments to `Warning`.
 
 # 1.24.1106.3
 
@@ -23,7 +31,6 @@
   * Initial release.
 * MISC
   * Fixed issues with API Url's parsing.
-
 
 # 1.24.1106.1
 
@@ -121,8 +128,6 @@
 * EXOArcConfig
   * Fixed `Test-TargetResource` to correctly check property `ArcTrustedSealers`
     when it has an array
-* EXOM365DataAtRestEncryptionPolicy
-  * Initial release.
 * EXOMailboxAuditBypassAssociation
   * Initial release.
 * EXOMailboxSettings
