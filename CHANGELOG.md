@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* IntuneAntivirusExclusionsPolicyMacOS
+  * Initial release.
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
