@@ -15,7 +15,7 @@ Import-Module -Name (Join-Path -Path $M365DSCTestFolder `
         -Resolve)
 
 $Global:DscHelper = New-M365DscUnitTestHelper -StubModule $CmdletModule `
-    -DscResource "IntuneAntivirusPolicyLinux" -GenericStubModule $GenericStubPath
+    -DscResource "IntuneAntivirusPolicyMacOS" -GenericStubModule $GenericStubPath
 Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
     InModuleScope -ModuleName $Global:DscHelper.ModuleName -ScriptBlock {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
@@ -49,7 +49,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Name            = 'My Test'
                     RoleScopeTagIds = @("FakeStringValue")
                     TemplateReference = @{
-                        TemplateId = '4cfd164c-5e8a-4ea9-b15d-9aa71e4ffff4_1'
+                        TemplateId = '2d345ec2-c817-49e5-9156-3ed416dc972a_1'
                     }
                 }
             }
@@ -69,7 +69,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 0
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_cloudservice_enabled'
+                                Id = 'com.apple.managedclient.preferences_enabled'
                                 Name = 'enabled'
                                 OffsetUri = 'enabled'
                                 AdditionalProperties = @{
@@ -78,15 +78,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         SettingInstance = @{
-                            SettingDefinitionId = 'linux_mdatp_managed_cloudservice_enabled'
+                            SettingDefinitionId = 'com.apple.managedclient.preferences_enabled'
                             SettingInstanceTemplateReference = @{
-                                SettingInstanceTemplateId = 'ad8554ce-16d5-44a5-9686-d286844755b0'
+                                SettingInstanceTemplateId = '9e424cc6-35b9-48ef-863c-73295aa9d2d7'
                             }
                             AdditionalProperties = @{
                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
                                 choiceSettingValue = @{
                                     children = @()
-                                    value = 'linux_mdatp_managed_cloudservice_enabled_true'
+                                    value = 'com.apple.managedclient.preferences_enabled_true'
                                 }
                             }
                         }
@@ -95,7 +95,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 1
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_disallowedthreatactions'
+                                Id = 'com.apple.managedclient.preferences_disallowedthreatactions'
                                 Name = 'disallowedThreatActions'
                                 OffsetUri = 'disallowedThreatActions'
                                 AdditionalProperties = @{
@@ -106,7 +106,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         SettingInstance = @{
-                            SettingDefinitionId = 'linux_mdatp_managed_antivirusengine_disallowedthreatactions'
+                            SettingDefinitionId = 'com.apple.managedclient.preferences_disallowedthreatactions'
                             SettingInstanceTemplateReference = @{
                                 SettingInstanceTemplateId = 'd1673a55-f037-4eca-b037-89392341d1b8'
                             }
@@ -125,33 +125,34 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 2
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions'
+                                Id = 'com.apple.managedclient.preferences_exclusions'
                                 Name = 'exclusions'
                                 OffsetUri = 'exclusions'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition'
-                                    maximumCount = 600
-                                    minimumCount = 0
+                                    maximumCount = 2147483647
+                                    minimumCount = 1
                                     childIds = @(
-                                        'linux_mdatp_managed_antivirusengine_exclusions_item_$type',
-                                        'linux_mdatp_managed_antivirusengine_exclusions_item_extension'
+                                        'com.apple.managedclient.preferences_exclusions_item_$type',
+                                        'com.apple.managedclient.preferences_exclusions_item_extension',
+                                        'com.apple.managedclient.preferences_exclusions_item_name'
                                     )
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                Id = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                 Name = 'exclusions_item_$type'
                                 OffsetUri = 'exclusions_item_$type'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_1'
+                                            itemId = 'com.apple.managedclient.preferences_exclusions_item_$type_1'
                                             name = 'Path'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions'
+                                                    dependentOn = 'com.apple.managedclient.preferences_exclusions'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_exclusions'
                                                 }
                                             )
                                         }
@@ -159,36 +160,36 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_extension'
+                                Id = 'com.apple.managedclient.preferences_exclusions_item_extension'
                                 Name = 'exclusions_item_extension'
                                 OffsetUri = 'exclusions/[{0}]/extension'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition'
                                     dependentOn = @(
                                         @{
-                                            dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_1'
-                                            parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                            dependentOn = 'com.apple.managedclient.preferences_exclusions_item_$type_1'
+                                            parentSettingId = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                         }
                                     )
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_name'
+                                Id = 'com.apple.managedclient.preferences_exclusions_item_name'
                                 Name = 'exclusions_item_name'
                                 OffsetUri = 'exclusions/[{0}]/name'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition'
                                     dependentOn = @(
                                         @{
-                                            dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_2'
-                                            parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                            dependentOn = 'com.apple.managedclient.preferences_exclusions_item_$type_2'
+                                            parentSettingId = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                         }
                                     )
                                 }
                             }
                         )
                         SettingInstance = @{
-                            SettingDefinitionId = 'linux_mdatp_managed_antivirusengine_exclusions'
+                            SettingDefinitionId = 'com.apple.managedclient.preferences_exclusions'
                             SettingInstanceTemplateReference = @{
                                 SettingInstanceTemplateId = 'e2d557ab-357e-4727-978e-0d655facbb23'
                             }
@@ -199,19 +200,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                         children = @(
                                             @{
                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
-                                                settingDefinitionId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                                settingDefinitionId = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                                 choiceSettingValue = @{
                                                     children = @(
                                                         @{
                                                             '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance'
-                                                            settingDefinitionId = 'linux_mdatp_managed_antivirusengine_exclusions_item_extension'
+                                                            settingDefinitionId = 'com.apple.managedclient.preferences_exclusions_item_extension'
                                                             simpleSettingValue = @{
                                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationStringSettingValue'
-                                                                value = '.exe'
+                                                                value = '.dmg'
                                                             }
                                                         }
                                                     )
-                                                    value = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_1'
+                                                    value = 'com.apple.managedclient.preferences_exclusions_item_$type_1'
                                                 }
                                             }
                                         )
@@ -220,19 +221,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                         children = @(
                                             @{
                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
-                                                settingDefinitionId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                                settingDefinitionId = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                                 choiceSettingValue = @{
                                                     children = @(
                                                         @{
                                                             '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance'
-                                                            settingDefinitionId = 'linux_mdatp_managed_antivirusengine_exclusions_item_name'
+                                                            settingDefinitionId = 'com.apple.managedclient.preferences_exclusions_item_name'
                                                             simpleSettingValue = @{
                                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationStringSettingValue'
                                                                 value = 'Test'
                                                             }
                                                         }
                                                     )
-                                                    value = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_2'
+                                                    value = 'com.apple.managedclient.preferences_exclusions_item_$type_2'
                                                 }
                                             }
                                         )
@@ -245,31 +246,31 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 3
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings'
                                 Name = 'threatTypeSettings'
                                 OffsetUri = 'threatTypeSettings'
                                 AdditionalProperties = @{
                                     maximumCount = 2147483647
-                                    minimumCount = 0
+                                    minimumCount = 1
                                     childIds = @(
-                                        'linux_mdatp_managed_antivirusengine_threattypesettings_item_key'
-                                        'linux_mdatp_managed_antivirusengine_threattypesettings_item_value'
+                                        'com.apple.managedclient.preferences_threattypesettings_item_key'
+                                        'com.apple.managedclient.preferences_threattypesettings_item_value'
                                     )
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings_item_key'
                                 Name = 'threatTypeSettings_item_key'
                                 OffsetUri = 'threatTypeSettings/[{0}]/key'
                                 AdditionalProperties = @{
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key_0'
+                                            itemId = 'com.apple.managedclient.preferences_threattypesettings_item_key_0'
                                             name = 'potentially_unwanted_application'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_threattypesettings'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                                    dependentOn = 'com.apple.managedclient.preferences_threattypesettings'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_threattypesettings'
                                                 }
                                             )
                                         }
@@ -277,19 +278,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings_item_value'
                                 Name = 'threatTypeSettings_item_value'
                                 OffsetUri = 'threatTypeSettings/[{0}]/value'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value_0'
+                                            itemId = 'com.apple.managedclient.preferences_threattypesettings_item_value_0'
                                             name = 'audit'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_threattypesettings'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                                    dependentOn = 'com.apple.managedclient.preferences_threattypesettings'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_threattypesettings'
                                                 }
                                             )
                                         }
@@ -298,7 +299,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         SettingInstance = @{
-                            SettingDefinitionId = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                            SettingDefinitionId = 'com.apple.managedclient.preferences_threattypesettings'
                             SettingInstanceTemplateReference = @{
                                 SettingInstanceTemplateId = '2e407734-2d3a-4cc2-9a81-4d1c54718096'
                             }
@@ -309,18 +310,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                         children = @(
                                             @{
                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
-                                                settingDefinitionId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key'
+                                                settingDefinitionId = 'com.apple.managedclient.preferences_threattypesettings_item_key'
                                                 choiceSettingValue = @{
                                                     children = @()
-                                                    value = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key_0'
+                                                    value = 'com.apple.managedclient.preferences_threattypesettings_item_key_0'
                                                 }
                                             },
                                             @{
                                                 '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
-                                                settingDefinitionId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value'
+                                                settingDefinitionId = 'com.apple.managedclient.preferences_threattypesettings_item_value'
                                                 choiceSettingValue = @{
                                                     children = @()
-                                                    value = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value_0'
+                                                    value = 'com.apple.managedclient.preferences_threattypesettings_item_value_0'
                                                 }
                                             }
                                         )
@@ -338,7 +339,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 0
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_cloudservice_enabled'
+                                Id = 'com.apple.managedclient.preferences_enabled'
                                 Name = 'enabled'
                                 OffsetUri = 'enabled'
                                 AdditionalProperties = @{
@@ -354,7 +355,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 1
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_disallowedthreatactions'
+                                Id = 'com.apple.managedclient.preferences_disallowedthreatactions'
                                 Name = 'disallowedThreatActions'
                                 OffsetUri = 'disallowedThreatActions'
                                 AdditionalProperties = @{
@@ -372,7 +373,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 2
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions'
+                                Id = 'com.apple.managedclient.preferences_exclusions'
                                 Name = 'exclusions'
                                 OffsetUri = 'exclusions'
                                 AdditionalProperties = @{
@@ -380,25 +381,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                     maximumCount = 600
                                     minimumCount = 0
                                     childIds = @(
-                                        'linux_mdatp_managed_antivirusengine_exclusions_item_$type',
-                                        'linux_mdatp_managed_antivirusengine_exclusions_item_extension'
+                                        'com.apple.managedclient.preferences_exclusions_item_$type',
+                                        'com.apple.managedclient.preferences_exclusions_item_extension'
                                     )
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                Id = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                 Name = 'exclusions_item_$type'
                                 OffsetUri = 'exclusions_item_$type'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_1'
+                                            itemId = 'com.apple.managedclient.preferences_exclusions_item_$type_1'
                                             name = 'Path'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions'
+                                                    dependentOn = 'com.apple.managedclient.preferences_exclusions'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_exclusions'
                                                 }
                                             )
                                         }
@@ -406,29 +407,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_extension'
+                                Id = 'com.apple.managedclient.preferences_exclusions_item_extension'
                                 Name = 'exclusions_item_extension'
                                 OffsetUri = 'exclusions/[{0}]/extension'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition'
                                     dependentOn = @(
                                         @{
-                                            dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_1'
-                                            parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
-                                        }
-                                    )
-                                }
-                            },
-                            @{
-                                Id = 'linux_mdatp_managed_antivirusengine_exclusions_item_name'
-                                Name = 'exclusions_item_name'
-                                OffsetUri = 'exclusions/[{0}]/name'
-                                AdditionalProperties = @{
-                                    '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition'
-                                    dependentOn = @(
-                                        @{
-                                            dependentOn = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type_2'
-                                            parentSettingId = 'linux_mdatp_managed_antivirusengine_exclusions_item_$type'
+                                            dependentOn = 'com.apple.managedclient.preferences_exclusions_item_$type_1'
+                                            parentSettingId = 'com.apple.managedclient.preferences_exclusions_item_$type'
                                         }
                                     )
                                 }
@@ -442,31 +429,31 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = 3
                         SettingDefinitions = @(
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings'
                                 Name = 'threatTypeSettings'
                                 OffsetUri = 'threatTypeSettings'
                                 AdditionalProperties = @{
                                     maximumCount = 2147483647
                                     minimumCount = 0
                                     childIds = @(
-                                        'linux_mdatp_managed_antivirusengine_threattypesettings_item_key'
-                                        'linux_mdatp_managed_antivirusengine_threattypesettings_item_value'
+                                        'com.apple.managedclient.preferences_threattypesettings_item_key'
+                                        'com.apple.managedclient.preferences_threattypesettings_item_value'
                                     )
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings_item_key'
                                 Name = 'threatTypeSettings_item_key'
                                 OffsetUri = 'threatTypeSettings/[{0}]/key'
                                 AdditionalProperties = @{
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_key_0'
+                                            itemId = 'com.apple.managedclient.preferences_threattypesettings_item_key_0'
                                             name = 'potentially_unwanted_application'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_threattypesettings'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                                    dependentOn = 'com.apple.managedclient.preferences_threattypesettings'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_threattypesettings'
                                                 }
                                             )
                                         }
@@ -474,19 +461,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }
                             },
                             @{
-                                Id = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value'
+                                Id = 'com.apple.managedclient.preferences_threattypesettings_item_value'
                                 Name = 'threatTypeSettings_item_value'
                                 OffsetUri = 'threatTypeSettings/[{0}]/value'
                                 AdditionalProperties = @{
                                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
                                     options = @(
                                         @{
-                                            itemId = 'linux_mdatp_managed_antivirusengine_threattypesettings_item_value_0'
+                                            itemId = 'com.apple.managedclient.preferences_threattypesettings_item_value_0'
                                             name = 'audit'
                                             dependentOn = @(
                                                 @{
-                                                    dependentOn = 'linux_mdatp_managed_antivirusengine_threattypesettings'
-                                                    parentSettingId = 'linux_mdatp_managed_antivirusengine_threattypesettings'
+                                                    dependentOn = 'com.apple.managedclient.preferences_threattypesettings'
+                                                    parentSettingId = 'com.apple.managedclient.preferences_threattypesettings'
                                                 }
                                             )
                                         }
@@ -534,7 +521,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
         }
         # Test contexts
-        Context -Name "The IntuneAntivirusPolicyLinux should exist but it DOES NOT" -Fixture {
+        Context -Name "The IntuneAntivirusPolicyMacOS should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = [CimInstance[]]@(
@@ -549,7 +536,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     enabled = "true";
                     exclusions = [CimInstance[]]@(
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
-                            Exclusions_item_extension = '.exe'
+                            Exclusions_item_extension = '.dmg'
                             Exclusions_item_type = '1'
                         } -ClientOnly)
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
@@ -586,7 +573,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
-        Context -Name "The IntuneAntivirusPolicyLinux exists but it SHOULD NOT" -Fixture {
+        Context -Name "The IntuneAntivirusPolicyMacOS exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = [CimInstance[]]@(
@@ -601,7 +588,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     enabled = "true";
                     exclusions = [CimInstance[]]@(
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
-                            Exclusions_item_extension = '.exe'
+                            Exclusions_item_extension = '.dmg'
                             Exclusions_item_type = '1'
                         } -ClientOnly)
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
@@ -636,7 +623,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementConfigurationPolicy -Exactly 1
             }
         }
-        Context -Name "The IntuneAntivirusPolicyLinux Exists and Values are already in the desired state" -Fixture {
+        Context -Name "The IntuneAntivirusPolicyMacOS Exists and Values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = [CimInstance[]]@(
@@ -651,7 +638,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     enabled = "true";
                     exclusions = [CimInstance[]]@(
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
-                            Exclusions_item_extension = '.exe'
+                            Exclusions_item_extension = '.dmg'
                             Exclusions_item_type = '1'
                         } -ClientOnly)
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
@@ -678,7 +665,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
-        Context -Name "The IntuneAntivirusPolicyLinux exists and values are NOT in the desired state" -Fixture {
+        Context -Name "The IntuneAntivirusPolicyMacOS exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = [CimInstance[]]@(
@@ -693,7 +680,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     enabled = "true";
                     exclusions = [CimInstance[]]@(
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
-                            Exclusions_item_extension = '.pdf' # Drift
+                            Exclusions_item_extension = '.xcode' # Drift
                             Exclusions_item_type = '1'
                         } -ClientOnly)
                         (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions -Property @{
@@ -737,7 +724,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
             }
-            
+
             It 'Should Reverse Engineer resource from the Export method' {
                 $result = Export-TargetResource @testParams
                 $result | Should -Not -BeNullOrEmpty

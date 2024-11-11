@@ -88,6 +88,7 @@
         # Simplify names from the OffsetUri. This is done to make the names more readable, especially in case of long and complex OffsetUris.
         switch -wildcard ($settingName)
         {
+            'com.apple.managedclient.preferences_enforcementLevel' { $settingName = 'enforcementLevel' } # IntuneAntivirusPolicyMacOS
             'access16v2~Policy~L_MicrosoftOfficeaccess~L_ApplicationSettings~*' { $settingName = $settingName.Replace('access16v2~Policy~L_MicrosoftOfficeaccess~L_ApplicationSettings', 'MicrosoftAccess_') }
             'excel16v2~Policy~L_MicrosoftOfficeExcel~L_ExcelOptions~*' { $settingName = $settingName.Replace('excel16v2~Policy~L_MicrosoftOfficeExcel~L_ExcelOptions', 'MicrosoftExcel_') }
             'word16v2~Policy~L_MicrosoftOfficeWord~L_WordOptions~*' { $settingName = $settingName.Replace('word16v2~Policy~L_MicrosoftOfficeWord~L_WordOptions', 'MicrosoftWord_') }
