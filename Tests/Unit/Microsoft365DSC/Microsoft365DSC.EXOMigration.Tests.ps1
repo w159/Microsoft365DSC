@@ -53,6 +53,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Get-MigrationUser -MockWith {
             }
 
+            Mock -CommandName Get-MigrationUser -MockWith {
+            }
+
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
             }
@@ -70,9 +73,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure               = "Present";
                     Identity             = "Arpita";
                     LargeItemLimit       = "Unlimited";
-                    MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                    MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                     MoveOptions          = @();
-                    NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                    NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
                     StartAfter           = "7/30/2020 9:00:00 PM";
@@ -108,9 +111,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure               = "Absent";
                     Identity             = "Arpita";
                     LargeItemLimit       = "Unlimited";
-                    MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                    MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                     MoveOptions          = @();
-                    NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                    NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
                     StartAfter           = "7/30/2020 9:00:00 PM";
@@ -128,9 +131,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Ensure               = "Present";
                         Identity             = "Arpita";
                         LargeItemLimit       = "Unlimited";
-                        MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                         MoveOptions          = @();
-                        NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                        NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
                         SourceEndpoint       = "gmailCalendar";
                         StartAfter           = "7/30/2020 9:00:00 PM";
@@ -164,9 +167,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure               = "Absent";
                     Identity             = "Arpita";
                     LargeItemLimit       = "Unlimited";
-                    MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                    MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                     MoveOptions          = @();
-                    NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                    NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
                     StartAfter           = "7/30/2020 9:00:00 PM";
@@ -184,9 +187,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Ensure               = "Present";
                         Identity             = "Arpita";
                         LargeItemLimit       = "Unlimited";
-                        MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                         MoveOptions          = @();
-                        NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                        NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
                         SourceEndpoint       = "gmailCalendar";
                         StartAfter           = "7/30/2020 9:00:00 PM";
@@ -216,12 +219,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BadItemLimit         = "Unlimited";
                     CompleteAfter        = "7/30/2020 9:00:00 PM";
                     Credential           = $Credscredential;
-                    Ensure               = "Absent";
+                    Ensure               = "Present";
                     Identity             = "Arpita";
                     LargeItemLimit       = "Unlimited";
-                    MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                    MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                     MoveOptions          = @();
-                    NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                    NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
                     StartAfter           = "7/30/2020 9:00:00 PM";
@@ -236,12 +239,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         BadItemLimit         = "Unlimited";
                         CompleteAfter        = "7/30/2020 9:00:00 PM";
                         Credential           = $Credscredential;
-                        Ensure               = "Absent";
+                        Ensure               = "Present";
                         Identity             = "Arpita";
                         LargeItemLimit       = "Unlimited";
-                        MigrationUsers       = @("peixintest1@$OrganizationName","akstest39@$OrganizationName");
+                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                         MoveOptions          = @();
-                        NotificationEmails   = @("eac_admin@$OrganizationName","abc@$OrganizationName");
+                        NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
                         SourceEndpoint       = "gmailCalendar";
                         StartAfter           = "7/30/2020 9:00:00 PM";
@@ -256,5 +259,99 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Test-TargetResource @testParams | Should -Be $true
             }
         }
+
+        Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AddUsers             = $False;
+                    BadItemLimit         = "Unlimited";
+                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    Credential           = $Credscredential;
+                    Ensure               = "Present";
+                    Identity             = "Arpita";
+                    LargeItemLimit       = "Unlimited";
+                    MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
+                    MoveOptions          = @();
+                    NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
+                    SkipMerging          = @("abc");
+                    SourceEndpoint       = "gmailCalendar";
+                    StartAfter           = "7/30/2020 9:00:00 PM";
+                    Status               = "Completing";
+                    TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
+                    Update               = $False;
+                }
+
+                Mock -CommandName Get-MigrationBatch -MockWith {
+                    return @{
+                        AddUsers             = $False;
+                        BadItemLimit         = "Unlimited";
+                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        Credential           = $Credscredential;
+                        Ensure               = "Present";
+                        Identity             = "Arpita";
+                        LargeItemLimit       = "Unlimited";
+                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
+                        MoveOptions          = @();
+                        NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
+                        SkipMerging          = @();
+                        SourceEndpoint       = "gmailCalendar";
+                        StartAfter           = "7/30/2020 9:00:00 PM";
+                        Status               = "Completing";
+                        TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
+                        Update               = $False;
+                    }
+                }
+            }
+
+            It 'Should return Values from the Get method' {
+                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+            }
+
+            It 'Should return false from the Test method' {
+                Test-TargetResource @testParams | Should -Be $false
+            }
+
+            It 'Should call the Set method' {
+                Set-TargetResource @testParams
+                Should -Invoke -CommandName Set-MigrationBatch -Exactly 1
+            }
+        }
+
+        Context -Name 'ReverseDSC Tests' -Fixture {
+            BeforeAll {
+                $Global:CurrentModeIsExport = $true
+                $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
+                $testParams = @{
+                    Credential  = $Credential;
+                }
+
+                Mock -CommandName Get-MigrationBatch -MockWith {
+                    return @{
+                        AddUsers             = $False;
+                        BadItemLimit         = "Unlimited";
+                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        Credential           = $Credscredential;
+                        Ensure               = "Present";
+                        Identity             = "Arpita";
+                        LargeItemLimit       = "Unlimited";
+                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
+                        MoveOptions          = @();
+                        NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
+                        SkipMerging          = @();
+                        SourceEndpoint       = "gmailCalendar";
+                        StartAfter           = "7/30/2020 9:00:00 PM";
+                        Status               = "Completing";
+                        TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
+                        Update               = $False;
+                    }
+                }
+            }
+            It 'Should Reverse Engineer resource from the Export method' {
+                $result = Export-TargetResource @testParams
+                $result | Should -Not -BeNullOrEmpty
+            }
+        }
     }
 }
+
+Invoke-Command -ScriptBlock $Global:DscHelper.CleanupScript -NoNewScope

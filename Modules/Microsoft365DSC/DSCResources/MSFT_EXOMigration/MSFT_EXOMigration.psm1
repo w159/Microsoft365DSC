@@ -306,13 +306,13 @@ function Set-TargetResource
         # Retrieve the migration batch
         $migrationBatch = Get-MigrationBatch -Identity $currentInstance.Identity -ErrorAction Stop
 
-        if ($migrationBatch.Status.Value -in @('Completed', 'CompletedWithErrors', 'Stopped', 'Failed', 'SyncedWithErrors'))
+        if ($migrationBatch.Status -in @('Completed', 'CompletedWithErrors', 'Stopped', 'Failed', 'SyncedWithErrors'))
         {
             # If the migration batch is in a final state, remove it directly
             Remove-MigrationBatch -Identity $currentInstance.Identity -Confirm:$false
             Write-Host "Migration batch '$($currentInstance.Identity)' has been removed as it was in a completed or stopped state."
         }
-        elseif ($migrationBatch.Status.Value -in @('InProgress', 'Syncing', 'Queued', 'Completing'))
+        elseif ($migrationBatch.Status -in @('InProgress', 'Syncing', 'Queued', 'Completing'))
         {
             # If the migration batch is in progress, stop it first
             Stop-MigrationBatch -Identity $currentInstance.Identity -Confirm:$false
