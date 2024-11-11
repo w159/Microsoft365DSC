@@ -10,6 +10,8 @@
 * M365DSCDRGUtil
   * Restrict CIM instance access to properties that appear multiple times.
   * Switch log type for not found Intune assignments to `Warning`.
+* DEPENDENCIES
+  * Updated DSCParser to version 2.0.0.12.
 
 # 1.24.1106.3
 
