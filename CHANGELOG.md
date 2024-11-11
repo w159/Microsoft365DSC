@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AzureBillingAccountPolicy
+  * Initial release.
+
 # 1.24.1106.3
 
 * AzureBillingAccountScheduledAction
