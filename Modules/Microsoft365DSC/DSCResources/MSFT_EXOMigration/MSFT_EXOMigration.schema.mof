@@ -2,7 +2,6 @@
 class MSFT_EXOMigration : OMI_BaseResource
 {
     [Key, Description("The Identity parameter identifies the name of the current migration batch.")] String Identity;
-    [Write, Description("The CSVData parameter specifies the CSV file that contains information about the user mailboxes to be moved or migrated.")] String CSVData;
     [Write, Description("The NotificationEmails parameter specifies one or more email addresses that migration status reports are sent to.")] String NotificationEmails[];
     [Write, Description("The CompleteAfter parameter specifies a delay before the batch is completed.")] DateTime CompleteAfter;
     [Write, Description("The AddUsers parameter controls whether additional users can be dynamically added to an existing migration batch after it has been created.")] Boolean AddUsers;

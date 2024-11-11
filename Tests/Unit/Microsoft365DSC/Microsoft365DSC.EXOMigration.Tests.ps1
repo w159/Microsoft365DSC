@@ -68,7 +68,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AddUsers             = $False;
                     BadItemLimit         = "Unlimited";
-                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    CompleteAfter        = "07/30/2020 9:00:00 PM";
                     Credential           = $Credscredential;
                     Ensure               = "Present";
                     Identity             = "Arpita";
@@ -78,7 +78,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
-                    StartAfter           = "7/30/2020 9:00:00 PM";
+                    StartAfter           = "07/30/2020 9:00:00 PM";
                     Status               = "Completing";
                     TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                     Update               = $False;
@@ -106,7 +106,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AddUsers             = $False;
                     BadItemLimit         = "Unlimited";
-                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    CompleteAfter        = "07/30/2020 9:00:00 PM";
                     Credential           = $Credscredential;
                     Ensure               = "Absent";
                     Identity             = "Arpita";
@@ -116,7 +116,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
-                    StartAfter           = "7/30/2020 9:00:00 PM";
+                    StartAfter           = "07/30/2020 9:00:00 PM";
                     Status               = "Completing";
                     TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                     Update               = $False;
@@ -126,7 +126,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        CompleteAfter        = "07/30/2020 21:00:00";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
@@ -135,9 +135,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MoveOptions          = @();
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
-                        SourceEndpoint       = "gmailCalendar";
-                        StartAfter           = "7/30/2020 9:00:00 PM";
-                        Status               = "Completing";
+                        SourceEndpoint       = @{Identity = @{Id = "gmailCalendar"}};
+                        StartAfter           = "07/30/2020 21:00:00";
+                        Status               = @{Value = "Completing"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
@@ -162,7 +162,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AddUsers             = $False;
                     BadItemLimit         = "Unlimited";
-                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    CompleteAfter        = "07/30/2020 9:00:00 PM";
                     Credential           = $Credscredential;
                     Ensure               = "Absent";
                     Identity             = "Arpita";
@@ -172,7 +172,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
-                    StartAfter           = "7/30/2020 9:00:00 PM";
+                    StartAfter           = "07/30/2020 9:00:00 PM";
                     Status               = "Completed";
                     TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                     Update               = $False;
@@ -182,18 +182,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        CompleteAfter        = "07/30/2020 21:00:00";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
                         LargeItemLimit       = "Unlimited";
-                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                         MoveOptions          = @();
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
-                        SourceEndpoint       = "gmailCalendar";
-                        StartAfter           = "7/30/2020 9:00:00 PM";
-                        Status               = "Completed";
+                        SourceEndpoint       = @{Identity = @{Id = "gmailCalendar"}};
+                        StartAfter           = "07/30/2020 21:00:00";
+                        Status               = @{Value = "Completed"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
@@ -217,7 +216,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AddUsers             = $False;
                     BadItemLimit         = "Unlimited";
-                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    CompleteAfter        = "07/30/2020 9:00:00 PM";
                     Credential           = $Credscredential;
                     Ensure               = "Present";
                     Identity             = "Arpita";
@@ -227,7 +226,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
-                    StartAfter           = "7/30/2020 9:00:00 PM";
+                    StartAfter           = "07/30/2020 9:00:00 PM";
                     Status               = "Completing";
                     TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                     Update               = $False;
@@ -237,26 +236,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        CompleteAfter        = "07/30/2020 21:00:00";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
                         LargeItemLimit       = "Unlimited";
-                        MigrationUsers       = @("peixintest1@bellred.org","akstest39@bellred.org");
                         MoveOptions          = @();
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
-                        SourceEndpoint       = "gmailCalendar";
-                        StartAfter           = "7/30/2020 9:00:00 PM";
-                        Status               = "Completing";
+                        SourceEndpoint       = @{Identity = @{Id = "gmailCalendar"}};
+                        StartAfter           = "07/30/2020 21:00:00";
+                        Status               = @{Value = "Completing"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
                 }
+
+                Mock -CommandName Get-MigrationUser -MockWith {
+                    return @(
+                        @{
+                            Identity = "peixintest1@bellred.org"
+                        },
+                        @{
+                            Identity = "akstest39@bellred.org"
+                        }
+                    )
+                }
             }
 
+
             It 'Should return true from the Test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                Test-TargetResource @testParams -Verbose | Should -Be $true
             }
         }
 
@@ -265,7 +275,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AddUsers             = $False;
                     BadItemLimit         = "Unlimited";
-                    CompleteAfter        = "7/30/2020 9:00:00 PM";
+                    CompleteAfter        = "07/30/2020 21:00:00";
                     Credential           = $Credscredential;
                     Ensure               = "Present";
                     Identity             = "Arpita";
@@ -275,8 +285,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                     SkipMerging          = @("abc");
                     SourceEndpoint       = "gmailCalendar";
-                    StartAfter           = "7/30/2020 9:00:00 PM";
-                    Status               = "Completing";
+                    StartAfter           = "07/30/2020 21:00:00";
+                    Status               = @{Value = "Completing"};
                     TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                     Update               = $False;
                 }
@@ -285,7 +295,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        CompleteAfter        = "07/30/2020 21:00:00";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
@@ -295,8 +305,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @();
                         SourceEndpoint       = "gmailCalendar";
-                        StartAfter           = "7/30/2020 9:00:00 PM";
-                        Status               = "Completing";
+                        StartAfter           = "07/30/2020 21:00:00";
+                        Status               = @{Value = "Completing"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
@@ -329,7 +339,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "7/30/2020 9:00:00 PM";
+                        CompleteAfter        = "07/30/2020 21:00:00";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
@@ -339,8 +349,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @();
                         SourceEndpoint       = "gmailCalendar";
-                        StartAfter           = "7/30/2020 9:00:00 PM";
-                        Status               = "Completing";
+                        StartAfter           = "07/30/2020 21:00:00";
+                        Status               = @{Value = "Completing"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }

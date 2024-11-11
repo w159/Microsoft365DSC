@@ -9,10 +9,6 @@ function Get-TargetResource
         $Identity,
 
         [Parameter()]
-        [System.Byte[]]
-        $CSVData,
-
-        [Parameter()]
         [System.String[]]
         $NotificationEmails,
 
@@ -124,11 +120,10 @@ function Get-TargetResource
         }
 
         $Users = Get-MigrationUser -BatchId $Identity
-        $UserEmails = $Users | Select-Object -ExpandProperty Identity
+        $UserEmails = $Users | ForEach-Object { $_.Identity }
 
         $results = @{
             Identity                = $Identity
-            CSVData                 = [System.Byte[]]$instance.CSVData
             NotificationEmails      = [System.String[]]$instance.NotificationEmails
             CompleteAfter           = $instance.CompleteAfter
             AddUsers                = [System.Boolean]$instance.AddUsers
@@ -172,10 +167,6 @@ function Set-TargetResource
         [Parameter(Mandatory = $true)]
         [System.String]
         $Identity,
-
-        [Parameter()]
-        [System.Byte[]]
-        $CSVData,
 
         [Parameter()]
         [System.String[]]
@@ -306,13 +297,13 @@ function Set-TargetResource
         # Retrieve the migration batch
         $migrationBatch = Get-MigrationBatch -Identity $currentInstance.Identity -ErrorAction Stop
 
-        if ($migrationBatch.Status -in @('Completed', 'CompletedWithErrors', 'Stopped', 'Failed', 'SyncedWithErrors'))
+        if ($migrationBatch.Status.Value -in @('Completed', 'CompletedWithErrors', 'Stopped', 'Failed', 'SyncedWithErrors'))
         {
             # If the migration batch is in a final state, remove it directly
             Remove-MigrationBatch -Identity $currentInstance.Identity -Confirm:$false
             Write-Host "Migration batch '$($currentInstance.Identity)' has been removed as it was in a completed or stopped state."
         }
-        elseif ($migrationBatch.Status -in @('InProgress', 'Syncing', 'Queued', 'Completing'))
+        elseif ($migrationBatch.Status.Value -in @('InProgress', 'Syncing', 'Queued', 'Completing'))
         {
             # If the migration batch is in progress, stop it first
             Stop-MigrationBatch -Identity $currentInstance.Identity -Confirm:$false
@@ -379,10 +370,6 @@ function Test-TargetResource
         [Parameter(Mandatory = $true)]
         [System.String]
         $Identity,
-
-        [Parameter()]
-        [System.Byte[]]
-        $CSVData,
 
         [Parameter()]
         [System.String[]]
