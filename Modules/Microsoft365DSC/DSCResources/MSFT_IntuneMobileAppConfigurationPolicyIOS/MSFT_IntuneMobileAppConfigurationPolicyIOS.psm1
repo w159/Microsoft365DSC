@@ -115,7 +115,7 @@ function Get-TargetResource
 
         Write-Verbose -Message "Found something with id {$id}"
 
-<#
+
         $complexSettings = @()
         foreach ($setting in $getValue.AdditionalProperties.settings)
         {
@@ -128,7 +128,7 @@ function Get-TargetResource
             }
         }
 
-#>       
+       
 
 
 
@@ -144,7 +144,7 @@ function Get-TargetResource
             DisplayName                    = $getValue.DisplayName
             
             targetedMobileApps             = $getValue.TargetedMobileApps
-            settings                       = $getValue.AdditionalProperties.settings
+            settings                       = $complexSettings #$getValue.AdditionalProperties.settings
             encodedSettingXml              = $getValue.AdditionalProperties.encodedSettingXml
 
             Ensure                         = 'Present'
