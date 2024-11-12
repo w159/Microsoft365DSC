@@ -23790,7 +23790,7 @@
                            },
                            {
                                "CIMType":  "UInt32",
-                               "Name":  "PasswordAgeDays_AAD",
+                               "Name":  "passwordagedays_aad",
                                "Option":  "Write"
                            },
                            {
@@ -45441,6 +45441,11 @@
                            {
                                "CIMType":  "String",
                                "Name":  "authschemes",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "AuthSchemes_AuthSchemes",
                                "Option":  "Write"
                            },
                            {
