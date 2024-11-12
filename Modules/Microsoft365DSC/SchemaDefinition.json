@@ -15736,71 +15736,6 @@
                        ]
     },
     {
-        "ClassName":  "MSFT_EXOM365DataAtRestEncryptionPolicy",
-        "Parameters":  [
-                           {
-                               "CIMType":  "String",
-                               "Name":  "Identity",
-                               "Option":  "Key"
-                           },
-                           {
-                               "CIMType":  "String",
-                               "Name":  "Name",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String",
-                               "Name":  "Description",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "Boolean",
-                               "Name":  "Enabled",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String[]",
-                               "Name":  "AzureKeyIDs",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "string",
-                               "Name":  "Ensure",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "MSFT_Credential",
-                               "Name":  "Credential",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String",
-                               "Name":  "ApplicationId",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String",
-                               "Name":  "TenantId",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String",
-                               "Name":  "CertificateThumbprint",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "Boolean",
-                               "Name":  "ManagedIdentity",
-                               "Option":  "Write"
-                           },
-                           {
-                               "CIMType":  "String[]",
-                               "Name":  "AccessTokens",
-                               "Option":  "Write"
-                           }
-                       ]
-    },
-    {
         "ClassName":  "MSFT_EXOMailboxAuditBypassAssociation",
         "Parameters":  [
                            {
@@ -24601,6 +24536,81 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_IntuneAntivirusExclusionsPolicyMacOS",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Description",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisplayName",
+                               "Option":  "Key"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "RoleScopeTagIds",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "Id",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_MicrosoftGraphIntuneSettingsCatalogexclusions[]",
+                               "Name":  "Exclusions",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_DeviceManagementConfigurationPolicyAssignments[]",
+                               "Name":  "Assignments",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "Ensure",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "Credential",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "ApplicationId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "TenantId",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_Credential",
+                               "Name":  "ApplicationSecret",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "CertificateThumbprint",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ManagedIdentity",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String[]",
+                               "Name":  "AccessTokens",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_MicrosoftGraphIntuneSettingsCatalogthreatTypeSettings",
         "Parameters":  [
                            {
@@ -25015,222 +25025,232 @@
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "tamperprotection",
+                               "Name":  "TamperProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disableaccountprotectionui",
+                               "Name":  "DisableAccountProtectionUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disableappbrowserui",
+                               "Name":  "DisableAppBrowserUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablecleartpmbutton",
+                               "Name":  "DisableClearTpmButton",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disabledevicesecurityui",
+                               "Name":  "DisableDeviceSecurityUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablefamilyui",
+                               "Name":  "DisableFamilyUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablehealthui",
+                               "Name":  "DisableHealthUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablenetworkui",
+                               "Name":  "DisableNetworkUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disableenhancednotifications",
+                               "Name":  "DisableEnhancedNotifications",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disabletpmfirmwareupdatewarning",
+                               "Name":  "DisableTpmFirmwareUpdateWarning",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablevirusui",
+                               "Name":  "DisableVirusUI",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "hideransomwaredatarecovery",
+                               "Name":  "HideRansomwareDataRecovery",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "hidewindowssecuritynotificationareacontrol",
+                               "Name":  "HideWindowsSecurityNotificationAreaControl",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "enablecustomizedtoasts",
+                               "Name":  "EnableCustomizedToasts",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "enableinappcustomization",
+                               "Name":  "EnableInAppCustomization",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "companyname",
+                               "Name":  "CompanyName",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "email",
+                               "Name":  "Email",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "phone",
+                               "Name":  "Phone",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "url",
+                               "Name":  "URL",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowarchivescanning",
+                               "Name":  "AllowArchiveScanning",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowbehaviormonitoring",
+                               "Name":  "AllowBehaviorMonitoring",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowcloudprotection",
+                               "Name":  "AllowCloudProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowdatagramprocessingonwinserver",
+                               "Name":  "AllowDatagramProcessingOnWinServer",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowemailscanning",
+                               "Name":  "AllowEmailScanning",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowfullscanonmappednetworkdrives",
+                               "Name":  "AllowFullScanOnMappedNetworkDrives",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowfullscanremovabledrivescanning",
+                               "Name":  "AllowFullScanRemovableDriveScanning",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowintrusionpreventionsystem",
+                               "Name":  "AllowIntrusionPreventionSystem",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowioavprotection",
+                               "Name":  "AllowIOAVProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allownetworkprotectiondownlevel",
+                               "Name":  "AllowNetworkProtectionDownLevel",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowrealtimemonitoring",
+                               "Name":  "AllowRealtimeMonitoring",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowscanningnetworkfiles",
+                               "Name":  "AllowScanningNetworkFiles",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowscriptscanning",
+                               "Name":  "AllowScriptScanning",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowuseruiaccess",
+                               "Name":  "AllowUserUIAccess",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "avgcpuloadfactor",
+                               "Name":  "AvgCPULoadFactor",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "archivemaxdepth",
+                               "Name":  "ArchiveMaxDepth",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "archivemaxsize",
+                               "Name":  "ArchiveMaxSize",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "checkforsignaturesbeforerunningscan",
+                               "Name":  "CheckForSignaturesBeforeRunningScan",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "cloudblocklevel",
+                               "Name":  "CloudBlockLevel",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "cloudextendedtimeout",
+                               "Name":  "CloudExtendedTimeout",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "daystoretaincleanedmalware",
+                               "Name":  "DaysToRetainCleanedMalware",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablecatchupfullscan",
+                               "Name":  "DisableCatchupFullScan",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablecatchupquickscan",
+                               "Name":  "DisableCatchupQuickScan",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablednsovertcpparsing",
+                               "Name":  "DisableCoreServiceECSIntegration",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablehttpparsing",
+                               "Name":  "DisableCoreServiceTelemetry",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisableDnsOverTcpParsing",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "DisableHttpParsing",
                                "Option":  "Write"
                            },
                            {
@@ -25240,147 +25260,147 @@
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "enablelowcpupriority",
+                               "Name":  "EnableLowCPUPriority",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "enablenetworkprotection",
+                               "Name":  "EnableNetworkProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String[]",
-                               "Name":  "excludedextensions",
+                               "Name":  "ExcludedExtensions",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String[]",
-                               "Name":  "excludedpaths",
+                               "Name":  "ExcludedPaths",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String[]",
-                               "Name":  "excludedprocesses",
+                               "Name":  "ExcludedProcesses",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "puaprotection",
+                               "Name":  "PUAProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "engineupdateschannel",
+                               "Name":  "EngineUpdatesChannel",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "meteredconnectionupdates",
+                               "Name":  "MeteredConnectionUpdates",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "platformupdateschannel",
+                               "Name":  "PlatformUpdatesChannel",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "securityintelligenceupdateschannel",
+                               "Name":  "SecurityIntelligenceUpdatesChannel",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "realtimescandirection",
+                               "Name":  "RealTimeScanDirection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "scanparameter",
+                               "Name":  "ScanParameter",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "schedulequickscantime",
+                               "Name":  "ScheduleQuickScanTime",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "schedulescanday",
+                               "Name":  "ScheduleScanDay",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "schedulescantime",
+                               "Name":  "ScheduleScanTime",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disabletlsparsing",
+                               "Name":  "DisableTlsParsing",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "randomizescheduletasktimes",
+                               "Name":  "RandomizeScheduleTaskTimes",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "schedulerrandomizationtime",
+                               "Name":  "SchedulerRandomizationTime",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String[]",
-                               "Name":  "signatureupdatefallbackorder",
+                               "Name":  "SignatureUpdateFallbackOrder",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String[]",
-                               "Name":  "signatureupdatefilesharessources",
+                               "Name":  "SignatureUpdateFileSharesSources",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "sInt32",
-                               "Name":  "signatureupdateinterval",
+                               "Name":  "SignatureUpdateInterval",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "submitsamplesconsent",
+                               "Name":  "SubmitSamplesConsent",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "disablelocaladminmerge",
+                               "Name":  "DisableLocalAdminMerge",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "allowonaccessprotection",
+                               "Name":  "AllowOnAccessProtection",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "lowseveritythreats",
+                               "Name":  "LowSeverityThreats",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "moderateseveritythreats",
+                               "Name":  "ModerateSeverityThreats",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "severethreats",
+                               "Name":  "SevereThreats",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "highseveritythreats",
+                               "Name":  "HighSeverityThreats",
                                "Option":  "Write"
                            },
                            {
                                "CIMType":  "String",
-                               "Name":  "templateId",
+                               "Name":  "TemplateId",
                                "Option":  "Write"
                            },
                            {
