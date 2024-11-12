@@ -22,6 +22,7 @@
   * Changes to how we're retrieving the users to improve performance.
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.12.
+  * Updated MSCloudLoginAssistant to version 1.1.28.
 
 # 1.24.1106.3
 
