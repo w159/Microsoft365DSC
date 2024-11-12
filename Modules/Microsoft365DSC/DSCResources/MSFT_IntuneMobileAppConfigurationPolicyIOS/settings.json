@@ -1,29 +1,29 @@
 {
-    "resourceName": "IntuneVPNConfigurationPolicyIOS",
-    "description": "This resource configures an Intune VPN Configuration Policy for iOS Device.",
+    "resourceName": "IntuneMobileAppConfigurationPolicyIOS",
+    "description": "This resource configures an Intune Managed Device Mobile App Configuration Policy for iOS Device.",
     "permissions": {
         "graph": {
             "delegated": {
                 "read": [
                     {
-                        "name": "DeviceManagementConfiguration.Read.All"
+                        "name": "DeviceManagementApps.Read.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "DeviceManagementConfiguration.ReadWrite.All"
+                        "name": "DeviceManagementApps.ReadWrite.All"
                     }
                 ]
             },
             "application": {
                 "read": [
                     {
-                        "name": "DeviceManagementConfiguration.Read.All"
+                        "name": "DeviceManagementApps.Read.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "DeviceManagementConfiguration.ReadWrite.All"
+                        "name": "DeviceManagementApps.ReadWrite.All"
                     }
                 ]
             }
