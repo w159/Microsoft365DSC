@@ -104372,3 +104372,47 @@ function Remove-MigrationBatch
     )
 }
 #endregion
+
+#region Microsoft.Graph.Authentication
+function Get-MigrationUser
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Object]
+        $EmailAddress,
+
+        [Parameter()]
+        [System.Object]
+        $MailboxGuid,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IncludeAssociatedUsers,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Object]
+        $BatchId,
+
+        [Parameter()]
+        [System.Object]
+        $Partition,
+
+        [Parameter()]
+        [System.Object]
+        $ResultSize,
+
+        [Parameter()]
+        [System.Object]
+        $Status,
+
+        [Parameter()]
+        [System.Object]
+        $StatusSummary
+    )
+}
+#endregion
