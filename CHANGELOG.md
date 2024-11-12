@@ -18,6 +18,8 @@
 * M365DSCIntuneSettingsCatalogUtil
   * Add ADMX handling for `edge~httpauthentication_`.
     FIXES [#5378](https://github.com/microsoft/Microsoft365DSC/issues/5378) (2/2)
+* TeamsUpgradePolicy
+  * Changes to how we're retrieving the users to improve performance.
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.12.
 
