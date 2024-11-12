@@ -95,8 +95,7 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        #$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
-        if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue }
+        if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $id -ErrorAction SilentlyContinue }
 
         #region resource generator code
         if ($null -eq $getValue)
@@ -325,7 +324,7 @@ function Set-TargetResource
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
            
         #region resource generator code
-        $policy = New-MgBetaDeviceManagementDeviceConfiguration @CreateParameters
+        $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration @CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
 
         if ($policy.id)
@@ -368,8 +367,8 @@ function Set-TargetResource
 
 
         #region resource generator code
-        Update-MgBetaDeviceManagementDeviceConfiguration @UpdateParameters `
-            -DeviceConfigurationId $currentInstance.Id
+        Update-MgBetaDeviceAppManagementMobileAppConfiguration @UpdateParameters `
+            -ManagedDeviceMobileAppConfigurationId $currentInstance.Id
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
         Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `
             -Targets $assignmentsHash `
@@ -380,7 +379,7 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Removing {$DisplayName}"
         #region resource generator code
-        Remove-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $currentInstance.Id
+        Remove-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $currentInstance.Id
         #endregion
     }
 }
@@ -601,7 +600,7 @@ function Export-TargetResource
     {
 
         #region resource generator code
-        [array]$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter $Filter -All `
+        [array]$getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter $Filter -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript { `
                 $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosMobileAppConfiguration'  `
