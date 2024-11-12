@@ -13,7 +13,7 @@ function Get-TargetResource
         $NotificationEmails,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $CompleteAfter,
 
         [Parameter()]
@@ -37,7 +37,7 @@ function Get-TargetResource
         $SkipMerging,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $StartAfter,
 
         [Parameter()]
@@ -125,13 +125,11 @@ function Get-TargetResource
         $results = @{
             Identity                = $Identity
             NotificationEmails      = [System.String[]]$instance.NotificationEmails
-            CompleteAfter           = $instance.CompleteAfter
             AddUsers                = [System.Boolean]$instance.AddUsers
             BadItemLimit            = [System.String]$instance.BadItemLimit
             LargeItemLimit          = [System.String]$instance.LargeItemLimit
             MoveOptions             = [System.String[]]$instance.MoveOptions
             SkipMerging             = [System.String[]]$instance.SkipMerging
-            StartAfter              = $instance.StartAfter
             Update                  = [System.Boolean]$instance.Update
             Ensure                  = 'Present'
             Credential              = $Credential
@@ -144,6 +142,16 @@ function Get-TargetResource
             MigrationUsers          = $UserEmails
             SourceEndpoint          = $instance.SourceEndpoint.Identity.Id
             TargetDeliveryDomain    = $instance.TargetDeliveryDomain
+        }
+
+        if ($instance.CompleteAfter -ne $null)
+        {
+            $results.Add('CompleteAfter', $instance.CompleteAfter.ToString("MM/dd/yyyy hh:mm tt"))
+        }
+
+        if ($instance.StartAfter -ne $null)
+        {
+            $results.Add('StartAfter', $instance.CompleteAfter.ToString("MM/dd/yyyy hh:mm tt"))
         }
 
         return [System.Collections.Hashtable] $results
@@ -173,7 +181,7 @@ function Set-TargetResource
         $NotificationEmails,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $CompleteAfter,
 
         [Parameter()]
@@ -197,7 +205,7 @@ function Set-TargetResource
         $SkipMerging,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $StartAfter,
 
         [Parameter()]
@@ -265,18 +273,18 @@ function Set-TargetResource
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        # Define the path for the CSV file to store the migration users
-        $csvFilePath = "$env:TEMP\MigrationUsers.csv"
+        # Convert the list of users to CSV format
+        $csvContent = @('"EmailAddress"') + ($MigrationUsers | ForEach-Object { "`"$_`"" })
 
-        # Convert each item in the array to a custom object with an EmailAddress property
-        $csvContent = $MigrationUsers | ForEach-Object { [PSCustomObject]@{EmailAddress = $_} }
+        # Join the results into a single string with new lines
+        $csvContent = $csvContent -join "`r`n"
 
-        # Export to CSV with the header "EmailAddress"
-        $csvContent | Export-Csv -Path $csvFilePath -NoTypeInformation -Force
+        # Convert the CSV content to bytes directly without saving to a file
+        $csvBytes = [System.Text.Encoding]::UTF8.GetBytes($csvContent -join "`r`n")
 
         $BatchParams = @{
             Name              = $Identity  # Use the existing Identity as the new batch name
-            CSVData           = [System.IO.File]::ReadAllBytes($csvFilePath)  # Load the CSV as byte array
+            CSVData           = $csvBytes  # Directly use the byte array
             NotificationEmails = $NotificationEmails  # Use the same notification emails if provided
             CompleteAfter     = $CompleteAfter
             StartAfter        = $StartAfter
@@ -376,7 +384,7 @@ function Test-TargetResource
         $NotificationEmails,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $CompleteAfter,
 
         [Parameter()]
@@ -400,7 +408,7 @@ function Test-TargetResource
         $SkipMerging,
 
         [Parameter()]
-        [System.DateTime]
+        [System.String]
         $StartAfter,
 
         [Parameter()]

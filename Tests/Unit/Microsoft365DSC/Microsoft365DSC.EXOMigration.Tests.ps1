@@ -53,9 +53,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Get-MigrationUser -MockWith {
             }
 
-            Mock -CommandName Get-MigrationUser -MockWith {
-            }
-
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
             }
@@ -126,7 +123,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         AddUsers             = $False;
                         BadItemLimit         = "Unlimited";
-                        CompleteAfter        = "07/30/2020 21:00:00";
+                        CompleteAfter        = "07/30/2020 9:00:00 PM";
                         Credential           = $Credscredential;
                         Ensure               = "Present";
                         Identity             = "Arpita";
@@ -136,18 +133,28 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NotificationEmails   = @("eac_admin@bellred.org","abc@bellred.org");
                         SkipMerging          = @("abc");
                         SourceEndpoint       = @{Identity = @{Id = "gmailCalendar"}};
-                        StartAfter           = "07/30/2020 21:00:00";
+                        StartAfter           = "07/30/2020 9:00:00 PM";
                         Status               = @{Value = "Completing"};
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
+                }
+                Mock -CommandName Get-MigrationUser -MockWith {
+                    return @(
+                        @{
+                            Identity = "peixintest1@bellred.org"
+                        },
+                        @{
+                            Identity = "akstest39@bellred.org"
+                        }
+                    )
                 }
             }
             It 'Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
             }
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                Test-TargetResource @testParams -Verbose | Should -Be $false
             }
 
             It 'Should remove the instance from the Set method' {
@@ -196,6 +203,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         TargetDeliveryDomain = "O365InsightsView.mail.onmicrosoft.com";
                         Update               = $False;
                     }
+                }
+                Mock -CommandName Get-MigrationUser -MockWith {
+                    return @(
+                        @{
+                            Identity = "peixintest1@bellred.org"
+                        },
+                        @{
+                            Identity = "akstest39@bellred.org"
+                        }
+                    )
                 }
             }
             It 'Should return Values from the Get method' {
@@ -266,7 +283,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
 
             It 'Should return true from the Test method' {
-                Test-TargetResource @testParams -Verbose | Should -Be $true
+                Test-TargetResource @testParams | Should -Be $true
             }
         }
 
