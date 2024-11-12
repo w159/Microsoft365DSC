@@ -144,6 +144,8 @@
 * EXOMailboxSettings
   * Added support for AddressBookPolicy, RetentionPolicy, RoleAssignmentPolicy
     and SharingPolicy.
+* EXOMigration
+  * Initial release.
 * EXOServicePrincipal
   * Initial release.
 * EXOTenantAllowBlockListItems
