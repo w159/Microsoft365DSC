@@ -216,6 +216,10 @@ function Set-TargetResource
     Write-Verbose -Message "Updating billing account policy for {$BillingAccount} with payload:`r`n$($payload)"
     $uri = "https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$($BillingAccount)/policies/default?api-version=2024-04-01"
     $response = Invoke-AzRest -Uri $uri -Method "PUT" -Payload $payload
+    if (-not [System.String]::IsNullOrEmpty($response.Error))
+    {
+        throw "Error: $($response.Error)"
+    }
     Write-Verbose -Message "Response:`r`n$($response.Content)"
 }
 
@@ -421,7 +425,6 @@ function Export-TargetResource
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
-
 
             if ($Results.EnterpriseAgreementPolicies)
             {
