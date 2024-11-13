@@ -6,6 +6,9 @@
   * Fixed bug where an empty value was passed in the request for the
     insiderRiskLevels parameter, which throws an error.
     FIXES [#5389](https://github.com/microsoft/Microsoft365DSC/issues/5389)
+  * Fixes a bug where 3P apps could not be assigned by DisplayName for both
+    IncludeApplications and ExcludeApplications
+    FIXES [#5390](https://github.com/microsoft/Microsoft365DSC/issues/5390)
 * EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
   * Fixed issue where empty arrays were being compared incorrectly to null
     strings
