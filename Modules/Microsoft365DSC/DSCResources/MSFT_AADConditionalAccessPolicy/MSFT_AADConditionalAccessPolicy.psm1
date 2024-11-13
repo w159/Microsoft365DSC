@@ -220,6 +220,7 @@ function Get-TargetResource
         $TransferMethods,
 
         [Parameter()]
+        [ValidateSet('minor', 'moderate', 'elevated', 'unknownFutureValue')]
         [System.String]
         $InsiderRiskLevels,
 
@@ -949,6 +950,7 @@ function Set-TargetResource
         $TransferMethods,
 
         [Parameter()]
+        [ValidateSet('minor', 'moderate', 'elevated', 'unknownFutureValue')]
         [System.String]
         $InsiderRiskLevels,
 
@@ -1586,7 +1588,7 @@ function Set-TargetResource
             }
         }
 
-        if ($null -ne $InsiderRiskLevels)
+        if ([String]::IsNullOrEmpty($InsiderRiskLevels) -eq $false)
         {
             $conditions.Add("insiderRiskLevels", $InsiderRiskLevels)
         }
@@ -2059,6 +2061,7 @@ function Test-TargetResource
         $TransferMethods,
 
         [Parameter()]
+        [ValidateSet('minor', 'moderate', 'elevated', 'unknownFutureValue')]
         [System.String]
         $InsiderRiskLevels,
 

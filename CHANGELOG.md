@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixed bug where an empty value was passed in the request for the
+    insiderRiskLevels parameter, which throws an error.
+    FIXES [#5389](https://github.com/microsoft/Microsoft365DSC/issues/5389)
 * IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy
   * Update property `PasswordAgeDays_AAD` to be lower-case.
     FIXES [#5378](https://github.com/microsoft/Microsoft365DSC/issues/5378) (1/2)
