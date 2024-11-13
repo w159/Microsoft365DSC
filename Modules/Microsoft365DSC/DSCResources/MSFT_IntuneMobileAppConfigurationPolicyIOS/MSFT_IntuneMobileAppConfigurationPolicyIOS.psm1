@@ -115,24 +115,20 @@ function Get-TargetResource
 
         Write-Verbose -Message "Found something with id {$id}"
 
-
+        #need to convert dictionary object into a hashtable array so we can work with it
         $complexSettings = @()
         foreach ($setting in $getValue.AdditionalProperties.settings)
         {
             $mySettings = @{}
-            $mySettings.Add($setting.keys, $setting.values)
-
+            $mySettings.Add('appConfigKey', $setting['appConfigKey'])
+            $mySettings.Add('appConfigKeyType', $setting['appConfigKeyType'])
+            $mySettings.Add('appConfigKeyValue', $setting['appConfigKeyValue'])
+            
             if ($mySettings.values.Where({$null -ne $_}).count -gt 0)
             {
                 $complexSettings += $mySettings
             }
         }
-
-       
-
-
-
-
 
 
 
@@ -657,6 +653,20 @@ function Export-TargetResource
 
 
 
+            if ($null -ne $Results.settings)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.settings `
+                    -CIMInstanceName 'MSFT_appConfigurationSettingItem'
+                if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                {
+                    $Results.settings = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('settings') | Out-Null
+                }
+            }
 
 
 
@@ -683,6 +693,18 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
+
+            
+            if ($Results.settings)
+            {
+                $isCIMArray = $false
+                if ($Results.settings.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'settings' -IsCIMArray:$isCIMArray
+            }
+
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
