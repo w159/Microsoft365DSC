@@ -190,7 +190,7 @@
                         $schedule = $instance
                     }
                 }
-                [Array]$request = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Filter "PrincipalId eq '$PrincipalId' and RoleDefinitionId eq '$($schedule.RoleDefinitionId)'" | Sort-Object -Property CompletedDateTime -Descending
+                [Array]$request = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Filter "PrincipalId eq '$PrincipalId'" | Where-Object -FilterScript {$_.RoleDefinitionId -eq $schedule.RoleDefinitionId} | Sort-Object -Property CompletedDateTime -Descending
 `
                 if ($request.Length -gt 1)
                 {
