@@ -143,7 +143,7 @@ function Get-TargetResource
             $myomaSettings.Add('IsEncrypted', $currentomaSettings.isEncrypted)
             $myomaSettings.Add('OmaUri', $currentomaSettings.omaUri)
             $myomaSettings.Add('FileName', $currentomaSettings.fileName)
-            $myomaSettings.Add('Value', [System.String]$currentomaSettings.value)
+            $myomaSettings.Add('Value', $currentomaSettings.value)
             if ($currentomaSettings.'@odata.type' -eq '#microsoft.graph.omaSettingInteger')
             {
                 $myomaSettings.Add('IsReadOnly', $currentomaSettings.isReadOnly)

@@ -6,6 +6,10 @@
   * Fixed bug where an empty value was passed in the request for the
     insiderRiskLevels parameter, which throws an error.
     FIXES [#5389](https://github.com/microsoft/Microsoft365DSC/issues/5389)
+* EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
+  * Fixed issue where empty arrays were being compared incorrectly to null
+    strings
+    FIXES [#5394](https://github.com/microsoft/Microsoft365DSC/issues/5394)
 * IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy
   * Update property `PasswordAgeDays_AAD` to be lower-case.
     FIXES [#5378](https://github.com/microsoft/Microsoft365DSC/issues/5378) (1/2)
@@ -14,10 +18,6 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
-* IntuneDeviceConfigurationCustomPolicyWindows10
-  * Fixed issue where `Value`, from `OmaSettings`, could not be compared
-    correctly if it was boolean and set to `$False`
-    FIXES [#5384](https://github.com/microsoft/Microsoft365DSC/issues/5384)
 * IntuneSecurityBaselineMicrosoftEdge
   * Deprecate property `authschemes` and replace with `AuthSchemes_AuthSchemes`
 * M365DSCDRGUtil
