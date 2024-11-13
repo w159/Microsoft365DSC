@@ -24,6 +24,10 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
+* IntuneDeviceConfigurationCustomPolicyWindows10
+  * Fixed issue where `Value`, from `OmaSettings`, could not be compared
+    correctly if it was boolean and set to `$False`
+    FIXES [#5384](https://github.com/microsoft/Microsoft365DSC/issues/5384)
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Remove changed property name from export.
     FIXES [#5300](https://github.com/microsoft/Microsoft365DSC/issues/5300)
@@ -36,7 +40,7 @@
   * Add ADMX handling for `edge~httpauthentication_`.
     FIXES [#5378](https://github.com/microsoft/Microsoft365DSC/issues/5378) (2/2)
 * TeamsUpgradePolicy
-  * Changes to how we're retrieving the users to improve performance.
+  * Changes to how we are retrieving the users to improve performance.
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.12.
   * Updated MSCloudLoginAssistant to version 1.1.28.
