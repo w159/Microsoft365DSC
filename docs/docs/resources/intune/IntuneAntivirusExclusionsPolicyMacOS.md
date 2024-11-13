@@ -1,4 +1,4 @@
-﻿# IntuneSecurityBaselineMicrosoftEdge
+﻿# IntuneAntivirusExclusionsPolicyMacOS
 
 ## Parameters
 
@@ -8,28 +8,7 @@
 | **DisplayName** | Key | String | Policy name | |
 | **RoleScopeTagIds** | Write | StringArray[] | List of Scope Tags for this Entity instance. | |
 | **Id** | Write | String | The unique identifier for an entity. Read-only. | |
-| **InternetExplorerIntegrationReloadInIEModeAllowed** | Write | String | Allow unconfigured sites to be reloaded in Internet Explorer mode (0: Disabled, 1: Enabled) | `0`, `1` |
-| **SSLErrorOverrideAllowed** | Write | String | Allow users to proceed from the HTTPS warning page (0: Disabled, 1: Enabled) | `0`, `1` |
-| **InternetExplorerIntegrationZoneIdentifierMhtFileAllowed** | Write | String | Automatically open downloaded MHT or MHTML files from the web in Internet Explorer mode (0: Disabled, 1: Enabled) | `0`, `1` |
-| **BrowserLegacyExtensionPointsBlockingEnabled** | Write | String | Enable browser legacy extension point blocking (0: Disabled, 1: Enabled) | `0`, `1` |
-| **SitePerProcess** | Write | String | Enable site isolation for every site (0: Disabled, 1: Enabled) | `0`, `1` |
-| **EdgeEnhanceImagesEnabled** | Write | String | Enhance images enabled (0: Disabled, 1: Enabled) | `0`, `1` |
-| **ExtensionInstallBlocklist** | Write | String | Control which extensions cannot be installed (0: Disabled, 1: Enabled) | `0`, `1` |
-| **ExtensionInstallBlocklistDesc** | Write | StringArray[] | Extension IDs the user should be prevented from installing (or * for all) (Device) - Depends on ExtensionInstallBlocklist | |
-| **WebSQLAccess** | Write | String | Force WebSQL to be enabled (0: Disabled, 1: Enabled) | `0`, `1` |
-| **BasicAuthOverHttpEnabled** | Write | String | Allow Basic authentication for HTTP (0: Disabled, 1: Enabled) | `0`, `1` |
-| **MicrosoftEdge_HTTPAuthentication_AuthSchemes** | Write | String | Supported authentication schemes (0: Disabled, 1: Enabled) | `0`, `1` |
-| **authschemes** | Write | String | (Deprecated) - Supported authentication schemes (Device) - Depends on MicrosoftEdge_HTTPAuthentication_AuthSchemes | |
-| **AuthSchemes_AuthSchemes** | Write | String | Supported authentication schemes (Device) - Depends on MicrosoftEdge_HTTPAuthentication_AuthSchemes | |
-| **NativeMessagingUserLevelHosts** | Write | String | Allow user-level native messaging hosts (installed without admin permissions) (0: Disabled, 1: Enabled) | `0`, `1` |
-| **InsecurePrivateNetworkRequestsAllowed** | Write | String | Specifies whether to allow insecure websites to make requests to more-private network endpoints (0: Disabled, 1: Enabled) | `0`, `1` |
-| **InternetExplorerModeToolbarButtonEnabled** | Write | String | Show the Reload in Internet Explorer mode button in the toolbar (0: Disabled, 1: Enabled) | `0`, `1` |
-| **SmartScreenEnabled** | Write | String | Configure Microsoft Defender SmartScreen (0: Disabled, 1: Enabled) | `0`, `1` |
-| **SmartScreenPuaEnabled** | Write | String | Configure Microsoft Defender SmartScreen to block potentially unwanted apps (0: Disabled, 1: Enabled) | `0`, `1` |
-| **PreventSmartScreenPromptOverride** | Write | String | Prevent bypassing Microsoft Defender SmartScreen prompts for sites (0: Disabled, 1: Enabled) | `0`, `1` |
-| **PreventSmartScreenPromptOverrideForFiles** | Write | String | Prevent bypassing of Microsoft Defender SmartScreen warnings about downloads (0: Disabled, 1: Enabled) | `0`, `1` |
-| **SharedArrayBufferUnrestrictedAccessAllowed** | Write | String | Specifies whether SharedArrayBuffers can be used in a non cross-origin-isolated context (0: Disabled, 1: Enabled) | `0`, `1` |
-| **TyposquattingCheckerEnabled** | Write | String | Configure Edge TyposquattingChecker (0: Disabled, 1: Enabled) | `0`, `1` |
+| **Exclusions** | Write | MSFT_MicrosoftGraphIntuneSettingsCatalogexclusions[] | Scan exclusions | |
 | **Assignments** | Write | MSFT_DeviceManagementConfigurationPolicyAssignments[] | Represents the assignment to the Intune policy. | |
 | **Ensure** | Write | String | Present ensures the policy exists, absent ensures it is removed. | `Present`, `Absent` |
 | **Credential** | Write | PSCredential | Credentials of the Admin | |
@@ -53,10 +32,22 @@
 | **groupDisplayName** | Write | String | The group Display Name that is the target of the assignment. | |
 | **collectionId** | Write | String | The collection Id that is the target of the assignment.(ConfigMgr) | |
 
+### MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions
+
+#### Parameters
+
+| Parameter | Attribute | DataType | Description | Allowed Values |
+| --- | --- | --- | --- | --- |
+| **exclusions_item_type** | Write | String | Type - Depends on exclusions (0: Path, 1: File extension, 2: Process name) | `0`, `1`, `2` |
+| **exclusions_item_extension** | Write | String | File extension - Depends on exclusions_item_type=1 | |
+| **exclusions_item_name** | Write | String | File name - exclusions_item_type=2 | |
+| **exclusions_item_path** | Write | String | Path - exclusions_item_type=0 | |
+| **exclusions_item_isDirectory** | Write | String | Is directory (false: Disabled, true: Enabled) - Depends on exclusions_item_type=0 | `false`, `true` |
+
 
 ## Description
 
-Intune Security Baseline Microsoft Edge
+Intune Antivirus Exclusions Policy for macOS
 
 ## Permissions
 
@@ -68,21 +59,21 @@ To authenticate with the Microsoft Graph API, this resource required the followi
 
 - **Read**
 
-    - Group.Read.All, DeviceManagementConfiguration.Read.All
+    - DeviceManagementConfiguration.Read.All, Group.Read.All
 
 - **Update**
 
-    - Group.Read.All, DeviceManagementConfiguration.ReadWrite.All
+    - DeviceManagementConfiguration.ReadWrite.All, Group.Read.All
 
 #### Application permissions
 
 - **Read**
 
-    - Group.Read.All, DeviceManagementConfiguration.Read.All
+    - DeviceManagementConfiguration.Read.All, Group.Read.All
 
 - **Update**
 
-    - Group.Read.All, DeviceManagementConfiguration.ReadWrite.All
+    - DeviceManagementConfiguration.ReadWrite.All, Group.Read.All
 
 ## Examples
 
@@ -111,14 +102,23 @@ Configuration Example
 
     node localhost
     {
-        IntuneSecurityBaselineMicrosoftEdge 'mySecurityBaselineMicrosoftEdge'
+        IntuneAntivirusExclusionsPolicyMacOS 'myIntuneAntivirusExclusionsPolicyMacOS'
         {
-            DisplayName           = 'test'
-            InsecurePrivateNetworkRequestsAllowed                   = "0";
-            InternetExplorerIntegrationReloadInIEModeAllowed        = "0";
-            InternetExplorerIntegrationZoneIdentifierMhtFileAllowed = "0";
-            InternetExplorerModeToolbarButtonEnabled                = "0";
-            Ensure                = 'Present'
+            Assignments = @();
+            Description = "";
+            DisplayName = "Test";
+            Ensure      = "Present";
+            Exclusions  = @(
+                MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                    Exclusions_item_extension = '.dmg'
+                    Exclusions_item_type = '1'
+                }
+                MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                    Exclusions_item_name = 'process1'
+                    Exclusions_item_type = '2'
+                }
+            );
+            RoleScopeTagIds                    = @("0");
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;
@@ -152,14 +152,23 @@ Configuration Example
 
     node localhost
     {
-        IntuneSecurityBaselineMicrosoftEdge 'mySecurityBaselineMicrosoftEdge'
+        IntuneAntivirusExclusionsPolicyMacOS 'myIntuneAntivirusExclusionsPolicyMacOS'
         {
-            DisplayName           = 'test'
-            InsecurePrivateNetworkRequestsAllowed                   = "0";
-            InternetExplorerIntegrationReloadInIEModeAllowed        = "0";
-            InternetExplorerIntegrationZoneIdentifierMhtFileAllowed = "0";
-            InternetExplorerModeToolbarButtonEnabled                = "1"; # Drift
-            Ensure                = 'Present'
+            Assignments = @();
+            Description = "";
+            DisplayName = "Test";
+            Ensure      = "Present";
+            Exclusions  = @(
+                MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                    Exclusions_item_extension = '.xcode' # Updated property
+                    Exclusions_item_type = '1'
+                }
+                MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                    Exclusions_item_name = 'process1'
+                    Exclusions_item_type = '2'
+                }
+            );
+            RoleScopeTagIds                    = @("0");
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;
@@ -193,7 +202,7 @@ Configuration Example
 
     node localhost
     {
-        IntuneSecurityBaselineMicrosoftEdge 'mySecurityBaselineMicrosoftEdge'
+        IntuneAntivirusExclusionsPolicyMacOS 'myIntuneAntivirusPolicyMacOS'
         {
             DisplayName           = 'test'
             Ensure                = 'Absent'

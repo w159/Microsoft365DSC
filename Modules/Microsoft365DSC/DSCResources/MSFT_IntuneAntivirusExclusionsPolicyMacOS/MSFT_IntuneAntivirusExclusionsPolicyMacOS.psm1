@@ -22,112 +22,8 @@ function Get-TargetResource
         $Id,
 
         [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationReloadInIEModeAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SSLErrorOverrideAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationZoneIdentifierMhtFileAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BrowserLegacyExtensionPointsBlockingEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SitePerProcess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $EdgeEnhanceImagesEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $ExtensionInstallBlocklist,
-
-        [Parameter()]
-        [ValidateLength(0, 2048)]
-        [System.String[]]
-        $ExtensionInstallBlocklistDesc,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $WebSQLAccess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BasicAuthOverHttpEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $MicrosoftEdge_HTTPAuthentication_AuthSchemes,
-
-        [Parameter()]
-        [System.String]
-        $authschemes,
-
-        [Parameter()]
-        [System.String]
-        $AuthSchemes_AuthSchemes,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $NativeMessagingUserLevelHosts,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InsecurePrivateNetworkRequestsAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerModeToolbarButtonEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenPuaEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverride,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverrideForFiles,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SharedArrayBufferUnrestrictedAccessAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $TyposquattingCheckerEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Exclusions,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -194,23 +90,24 @@ function Get-TargetResource
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Security Baseline Microsoft Edge with Id {$Id}"
+            Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Id {$Id}"
 
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
                     -Filter "Name eq '$DisplayName'" `
+                    -All `
                     -ErrorAction SilentlyContinue
             }
         }
         #endregion
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Security Baseline Microsoft Edge with Name {$DisplayName}."
+            Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Name {$DisplayName}."
             return $nullResult
         }
         $Id = $getValue.Id
-        Write-Verbose -Message "An Intune Security Baseline Microsoft Edge with Id {$Id} and Name {$DisplayName} was found"
+        Write-Verbose -Message "An Intune Antivirus Exclusions Policy for macOS with Id {$Id} and Name {$DisplayName} was found"
 
         # Retrieve policy specific settings
         [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
@@ -222,12 +119,46 @@ function Get-TargetResource
         $policySettings = @{}
         $policySettings = Export-IntuneSettingCatalogPolicySettings -Settings $settings -ReturnHashtable $policySettings
 
+        #region resource generator code
+        $complexExclusions = @()
+        foreach ($currentExclusions in $policySettings.exclusions)
+        {
+            $myExclusions = @{}
+            if ($null -ne $currentExclusions.exclusions_item_type)
+            {
+                $myExclusions.Add('Exclusions_item_type', $currentExclusions.exclusions_item_type)
+            }
+            if ($null -ne $currentExclusions.exclusions_item_extension)
+            {
+                $myExclusions.Add('Exclusions_item_extension', $currentExclusions.exclusions_item_extension)
+            }
+            if ($null -ne $currentExclusions.exclusions_item_isDirectory)
+            {
+                $myExclusions.Add('Exclusions_item_isDirectory', $currentExclusions.exclusions_item_isDirectory)
+            }
+            if ($null -ne $currentExclusions.exclusions_item_name)
+            {
+                $myExclusions.Add('Exclusions_item_name', $currentExclusions.exclusions_item_name)
+            }
+            if ($null -ne $currentExclusions.exclusions_item_path)
+            {
+                $myExclusions.Add('Exclusions_item_path', $currentExclusions.exclusions_item_path)
+            }
+            if ($myExclusions.values.Where({$null -ne $_}).Count -gt 0)
+            {
+                $complexExclusions += $myExclusions
+            }
+        }
+        $policySettings.Remove('exclusions') | Out-Null
+        #endregion
+
         $results = @{
             #region resource generator code
             Description           = $getValue.Description
             DisplayName           = $getValue.Name
             RoleScopeTagIds       = $getValue.RoleScopeTagIds
             Id                    = $getValue.Id
+            Exclusions            = $complexExclusions
             Ensure                = 'Present'
             Credential            = $Credential
             ApplicationId         = $ApplicationId
@@ -284,112 +215,8 @@ function Set-TargetResource
         $Id,
 
         [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationReloadInIEModeAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SSLErrorOverrideAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationZoneIdentifierMhtFileAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BrowserLegacyExtensionPointsBlockingEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SitePerProcess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $EdgeEnhanceImagesEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $ExtensionInstallBlocklist,
-
-        [Parameter()]
-        [ValidateLength(0, 2048)]
-        [System.String[]]
-        $ExtensionInstallBlocklistDesc,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $WebSQLAccess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BasicAuthOverHttpEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $MicrosoftEdge_HTTPAuthentication_AuthSchemes,
-
-        [Parameter()]
-        [System.String]
-        $authschemes,
-
-        [Parameter()]
-        [System.String]
-        $AuthSchemes_AuthSchemes,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $NativeMessagingUserLevelHosts,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InsecurePrivateNetworkRequestsAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerModeToolbarButtonEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenPuaEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverride,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverrideForFiles,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SharedArrayBufferUnrestrictedAccessAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $TyposquattingCheckerEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Exclusions,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -445,20 +272,13 @@ function Set-TargetResource
 
     $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    $templateReferenceId = 'c66347b7-8325-4954-a235-3bf2233dfbfd_2'
-    $platforms = 'windows10'
-    $technologies = 'mdm'
-
-    if ($BoundParameters.ContainsKey('authschemes'))
-    {
-        Write-Warning -Message "The parameter 'authschemes' is deprecated. Please use 'AuthSchemes_AuthSchemes' instead."
-        $BoundParameters['AuthSchemes_AuthSchemes'] = $BoundParameters['authschemes']
-        $BoundParameters.Remove('authschemes') | Out-Null
-    }
+    $templateReferenceId = '43397174-2244-4006-b5ad-421b369e90d4_1'
+    $platforms = 'macOS'
+    $technologies = 'mdm,appleRemoteManagement,microsoftSense'
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an Intune Security Baseline Microsoft Edge with Name {$DisplayName}"
+        Write-Verbose -Message "Creating an Intune Antivirus Exclusions Policy for macOS with Name {$DisplayName}"
         $BoundParameters.Remove("Assignments") | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
@@ -489,7 +309,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating the Intune Security Baseline Microsoft Edge with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Updating the Intune Antivirus Exclusions Policy for macOS with Id {$($currentInstance.Id)}"
         $BoundParameters.Remove("Assignments") | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
@@ -515,7 +335,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing the Intune Security Baseline Microsoft Edge with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Removing the Intune Antivirus Exclusions Policy for macOS with Id {$($currentInstance.Id)}"
         #region resource generator code
         Remove-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $currentInstance.Id
         #endregion
@@ -546,112 +366,8 @@ function Test-TargetResource
         $Id,
 
         [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationReloadInIEModeAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SSLErrorOverrideAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerIntegrationZoneIdentifierMhtFileAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BrowserLegacyExtensionPointsBlockingEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SitePerProcess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $EdgeEnhanceImagesEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $ExtensionInstallBlocklist,
-
-        [Parameter()]
-        [ValidateLength(0, 2048)]
-        [System.String[]]
-        $ExtensionInstallBlocklistDesc,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $WebSQLAccess,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $BasicAuthOverHttpEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $MicrosoftEdge_HTTPAuthentication_AuthSchemes,
-
-        [Parameter()]
-        [System.String]
-        $authschemes,
-
-        [Parameter()]
-        [System.String]
-        $AuthSchemes_AuthSchemes,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $NativeMessagingUserLevelHosts,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InsecurePrivateNetworkRequestsAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $InternetExplorerModeToolbarButtonEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SmartScreenPuaEnabled,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverride,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $PreventSmartScreenPromptOverrideForFiles,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $SharedArrayBufferUnrestrictedAccessAllowed,
-
-        [Parameter()]
-        [ValidateSet('0', '1')]
-        [System.String]
-        $TyposquattingCheckerEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Exclusions,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -704,7 +420,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Intune Security Baseline Microsoft Edge with Id {$Id} and Name {$DisplayName}"
+    Write-Verbose -Message "Testing configuration of the Intune Antivirus Exclusions Policy for macOS with Id {$Id} and Name {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     [Hashtable]$ValuesToCheck = @{}
@@ -747,17 +463,6 @@ function Test-TargetResource
 
             $ValuesToCheck.Remove($key) | Out-Null
         }
-    }
-
-    if ($PSBoundParameters.ContainsKey('authschemes'))
-    {
-        Write-Warning -Message "The parameter 'authschemes' is deprecated. Please use 'AuthSchemes_AuthSchemes' instead."
-        if ($PSBoundParameters['authschemes'] -ne $CurrentValues['AuthSchemes_AuthSchemes'])
-        {
-            $testResult = $false
-        }
-        $ValuesToCheck.Remove('authschemes') | Out-Null
-        $ValuesToCheck.Remove('AuthSchemes_AuthSchemes') | Out-Null
     }
 
     $ValuesToCheck.Remove('Id') | Out-Null
@@ -836,7 +541,7 @@ function Export-TargetResource
     try
     {
         #region resource generator code
-        $policyTemplateID = "c66347b7-8325-4954-a235-3bf2233dfbfd_2"
+        $policyTemplateID = "43397174-2244-4006-b5ad-421b369e90d4_1"
         [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
             -Filter $Filter `
             -All `
@@ -884,6 +589,20 @@ function Export-TargetResource
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
+            if ($null -ne $Results.Exclusions)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.Exclusions `
+                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogExclusions'
+                if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                {
+                    $Results.Exclusions = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('Exclusions') | Out-Null
+                }
+            }
 
             if ($Results.Assignments)
             {
@@ -903,6 +622,10 @@ function Export-TargetResource
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
+            if ($Results.Exclusions)
+            {
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Exclusions" -IsCIMArray:$True
+            }
 
             if ($Results.Assignments)
             {
