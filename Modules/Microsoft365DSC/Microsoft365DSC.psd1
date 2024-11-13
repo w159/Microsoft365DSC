@@ -154,6 +154,9 @@
   * Fixes a bug where 3P apps could not be assigned by DisplayName for both
     IncludeApplications and ExcludeApplications
     FIXES [#5390](https://github.com/microsoft/Microsoft365DSC/issues/5390)
+* AADRoleEligibilityScheduleRequest
+  * FIXES [#3787](https://github.com/microsoft/Microsoft365DSC/issues/3787)
+  * FIXES [#5089](https://github.com/microsoft/Microsoft365DSC/issues/5089)
 * EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
   * Fixed issue where empty arrays were being compared incorrectly to null
     strings
