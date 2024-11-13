@@ -2,6 +2,11 @@
 
 # UNRELEASED
 
+* AADRoleEligibilityScheduleRequest
+  * Adds support for custom role assignments at app scope.
+
+# 1.24.1113.1
+
 * AADConditionalAccessPolicy
   * Fixed bug where an empty value was passed in the request for the
     insiderRiskLevels parameter, which throws an error.
