@@ -240,7 +240,20 @@
                 return $nullResult
             }
             $RoleDefinitionId = (Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter "DisplayName eq '$RoleDefinition'").Id
-            $schedule = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($request.PrincipalId)' and RoleDefinitionId eq '$RoleDefinitionId'"
+            $schedules = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($request.PrincipalId)'"
+            $schedule = $schedules | Where-Object -FilterScript {$_.RoleDefinitionId -eq $RoleDefinitionId}
+            if ($null -eq $schedule)
+            {
+                foreach ($instance in $schedules)
+                {
+                    $roleDefinitionInfo = Get-MgBetaRoleManagementDirectoryRoleDefinition -UnifiedRoleDefinitionId $instance.RoleDefinitionId
+                    if ($null -ne $roleDefinitionInfo -and $RoleDefinitionInfo.DisplayName -eq $RoleDefinition)
+                    {
+                        $schedule = $instance
+                        break
+                    }
+                }
+            }
         }
         if ($null -eq $schedule -or $null -eq $request)
         {
