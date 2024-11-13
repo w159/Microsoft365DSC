@@ -46,7 +46,7 @@
                         }
                     );
                     BackupDirectory          = "1";
-                    PasswordAgeDays_AAD      = 10;
+                    passwordagedays_aad      = 10;
                     AdministratorAccountName = "Administrator";
                     PasswordAgeDays          = 20;
                     ApplicationId         = $ApplicationId;
@@ -115,6 +115,27 @@
                     Exclusions  = @(
                         MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
                             Exclusions_item_extension = '.exe'
+                            Exclusions_item_type = '1'
+                        }
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                            Exclusions_item_name = 'process1'
+                            Exclusions_item_type = '2'
+                        }
+                    );
+                    RoleScopeTagIds                    = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneAntivirusExclusionsPolicyMacOS 'myIntuneAntivirusExclusionsPolicyMacOS'
+                {
+                    Assignments = @();
+                    Description = "";
+                    DisplayName = "Test";
+                    Ensure      = "Present";
+                    Exclusions  = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                            Exclusions_item_extension = '.dmg'
                             Exclusions_item_type = '1'
                         }
                         MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
