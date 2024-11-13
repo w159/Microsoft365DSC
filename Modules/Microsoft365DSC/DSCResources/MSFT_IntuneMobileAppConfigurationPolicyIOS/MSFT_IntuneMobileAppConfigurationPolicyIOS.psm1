@@ -25,6 +25,9 @@ function Get-TargetResource
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $settings,
 
+        [Parameter()]
+        [System.String]
+        $encodedSettingXml,
 
         #======================
         #standard params
@@ -207,6 +210,9 @@ function Set-TargetResource
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $settings,
 
+        [Parameter()]
+        [System.String]
+        $encodedSettingXml,
 
         #======================
         #standard params
@@ -282,7 +288,7 @@ function Set-TargetResource
     $PSBoundParameters.Remove('ManagedIdentity') | Out-Null
     $PSBoundParameters.Remove('AccessTokens') | Out-Null
 
-
+    
 
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -359,7 +365,7 @@ function Set-TargetResource
                 $UpdateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters[$key]
             }
         }
-
+        $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
 
 
         #region resource generator code
@@ -407,6 +413,9 @@ function Test-TargetResource
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $settings,
 
+        [Parameter()]
+        [System.String]
+        $encodedSettingXml,
 
         #======================
         #standard params
@@ -712,6 +721,7 @@ function Export-TargetResource
             $i++
             Write-Host $Global:M365DSCEmojiGreenCheckMark
         }
+        
         return $dscContent
     }
     catch
