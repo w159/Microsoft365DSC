@@ -6,6 +6,8 @@
   * Adds support for custom role assignments at app scope.
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
+* IntuneFirewallRulesPolicyWindows10ConfigMgr
+  * Initial release.
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
 
