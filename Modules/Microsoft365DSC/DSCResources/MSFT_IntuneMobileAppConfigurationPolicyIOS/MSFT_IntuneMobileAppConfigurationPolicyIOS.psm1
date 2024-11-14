@@ -99,7 +99,7 @@ function Get-TargetResource
     try
     {
         if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $id -ErrorAction SilentlyContinue }
-
+        
         #region resource generator code
         if ($null -eq $getValue)
         {
