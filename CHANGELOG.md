@@ -4,6 +4,10 @@
 
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* IntuneFirewallRulesHyperVPolicyWindows10
+  * Initial release.
+* M365DSCDRGUtil
+  * Improve CIM instance detection for specific Intune resources.
 
 # 1.24.1113.1
 
