@@ -2,6 +2,13 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixed bug where a null value was passed in the request for the
+    excludePlatforms parameter when just values were assigned to includePlatforms, which throws an error.
+  * Fixed bug where a null value was passed in the request for the
+    sessionControl parameter when there are no session controls, which throws an error.
+  * Fixed bug where a null value was passed in the request for the
+    applicationEnforcedRestrictions parameter when value was set to false, which throws an error.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * IntuneFirewallRulesHyperVPolicyWindows10
