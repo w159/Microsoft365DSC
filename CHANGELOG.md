@@ -4,6 +4,8 @@
 
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* IntuneDiskEncryptionPDEPolicyWindows10
+  * Initial release.
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
 * M365DSCDRGUtil
