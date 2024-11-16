@@ -4,7 +4,7 @@ function Get-TargetResource
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        #region resource generator code
+        #region Intune resource parameters
         [Parameter()]
         [System.String]
         $Id,
@@ -29,11 +29,10 @@ function Get-TargetResource
         [System.String]
         $encodedSettingXml,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
+
         #endregion
 
         [Parameter()]
@@ -68,7 +67,6 @@ function Get-TargetResource
         [Parameter()]
         [System.String[]]
         $AccessTokens
-
     )
 
     try
@@ -133,19 +131,14 @@ function Get-TargetResource
             }
         }
 
-
-
-
         $results = @{
             #region resource generator code
             Id                             = $getValue.Id
             Description                    = $getValue.Description
-            DisplayName                    = $getValue.DisplayName
-            
+            DisplayName                    = $getValue.DisplayName   
             targetedMobileApps             = $getValue.TargetedMobileApps
             settings                       = $complexSettings #$getValue.AdditionalProperties.settings
             encodedSettingXml              = $getValue.AdditionalProperties.encodedSettingXml
-
             Ensure                         = 'Present'
             Credential                     = $Credential
             ApplicationId                  = $ApplicationId
@@ -158,8 +151,6 @@ function Get-TargetResource
 
         }
                                           
-
-
         $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppConfigurationAssignment -ManagedDeviceMobileAppConfigurationId $Results.Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
@@ -189,7 +180,7 @@ function Set-TargetResource
     [CmdletBinding()]
     param
     (
-        #region resource generator code
+        #region Intune resource parameters
         [Parameter()]
         [System.String]
         $Id,
@@ -214,11 +205,10 @@ function Set-TargetResource
         [System.String]
         $encodedSettingXml,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
+
         #endregion
 
         [Parameter()]
@@ -288,17 +278,12 @@ function Set-TargetResource
     $PSBoundParameters.Remove('ManagedIdentity') | Out-Null
     $PSBoundParameters.Remove('AccessTokens') | Out-Null
 
-    
-
-
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating {$DisplayName}"
         $PSBoundParameters.Remove('Assignments') | Out-Null
-
         $CreateParameters = ([Hashtable]$PSBoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($CreateParameters)
 
         foreach ($key in $AdditionalProperties.keys)
@@ -321,8 +306,6 @@ function Set-TargetResource
             }
         }
 
-
-
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
            
         #region resource generator code
@@ -341,10 +324,8 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Updating {$DisplayName}"
         $PSBoundParameters.Remove('Assignments') | Out-Null
-
         $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($UpdateParameters)
         foreach ($key in $AdditionalProperties.keys)
         {
@@ -365,8 +346,8 @@ function Set-TargetResource
                 $UpdateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters[$key]
             }
         }
-        $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
 
+        $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
 
         #region resource generator code
         Update-MgBetaDeviceAppManagementMobileAppConfiguration @UpdateParameters `
@@ -392,7 +373,7 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (
-        #region resource generator code
+        #region Intune resource parameters
         [Parameter()]
         [System.String]
         $Id,
@@ -417,11 +398,10 @@ function Test-TargetResource
         [System.String]
         $encodedSettingXml,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
+
         #endregion
 
         [Parameter()]
@@ -502,7 +482,6 @@ function Test-TargetResource
                 $testResult = Compare-M365DSCComplexObject `
                     -Source (Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $CIMArraySource[$i]) `
                     -Target ($CIMArrayTarget[$i])
-
                 $i++
                 if (-Not $testResult)
                 {
@@ -603,7 +582,6 @@ function Export-TargetResource
 
     try
     {
-
         #region resource generator code
         [array]$getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter $Filter -All `
             -ErrorAction Stop | Where-Object `
@@ -660,8 +638,6 @@ function Export-TargetResource
                 }
             }
 
-
-
             if ($null -ne $Results.settings)
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -677,21 +653,11 @@ function Export-TargetResource
                 }
             }
 
-
-
-
-
-
-
-
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
-
-
-
 
             if ($Results.Assignments)
             {
@@ -702,8 +668,7 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
-
-            
+           
             if ($Results.settings)
             {
                 $isCIMArray = $false
@@ -713,7 +678,6 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'settings' -IsCIMArray:$isCIMArray
             }
-
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
