@@ -23,6 +23,8 @@
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.12.
   * Updated MSCloudLoginAssistant to version 1.1.28.
+* MSFT_IntuneMobileAppConfigurationPolicyIOS
+  * Initial release.
 
 # 1.24.1106.3
 
