@@ -1,6 +1,6 @@
 ﻿{
-    "resourceName": "AADRoleEligibilityScheduleRequest",
-    "description": "This resource configures an Azure Active Directory Privilege Identity Management eligibility request.",
+    "resourceName": "AADRoleAssignmentScheduleRequest",
+    "description": "This resource configures an Azure Active Directory Privilege Identity Management assignment.",
     "roles": {
         "read": [
             "Security Reader"
@@ -14,12 +14,12 @@
             "application": {
                 "read": [
                     {
-                        "name": "RoleEligibilitySchedule.Read.Directory"
+                        "name": "RoleAssignmentSchedule.Read.Directory"
                     }
                 ],
                 "update": [
                     {
-                        "name": "RoleEligibilitySchedule.ReadWrite.Directory"
+                        "name": "RoleAssignmentSchedule.ReadWrite.Directory"
                     }
                 ]
             }
