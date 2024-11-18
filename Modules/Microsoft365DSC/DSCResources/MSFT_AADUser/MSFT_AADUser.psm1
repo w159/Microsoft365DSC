@@ -619,7 +619,6 @@ function Set-TargetResource
                 # user is a member of some groups, ensure that user is only a member of groups listed in MemberOf
                 Compare-Object -ReferenceObject $MemberOf -DifferenceObject $user.MemberOf | ForEach-Object {
                     $group = Get-MgGroup -Filter "DisplayName eq '$($_.InputObject)'" -Property Id, GroupTypes
-
                     if ($_.SideIndicator -eq '<=')
                     {
                         # Group in MemberOf not present in groups that user is a member of, add user to group
