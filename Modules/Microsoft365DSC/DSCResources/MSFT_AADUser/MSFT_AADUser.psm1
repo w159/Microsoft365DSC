@@ -223,7 +223,6 @@ function Get-TargetResource
         }
 
         $results = @{
-            Id                    = $user.id
             UserPrincipalName     = $UserPrincipalName
             DisplayName           = $user.DisplayName
             FirstName             = $user.GivenName
@@ -620,6 +619,7 @@ function Set-TargetResource
                 # user is a member of some groups, ensure that user is only a member of groups listed in MemberOf
                 Compare-Object -ReferenceObject $MemberOf -DifferenceObject $user.MemberOf | ForEach-Object {
                     $group = Get-MgGroup -Filter "DisplayName eq '$($_.InputObject)'" -Property Id, GroupTypes
+
                     if ($_.SideIndicator -eq '<=')
                     {
                         # Group in MemberOf not present in groups that user is a member of, add user to group
@@ -643,13 +643,14 @@ function Set-TargetResource
 
                             throw "Cannot add user $UserPrincipalName to group '$($_.InputObject)' because it is a dynamic group"
                         }
-                        New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
+                        New-MgGroupMember -GroupId $group.Id -DirectoryObjectId (Get-MgUser -UserId $UserPrincipalName).Id
                     }
                     else
                     {
+
                         # Group that user is a member of is not present in MemberOf, remove user from group
                         # (no need to test for dynamic groups as they are ignored in Get-TargetResource)
-                        Remove-MgGroupMemberDirectoryObjectByRef -GroupId $group.Id -DirectoryObjectId $user.Id
+                        Remove-MgGroupMemberDirectoryObjectByRef -GroupId $group.Id -DirectoryObjectId (Get-MgUser -UserId $UserPrincipalName).Id
                     }
                 }
             }
