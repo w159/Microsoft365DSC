@@ -8210,7 +8210,7 @@
                            {
                                "CIMType":  "String",
                                "Name":  "DirectoryScopeId",
-                               "Option":  "Write"
+                               "Option":  "Key"
                            },
                            {
                                "CIMType":  "String",
