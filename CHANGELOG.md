@@ -11,6 +11,11 @@
     applicationEnforcedRestrictions parameter when value was set to false, which throws an error.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Fixed issue when properties `DetailedHelpText`,
+    `DeviceOwnerLockScreenMessage` or `ShortHelpText` were defined but the
+    request was not being sent correctly
+    FIXES [#5411](https://github.com/microsoft/Microsoft365DSC/issues/5411)
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
 * M365DSCDRGUtil
