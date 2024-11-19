@@ -15,6 +15,8 @@
   * Initial release.
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
+* AADUser
+  * Fixed issue updating user group membership when looking for the group by DisplayName.
 
 # 1.24.1113.1
 
