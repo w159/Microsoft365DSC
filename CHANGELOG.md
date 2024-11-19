@@ -61,6 +61,8 @@
     `DeviceOwnerLockScreenMessage` or `ShortHelpText` were defined but the
     request was not being sent correctly
     FIXES [#5411](https://github.com/microsoft/Microsoft365DSC/issues/5411)
+* IntuneDiskEncryptionPDEPolicyWindows10
+  * Initial release.
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
 * TeamsUpdateManagementPolicy
