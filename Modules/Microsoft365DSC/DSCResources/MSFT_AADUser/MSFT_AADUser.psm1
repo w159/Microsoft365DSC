@@ -611,7 +611,7 @@ function Set-TargetResource
 
                         throw "Cannot add user $UserPrincipalName to group '$memberOfGroup' because it is a dynamic group"
                     }
-                    New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
+                    New-MgGroupMember -GroupId $group.Id -DirectoryObjectId (Get-MgUser -UserId $UserPrincipalName).Id
                 }
             }
             else
