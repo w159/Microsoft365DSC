@@ -114,7 +114,7 @@ function Get-TargetResource
             return $nullResult
         }
 
-        Write-Verbose -Message "Found something with id {$id}"
+        Write-Verbose -Message "An Intune Mobile App Configuration Policy for iOS with Id {$id} and DisplayName {$DisplayName} was found"
 
         #need to convert dictionary object into a hashtable array so we can work with it
         $complexSettings = @()
