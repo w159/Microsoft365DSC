@@ -2,6 +2,39 @@
 
 # UNRELEASED
 
+* AADAdminConsentRequestPolicy
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyAuthenticator
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyEmail
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyExternal
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyFido2
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyHardware
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicySms
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicySoftware
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyTemporary
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyVoice
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyX509
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
 * AADConditionalAccessPolicy
   * Fixed bug where a null value was passed in the request for the
     excludePlatforms parameter when just values were assigned to includePlatforms, which throws an error.
@@ -9,8 +42,13 @@
     sessionControl parameter when there are no session controls, which throws an error.
   * Fixed bug where a null value was passed in the request for the
     applicationEnforcedRestrictions parameter when value was set to false, which throws an error.
+* AADDeviceRegistrationPolicy
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* AzureBillingAccountPolicy
+  * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
   * Fixed issue when properties `DetailedHelpText`,
     `DeviceOwnerLockScreenMessage` or `ShortHelpText` were defined but the
@@ -33,8 +71,6 @@
 * AADRoleEligibilityScheduleRequest
   * FIXES [#3787](https://github.com/microsoft/Microsoft365DSC/issues/3787)
   * FIXES [#5089](https://github.com/microsoft/Microsoft365DSC/issues/5089)
-* AzureBillingAccountPolicy
-  * Initial release.
 * EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
   * Fixed issue where empty arrays were being compared incorrectly to null
     strings
