@@ -1,5 +1,5 @@
 <#
-This example removes a Device Control Policy.
+This example removes a Intune Firewall Rules Policy for Windows10 Configuration Manager.
 #>
 
 Configuration Example

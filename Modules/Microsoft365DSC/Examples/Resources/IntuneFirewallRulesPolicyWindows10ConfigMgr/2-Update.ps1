@@ -1,5 +1,5 @@
 <#
-This example updates a Intune Firewall Policy for Windows10.
+This example updates a Intune Firewall Rules Policy for Windows10 Configuration Manager.
 #>
 
 Configuration Example
