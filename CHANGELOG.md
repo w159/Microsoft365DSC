@@ -45,6 +45,8 @@
 * AADDeviceRegistrationPolicy
   * Added error handling to Group display name retrieval to prevent errors
     when an assigned group no longer exists.
+* AADRoleAssignmentScheduleRequest
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * AzureBillingAccountPolicy
