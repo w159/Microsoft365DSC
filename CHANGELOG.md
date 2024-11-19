@@ -9,6 +9,8 @@
     sessionControl parameter when there are no session controls, which throws an error.
   * Fixed bug where a null value was passed in the request for the
     applicationEnforcedRestrictions parameter when value was set to false, which throws an error.
+* AADRoleAssignmentScheduleRequest
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * IntuneFirewallRulesHyperVPolicyWindows10

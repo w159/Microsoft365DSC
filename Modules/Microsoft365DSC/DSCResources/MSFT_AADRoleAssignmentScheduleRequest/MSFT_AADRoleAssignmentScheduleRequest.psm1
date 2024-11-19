@@ -21,7 +21,7 @@ function Get-TargetResource
         [System.String]
         $Id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $DirectoryScopeId,
 
@@ -290,7 +290,7 @@ function Set-TargetResource
         [System.String]
         $Id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $DirectoryScopeId,
 
@@ -524,7 +524,7 @@ function Test-TargetResource
         [System.String]
         $Id,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $DirectoryScopeId,
 
@@ -773,6 +773,7 @@ function Export-TargetResource
                 Id                    = $request.Id
                 Principal             = $PrincipalValue
                 PrincipalType         = $principalType
+                DirectoryScopeId      = $request.DirectoryScopeId
                 RoleDefinition        = $RoleDefinitionId.DisplayName
                 Ensure                = 'Present'
                 Credential            = $Credential
