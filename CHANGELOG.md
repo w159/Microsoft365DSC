@@ -45,12 +45,15 @@
 * AADDeviceRegistrationPolicy
   * Added error handling to Group display name retrieval to prevent errors
     when an assigned group no longer exists.
+* AADRoleAssignmentScheduleRequest
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * AADRoleSettings
   * Fixing issue where the ActivateApprover parameter isn't processed correctly
     when an approver does not exist.
     FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
+    FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)
 * AzureBillingAccountPolicy
   * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner

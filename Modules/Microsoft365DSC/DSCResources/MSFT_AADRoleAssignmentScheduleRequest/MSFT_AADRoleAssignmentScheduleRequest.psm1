@@ -1,4 +1,4 @@
-﻿function Get-TargetResource
+function Get-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
@@ -112,7 +112,7 @@
             else
             {
                 Write-Verbose -Message "Getting Role Eligibility by Id {$Id}"
-                $request = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -UnifiedRoleEligibilityScheduleRequestId $Id `
+                $request = Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -UnifiedRoleAssignmentScheduleRequestId $Id `
                     -ErrorAction SilentlyContinue
             }
         }
@@ -145,7 +145,7 @@
         if ($null -eq $request)
         {
             Write-Verbose -Message "Retrieving the request by PrincipalId {$($PrincipalInstance.Id)}, RoleDefinitionId {$($RoleDefinitionId)} and DirectoryScopeId {$($DirectoryScopeId)}"
-            [Array] $requests = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Filter "PrincipalId eq '$($PrincipalInstance.Id)' and RoleDefinitionId eq '$($RoleDefinitionId)' and DirectoryScopeId eq '$($DirectoryScopeId)'"
+            [Array] $requests = Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -Filter "PrincipalId eq '$($PrincipalInstance.Id)' and RoleDefinitionId eq '$($RoleDefinitionId)' and DirectoryScopeId eq '$($DirectoryScopeId)'"
             if ($requests.Length -eq 0)
             {
                 return $nullResult
@@ -154,7 +154,7 @@
             $request = $requests[0]
         }
 
-        $schedules = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($request.PrincipalId)'"
+        $schedules = Get-MgBetaRoleManagementDirectoryRoleAssignmentSchedule -Filter "PrincipalId eq '$($request.PrincipalId)'"
         $schedule = $schedules | Where-Object -FilterScript {$_.RoleDefinitionId -eq $RoleDefinitionId}
         if ($null -eq $schedule)
         {
@@ -483,21 +483,21 @@ function Set-TargetResource
         Write-Verbose -Message "Creating a Role Assignment Schedule Request for principal {$Principal} and role {$RoleDefinition}"
         $ParametersOps.Remove("Id") | Out-Null
         Write-Verbose -Message "Values: $(Convert-M365DscHashtableToString -Hashtable $ParametersOps)"
-        New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest @ParametersOps
+        New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest @ParametersOps
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Role Assignment Schedule Request for principal {$Principal} and role {$RoleDefinition}"
         $ParametersOps.Remove("Id") | Out-Null
         $ParametersOps.Action = 'AdminUpdate'
-        New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest @ParametersOps
+        New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest @ParametersOps
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Removing the Role Assignment Schedule Request for principal {$Principal} and role {$RoleDefinition}"
         $ParametersOps.Remove("Id") | Out-Null
         $ParametersOps.Action = 'AdminRemove'
-        New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest @ParametersOps
+        New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest @ParametersOps
     }
 }
 
@@ -714,9 +714,9 @@ function Export-TargetResource
     {
         $Script:ExportMode = $true
         #region resource generator code
-        $schedules = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -All -ErrorAction Stop
+        $schedules = Get-MgBetaRoleManagementDirectoryRoleAssignmentSchedule -All -ErrorAction Stop
         [array] $Script:exportedInstances = @()
-        [array] $allRequests = Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -All `
+        [array] $allRequests = Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -All `
                 -Filter "Status ne 'Revoked'" -ErrorAction Stop
         foreach ($schedule in $schedules)
         {
@@ -862,7 +862,7 @@ function Get-M365DSCAzureADEligibilityRequestTicketInfoAsString
 
     if ($TicketInfo.TicketNumber -or $TicketInfo.TicketSystem)
     {
-        $StringContent  = "MSFT_AADRoleEligibilityScheduleRequestTicketInfo {`r`n"
+        $StringContent  = "MSFT_AADRoleAssignmentScheduleRequestTicketInfo {`r`n"
         $StringContent += "                ticketNumber = '$($TicketInfo.TicketNumber)'`r`n"
         $StringContent += "                ticketSystem = '$($TicketInfo.TicketSystem)'`r`n"
         $StringContent += "             }`r`n"
@@ -885,7 +885,7 @@ function Get-M365DSCAzureADEligibilityRequestScheduleInfoAsString
     )
 
     $Found = $false
-    $StringContent  = "MSFT_AADRoleEligibilityScheduleRequestSchedule {`r`n"
+    $StringContent  = "MSFT_AADRoleAssignmentScheduleRequestSchedule {`r`n"
     if ($ScheduleInfo.StartDateTime)
     {
         $StringContent += "                startDateTime             = '$($ScheduleInfo.StartDateTime)'`r`n"
@@ -893,7 +893,7 @@ function Get-M365DSCAzureADEligibilityRequestScheduleInfoAsString
     if ($ScheduleInfo.Expiration.Duration -or $ScheduleInfo.Expiration.EndDateTime -or $ScheduleInfo.Expiration.Type)
     {
         $Found = $true
-        $StringContent += "                expiration                = MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration`r`n"
+        $StringContent += "                expiration                = MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration`r`n"
         $StringContent += "                    {`r`n"
         if ($ScheduleInfo.Expiration.Duration)
         {
@@ -916,7 +916,7 @@ function Get-M365DSCAzureADEligibilityRequestScheduleInfoAsString
     $ScheduleInfo.Recurrence.Range.recurrenceTimeZone -or $ScheduleInfo.Recurrence.Range.startDate -or `
     $ScheduleInfo.Recurrence.Range.type)
     {
-        $StringContent += "                recurrence                = MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence`r`n"
+        $StringContent += "                recurrence                = MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrence`r`n"
         $StringContent += "                    {`r`n"
 
         if ($ScheduleInfo.Recurrence.Pattern.DayOfMonth -or $ScheduleInfo.Recurrence.Pattern.DaysOfWeek -or `
@@ -925,7 +925,7 @@ function Get-M365DSCAzureADEligibilityRequestScheduleInfoAsString
             $ScheduleInfo.Recurrence.Pattern.Type)
         {
             $Found = $true
-            $StringContent += "                         pattern = MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrencePattern`r`n"
+            $StringContent += "                         pattern = MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrencePattern`r`n"
             $StringContent += "                             {`r`n"
             if ($ScheduleInfo.Recurrence.Pattern.DayOfMonth)
             {
@@ -962,7 +962,7 @@ function Get-M365DSCAzureADEligibilityRequestScheduleInfoAsString
             $ScheduleInfo.Recurrence.Range.type)
         {
             $Found = $true
-            $StringContent += "                         range = MSFT_AADRoleEligibilityScheduleRequestScheduleRange`r`n"
+            $StringContent += "                         range = MSFT_AADRoleAssignmentScheduleRequestScheduleRange`r`n"
             $StringContent += "                             {`r`n"
             $StringContent += "                                 endDate             = '$($ScheduleInfo.Recurrence.Range.EndDate)'`r`n"
             $StringContent += "                                 numberOfOccurrences = $($ScheduleInfo.Recurrence.Range.numberOfOccurrences)`r`n"

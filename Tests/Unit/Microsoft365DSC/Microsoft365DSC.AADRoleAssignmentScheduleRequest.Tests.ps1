@@ -15,7 +15,7 @@ Import-Module -Name (Join-Path -Path $M365DSCTestFolder `
         -ChildPath '\UnitTestHelper.psm1' `
         -Resolve)
 $Global:DscHelper = New-M365DscUnitTestHelper -StubModule $CmdletModule `
-    -DscResource 'AADRoleEligibilityScheduleRequest' -GenericStubModule $GenericStubPath
+    -DscResource 'AADRoleAssignmentScheduleRequest' -GenericStubModule $GenericStubPath
 
 Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
     InModuleScope -ModuleName $Global:DscHelper.ModuleName -ScriptBlock {
@@ -36,7 +36,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return 'Credentials'
             }
 
-            Mock -CommandName New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+            Mock -CommandName New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
             }
 
             Mock -CommandName Get-MgUser -MockWith {
@@ -52,7 +52,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id          = '12345'
                 }
             }
-            Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -MockWith {
+            Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentSchedule -MockWith {
                 return @{
                     Id          = '12345-12345-12345-12345-12345'
                     RoleDefinitionId = "12345"
@@ -76,9 +76,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Principal            = "John.Smith@contoso.com";
                     PrincipalType        = "User"
                     RoleDefinition       = "Teams Communications Administrator";
-                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
+                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestSchedule -Property @{
                             startDateTime             = '2023-09-01T02:40:44Z'
-                            expiration = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration -Property @{
+                            expiration = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration -Property @{
                                 endDateTime = '2025-10-31T02:40:09Z'
                                 type        = 'afterDateTime'
                             } -ClientOnly
@@ -86,7 +86,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential
                 }
 
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
                     return $null
                 }
             }
@@ -98,7 +98,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             It 'Should Create the instance from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Exactly 1
+                Should -Invoke -CommandName New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -Exactly 1
             }
         }
 
@@ -112,9 +112,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
-                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
+                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestSchedule -Property @{
 
-                            expiration = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration -Property @{
+                            expiration = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration -Property @{
 
                                 type        = 'afterDateTime'
                             } -ClientOnly
@@ -122,7 +122,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential
                 }
 
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
                     return @{
                         Action               = "AdminAssign";
                         Id                   = '12345-12345-12345-12345-12345'
@@ -151,7 +151,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should Remove the instance from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Exactly 1
+                Should -Invoke -CommandName New-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -Exactly 1
             }
         }
         Context -Name 'The instance Exists and Values are already in the desired state' -Fixture {
@@ -164,16 +164,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
-                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
+                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestSchedule -Property @{
 
-                            expiration = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration -Property @{
+                            expiration = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration -Property @{
                                 type        = 'afterDateTime'
                             } -ClientOnly
                         } -ClientOnly
                     Credential  = $Credential
                 }
 
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
                     return @{
                         Action               = "AdminAssign";
                         Id                   = '12345-12345-12345-12345-12345'
@@ -188,7 +188,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         };
                     }
                 }
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentSchedule -MockWith {
                     return @{
                         Action               = "AdminAssign";
                         Id                   = '12345-12345-12345-12345-12345'
@@ -223,9 +223,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
-                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
+                    ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestSchedule -Property @{
 
-                            expiration = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration -Property @{
+                            expiration = New-CimInstance -ClassName MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration -Property @{
 
                                 type        = 'afterDateTime'
                             } -ClientOnly
@@ -233,7 +233,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential  = $Credential
                 }
 
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
                     return @{
                         Action               = "AdminAssign";
                         Id                   = '12345-12345-12345-12345-12345'
@@ -263,7 +263,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set to Update the instance' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -Exactly 1
+                Should -Invoke -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -Exactly 1
             }
         }
         Context -Name 'ReverseDSC Tests' -Fixture {
@@ -274,7 +274,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
 
-                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
+                Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleAssignmentScheduleRequest -MockWith {
                     return @{
                         Action               = "AdminAssign";
                         Id                   = '12345-12345-12345-12345-12345'
