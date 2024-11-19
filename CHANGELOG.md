@@ -47,6 +47,10 @@
     when an assigned group no longer exists.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* AADRoleSettings
+  * Fixing issue where the ActivateApprover parameter isn't processed correctly
+    when an approver does not exist.
+    FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
 * AzureBillingAccountPolicy
   * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
@@ -56,6 +60,9 @@
     FIXES [#5411](https://github.com/microsoft/Microsoft365DSC/issues/5411)
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
+* TeamsUpdateManagementPolicy
+  * Added conversion of the UpdateTimeOfDay parameter to the local culture format
+    so that the comparison will work consistently.
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
 
