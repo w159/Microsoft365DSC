@@ -1,4 +1,4 @@
-﻿# AADRoleEligibilityScheduleRequest
+﻿# AADRoleAssignmentScheduleRequest
 
 ## Parameters
 
@@ -6,15 +6,15 @@
 | --- | --- | --- | --- | --- |
 | **Principal** | Key | String | User Principal Name of the eligibility request. | |
 | **RoleDefinition** | Key | String | Role associated with the eligibility request. | |
-| **PrincipalType** | Write | String | Represented the type of principal to assign the request to. Accepted values are: Group and User. | `Group`, `User` |
+| **PrincipalType** | Write | String | Represented the type of principal to assign the request to. Accepted values are: Group and User. | `Group`, `User`, `ServicePrincipal` |
 | **DirectoryScopeId** | Key | String | Identifier of the directory object representing the scope of the role eligibility. The scope of an role eligibility determines the set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope to an application only. Either directoryScopeId or appScopeId is required. | |
 | **Id** | Write | String | Identifier for the Role Eligibility Schedule Request. | |
 | **AppScopeId** | Write | String | Identifier of the app-specific scope when the role eligibility is scoped to an app. The scope of a role eligibility determines the set of resources for which the principal is eligible to access. App scopes are scopes that are defined and understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to particular directory objects, for example, administrative units. Either directoryScopeId or appScopeId is required. | |
 | **Action** | Write | String | Represents the type of operation on the role eligibility request.The possible values are: adminAssign, adminUpdate, adminRemove, selfActivate, selfDeactivate, adminExtend, adminRenew, selfExtend, selfRenew, unknownFutureValue. | `adminAssign`, `adminUpdate`, `adminRemove`, `selfActivate`, `selfDeactivate`, `adminExtend`, `adminRenew`, `selfExtend`, `selfRenew`, `unknownFutureValue` |
 | **IsValidationOnly** | Write | Boolean | Determines whether the call is a validation or an actual call. Only set this property if you want to check whether an activation is subject to additional rules like MFA before actually submitting the request. | |
-| **Justification** | Write | String | A message provided by users and administrators when create they create the unifiedRoleEligibilityScheduleRequest object. Optional when action is adminRemove. Whether this property is required or optional is also dependent on the settings for the Azure AD role. | |
-| **ScheduleInfo** | Write | MSFT_AADRoleEligibilityScheduleRequestSchedule | The period of the role eligibility. Optional when action is adminRemove. The period of eligibility is dependent on the settings of the Azure AD role. | |
-| **TicketInfo** | Write | MSFT_AADRoleEligibilityScheduleRequestTicketInfo | Ticket details linked to the role eligibility request including details of the ticket number and ticket system. | |
+| **Justification** | Write | String | A message provided by users and administrators when create they create the unifiedRoileAssignmentScheduleRequest object. Optional when action is adminRemove. Whether this property is required or optional is also dependent on the settings for the Azure AD role. | |
+| **ScheduleInfo** | Write | MSFT_AADRoleAssignmentScheduleRequestSchedule | The period of the role eligibility. Optional when action is adminRemove. The period of eligibility is dependent on the settings of the Azure AD role. | |
+| **TicketInfo** | Write | MSFT_AADRoleAssignmentScheduleRequestTicketInfo | Ticket details linked to the role eligibility request including details of the ticket number and ticket system. | |
 | **Ensure** | Write | String | Present ensures the instance exists, absent ensures it is removed. | `Present`, `Absent` |
 | **Credential** | Write | PSCredential | Credentials of the Intune Admin | |
 | **ApplicationId** | Write | String | Id of the Azure Active Directory application to authenticate with. | |
@@ -24,7 +24,7 @@
 | **ManagedIdentity** | Write | Boolean | Managed ID being used for authentication. | |
 | **AccessTokens** | Write | StringArray[] | Access token used for authentication. | |
 
-### MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrenceRange
+### MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrenceRange
 
 #### Parameters
 
@@ -36,7 +36,7 @@
 | **startDate** | Required | String | The date to start applying the recurrence pattern. The first occurrence of the meeting may be this date or later, depending on the recurrence pattern of the event. Must be the same value as the start property of the recurring event. | |
 | **type** | Required | String | The recurrence range. The possible values are: endDate, noEnd, numbered. | `endDate`, `noEnd`, `numbered` |
 
-### MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrencePattern
+### MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrencePattern
 
 #### Parameters
 
@@ -50,16 +50,16 @@
 | **month** | Write | UInt32 | The month in which the event occurs. This is a number from 1 to 12. | |
 | **type** | Write | String | The recurrence pattern type: daily, weekly, absoluteMonthly, relativeMonthly, absoluteYearly, relativeYearly. | `daily`, `weekly`, `absoluteMonthly`, `relativeMonthly`, `absoluteYearly`, `relativeYearly` |
 
-### MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence
+### MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrence
 
 #### Parameters
 
 | Parameter | Attribute | DataType | Description | Allowed Values |
 | --- | --- | --- | --- | --- |
-| **pattern** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrencePattern | The frequency of an event. | |
-| **range** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrenceRange | The duration of an event. | |
+| **pattern** | Write | MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrencePattern | The frequency of an event. | |
+| **range** | Write | MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrenceRange | The duration of an event. | |
 
-### MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration
+### MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration
 
 #### Parameters
 
@@ -69,17 +69,17 @@
 | **endDateTime** | Write | String | Timestamp of date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. | |
 | **type** | Write | String | The requestor's desired expiration pattern type. The possible values are: notSpecified, noExpiration, afterDateTime, afterDuration. | `notSpecified`, `noExpiration`, `afterDateTime`, `afterDuration` |
 
-### MSFT_AADRoleEligibilityScheduleRequestSchedule
+### MSFT_AADRoleAssignmentScheduleRequestSchedule
 
 #### Parameters
 
 | Parameter | Attribute | DataType | Description | Allowed Values |
 | --- | --- | --- | --- | --- |
-| **expiration** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration | When the eligible or active assignment expires. | |
-| **recurrence** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence | The frequency of the eligible or active assignment. This property is currently unsupported in PIM. | |
+| **expiration** | Write | MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration | When the eligible or active assignment expires. | |
+| **recurrence** | Write | MSFT_AADRoleAssignmentScheduleRequestScheduleRecurrence | The frequency of the eligible or active assignment. This property is currently unsupported in PIM. | |
 | **startDateTime** | Write | String | When the eligible or active assignment becomes active. | |
 
-### MSFT_AADRoleEligibilityScheduleRequestTicketInfo
+### MSFT_AADRoleAssignmentScheduleRequestTicketInfo
 
 #### Parameters
 
@@ -91,7 +91,7 @@
 
 ## Description
 
-Represents a request for a role eligibility for a principal through PIM. The role eligibility can be permanently eligible without an expiry date or temporarily eligible with an expiry date. Inherits from request.
+This resource configures an Azure Active Directory Privilege Identity Management assignment.
 
 ## Permissions
 
@@ -113,11 +113,11 @@ To authenticate with the Microsoft Graph API, this resource required the followi
 
 - **Read**
 
-    - RoleEligibilitySchedule.Read.Directory
+    - RoleAssignmentSchedule.Read.Directory
 
 - **Update**
 
-    - RoleEligibilitySchedule.ReadWrite.Directory
+    - RoleAssignmentSchedule.ReadWrite.Directory
 
 ## Examples
 
@@ -129,18 +129,23 @@ It is not meant to use as a production baseline.
 ```powershell
 Configuration Example
 {
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
-
     Import-DscResource -ModuleName Microsoft365DSC
-
     node localhost
     {
-        AADRoleEligibilityScheduleRequest "MyRequest"
+        AADRoleAssignmentScheduleRequest "MyRequest"
         {
             Action               = "AdminAssign";
             ApplicationId         = $ApplicationId
@@ -151,9 +156,9 @@ Configuration Example
             IsValidationOnly     = $False;
             Principal            = "AdeleV@$TenantId";
             RoleDefinition       = "Teams Communications Administrator";
-            ScheduleInfo         = MSFT_AADRoleEligibilityScheduleRequestSchedule {
+            ScheduleInfo         = MSFT_AADRoleAssignmentScheduleRequestSchedule {
                 startDateTime             = '2023-09-01T02:40:44Z'
-                expiration                = MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration
+                expiration                = MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration
                     {
                         endDateTime = '2025-10-31T02:40:09Z'
                         type        = 'afterDateTime'
@@ -172,18 +177,23 @@ It is not meant to use as a production baseline.
 ```powershell
 Configuration Example
 {
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
-
     Import-DscResource -ModuleName Microsoft365DSC
-
     node localhost
     {
-        AADRoleEligibilityScheduleRequest "MyRequest"
+        AADRoleAssignmentScheduleRequest "MyRequest"
         {
             Action               = "AdminUpdate";
             ApplicationId         = $ApplicationId
@@ -194,9 +204,9 @@ Configuration Example
             IsValidationOnly     = $False;
             Principal            = "AdeleV@$TenantId";
             RoleDefinition       = "Teams Communications Administrator";
-            ScheduleInfo         = MSFT_AADRoleEligibilityScheduleRequestSchedule {
+            ScheduleInfo         = MSFT_AADRoleAssignmentScheduleRequestSchedule {
                 startDateTime             = '2023-09-01T02:45:44Z' # Updated Property
-                expiration                = MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration
+                expiration                = MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration
                     {
                         endDateTime = '2025-10-31T02:40:09Z'
                         type        = 'afterDateTime'
@@ -215,18 +225,23 @@ It is not meant to use as a production baseline.
 ```powershell
 Configuration Example
 {
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
-
     Import-DscResource -ModuleName Microsoft365DSC
-
     node localhost
     {
-        AADRoleEligibilityScheduleRequest "MyRequest"
+        AADRoleAssignmentScheduleRequest "MyRequest"
         {
             Action               = "AdminAssign";
             ApplicationId         = $ApplicationId
@@ -237,9 +252,9 @@ Configuration Example
             IsValidationOnly     = $True; # Updated Property
             Principal            = "AdeleV@$TenantId";
             RoleDefinition       = "Teams Communications Administrator";
-            ScheduleInfo         = MSFT_AADRoleEligibilityScheduleRequestSchedule {
+            ScheduleInfo         = MSFT_AADRoleAssignmentScheduleRequestSchedule {
                 startDateTime             = '2023-09-01T02:40:44Z'
-                expiration                = MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration
+                expiration                = MSFT_AADRoleAssignmentScheduleRequestScheduleExpiration
                     {
                         endDateTime = '2025-10-31T02:40:09Z'
                         type        = 'afterDateTime'
