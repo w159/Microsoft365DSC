@@ -110,11 +110,11 @@ function Get-TargetResource
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
+            Write-Verbose -Message "No Intune Mobile App Configuration Policy for iOS with Id {$id} was found"
             return $nullResult
         }
 
-        Write-Verbose -Message "Found something with id {$id}"
+        Write-Verbose -Message "An Intune Mobile App Configuration Policy for iOS with Id {$id} and DisplayName {$DisplayName} was found"
 
         #need to convert dictionary object into a hashtable array so we can work with it
         $complexSettings = @()
