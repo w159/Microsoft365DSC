@@ -49,6 +49,7 @@
   * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+    FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)
 * AzureBillingAccountPolicy
   * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
