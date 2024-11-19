@@ -110,7 +110,7 @@ function Get-TargetResource
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
+            Write-Verbose -Message "No Intune Mobile App Configuration Policy for iOS with Id {$id} was found"
             return $nullResult
         }
 
