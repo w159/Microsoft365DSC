@@ -47,6 +47,8 @@
     when an assigned group no longer exists.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* AzureBillingAccountPolicy
+  * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
   * Fixed issue when properties `DetailedHelpText`,
     `DeviceOwnerLockScreenMessage` or `ShortHelpText` were defined but the
@@ -69,8 +71,6 @@
 * AADRoleEligibilityScheduleRequest
   * FIXES [#3787](https://github.com/microsoft/Microsoft365DSC/issues/3787)
   * FIXES [#5089](https://github.com/microsoft/Microsoft365DSC/issues/5089)
-* AzureBillingAccountPolicy
-  * Initial release.
 * EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
   * Fixed issue where empty arrays were being compared incorrectly to null
     strings
