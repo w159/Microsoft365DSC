@@ -63,6 +63,7 @@
 * TeamsUpdateManagementPolicy
   * Added conversion of the UpdateTimeOfDay parameter to the local culture format
     so that the comparison will work consistently.
+    FIXES [#5424](https://github.com/microsoft/Microsoft365DSC/issues/5424)
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
 
