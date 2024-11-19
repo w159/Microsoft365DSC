@@ -6,27 +6,32 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance,
+        $BillingAccount,
 
         [Parameter()]
-        [System.Boolean]
-        $IsEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $EnterpriseAgreementPolicies,
 
         [Parameter()]
-        [System.Boolean]
-        $NotifyReviewers,
+        [System.String]
+        $MarketplacePurchases,
 
         [Parameter()]
-        [System.Boolean]
-        $RemindersEnabled,
+        [System.String]
+        $ReservationPurchases,
 
         [Parameter()]
-        [System.UInt32]
-        $RequestDurationInDays,
+        [System.String]
+        $SavingsPlanPurchases,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $Reviewers,
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -41,10 +46,6 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -57,7 +58,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters | Out-Null
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -73,74 +74,42 @@ function Get-TargetResource
     #endregion
 
     $nullResult = $PSBoundParameters
+    $nullResult.Ensure = 'Absent'
     try
     {
-        $instance = Get-MgBetaPolicyAdminConsentRequestPolicy -ErrorAction Stop
+        $uri = "https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$($BillingAccount)/policies/default?api-version=2024-04-01"
+        $response = Invoke-AzRest -Uri $uri -Method GET
+        $instance = (ConvertFrom-Json ($response.Content)).value
+
         if ($null -eq $instance)
         {
-            throw 'Could not retrieve the Admin Consent Request Policy'
+            return $nullResult
         }
 
-        $reviewersValue = @()
-        foreach ($reviewer in $instance.Reviewers)
+        $EnterpriseAgreementPoliciesValue = $null
+        if ($null -ne $EnterpriseAgreementPolicies)
         {
-            if ($reviewer.Query.Contains('/users/'))
-            {
-                $userId = $reviewer.Query.Split('/')[3]
-                $userInfo = Get-MgUser -UserId $userId
-
-                $entry = @{
-                    ReviewerType = 'User'
-                    ReviewerId   = $userInfo.UserPrincipalName
-                }
+            $EnterpriseAgreementPoliciesValue = @{
+                accountOwnerViewCharges    = $instance.properties.enterpriseAgreementPolicies.accountOwnerViewCharges
+                authenticationType         = $instance.properties.enterpriseAgreementPolicies.authenticationType
+                departmentAdminViewCharges = $instance.properties.enterpriseAgreementPolicies.departmentAdminViewCharges
             }
-            elseif ($reviewer.Query.Contains('/groups/'))
-            {
-                $groupId = $reviewer.Query.Split('/')[3]
-                try
-                {
-                    $groupInfo = Get-MgGroup -GroupId $groupId -ErrorAction SilentlyContinue
-                    $entry = @{
-                        ReviewerType = 'Group'
-                        ReviewerId   = $groupInfo.DisplayName
-                    }
-                }
-                catch
-                {
-                    $message = "Group with ID $groupId specified in Reviewers not found"
-                    New-M365DSCLogEntry -Message $message `
-                        -Source $($MyInvocation.MyCommand.Source) `
-                        -TenantId $TenantId `
-                        -Credential $Credential
-                    continue
-                }
-            }
-            elseif ($reviewer.Query.Contains('directory/roleAssignments?$'))
-            {
-                $roleId = $reviewer.Query.Replace("/beta/roleManagement/directory/roleAssignments?`$filter=roleDefinitionId eq ", "").Replace("'", '')
-                $roleInfo = Get-MgBetaRoleManagementDirectoryRoleDefinition -UnifiedRoleDefinitionId $roleId
-                $entry = @{
-                    ReviewerType = 'Role'
-                    ReviewerId   = $roleInfo.DisplayName
-                }
-            }
-            $reviewersValue += $entry
         }
 
         $results = @{
-            IsSingleInstance      = 'Yes'
-            IsEnabled             = $instance.IsEnabled
-            NotifyReviewers       = $instance.NotifyReviewers
-            RemindersEnabled      = $instance.RemindersEnabled
-            RequestDurationInDays = $instance.RequestDurationInDays
-            Reviewers             = $reviewersValue
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            ApplicationSecret     = $ApplicationSecret
-            CertificateThumbprint = $CertificateThumbprint
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+            BillingAccount              = $BillingAccount
+            Name                        = $instance.name
+            EnterpriseAgreementPolicies = $EnterpriseAgreementPoliciesValue
+            MarketplacePurchases        = $instance.properties.marketplacePurchases
+            ReservationPurchases        = $instance.properties.reservationPurchases
+            SavingsPlanPurchases        = $instance.properties.savingsPlanPurchases
+            Ensure                      = 'Present'
+            Credential                  = $Credential
+            ApplicationId               = $ApplicationId
+            TenantId                    = $TenantId
+            CertificateThumbprint       = $CertificateThumbprint
+            ManagedIdentity             = $ManagedIdentity.IsPresent
+            AccessTokens                = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -164,27 +133,32 @@ function Set-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance,
+        $BillingAccount,
 
         [Parameter()]
-        [System.Boolean]
-        $IsEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $EnterpriseAgreementPolicies,
 
         [Parameter()]
-        [System.Boolean]
-        $NotifyReviewers,
+        [System.String]
+        $MarketplacePurchases,
 
         [Parameter()]
-        [System.Boolean]
-        $RemindersEnabled,
+        [System.String]
+        $ReservationPurchases,
 
         [Parameter()]
-        [System.UInt32]
-        $RequestDurationInDays,
+        [System.String]
+        $SavingsPlanPurchases,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $Reviewers,
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -197,10 +171,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -215,7 +185,7 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters | Out-Null
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -230,52 +200,27 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $reviewerValues = @()
-    foreach ($reviewer in $Reviewers)
+    $instanceParams = @{
+        properties = @{
+            enterpriseAgreementPolicies = @{
+                accountOwnerViewCharges    = $EnterpriseAgreementPolicies.accountOwnerViewCharges
+                authenticationType         = $EnterpriseAgreementPolicies.authenticationType
+                departmentAdminViewCharges = $EnterpriseAgreementPolicies.departmentAdminViewCharges
+            }
+            marketplacePurchases = $MarketplacePurchases
+            reservationPurchases = $ReservationPurchases
+            savingsPlanPurchases = $SavingsPlanPurchases
+        }
+    }
+    $payload = ConvertTo-Json $instanceParams -Depth 5 -Compress
+    Write-Verbose -Message "Updating billing account policy for {$BillingAccount} with payload:`r`n$($payload)"
+    $uri = "https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$($BillingAccount)/policies/default?api-version=2024-04-01"
+    $response = Invoke-AzRest -Uri $uri -Method "PUT" -Payload $payload
+    if (-not [System.String]::IsNullOrEmpty($response.Error))
     {
-        if ($reviewer.ReviewerType -eq 'User')
-        {
-            $userInfo = Get-MgUser -Filter "UserPrincipalName eq '$($reviewer.ReviewerId)'"
-            $entry = @{
-                query     = "/users/$($userInfo.Id)"
-                queryType = 'MicrosoftGraph'
-            }
-            $reviewerValues += $entry
-        }
-        elseif ($reviewer.ReviewerType -eq 'Group')
-        {
-            $groupInfo = Get-MgGroup -Filter "DisplayName eq '$($reviewer.ReviewerId)'"
-            $entry = @{
-                query     = "/groups/$($groupInfo.Id)/transitiveMembers/microsoft.graph.user"
-                queryType = 'MicrosoftGraph'
-            }
-            $reviewerValues += $entry
-        }
-        elseif ($reviewer.ReviewerType -eq 'Role')
-        {
-            $roleInfo = Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter "DisplayName eq '$($reviewer.ReviewerId)'"
-            $entry = @{
-                query     = "/roleManagement/directory/roleAssignments?`$filter=roleDefinitionId eq '$($roleInfo.Id.Replace('\u0027', ''))'"
-                queryType = 'MicrosoftGraph'
-            }
-            $reviewerValues += $entry
-        }
+        throw "Error: $($response.Error)"
     }
-
-    $updateParameters = @{
-        isEnabled             = $IsEnabled
-        reviewers             = $reviewerValues
-        notifyReviewers       = $NotifyReviewers
-        remindersEnabled      = $RemindersEnabled
-        requestDurationInDays = $RequestDurationInDays
-    }
-
-    $updateJSON = ConvertTo-Json $updateParameters
-    Write-Verbose -Message "Updating the Entra Id Admin Consent Request Policy with values: $updateJSON"
-    $Uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'beta/policies/adminConsentRequestPolicy'
-    Invoke-MgGraphRequest -Method 'PUT' `
-                          -Uri $Uri `
-                          -Body $updateJSON | Out-Null
+    Write-Verbose -Message "Response:`r`n$($response.Content)"
 }
 
 function Test-TargetResource
@@ -286,27 +231,32 @@ function Test-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $IsSingleInstance,
+        $BillingAccount,
 
         [Parameter()]
-        [System.Boolean]
-        $IsEnabled,
+        [Microsoft.Management.Infrastructure.CimInstance]
+        $EnterpriseAgreementPolicies,
 
         [Parameter()]
-        [System.Boolean]
-        $NotifyReviewers,
+        [System.String]
+        $MarketplacePurchases,
 
         [Parameter()]
-        [System.Boolean]
-        $RemindersEnabled,
+        [System.String]
+        $ReservationPurchases,
 
         [Parameter()]
-        [System.UInt32]
-        $RequestDurationInDays,
+        [System.String]
+        $SavingsPlanPurchases,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $Reviewers,
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -319,10 +269,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -354,21 +300,31 @@ function Test-TargetResource
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
-
     $testResult = $true
-    foreach ($reviewer in $Reviewers)
+
+    #Compare Cim instances
+    foreach ($key in $PSBoundParameters.Keys)
     {
-        $currentEquivalent = $CurrentValues.Reviewers | Where-Object -FilterScript {$_.ReviewerId -eq $reviewer.ReviewerId -and $_.ReviewerType -eq $reviewer.ReviewerType}
-        if ($null -eq $currentEquivalent)
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+        if ($source.getType().Name -like '*CimInstance*')
         {
-            $testResult = $false
-            Write-Verbose -Message "Couldn't find current reviewer {$($reviewer.ReviewerId)}"
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
+
+            if (-Not $testResult)
+            {
+                $testResult = $false
+                break
+            }
+
+            $ValuesToCheck.Remove($key) | Out-Null
         }
     }
 
     if ($testResult)
     {
-        $ValuesToCheck.Remove('Reviewers') | Out-Null
         $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
             -Source $($MyInvocation.MyCommand.Source) `
             -DesiredValues $PSBoundParameters `
@@ -415,7 +371,7 @@ function Export-TargetResource
         $AccessTokens
     )
 
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -433,11 +389,13 @@ function Export-TargetResource
     try
     {
         $Script:ExportMode = $true
-        [array] $Script:exportedInstances = Get-MgBetaPolicyAdminConsentRequestPolicy -ErrorAction Stop
+
+        #Get all billing account
+        $accounts = Get-M365DSCAzureBillingAccount
 
         $i = 1
         $dscContent = ''
-        if ($Script:exportedInstances.Length -eq 0)
+        if ($accounts.Length -eq 0)
         {
             Write-Host $Global:M365DSCEmojiGreenCheckMark
         }
@@ -445,21 +403,20 @@ function Export-TargetResource
         {
             Write-Host "`r`n" -NoNewline
         }
-        foreach ($config in $Script:exportedInstances)
+        foreach ($account in $accounts.value)
         {
+            $displayedKey = $account.properties.displayName
+            Write-Host "    |---[$i/$($accounts.value.Length)] $displayedKey" -NoNewline
+
             if ($null -ne $Global:M365DSCExportResourceInstancesCount)
             {
                 $Global:M365DSCExportResourceInstancesCount++
             }
-
-            $displayedKey = 'Policy'
-            Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             $params = @{
-                IsSingleInstance      = 'Yes'
+                BillingAccount        = $account.name
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
-                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
@@ -469,20 +426,32 @@ function Export-TargetResource
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
 
-            if ($Results.Reviewers.Count -gt 0)
+            if ($Results.EnterpriseAgreementPolicies)
             {
-                $Results.Reviewers = Get-M365DSCAzureADAAdminConsentPolicyReviewerAsString $Results.Reviewers
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.EnterpriseAgreementPolicies -CIMInstanceName AzureBillingAccountPolicyEnterpriseAgreementPolicy
+                if ($complexTypeStringResult)
+                {
+                    $Results.EnterpriseAgreementPolicies = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('EnterpriseAgreementPolicies') | Out-Null
+                }
             }
-
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
 
-            if ($Results.Reviewers)
+            if ($Results.EnterpriseAgreementPolicies)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Reviewers" -IsCIMArray:$true
+                $isCIMArray = $false
+                if ($Results.EnterpriseAgreementPolicies.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseAgreementPolicies' -IsCIMArray:$isCIMArray
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -504,29 +473,6 @@ function Export-TargetResource
 
         return ''
     }
-}
-
-function Get-M365DSCAzureADAAdminConsentPolicyReviewerAsString
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param(
-        [Parameter(Mandatory = $true)]
-        [Array]
-        $Reviewers
-    )
-
-    $result = "                @(`r`n"
-    foreach ($reviewer in $reviewers)
-    {
-        $result += "                MSFT_AADAdminConsentRequestPolicyReviewer {`r`n"
-        $result += "                     ReviewerType = '$($reviewer.ReviewerType)'`r`n"
-        $result += "                     ReviewerId   = '$($reviewer.ReviewerId)'`r`n"
-        $result += "                     QueryRoot    = '$($reviewer.QueryRoot)'`r`n"
-        $result += "                }`r`n"
-    }
-    $result += '                )'
-    return $result
 }
 
 Export-ModuleMember -Function *-TargetResource
