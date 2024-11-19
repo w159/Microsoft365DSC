@@ -33,6 +33,8 @@
 * AADRoleEligibilityScheduleRequest
   * FIXES [#3787](https://github.com/microsoft/Microsoft365DSC/issues/3787)
   * FIXES [#5089](https://github.com/microsoft/Microsoft365DSC/issues/5089)
+* AzureBillingAccountPolicy
+  * Initial release.
 * EXOATPBuiltInProtectionRule, EXOEOPProtectionRule
   * Fixed issue where empty arrays were being compared incorrectly to null
     strings
