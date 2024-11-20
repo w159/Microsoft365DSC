@@ -65,6 +65,8 @@
   * Initial release.
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
+* IntuneFirewallRulesPolicyWindows10ConfigMgr
+  * Initial release.
 * SCPolicyConfig
   * Fixed an issue extracting empty groups properties.
 * TeamsUpdateManagementPolicy
