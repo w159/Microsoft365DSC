@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AAD - Added ApplicationSecret auth method to multiple resources
+  * PR #5409
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * IntuneFirewallRulesHyperVPolicyWindows10
