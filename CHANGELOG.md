@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AAD - Added ApplicationSecret auth method to multiple resources
+  * PR #5409
 * AADAdminConsentRequestPolicy
   * Added error handling to Group display name retrieval to prevent errors
     when an assigned group no longer exists.
