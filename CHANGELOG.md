@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* MISC
+  * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+
 # 1.24.1120.1
 
 * AADAdminConsentRequestPolicy
