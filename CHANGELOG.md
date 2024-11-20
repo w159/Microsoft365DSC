@@ -1,5 +1,7 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
 # 1.24.1120.1
 
 * AADAdminConsentRequestPolicy
