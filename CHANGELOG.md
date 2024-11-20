@@ -17,6 +17,7 @@
   * Improve CIM instance detection for specific Intune resources.
 * AADUser
   * Fixed issue updating user group membership when looking for the group by DisplayName.
+  * Fixed missing User Id when changing  group membership in Set-TargetResource function.
 
 # 1.24.1113.1
 
