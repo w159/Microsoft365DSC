@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1120.1
 
 * AADAdminConsentRequestPolicy
   * Added error handling to Group display name retrieval to prevent errors
