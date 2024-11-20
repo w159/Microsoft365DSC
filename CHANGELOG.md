@@ -4,10 +4,81 @@
 
 * AAD - Added ApplicationSecret auth method to multiple resources
   * PR #5409
+* AADAdminConsentRequestPolicy
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyAuthenticator
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyEmail
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyExternal
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyFido2
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyHardware
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicySms
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicySoftware
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyTemporary
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyVoice
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADAuthenticationMethodPolicyX509
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADConditionalAccessPolicy
+  * Fixed bug where a null value was passed in the request for the
+    excludePlatforms parameter when just values were assigned to includePlatforms, which throws an error.
+  * Fixed bug where a null value was passed in the request for the
+    sessionControl parameter when there are no session controls, which throws an error.
+  * Fixed bug where a null value was passed in the request for the
+    applicationEnforcedRestrictions parameter when value was set to false, which throws an error.
+* AADDeviceRegistrationPolicy
+  * Added error handling to Group display name retrieval to prevent errors
+    when an assigned group no longer exists.
+* AADRoleAssignmentScheduleRequest
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
+* AADRoleSettings
+  * Fixing issue where the ActivateApprover parameter isn't processed correctly
+    when an approver does not exist.
+    FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
+    FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)
+* ADOSecurityPolicy
+  * Fixed an error in the export when using a Service Principal to authenticate.
+* AzureBillingAccountPolicy
+  * Initial release.
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Fixed issue when properties `DetailedHelpText`,
+    `DeviceOwnerLockScreenMessage` or `ShortHelpText` were defined but the
+    request was not being sent correctly
+    FIXES [#5411](https://github.com/microsoft/Microsoft365DSC/issues/5411)
+* IntuneDiskEncryptionPDEPolicyWindows10
+  * Initial release.
 * IntuneFirewallRulesHyperVPolicyWindows10
   * Initial release.
+* IntuneFirewallRulesPolicyWindows10ConfigMgr
+  * Initial release.
+* IntuneMobileAppConfigurationPolicyIOS
+  * Initial release.
+* SCPolicyConfig
+  * Fixed an issue extracting empty groups properties.
+* TeamsUpdateManagementPolicy
+  * Added conversion of the UpdateTimeOfDay parameter to the local culture format
+    so that the comparison will work consistently.
+    FIXES [#5424](https://github.com/microsoft/Microsoft365DSC/issues/5424)
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
 
@@ -35,13 +106,6 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
-* IntuneDeviceConfigurationCustomPolicyWindows10
-  * Fixed issue where `Value`, from `OmaSettings`, could not be compared
-    correctly if it was boolean and set to `$False`
-    FIXES [#5384](https://github.com/microsoft/Microsoft365DSC/issues/5384)
-* IntuneEndpointDetectionAndResponsePolicyWindows10
-  * Remove changed property name from export.
-    FIXES [#5300](https://github.com/microsoft/Microsoft365DSC/issues/5300)
 * IntuneSecurityBaselineMicrosoftEdge
   * Deprecate property `authschemes` and replace with `AuthSchemes_AuthSchemes`
 * M365DSCDRGUtil
