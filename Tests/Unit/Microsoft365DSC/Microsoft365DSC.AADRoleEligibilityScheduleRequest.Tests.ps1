@@ -55,6 +55,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -MockWith {
                 return @{
                     Id          = '12345-12345-12345-12345-12345'
+                    RoleDefinitionId = "12345"
                 }
             }
 
@@ -73,6 +74,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure               = "Present";
                     IsValidationOnly     = $False;
                     Principal            = "John.Smith@contoso.com";
+                    PrincipalType        = "User"
                     RoleDefinition       = "Teams Communications Administrator";
                     ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
                             startDateTime             = '2023-09-01T02:40:44Z'
@@ -107,6 +109,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DirectoryScopeId     = "/";
                     Ensure               = "Absent";
                     IsValidationOnly     = $False;
+                    PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
                     ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
@@ -158,6 +161,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DirectoryScopeId     = "/";
                     Ensure               = "Present";
                     IsValidationOnly     = $False;
+                    PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
                     ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
@@ -216,6 +220,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DirectoryScopeId     = "/";
                     Ensure               = "Present";
                     IsValidationOnly     = $False;
+                    PrincipalType        = "User"
                     Principal            = "John.Smith@contoso.com";
                     RoleDefinition       = "Teams Communications Administrator";
                     ScheduleInfo         = New-CimInstance -ClassName MSFT_AADRoleEligibilityScheduleRequestSchedule -Property @{
