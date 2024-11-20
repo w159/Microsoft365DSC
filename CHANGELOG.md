@@ -54,6 +54,8 @@
     when an approver does not exist.
     FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
     FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)
+* ADOSecurityPolicy
+  * Fixed an error in the export when using a Service Principal to authenticate.
 * AzureBillingAccountPolicy
   * Initial release.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
