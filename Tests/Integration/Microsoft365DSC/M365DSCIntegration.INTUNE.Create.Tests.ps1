@@ -2458,6 +2458,21 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneDiskEncryptionPDEPolicyWindows10 'IntuneDiskEncryptionPDEPolicyWindows10'
+                {
+                    Assignments                  = @();
+                    Description                  = "test";
+                    DisplayName                  = "test";
+                    Ensure                       = "Present";
+                    EnablePersonalDataEncryption = "1";
+                    ProtectDesktop               = "0";
+                    ProtectDocuments             = "0";
+                    ProtectPictures              = "0";
+                    RoleScopeTagIds              = @("0");
+                    ApplicationId                = $ApplicationId;
+                    TenantId                     = $TenantId;
+                    CertificateThumbprint        = $CertificateThumbprint;
+                }
                 IntuneDiskEncryptionWindows10 'myDiskEncryption'
                 {
                     DisplayName        = 'Disk Encryption'
@@ -2703,6 +2718,34 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneFirewallRulesHyperVPolicyWindows10 'myIntuneFirewallRulesHyperVPolicyWindows10'
+                {
+                    Assignments           = @(
+                        MSFT_DeviceManagementConfigurationPolicyAssignments{
+                            deviceAndAppManagementAssignmentFilterType = 'none'
+                            dataType = '#microsoft.graph.groupAssignmentTarget'
+                            groupId = '11111111-1111-1111-1111-111111111111'
+                        }
+                    );
+                    FirewallRuleName = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName_IntuneFirewallRulesHyperVPolicyWindows10{
+                            Direction = 'out'
+                            RemotePortRanges = @('0-100')
+                            Name = 'Rule1'
+                            Protocol = 80
+                            Enabled = '1'
+                            Action = '1'
+                        }
+                    )
+                    Description           = 'Description'
+                    DisplayName           = "Intune Firewall Rules Hyper-V Policy Windows10";
+                    Ensure                = "Present";
+                    Id                    = '00000000-0000-0000-0000-000000000000'
+                    RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 IntuneFirewallRulesPolicyWindows10 'myIntuneFirewallRulesPolicyWindows10'
                 {
                     Assignments           = @(
@@ -2730,6 +2773,59 @@
                     Ensure                = "Present";
                     Id                    = '00000000-0000-0000-0000-000000000000'
                     RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneFirewallRulesPolicyWindows10ConfigMgr 'myIntuneFirewallRulesPolicyWindows10ConfigMgr'
+                {
+                    Assignments           = @(
+                        MSFT_DeviceManagementConfigurationPolicyAssignments{
+                            deviceAndAppManagementAssignmentFilterType = 'none'
+                            dataType = '#microsoft.graph.groupAssignmentTarget'
+                            groupId = '11111111-1111-1111-1111-111111111111'
+                        }
+                    );
+                    FirewallRuleName = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName_IntuneFirewallRulesPolicyWindows10ConfigMgr{
+                            Direction = 'out'
+                            InterfaceTypes = @('lan')
+                            RemotePortRanges = @('0-100')
+                            Name = 'Rule1'
+                            FilePath = 'C:\Temp'
+                            Protocol = 80
+                            ServiceName = 'mysvc'
+                            Enabled = '1'
+                            Type = '1'
+                        }
+                    )
+                    Description           = 'Description'
+                    DisplayName           = "Intune Firewall Rules Policy Windows10 ConfigMgr";
+                    Ensure                = "Present";
+                    Id                    = '00000000-0000-0000-0000-000000000000'
+                    RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneMobileAppConfigurationPolicyIOS 'ConfigureIntuneMobileAppConfigurationPolicyIOS'
+                {
+                    Description           = "IntuneMobileAppConfigurationPolicyIOS Description";
+                    DisplayName           = "IntuneMobileAppConfigurationPolicyIOS DisplayName";
+                    Ensure                = "Present";
+                    settings              = @(
+                        MSFT_appConfigurationSettingItem{
+                            appConfigKey = 'ConfigKey1'
+                            appConfigKeyType = 'stringType'
+                            appConfigKeyValue = 'KeyValue1'
+                        }
+                        MSFT_appConfigurationSettingItem{
+                            appConfigKey = 'ConfigKey2'
+                            appConfigKeyType = 'stringType'
+                            appConfigKeyValue = 'keyValue2'
+                        }
+                    );
+                    targetedMobileApps    = @("06131066-8adf-42a9-86aa-e4b59e27da5d");
                     ApplicationId         = $ApplicationId;
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
