@@ -67,6 +67,8 @@
   * Initial release.
 * IntuneFirewallRulesPolicyWindows10ConfigMgr
   * Initial release.
+* SCPolicyConfig
+  * Fixed an issue extracting empty groups properties.
 * TeamsUpdateManagementPolicy
   * Added conversion of the UpdateTimeOfDay parameter to the local culture format
     so that the comparison will work consistently.
