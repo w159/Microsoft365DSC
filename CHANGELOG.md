@@ -10,6 +10,8 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
+* IntuneMobileAppConfigurationPolicyIOS
+  * Initial release.
 * IntuneSecurityBaselineMicrosoftEdge
   * Deprecate property `authschemes` and replace with `AuthSchemes_AuthSchemes`
 * M365DSCDRGUtil
@@ -23,8 +25,6 @@
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.12.
   * Updated MSCloudLoginAssistant to version 1.1.28.
-* MSFT_IntuneMobileAppConfigurationPolicyIOS
-  * Initial release.
 
 # 1.24.1106.3
 
