@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* M365DSCUtil
+  * Add default Ensure value `Present` if not specified.
+    FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 

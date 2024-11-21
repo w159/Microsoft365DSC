@@ -687,6 +687,16 @@ function Test-M365DSCParameterState
         $KeyList = $ValuesToCheck
     }
 
+    # Add default Ensure value if it is not present in the DesiredValues but present in the CurrentValues
+    if (-not $KeyList.Contains('Ensure') -and -not $KeyList.Contains('IsSingleInstance') -and $CurrentValues.ContainsKey('Ensure'))
+    {
+        $KeyList += 'Ensure'
+        if (-not $DesiredValues.ContainsKey('Ensure'))
+        {
+            $DesiredValues.Add('Ensure', 'Present')
+        }
+    }
+
     $KeyList | ForEach-Object -Process {
         if (($_ -ne 'Verbose') -and ($_ -ne 'Credential') `
                 -and ($_ -ne 'ApplicationId') -and ($_ -ne 'CertificateThumbprint') `
