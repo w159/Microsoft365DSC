@@ -134,8 +134,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 Name = 'Pol_HardenedPaths'
                                 OffsetUri = '/Config/Connectivity/HardenedUNCPaths'
                                 AdditionalProperties = @{
-                                    '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition'
-                                    options=@(
+                                    '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
+                                    options = @(
                                         @{
                                             name ='Enabled'
                                             itemId = 'device_vendor_msft_policy_config_connectivity_hardeneduncpaths_1'                                                                                                                                 
@@ -154,8 +154,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                     childIds = @(
                                         'device_vendor_msft_policy_config_connectivity_hardeneduncpaths_pol_hardenedpaths_key',
                                         'device_vendor_msft_policy_config_connectivity_hardeneduncpaths_pol_hardenedpaths_value'         
-                                    )                            
-
+                                    )
+                                    dependentOn = @(
+                                        @{
+                                            dependentOn = 'device_vendor_msft_policy_config_connectivity_hardeneduncpaths_1'
+                                            parentSettingId = 'device_vendor_msft_policy_config_connectivity_hardeneduncpaths'
+                                        }
+                                    )
                                 }
                             },
                             @{
@@ -256,12 +261,72 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                     value = "user_vendor_msft_policy_config_experience_allowwindowsspotlight_1"
                                 }
                             }
+                        }                         
+                    }
+                    @{
+                        Id = '3'
+                        SettingDefinitions = @(
+                            @{
+                                Id = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules'
+                                Name = 'AttackSurfaceReductionRules'
+                                OffsetUri = '/Config/Defender/AttackSurfaceReductionRules'
+                                AdditionalProperties = @{
+                                    '@odata.type' = '#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition'
+                                    maximumCount = 1
+                                    minimumCount = 0
+                                    childIds = @(
+                                        'device_vendor_msft_policy_config_defender_attacksurfacereductionrules_blockexecutionofpotentiallyobfuscatedscripts'         
+                                    )                            
+
+                                }
+                            },
+                            @{
+                                Id = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules_blockexecutionofpotentiallyobfuscatedscripts'
+                                Name = 'BlockExecutionOfPotentiallyObfuscatedScripts'
+                                OffsetUri = '/Config/Defender/AttackSurfaceReductionRules'
+                                AdditionalProperties = @{
+                                    '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition'
+                                    options=@(
+                                        @{
+                                            name ='Block'
+                                            itemId = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules_blockexecutionofpotentiallyobfuscatedscripts_block'
+                                            dependentOn = @(
+                                                @{
+                                                    dependentOn = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules'
+                                                    parentSettingId = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules'
+                                                }
+                                            )                                            
+                                        }
+                                    )
+                                }
+                            }
+                        )
+                        SettingInstance = @{
+                            SettingDefinitionId = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules'
+                            SettingInstanceTemplateReference = @{
+                                SettingInstanceTemplateId = '3d6107c2-c307-4399-8070-6542f1760309'
+                            }
+                            AdditionalProperties = @{
+                                SettingDefinitionId = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules'                                                                                       
+                                '@odata.type' = "#microsoft.graph.deviceManagementConfigurationGroupSettingCollectionInstance"
+                                groupSettingCollectionValue = @{
+                                    children = @(
+                                        @{
+                                            '@odata.type' = '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
+                                            settingDefinitionId = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules_blockexecutionofpotentiallyobfuscatedscripts'
+                                            choiceSettingValue = @{
+                                                children = @()
+                                                value = 'device_vendor_msft_policy_config_defender_attacksurfacereductionrules_blockexecutionofpotentiallyobfuscatedscripts_block'
+                                            }
+                                        }                                                    
+                                    )                                                 
+                                }
+                            }                                    
                         }
-                         
                     }
                 )
             }
-
+            
             Mock -CommandName Update-DeviceConfigurationPolicyAssignment -MockWith {
             }
 
@@ -294,6 +359,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
         }
+
         # Test contexts
         Context -Name "The IntuneSecurityBaselineWindows10 should exist but it DOES NOT" -Fixture {
             BeforeAll {
@@ -312,16 +378,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
-                            key = "\\*\SYSVOL"
-                            value = "RequireMutualAuthentication=1,RequireIntegrity=1"
+                                value = "RequireMutualAuthentication=1,RequireIntegrity=1"
+                                key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
+                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
+                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
+                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
-                    RoleScopeTagIds = @("FakeStringValue")                    
+                    RoleScopeTagIds = @("FakeStringValue")
                     userSettings = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10 -Property @{
-                        AllowWindowsSpotlight = '1'
+                        AllowWindowsSpotlight = '1'                   
                     } -ClientOnly)
                     Ensure = "Present"
                     Credential = $Credential;
@@ -360,21 +429,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
-                                key = "\\*\SYSVOL"
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
+                                key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
+                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
+                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
+                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
-                    RoleScopeTagIds = @("FakeStringValue")                    
+                    RoleScopeTagIds = @("FakeStringValue")
                     userSettings = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10 -Property @{
-                        AllowWindowsSpotlight = '1'
+                        AllowWindowsSpotlight = '1'                   
                     } -ClientOnly)
                     Ensure = "Absent"
                     Credential = $Credential;
-                }                
-            }
+                }
+            }                
 
             It 'Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
@@ -407,20 +479,23 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
-                                key = "\\*\SYSVOL"
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
+                                key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
+                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
+                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
+                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
-                    RoleScopeTagIds = @("FakeStringValue")                    
+                    RoleScopeTagIds = @("FakeStringValue")
                     userSettings = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10 -Property @{
-                        AllowWindowsSpotlight = '1'
+                        AllowWindowsSpotlight = '1'                   
                     } -ClientOnly)
                     Ensure = "Present"
                     Credential = $Credential;
-                }
+                }               
             }
 
             It 'Should return true from the Test method' {
@@ -445,16 +520,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
-                                key = "\\*\SYSVOL"
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
+                                key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
+                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
+                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
+                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
-                    RoleScopeTagIds = @("FakeStringValue")                    
+                    RoleScopeTagIds = @("FakeStringValue")
                     userSettings = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10 -Property @{
-                        AllowWindowsSpotlight = '0'
+                        AllowWindowsSpotlight = '0' #drift                 
                     } -ClientOnly)
                     Ensure = "Present"
                     Credential = $Credential;
@@ -481,7 +559,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
                 $testParams = @{
                     Credential = $Credential
-                }
+                }                
             }
 
             It 'Should Reverse Engineer resource from the Export method' {

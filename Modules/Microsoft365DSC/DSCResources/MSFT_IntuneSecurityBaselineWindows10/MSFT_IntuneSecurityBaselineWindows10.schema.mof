@@ -9,11 +9,55 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
     [Write, Description("The collection Id that is the target of the assignment.(ConfigMgr)")] String collectionId;
 };
 
+
+
 [ClassVersion("1.0.0.0")]
 class MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths
 {
-    [Write, Description("Name")] String Pol_HardenedPathsKey;
-    [Write, Description("Value")] String Pol_HardenedPathsValue;
+    [Write, Description("Value")] String value;
+    [Write, Description("Name")] String key;
+};
+
+[ClassVersion("1.0.0.0")]
+class MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules
+{
+    [Write, Description("Block execution of potentially obfuscated scripts - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutionOfPotentiallyObfuscatedScripts;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Win32 API calls from Office macros - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockWin32APICallsFromOfficeMacros;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block executable files from running unless they meet a prevalence, age, or trusted list criterion - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Office communication application from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeCommunicationAppFromCreatingChildProcesses;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block all Office applications from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAllOfficeApplicationsFromCreatingChildProcesses;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Adobe Reader from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAdobeReaderFromCreatingChildProcesses;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block credential stealing from the Windows local security authority subsystem - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block JavaScript or VBScript from launching downloaded executable content - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Webshell creation for Servers - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockWebshellCreationForServers;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockWebshellCreationForServers_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block untrusted and unsigned processes that run from USB - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockUntrustedUnsignedProcessesThatRunFromUSB;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block persistence through WMI event subscription - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockPersistenceThroughWMIEventSubscription;
+    [Write, Description("[PREVIEW] Block use of copied or impersonated system tools - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockUseOfCopiedOrImpersonatedSystemTools;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block abuse of exploited vulnerable signed drivers (Device) - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAbuseOfExploitedVulnerableSignedDrivers;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block process creations originating from PSExec and WMI commands - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockProcessCreationsFromPSExecAndWMICommands;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Office applications from creating executable content - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeApplicationsFromCreatingExecutableContent;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block Office applications from injecting code into other processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions[];
+    [Write, Description("[PREVIEW] Block rebooting machine in Safe Mode - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockRebootingMachineInSafeMode;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions[];
+    [Write, Description("Use advanced protection against ransomware - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String UseAdvancedProtectionAgainstRansomware;
+    [Write, Description("ASR Only Per Rule Exclusions")] String UseAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions[];
+    [Write, Description("Block executable content from email client and webmail - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutableContentFromEmailClientAndWebmail;
+    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions[];
 };
 
 [ClassVersion("1.0.0.0")]
@@ -35,8 +79,8 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("MSS: (NoNameReleaseOnDemand) Allow the computer to ignore NetBIOS name release requests except from WINS servers (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String Pol_MSS_NoNameReleaseOnDemand;
     [Write, Description("Turn off multicast name resolution (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String Turn_Off_Multicast;
     [Write, Description("Prohibit use of Internet Connection Sharing on your DNS domain network (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String NC_ShowSharedAccessUI;
-    [Write, Description("Hardened UNC Paths (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String HardenedUNCPaths_Pol_HardenedPaths;
-    [Write, Description("Hardened UNC Paths: (Device) - Depends on HardenedUNCPaths_Pol_HardenedPaths"), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths")] String pol_hardenedpaths[];
+    [Write, Description("Hardened UNC Paths (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String hardeneduncpaths_Pol_HardenedPaths;
+    [Write, Description("Hardened UNC Paths: (Device) - Depends on hardeneduncpaths_Pol_HardenedPaths"), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths")] String pol_hardenedpaths[];
     [Write, Description("Prohibit connection to non-domain networks when connected to domain authenticated network (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String WCM_BlockNonDomain;
     [Write, Description("Configure Redirection Guard (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String ConfigureRedirectionGuardPolicy;
     [Write, Description("Redirection Guard Options (Device) - Depends on ConfigureRedirectionGuardPolicy (0: Redirection Guard Disabled, 1: Redirection Guard Enabled, 2: Redirection Guard Audit Only)"), ValueMap{"0", "1", "2"}, Values{"0", "1", "2"}] String RedirectionGuardPolicy_Enum;
@@ -282,7 +326,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("Prevent managing SmartScreen Filter (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String Disable_Managing_Safety_Filter_IE9;
     [Write, Description("Select SmartScreen Filter mode - Depends on Disable_Managing_Safety_Filter_IE9 (0: Off, 1: On)"), ValueMap{"0", "1"}, Values{"0", "1"}] String IE9SafetyFilterOptions;
     [Write, Description("Prevent per-user installation of ActiveX controls (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String DisablePerUserActiveXInstall;
-    [Write, Description("Remove "Run this time" button for outdated ActiveX controls in Internet Explorer (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String VerMgmtDisableRunThisTime;
+    [Write, Description("Remove 'Run this time' button for outdated ActiveX controls in Internet Explorer (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String VerMgmtDisableRunThisTime;
     [Write, Description("Turn off blocking of outdated ActiveX controls for Internet Explorer (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String VerMgmtDisable;
     [Write, Description("Allow fallback to SSL 3.0 (Internet Explorer) (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String Advanced_EnableSSL3Fallback;
     [Write, Description("Allow insecure fallback for: - Depends on Advanced_EnableSSL3Fallback (0: No Sites, 1: Non-Protected Mode Sites, 3: All Sites)"), ValueMap{"0", "1", "3"}, Values{"0", "1", "3"}] String Advanced_EnableSSL3FallbackOptions;
@@ -358,43 +402,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("Allow Realtime Monitoring (0: Not allowed. Turns off the real-time monitoring service., 1: Allowed. Turns on and runs the real-time monitoring service.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowRealtimeMonitoring;
     [Write, Description("Allow scanning of all downloaded files and attachments (0: Not allowed., 1: Allowed.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowIOAVProtection;
     [Write, Description("Allow Script Scanning (0: Not allowed., 1: Allowed.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowScriptScanning;
-    [Write, Description("Block execution of potentially obfuscated scripts - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutionOfPotentiallyObfuscatedScripts;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Win32 API calls from Office macros - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockWin32APICallsFromOfficeMacros;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block executable files from running unless they meet a prevalence, age, or trusted list criterion - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Office communication application from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeCommunicationAppFromCreatingChildProcesses;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block all Office applications from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAllOfficeApplicationsFromCreatingChildProcesses;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Adobe Reader from creating child processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAdobeReaderFromCreatingChildProcesses;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block credential stealing from the Windows local security authority subsystem - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block JavaScript or VBScript from launching downloaded executable content - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Webshell creation for Servers - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockWebshellCreationForServers;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockWebshellCreationForServers_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block untrusted and unsigned processes that run from USB - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockUntrustedUnsignedProcessesThatRunFromUSB;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block persistence through WMI event subscription - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockPersistenceThroughWMIEventSubscription;
-    [Write, Description("[PREVIEW] Block use of copied or impersonated system tools - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockUseOfCopiedOrImpersonatedSystemTools;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block abuse of exploited vulnerable signed drivers (Device) - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockAbuseOfExploitedVulnerableSignedDrivers;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block process creations originating from PSExec and WMI commands - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockProcessCreationsFromPSExecAndWMICommands;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Office applications from creating executable content - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeApplicationsFromCreatingExecutableContent;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block Office applications from injecting code into other processes - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions[];
-    [Write, Description("[PREVIEW] Block rebooting machine in Safe Mode - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockRebootingMachineInSafeMode;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions[];
-    [Write, Description("Use advanced protection against ransomware - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String UseAdvancedProtectionAgainstRansomware;
-    [Write, Description("ASR Only Per Rule Exclusions")] String UseAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions[];
-    [Write, Description("Block executable content from email client and webmail - Depends on AttackSurfaceReductionRules (off: Off, block: Block, audit: Audit, warn: Warn)"), ValueMap{"off", "block", "audit", "warn"}, Values{"off", "block", "audit", "warn"}] String BlockExecutableContentFromEmailClientAndWebmail;
-    [Write, Description("ASR Only Per Rule Exclusions")] String BlockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions[];
+    [Write, Description("Attack Surface Reduction Rules"), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules")] String AttackSurfaceReductionRules;
     [Write, Description("Cloud Block Level (0: NotConfigured, 2: High, 4: HighPlus, 6: ZeroTolerance)"), ValueMap{"0", "2", "4", "6"}, Values{"0", "2", "4", "6"}] String CloudBlockLevel;
     [Write, Description("Cloud Extended Timeout")] SInt32 CloudExtendedTimeout;
     [Write, Description("Disable Local Admin Merge (0: Enable Local Admin Merge, 1: Disable Local Admin Merge)"), ValueMap{"0", "1"}, Values{"0", "1"}] String DisableLocalAdminMerge;
@@ -412,7 +420,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("Device Password Expiration - Depends on DevicePasswordEnabled")] SInt32 DevicePasswordExpiration;
     [Write, Description("Min Device Password Length - Depends on DevicePasswordEnabled")] SInt32 MinDevicePasswordLength;
     [Write, Description("Alphanumeric Device Password Required - Depends on DevicePasswordEnabled (0: Password or Alphanumeric PIN required., 1: Password or Numeric PIN required., 2: Password, Numeric PIN, or Alphanumeric PIN required.)"), ValueMap{"0", "1", "2"}, Values{"0", "1", "2"}] String AlphanumericDevicePasswordRequired;
-    [Write, Description("Min Device Password Complex Characters (1: Digits only, 2: Digits and lowercase letters are required, 3: Digits lowercase letters and uppercase letters are required. Not supported in desktop Microsoft accounts and domain accounts, 4: Digits lowercase letters uppercase letters and special characters are required. Not supported in desktop)"), ValueMap{"1", "2", "3", "4"}, Values{"1", "2", "3", "4"}] String MinDevicePasswordComplexCharacters;
     [Write, Description("Max Device Password Failed Attempts - Depends on DevicePasswordEnabled")] SInt32 MaxDevicePasswordFailedAttempts;
     [Write, Description("Min Device Password Complex Characters - Depends on DevicePasswordEnabled (1: Digits only, 2: Digits and lowercase letters are required, 3: Digits lowercase letters and uppercase letters are required. Not supported in desktop Microsoft accounts and domain accounts, 4: Digits lowercase letters uppercase letters and special characters are required. Not supported in desktop)"), ValueMap{"1", "2", "3", "4"}, Values{"1", "2", "3", "4"}] String MinDevicePasswordComplexCharacters;
     [Write, Description("Max Inactivity Time Device Lock - Depends on DevicePasswordEnabled")] SInt32 MaxInactivityTimeDeviceLock;
@@ -446,7 +453,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("MSI Allow User Control Over Install (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String MSIAllowUserControlOverInstall;
     [Write, Description("MSI Always Install With Elevated Privileges (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String MSIAlwaysInstallWithElevatedPrivileges;
     [Write, Description("Configure Microsoft Defender SmartScreen (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String SmartScreenEnabled;
-    [Write, Description("Prevent bypassing Microsoft Defender SmartScreen prompts for sites (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String MicrosoftEdge_~SmartScreen_PreventSmartScreenPromptOverride;
+    [Write, Description("Prevent bypassing Microsoft Defender SmartScreen prompts for sites (0: Disabled, 1: Enabled)"), ValueMap{"0", "1"}, Values{"0", "1"}] String MicrosoftEdge_SmartScreen_PreventSmartScreenPromptOverride;
     [Write, Description("Let Apps Activate With Voice Above Lock (0: User in control. Users can decide if Windows apps can be activated by voice while the screen is locked using Settings > Privacy options on the device., 1: Force allow. Windows apps can be activated by voice while the screen is locked, and users cannot change it., 2: Force deny. Windows apps cannot be activated by voice while the screen is locked, and users cannot change it.)"), ValueMap{"0", "1", "2"}, Values{"0", "1", "2"}] String LetAppsActivateWithVoiceAboveLock;
     [Write, Description("Allow Indexing Encrypted Stores Or Items (0: Not allowed., 1: Allowed.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowIndexingEncryptedStoresOrItems;
     [Write, Description("Enable Smart Screen In Shell (0: Disabled., 1: Enabled.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String EnableSmartScreenInShell;
@@ -490,7 +497,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("AD Password Encryption Principal - Depends on BackupDirectory")] String ADPasswordEncryptionPrincipal;
     [Write, Description("Password Expiration Protection Enabled - Depends on BackupDirectory (false: Allow configured password expiriration timestamp to exceed maximum password age, true: Do not allow configured password expiriration timestamp to exceed maximum password age)"), ValueMap{"false", "true"}, Values{"false", "true"}] String PasswordExpirationProtectionEnabled;
 };
-
 [ClassVersion("1.0.0.0")]
 class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10
 {
@@ -510,12 +516,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselin
 class MSFT_IntuneSecurityBaselineWindows10 : OMI_BaseResource
 {
     [Write, Description("Policy description")] String Description;
-    [Key, Description("Policy name")] String DisplayName;    
+    [Key, Description("Policy name")] String DisplayName;
     [Write, Description("List of Scope Tags for this Entity instance.")] String RoleScopeTagIds[];
-    [Weite, Description("The unique identifier for an entity. Read-only.")] String Id;
-    [Write, Description(""), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBaselineWindows10")] String DeviceSettings;
-    [Write, Description(""), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10")] String UserSettings;
-
+    [Write, Description("The unique identifier for an entity. Read-only.")] String Id;
+    [Write, Description("The policy settings for the device scope."), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBaselineWindows10")] String DeviceSettings;
+    [Write, Description("The policy settings for the user scope."), EmbeddedInstance("MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10")] String UserSettings;
     [Write, Description("Represents the assignment to the Intune policy."), EmbeddedInstance("MSFT_DeviceManagementConfigurationPolicyAssignments")] String Assignments[];
     [Write, Description("Present ensures the policy exists, absent ensures it is removed."), ValueMap{"Present","Absent"}, Values{"Present","Absent"}] string Ensure;
     [Write, Description("Credentials of the Admin"), EmbeddedInstance("MSFT_Credential")] string Credential;

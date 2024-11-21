@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* IntuneSecurityBaselineDefenderForEndpoint
+  * Added Group.Read.All permission.
+* IntuneSecurityBaselineWindows10
+  * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
