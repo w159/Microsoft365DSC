@@ -1,7 +1,8 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
-
+* IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
