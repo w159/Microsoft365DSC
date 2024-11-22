@@ -4,6 +4,12 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* EXORecipientPermission
+  * Added logic to update an existing recipient's permissions.
+* EXOEOPProtectionPolicyRule
+  * Added support for AccessTokens.
+* EXOExternalInOutlook
+  * Added support for AccessTokens.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * MISC
