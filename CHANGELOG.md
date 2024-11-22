@@ -2,12 +2,16 @@
 
 # UNRELEASED
 
+* AAD
+  * Added ApplicationSecret auth method to multiple resources
 * EXORecipientPermission
   * Added logic to update an existing recipient's permissions.
 * EXOEOPProtectionPolicyRule
   * Added support for AccessTokens.
 * EXOExternalInOutlook
   * Added support for AccessTokens.
+* IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
@@ -84,12 +88,17 @@
   * Initial release.
 * SCPolicyConfig
   * Fixed an issue extracting empty groups properties.
+* TeamsMeetingPolicy
+  * FIXES #5442(https://github.com/microsoft/Microsoft365DSC/issues/5442)
 * TeamsUpdateManagementPolicy
   * Added conversion of the UpdateTimeOfDay parameter to the local culture format
     so that the comparison will work consistently.
     FIXES [#5424](https://github.com/microsoft/Microsoft365DSC/issues/5424)
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
+* AADUser
+  * Fixed issue updating user group membership when looking for the group by DisplayName.
+  * Fixed missing User Id when changing  group membership in Set-TargetResource function.
 
 # 1.24.1113.1
 
