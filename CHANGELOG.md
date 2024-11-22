@@ -4,6 +4,8 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
