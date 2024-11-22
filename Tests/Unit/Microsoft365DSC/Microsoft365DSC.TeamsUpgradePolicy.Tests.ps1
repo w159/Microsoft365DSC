@@ -49,7 +49,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Identity               = 'Test Policy'
-                    Users                  = @('john.smith@contoso.onmicrosoft.com')
                     MigrateMeetingsToTeams = $false
                     Credential             = $Credential
                 }
@@ -68,7 +67,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Identity               = 'Test Policy'
-                    Users                  = @('john.smith@contoso.onmicrosoft.com')
                     MigrateMeetingsToTeams = $false
                     Credential             = $Credential
                 }
@@ -78,13 +76,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Identity       = 'Test Policy'
                         Description    = 'This is a configuration drift'
                         NotifySfBUsers = $false
-                    }
-                }
-
-                Mock -CommandName Get-CsOnlineUser -MockWith {
-                    return @{
-                        UserPrincipalName  = 'Bob.Houle@contoso.onmicrosoft.com'
-                        TeamsUpgradePolicy = 'Global'
                     }
                 }
             }
@@ -103,7 +94,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Identity               = 'Islands'
-                    Users                  = @('john.smith@contoso.onmicrosoft.com')
                     MigrateMeetingsToTeams = $false
                     Credential             = $Credential
                 }
@@ -113,13 +103,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Identity       = 'Islands'
                         Description    = 'This is a test policy'
                         NotifySfBUsers = $false
-                    }
-                }
-
-                Mock -CommandName Get-CsOnlineUser -MockWith {
-                    return @{
-                        UserPrincipalName  = 'John.Smith@contoso.onmicrosoft.com'
-                        TeamsUpgradePolicy = 'Islands'
                     }
                 }
             }
@@ -142,13 +125,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Identity       = 'Islands'
                         Description    = 'Test Description'
                         NotifySfBUsers = $false
-                    }
-                }
-
-                Mock -CommandName Get-CsOnlineUser -MockWith {
-                    return @{
-                        UserPrincipalName  = 'John.Smith@contoso.onmicrosoft.com'
-                        TeamsUpgradePolicy = 'Islands'
                     }
                 }
             }
