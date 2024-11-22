@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AAD
+  * Added ApplicationSecret auth method to multiple resources
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
