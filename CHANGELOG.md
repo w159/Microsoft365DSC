@@ -2,8 +2,13 @@
 
 # UNRELEASED
 
-* AAD - Added ApplicationSecret auth method to multiple resources
-  * PR #5409
+* AAD
+  * Added ApplicationSecret auth method to multiple resources
+* MISC
+  * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+
+# 1.24.1120.1
+
 * AADAdminConsentRequestPolicy
   * Added error handling to Group display name retrieval to prevent errors
     when an assigned group no longer exists.
@@ -75,6 +80,8 @@
   * Initial release.
 * SCPolicyConfig
   * Fixed an issue extracting empty groups properties.
+* TeamsMeetingPolicy
+  * FIXES #5442(https://github.com/microsoft/Microsoft365DSC/issues/5442)
 * TeamsUpdateManagementPolicy
   * Added conversion of the UpdateTimeOfDay parameter to the local culture format
     so that the comparison will work consistently.
@@ -106,7 +113,13 @@
 * IntuneAntivirusPolicyWindows10SettingCatalog
   * Update properties to be upper-case.
     Fixes [#5373](https://github.com/microsoft/Microsoft365DSC/issues/5373)
-* IntuneSecurityBaselineMicrosoftEdge
+* IntuneDeviceConfigurationCustomPolicyWindows10
+  * Fixed issue where `Value`, from `OmaSettings`, could not be compared
+    correctly if it was boolean and set to `$False`
+    FIXES [#5384](https://github.com/microsoft/Microsoft365DSC/issues/5384)
+* IntuneEndpointDetectionAndResponsePolicyWindows10
+  * Remove changed property name from export.
+    FIXES [#5300](https://github.com/microsoft/Microsoft365DSC/issues/5300)* IntuneSecurityBaselineMicrosoftEdge
   * Deprecate property `authschemes` and replace with `AuthSchemes_AuthSchemes`
 * M365DSCDRGUtil
   * Restrict CIM instance access to properties that appear multiple times.
