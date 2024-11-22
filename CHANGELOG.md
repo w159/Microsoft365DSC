@@ -4,6 +4,8 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
 * M365DSCUtil
   * Add default Ensure value `Present` if not specified.
     FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
