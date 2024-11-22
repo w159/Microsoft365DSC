@@ -279,7 +279,7 @@ function Get-TargetResource
         if ($policy.Length -eq 0)
         {
             Write-Verbose -Message "No iOS App Protection Policy {$Identity} was found by Identity. Trying to retrieve by DisplayName"
-            [Array]$policy = Get-MgBetaDeviceAppManagementiOSManagedAppProtection -Filter "DisplayName eq '$DisplayName'" -ErrorAction SilentlyContinue
+            [Array]$policy = Get-MgBetaDeviceAppManagementiOSManagedAppProtection -All -Filter "DisplayName eq '$DisplayName'" -ErrorAction SilentlyContinue
         }
 
         if ($policy.Length -gt 1)

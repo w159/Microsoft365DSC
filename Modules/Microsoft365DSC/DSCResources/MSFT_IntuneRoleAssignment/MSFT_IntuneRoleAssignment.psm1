@@ -117,7 +117,7 @@ function Get-TargetResource
         {
             Write-Verbose -Message "Nothing with id {$id} was found"
             $Filter = "displayName eq '$DisplayName'"
-            $getValue = Get-MgBetaDeviceManagementRoleAssignment -Filter $Filter -ErrorAction SilentlyContinue
+            $getValue = Get-MgBetaDeviceManagementRoleAssignment -All -Filter $Filter -ErrorAction SilentlyContinue
             if ($null -ne $getValue)
             {
                 Write-Verbose -Message "Found something with displayname {$DisplayName}"

@@ -173,6 +173,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $instance = Get-MgBetaDeviceAppManagementMobileApp `
+                    -All `
                     -Filter "(isof('microsoft.graph.officeSuiteApp') and displayName eq '$DisplayName')" `
                     -ErrorAction SilentlyContinue
             }

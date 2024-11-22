@@ -156,6 +156,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $instance = Get-MgBetaDeviceAppManagementMobileApp `
+                    -All `
                     -Filter "(isof('microsoft.graph.macOSLobApp') and displayName eq '$DisplayName')" `
                     -ErrorAction SilentlyContinue
             }

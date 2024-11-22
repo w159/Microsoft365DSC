@@ -90,18 +90,18 @@ function Get-TargetResource
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
-    
+
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
     try
     {
         if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $id -ErrorAction SilentlyContinue }
-        
+
         #region resource generator code
         if ($null -eq $getValue)
         {
-            $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+            $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
             -FilterScript { `
                 $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosMobileAppConfiguration' `
             }
@@ -124,7 +124,7 @@ function Get-TargetResource
             $mySettings.Add('appConfigKey', $setting['appConfigKey'])
             $mySettings.Add('appConfigKeyType', $setting['appConfigKeyType'])
             $mySettings.Add('appConfigKeyValue', $setting['appConfigKeyValue'])
-            
+
             if ($mySettings.values.Where({$null -ne $_}).count -gt 0)
             {
                 $complexSettings += $mySettings
@@ -135,7 +135,7 @@ function Get-TargetResource
             #region resource generator code
             Id                             = $getValue.Id
             Description                    = $getValue.Description
-            DisplayName                    = $getValue.DisplayName   
+            DisplayName                    = $getValue.DisplayName
             targetedMobileApps             = $getValue.TargetedMobileApps
             settings                       = $complexSettings #$getValue.AdditionalProperties.settings
             encodedSettingXml              = $getValue.AdditionalProperties.encodedSettingXml
@@ -150,7 +150,7 @@ function Get-TargetResource
             version                        = $getValue.AdditionalProperties.version
 
         }
-                                          
+
         $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppConfigurationAssignment -ManagedDeviceMobileAppConfigurationId $Results.Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
@@ -307,7 +307,7 @@ function Set-TargetResource
         }
 
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
-           
+
         #region resource generator code
         $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration @CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
@@ -668,7 +668,7 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
-           
+
             if ($Results.settings)
             {
                 $isCIMArray = $false
@@ -685,7 +685,7 @@ function Export-TargetResource
             $i++
             Write-Host $Global:M365DSCEmojiGreenCheckMark
         }
-        
+
         return $dscContent
     }
     catch

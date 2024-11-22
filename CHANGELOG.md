@@ -10,6 +10,8 @@
   * Added support for AccessTokens.
 * EXOExternalInOutlook
   * Added support for AccessTokens.
+* INTUNE
+  * Add parameter `-All` to Graph requests to fetch all policies on Get.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * MISC
