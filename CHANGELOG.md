@@ -2,6 +2,12 @@
 
 # UNRELEASED
 
+* EXORecipientPermission
+  * Added logic to update an existing recipient's permissions.
+* EXOEOPProtectionPolicyRule
+  * Added support for AccessTokens.
+* EXOExternalInOutlook
+  * Added support for AccessTokens.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
