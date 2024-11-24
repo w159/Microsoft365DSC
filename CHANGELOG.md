@@ -14,6 +14,7 @@
   * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+  * Add separate module handling for PowerShell Core.
 
 # 1.24.1120.1
 
