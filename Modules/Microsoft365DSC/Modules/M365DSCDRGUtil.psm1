@@ -2349,7 +2349,15 @@ function Export-IntuneSettingCatalogPolicySettings
     {
         '#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance'
         {
-            $settingValue = if ($IsRoot) { $SettingInstance.AdditionalProperties.simpleSettingValue.value } else { $SettingInstance.simpleSettingValue.value }
+            $simpleSetting = if ($IsRoot) { $SettingInstance.AdditionalProperties.simpleSettingValue } else { $SettingInstance.simpleSettingValue }
+            if ($simpleSetting.'@odata.type' -eq '#microsoft.graph.deviceManagementConfigurationIntegerSettingValue')
+            {
+                $settingValue = [int]$simpleSetting.value
+            }
+            else
+            {
+                $settingValue = $simpleSetting.value
+            }
         }
         '#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance'
         {
@@ -2439,16 +2447,30 @@ function Export-IntuneSettingCatalogPolicySettings
         '#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance'
         {
             $values = @()
-            $childValues = if ($IsRoot) { $SettingInstance.AdditionalProperties.simpleSettingCollectionValue.value } else { $SettingInstance.simpleSettingCollectionValue.value }
+            $childValues = if ($IsRoot) { $SettingInstance.AdditionalProperties.simpleSettingCollectionValue } else { $SettingInstance.simpleSettingCollectionValue }
             foreach ($value in $childValues)
             {
-                $values += $value
+                if ($value.'@odata.type' -eq '#microsoft.graph.deviceManagementConfigurationIntegerSettingValue')
+                {
+                    $values += [int]$value.value
+                }
+                else
+                {
+                    $values += $value.value
+                }
             }
             $settingValue = $values
         }
         Default
         {
-            $settingValue = $SettingInstance.value
+            if ($SettingInstance.'@odata.type' -eq '#microsoft.graph.deviceManagementConfigurationIntegerSettingValue')
+            {
+                $settingValue += [int]$SettingInstance.value
+            }
+            else
+            {
+                $settingValue = $SettingInstance.value
+            }
         }
     }
 
