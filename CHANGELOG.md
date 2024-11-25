@@ -4,16 +4,19 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* EXOEOPProtectionPolicyRule
+  * Added support for AccessTokens.
+* EXOExternalInOutlook
+  * Added support for AccessTokens.
 * EXOMailContact
   * Changed how empty arrays are returned.
 * EXOPlace
   * Changed how empty arrays are returned.
 * EXORecipientPermission
   * Added logic to update an existing recipient's permissions.
-* EXOEOPProtectionPolicyRule
-  * Added support for AccessTokens.
-* EXOExternalInOutlook
-  * Added support for AccessTokens.
+* EXOTransportRule
+  * Changed how empty arrays are returned.
+
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * TeamsUserPolicyAssignment
