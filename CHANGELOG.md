@@ -16,9 +16,12 @@
   * Added logic to update an existing recipient's permissions.
 * EXOTransportRule
   * Changed how empty arrays are returned.
-
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
+* IntuneAppConfigurationPolicy
+  * Fixes an issue where assignment wasn't properly set if the
+    groupId was null.
+    FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
 * TeamsUpgradePolicy
