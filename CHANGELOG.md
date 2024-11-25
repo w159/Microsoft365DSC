@@ -4,13 +4,29 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* EXORecipientPermission
+  * Added logic to update an existing recipient's permissions.
+* EXOEOPProtectionPolicyRule
+  * Added support for AccessTokens.
+* EXOExternalInOutlook
+  * Added support for AccessTokens.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
+* TeamsUserPolicyAssignment
+  * Added support for the Global policies.
+* TeamsUpgradePolicy
+  * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
+    instead.
 * M365DSCUtil
   * Add default Ensure value `Present` if not specified.
     FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+* DEPENDENCIES
+  * Updated DSCParser to version 2.0.0.13.
+  * Updated Microsoft.Graph to version 2.25.0.
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.200.
+  * Updated MicrosoftTeams to version 6.7.0.
 
 # 1.24.1120.1
 
