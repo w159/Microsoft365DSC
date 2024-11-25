@@ -57,9 +57,8 @@ function Get-TargetResource
 
         [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is excludeList in the object
+        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
 
-        #defining next 4 as hashtables, hopefully right thing to do!?
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $server,
@@ -69,7 +68,7 @@ function Get-TargetResource
         $customData,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]] #[System.Collections.Hashtable]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $customKeyValueData,
 
         [Parameter()]
@@ -80,8 +79,6 @@ function Get-TargetResource
         [System.Collections.Hashtable]
         $targetedMobileApps,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
@@ -199,8 +196,7 @@ function Get-TargetResource
         -CommandName $CommandName `
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-    
+    #endregion    
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
@@ -226,7 +222,6 @@ function Get-TargetResource
         }
 
         Write-Verbose -Message "Found something with id {$id}"
-
 
         $complexServers = @()
         foreach ($currentservers in $getValue.AdditionalProperties.server)
@@ -254,7 +249,6 @@ function Get-TargetResource
             }
         }
 
-
         $complexCustomData = @()
         foreach ($value in $getValue.AdditionalProperties.customData)
         {
@@ -278,8 +272,6 @@ function Get-TargetResource
                 $complexCustomKeyValueData += $myCVdata
             }
         }
-
-
 
         $results = @{
             #region resource generator code
@@ -326,8 +318,6 @@ function Get-TargetResource
 
         }
                                           
-
-
         #$assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Id
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Results.Id
         $assignmentResult = @()
@@ -411,7 +401,7 @@ function Set-TargetResource
 
         [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is excludeList in the object
+        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -433,8 +423,6 @@ function Set-TargetResource
         [System.Collections.Hashtable]
         $targetedMobileApps,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
@@ -588,15 +576,12 @@ function Set-TargetResource
         }
     }
 
-
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating {$DisplayName}"
         $PSBoundParameters.Remove('Assignments') | Out-Null
-
         $CreateParameters = ([Hashtable]$PSBoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($CreateParameters)
 
         foreach ($key in $AdditionalProperties.keys)
@@ -647,12 +632,12 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating {$DisplayName}"
-        $PSBoundParameters.Remove('Assignments') | Out-Null
 
+        $PSBoundParameters.Remove('Assignments') | Out-Null
         $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($UpdateParameters)
+
         foreach ($key in $AdditionalProperties.keys)
         {
             if ($key -ne '@odata.type')
@@ -689,7 +674,6 @@ function Set-TargetResource
             
             #add the additional properties to the updateparameters
             $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
-
         }
 
         #region resource generator code
@@ -769,9 +753,8 @@ function Test-TargetResource
 
         [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is excludeList in the object
+        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
 
-        #defining next 4 as hashtables, hopefully right thing to do!?
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $server,
@@ -792,8 +775,6 @@ function Test-TargetResource
         [System.Collections.Hashtable]
         $targetedMobileApps,
 
-        #======================
-        #standard params
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
@@ -832,7 +813,6 @@ function Test-TargetResource
         [System.String[]]
         $AccessTokens,
 
-                #latest updates
         [Parameter()]
         [System.UInt32]
         $version,
@@ -1239,6 +1219,7 @@ function Export-TargetResource
         return ''
     }
 }
+
 function Get-M365DSCAdditionalProperties
 {
     [CmdletBinding()]
