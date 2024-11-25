@@ -782,14 +782,22 @@ function Compare-M365DSCComplexObject
                 }
                 elseif ($targetType -eq 'String')
                 {
-                    # Remove carriage return and line feed characters
-                    $referenceObject = $referenceObject.Replace("`r`n", "`n")
-                    $differenceObject = $differenceObject.Replace("`r`n", "`n")
-
-                    $ordinalComparison = [System.String]::Equals($referenceObject, $differenceObject, [System.StringComparison]::Ordinal)
-                    if (-not $ordinalComparison)
+                    # Align line breaks
+                    if (-not [System.String]::IsNullOrEmpty($referenceObject))
                     {
-                        $compareResult = $true
+                        $referenceObject = $referenceObject.Replace("`r`n", "`n")
+                    }
+
+                    if (-not [System.String]::IsNullOrEmpty($differenceObject))
+                    {
+                        $differenceObject = $differenceObject.Replace("`r`n", "`n")
+                    }
+
+                    $compareResult = $true
+                    $ordinalComparison = [System.String]::Equals($referenceObject, $differenceObject, [System.StringComparison]::Ordinal)
+                    if ($ordinalComparison)
+                    {
+                        $compareResult = $null
                     }
                 }
                 else
