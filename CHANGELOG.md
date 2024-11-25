@@ -19,6 +19,10 @@
     instead.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+* DEPENDENCIES
+  * Updated DSCParser to version 2.0.0.13
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.200.
+  * Updated MicrosoftTeams to version 6.7.0.
 
 # 1.24.1120.1
 

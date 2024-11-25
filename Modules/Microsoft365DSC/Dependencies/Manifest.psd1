@@ -18,7 +18,7 @@
         },
         @{
             ModuleName      = 'DSCParser'
-            RequiredVersion = '2.0.0.12'
+            RequiredVersion = '2.0.0.13'
         },
         @{
             ModuleName      = 'ExchangeOnlineManagement'
@@ -114,11 +114,11 @@
         },
         @{
             ModuleName      = 'Microsoft.PowerApps.Administration.PowerShell'
-            RequiredVersion = '2.0.199'
+            RequiredVersion = '2.0.200'
         },
         @{
             ModuleName      = 'MicrosoftTeams'
-            RequiredVersion = '6.6.0'
+            RequiredVersion = '6.7.0'
         },
         @{
             ModuleName      = "MSCloudLoginAssistant"
