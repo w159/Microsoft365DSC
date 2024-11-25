@@ -608,7 +608,7 @@ function Compare-M365DSCComplexObject
     {
         if ($Source.Length -ne $Target.Length)
         {
-            Write-Verbose -Message "Configuration drift - The complex array have different number of items: Source {$($Source.Length)} Target {$($Target.Length)}"
+            Write-Verbose -Message "Configuration drift - The complex array have different number of items: Source {$($Source.Length)}, Target {$($Target.Length)}"
             return $false
         }
         if ($Source.Length -eq 0)
@@ -627,7 +627,9 @@ function Compare-M365DSCComplexObject
 
             if (-not $compareResult)
             {
-                Write-Verbose -Message "Configuration drift - Intune Policy Assignment: $key Source {$Source} Target {$Target}"
+                Write-Verbose -Message "Configuration drift - Intune Policy Assignment: $key"
+                Write-Verbose -Message "Source {$Source}"
+                Write-Verbose -Message "Target {$Target}"
                 return $false
             }
 
@@ -724,7 +726,9 @@ function Compare-M365DSCComplexObject
                 $targetValue = 'null'
             }
 
-            Write-Verbose -Message "Configuration drift - key: $key Source {$sourceValue} Target {$targetValue}"
+            Write-Verbose -Message "Configuration drift - key: $key"
+            Write-Verbose -Message "Source {$sourceValue}"
+            Write-Verbose -Message "Target {$targetValue}"
             return $false
         }
 
@@ -753,7 +757,9 @@ function Compare-M365DSCComplexObject
 
                 if (-not $compareResult)
                 {
-                    Write-Verbose -Message "Configuration drift - complex object key: $key Source {$sourceValue} Target {$targetValue}"
+                    Write-Verbose -Message "Configuration drift - complex object key: $key"
+                    Write-Verbose -Message "Source {$sourceValue}"
+                    Write-Verbose -Message "Target {$targetValue}"
                     return $false
                 }
             }
@@ -774,6 +780,18 @@ function Compare-M365DSCComplexObject
                         $compareResult = $null
                     }
                 }
+                elseif ($targetType -eq 'String')
+                {
+                    # Remove carriage return and line feed characters
+                    $referenceObject = $referenceObject.Replace("`r`n", "`n")
+                    $differenceObject = $differenceObject.Replace("`r`n", "`n")
+
+                    $ordinalComparison = [System.String]::Equals($referenceObject, $differenceObject, [System.StringComparison]::Ordinal)
+                    if (-not $ordinalComparison)
+                    {
+                        $compareResult = $true
+                    }
+                }
                 else
                 {
                     $compareResult = Compare-Object `
@@ -783,7 +801,9 @@ function Compare-M365DSCComplexObject
 
                 if ($null -ne $compareResult)
                 {
-                    Write-Verbose -Message "Configuration drift - simple object key: $key Source {$sourceValue} Target {$targetValue}"
+                    Write-Verbose -Message "Configuration drift - simple object key: $key"
+                    Write-Verbose -Message "Source {$sourceValue}"
+                    Write-Verbose -Message "Target {$targetValue}"
                     return $false
                 }
             }
