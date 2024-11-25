@@ -12,6 +12,11 @@
   * Added support for AccessTokens.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
+* TeamsUserPolicyAssignment
+  * Added support for the Global policies.
+* TeamsUpgradePolicy
+  * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
+    instead.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
