@@ -4,12 +4,19 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
-* EXORecipientPermission
-  * Added logic to update an existing recipient's permissions.
 * EXOEOPProtectionPolicyRule
   * Added support for AccessTokens.
 * EXOExternalInOutlook
   * Added support for AccessTokens.
+* EXOMailContact
+  * Changed how empty arrays are returned.
+* EXOPlace
+  * Changed how empty arrays are returned.
+* EXORecipientPermission
+  * Added logic to update an existing recipient's permissions.
+* EXOTransportRule
+  * Changed how empty arrays are returned.
+
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * TeamsUserPolicyAssignment
@@ -20,7 +27,7 @@
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 * DEPENDENCIES
-  * Updated DSCParser to version 2.0.0.13.
+  * Updated DSCParser to version 2.0.0.14.
   * Updated Microsoft.Graph to version 2.25.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.200.
   * Updated MicrosoftTeams to version 6.7.0.
