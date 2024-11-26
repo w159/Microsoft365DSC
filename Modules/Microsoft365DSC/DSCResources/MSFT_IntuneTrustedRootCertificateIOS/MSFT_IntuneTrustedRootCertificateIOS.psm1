@@ -96,7 +96,7 @@
         #region resource generator code
         if ($null -eq $getValue)
         {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
             -FilterScript { `
                 $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosTrustedRootCertificate' `
             }
@@ -432,40 +432,18 @@ function Test-TargetResource
     }
     $testResult = $true
 
+    #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)
     {
-        if ($PSBoundParameters[$key].getType().Name -like '*CimInstance*')
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+        if ($source.GetType().Name -like '*CimInstance*')
         {
-            $CIMArraySource = @()
-            $CIMArrayTarget = @()
-            $CIMArraySource += $PSBoundParameters[$key]
-            $CIMArrayTarget += $CurrentValues.$key
-            if ($CIMArraySource.count -ne $CIMArrayTarget.count)
-            {
-            Write-Verbose -Message "$PSBoundParameters[$key]"
-                Write-Verbose -Message "Configuration drift:Number of items does not match: Source=$($CIMArraySource.count) Target=$($CIMArrayTarget.count)"
-                $testResult = $false
-                break
-            }
-            $i = 0
-            foreach ($item in $CIMArraySource )
-            {
-                $testResult = Compare-M365DSCComplexObject `
-                    -Source (Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $CIMArraySource[$i]) `
-                    -Target ($CIMArrayTarget[$i])
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
 
-                $i++
-                if (-Not $testResult)
-                {
-                    $testResult = $false
-                    break
-                }
-            }
-            if (-Not $testResult)
-            {
-                $testResult = $false
-                break
-            }
+            if (-not $testResult) { break }
 
             $ValuesToCheck.Remove($key) | Out-Null
         }
