@@ -3204,10 +3204,13 @@ function Update-M365DSCDependencies
         [Parameter()]
         [Switch]
         $ValidateOnly,
+
         [Parameter()]
         [ValidateSet("CurrentUser", "AllUsers")]
         $Scope = "AllUsers"
     )
+
+    $isPSResourceGetInstalled = Get-Module -Name Microsoft.PowerShell.PSResourceGet -ListAvailable
 
     try
     {
@@ -3258,14 +3261,14 @@ function Update-M365DSCDependencies
                     }
                     if (-not $errorFound)
                     {
-                        if (-not $dependency.PowerShellCore -and $Script:IsPowerShellCore)
+                        if (($dependency.PowerShellCore -eq $false -or $dependency.InstallLocation -eq "WindowsPowerShell") -and $Script:IsPowerShellCore)
                         {
-                            Write-Warning "The dependency {$($dependency.ModuleName)} does not support PowerShell Core. Please run Update-M365DSCDependencies in Windows PowerShell."
+                            Write-Warning "The dependency {$($dependency.ModuleName)} requires Windows PowerShell for installation. Please run Update-M365DSCDependencies in Windows PowerShell."
                             continue
                         }
                         elseif ($dependency.PowerShellCore -and -not $Script:IsPowerShellCore)
                         {
-                            Write-Warning "The dependency {$($dependency.ModuleName)} requires PowerShell Core. Please run Update-M365DSCDependencies in PowerShell Core."
+                            Write-Warning "The dependency {$($dependency.ModuleName)} requires PowerShell Core for installation. Please run Update-M365DSCDependencies in PowerShell Core."
                             continue
                         }
 
@@ -3276,7 +3279,15 @@ function Update-M365DSCDependencies
                             Remove-Module 'Microsoft.Graph.Authentication' -Force -ErrorAction SilentlyContinue
                         }
                         Remove-Module $dependency.ModuleName -Force -ErrorAction SilentlyContinue
-                        Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -AllowClobber -Force -Scope "$Scope"
+
+                        if ($null -eq $isPSResourceGetInstalled)
+                        {
+                            Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -AllowClobber -Force -Scope $Scope
+                        }
+                        else
+                        {
+                            Install-PSResource -Name $dependency.ModuleName -Version $dependency.RequiredVersion -AcceptLicense -Scope $Scope -Reinstall -TrustRepository
+                        }
                     }
                 }
 
