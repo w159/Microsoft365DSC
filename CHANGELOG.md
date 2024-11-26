@@ -12,6 +12,8 @@
   * Added support for AccessTokens.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
+* IntuneRoleScopeTag
+  * Initial release.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
 
