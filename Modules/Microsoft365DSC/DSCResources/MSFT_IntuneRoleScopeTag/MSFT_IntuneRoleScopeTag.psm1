@@ -16,6 +16,10 @@ function Get-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Assignments,
         #endregion
 
         [Parameter()]
@@ -52,7 +56,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Intune Role Scope Tag DisplayName {$DisplayName}"
+    Write-Verbose -Message "Getting configuration of the Intune Role Scope Tag with Id {$Id} DisplayName {$DisplayName}"
 
     try
     {
@@ -117,6 +121,14 @@ function Get-TargetResource
             #endregion
         }
 
+        $assignmentsValues = Get-MgBetaDeviceManagementRoleScopeTagAssignment -RoleScopeTagId $Id
+        $assignmentResult = @()
+        if ($assignmentsValues.Count -gt 0)
+        {
+            $assignmentResult += ConvertFrom-IntunePolicyAssignment -Assignments $assignmentsValues -IncludeDeviceFilter $true
+        }
+        $results.Add('Assignments', $assignmentResult)
+
         return [System.Collections.Hashtable] $results
     }
     catch
@@ -148,6 +160,10 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Assignments,
         #endregion
 
         [Parameter()]
@@ -205,30 +221,65 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Intune Role Scope Tag with DisplayName {$DisplayName}"
+        $BoundParameters.Remove("Assignments") | Out-Null
 
         $createParameters = ([Hashtable]$BoundParameters).Clone()
         $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
         $createParameters.Remove('Id') | Out-Null
 
+        $keys = (([Hashtable]$createParameters).Clone()).Keys
+        foreach ($key in $keys)
+        {
+            if ($null -ne $createParameters.$key -and $createParameters.$key.GetType().Name -like '*CimInstance*')
+            {
+                $createParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $createParameters.$key
+            }
+        }
+
         #region resource generator code
         $createParameters.Add("@odata.type", "#microsoft.graph.RoleScopeTag")
         $policy = New-MgBetaDeviceManagementRoleScopeTag -BodyParameter $createParameters
+
+        if ($policy.Id)
+        {
+            $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$false -Assignments $Assignments
+            Update-DeviceConfigurationPolicyAssignment `
+                -DeviceConfigurationPolicyId $policy.Id `
+                -Targets $assignmentsHash `
+                -Repository 'deviceManagement/roleScopeTags'
+        }
         #endregion
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Intune Role Scope Tag with Id {$($currentInstance.Id)}"
+        $BoundParameters.Remove("Assignments") | Out-Null
 
         $updateParameters = ([Hashtable]$BoundParameters).Clone()
         $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
 
         $updateParameters.Remove('Id') | Out-Null
 
+        $keys = (([Hashtable]$updateParameters).Clone()).Keys
+        foreach ($key in $keys)
+        {
+            if ($null -ne $updateParameters.$key -and $updateParameters.$key.GetType().Name -like '*CimInstance*')
+            {
+                $updateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.RoleScopeTagId
+            }
+        }
+
         #region resource generator code
         $UpdateParameters.Add("@odata.type", "#microsoft.graph.RoleScopeTag")
         Update-MgBetaDeviceManagementRoleScopeTag `
             -RoleScopeTagId $currentInstance.Id `
             -BodyParameter $UpdateParameters
+
+        $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$false -Assignments $Assignments
+        Update-DeviceConfigurationPolicyAssignment `
+            -DeviceConfigurationPolicyId $currentInstance.Id `
+            -Targets $assignmentsHash `
+            -Repository 'deviceManagement/roleScopeTags'
         #endregion
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
@@ -259,6 +310,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Assignments,
         #endregion
 
         [Parameter()]
@@ -318,6 +373,26 @@ function Test-TargetResource
         return $false
     }
     $testResult = $true
+
+    #Compare Cim instances
+    foreach ($key in $PSBoundParameters.Keys)
+    {
+        $source = $PSBoundParameters.$key
+        $target = $CurrentValues.$key
+        if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
+        {
+            $testResult = Compare-M365DSCComplexObject `
+                -Source ($source) `
+                -Target ($target)
+
+            if (-not $testResult)
+            {
+                break
+            }
+
+            $ValuesToCheck.Remove($key) | Out-Null
+        }
+    }
 
     $ValuesToCheck.Remove('Id') | Out-Null
     $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
@@ -436,11 +511,29 @@ function Export-TargetResource
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
 
+            if ($Results.Assignments)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Assignments -CIMInstanceName DeviceManagementConfigurationPolicyAssignments
+                if ($complexTypeStringResult)
+                {
+                    $Results.Assignments = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('Assignments') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
+
+            if ($Results.Assignments)
+            {
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -IsCIMArray:$true
+            }
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
