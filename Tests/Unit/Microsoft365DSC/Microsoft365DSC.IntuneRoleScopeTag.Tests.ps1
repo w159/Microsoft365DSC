@@ -124,9 +124,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneRoleScopeTag Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Description = 'FakeStringValue'
-                    DisplayName = 'FakeStringValue'
                     Id          = 'FakeStringValue'
+                    DisplayName = 'FakeStringValue'
+                    Description = 'FakeStringValue'
                     Ensure      = 'Present'
                     Credential  = $Credential
                 }
