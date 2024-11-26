@@ -242,21 +242,13 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
-
-    $PSBoundParameters.Remove('Ensure') | Out-Null
-    $PSBoundParameters.Remove('Credential') | Out-Null
-    $PSBoundParameters.Remove('ApplicationId') | Out-Null
-    $PSBoundParameters.Remove('ApplicationSecret') | Out-Null
-    $PSBoundParameters.Remove('TenantId') | Out-Null
-    $PSBoundParameters.Remove('CertificateThumbprint') | Out-Null
-    $PSBoundParameters.Remove('ManagedIdentity') | Out-Null
-    $PSBoundParameters.Remove('AccessTokens') | Out-Null
+    $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating {$DisplayName}"
-        $PSBoundParameters.Remove('Assignments') | Out-Null
-        $CreateParameters = ([Hashtable]$PSBoundParameters).clone()
+        $BoundParameters.Remove('Assignments') | Out-Null
+        $CreateParameters = ([Hashtable]$BoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($CreateParameters)
 
@@ -275,7 +267,6 @@ function Set-TargetResource
         }
 
         $CreateParameters.Remove('Id') | Out-Null
-        $CreateParameters.Remove('Verbose') | Out-Null
 
         foreach ($key in ($CreateParameters.clone()).Keys)
         {
@@ -302,8 +293,8 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating {$DisplayName}"
-        $PSBoundParameters.Remove('Assignments') | Out-Null
-        $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
+        $BoundParameters.Remove('Assignments') | Out-Null
+        $UpdateParameters = ([Hashtable]$BoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($UpdateParameters)
 
@@ -322,7 +313,6 @@ function Set-TargetResource
         }
 
         $UpdateParameters.Remove('Id') | Out-Null
-        $UpdateParameters.Remove('Verbose') | Out-Null
 
         foreach ($key in ($UpdateParameters.clone()).Keys)
         {
@@ -480,7 +470,9 @@ function Test-TargetResource
             $ValuesToCheck.Remove($key) | Out-Null
         }
     }
+
     $ValuesToCheck.Remove('Id') | Out-Null
+    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
