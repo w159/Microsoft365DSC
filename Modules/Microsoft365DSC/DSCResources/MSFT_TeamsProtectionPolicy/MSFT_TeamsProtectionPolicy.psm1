@@ -1,0 +1,665 @@
+function Get-TargetResource
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $AdminDisplayName,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalSubject,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromAddress,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromName,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalSubject,
+
+        [Parameter()]
+        [System.Boolean]
+        $CustomNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableExternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableFileFilter,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableInternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.String]
+        $ExternalSenderAdminAddress,
+
+        [Parameter()]
+        [ValidateSet('Quarantine', 'Reject')]
+        [System.String]
+        $FileTypeAction,
+
+        [Parameter()]
+        [System.String[]]
+        $FileTypes = @(),
+
+        [Parameter()]
+        [System.String]
+        $InternalSenderAdminAddress,
+
+        [Parameter()]
+        [System.Boolean]
+        $MakeDefault,
+
+        [Parameter()]
+        [System.String]
+        $QuarantineTag,
+
+        [Parameter()]
+        [System.Boolean]
+        $ZapEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
+
+        [Parameter()]
+        [System.String]
+        $CertificatePath,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $CertificatePassword,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
+    )
+
+    Write-Verbose -Message "Getting configuration of MalwareFilterPolicy for $($Identity)"
+    if ($Global:CurrentModeIsExport)
+    {
+        $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+            -InboundParameters $PSBoundParameters `
+            -SkipModuleReload $true
+    }
+    else
+    {
+        $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+            -InboundParameters $PSBoundParameters
+    }
+
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+
+    $nullReturn = $PSBoundParameters
+    $nullReturn.Ensure = 'Absent'
+
+    try
+    {
+        $MalwareFilterPolicys = Get-MalwareFilterPolicy -ErrorAction Stop
+
+        $MalwareFilterPolicy = $MalwareFilterPolicys | Where-Object -FilterScript { $_.Identity -eq $Identity }
+        if ($null -eq $MalwareFilterPolicy)
+        {
+            Write-Verbose -Message "MalwareFilterPolicy $($Identity) does not exist."
+            return $nullReturn
+        }
+        else
+        {
+            $result = @{
+                Identity                               = $Identity
+                AdminDisplayName                       = $MalwareFilterPolicy.AdminDisplayName
+                CustomExternalBody                     = $MalwareFilterPolicy.CustomExternalBody
+                CustomExternalSubject                  = $MalwareFilterPolicy.CustomExternalSubject
+                CustomFromAddress                      = $MalwareFilterPolicy.CustomFromAddress
+                CustomFromName                         = $MalwareFilterPolicy.CustomFromName
+                CustomInternalBody                     = $MalwareFilterPolicy.CustomInternalBody
+                CustomInternalSubject                  = $MalwareFilterPolicy.CustomInternalSubject
+                CustomNotifications                    = $MalwareFilterPolicy.CustomNotifications
+                EnableExternalSenderAdminNotifications = $MalwareFilterPolicy.EnableExternalSenderAdminNotifications
+                EnableFileFilter                       = $MalwareFilterPolicy.EnableFileFilter
+                EnableInternalSenderAdminNotifications = $MalwareFilterPolicy.EnableInternalSenderAdminNotifications
+                ExternalSenderAdminAddress             = $MalwareFilterPolicy.ExternalSenderAdminAddress
+                FileTypeAction                         = $MalwareFilterPolicy.FileTypeAction
+                FileTypes                              = $MalwareFilterPolicy.FileTypes
+                InternalSenderAdminAddress             = $MalwareFilterPolicy.InternalSenderAdminAddress
+                QuarantineTag                          = $MalwareFilterPolicy.QuarantineTag
+                MakeDefault                            = $MalwareFilterPolicy.IsDefault
+                ZapEnabled                             = $MalwareFilterPolicy.ZapEnabled
+                Credential                             = $Credential
+                Ensure                                 = 'Present'
+                ApplicationId                          = $ApplicationId
+                CertificateThumbprint                  = $CertificateThumbprint
+                CertificatePath                        = $CertificatePath
+                CertificatePassword                    = $CertificatePassword
+                Managedidentity                        = $ManagedIdentity.IsPresent
+                TenantId                               = $TenantId
+                AccessTokens                           = $AccessTokens
+            }
+
+            Write-Verbose -Message "Found MalwareFilterPolicy $($Identity)"
+            Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
+            return $result
+        }
+    }
+    catch
+    {
+        New-M365DSCLogEntry -Message 'Error retrieving data:' `
+            -Exception $_ `
+            -Source $($MyInvocation.MyCommand.Source) `
+            -TenantId $TenantId `
+            -Credential $Credential
+
+        return $nullReturn
+    }
+}
+function Set-TargetResource
+{
+    [CmdletBinding()]
+
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $AdminDisplayName,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalSubject,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromAddress,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromName,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalSubject,
+
+        [Parameter()]
+        [System.Boolean]
+        $CustomNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableExternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableFileFilter,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableInternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.String]
+        $ExternalSenderAdminAddress,
+
+        [Parameter()]
+        [ValidateSet('Quarantine', 'Reject')]
+        [System.String]
+        $FileTypeAction,
+
+        [Parameter()]
+        [System.String[]]
+        $FileTypes = @(),
+
+        [Parameter()]
+        [System.String]
+        $InternalSenderAdminAddress,
+
+        [Parameter()]
+        [System.Boolean]
+        $MakeDefault,
+
+        [Parameter()]
+        [System.String]
+        $QuarantineTag,
+
+        [Parameter()]
+        [System.Boolean]
+        $ZapEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
+
+        [Parameter()]
+        [System.String]
+        $CertificatePath,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $CertificatePassword,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
+    )
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+    Write-Verbose -Message "Setting configuration of MalwareFilterPolicy for $($Identity)"
+
+    $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+        -InboundParameters $PSBoundParameters
+
+    $MalwareFilterPolicys = Get-MalwareFilterPolicy
+    $MalwareFilterPolicy = $MalwareFilterPolicys | Where-Object -FilterScript { $_.Identity -eq $Identity }
+    $MalwareFilterPolicyParams = [System.Collections.Hashtable]($PSBoundParameters)
+    $MalwareFilterPolicyParams.Remove('Ensure') | Out-Null
+    $MalwareFilterPolicyParams.Remove('Credential') | Out-Null
+    $MalwareFilterPolicyParams.Remove('ApplicationId') | Out-Null
+    $MalwareFilterPolicyParams.Remove('TenantId') | Out-Null
+    $MalwareFilterPolicyParams.Remove('CertificateThumbprint') | Out-Null
+    $MalwareFilterPolicyParams.Remove('CertificatePath') | Out-Null
+    $MalwareFilterPolicyParams.Remove('CertificatePassword') | Out-Null
+    $MalwareFilterPolicyParams.Remove('ManagedIdentity') | Out-Null
+    $MalwareFilterPolicyParams.Remove('AccessTokens') | Out-Null
+
+    if (('Present' -eq $Ensure ) -and ($null -eq $MalwareFilterPolicy))
+    {
+        Write-Verbose -Message "Creating MalwareFilterPolicy $($Identity)."
+        $MalwareFilterPolicyParams.Add('Name', $Identity)
+        $MalwareFilterPolicyParams.Remove('Identity') | Out-Null
+        $MalwareFilterPolicyParams.Remove('MakeDefault') | Out-Null
+        New-MalwareFilterPolicy @MalwareFilterPolicyParams
+
+        if ($MakeDefault)
+        {
+            Set-MalwareFilterPolicy -Identity $Identity -MakeDefault
+        }
+    }
+    elseif (('Present' -eq $Ensure ) -and ($Null -ne $MalwareFilterPolicy))
+    {
+        Write-Verbose -Message "Setting MalwareFilterPolicy $($Identity) with values: $(Convert-M365DscHashtableToString -Hashtable $MalwareFilterPolicyParams)"
+        Set-MalwareFilterPolicy @MalwareFilterPolicyParams -Confirm:$false
+    }
+    elseif (('Absent' -eq $Ensure ) -and ($null -ne $MalwareFilterPolicy))
+    {
+        Write-Verbose -Message "Removing MalwareFilterPolicy $($Identity)"
+        Remove-MalwareFilterPolicy -Identity $Identity -Confirm:$false
+    }
+}
+
+function Test-TargetResource
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $AdminDisplayName,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomExternalSubject,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromAddress,
+
+        [Parameter()]
+        [System.String]
+        $CustomFromName,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalBody,
+
+        [Parameter()]
+        [System.String]
+        $CustomInternalSubject,
+
+        [Parameter()]
+        [System.Boolean]
+        $CustomNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableExternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableFileFilter,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableInternalSenderAdminNotifications,
+
+        [Parameter()]
+        [System.String]
+        $ExternalSenderAdminAddress,
+
+        [Parameter()]
+        [ValidateSet('Quarantine', 'Reject')]
+        [System.String]
+        $FileTypeAction,
+
+        [Parameter()]
+        [System.String[]]
+        $FileTypes = @(),
+
+        [Parameter()]
+        [System.String]
+        $InternalSenderAdminAddress,
+
+        [Parameter()]
+        [System.Boolean]
+        $MakeDefault,
+
+        [Parameter()]
+        [System.String]
+        $QuarantineTag,
+
+        [Parameter()]
+        [System.Boolean]
+        $ZapEnabled,
+
+        [Parameter()]
+        [ValidateSet('Present', 'Absent')]
+        [System.String]
+        $Ensure = 'Present',
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
+
+        [Parameter()]
+        [System.String]
+        $CertificatePath,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $CertificatePassword,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
+    )
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+
+    Write-Verbose -Message "Testing configuration of MalwareFilterPolicy for $($Identity)"
+
+    $CurrentValues = Get-TargetResource @PSBoundParameters
+
+    Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
+    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
+
+    $ValuesToCheck = $PSBoundParameters
+
+    $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
+        -Source $($MyInvocation.MyCommand.Source) `
+        -DesiredValues $PSBoundParameters `
+        -ValuesToCheck $ValuesToCheck.Keys
+
+    Write-Verbose -Message "Test-TargetResource returned $($TestResult)"
+
+    return $TestResult
+}
+
+function Export-TargetResource
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint,
+
+        [Parameter()]
+        [System.String]
+        $CertificatePath,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $CertificatePassword,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
+    )
+    $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+        -InboundParameters $PSBoundParameters `
+        -SkipModuleReload $true
+
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+
+    try
+    {
+        [array]$MalwareFilterPolicys = Get-MalwareFilterPolicy -ErrorAction Stop
+        if ($MalwareFilterPolicys.Length -eq 0)
+        {
+            Write-Host $Global:M365DSCEmojiGreenCheckMark
+        }
+        else
+        {
+            Write-Host "`r`n" -NoNewline
+        }
+        $dscContent = ''
+        $i = 1
+        foreach ($MalwareFilterPolicy in $MalwareFilterPolicys)
+        {
+            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            {
+                $Global:M365DSCExportResourceInstancesCount++
+            }
+
+            Write-Host "    |---[$i/$($MalwareFilterPolicys.length)] $($MalwareFilterPolicy.Identity)" -NoNewline
+
+            $Params = @{
+                Identity              = $MalwareFilterPolicy.Identity
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                CertificateThumbprint = $CertificateThumbprint
+                CertificatePassword   = $CertificatePassword
+                Managedidentity       = $ManagedIdentity.IsPresent
+                CertificatePath       = $CertificatePath
+                AccessTokens          = $AccessTokens
+            }
+
+            $Results = Get-TargetResource @Params
+
+            $keysToRemove = @()
+            foreach ($key in $Results.Keys)
+            {
+                if ([System.String]::IsNullOrEmpty($Results.$key))
+                {
+                    $keysToRemove += $key
+                }
+            }
+            foreach ($key in $keysToRemove)
+            {
+                $Results.Remove($key) | Out-Null
+            }
+            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
+                -Results $Results
+            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
+                -ConnectionMode $ConnectionMode `
+                -ModulePath $PSScriptRoot `
+                -Results $Results `
+                -Credential $Credential
+            $dscContent += $currentDSCBlock
+            Save-M365DSCPartialExport -Content $currentDSCBlock `
+                -FileName $Global:PartialExportFileName
+            Write-Host $Global:M365DSCEmojiGreenCheckMark
+            $i++
+        }
+        return $dscContent
+    }
+    catch
+    {
+        Write-Host $Global:M365DSCEmojiRedX
+
+        New-M365DSCLogEntry -Message 'Error during Export:' `
+            -Exception $_ `
+            -Source $($MyInvocation.MyCommand.Source) `
+            -TenantId $TenantId `
+            -Credential $Credential
+
+        return ''
+    }
+}
+Export-ModuleMember -Function *-TargetResource
+
