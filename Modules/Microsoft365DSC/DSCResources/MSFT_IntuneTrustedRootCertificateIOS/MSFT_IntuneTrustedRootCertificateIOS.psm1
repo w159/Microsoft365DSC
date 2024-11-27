@@ -110,6 +110,8 @@ function Get-TargetResource
             Write-Verbose -Message "No Intune Trusted Root Certificate Policy for iOS with Id {$id} was found"
             return $nullResult
         }
+        
+        $Id = $getValue.Id
 
         Write-Verbose -Message "An Intune Trusted Root Certificate Policy for iOS with id {$id} and DisplayName {$DisplayName} was found"
 
