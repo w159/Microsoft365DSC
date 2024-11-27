@@ -5,86 +5,27 @@ function Get-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $Identity,
+        $IsSingleInstance,
 
         [Parameter()]
         [System.String]
         $AdminDisplayName,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalBody,
+        $HighConfidencePhishQuarantineTag,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalSubject,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromAddress,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromName,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalBody,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalSubject,
-
-        [Parameter()]
-        [System.Boolean]
-        $CustomNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableExternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableFileFilter,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableInternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.String]
-        $ExternalSenderAdminAddress,
-
-        [Parameter()]
-        [ValidateSet('Quarantine', 'Reject')]
-        [System.String]
-        $FileTypeAction,
-
-        [Parameter()]
-        [System.String[]]
-        $FileTypes = @(),
-
-        [Parameter()]
-        [System.String]
-        $InternalSenderAdminAddress,
-
-        [Parameter()]
-        [System.Boolean]
-        $MakeDefault,
-
-        [Parameter()]
-        [System.String]
-        $QuarantineTag,
+        $MalwareQuarantineTag,
 
         [Parameter()]
         [System.Boolean]
         $ZapEnabled,
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -119,18 +60,9 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of MalwareFilterPolicy for $($Identity)"
-    if ($Global:CurrentModeIsExport)
-    {
-        $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
-            -InboundParameters $PSBoundParameters `
-            -SkipModuleReload $true
-    }
-    else
-    {
-        $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
-            -InboundParameters $PSBoundParameters
-    }
+    Write-Verbose -Message "Getting configuration of Teams Protection Policy"
+    $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+        -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -144,53 +76,42 @@ function Get-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $nullReturn = $PSBoundParameters
-    $nullReturn.Ensure = 'Absent'
+    $nullReturn = @{
+        IsSingleInstance                 = 'Yes'
+        AdminDisplayName                 = $null
+        HighConfidencePhishQuarantineTag = $null
+        MalwareQuarantineTag             = $null
+        ZapEnabled                       = $null
+    }
 
     try
     {
-        $MalwareFilterPolicys = Get-MalwareFilterPolicy -ErrorAction Stop
+        $ProtectionPolicy = Get-TeamsProtectionPolicy
 
-        $MalwareFilterPolicy = $MalwareFilterPolicys | Where-Object -FilterScript { $_.Identity -eq $Identity }
-        if ($null -eq $MalwareFilterPolicy)
+        if ($null -eq $ProtectionPolicy)
         {
-            Write-Verbose -Message "MalwareFilterPolicy $($Identity) does not exist."
+            Write-Verbose -Message "Teams Protection Policy does not exist."
             return $nullReturn
         }
         else
         {
             $result = @{
-                Identity                               = $Identity
-                AdminDisplayName                       = $MalwareFilterPolicy.AdminDisplayName
-                CustomExternalBody                     = $MalwareFilterPolicy.CustomExternalBody
-                CustomExternalSubject                  = $MalwareFilterPolicy.CustomExternalSubject
-                CustomFromAddress                      = $MalwareFilterPolicy.CustomFromAddress
-                CustomFromName                         = $MalwareFilterPolicy.CustomFromName
-                CustomInternalBody                     = $MalwareFilterPolicy.CustomInternalBody
-                CustomInternalSubject                  = $MalwareFilterPolicy.CustomInternalSubject
-                CustomNotifications                    = $MalwareFilterPolicy.CustomNotifications
-                EnableExternalSenderAdminNotifications = $MalwareFilterPolicy.EnableExternalSenderAdminNotifications
-                EnableFileFilter                       = $MalwareFilterPolicy.EnableFileFilter
-                EnableInternalSenderAdminNotifications = $MalwareFilterPolicy.EnableInternalSenderAdminNotifications
-                ExternalSenderAdminAddress             = $MalwareFilterPolicy.ExternalSenderAdminAddress
-                FileTypeAction                         = $MalwareFilterPolicy.FileTypeAction
-                FileTypes                              = $MalwareFilterPolicy.FileTypes
-                InternalSenderAdminAddress             = $MalwareFilterPolicy.InternalSenderAdminAddress
-                QuarantineTag                          = $MalwareFilterPolicy.QuarantineTag
-                MakeDefault                            = $MalwareFilterPolicy.IsDefault
-                ZapEnabled                             = $MalwareFilterPolicy.ZapEnabled
-                Credential                             = $Credential
-                Ensure                                 = 'Present'
-                ApplicationId                          = $ApplicationId
-                CertificateThumbprint                  = $CertificateThumbprint
-                CertificatePath                        = $CertificatePath
-                CertificatePassword                    = $CertificatePassword
-                Managedidentity                        = $ManagedIdentity.IsPresent
-                TenantId                               = $TenantId
-                AccessTokens                           = $AccessTokens
+                IsSingleInstance                 = 'Yes'
+                AdminDisplayName                 = $ProtectionPolicy.AdminDisplayName
+                HighConfidencePhishQuarantineTag = $ProtectionPolicy.HighConfidencePhishQuarantineTag
+                MalwareQuarantineTag             = $ProtectionPolicy.MalwareQuarantineTag
+                ZapEnabled                       = $ProtectionPolicy.ZapEnabled
+                Credential                       = $Credential
+                ApplicationId                    = $ApplicationId
+                CertificateThumbprint            = $CertificateThumbprint
+                CertificatePath                  = $CertificatePath
+                CertificatePassword              = $CertificatePassword
+                Managedidentity                  = $ManagedIdentity.IsPresent
+                TenantId                         = $TenantId
+                AccessTokens                     = $AccessTokens
             }
 
-            Write-Verbose -Message "Found MalwareFilterPolicy $($Identity)"
+            Write-Verbose -Message "Found ProtectionPolicy"
             Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
             return $result
         }
@@ -213,86 +134,27 @@ function Set-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $Identity,
+        $IsSingleInstance,
 
         [Parameter()]
         [System.String]
         $AdminDisplayName,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalBody,
+        $HighConfidencePhishQuarantineTag,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalSubject,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromAddress,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromName,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalBody,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalSubject,
-
-        [Parameter()]
-        [System.Boolean]
-        $CustomNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableExternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableFileFilter,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableInternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.String]
-        $ExternalSenderAdminAddress,
-
-        [Parameter()]
-        [ValidateSet('Quarantine', 'Reject')]
-        [System.String]
-        $FileTypeAction,
-
-        [Parameter()]
-        [System.String[]]
-        $FileTypes = @(),
-
-        [Parameter()]
-        [System.String]
-        $InternalSenderAdminAddress,
-
-        [Parameter()]
-        [System.Boolean]
-        $MakeDefault,
-
-        [Parameter()]
-        [System.String]
-        $QuarantineTag,
+        $MalwareQuarantineTag,
 
         [Parameter()]
         [System.Boolean]
         $ZapEnabled,
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -337,47 +199,27 @@ function Set-TargetResource
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
-    Write-Verbose -Message "Setting configuration of MalwareFilterPolicy for $($Identity)"
+    Write-Verbose -Message "Setting configuration of Teams Protection Policy"
 
     $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
         -InboundParameters $PSBoundParameters
 
-    $MalwareFilterPolicys = Get-MalwareFilterPolicy
-    $MalwareFilterPolicy = $MalwareFilterPolicys | Where-Object -FilterScript { $_.Identity -eq $Identity }
-    $MalwareFilterPolicyParams = [System.Collections.Hashtable]($PSBoundParameters)
-    $MalwareFilterPolicyParams.Remove('Ensure') | Out-Null
-    $MalwareFilterPolicyParams.Remove('Credential') | Out-Null
-    $MalwareFilterPolicyParams.Remove('ApplicationId') | Out-Null
-    $MalwareFilterPolicyParams.Remove('TenantId') | Out-Null
-    $MalwareFilterPolicyParams.Remove('CertificateThumbprint') | Out-Null
-    $MalwareFilterPolicyParams.Remove('CertificatePath') | Out-Null
-    $MalwareFilterPolicyParams.Remove('CertificatePassword') | Out-Null
-    $MalwareFilterPolicyParams.Remove('ManagedIdentity') | Out-Null
-    $MalwareFilterPolicyParams.Remove('AccessTokens') | Out-Null
+    $currentValues = Get-TargetResource @PSBoundParameters
 
-    if (('Present' -eq $Ensure ) -and ($null -eq $MalwareFilterPolicy))
+    if ($null -eq $currentValues.AdminDisplayName -and `
+        $null -eq $currentValues.HighConfidencePhishQuarantineTag -and `
+        $null -eq $currentValues.MalwareQuarantineTag -and `
+        $null -eq $currentValues.ZapEnabled)
     {
-        Write-Verbose -Message "Creating MalwareFilterPolicy $($Identity)."
-        $MalwareFilterPolicyParams.Add('Name', $Identity)
-        $MalwareFilterPolicyParams.Remove('Identity') | Out-Null
-        $MalwareFilterPolicyParams.Remove('MakeDefault') | Out-Null
-        New-MalwareFilterPolicy @MalwareFilterPolicyParams
+        Write-Verbose -Message 'Teams Protection Policy does not exist, creating new policy'
+        New-TeamsProtectionPolicy -Name 'Teams Protection Policy'
+    }
 
-        if ($MakeDefault)
-        {
-            Set-MalwareFilterPolicy -Identity $Identity -MakeDefault
-        }
-    }
-    elseif (('Present' -eq $Ensure ) -and ($Null -ne $MalwareFilterPolicy))
-    {
-        Write-Verbose -Message "Setting MalwareFilterPolicy $($Identity) with values: $(Convert-M365DscHashtableToString -Hashtable $MalwareFilterPolicyParams)"
-        Set-MalwareFilterPolicy @MalwareFilterPolicyParams -Confirm:$false
-    }
-    elseif (('Absent' -eq $Ensure ) -and ($null -ne $MalwareFilterPolicy))
-    {
-        Write-Verbose -Message "Removing MalwareFilterPolicy $($Identity)"
-        Remove-MalwareFilterPolicy -Identity $Identity -Confirm:$false
-    }
+    $params = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+    $params.Add('Identity', 'Teams Protection Policy')
+    $params.Remove('IsSingleInstance')
+
+    Set-TeamsProtectionPolicy @params
 }
 
 function Test-TargetResource
@@ -387,86 +229,27 @@ function Test-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [ValidateSet('Yes')]
         [System.String]
-        $Identity,
+        $IsSingleInstance,
 
         [Parameter()]
         [System.String]
         $AdminDisplayName,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalBody,
+        $HighConfidencePhishQuarantineTag,
 
         [Parameter()]
+        [ValidateSet('AdminOnlyAccessPolicy', 'DefaultFullAccessPolicy', 'DefaultFullAccessWithNotificationPolicy')]
         [System.String]
-        $CustomExternalSubject,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromAddress,
-
-        [Parameter()]
-        [System.String]
-        $CustomFromName,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalBody,
-
-        [Parameter()]
-        [System.String]
-        $CustomInternalSubject,
-
-        [Parameter()]
-        [System.Boolean]
-        $CustomNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableExternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableFileFilter,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableInternalSenderAdminNotifications,
-
-        [Parameter()]
-        [System.String]
-        $ExternalSenderAdminAddress,
-
-        [Parameter()]
-        [ValidateSet('Quarantine', 'Reject')]
-        [System.String]
-        $FileTypeAction,
-
-        [Parameter()]
-        [System.String[]]
-        $FileTypes = @(),
-
-        [Parameter()]
-        [System.String]
-        $InternalSenderAdminAddress,
-
-        [Parameter()]
-        [System.Boolean]
-        $MakeDefault,
-
-        [Parameter()]
-        [System.String]
-        $QuarantineTag,
+        $MalwareQuarantineTag,
 
         [Parameter()]
         [System.Boolean]
         $ZapEnabled,
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -512,7 +295,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of MalwareFilterPolicy for $($Identity)"
+    Write-Verbose -Message 'Testing configuration of Teams Protection Policy'
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
@@ -587,28 +370,18 @@ function Export-TargetResource
 
     try
     {
-        [array]$MalwareFilterPolicys = Get-MalwareFilterPolicy -ErrorAction Stop
-        if ($MalwareFilterPolicys.Length -eq 0)
+        if ($null -ne $Global:M365DSCExportResourceInstancesCount)
         {
-            Write-Host $Global:M365DSCEmojiGreenCheckMark
+            $Global:M365DSCExportResourceInstancesCount++
         }
-        else
-        {
-            Write-Host "`r`n" -NoNewline
-        }
+
         $dscContent = ''
-        $i = 1
-        foreach ($MalwareFilterPolicy in $MalwareFilterPolicys)
+
+        [array]$teamsProtectionPolicy = Get-TeamsProtectionPolicy
+        if ($null -ne $teamsProtectionPolicy)
         {
-            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
-            {
-                $Global:M365DSCExportResourceInstancesCount++
-            }
-
-            Write-Host "    |---[$i/$($MalwareFilterPolicys.length)] $($MalwareFilterPolicy.Identity)" -NoNewline
-
             $Params = @{
-                Identity              = $MalwareFilterPolicy.Identity
+                IsSingleInstance      = 'Yes'
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
@@ -620,32 +393,22 @@ function Export-TargetResource
             }
 
             $Results = Get-TargetResource @Params
-
-            $keysToRemove = @()
-            foreach ($key in $Results.Keys)
-            {
-                if ([System.String]::IsNullOrEmpty($Results.$key))
-                {
-                    $keysToRemove += $key
-                }
-            }
-            foreach ($key in $keysToRemove)
-            {
-                $Results.Remove($key) | Out-Null
-            }
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential
+
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName
-            Write-Host $Global:M365DSCEmojiGreenCheckMark
-            $i++
         }
+
+        Write-Host $Global:M365DSCEmojiGreenCheckMark
+
         return $dscContent
     }
     catch
