@@ -22,6 +22,8 @@
   * Fixes an issue where assignment wasn't properly set if the
     groupId was null.
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
+* IntuneRoleAssignment
+  * Improve verbose output and fix copy-pasted variables.
 * IntuneRoleScopeTag
   * Initial release.
 * TeamsUserPolicyAssignment
