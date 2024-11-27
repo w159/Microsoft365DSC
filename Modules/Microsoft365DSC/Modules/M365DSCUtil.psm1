@@ -3786,13 +3786,13 @@ function Get-M365DSCExportContentForResource
             Import-Module $Resource.Path -Force
             $moduleInfo = Get-Command -Module $ModuleFullName -ErrorAction SilentlyContinue
             $cmdInfo = $moduleInfo | Where-Object -FilterScript {$_.Name -eq 'Get-TargetResource'}
-            $Keys = $cmdInfo.Parameters.Keys
+            $Keys = $cmdInfo.Parameters.Values.Where({ $_.ParameterSets.Values.IsMandatory }).Name
         }
     }
     else
     {
         $cmdInfo = $moduleInfo | Where-Object -FilterScript {$_.Name -eq 'Get-TargetResource'}
-        $Keys = $cmdInfo.Parameters.Keys
+        $Keys = $cmdInfo.Parameters.Values.Where({ $_.ParameterSets.Values.IsMandatory }).Name
     }
 
     if ($Keys.Contains('IsSingleInstance'))
@@ -3839,19 +3839,20 @@ function Get-M365DSCExportContentForResource
     {
         $primaryKey = $Results.UserPrincipalName
     }
-    elseif ($Keys.Contains('User'))
+
+    if ([String]::IsNullOrEmpty($primaryKey) -and `
+        -not $Keys.Contains('IsSingleInstance'))
     {
-        $primaryKey = $Results.User
+        foreach ($Key in $Keys)
+        {
+            $primaryKey += $Results.$Key
+        }
     }
 
     $instanceName = $ResourceName
     if (-not [System.String]::IsNullOrEmpty($primaryKey))
     {
         $instanceName += "-$primaryKey"
-    }
-    elseif (-not $Keys.Contains('IsSingleInstance'))
-    {
-        $instanceName += "-" + (New-Guid).ToString()
     }
 
     if ($Results.ContainsKey('Workload'))

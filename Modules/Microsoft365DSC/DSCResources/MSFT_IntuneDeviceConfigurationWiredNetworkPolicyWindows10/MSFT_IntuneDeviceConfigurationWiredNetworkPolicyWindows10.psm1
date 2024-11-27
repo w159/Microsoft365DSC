@@ -563,7 +563,7 @@ function Set-TargetResource
                     -CertificateId $RootCertificatesForServerValidationIds[$i] `
                     -CertificateDisplayName $RootCertificatesForServerValidationDisplayNames[$i] `
                     -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-                $rootCertificatesForServerValidation += "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+                $rootCertificatesForServerValidation += "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             }
             $CreateParameters.Add('rootCertificatesForServerValidation@odata.bind', $rootCertificatesForServerValidation)
         }
@@ -578,7 +578,7 @@ function Set-TargetResource
                     '#microsoft.graph.windows81TrustedRootCertificate', `
                     '#microsoft.graph.windows10PkcsCertificateProfile' `
                 )
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('identityCertificateForClientAuthentication@odata.bind', $ref)
         }
 
@@ -592,7 +592,7 @@ function Set-TargetResource
                     '#microsoft.graph.windows81TrustedRootCertificate', `
                     '#microsoft.graph.windows10PkcsCertificateProfile' `
                 )
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('secondaryIdentityCertificateForClientAuthentication@odata.bind', $ref)
         }
 
@@ -602,7 +602,7 @@ function Set-TargetResource
                 -CertificateId $RootCertificateForClientValidationId `
                 -CertificateDisplayName $RootCertificateForClientValidationDisplayName `
                 -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('rootCertificateForClientValidation@odata.bind', $ref)
         }
 
@@ -612,7 +612,7 @@ function Set-TargetResource
                 -CertificateId $SecondaryRootCertificateForClientValidationId `
                 -CertificateDisplayName $SecondaryRootCertificateForClientValidationDisplayName `
                 -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('secondaryRootCertificateForClientValidation@odata.bind', $ref)
         }
 
@@ -1241,7 +1241,7 @@ function Update-DeviceConfigurationPolicyCertificateId
     foreach ($certificateId in $CertificateIds)
     {
         $ref = @{
-            '@odata.id' = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$certificateId')"
+            '@odata.id' = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$certificateId')"
         }
 
         Invoke-MgGraphRequest -Method $method -Uri $Uri -Body ($ref | ConvertTo-Json) -ErrorAction Stop 4>$null

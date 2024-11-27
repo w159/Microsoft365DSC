@@ -4,13 +4,27 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
-* EXORecipientPermission
-  * Added logic to update an existing recipient's permissions.
 * EXOEOPProtectionPolicyRule
   * Added support for AccessTokens.
 * EXOExternalInOutlook
   * Added support for AccessTokens.
+* EXOMailContact
+  * Changed how empty arrays are returned.
+* EXOPlace
+  * Changed how empty arrays are returned.
+* EXORecipientPermission
+  * Added logic to update an existing recipient's permissions.
+* EXOTransportRule
+  * Changed how empty arrays are returned.
 * IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
+* IntuneAppConfigurationPolicy
+  * Fixes an issue where assignment wasn't properly set if the
+    groupId was null.
+    FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
+* IntuneRoleAssignment
+  * Improve verbose output and fix copy-pasted variables.
+* IntuneRoleScopeTag
   * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
@@ -20,10 +34,14 @@
 * M365DSCUtil
   * Add default Ensure value `Present` if not specified.
     FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
+  * When exporting generate the instance names of resources with their mandatory
+    keys instead of random GUIDs , this makes exports idempotent again
+    FIXES [#5469](https://github.com/microsoft/Microsoft365DSC/issues/5469)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+  * Add separate module handling for PowerShell Core.
 * DEPENDENCIES
-  * Updated DSCParser to version 2.0.0.13.
+  * Updated DSCParser to version 2.0.0.14.
   * Updated Microsoft.Graph to version 2.25.0.
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.200.
   * Updated MicrosoftTeams to version 6.7.0.
