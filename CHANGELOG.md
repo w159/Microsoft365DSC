@@ -24,6 +24,8 @@
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* IntuneRoleScopeTag
+  * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
 * TeamsUpgradePolicy
@@ -31,6 +33,7 @@
     instead.
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+  * Add separate module handling for PowerShell Core.
 * DEPENDENCIES
   * Updated DSCParser to version 2.0.0.14.
   * Updated Microsoft.Graph to version 2.25.0.
