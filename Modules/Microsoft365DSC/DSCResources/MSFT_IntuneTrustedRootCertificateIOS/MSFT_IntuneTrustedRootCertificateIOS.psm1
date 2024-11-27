@@ -91,7 +91,9 @@
     $nullResult.Ensure = 'Absent'
     try
     {
-        if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue }
+        if (-not [string]::IsNullOrWhiteSpace($id)){ 
+		$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
+	}
         
         #region resource generator code
         if ($null -eq $getValue)
