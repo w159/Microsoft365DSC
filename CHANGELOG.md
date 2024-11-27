@@ -1,5 +1,61 @@
 # Change log for Microsoft365DSC
 
+# 1.24.1127.1
+
+* AAD
+  * Added ApplicationSecret auth method to multiple resources
+* AADFilteringPolicyRule
+  * Fixed an issue with the export of the Destinations property where
+    the CIMInstance array object was malformed.
+* EXOEOPProtectionPolicyRule
+  * Added support for AccessTokens.
+* EXOExternalInOutlook
+  * Added support for AccessTokens.
+* EXOMailContact
+  * Changed how empty arrays are returned.
+* EXOPlace
+  * Changed how empty arrays are returned.
+* EXORecipientPermission
+  * Added logic to update an existing recipients permissions.
+* EXOTransportRule
+  * Changed how empty arrays are returned.
+* INTUNE
+  * Add parameter `-All` to Graph requests to fetch all policies on Get.
+* IntuneAndroidManagedStoreAppConfiguration
+  * Initial release.
+* IntuneAppConfigurationPolicy
+  * Fixes an issue where assignment was not properly set if the
+    groupId was null.
+    FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
+* IntuneMobileAppConfigurationPolicyIOS
+  * Removing resource. Already possible with IntuneAppConfigurationDevicePolicy
+* IntuneMobileThreatDefenseConnector
+  * Fixes a NotFound error when the resource does not exist and remove
+    `LastHeartbeatDateTime` from comparison.
+* IntuneRoleAssignment
+  * Improve verbose output and fix copy-pasted variables.
+* IntuneRoleScopeTag
+  * Initial release.
+* TeamsUserPolicyAssignment
+  * Added support for the Global policies.
+* TeamsUpgradePolicy
+  * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
+    instead.
+* M365DSCUtil
+  * Add default Ensure value `Present` if not specified.
+    FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
+  * When exporting generate the instance names of resources with their mandatory
+    keys instead of random GUIDs , this makes exports idempotent again
+    FIXES [#5469](https://github.com/microsoft/Microsoft365DSC/issues/5469)
+* MISC
+  * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
+  * Add separate module handling for PowerShell Core.
+* DEPENDENCIES
+  * Updated DSCParser to version 2.0.0.14.
+  * Updated Microsoft.Graph to version 2.25.0.
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.200.
+  * Updated MicrosoftTeams to version 6.7.0.
+
 # 1.24.1120.1
 
 * AADAdminConsentRequestPolicy
@@ -50,7 +106,7 @@
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * AADRoleSettings
-  * Fixing issue where the ActivateApprover parameter isn't processed correctly
+  * Fixing issue where the ActivateApprover parameter is not processed correctly
     when an approver does not exist.
     FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
     FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)
@@ -73,12 +129,17 @@
   * Initial release.
 * SCPolicyConfig
   * Fixed an issue extracting empty groups properties.
+* TeamsMeetingPolicy
+  * FIXES #5442(https://github.com/microsoft/Microsoft365DSC/issues/5442)
 * TeamsUpdateManagementPolicy
   * Added conversion of the UpdateTimeOfDay parameter to the local culture format
     so that the comparison will work consistently.
     FIXES [#5424](https://github.com/microsoft/Microsoft365DSC/issues/5424)
 * M365DSCDRGUtil
   * Improve CIM instance detection for specific Intune resources.
+* AADUser
+  * Fixed issue updating user group membership when looking for the group by DisplayName.
+  * Fixed missing User Id when changing  group membership in Set-TargetResource function.
 
 # 1.24.1113.1
 

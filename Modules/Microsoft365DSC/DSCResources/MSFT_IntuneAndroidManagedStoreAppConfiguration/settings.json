@@ -1,6 +1,6 @@
 {
-    "resourceName": "IntuneMobileAppConfigurationPolicyIOS",
-    "description": "This resource configures an Intune Managed Device Mobile App Configuration Policy for iOS Device.",
+    "resourceName": "IntuneAndroidManagedStoreAppConfiguration",
+    "description": "This resource configures an Intune Android Managed Store Application Configuration Policy.",
     "permissions": {
         "graph": {
             "delegated": {
@@ -8,7 +8,7 @@
                     {
                         "name": "Group.Read.All"
                     },
-{
+                    {
                         "name": "DeviceManagementApps.Read.All"
                     }
                 ],

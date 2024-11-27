@@ -1,10 +1,10 @@
-function Get-TargetResource
+﻿function Get-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        #region Intune resource parameters
+        #region resource generator code
         [Parameter()]
         [System.String]
         $Id,
@@ -22,17 +22,32 @@ function Get-TargetResource
         $targetedMobileApps,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $settings,
+        [System.String]
+        $packageId,
 
         [Parameter()]
         [System.String]
-        $encodedSettingXml,
+        $payloadJson,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $permissionActions,
+
+        [Parameter()]
+        [System.Boolean]
+        $appSupportsOemConfig,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $profileApplicability,
+
+        [Parameter()]
+        [System.Boolean]
+        $connectedAppsEnabled,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
-
         #endregion
 
         [Parameter()]
@@ -67,6 +82,7 @@ function Get-TargetResource
         [Parameter()]
         [System.String[]]
         $AccessTokens
+
     )
 
     try
@@ -89,8 +105,7 @@ function Get-TargetResource
         -CommandName $CommandName `
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-    
+    #endregion   
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
@@ -103,31 +118,30 @@ function Get-TargetResource
         {
             $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
             -FilterScript { `
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosMobileAppConfiguration' `
+                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidManagedStoreAppConfiguration' `
             }
         }
         #endregion
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "No Intune Mobile App Configuration Policy for iOS with Id {$id} was found"
+            Write-Verbose -Message "Nothing with id {$id} was found"
             return $nullResult
         }
 
-        Write-Verbose -Message "An Intune Mobile App Configuration Policy for iOS with Id {$id} and DisplayName {$DisplayName} was found"
+        Write-Verbose -Message "Found something with id {$id}"
 
         #need to convert dictionary object into a hashtable array so we can work with it
-        $complexSettings = @()
-        foreach ($setting in $getValue.AdditionalProperties.settings)
+        $complexPermissionActions = @()
+        foreach ($setting in $getValue.AdditionalProperties.permissionActions)
         {
             $mySettings = @{}
-            $mySettings.Add('appConfigKey', $setting['appConfigKey'])
-            $mySettings.Add('appConfigKeyType', $setting['appConfigKeyType'])
-            $mySettings.Add('appConfigKeyValue', $setting['appConfigKeyValue'])
+            $mySettings.Add('permission', $setting['permission'])
+            $mySettings.Add('action', $setting['action'])
             
             if ($mySettings.values.Where({$null -ne $_}).count -gt 0)
             {
-                $complexSettings += $mySettings
+                $complexPermissionActions += $mySettings
             }
         }
 
@@ -135,10 +149,14 @@ function Get-TargetResource
             #region resource generator code
             Id                             = $getValue.Id
             Description                    = $getValue.Description
-            DisplayName                    = $getValue.DisplayName   
+            DisplayName                    = $getValue.DisplayName       
             targetedMobileApps             = $getValue.TargetedMobileApps
-            settings                       = $complexSettings #$getValue.AdditionalProperties.settings
-            encodedSettingXml              = $getValue.AdditionalProperties.encodedSettingXml
+            packageId                      = $getValue.AdditionalProperties.packageId
+            payloadJson                    = $getValue.AdditionalProperties.payloadJson
+            appSupportsOemConfig           = $getValue.AdditionalProperties.appSupportsOemConfig
+            profileApplicability           = $getValue.AdditionalProperties.profileApplicability
+            connectedAppsEnabled           = $getValue.AdditionalProperties.connectedAppsEnabled
+            permissionActions              = $complexPermissionActions           
             Ensure                         = 'Present'
             Credential                     = $Credential
             ApplicationId                  = $ApplicationId
@@ -148,7 +166,6 @@ function Get-TargetResource
             Managedidentity                = $ManagedIdentity.IsPresent
             AccessTokens                   = $AccessTokens
             version                        = $getValue.AdditionalProperties.version
-
         }
                                           
         $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppConfigurationAssignment -ManagedDeviceMobileAppConfigurationId $Results.Id
@@ -179,8 +196,8 @@ function Set-TargetResource
 {
     [CmdletBinding()]
     param
-    (
-        #region Intune resource parameters
+     (
+        #region resource generator code
         [Parameter()]
         [System.String]
         $Id,
@@ -198,17 +215,32 @@ function Set-TargetResource
         $targetedMobileApps,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $settings,
+        [System.String]
+        $packageId,
 
         [Parameter()]
         [System.String]
-        $encodedSettingXml,
+        $payloadJson,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $permissionActions,
+
+        [Parameter()]
+        [System.Boolean]
+        $appSupportsOemConfig,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $profileApplicability,
+
+        [Parameter()]
+        [System.Boolean]
+        $connectedAppsEnabled,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
-
         #endregion
 
         [Parameter()]
@@ -243,6 +275,7 @@ function Set-TargetResource
         [Parameter()]
         [System.String[]]
         $AccessTokens
+
     )
 
     try
@@ -327,6 +360,7 @@ function Set-TargetResource
         $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($UpdateParameters)
+
         foreach ($key in $AdditionalProperties.keys)
         {
             if ($key -ne '@odata.type')
@@ -346,7 +380,6 @@ function Set-TargetResource
                 $UpdateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters[$key]
             }
         }
-
         $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
 
         #region resource generator code
@@ -373,7 +406,7 @@ function Test-TargetResource
     [OutputType([System.Boolean])]
     param
     (
-        #region Intune resource parameters
+        #region resource generator code
         [Parameter()]
         [System.String]
         $Id,
@@ -391,17 +424,32 @@ function Test-TargetResource
         $targetedMobileApps,
 
         [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $settings,
+        [System.String]
+        $packageId,
 
         [Parameter()]
         [System.String]
-        $encodedSettingXml,
+        $payloadJson,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $permissionActions,
+
+        [Parameter()]
+        [System.Boolean]
+        $appSupportsOemConfig,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $profileApplicability,
+
+        [Parameter()]
+        [System.Boolean]
+        $connectedAppsEnabled,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $Assignments,
-
         #endregion
 
         [Parameter()]
@@ -436,6 +484,7 @@ function Test-TargetResource
         [Parameter()]
         [System.String[]]
         $AccessTokens
+
     )
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -482,6 +531,7 @@ function Test-TargetResource
                 $testResult = Compare-M365DSCComplexObject `
                     -Source (Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $CIMArraySource[$i]) `
                     -Target ($CIMArrayTarget[$i])
+
                 $i++
                 if (-Not $testResult)
                 {
@@ -582,11 +632,12 @@ function Export-TargetResource
 
     try
     {
+
         #region resource generator code
         [array]$getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter $Filter -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript { `
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosMobileAppConfiguration'  `
+                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidManagedStoreAppConfiguration'  `
         }
         #endregion
 
@@ -638,18 +689,18 @@ function Export-TargetResource
                 }
             }
 
-            if ($null -ne $Results.settings)
+            if ($null -ne $Results.permissionActions)
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.settings `
-                    -CIMInstanceName 'MSFT_appConfigurationSettingItem'
+                    -ComplexObject $Results.permissionActions `
+                    -CIMInstanceName 'MSFT_androidPermissionAction'
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
-                    $Results.settings = $complexTypeStringResult
+                    $Results.permissionActions = $complexTypeStringResult
                 }
                 else
                 {
-                    $Results.Remove('settings') | Out-Null
+                    $Results.Remove('permissionActions') | Out-Null
                 }
             }
 
@@ -668,15 +719,15 @@ function Export-TargetResource
                 }
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
-           
-            if ($Results.settings)
+
+            if ($Results.permissionActions)
             {
                 $isCIMArray = $false
-                if ($Results.settings.getType().Fullname -like '*[[\]]')
+                if ($Results.permissionActions.getType().Fullname -like '*[[\]]')
                 {
                     $isCIMArray = $true
                 }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'settings' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'permissionActions' -IsCIMArray:$isCIMArray
             }
 
             $dscContent += $currentDSCBlock
@@ -710,8 +761,6 @@ function Export-TargetResource
     }
 }
 
-
-
 function Get-M365DSCAdditionalProperties
 {
     [CmdletBinding()]
@@ -724,11 +773,15 @@ function Get-M365DSCAdditionalProperties
     )
 
     $additionalProperties = @(
-        'encodedSettingXml'
-        'settings'
+        'packageId'
+        'payloadJson'
+        'permissionActions'
+        'appSupportsOemConfig'
+        'profileApplicability'
+        'connectedAppsEnabled'
     )
 
-    $results = @{'@odata.type' = '#microsoft.graph.iosMobileAppConfiguration' }
+    $results = @{'@odata.type' = '#microsoft.graph.androidManagedStoreAppConfiguration' }
     $cloneProperties = $Properties.clone()
     foreach ($property in $cloneProperties.Keys)
     {

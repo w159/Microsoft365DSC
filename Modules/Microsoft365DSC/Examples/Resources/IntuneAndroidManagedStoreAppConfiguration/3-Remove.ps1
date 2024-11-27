@@ -21,10 +21,10 @@ Configuration Example
 
     Node localhost
     {
-        IntuneMobileAppConfigurationPolicyIOS "ConfigureIntuneMobileAppConfigurationPolicyIOS"
+        IntuneAndroidManagedStoreAppConfiguration "ConfigureIntuneAndroidManagedStoreAppConfiguration"
         {
-            Description           = "IntuneMobileAppConfigurationPolicyIOS Description";
-            DisplayName           = "IntuneMobileAppConfigurationPolicyIOS DisplayName";
+            Description           = "IntuneAndroidManagedStoreAppConfiguration Description";
+            DisplayName           = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
             Ensure                = "Absent";
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;

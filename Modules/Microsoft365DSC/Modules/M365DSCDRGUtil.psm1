@@ -982,7 +982,11 @@ function ConvertTo-IntunePolicyAssignment
         }
         elseif ($assignment.dataType -like '*GroupAssignmentTarget')
         {
-            $group = Get-MgGroup -GroupId ($assignment.groupId) -ErrorAction SilentlyContinue
+            $group = $null
+            if (-not [System.String]::IsNullOrEmpty($assignment.groupId))
+            {
+                $group = Get-MgGroup -GroupId ($assignment.groupId) -ErrorAction SilentlyContinue
+            }
             if ($null -eq $group)
             {
                 if ($assignment.groupDisplayName)
