@@ -288,7 +288,7 @@ function Set-TargetResource
         {
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $policy.id `
                 -Targets $assignmentsHash `
-                -Repository 'deviceAppManagement/mobileAppConfigurations'
+                -Repository 'deviceManagement/deviceConfigurations'
         }
         #endregion
     }
@@ -331,7 +331,7 @@ function Set-TargetResource
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
         Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `
             -Targets $assignmentsHash `
-            -Repository 'deviceAppManagement/mobileAppConfigurations'
+            -Repository 'deviceManagement/deviceConfigurations'
         #endregion
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
