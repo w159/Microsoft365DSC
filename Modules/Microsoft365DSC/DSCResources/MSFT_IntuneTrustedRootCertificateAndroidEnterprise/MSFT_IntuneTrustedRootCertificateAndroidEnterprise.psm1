@@ -111,6 +111,8 @@ function Get-TargetResource
             return $nullResult
         }
 
+        $Id = $getValue.Id
+
         Write-Verbose -Message "An Intune Trusted Root Certificate Policy for Android with id {$id} and DisplayName {$DisplayName} was found"
 
         $results = @{
@@ -288,7 +290,7 @@ function Set-TargetResource
         {
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $policy.id `
                 -Targets $assignmentsHash `
-                -Repository 'deviceAppManagement/mobileAppConfigurations'
+                -Repository 'deviceManagement/deviceConfigurations'
         }
         #endregion
     }
@@ -331,7 +333,7 @@ function Set-TargetResource
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
         Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `
             -Targets $assignmentsHash `
-            -Repository 'deviceAppManagement/mobileAppConfigurations'
+            -Repository 'deviceManagement/deviceConfigurations'
         #endregion
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
