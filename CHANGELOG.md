@@ -24,11 +24,19 @@
   * Fixes an issue where assignment wasn't properly set if the
     groupId was null.
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
+* IntuneRoleAssignment
+  * Improve verbose output and fix copy-pasted variables.
+* IntuneRoleScopeTag
+  * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
 * TeamsUpgradePolicy
   * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
     instead.
+* M365DSCUtil
+  * When exporting generate the instance names of resources with their mandatory
+    keys instead of random GUIDs , this makes exports idempotent again
+    FIXES [#5469](https://github.com/microsoft/Microsoft365DSC/issues/5469)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
   * Add separate module handling for PowerShell Core.
