@@ -91,7 +91,8 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        if (-not [string]::IsNullOrWhiteSpace($id)){ 
+        if (-not [string]::IsNullOrWhiteSpace($id))
+        { 
             $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
         }
         
