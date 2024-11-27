@@ -19,6 +19,8 @@
   * Added logic to update an existing recipient's permissions.
 * EXOTransportRule
   * Changed how empty arrays are returned.
+* INTUNE
+  * Add parameter `-All` to Graph requests to fetch all policies on Get.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * IntuneAppConfigurationPolicy
