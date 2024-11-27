@@ -769,7 +769,6 @@ function Set-TargetResource
         }
         $createParameters.ExemptedAppProtocols = $myExemptedAppProtocols
 
-
         $policy = New-MgBetaDeviceAppManagementiOSManagedAppProtection -BodyParameter $createParameters
 
         Update-IntuneAppProtectionPolicyiOSApp -IosManagedAppProtectionId $policy.id -Apps $myApps
@@ -812,7 +811,6 @@ function Set-TargetResource
             }
         }
         $updateParameters.ExemptedAppProtocols = $myExemptedAppProtocols
-
 
         Update-MgBetaDeviceAppManagementiOSManagedAppProtection -IosManagedAppProtectionId $Identity -BodyParameter $updateParameters
 
