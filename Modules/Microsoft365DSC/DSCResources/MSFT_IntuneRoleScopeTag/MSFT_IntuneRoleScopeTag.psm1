@@ -119,6 +119,7 @@ function Get-TargetResource
             ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
+            AccessTokens          = $AccessTokens
             #endregion
         }
 

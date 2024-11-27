@@ -4,6 +4,9 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* AADFilteringPolicyRule
+  * Fixed an issue with the export of the Destinations property where
+    the CIMInstance array object was malformed.
 * EXOEOPProtectionPolicyRule
   * Added support for AccessTokens.
 * EXOExternalInOutlook
@@ -24,6 +27,8 @@
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* IntuneRoleAssignment
+  * Improve verbose output and fix copy-pasted variables.
 * IntuneRoleScopeTag
   * Initial release.
 * TeamsUserPolicyAssignment
@@ -31,6 +36,12 @@
 * TeamsUpgradePolicy
   * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
     instead.
+* M365DSCUtil
+  * Add default Ensure value `Present` if not specified.
+    FIXES [#5085](https://github.com/microsoft/Microsoft365DSC/issues/5085)
+  * When exporting generate the instance names of resources with their mandatory
+    keys instead of random GUIDs , this makes exports idempotent again
+    FIXES [#5469](https://github.com/microsoft/Microsoft365DSC/issues/5469)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
   * Add separate module handling for PowerShell Core.
