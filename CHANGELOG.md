@@ -22,6 +22,9 @@
   * Fixes an issue where assignment wasn't properly set if the
     groupId was null.
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
+* IntuneMobileThreatDefenseConnector
+  * Fixes a NotFound error when the resource does not exist and remove 
+    `LastHeartbeatDateTime` from comparison.
 * IntuneRoleScopeTag
   * Initial release.
 * TeamsUserPolicyAssignment
