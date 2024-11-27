@@ -24,6 +24,10 @@
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
 * IntuneRoleScopeTag
   * Initial release.
+* IntuneTrustedRootCertificateAndroidDeviceOwner
+  * Initial release.
+* IntuneTrustedRootCertificateAndroidEnterprise
+  * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
 * TeamsUpgradePolicy
