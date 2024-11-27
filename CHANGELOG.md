@@ -29,6 +29,10 @@
 * TeamsUpgradePolicy
   * DEPRECATED: Users properties. Use the TeamsUserPolicyAssignment resource
     instead.
+* M365DSCUtil
+  * When exporting generate the instance names of resources with their mandatory
+    keys instead of random GUIDs , this makes exports idempotent again
+    FIXES [#5469](https://github.com/microsoft/Microsoft365DSC/issues/5469)
 * MISC
   * Removed hardcoded Graph urls and replaced by MSCloudLoginAssistant values.
   * Add separate module handling for PowerShell Core.
