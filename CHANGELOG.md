@@ -4,6 +4,9 @@
 
 * AAD
   * Added ApplicationSecret auth method to multiple resources
+* AADFilteringPolicyRule
+  * Fixed an issue with the export of the Destinations property where
+    the CIMInstance array object was malformed.
 * EXOEOPProtectionPolicyRule
   * Added support for AccessTokens.
 * EXOExternalInOutlook
