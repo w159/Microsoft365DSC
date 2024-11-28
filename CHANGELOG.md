@@ -4,6 +4,10 @@
 
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* M365DSCDRGUtil
+  * Add separate check for strings with ordinal comparison and standardized line breaks.
+* M365DSCUtil
+  * Add separate check for strings with ordinal comparison and standardized line breaks.
 
 # 1.24.1127.1
 
