@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* IntuneTrustedRootCertificateIOS
+  * Initial release
+
 # 1.24.1127.1
 
 * AAD
