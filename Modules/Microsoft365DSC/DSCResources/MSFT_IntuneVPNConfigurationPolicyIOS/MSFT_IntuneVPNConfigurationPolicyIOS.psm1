@@ -202,8 +202,10 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        #$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
-        if (-not [string]::IsNullOrWhiteSpace($id)){ $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue }
+        if (-not [string]::IsNullOrWhiteSpace($id))
+        { 
+        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue 
+        }
 
         #region resource generator code
         if ($null -eq $getValue)
@@ -217,11 +219,13 @@ function Get-TargetResource
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
+            Write-Verbose -Message "No Intune VPN Policy for iOS with Id {$id} was found"
             return $nullResult
         }
 
-        Write-Verbose -Message "Found something with id {$id}"
+        $Id = $getValue.Id
+
+        Write-Verbose -Message "An Intune VPN Policy for iOS with id {$id} and DisplayName {$DisplayName} was found"
 
         $complexServers = @()
         foreach ($currentservers in $getValue.AdditionalProperties.server)
@@ -544,18 +548,11 @@ function Set-TargetResource
 
     $currentInstance = Get-TargetResource @PSBoundParameters
 
-    $PSBoundParameters.Remove('Ensure') | Out-Null
-    $PSBoundParameters.Remove('Credential') | Out-Null
-    $PSBoundParameters.Remove('ApplicationId') | Out-Null
-    $PSBoundParameters.Remove('ApplicationSecret') | Out-Null
-    $PSBoundParameters.Remove('TenantId') | Out-Null
-    $PSBoundParameters.Remove('CertificateThumbprint') | Out-Null
-    $PSBoundParameters.Remove('ManagedIdentity') | Out-Null
-    $PSBoundParameters.Remove('AccessTokens') | Out-Null
+    $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
     #proxy and server values need converting before new- / update- cmdlets will accept parameters
     #creating hashtables now for use later in both present/present and present/absent blocks
-    $allTargetValues = Convert-M365DscHashtableToString -Hashtable $PSBoundParameters
+    $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
     if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)') {$serverBlock = $matches[1]}
     $serverHashtable = @{}
     $serverBlock -split ";" | ForEach-Object {
@@ -579,8 +576,8 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating {$DisplayName}"
-        $PSBoundParameters.Remove('Assignments') | Out-Null
-        $CreateParameters = ([Hashtable]$PSBoundParameters).clone()
+        $BoundParameters.Remove('Assignments') | Out-Null
+        $CreateParameters = ([Hashtable]$BoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($CreateParameters)
 
@@ -594,7 +591,6 @@ function Set-TargetResource
         }
 
         $CreateParameters.Remove('Id') | Out-Null
-        $CreateParameters.Remove('Verbose') | Out-Null
 
         foreach ($key in ($CreateParameters.clone()).Keys)
         {
@@ -633,8 +629,8 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Updating {$DisplayName}"
 
-        $PSBoundParameters.Remove('Assignments') | Out-Null
-        $UpdateParameters = ([Hashtable]$PSBoundParameters).clone()
+        $BoundParameters.Remove('Assignments') | Out-Null
+        $UpdateParameters = ([Hashtable]$BoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
         $AdditionalProperties = Get-M365DSCAdditionalProperties -Properties ($UpdateParameters)
 
@@ -648,7 +644,6 @@ function Set-TargetResource
         }
 
         $UpdateParameters.Remove('Id') | Out-Null
-        $UpdateParameters.Remove('Verbose') | Out-Null
 
         foreach ($key in ($UpdateParameters.clone()).Keys)
         {
