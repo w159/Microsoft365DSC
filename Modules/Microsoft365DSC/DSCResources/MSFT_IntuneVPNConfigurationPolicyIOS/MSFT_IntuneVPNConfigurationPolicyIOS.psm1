@@ -76,7 +76,7 @@ function Get-TargetResource
         $onDemandRules,
 
         [Parameter()]
-        [System.Collections.Hashtable]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $targetedMobileApps,
 
         [Parameter()]
@@ -277,6 +277,20 @@ function Get-TargetResource
             }
         }
 
+        $complexTargetedMobileApps = @()
+        foreach ($value in $getValue.AdditionalProperties.targetedMobileApps)
+        {
+            $myTMAdata = @{}
+            $myTMAdata.Add('address', $value.address)
+            $myTMAdata.Add('publisher', $value.publisher)
+            $myTMAdata.Add('publisher', $value.appStoreUrl)
+            $myTMAdata.Add('publisher', $value.application)
+            if ($myTMAdata.values.Where({$null -ne $_}).count -gt 0)
+            {
+                $complexTargetedMobileApps += $myTMAdata
+            }
+        }
+
         $results = @{
             #region resource generator code
             Id                             = $getValue.Id
@@ -296,7 +310,7 @@ function Get-TargetResource
             customKeyValueData             = $complexCustomKeyValueData #$getValue.AdditionalProperties.customKeyValueData
             onDemandRules                  = $getValue.AdditionalProperties.onDemandRules
             proxyServer                    = $complexProxyServers
-            targetedMobileApps             = $getValue.AdditionalProperties.targetedMobileApps
+            targetedMobileApps             = $complexTargetedMobileApps #$getValue.AdditionalProperties.targetedMobileApps
             Ensure                         = 'Present'
             Credential                     = $Credential
             ApplicationId                  = $ApplicationId
@@ -424,7 +438,7 @@ function Set-TargetResource
         $onDemandRules,
 
         [Parameter()]
-        [System.Collections.Hashtable]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $targetedMobileApps,
 
         [Parameter()]
@@ -767,7 +781,7 @@ function Test-TargetResource
         $onDemandRules,
 
         [Parameter()]
-        [System.Collections.Hashtable]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $targetedMobileApps,
 
         [Parameter()]
@@ -1142,6 +1156,21 @@ function Export-TargetResource
                     $Results.Remove('customKeyValueData') | Out-Null
                 }
             }
+            
+            if ($null -ne $Results.targetedMobileApps)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.targetedMobileApps `
+                    -CIMInstanceName 'MSFT_targetedMobileApps' 
+                if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                {
+                    $Results.targetedMobileApps = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('targetedMobileApps') | Out-Null
+                }
+            }
 
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
@@ -1174,6 +1203,10 @@ function Export-TargetResource
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "customKeyValueData" -isCIMArray:$True
             }
 
+            if ($Results.targetedMobileApps)
+            {
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "targetedMobileApps" -isCIMArray:$True
+            }
 
             if ($Results.Assignments)
             {
