@@ -117,7 +117,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             dnsServerAddressMatch              = 'FakeStringValue'
                         } -ClientOnly)
                     )                  
-                     <#targetedMobileApps                      = [CimInstance[]]@(
+                     targetedMobileApps                      = [CimInstance[]]@(
                         (New-CimInstance `
                         -ClassName MSFT_targetedMobileApps `
                         -Property @{
@@ -126,7 +126,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             appStoreUrl                        = 'FakeStringValue'
                             appId                              = 'FakeStringValue'
                         } -ClientOnly)
-                    )  #>
+                    )
                     Ensure                                     = 'Present'
                     Credential                                 = $Credential
                 }
@@ -215,7 +215,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             dnsServerAddressMatch             = 'FakeStringValue'
                         } -ClientOnly)
                     )                    
-                    <#targetedMobileApps                      = [CimInstance[]]@(
+                    targetedMobileApps                      = [CimInstance[]]@(
                         (New-CimInstance `
                         -ClassName MSFT_targetedMobileApps `
                         -Property @{
@@ -224,7 +224,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             appStoreUrl                      = 'FakeStringValue'
                             appId                            = 'FakeStringValue'
                         } -ClientOnly)
-                    )  #>
+                    )
                     Ensure                                   = 'Present'
                     Credential                               = $Credential
                 }
@@ -282,7 +282,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                     automaticConfigurationScriptUrl  = 'https://www.test.com'
                                     address                          = 'proxy.test.com'
                                  }
-                            )                                                                                          
+                            )
+                            targetedMobileApps                      = @(
+                                @{
+                                    address                         = 'FakeStringValue'
+                                    publisher                       = 'FakeStringValue'
+                                    appStoreUrl                     = 'FakeStringValue'
+                                    appId                           = 'FakeStringValue'
+                                }
+                            )                                                                                      
                         }
                     }
                 }
@@ -363,7 +371,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             dnsServerAddressMatch           = 'FakeStringValue'
                         } -ClientOnly)
                     )  
-                    <#targetedMobileApps                    = [CimInstance[]]@(
+                    targetedMobileApps                    = [CimInstance[]]@(
                         (New-CimInstance `
                         -ClassName MSFT_targetedMobileApps `
                         -Property @{
@@ -372,7 +380,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             appStoreUrl                     = 'FakeStringValue'
                             appId                           = 'FakeStringValue'
                         } -ClientOnly)
-                    )  #>
+                    )  
                     safariDomains                           = @{}
                     associatedDomains                       = @{}
                     excludedDomains                         = @{}
@@ -432,14 +440,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                     dnsServerAddressMatch           = 'FakeStringValue'
                                 }
                             )
-                            <#targetedMobileApps                    = @(
+                            targetedMobileApps                    = @(
                                 @{
                                     address                         = 'FakeStringValue'
                                     publisher                       = 'FakeStringValue'
                                     appStoreUrl                     = 'FakeStringValue'
                                     appId                           = 'FakeStringValue'
                                 }
-                            )#>
+                            )
                             safariDomains                           = @{}
                             associatedDomains                       = @{}
                             excludedDomains                         = @{}

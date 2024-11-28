@@ -283,8 +283,8 @@ function Get-TargetResource
             $myTMAdata = @{}
             $myTMAdata.Add('address', $value.address)
             $myTMAdata.Add('publisher', $value.publisher)
-            $myTMAdata.Add('publisher', $value.appStoreUrl)
-            $myTMAdata.Add('publisher', $value.application)
+            $myTMAdata.Add('appStoreUrl', $value.appStoreUrl)
+            $myTMAdata.Add('appId', $value.appId)
             if ($myTMAdata.values.Where({$null -ne $_}).count -gt 0)
             {
                 $complexTargetedMobileApps += $myTMAdata
