@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* All resources
+  * Applying project default formatting on all files, to improve
+    reading and troubleshooting
 * IntuneTrustedRootCertificateIOS
   * Initial release
 
