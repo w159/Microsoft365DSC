@@ -2,6 +2,11 @@
 
 # UNRELEASED
 
+* IntuneTrustedRootCertificateIOS
+  * Initial release
+
+# 1.24.1127.1
+
 * AAD
   * Added ApplicationSecret auth method to multiple resources
 * AADFilteringPolicyRule
@@ -16,17 +21,22 @@
 * EXOPlace
   * Changed how empty arrays are returned.
 * EXORecipientPermission
-  * Added logic to update an existing recipient's permissions.
+  * Added logic to update an existing recipients permissions.
 * EXOTransportRule
   * Changed how empty arrays are returned.
+* INTUNE
+  * Add parameter `-All` to Graph requests to fetch all policies on Get.
 * IntuneAndroidManagedStoreAppConfiguration
   * Initial release.
 * IntuneAppConfigurationPolicy
-  * Fixes an issue where assignment wasn't properly set if the
+  * Fixes an issue where assignment was not properly set if the
     groupId was null.
     FIXES [#5430](https://github.com/microsoft/Microsoft365DSC/issues/5430)
-* IntuneTrustedRootCertificateIOS
-  * Initial release
+* IntuneMobileAppConfigurationPolicyIOS
+  * Removing resource. Already possible with IntuneAppConfigurationDevicePolicy
+* IntuneMobileThreatDefenseConnector
+  * Fixes a NotFound error when the resource does not exist and remove
+    `LastHeartbeatDateTime` from comparison.
 * IntuneRoleAssignment
   * Improve verbose output and fix copy-pasted variables.
 * IntuneRoleScopeTag
@@ -101,7 +111,7 @@
 * AADRoleEligibilityScheduleRequest
   * Adds support for custom role assignments at app scope.
 * AADRoleSettings
-  * Fixing issue where the ActivateApprover parameter isn't processed correctly
+  * Fixing issue where the ActivateApprover parameter is not processed correctly
     when an approver does not exist.
     FIXES [#5423](https://github.com/microsoft/Microsoft365DSC/issues/5423)
     FIXES [#5415](https://github.com/microsoft/Microsoft365DSC/issues/5415)

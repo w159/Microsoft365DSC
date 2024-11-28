@@ -2834,28 +2834,6 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
-                IntuneMobileAppConfigurationPolicyIOS 'ConfigureIntuneMobileAppConfigurationPolicyIOS'
-                {
-                    Description           = "IntuneMobileAppConfigurationPolicyIOS Description";
-                    DisplayName           = "IntuneMobileAppConfigurationPolicyIOS DisplayName";
-                    Ensure                = "Present";
-                    settings              = @(
-                        MSFT_appConfigurationSettingItem{
-                            appConfigKey = 'ConfigKey1'
-                            appConfigKeyType = 'stringType'
-                            appConfigKeyValue = 'KeyValue1'
-                        }
-                        MSFT_appConfigurationSettingItem{
-                            appConfigKey = 'ConfigKey2'
-                            appConfigKeyType = 'stringType'
-                            appConfigKeyValue = 'keyValue2'
-                        }
-                    );
-                    targetedMobileApps    = @("06131066-8adf-42a9-86aa-e4b59e27da5d");
-                    ApplicationId         = $ApplicationId;
-                    TenantId              = $TenantId;
-                    CertificateThumbprint = $CertificateThumbprint;
-                }
                 IntuneMobileAppsMacOSLobApp 'IntuneMobileAppsMacOSLobApp-TeamsForBusinessInstaller'
                 {
                     Id                    = "8d027f94-0682-431e-97c1-827d1879fa79";
