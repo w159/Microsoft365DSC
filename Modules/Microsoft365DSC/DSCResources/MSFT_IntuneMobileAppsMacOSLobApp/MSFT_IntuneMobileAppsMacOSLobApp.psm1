@@ -146,7 +146,7 @@ function Get-TargetResource
     try
     {
         $instance = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $Id `
-            -ExpandProperty "categories" `
+            -ExpandProperty 'categories' `
             -ErrorAction SilentlyContinue
 
         if ($null -eq $instance)
@@ -156,6 +156,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $instance = Get-MgBetaDeviceAppManagementMobileApp `
+                    -All `
                     -Filter "(isof('microsoft.graph.macOSLobApp') and displayName eq '$DisplayName')" `
                     -ErrorAction SilentlyContinue
             }
@@ -163,7 +164,7 @@ function Get-TargetResource
             if ($null -ne $instance)
             {
                 $instance = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $instance.Id `
-                    -ExpandProperty "categories" `
+                    -ExpandProperty 'categories' `
                     -ErrorAction SilentlyContinue
                 $Id = $instance.Id
             }
@@ -207,7 +208,7 @@ function Get-TargetResource
         $complexMinimumSupportedOperatingSystem = @{}
         if ($null -ne $instance.AdditionalProperties.minimumSupportedOperatingSystem)
         {
-            $instance.AdditionalProperties.minimumSupportedOperatingSystem.GetEnumerator() | Foreach-Object {
+            $instance.AdditionalProperties.minimumSupportedOperatingSystem.GetEnumerator() | ForEach-Object {
                 if ($_.Value) # Values are either true or false. Only export the true value.
                 {
                     $complexMinimumSupportedOperatingSystem.Add($_.Key, $_.Value)
@@ -252,8 +253,8 @@ function Get-TargetResource
         if ($null -ne $appAssignments -and $appAssignments.count -gt 0)
         {
             $resultAssignments += ConvertFrom-IntuneMobileAppAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($appAssignments)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($appAssignments)
         }
         $results.Add('Assignments', $resultAssignments)
 
@@ -450,8 +451,8 @@ function Set-TargetResource
                 throw "Mobile App Category with DisplayName $($category.DisplayName) not found."
             }
 
-            Invoke-MgGraphRequest -Uri "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileApps/$($app.Id)/categories/`$ref" -Method 'POST' -Body @{
-                '@odata.id' = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
+            Invoke-MgGraphRequest -Uri "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileApps/$($app.Id)/categories/`$ref" -Method 'POST' -Body @{
+                '@odata.id' = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
             }
         }
 
@@ -484,8 +485,22 @@ function Set-TargetResource
         $UpdateParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
         Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $UpdateParameters
 
-        [array]$referenceObject = if ($null -ne $currentInstance.Categories.DisplayName) { $currentInstance.Categories.DisplayName } else { ,@() }
-        [array]$differenceObject = if ($null -ne $Categories.DisplayName) { $Categories.DisplayName } else { ,@() }
+        [array]$referenceObject = if ($null -ne $currentInstance.Categories.DisplayName)
+        {
+            $currentInstance.Categories.DisplayName
+        }
+        else
+        {
+            , @()
+        }
+        [array]$differenceObject = if ($null -ne $Categories.DisplayName)
+        {
+            $Categories.DisplayName
+        }
+        else
+        {
+            , @()
+        }
         $delta = Compare-Object -ReferenceObject $referenceObject -DifferenceObject $differenceObject -PassThru
         foreach ($diff in $delta)
         {
@@ -507,7 +522,7 @@ function Set-TargetResource
                 }
 
                 Invoke-MgGraphRequest -Uri "/beta/deviceAppManagement/mobileApps/$($currentInstance.Id)/categories/`$ref" -Method 'POST' -Body @{
-                    '@odata.id' = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
+                    '@odata.id' = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceAppManagement/mobileAppCategories/$($currentCategory.Id)"
                 }
             }
             else

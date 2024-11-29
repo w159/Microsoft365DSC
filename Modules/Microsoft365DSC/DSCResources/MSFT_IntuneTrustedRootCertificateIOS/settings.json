@@ -1,6 +1,6 @@
 {
-    "resourceName": "IntuneMobileAppConfigurationPolicyIOS",
-    "description": "This resource configures an Intune Managed Device Mobile App Configuration Policy for iOS Device.",
+    "resourceName": "IntuneTrustedRootCertificateIOS",
+    "description": "This resource configures an iOS Intune Trusted Root Certificate Policy.",
     "permissions": {
         "graph": {
             "delegated": {
@@ -8,8 +8,8 @@
                     {
                         "name": "Group.Read.All"
                     },
-{
-                        "name": "DeviceManagementApps.Read.All"
+                    {
+                        "name": "DeviceManagementConfiguration.Read.All"
                     }
                 ],
                 "update": [
@@ -17,7 +17,7 @@
                         "name": "Group.Read.All"
                     },
                     {
-                        "name": "DeviceManagementApps.ReadWrite.All"
+                        "name": "DeviceManagementConfiguration.ReadWrite.All"
                     }
                 ]
             },
@@ -27,7 +27,7 @@
                         "name": "Group.Read.All"
                     },
                     {
-                        "name": "DeviceManagementApps.Read.All"
+                        "name": "DeviceManagementConfiguration.Read.All"
                     }
                 ],
                 "update": [
@@ -35,7 +35,7 @@
                         "name": "Group.Read.All"
                     },
                     {
-                        "name": "DeviceManagementApps.ReadWrite.All"
+                        "name": "DeviceManagementConfiguration.ReadWrite.All"
                     }
                 ]
             }

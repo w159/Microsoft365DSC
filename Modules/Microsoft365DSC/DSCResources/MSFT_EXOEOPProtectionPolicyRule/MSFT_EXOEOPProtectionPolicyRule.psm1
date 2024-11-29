@@ -71,7 +71,11 @@ function Get-TargetResource
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
-        $ApplicationSecret
+        $ApplicationSecret,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
     )
 
     New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -118,6 +122,7 @@ function Get-TargetResource
             TenantId                  = $TenantId
             CertificateThumbprint     = $CertificateThumbprint
             ApplicationSecret         = $ApplicationSecret
+            AccessTokens              = $AccessTokens
         }
         return [System.Collections.Hashtable] $results
     }
@@ -205,7 +210,11 @@ function Set-TargetResource
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
-        $ApplicationSecret
+        $ApplicationSecret,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
     )
 
     New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -230,7 +239,7 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         #following Microsoft recommendation, we will not create new EOPProtectionPolicyRule, instead we will enable the rule if not already done
-        Write-Verbose -Message "We not create new EOPProtectionPolicyRule if it is not present"
+        Write-Verbose -Message 'We not create new EOPProtectionPolicyRule if it is not present'
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
@@ -250,9 +259,9 @@ function Set-TargetResource
             }
         }
 
-        if($currentInstance.State -ne $State)
+        if ($currentInstance.State -ne $State)
         {
-            if($State -eq 'Enabled')
+            if ($State -eq 'Enabled')
             {
                 Enable-EOPProtectionPolicyRule -Identity $Identity
             }
@@ -267,7 +276,7 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
         #following Microsoft recommendation, we will not remove EOPProtectionPolicyRules.
-        Write-Verbose -Message "We will not remove EOPProtectionPolicyRules"
+        Write-Verbose -Message 'We will not remove EOPProtectionPolicyRules'
     }
 }
 
@@ -344,7 +353,11 @@ function Test-TargetResource
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
-        $ApplicationSecret
+        $ApplicationSecret,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
     )
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -388,7 +401,7 @@ function Test-TargetResource
         {
             switch -regex ($key)
             {
-                "^ExceptIf\w+$|^RecipientDomainIs$|^SentTo(\w+)?$"
+                '^ExceptIf\w+$|^RecipientDomainIs$|^SentTo(\w+)?$'
                 {
                     $CurrentValues[$key] = @()
                     break
@@ -435,10 +448,14 @@ function Export-TargetResource
 
         [Parameter()]
         [Switch]
-        $ManagedIdentity
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens
     )
 
-   $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
         -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -481,14 +498,14 @@ function Export-TargetResource
             }
             Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
             $params = @{
-                Identity = $config.Identity
-                Ensure = 'Present'
-                Credential = $Credential
-                ApplicationId = $ApplicationId
-                TenantId = $TenantId
+                Identity              = $config.Identity
+                Ensure                = 'Present'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint
-                ApplicationSecret = $ApplicationSecret
-
+                ApplicationSecret     = $ApplicationSecret
+                AccessTokens          = $AccessTokens
             }
 
             $Results = Get-TargetResource @Params

@@ -208,6 +208,7 @@ function Get-TargetResource
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -All `
                     -Filter "DisplayName eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue | Where-Object `
                     -FilterScript { `
@@ -256,11 +257,11 @@ function Get-TargetResource
         }
         #endregion
 
-        $rootCertificateForClientValidation                  = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName rootCertificateForClientValidation
-        $rootCertificatesForServerValidation                 = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName rootCertificatesForServerValidation
-        $identityCertificateForClientAuthentication          = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName identityCertificateForClientAuthentication
+        $rootCertificateForClientValidation = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName rootCertificateForClientValidation
+        $rootCertificatesForServerValidation = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName rootCertificatesForServerValidation
+        $identityCertificateForClientAuthentication = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName identityCertificateForClientAuthentication
         $secondaryIdentityCertificateForClientAuthentication = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName secondaryIdentityCertificateForClientAuthentication
-        $secondaryRootCertificateForClientValidation         = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName secondaryRootCertificateForClientValidation
+        $secondaryRootCertificateForClientValidation = Get-DeviceConfigurationPolicyCertificate -DeviceConfigurationPolicyId $getValue.Id -CertificateName secondaryRootCertificateForClientValidation
 
         $results = @{
             #region resource generator code
@@ -312,8 +313,8 @@ function Get-TargetResource
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 
@@ -563,7 +564,7 @@ function Set-TargetResource
                     -CertificateId $RootCertificatesForServerValidationIds[$i] `
                     -CertificateDisplayName $RootCertificatesForServerValidationDisplayNames[$i] `
                     -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-                $rootCertificatesForServerValidation += "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+                $rootCertificatesForServerValidation += "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             }
             $CreateParameters.Add('rootCertificatesForServerValidation@odata.bind', $rootCertificatesForServerValidation)
         }
@@ -577,8 +578,8 @@ function Set-TargetResource
                     '#microsoft.graph.windows81SCEPCertificateProfile', `
                     '#microsoft.graph.windows81TrustedRootCertificate', `
                     '#microsoft.graph.windows10PkcsCertificateProfile' `
-                )
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            )
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('identityCertificateForClientAuthentication@odata.bind', $ref)
         }
 
@@ -591,8 +592,8 @@ function Set-TargetResource
                     '#microsoft.graph.windows81SCEPCertificateProfile', `
                     '#microsoft.graph.windows81TrustedRootCertificate', `
                     '#microsoft.graph.windows10PkcsCertificateProfile' `
-                )
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            )
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('secondaryIdentityCertificateForClientAuthentication@odata.bind', $ref)
         }
 
@@ -602,7 +603,7 @@ function Set-TargetResource
                 -CertificateId $RootCertificateForClientValidationId `
                 -CertificateDisplayName $RootCertificateForClientValidationDisplayName `
                 -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('rootCertificateForClientValidation@odata.bind', $ref)
         }
 
@@ -612,7 +613,7 @@ function Set-TargetResource
                 -CertificateId $SecondaryRootCertificateForClientValidationId `
                 -CertificateDisplayName $SecondaryRootCertificateForClientValidationDisplayName `
                 -OdataTypes @('#microsoft.graph.windows81TrustedRootCertificate')
-            $ref = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
+            $ref = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
             $CreateParameters.Add('secondaryRootCertificateForClientValidation@odata.bind', $ref)
         }
 
@@ -711,7 +712,7 @@ function Set-TargetResource
                         '#microsoft.graph.windows81SCEPCertificateProfile', `
                         '#microsoft.graph.windows81TrustedRootCertificate', `
                         '#microsoft.graph.windows10PkcsCertificateProfile' `
-                    )
+                )
                 Update-DeviceConfigurationPolicyCertificateId -DeviceConfigurationPolicyId $currentInstance.Id `
                     -CertificateIds $IdentityCertificateForClientAuthenticationId `
                     -CertificateName identityCertificateForClientAuthentication
@@ -729,7 +730,7 @@ function Set-TargetResource
                         '#microsoft.graph.windows81SCEPCertificateProfile', `
                         '#microsoft.graph.windows81TrustedRootCertificate', `
                         '#microsoft.graph.windows10PkcsCertificateProfile' `
-                    )
+                )
                 Update-DeviceConfigurationPolicyCertificateId -DeviceConfigurationPolicyId $currentInstance.Id `
                     -CertificateIds $SecondaryIdentityCertificateForClientAuthenticationId `
                     -CertificateName secondaryIdentityCertificateForClientAuthentication
@@ -1154,8 +1155,8 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-            $_.Exception -like "*Message: Location header not present in redirection response.*" -or `
-            $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Message: Location header not present in redirection response.*' -or `
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }
@@ -1194,13 +1195,13 @@ function Get-DeviceConfigurationPolicyCertificate
         $result = Invoke-MgGraphRequest -Method Get -Uri $Uri 4>$null
 
         return $(if ($result.value)
-        {
-            $result.value
-        }
-        else
-        {
-            $result
-        })
+            {
+                $result.value
+            }
+            else
+            {
+                $result
+            })
     }
     catch
     {
@@ -1241,7 +1242,7 @@ function Update-DeviceConfigurationPolicyCertificateId
     foreach ($certificateId in $CertificateIds)
     {
         $ref = @{
-            '@odata.id' = "$($Global:MSCloudLoginAssistant.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$certificateId')"
+            '@odata.id' = "$($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl)beta/deviceManagement/deviceConfigurations('$certificateId')"
         }
 
         Invoke-MgGraphRequest -Method $method -Uri $Uri -Body ($ref | ConvertTo-Json) -ErrorAction Stop 4>$null
@@ -1295,8 +1296,8 @@ function Get-IntuneDeviceConfigurationCertificateId
         -DeviceConfigurationId $CertificateId `
         -ErrorAction SilentlyContinue | `
             Where-Object -FilterScript {
-                $_.AdditionalProperties.'@odata.type' -in $OdataTypes
-            }
+            $_.AdditionalProperties.'@odata.type' -in $OdataTypes
+        }
 
     if ($null -eq $Certificate)
     {
@@ -1306,8 +1307,8 @@ function Get-IntuneDeviceConfigurationCertificateId
             -Filter "DisplayName eq '$CertificateDisplayName'" `
             -ErrorAction SilentlyContinue | `
                 Where-Object -FilterScript {
-                    $_.AdditionalProperties.'@odata.type' -in $OdataTypes
-                }
+                $_.AdditionalProperties.'@odata.type' -in $OdataTypes
+            }
 
         if ($null -eq $Certificate)
         {

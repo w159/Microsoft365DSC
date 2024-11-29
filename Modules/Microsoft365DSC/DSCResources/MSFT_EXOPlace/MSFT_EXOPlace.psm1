@@ -69,7 +69,7 @@ function Get-TargetResource
         $ParentId,
 
         [Parameter()]
-        [ValidateSet("Floor", "Section", "None")]
+        [ValidateSet('Floor', 'Section', 'None')]
         [System.String]
         $ParentType,
 
@@ -172,13 +172,19 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 Write-Verbose -Message "Couldn't retrieve place by Id {$($Identity)}. Trying by DisplayName"
-                $place = Get-Place -ResultSize 'Unlimited' | Where-Object -FilterScript {$_.DisplayName -eq $DisplayName}
+                $place = Get-Place -ResultSize 'Unlimited' | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
             }
 
             if ($null -eq $place)
             {
                 return $nullReturn
             }
+        }
+
+        $TagsValue = [Array] $place.Tags
+        if ($place.Tags -eq $null)
+        {
+            $TagsValue = @()
         }
 
         $result = @{
@@ -203,7 +209,7 @@ function Get-TargetResource
             PostalCode             = $place.PostalCode
             State                  = $place.State
             Street                 = $place.Street
-            Tags                   = [Array] $place.Tags
+            Tags                   = $TagsValue
             VideoDeviceName        = $place.VideoDeviceName
             Credential             = $Credential
             Ensure                 = 'Present'
@@ -299,7 +305,7 @@ function Set-TargetResource
         $ParentId,
 
         [Parameter()]
-        [ValidateSet("Floor", "Section", "None")]
+        [ValidateSet('Floor', 'Section', 'None')]
         [System.String]
         $ParentType,
 
@@ -470,7 +476,7 @@ function Test-TargetResource
         $ParentId,
 
         [Parameter()]
-        [ValidateSet("Floor", "Section", "None")]
+        [ValidateSet('Floor', 'Section', 'None')]
         [System.String]
         $ParentType,
 

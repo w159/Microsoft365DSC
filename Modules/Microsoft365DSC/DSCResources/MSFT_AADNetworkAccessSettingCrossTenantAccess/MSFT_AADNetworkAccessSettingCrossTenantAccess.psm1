@@ -25,6 +25,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -62,6 +66,7 @@ function Get-TargetResource
             Credential                 = $Credential
             ApplicationId              = $ApplicationId
             TenantId                   = $TenantId
+            ApplicationSecret          = $ApplicationSecret
             CertificateThumbprint      = $CertificateThumbprint
             ManagedIdentity            = $ManagedIdentity.IsPresent
             AccessTokens               = $AccessTokens
@@ -107,6 +112,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -134,7 +143,7 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Updating the Cross Tenant Access Settings"
+    Write-Verbose -Message 'Updating the Cross Tenant Access Settings'
     Update-MgBetaNetworkAccessSettingCrossTenantAccess -NetworkPacketTaggingStatus $NetworkPacketTaggingStatus
 }
 
@@ -163,6 +172,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -266,6 +279,7 @@ function Export-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens

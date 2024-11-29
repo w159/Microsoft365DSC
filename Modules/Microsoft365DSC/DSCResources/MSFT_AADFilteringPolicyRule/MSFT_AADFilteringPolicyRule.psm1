@@ -42,6 +42,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -73,7 +77,7 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter {$_.Name -eq $Policy}
+        $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter { $_.Name -eq $Policy }
         if ($null -ne $policyInstance)
         {
             Write-Verbose -Message "Found existing Policy {$Policy}"
@@ -82,12 +86,12 @@ function Get-TargetResource
             {
                 Write-Verbose -Message "Retrieving Filtering Policy Rule by Id {$Id}"
                 $instance = Get-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id `
-                                                                       -PolicyRuleId Id -ErrorAction SilentlyContinue
+                    -PolicyRuleId Id -ErrorAction SilentlyContinue
             }
             if ($null -eq $instance)
             {
                 Write-Verbose -Message "Retrieving Filtering Policy Rule by Name {$Name}"
-                $instance = Get-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id | Where-Object -FilterScript {$_.Name -eq $Name}
+                $instance = Get-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id | Where-Object -FilterScript { $_.Name -eq $Name }
             }
         }
         if ($null -eq $instance)
@@ -107,7 +111,7 @@ function Get-TargetResource
             elseif ($instance.AdditionalProperties.ruleType -eq 'webCategory')
             {
                 $DestinationsValue += @{
-                    name        = $destination.name
+                    name = $destination.name
                 }
             }
         }
@@ -122,6 +126,7 @@ function Get-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -184,6 +189,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -196,7 +205,7 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Entering the Set-TargetResource function"
+    Write-Verbose -Message 'Entering the Set-TargetResource function'
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -211,29 +220,12 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
-    $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter {$_.Name -eq $Policy}
+    $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter { $_.Name -eq $Policy }
 
     if ($RuleType -eq 'webCategory')
     {
         $instanceParams = @{
-            "@odata.type" = "#microsoft.graph.networkaccess.webCategoryFilteringRule"
-            name          = $Name
-            ruleType      = $RuleType
-            destinations = @()
-        }
-
-        foreach ($destination in $Destinations)
-        {
-            $instanceParams.destinations += @{
-                "@odata.type" = "#microsoft.graph.networkaccess.webCategory"
-                name          = $destination.name
-            }
-        }
-    }
-    elseif ($RuleType -eq 'fqdn')
-    {
-        $instanceParams = @{
-            "@odata.type" = "#microsoft.graph.networkaccess.fqdnFilteringRule"
+            '@odata.type' = '#microsoft.graph.networkaccess.webCategoryFilteringRule'
             name          = $Name
             ruleType      = $RuleType
             destinations  = @()
@@ -242,7 +234,24 @@ function Set-TargetResource
         foreach ($destination in $Destinations)
         {
             $instanceParams.destinations += @{
-                "@odata.type" = "#microsoft.graph.networkaccess.fqdn"
+                '@odata.type' = '#microsoft.graph.networkaccess.webCategory'
+                name          = $destination.name
+            }
+        }
+    }
+    elseif ($RuleType -eq 'fqdn')
+    {
+        $instanceParams = @{
+            '@odata.type' = '#microsoft.graph.networkaccess.fqdnFilteringRule'
+            name          = $Name
+            ruleType      = $RuleType
+            destinations  = @()
+        }
+
+        foreach ($destination in $Destinations)
+        {
+            $instanceParams.destinations += @{
+                '@odata.type' = '#microsoft.graph.networkaccess.fqdn'
                 value         = $destination.value
             }
         }
@@ -253,7 +262,7 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Creating new Filtering Policy Rule {$Name}"
         New-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id `
-                                                   -BodyParameter $instanceParams
+            -BodyParameter $instanceParams
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -261,15 +270,15 @@ function Set-TargetResource
         Write-Verbose -Message "Updating Filtering Policy Rule {$Name}"
         $instanceParams.Remove('ruleType') | Out-Null
         Update-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id `
-                                                      -PolicyRuleId $currentInstance.Id `
-                                                      -BodyParameter $instanceParams
+            -PolicyRuleId $currentInstance.Id `
+            -BodyParameter $instanceParams
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Removing Filtering Policy Rule {$Name}"
         Remove-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policyInstance.Id `
-                                                      -PolicyRuleId $currentInstance.Id
+            -PolicyRuleId $currentInstance.Id
     }
 }
 
@@ -315,6 +324,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -451,7 +464,7 @@ function Export-TargetResource
             $displayedKey = $policy.Name
             Write-Host "    |---[$i/$($policies.Count)] $displayedKey" -NoNewline
             $rules = Get-MgBetaNetworkAccessFilteringPolicyRule -FilteringPolicyId $policy.Id `
-                                                                -ErrorAction SilentlyContinue
+                -ErrorAction SilentlyContinue
             if ($rules.Length -eq 0)
             {
                 Write-Host $Global:M365DSCEmojiGreenCheckMark
@@ -477,6 +490,7 @@ function Export-TargetResource
                     Credential            = $Credential
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
+                    ApplicationSecret     = $ApplicationSecret
                     CertificateThumbprint = $CertificateThumbprint
                     ManagedIdentity       = $ManagedIdentity.IsPresent
                     AccessTokens          = $AccessTokens
@@ -506,7 +520,7 @@ function Export-TargetResource
 
                 if ($Results.Destinations)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Destinations' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Destinations' -IsCIMArray:$true
                 }
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `

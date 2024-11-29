@@ -46,6 +46,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -81,11 +85,11 @@ function Get-TargetResource
         {
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
             }
             if ($null -eq $instance)
             {
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.DisplayName -eq $DisplayName}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
             }
         }
         else
@@ -148,6 +152,7 @@ function Get-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -214,6 +219,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -241,31 +250,31 @@ function Set-TargetResource
     $currentInstance = Get-TargetResource @PSBoundParameters
 
     $instanceParams = @{
-        displayName = $DisplayName
-        description = $Description
-        endpointConfiguration = @{
-            "@odata.type"        = "#microsoft.graph.logicAppTriggerEndpointConfiguration"
+        displayName                 = $DisplayName
+        description                 = $Description
+        endpointConfiguration       = @{
+            '@odata.type'        = '#microsoft.graph.logicAppTriggerEndpointConfiguration'
             subscriptionId       = $EndpointConfiguration.subscriptionId
             resourceGroupName    = $EndpointConfiguration.resourceGroupName
             logicAppWorkflowName = $EndpointConfiguration.logicAppWorkflowName
             url                  = $EndpointConfiguration.url
         }
-        clientConfiguration = @{
-            "@odata.type"         = "#microsoft.graph.customExtensionClientConfiguration"
+        clientConfiguration         = @{
+            '@odata.type'         = '#microsoft.graph.customExtensionClientConfiguration'
             maximumRetries        = $clientConfiguration.maximumRetries
             timeoutInMilliseconds = $clientConfiguration.timeoutInMilliseconds
         }
         authenticationConfiguration = @{
-            "@odata.type" = "#microsoft.graph.azureAdPopTokenAuthentication"
+            '@odata.type' = '#microsoft.graph.azureAdPopTokenAuthentication'
         }
     }
 
     if ($null -ne $CallbackConfiguration)
     {
         $instanceParams.Add('callbackConfiguration', @{
-            "@odata.type"   = "#microsoft.graph.identityGovernance.customTaskExtensionCallbackConfiguration"
-            timeoutDuration = $CallbackConfiguration.timeoutDuration
-        })
+                '@odata.type'   = '#microsoft.graph.identityGovernance.customTaskExtensionCallbackConfiguration'
+                timeoutDuration = $CallbackConfiguration.timeoutDuration
+            })
 
         if ($null -ne $CallbackConfiguration.AuthorizedApps)
         {
@@ -348,6 +357,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -491,6 +504,7 @@ function Export-TargetResource
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens

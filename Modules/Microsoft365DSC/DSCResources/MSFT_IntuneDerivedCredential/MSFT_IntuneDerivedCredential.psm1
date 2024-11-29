@@ -1,4 +1,5 @@
-function Get-TargetResource {
+function Get-TargetResource
+{
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param (
@@ -91,7 +92,7 @@ function Get-TargetResource {
         $instance = $null
         if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
         {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
+            $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
         }
 
         if ($null -eq $instance)
@@ -105,6 +106,7 @@ function Get-TargetResource {
                 if (-Not [string]::IsNullOrEmpty($DisplayName))
                 {
                     $instance = Get-MgBetaDeviceManagementDerivedCredential `
+                        -All `
                         -Filter "DisplayName eq '$DisplayName'" `
                         -ErrorAction SilentlyContinue
 
@@ -118,20 +120,20 @@ function Get-TargetResource {
         }
 
         $results = @{
-            Ensure                      = 'Present'
-            Id                          = $instance.Id
-            DisplayName                 = $instance.DisplayName
-            HelpUrl                     = $instance.HelpUrl
-            Issuer                      = $instance.Issuer.ToString()
-            NotificationType            = $instance.NotificationType.ToString()
-            RenewalThresholdPercentage  = $instance.RenewalThresholdPercentage
-            Credential                  = $Credential
-            ApplicationId               = $ApplicationId
-            TenantId                    = $TenantId
-            CertificateThumbprint       = $CertificateThumbprint
-            ApplicationSecret           = $ApplicationSecret
-            ManagedIdentity             = $ManagedIdentity.IsPresent
-            AccessTokens                = $AccessTokens
+            Ensure                     = 'Present'
+            Id                         = $instance.Id
+            DisplayName                = $instance.DisplayName
+            HelpUrl                    = $instance.HelpUrl
+            Issuer                     = $instance.Issuer.ToString()
+            NotificationType           = $instance.NotificationType.ToString()
+            RenewalThresholdPercentage = $instance.RenewalThresholdPercentage
+            Credential                 = $Credential
+            ApplicationId              = $ApplicationId
+            TenantId                   = $TenantId
+            CertificateThumbprint      = $CertificateThumbprint
+            ApplicationSecret          = $ApplicationSecret
+            ManagedIdentity            = $ManagedIdentity.IsPresent
+            AccessTokens               = $AccessTokens
         }
 
         return [System.Collections.Hashtable] $results
@@ -149,7 +151,8 @@ function Get-TargetResource {
     }
 }
 
-function Set-TargetResource {
+function Set-TargetResource
+{
     [CmdletBinding()]
     param (
 
@@ -186,7 +189,7 @@ function Set-TargetResource {
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
         [System.String]
-        $Ensure='Present',
+        $Ensure = 'Present',
 
         [Parameter()]
         [System.Management.Automation.PSCredential]
@@ -251,7 +254,8 @@ function Set-TargetResource {
     }
 }
 
-function Test-TargetResource {
+function Test-TargetResource
+{
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param (
@@ -360,7 +364,8 @@ function Test-TargetResource {
     return $testResult
 }
 
-function Export-TargetResource {
+function Export-TargetResource
+{
     [CmdletBinding()]
     [OutputType([System.String])]
     param (
@@ -430,7 +435,7 @@ function Export-TargetResource {
     )
 
     $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-    -InboundParameters $PSBoundParameters
+        -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -465,20 +470,20 @@ function Export-TargetResource {
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
 
             $params = @{
-                Ensure                      = 'Present'
-                Id                          = $config.Id
-                DisplayName                 = $config.DisplayName
-                HelpUrl                     = $config.HelpUrl
-                Issuer                      = $config.Issuer.ToString()
-                NotificationType            = $config.NotificationType.ToString()
-                RenewalThresholdPercentage  = $config.RenewalThresholdPercentage
-                Credential                  = $Credential
-                AccessTokens                = $AccessTokens
-                ApplicationId               = $ApplicationId
-                TenantId                    = $TenantId
-                ApplicationSecret           = $ApplicationSecret
-                CertificateThumbprint       = $CertificateThumbprint
-                ManagedIdentity             = $ManagedIdentity.IsPresent
+                Ensure                     = 'Present'
+                Id                         = $config.Id
+                DisplayName                = $config.DisplayName
+                HelpUrl                    = $config.HelpUrl
+                Issuer                     = $config.Issuer.ToString()
+                NotificationType           = $config.NotificationType.ToString()
+                RenewalThresholdPercentage = $config.RenewalThresholdPercentage
+                Credential                 = $Credential
+                AccessTokens               = $AccessTokens
+                ApplicationId              = $ApplicationId
+                TenantId                   = $TenantId
+                ApplicationSecret          = $ApplicationSecret
+                CertificateThumbprint      = $CertificateThumbprint
+                ManagedIdentity            = $ManagedIdentity.IsPresent
             }
 
             $Results = Get-TargetResource @Params

@@ -6,26 +6,20 @@ It is not meant to use as a production baseline.
 Configuration Example
 {
     param(
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint
+        [Parameter(Mandatory = $true)]
+        [PSCredential]
+        $Credscredential
     )
     Import-DscResource -ModuleName Microsoft365DSC
 
     node localhost
     {
-        EXODataEncryptionPolicy 'ConfigureDataEncryptionPolicy'
+        IntuneRoleScopeTag 'Example'
         {
-            Identity    = 'US Mailboxes'
-            Ensure      = "Absent"
+            DisplayName           = "MyExistingTag"
+            Id                    = "5"
+            Description           = "My Example Tag"
+            Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint
