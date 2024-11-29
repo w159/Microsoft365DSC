@@ -7,6 +7,9 @@
     reading and troubleshooting
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* TeamsProtectionPolicy
+  * Initial release
+    FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
 * M365DSCDRGUtil
   * Add separate check for strings with ordinal comparison and standardized line breaks.
 * M365DSCUtil
