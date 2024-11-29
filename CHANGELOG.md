@@ -5,6 +5,8 @@
 * All resources
   * Applying project default formatting on all files, to improve
     reading and troubleshooting
+* EXOTransportRule
+  * Fixed conditional logic for creation and update.
 * IntuneTrustedRootCertificateIOS
   * Initial release
 * M365DSCDRGUtil
