@@ -190,6 +190,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
+                    -All `
                     -Filter "Name eq '$DisplayName' and templateReference/TemplateId eq '$templateReferenceId'" `
                     -ErrorAction SilentlyContinue
             }
@@ -223,8 +224,8 @@ function Get-TargetResource
         if ($graphAssignments.Count -gt 0)
         {
             $returnAssignments += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($graphAssignments)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($graphAssignments)
         }
         $returnHashtable.Add('Assignments', $returnAssignments)
 
@@ -859,8 +860,8 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-            $_.Exception -like "*Unable to perform redirect as Location Header is not set in response*" -or `
-            $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Unable to perform redirect as Location Header is not set in response*' -or `
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

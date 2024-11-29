@@ -54,6 +54,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -89,11 +93,11 @@ function Get-TargetResource
         {
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
             }
             if ($null -eq $instance)
             {
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.DisplayName -eq $DisplayName}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
             }
         }
         else
@@ -102,11 +106,11 @@ function Get-TargetResource
             $instances = Invoke-MgGraphRequest $uri -Method Get
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $instance = $instances.value | Where-Object -FilterScript {$_.Id -eq $Id}
+                $instance = $instances.value | Where-Object -FilterScript { $_.Id -eq $Id }
             }
             if ($null -eq $instance)
             {
-                $instance = $instances.value | Where-Object -FilterScript {$_.DisplayName -eq $DisplayName}
+                $instance = $instances.value | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
             }
         }
         if ($null -eq $instance)
@@ -127,6 +131,7 @@ function Get-TargetResource
             Credential                      = $Credential
             ApplicationId                   = $ApplicationId
             TenantId                        = $TenantId
+            ApplicationSecret               = $ApplicationSecret
             CertificateThumbprint           = $CertificateThumbprint
             ManagedIdentity                 = $ManagedIdentity.IsPresent
             AccessTokens                    = $AccessTokens
@@ -201,6 +206,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -228,7 +237,7 @@ function Set-TargetResource
     $currentInstance = Get-TargetResource @PSBoundParameters
 
     $instanceParams = @{
-        "@odata.type"                   = "microsoft.graph.samlOrWsFedExternalDomainFederation"
+        '@odata.type'                   = 'microsoft.graph.samlOrWsFedExternalDomainFederation'
         displayName                     = $DisplayName
         metadataExchangeUri             = $MetadataExchangeUri
         issuerUri                       = $IssuerUri
@@ -240,7 +249,7 @@ function Set-TargetResource
     foreach ($domain in $domains)
     {
         $instanceParams.domains += @{
-            "@odata.type" = "microsoft.graph.externalDomainName"
+            '@odata.type' = 'microsoft.graph.externalDomainName'
             id            = $domain
         }
     }
@@ -323,6 +332,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -446,6 +459,7 @@ function Export-TargetResource
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens

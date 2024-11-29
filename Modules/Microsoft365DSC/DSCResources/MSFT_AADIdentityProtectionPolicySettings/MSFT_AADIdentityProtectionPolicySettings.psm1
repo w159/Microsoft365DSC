@@ -25,6 +25,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -55,7 +59,7 @@ function Get-TargetResource
     $nullResult = $PSBoundParameters
     try
     {
-         $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+        $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'beta/identityProtection/policy'
         $instance = Invoke-MgGraphRequest -Method Get -Uri $url
 
         if ($null -eq $instance)
@@ -69,6 +73,7 @@ function Get-TargetResource
             Credential                       = $Credential
             ApplicationId                    = $ApplicationId
             TenantId                         = $TenantId
+            ApplicationSecret                = $ApplicationSecret
             CertificateThumbprint            = $CertificateThumbprint
             ManagedIdentity                  = $ManagedIdentity.IsPresent
             AccessTokens                     = $AccessTokens
@@ -114,6 +119,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -144,7 +153,7 @@ function Set-TargetResource
 
     $updateJSON = ConvertTo-Json $updateParameters
     Write-Verbose -Message "Updating the AAD Identity Protection Policy settings with values: $updateJSON"
-     $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+    $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'beta/identityProtection/policy'
 
     Invoke-MgGraphRequest -Method PATCH -Uri $url -Body $updateJSON
 }
@@ -174,6 +183,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -270,7 +283,7 @@ function Export-TargetResource
     {
         $Script:ExportMode = $true
 
-         $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/identityProtection/policy"
+        $url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'beta/identityProtection/policy'
         [array] $Script:exportedInstances = Invoke-MgGraphRequest -Method Get -Uri $url
 
         $i = 1
@@ -297,6 +310,7 @@ function Export-TargetResource
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens

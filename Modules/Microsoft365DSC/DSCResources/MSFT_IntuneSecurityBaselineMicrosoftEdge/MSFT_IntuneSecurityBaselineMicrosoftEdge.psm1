@@ -81,6 +81,10 @@ function Get-TargetResource
         $authschemes,
 
         [Parameter()]
+        [System.String]
+        $AuthSchemes_AuthSchemes,
+
+        [Parameter()]
         [ValidateSet('0', '1')]
         [System.String]
         $NativeMessagingUserLevelHosts,
@@ -186,7 +190,7 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id  -ErrorAction SilentlyContinue
+        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
 
         if ($null -eq $getValue)
         {
@@ -195,6 +199,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
+                    -All `
                     -Filter "Name eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue
             }
@@ -339,6 +344,10 @@ function Set-TargetResource
         $authschemes,
 
         [Parameter()]
+        [System.String]
+        $AuthSchemes_AuthSchemes,
+
+        [Parameter()]
         [ValidateSet('0', '1')]
         [System.String]
         $NativeMessagingUserLevelHosts,
@@ -441,10 +450,17 @@ function Set-TargetResource
     $platforms = 'windows10'
     $technologies = 'mdm'
 
+    if ($BoundParameters.ContainsKey('authschemes'))
+    {
+        Write-Warning -Message "The parameter 'authschemes' is deprecated. Please use 'AuthSchemes_AuthSchemes' instead."
+        $BoundParameters['AuthSchemes_AuthSchemes'] = $BoundParameters['authschemes']
+        $BoundParameters.Remove('authschemes') | Out-Null
+    }
+
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Intune Security Baseline Microsoft Edge with Name {$DisplayName}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
             -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
@@ -475,7 +491,7 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Intune Security Baseline Microsoft Edge with Id {$($currentInstance.Id)}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
             -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
@@ -588,6 +604,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $authschemes,
+
+        [Parameter()]
+        [System.String]
+        $AuthSchemes_AuthSchemes,
 
         [Parameter()]
         [ValidateSet('0', '1')]
@@ -730,6 +750,17 @@ function Test-TargetResource
         }
     }
 
+    if ($PSBoundParameters.ContainsKey('authschemes'))
+    {
+        Write-Warning -Message "The parameter 'authschemes' is deprecated. Please use 'AuthSchemes_AuthSchemes' instead."
+        if ($PSBoundParameters['authschemes'] -ne $CurrentValues['AuthSchemes_AuthSchemes'])
+        {
+            $testResult = $false
+        }
+        $ValuesToCheck.Remove('authschemes') | Out-Null
+        $ValuesToCheck.Remove('AuthSchemes_AuthSchemes') | Out-Null
+    }
+
     $ValuesToCheck.Remove('Id') | Out-Null
     $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
 
@@ -806,14 +837,14 @@ function Export-TargetResource
     try
     {
         #region resource generator code
-        $policyTemplateID = "c66347b7-8325-4954-a235-3bf2233dfbfd_2"
+        $policyTemplateID = 'c66347b7-8325-4954-a235-3bf2233dfbfd_2'
         [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
             -Filter $Filter `
             -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript {
-                $_.TemplateReference.TemplateId -eq $policyTemplateID
-            }
+            $_.TemplateReference.TemplateId -eq $policyTemplateID
+        }
         #endregion
 
         $i = 1
@@ -839,16 +870,16 @@ function Export-TargetResource
             }
             Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
             $params = @{
-                Id = $config.Id
-                DisplayName = $config.Name
-                Ensure = 'Present'
-                Credential = $Credential
-                ApplicationId = $ApplicationId
-                TenantId = $TenantId
-                ApplicationSecret = $ApplicationSecret
+                Id                    = $config.Id
+                DisplayName           = $config.Name
+                Ensure                = 'Present'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
-                ManagedIdentity = $ManagedIdentity.IsPresent
-                AccessTokens = $AccessTokens
+                ManagedIdentity       = $ManagedIdentity.IsPresent
+                AccessTokens          = $AccessTokens
             }
 
             $Results = Get-TargetResource @Params
@@ -876,7 +907,7 @@ function Export-TargetResource
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock

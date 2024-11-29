@@ -46,7 +46,7 @@
                         }
                     );
                     BackupDirectory          = "1";
-                    PasswordAgeDays_AAD      = 10;
+                    passwordagedays_aad      = 10;
                     AdministratorAccountName = "Administrator";
                     PasswordAgeDays          = 20;
                     ApplicationId         = $ApplicationId;
@@ -106,6 +106,32 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneAndroidManagedStoreAppConfiguration 'ConfigureIntuneAndroidManagedStoreAppConfiguration'
+                {
+                    Description           = "IntuneAndroidManagedStoreAppConfiguration Description";
+                    DisplayName           = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
+                    Ensure                = "Present";
+                    appSupportsOemConfig  = $False;
+                    connectedAppsEnabled  = $False;
+                    packageId             = "app:org.mozilla.firefox";
+                    payloadJson           = "";
+        	    permissionActions     = @(
+                        MSFT_androidPermissionAction{
+                            permission = 'android.permission.RECEIVE_SMS'
+                        }
+                        MSFT_androidPermissionAction{
+                            permission = 'android.permission.READ_SMS'
+                        }
+                        MSFT_androidPermissionAction{
+                            permission = 'android.permission.RECEIVE_WAP_PUSH'
+                        }
+                    );
+                    profileApplicability  = "androidDeviceOwner";
+                    targetedMobileApps    = @("30ab8f7a-14fb-4a05-befa-ea7f51141ad9");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 IntuneAntivirusExclusionsPolicyLinux 'myIntuneAntivirusExclusionsPolicyLinux'
                 {
                     Assignments = @();
@@ -115,6 +141,27 @@
                     Exclusions  = @(
                         MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
                             Exclusions_item_extension = '.exe'
+                            Exclusions_item_type = '1'
+                        }
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                            Exclusions_item_name = 'process1'
+                            Exclusions_item_type = '2'
+                        }
+                    );
+                    RoleScopeTagIds                    = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneAntivirusExclusionsPolicyMacOS 'myIntuneAntivirusExclusionsPolicyMacOS'
+                {
+                    Assignments = @();
+                    Description = "";
+                    DisplayName = "Test";
+                    Ensure      = "Present";
+                    Exclusions  = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
+                            Exclusions_item_extension = '.dmg'
                             Exclusions_item_type = '1'
                         }
                         MSFT_MicrosoftGraphIntuneSettingsCatalogExclusions{
@@ -2437,6 +2484,21 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneDiskEncryptionPDEPolicyWindows10 'IntuneDiskEncryptionPDEPolicyWindows10'
+                {
+                    Assignments                  = @();
+                    Description                  = "test";
+                    DisplayName                  = "test";
+                    Ensure                       = "Present";
+                    EnablePersonalDataEncryption = "1";
+                    ProtectDesktop               = "0";
+                    ProtectDocuments             = "0";
+                    ProtectPictures              = "0";
+                    RoleScopeTagIds              = @("0");
+                    ApplicationId                = $ApplicationId;
+                    TenantId                     = $TenantId;
+                    CertificateThumbprint        = $CertificateThumbprint;
+                }
                 IntuneDiskEncryptionWindows10 'myDiskEncryption'
                 {
                     DisplayName        = 'Disk Encryption'
@@ -2682,6 +2744,34 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneFirewallRulesHyperVPolicyWindows10 'myIntuneFirewallRulesHyperVPolicyWindows10'
+                {
+                    Assignments           = @(
+                        MSFT_DeviceManagementConfigurationPolicyAssignments{
+                            deviceAndAppManagementAssignmentFilterType = 'none'
+                            dataType = '#microsoft.graph.groupAssignmentTarget'
+                            groupId = '11111111-1111-1111-1111-111111111111'
+                        }
+                    );
+                    FirewallRuleName = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName_IntuneFirewallRulesHyperVPolicyWindows10{
+                            Direction = 'out'
+                            RemotePortRanges = @('0-100')
+                            Name = 'Rule1'
+                            Protocol = 80
+                            Enabled = '1'
+                            Action = '1'
+                        }
+                    )
+                    Description           = 'Description'
+                    DisplayName           = "Intune Firewall Rules Hyper-V Policy Windows10";
+                    Ensure                = "Present";
+                    Id                    = '00000000-0000-0000-0000-000000000000'
+                    RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 IntuneFirewallRulesPolicyWindows10 'myIntuneFirewallRulesPolicyWindows10'
                 {
                     Assignments           = @(
@@ -2706,6 +2796,37 @@
                     )
                     Description           = 'Description'
                     DisplayName           = "Intune Firewall Rules Policy Windows10";
+                    Ensure                = "Present";
+                    Id                    = '00000000-0000-0000-0000-000000000000'
+                    RoleScopeTagIds       = @("0");
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneFirewallRulesPolicyWindows10ConfigMgr 'myIntuneFirewallRulesPolicyWindows10ConfigMgr'
+                {
+                    Assignments           = @(
+                        MSFT_DeviceManagementConfigurationPolicyAssignments{
+                            deviceAndAppManagementAssignmentFilterType = 'none'
+                            dataType = '#microsoft.graph.groupAssignmentTarget'
+                            groupId = '11111111-1111-1111-1111-111111111111'
+                        }
+                    );
+                    FirewallRuleName = @(
+                        MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName_IntuneFirewallRulesPolicyWindows10ConfigMgr{
+                            Direction = 'out'
+                            InterfaceTypes = @('lan')
+                            RemotePortRanges = @('0-100')
+                            Name = 'Rule1'
+                            FilePath = 'C:\Temp'
+                            Protocol = 80
+                            ServiceName = 'mysvc'
+                            Enabled = '1'
+                            Type = '1'
+                        }
+                    )
+                    Description           = 'Description'
+                    DisplayName           = "Intune Firewall Rules Policy Windows10 ConfigMgr";
                     Ensure                = "Present";
                     Id                    = '00000000-0000-0000-0000-000000000000'
                     RoleScopeTagIds       = @("0");
@@ -2862,6 +2983,15 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
+                IntuneRoleScopeTag 'Example'
+                {
+                    DisplayName           = "MyNewTag"
+                    Description           = "My Example Tag"
+                    Ensure                = "Present"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
                 IntuneSecurityBaselineDefenderForEndpoint 'mySecurityBaselineDefenderForEndpoint'
                 {
                     DisplayName           = 'test'
@@ -2877,9 +3007,9 @@
                         DisableSafetyFilterOverrideForAppRepUnknown = '1'
                     }
                     Ensure                = 'Present'
-                    ApplicationId         = $ApplicationId;
-                    TenantId              = $TenantId;
-                    CertificateThumbprint = $CertificateThumbprint;
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
                 }
                 IntuneSecurityBaselineMicrosoft365AppsForEnterprise 'mySecurityBaselineMicrosoft365AppsForEnterprisePolicy'
                 {
@@ -3015,6 +3145,17 @@
                     ApplicationId         = $ApplicationId;
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
+                }
+                IntuneTrustedRootCertificateIOS 'ConfigureIntuneTrustedRootCertificateIOS'
+                {
+                    Description            = "IntuneTrustedRootCertificateIOS Description";
+                    DisplayName            = "IntuneTrustedRootCertificateIOS DisplayName";
+                    Ensure                 = "Present";
+                    certFileName           = "fakename.cer";
+                    trustedRootCertificate = "insertValidBase64StringHere";
+                    ApplicationId          = $ApplicationId;
+                    TenantId               = $TenantId;
+                    CertificateThumbprint  = $CertificateThumbprint;
                 }
                 IntuneWiFiConfigurationPolicyAndroidDeviceAdministrator 'myWifiConfigAndroidDevicePolicy'
                 {

@@ -46,6 +46,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -82,12 +86,12 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
                 Write-Verbose -Message "Retrieving profile by Id {$Id}"
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
             }
             if ($null -eq $instance)
             {
                 Write-Verbose -Message "Retrieving profile by Name {$Name}"
-                $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Name -eq $Name}
+                $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Name -eq $Name }
             }
         }
         else
@@ -100,7 +104,7 @@ function Get-TargetResource
             if ($null -eq $instance)
             {
                 Write-Verbose -Message "Retrieving profile by Name {$Name}"
-                $instance = Get-MgBetaNetworkAccessFilteringProfile -All -ExpandProperty Policies | Where-Object -FilterScript {$_.Name -eq $Name}
+                $instance = Get-MgBetaNetworkAccessFilteringProfile -All -ExpandProperty Policies | Where-Object -FilterScript { $_.Name -eq $Name }
             }
         }
         if ($null -eq $instance)
@@ -139,6 +143,7 @@ function Get-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -205,6 +210,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -241,16 +250,16 @@ function Set-TargetResource
 
     foreach ($policy in $Policies)
     {
-        $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -All | Where-Object -FilterScript {$_.Name -eq $policy.PolicyName}
+        $policyInfo = Get-MgBetaNetworkAccessFilteringPolicy -All | Where-Object -FilterScript { $_.Name -eq $policy.PolicyName }
         if ($null -ne $policyInfo)
         {
             $entry = @{
-                "@odata.type" = "#microsoft.graph.networkaccess.filteringPolicyLink"
+                '@odata.type' = '#microsoft.graph.networkaccess.filteringPolicyLink'
                 loggingState  = $policy.LoggingState
                 priority      = $policy.Priority
                 state         = $policy.State
                 policy        = @{
-                    "@odata.type" = "#microsoft.graph.networkaccess.filteringPolicy"
+                    '@odata.type' = '#microsoft.graph.networkaccess.filteringPolicy'
                     id            = $policyInfo.Id
                 }
             }
@@ -325,6 +334,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -473,6 +486,7 @@ function Export-TargetResource
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens

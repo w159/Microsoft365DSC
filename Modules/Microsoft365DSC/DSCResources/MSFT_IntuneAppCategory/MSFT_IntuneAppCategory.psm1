@@ -73,7 +73,7 @@ function Get-TargetResource
         $instance = $null
         if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
         {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Id -eq $Id}
+            $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
         }
 
         if ($null -eq $instance)
@@ -87,6 +87,7 @@ function Get-TargetResource
                 if (-Not [string]::IsNullOrEmpty($DisplayName))
                 {
                     $instance = Get-MgBetaDeviceAppManagementMobileAppCategory `
+                        -All `
                         -Filter "DisplayName eq '$DisplayName'" `
                         -ErrorAction SilentlyContinue
                 }

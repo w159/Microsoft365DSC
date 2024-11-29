@@ -253,6 +253,35 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                EXOAuthenticationPolicy 'ConfigureAuthenticationPolicy'
+                {
+                    Identity                            = "My Assigned Policy"
+                    AllowBasicAuthActiveSync            = $False
+                    AllowBasicAuthAutodiscover          = $False
+                    AllowBasicAuthImap                  = $False
+                    AllowBasicAuthMapi                  = $False
+                    AllowBasicAuthOfflineAddressBook    = $False
+                    AllowBasicAuthOutlookService        = $False
+                    AllowBasicAuthPop                   = $False
+                    AllowBasicAuthPowerShell            = $False
+                    AllowBasicAuthReportingWebServices  = $False
+                    AllowBasicAuthRpc                   = $False
+                    AllowBasicAuthSmtp                  = $False
+                    AllowBasicAuthWebServices           = $False
+                    Ensure                              = "Present"
+                    ApplicationId                       = $ApplicationId
+                    TenantId                            = $TenantId
+                    CertificateThumbprint               = $CertificateThumbprint
+                }
+                EXOAuthenticationPolicyAssignment 'ConfigureAuthenticationPolicyAssignment'
+                {
+                    UserName                 = "AdeleV@$TenantId"
+                    AuthenticationPolicyName = "My Assigned Policy"
+                    Ensure                   = "Present"
+                    ApplicationId            = $ApplicationId
+                    TenantId                 = $TenantId
+                    CertificateThumbprint    = $CertificateThumbprint
+                }
                 EXOAvailabilityAddressSpace 'ConfigureAvailabilityAddressSpace'
                 {
                     Identity              = 'Contoso.com'
@@ -411,6 +440,15 @@
                     IsDefault            = $True;
                     Locale               = "en-US";
                     Name                 = "Canada Social Insurance Number";
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                EXODataEncryptionPolicy 'ConfigureDataEncryptionPolicy'
+                {
+                    Identity              = 'US Mailboxes'
+                    Enabled               = $false #Drift
+                    Ensure                = "Present"
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
@@ -949,6 +987,23 @@
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
                 }
+                EXOMigration 'EXOMigration-test'
+                {
+                    AddUsers             = $True;  #Updated Property
+                    BadItemLimit         = "";
+                    CompleteAfter        = "12/31/9999 11:59:59 PM";
+                    Ensure               = "Present";
+                    Identity             = "test";
+                    LargeItemLimit       = "";
+                    MoveOptions          = @();
+                    NotificationEmails   = @("eac_admin@bellred.org");
+                    SkipMerging          = @();
+                    Status               = "Completed";
+                    Update               = $False;
+                    ApplicationId         = $ApplicationId;
+                    TenantId              = $TenantId;
+                    CertificateThumbprint = $CertificateThumbprint;
+                }
                 EXOMigrationEndpoint 'EXOMigrationEndpoint-testIMAP'
                 {
                     AcceptUntrustedCertificates   = $True;
@@ -1318,6 +1373,16 @@
                     ESNEnabled                        = $True; # Updated Property
                     Identity                          = "$TenantId\IntegrationPolicy";
                     Ensure                            = "Present"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                EXORecipientPermission 'AddSendAs'
+                {
+                    Identity              = "AlexW@$TenantId"
+                    Trustee               = "AdeleV@$TenantId" # Drift
+                    AccessRights          = 'SendAs'
+                    Ensure                = 'Present'
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint

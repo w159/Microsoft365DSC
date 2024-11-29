@@ -96,7 +96,7 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id  -ErrorAction SilentlyContinue
+        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
 
         if ($null -eq $getValue)
         {
@@ -105,6 +105,7 @@ function Get-TargetResource
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -All `
                     -Filter "DisplayName eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue
             }
@@ -152,14 +153,14 @@ function Get-TargetResource
             AccessTokens                            = $AccessTokens
             #endregion
         }
-        
+
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 
@@ -286,7 +287,7 @@ function Set-TargetResource
         }
         $CreateParameters.ConfigDeviceHealthMonitoringScope = [String[]]$CreateParameters.ConfigDeviceHealthMonitoringScope -join ','
         #region resource generator code
-        $CreateParameters.Add("@odata.type", "#microsoft.graph.windowsHealthMonitoringConfiguration")
+        $CreateParameters.Add('@odata.type', '#microsoft.graph.windowsHealthMonitoringConfiguration')
         $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
 
@@ -318,7 +319,7 @@ function Set-TargetResource
         }
         $UpdateParameters.ConfigDeviceHealthMonitoringScope = [String[]]$UpdateParameters.ConfigDeviceHealthMonitoringScope -join ','
         #region resource generator code
-        $UpdateParameters.Add("@odata.type", "#microsoft.graph.windowsHealthMonitoringConfiguration")
+        $UpdateParameters.Add('@odata.type', '#microsoft.graph.windowsHealthMonitoringConfiguration')
         Update-MgBetaDeviceManagementDeviceConfiguration  `
             -DeviceConfigurationId $currentInstance.Id `
             -BodyParameter $UpdateParameters
@@ -613,7 +614,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

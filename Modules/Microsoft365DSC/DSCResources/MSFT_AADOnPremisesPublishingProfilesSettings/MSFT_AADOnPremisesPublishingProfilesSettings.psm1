@@ -25,6 +25,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -68,6 +72,7 @@ function Get-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -111,6 +116,10 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -167,6 +176,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $ApplicationId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -278,6 +291,7 @@ function Export-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -285,16 +299,16 @@ function Export-TargetResource
 
         $Results = Get-TargetResource @Params
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
+            -Results $Results
 
         $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
+            -ConnectionMode $ConnectionMode `
+            -ModulePath $PSScriptRoot `
+            -Results $Results `
+            -Credential $Credential
         $dscContent += $currentDSCBlock
         Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
+            -FileName $Global:PartialExportFileName
         Write-Host $Global:M365DSCEmojiGreenCheckMark
         return $dscContent
     }

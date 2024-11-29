@@ -251,18 +251,20 @@ function Set-TargetResource
     # Receipient Permission doesn't exist but it should
     if ($Ensure -eq 'Present' -and $currentState.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "The Receipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' does not exist but it should. Adding it."
+        Write-Verbose -Message "The Recipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' does not exist but it should. Adding it."
         Add-RecipientPermission @parameters -Confirm:$false
     }
     # Receipient Permission exists but shouldn't
     elseif ($Ensure -eq 'Absent' -and $currentState.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Receipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' exists but shouldn't. Removing it."
+        Write-Verbose -Message "Recipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' exists but shouldn't. Removing it."
         Remove-RecipientPermission @parameters -Confirm:$false
     }
     elseif ($Ensure -eq 'Present' -and $currentState.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Receipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' exists."
+        Write-Verbose -Message "Recipient Permission for '$Trustee' with Access Rights '$($AccessRights -join ', ')' on mailbox '$Identity' exists."
+        Remove-RecipientPermission @parameters -Confirm:$false
+        Add-RecipientPermission @parameters -Confirm:$false
     }
 }
 
@@ -454,7 +456,7 @@ function Export-TargetResource
             }
 
             $IdentityValue = $recipientPermission.Identity
-            if ([System.Guid]::TryParse($IdentityValue,[System.Management.Automation.PSReference]$ObjectGuid))
+            if ([System.Guid]::TryParse($IdentityValue, [System.Management.Automation.PSReference]$ObjectGuid))
             {
                 $user = Get-User -Identity $IdentityValue
                 $IdentityValue = $user.UserPrincipalName

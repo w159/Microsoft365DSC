@@ -279,7 +279,7 @@ function Get-TargetResource
         if ($policy.Length -eq 0)
         {
             Write-Verbose -Message "No iOS App Protection Policy {$Identity} was found by Identity. Trying to retrieve by DisplayName"
-            [Array]$policy = Get-MgBetaDeviceAppManagementiOSManagedAppProtection -Filter "DisplayName eq '$DisplayName'" -ErrorAction SilentlyContinue
+            [Array]$policy = Get-MgBetaDeviceAppManagementiOSManagedAppProtection -All -Filter "DisplayName eq '$DisplayName'" -ErrorAction SilentlyContinue
         }
 
         if ($policy.Length -gt 1)
@@ -769,12 +769,11 @@ function Set-TargetResource
         }
         $createParameters.ExemptedAppProtocols = $myExemptedAppProtocols
 
-
         $policy = New-MgBetaDeviceAppManagementiOSManagedAppProtection -BodyParameter $createParameters
 
         Update-IntuneAppProtectionPolicyiOSApp -IosManagedAppProtectionId $policy.id -Apps $myApps
 
-        Write-Verbose -Message "Updating policy assignments"
+        Write-Verbose -Message 'Updating policy assignments'
         Update-IntuneAppProtectionPolicyiOSAssignment -IosManagedAppProtectionId $policy.id -Assignments $myAssignments
     }
     elseif ($Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
@@ -812,7 +811,6 @@ function Set-TargetResource
             }
         }
         $updateParameters.ExemptedAppProtocols = $myExemptedAppProtocols
-
 
         Update-MgBetaDeviceAppManagementiOSManagedAppProtection -IosManagedAppProtectionId $Identity -BodyParameter $updateParameters
 
@@ -1236,7 +1234,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }
@@ -1295,7 +1293,7 @@ function Get-IntuneAppProtectionPolicyiOSAssignmentToHashtable
     foreach ($assignment in $Parameters.Assignments)
     {
         $assignmentValue = $assignment
-        if (-not [System.Guid]::TryParse($assignment,[System.Management.Automation.PSReference]$ObjectGuid))
+        if (-not [System.Guid]::TryParse($assignment, [System.Management.Automation.PSReference]$ObjectGuid))
         {
             $groupInfo = Get-MgGroup -Filter "DisplayName eq '$assignment'"
             $assignmentValue = $groupInfo.Id
@@ -1310,7 +1308,7 @@ function Get-IntuneAppProtectionPolicyiOSAssignmentToHashtable
     foreach ($exclusion in $Parameters.Exclusions)
     {
         $assignmentValue = $exclusion
-        if (-not [System.Guid]::TryParse($exclusion,[System.Management.Automation.PSReference]$ObjectGuid))
+        if (-not [System.Guid]::TryParse($exclusion, [System.Management.Automation.PSReference]$ObjectGuid))
         {
             $groupInfo = Get-MgGroup -Filter "DisplayName eq '$exclusion'"
             $assignmentValue = $groupInfo.Id
@@ -1338,7 +1336,7 @@ function Get-IntuneAppProtectionPolicyiOSAssignment
 
     try
     {
-        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assignments"
+        $Url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assignments"
         $response = Invoke-MgGraphRequest -Method Get `
             -Uri $Url
         return $response.value
@@ -1369,7 +1367,7 @@ function Update-IntuneAppProtectionPolicyiOSAssignment
     )
     try
     {
-        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assign"
+        $Url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/assign"
         $body = ($Assignments | ConvertTo-Json -Depth 20 -Compress)
         Write-Verbose -Message "Group Assignment for iOS App Protection policy with JSON payload {$Url}: `r`n$body"
         Invoke-MgGraphRequest -Method POST `
@@ -1403,7 +1401,7 @@ function Update-IntuneAppProtectionPolicyiOSApp
 
     try
     {
-        $Url =  $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/targetApps"
+        $Url = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/deviceAppManagement/iosManagedAppProtections('$IosManagedAppProtectionId')/targetApps"
         # Write-Verbose -Message "Group Assignment for iOS App Protection policy with JSON payload: `r`n$JSONContent"
         Invoke-MgGraphRequest -Method POST `
             -Uri $Url `

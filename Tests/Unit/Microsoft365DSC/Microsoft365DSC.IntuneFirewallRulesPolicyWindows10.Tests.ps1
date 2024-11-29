@@ -399,7 +399,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     Description = "My Test"
                     FirewallRuleName = [CimInstance[]]@(
-                        (New-CimInstance -ClassName MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
+                        (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
                             Direction = 'out'
                             InterfaceTypes = @('lan')
                             RemotePortRanges = @('0-100')
@@ -447,7 +447,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     Description = "My Test"
                     FirewallRuleName = [CimInstance[]]@(
-                        (New-CimInstance -ClassName MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
+                        (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
                             Direction = 'out'
                             InterfaceTypes = @('lan')
                             RemotePortRanges = @('0-100')
@@ -493,7 +493,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     Description = "My Test"
                     FirewallRuleName = [CimInstance[]]@(
-                        (New-CimInstance -ClassName MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
+                        (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
                             Direction = 'out'
                             InterfaceTypes = @('lan')
                             RemotePortRanges = @('0-100')
@@ -530,7 +530,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     Description = "My Test"
                     FirewallRuleName = [CimInstance[]]@(
-                        (New-CimInstance -ClassName MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
+                        (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogFirewallRuleName -Property @{
                             Direction = 'in' # Drift
                             InterfaceTypes = @('lan')
                             RemotePortRanges = @('0-100')
