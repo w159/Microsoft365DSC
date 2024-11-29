@@ -487,7 +487,7 @@ function Export-TargetResource
     Write-Host "`r`n" -NoNewline
     try
     {
-        [array] $roles = Get-MgBetaRoleManagementDirectoryRoleDefinition -All
+        [array] $roles = Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter $Filter -All
 
         $j = 1
         foreach ($role in $roles)
