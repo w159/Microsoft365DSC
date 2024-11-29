@@ -1,6 +1,6 @@
 
-[ClassVersion("1.0.0.0"), FriendlyName("TeamsProtectionPolicy")]
-class MSFT_TeamsProtectionPolicy : OMI_BaseResource
+[ClassVersion("1.0.0.0"), FriendlyName("EXOTeamsProtectionPolicy")]
+class MSFT_EXOTeamsProtectionPolicy : OMI_BaseResource
 {
     [Key, Description("Only valid value is 'Yes'."), ValueMap{"Yes"}, Values{"Yes"}] String IsSingleInstance;
     [Write, Description("The AdminDisplayName parameter specifies a description for the policy.")] String AdminDisplayName;

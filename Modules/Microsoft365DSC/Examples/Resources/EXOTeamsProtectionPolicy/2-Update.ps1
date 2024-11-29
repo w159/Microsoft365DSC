@@ -24,7 +24,7 @@ Configuration Example
 
     node localhost
     {
-        TeamsProtectionPolicy 'TeamsProtectionPolicy'
+        EXOTeamsProtectionPolicy 'EXOTeamsProtectionPolicy'
         {
             IsSingleInstance                 = 'Yes'
             AdminDisplayName                 = 'Contoso Administrator'

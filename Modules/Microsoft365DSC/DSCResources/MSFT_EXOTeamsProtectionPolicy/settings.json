@@ -1,5 +1,5 @@
 ﻿{
-    "resourceName": "TeamsProtectionPolicy",
+    "resourceName": "EXOTeamsProtectionPolicy",
     "description": "",
     "roles": {
         "read": [
