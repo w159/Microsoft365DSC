@@ -204,13 +204,13 @@ function Get-TargetResource
     {
         if (-not [string]::IsNullOrWhiteSpace($id))
         { 
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue 
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue 
         }
 
         #region resource generator code
         if ($null -eq $getValue)
         {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
             -FilterScript { `
                 $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosVpnConfiguration' `
             }
@@ -336,7 +336,6 @@ function Get-TargetResource
 
         }
                                           
-        #$assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Id
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Results.Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
@@ -567,7 +566,12 @@ function Set-TargetResource
     #proxy and server values need converting before new- / update- cmdlets will accept parameters
     #creating hashtables now for use later in both present/present and present/absent blocks
     $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
-    if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)') {$serverBlock = $matches[1]}
+    
+    if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)') 
+    {
+        $serverBlock = $matches[1]
+    }
+
     $serverHashtable = @{}
     $serverBlock -split ";" | ForEach-Object {
         if ($_ -match '^(.*?)=(.*)$') {
@@ -576,7 +580,10 @@ function Set-TargetResource
             $serverHashtable[$key] = $value
         }
     }
-    if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') {$proxyBlock = $matches[1]}
+    if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') 
+    {
+        $proxyBlock = $matches[1]
+    }
 
     $proxyHashtable = @{}
     $proxyBlock -split ";" | ForEach-Object {
