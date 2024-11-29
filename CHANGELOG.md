@@ -5,6 +5,8 @@
 * All resources
   * Applying project default formatting on all files, to improve
     reading and troubleshooting
+* AADRoleManagementPolicyRule
+  * Added the logic to handle filters in the Export logic flow.
 * EXOTransportRule
   * Fixed conditional logic for creation and update.
 * IntuneTrustedRootCertificateIOS
