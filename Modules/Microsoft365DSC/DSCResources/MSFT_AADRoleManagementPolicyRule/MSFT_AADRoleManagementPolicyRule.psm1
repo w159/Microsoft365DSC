@@ -119,7 +119,6 @@ function Get-TargetResource
         $rule = Get-M365DSCRoleManagementPolicyRuleObject -Rule $getValue
 
         $results = @{
-<<<<<<< Updated upstream
             id                        = $id
             policyId                  = $policyId
             roleDisplayName           = $roleDisplayName
@@ -128,16 +127,6 @@ function Get-TargetResource
             notificationRule          = $rule.notificationRule
             enablementRule            = $rule.enablementRule
             approvalRule              = $rule.approvalRule
-=======
-            id                    = $id
-            policyId              = $policyId
-            roleDisplayName       = $roleDisplayName
-            ruleType              = $rule.ruleType
-            expirationRule        = $rule.expirationRule
-            notificationRule      = $rule.notificationRule
-            enablementRule        = $rule.enablementRule
-            approvalRule          = $rule.approvalRule
->>>>>>> Stashed changes
             authenticationContextRule = $rule.authenticationContextRule
             Credential                = $Credential
             ApplicationId             = $ApplicationId
@@ -498,11 +487,7 @@ function Export-TargetResource
     Write-Host "`r`n" -NoNewline
     try
     {
-<<<<<<< Updated upstream
-        [array] $roles = Get-MgBetaRoleManagementDirectoryRoleDefinition -All
-=======
         [array] $roles = Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter $Filter -All
->>>>>>> Stashed changes
 
         $j = 1
         foreach ($role in $roles)
