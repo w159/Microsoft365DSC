@@ -116,14 +116,40 @@ function Get-TargetResource
 
             foreach ($userId in $getValue.AzureAdJoin.AllowedToJoin.AdditionalProperties.users)
             {
-                $userInfo = Get-MgUser -UserId $userId
-                $AzureADAllowedToJoinUsers += $userInfo.UserPrincipalName
+                try
+                {
+                    $userInfo = Get-MgUser -UserId $userId -ErrorAction Stop
+                    $AzureADAllowedToJoinUsers += $userInfo.UserPrincipalName
+                }
+                catch
+                {
+                    $message = "Could not find a user with id $($userId) specified in AllowedToJoin. Skipping user!"
+                    New-M365DSCLogEntry -Message $message `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+                    continue
+                }
             }
 
             foreach ($groupId in $getValue.AzureAdJoin.AllowedToJoin.AdditionalProperties.groups)
             {
-                $groupInfo = Get-MgGroup -GroupId $groupId
-                $AzureADAllowedToJoinGroups += $groupInfo.DisplayName
+                try
+                {
+                    $groupInfo = Get-MgGroup -GroupId $groupId -ErrorAction Stop
+                    $AzureADAllowedToJoinGroups += $groupInfo.DisplayName
+                }
+                catch
+                {
+                    $message = "Could not find a group with id $($groupId) specified in AllowedToJoin. Skipping group!"
+                    New-M365DSCLogEntry -Message $message `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+                    continue
+                }
             }
         }
 
@@ -140,14 +166,40 @@ function Get-TargetResource
             $AzureAdJoinLocalAdminsRegisteringMode = 'Selected'
             foreach ($userId in $getValue.AzureAdJoin.LocalAdmins.RegisteringUsers.AdditionalProperties.users)
             {
-                $userInfo = Get-MgUser -UserId $userId
-                $AzureAdJoinLocalAdminsRegisteringUsers += $userInfo.UserPrincipalName
+                try
+                {
+                    $userInfo = Get-MgUser -UserId $userId -ErrorAction Stop
+                    $AzureAdJoinLocalAdminsRegisteringUsers += $userInfo.UserPrincipalName
+                }
+                catch
+                {
+                    $message = "Could not find a user with id $($userId) specified in AllowedToJoin. Skipping user!"
+                    New-M365DSCLogEntry -Message $message `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+                    continue
+                }
             }
 
             foreach ($groupId in $getValue.AzureAdJoin.LocalAdmins.RegisteringUsers.AdditionalProperties.groups)
             {
-                $groupInfo = Get-MgGroup -GroupId $groupId
-                $AzureAdJoinLocalAdminsRegisteringGroups += $groupInfo.DisplayName
+                try
+                {
+                    $groupInfo = Get-MgGroup -GroupId $groupId -ErrorAction Stop
+                    $AzureAdJoinLocalAdminsRegisteringGroups += $groupInfo.DisplayName
+                }
+                catch
+                {
+                    $message = "Could not find a group with id $($groupId) specified in AllowedToJoin. Skipping group!"
+                    New-M365DSCLogEntry -Message $message `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+                    continue
+                }
             }
         }
 
@@ -293,20 +345,20 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $MultiFactorAuthConfigurationValue = "notRequired"
+    $MultiFactorAuthConfigurationValue = 'notRequired'
     if ($MultiFactorAuthConfiguration)
     {
         $MultiFactorAuthConfigurationValue = 'required'
     }
 
-    $azureADRegistrationAllowedToRegister = "#microsoft.graph.noDeviceRegistrationMembership"
+    $azureADRegistrationAllowedToRegister = '#microsoft.graph.noDeviceRegistrationMembership'
     if ($AzureAdJoinLocalAdminsRegisteringMode -eq 'All')
     {
-        $azureADRegistrationAllowedToRegister = "#microsoft.graph.allDeviceRegistrationMembership"
+        $azureADRegistrationAllowedToRegister = '#microsoft.graph.allDeviceRegistrationMembership'
     }
     elseif ($AzureAdJoinLocalAdminsRegisteringMode -eq 'Selected')
     {
-        $azureADRegistrationAllowedToRegister = "#microsoft.graph.enumeratedDeviceRegistrationMembership"
+        $azureADRegistrationAllowedToRegister = '#microsoft.graph.enumeratedDeviceRegistrationMembership'
 
         $azureADRegistrationAllowedUsers = @()
         foreach ($user in $AzureAdJoinLocalAdminsRegisteringUsers)
@@ -323,14 +375,14 @@ function Set-TargetResource
         }
     }
 
-    $localAdminAllowedMode = "#microsoft.graph.noDeviceRegistrationMembership"
+    $localAdminAllowedMode = '#microsoft.graph.noDeviceRegistrationMembership'
     if ($AzureAdJoinLocalAdminsRegisteringMode -eq 'All')
     {
-        $localAdminAllowedMode = "#microsoft.graph.allDeviceRegistrationMembership"
+        $localAdminAllowedMode = '#microsoft.graph.allDeviceRegistrationMembership'
     }
     elseif ($AzureAdJoinLocalAdminsRegisteringMode -eq 'Selected')
     {
-        $localAdminAllowedMode = "#microsoft.graph.enumeratedDeviceRegistrationMembership"
+        $localAdminAllowedMode = '#microsoft.graph.enumeratedDeviceRegistrationMembership'
 
         $localAdminAllowedUsers = @()
         foreach ($user in $AzureAdJoinLocalAdminsRegisteringUsers)
@@ -348,31 +400,31 @@ function Set-TargetResource
     }
 
     $updateParameters = @{
-        userDeviceQuota = $UserDeviceQuota
+        userDeviceQuota              = $UserDeviceQuota
         multiFactorAuthConfiguration = $MultiFactorAuthConfigurationValue
-        azureADJoin = @{
-            isAdminConfigurable =$AzureADJoinIsAdminConfigurable
-            allowedToJoin = @{
+        azureADJoin                  = @{
+            isAdminConfigurable = $AzureADJoinIsAdminConfigurable
+            allowedToJoin       = @{
                 '@odata.type' = $azureADRegistrationAllowedToRegister
-                users = $AzureADAllowedToJoinUsers
-                groups = $AzureADAllowedToJoinGroups
+                users         = $AzureADAllowedToJoinUsers
+                groups        = $AzureADAllowedToJoinGroups
             }
-            localAdmins = @{
+            localAdmins         = @{
                 enableGlobalAdmins = $LocalAdminsEnableGlobalAdmins
-                registeringUsers = @{
+                registeringUsers   = @{
                     '@odata.type' = $localAdminAllowedMode
-                    users = $localAdminAllowedUsers
-                    groups = $localAdminAllowedGroups
+                    users         = $localAdminAllowedUsers
+                    groups        = $localAdminAllowedGroups
                 }
             }
         }
-        localAdminPassword = @{
+        localAdminPassword           = @{
             isEnabled = $LocalAdminPasswordIsEnabled
         }
-        azureADRegistration = @{
+        azureADRegistration          = @{
             isAdminConfigurable = $false
-            allowedToRegister = @{
-                '@odata.type' = "#microsoft.graph.allDeviceRegistrationMembership"
+            allowedToRegister   = @{
+                '@odata.type' = '#microsoft.graph.allDeviceRegistrationMembership'
             }
         }
     }
@@ -479,7 +531,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Device Registration Policy"
+    Write-Verbose -Message 'Testing configuration of the Device Registration Policy'
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
@@ -565,7 +617,7 @@ function Export-TargetResource
 
         $Results = Get-TargetResource @Params
         $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
+            -Results $Results
 
         $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
             -ConnectionMode $ConnectionMode `
@@ -582,7 +634,7 @@ function Export-TargetResource
     }
     catch
     {
-        if ($_.ErrorDetails.Message -like "*Insufficient privileges*")
+        if ($_.ErrorDetails.Message -like '*Insufficient privileges*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) Insufficient permissions or license to export Attribute Sets."
         }
@@ -590,10 +642,10 @@ function Export-TargetResource
         {
             Write-Host $Global:M365DSCEmojiRedX
             New-M365DSCLogEntry -Message 'Error during Export:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
+                -Exception $_ `
+                -Source $($MyInvocation.MyCommand.Source) `
+                -TenantId $TenantId `
+                -Credential $Credential
         }
 
         return ''

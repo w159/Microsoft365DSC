@@ -81,11 +81,11 @@ function Get-TargetResource
     $nullResult.Ensure = 'Absent'
     try
     {
-        $uri = "https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$($account.name)/providers/Microsoft.CostManagement/scheduledActions?api-version=2023-11-01"
+        $uri = "https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$($BillingAccount)/providers/Microsoft.CostManagement/scheduledActions?api-version=2023-11-01"
         $response = Invoke-AzRest -Uri $uri -Method GET
         $actions = (ConvertFrom-Json ($response.Content)).value
 
-        $instance = $actions | Where-Object -FilterScript {$_.properties.displayName -eq $DisplayName}
+        $instance = $actions | Where-Object -FilterScript { $_.properties.displayName -eq $DisplayName }
 
         if ($null -eq $instance)
         {
@@ -225,8 +225,8 @@ function Set-TargetResource
     $currentInstance = Get-TargetResource @PSBoundParameters
 
     $instanceParams = @{
-        kind              = "Email"
-        properties        = @{
+        kind       = 'Email'
+        properties = @{
             displayName       = $DisplayName
             notificationEmail = $NotificationEmail
             notification      = @{
@@ -234,7 +234,7 @@ function Set-TargetResource
                 subject = $Notification.subject
                 message = $Notification.message
             }
-            schedule = @{
+            schedule          = @{
                 frequency    = $Schedule.frequency
                 weeksOfMonth = $Schedule.weeksOfMonth
                 daysOfWeek   = $Schedule.daysOfWeek
@@ -242,8 +242,8 @@ function Set-TargetResource
                 endDate      = $Schedule.endDate
                 dayOfMonth   = $Schedule.dayOfMonth
             }
-            viewId = $View
-            status = $Status
+            viewId            = $View
+            status            = $Status
         }
     }
     $payload = ConvertTo-Json $instanceParams -Depth 10 -Compress

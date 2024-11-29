@@ -22,7 +22,7 @@ function Get-TargetResource
         $PermissionActions,
 
         [Parameter()]
-        [ValidateSet('default','androidWorkProfile','androidDeviceOwner')]
+        [ValidateSet('default', 'androidWorkProfile', 'androidDeviceOwner')]
         [System.String]
         $ProfileApplicability,
 
@@ -117,7 +117,7 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $Id  -ErrorAction SilentlyContinue
+        $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $Id -ErrorAction SilentlyContinue
 
         if ($null -eq $getValue)
         {
@@ -126,6 +126,7 @@ function Get-TargetResource
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration `
+                    -All `
                     -Filter "DisplayName eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue
             }
@@ -149,7 +150,7 @@ function Get-TargetResource
                 $mypermissionActions.Add('Action', $currentpermissionActions.action.toString())
             }
             $mypermissionActions.Add('Permission', $currentpermissionActions.permission)
-            if ($mypermissionActions.values.Where({$null -ne $_}).count -gt 0)
+            if ($mypermissionActions.values.Where({ $null -ne $_ }).count -gt 0)
             {
                 $complexPermissionActions += $mypermissionActions
             }
@@ -165,7 +166,7 @@ function Get-TargetResource
                 $mysettings.Add('AppConfigKeyType', $currentsettings.appConfigKeyType.toString())
             }
             $mysettings.Add('AppConfigKeyValue', $currentsettings.appConfigKeyValue)
-            if ($mysettings.values.Where({$null -ne $_}).count -gt 0)
+            if ($mysettings.values.Where({ $null -ne $_ }).count -gt 0)
             {
                 $complexSettings += $mysettings
             }
@@ -275,7 +276,7 @@ function Set-TargetResource
         $PermissionActions,
 
         [Parameter()]
-        [ValidateSet('default','androidWorkProfile','androidDeviceOwner')]
+        [ValidateSet('default', 'androidWorkProfile', 'androidDeviceOwner')]
         [System.String]
         $ProfileApplicability,
 
@@ -393,7 +394,7 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Intune App Configuration Device Policy with DisplayName {$DisplayName}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $CreateParameters = ([Hashtable]$BoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
@@ -432,7 +433,7 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Intune App Configuration Device Policy with Id {$($currentInstance.Id)}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $UpdateParameters = ([Hashtable]$BoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
@@ -500,7 +501,7 @@ function Test-TargetResource
         $PermissionActions,
 
         [Parameter()]
-        [ValidateSet('default','androidWorkProfile','androidDeviceOwner')]
+        [ValidateSet('default', 'androidWorkProfile', 'androidDeviceOwner')]
         [System.String]
         $ProfileApplicability,
 
@@ -608,7 +609,10 @@ function Test-TargetResource
                 -Source ($source) `
                 -Target ($target)
 
-            if (-not $testResult) { break }
+            if (-not $testResult)
+            {
+                break
+            }
 
             $ValuesToCheck.Remove($key) | Out-Null
         }
@@ -721,7 +725,7 @@ function Export-TargetResource
             Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
             $params = @{
                 Id                    = $config.Id
-                DisplayName           =  $config.DisplayName
+                DisplayName           = $config.DisplayName
                 Ensure                = 'Present'
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
@@ -782,15 +786,15 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.PermissionActions)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "PermissionActions" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PermissionActions' -IsCIMArray:$True
             }
             if ($Results.Settings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Settings" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Settings' -IsCIMArray:$True
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -isCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock

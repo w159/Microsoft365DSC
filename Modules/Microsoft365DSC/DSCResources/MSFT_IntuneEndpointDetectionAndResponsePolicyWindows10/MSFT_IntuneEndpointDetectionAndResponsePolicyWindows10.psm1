@@ -105,8 +105,9 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
-                -Filter "Name eq '$DisplayName'" `
-                -ErrorAction SilentlyContinue
+                    -All `
+                    -Filter "Name eq '$DisplayName'" `
+                    -ErrorAction SilentlyContinue
             }
         }
 
@@ -122,6 +123,7 @@ function Get-TargetResource
         [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
             -DeviceManagementConfigurationPolicyId $Identity `
             -ExpandProperty 'settingDefinitions' `
+            -All `
             -ErrorAction Stop
 
         $policySettings = @{}
@@ -130,7 +132,7 @@ function Get-TargetResource
         $policySettings.Remove('ClientConfigurationPackageType')
         $policySettings.Remove('onboarding')
         $policySettings.Remove('offboarding')
-        $policySettings.Remove('autofromconnector')
+        $policySettings.Remove('onboarding_fromconnector')
 
         # Removing TelemetryReportingFrequency because it's deprecated and doesn't need to be evaluated and enforced
         $policySettings.Remove('telemetryreportingfrequency')
@@ -313,7 +315,7 @@ function Set-TargetResource
         }
 
         #region resource generator code
-        $policy = New-MgBetaDeviceManagementConfigurationPolicy -bodyParameter $createParameters
+        $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
 
         if ($policy.Id)
         {
@@ -573,8 +575,8 @@ function Export-TargetResource
             -Filter $Filter `
             -ErrorAction Stop | Where-Object `
             -FilterScript {
-                $_.TemplateReference.TemplateId -eq $policyTemplateID
-            }
+            $_.TemplateReference.TemplateId -eq $policyTemplateID
+        }
 
         if ($policies.Length -eq 0)
         {
@@ -631,7 +633,7 @@ function Export-TargetResource
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock
@@ -645,8 +647,8 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-            $_.Exception -like "*Unable to perform redirect as Location Header is not set in response*" -or `
-            $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Unable to perform redirect as Location Header is not set in response*' -or `
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

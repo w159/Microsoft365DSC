@@ -67,7 +67,7 @@ function Get-TargetResource
 
     try
     {
-        $category = Get-MgBetaDeviceManagementDeviceCategory -Filter "displayName eq '$DisplayName'"
+        $category = Get-MgBetaDeviceManagementDeviceCategory -Filter "displayName eq '$DisplayName'" -All
 
         if ($null -eq $category)
         {
@@ -370,7 +370,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

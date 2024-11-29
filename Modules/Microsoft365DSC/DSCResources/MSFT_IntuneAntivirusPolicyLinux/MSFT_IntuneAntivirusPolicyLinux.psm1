@@ -197,15 +197,16 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id  -ErrorAction SilentlyContinue
+        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy Linux with Id {$Id}"
+            Write-Verbose -Message "Could not find an Intune Antivirus Policy for Linux with Id {$Id}"
 
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
+                    -All `
                     -Filter "Name eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue
             }
@@ -213,11 +214,11 @@ function Get-TargetResource
         #endregion
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy Linux with Name {$DisplayName}."
+            Write-Verbose -Message "Could not find an Intune Antivirus Policy for Linux with Name {$DisplayName}."
             return $nullResult
         }
         $Id = $getValue.Id
-        Write-Verbose -Message "An Intune Antivirus Policy Linux with Id {$Id} and Name {$DisplayName} was found"
+        Write-Verbose -Message "An Intune Antivirus Policy for Linux with Id {$Id} and Name {$DisplayName} was found"
 
         # Retrieve policy specific settings
         [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
@@ -260,7 +261,7 @@ function Get-TargetResource
             {
                 $myExclusions.Add('Exclusions_item_isDirectory', $currentExclusions.exclusions_item_isDirectory)
             }
-            if ($myExclusions.values.Where({$null -ne $_}).Count -gt 0)
+            if ($myExclusions.values.Where({ $null -ne $_ }).Count -gt 0)
             {
                 $complexExclusions += $myExclusions
             }
@@ -279,7 +280,7 @@ function Get-TargetResource
             {
                 $myThreatTypeSettings.Add('ThreatTypeSettings_item_value', $currentThreatTypeSettings.threatTypeSettings_item_value)
             }
-            if ($myThreatTypeSettings.values.Where({$null -ne $_}).Count -gt 0)
+            if ($myThreatTypeSettings.values.Where({ $null -ne $_ }).Count -gt 0)
             {
                 $complexThreatTypeSettings += $myThreatTypeSettings
             }
@@ -526,8 +527,8 @@ function Set-TargetResource
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an Intune Antivirus Policy Linux with Name {$DisplayName}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        Write-Verbose -Message "Creating an Intune Antivirus Policy for Linux with Name {$DisplayName}"
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
             -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
@@ -557,8 +558,8 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Updating the Intune Antivirus Policy Linux with Id {$($currentInstance.Id)}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        Write-Verbose -Message "Updating the Intune Antivirus Policy for Linux with Id {$($currentInstance.Id)}"
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $settings = Get-IntuneSettingCatalogPolicySetting `
             -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
@@ -583,7 +584,7 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing the Intune Antivirus Policy Linux with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Removing the Intune Antivirus Policy for Linux with Id {$($currentInstance.Id)}"
         #region resource generator code
         Remove-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $currentInstance.Id
         #endregion
@@ -779,7 +780,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Intune Antivirus Policy Linux with Id {$Id} and Name {$DisplayName}"
+    Write-Verbose -Message "Testing configuration of the Intune Antivirus Policy for Linux with Id {$Id} and Name {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     [Hashtable]$ValuesToCheck = @{}
@@ -900,14 +901,14 @@ function Export-TargetResource
     try
     {
         #region resource generator code
-        $policyTemplateID = "4cfd164c-5e8a-4ea9-b15d-9aa71e4ffff4_1"
+        $policyTemplateID = '4cfd164c-5e8a-4ea9-b15d-9aa71e4ffff4_1'
         [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
             -Filter $Filter `
             -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript {
-                $_.TemplateReference.TemplateId -eq $policyTemplateID
-            }
+            $_.TemplateReference.TemplateId -eq $policyTemplateID
+        }
         #endregion
 
         $i = 1
@@ -933,16 +934,16 @@ function Export-TargetResource
             }
             Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
             $params = @{
-                Id = $config.Id
-                DisplayName = $config.Name
-                Ensure = 'Present'
-                Credential = $Credential
-                ApplicationId = $ApplicationId
-                TenantId = $TenantId
-                ApplicationSecret = $ApplicationSecret
+                Id                    = $config.Id
+                DisplayName           = $config.Name
+                Ensure                = 'Present'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
-                ManagedIdentity = $ManagedIdentity.IsPresent
-                AccessTokens = $AccessTokens
+                ManagedIdentity       = $ManagedIdentity.IsPresent
+                AccessTokens          = $AccessTokens
             }
 
             $Results = Get-TargetResource @Params
@@ -997,16 +998,16 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.exclusions)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "exclusions" -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'exclusions' -IsCIMArray:$True
             }
             if ($Results.threatTypeSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "threatTypeSettings" -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'threatTypeSettings' -IsCIMArray:$True
             }
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock

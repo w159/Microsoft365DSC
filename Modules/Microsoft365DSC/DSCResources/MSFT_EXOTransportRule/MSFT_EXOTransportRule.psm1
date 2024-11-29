@@ -784,7 +784,7 @@ function Get-TargetResource
                 $MessageContainsDataClassificationsValue = $TransportRule.MessageContainsDataClassifications.Replace('"', "'")
             }
 
-            if ($TransportRule.State -eq "Enabled")
+            if ($TransportRule.State -eq 'Enabled')
             {
                 $enabled = $true
             }
@@ -966,6 +966,16 @@ function Get-TargetResource
                 Managedidentity                              = $ManagedIdentity.IsPresent
                 TenantId                                     = $TenantId
                 AccessTokens                                 = $AccessTokens
+            }
+            $inputParams = (Get-Command 'Get-TargetResource').Parameters
+            foreach ($key in $inputParams.Keys)
+            {
+                $propertyInfo = $inputParams.$key
+                $curVar = Get-Variable -Name $key -ErrorAction SilentlyContinue
+                if ($propertyInfo.ParameterType.Name -eq 'String[]' -and $curVar -ne $null -and $curVar.Value -eq $null)
+                {
+                    $result.$key = @()
+                }
             }
 
             # Formats DateTime as String
@@ -1765,10 +1775,10 @@ function Set-TargetResource
 
     # check for deprecated DLP parameters and remove them
     if ($NewTransportRuleParams.ContainsKey('MessageContainsDataClassifications') `
-        -or $NewTransportRuleParams.ContainsKey('ExceptIfMessageContainsDataClassifications') `
-        -or $NewTransportRuleParams.ContainsKey('HasSenderOverride') `
-        -or $NewTransportRuleParams.ContainsKey('ExceptIfHasSenderOverride') `
-        -or $NewTransportRuleParams.ContainsKey('NotifySender'))
+            -or $NewTransportRuleParams.ContainsKey('ExceptIfMessageContainsDataClassifications') `
+            -or $NewTransportRuleParams.ContainsKey('HasSenderOverride') `
+            -or $NewTransportRuleParams.ContainsKey('ExceptIfHasSenderOverride') `
+            -or $NewTransportRuleParams.ContainsKey('NotifySender'))
     {
         $NewTransportRuleParams.Remove('MessageContainsDataClassifications') | Out-Null
         $NewTransportRuleParams.Remove('ExceptIfMessageContainsDataClassifications') | Out-Null
@@ -1776,7 +1786,7 @@ function Set-TargetResource
         $NewTransportRuleParams.Remove('ExceptIfHasSenderOverride') | Out-Null
         $NewTransportRuleParams.Remove('NotifySender') | Out-Null
 
-        Write-Verbose -Message "DEPRECATED - The DLP parameters (MessageContainsDataClassifications, ExceptIfMessageContainsDataClassifications, ExceptIfHasSenderOverride, HasSenderOverride and NotifySender) are deprecated and will be ignored."
+        Write-Verbose -Message 'DEPRECATED - The DLP parameters (MessageContainsDataClassifications, ExceptIfMessageContainsDataClassifications, ExceptIfHasSenderOverride, HasSenderOverride and NotifySender) are deprecated and will be ignored.'
     }
 
     $SetTransportRuleParams = $NewTransportRuleParams.Clone()

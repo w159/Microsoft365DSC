@@ -25,6 +25,10 @@ function Get-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -57,7 +61,7 @@ function Get-TargetResource
     {
         if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
         {
-            $instance = $Script:exportedInstances | Where-Object -FilterScript {$_.Name -eq $Name}
+            $instance = $Script:exportedInstances | Where-Object -FilterScript { $_.Name -eq $Name }
         }
         else
         {
@@ -76,6 +80,7 @@ function Get-TargetResource
             Credential            = $Credential
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
+            ApplicationSecret     = $ApplicationSecret
             CertificateThumbprint = $CertificateThumbprint
             ManagedIdentity       = $ManagedIdentity.IsPresent
             AccessTokens          = $AccessTokens
@@ -121,6 +126,10 @@ function Set-TargetResource
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificateThumbprint,
 
@@ -148,44 +157,53 @@ function Set-TargetResource
     $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
     $currentPolicy = Get-MgBetaNetworkAccessForwardingPolicy -Expand * -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq $setParameters.Name }
-    if ($Name -eq "Custom Bypass") {
-        foreach ($rule in $currentPolicy.PolicyRules) {
+    if ($Name -eq 'Custom Bypass')
+    {
+        foreach ($rule in $currentPolicy.PolicyRules)
+        {
             Remove-MgBetaNetworkAccessForwardingPolicyRule -ForwardingPolicyId $currentPolicy.Id -PolicyRuleId $rule.Id
         }
 
-        foreach ($rule in $setParameters.PolicyRules) {
+        foreach ($rule in $setParameters.PolicyRules)
+        {
             $complexDestinations = @()
-            foreach ($destination in $rule.Destinations) {
+            foreach ($destination in $rule.Destinations)
+            {
                 $complexDestinations += @{
-                    "@odata.type" = "#microsoft.graph.networkaccess." + $rule.RuleType
+                    '@odata.type' = '#microsoft.graph.networkaccess.' + $rule.RuleType
                     value         = $destination
                 }
             }
             $params = @{
-                "@odata.type" = "#microsoft.graph.networkaccess.internetAccessForwardingRule"
-                name = $rule.Name
-                action = $rule.ActionValue
-                ruleType = $rule.RuleType
-                ports = ($rule.Ports | ForEach-Object { $_.ToString() })
-                protocol = $rule.Protocol
-                destinations = $complexDestinations
+                '@odata.type' = '#microsoft.graph.networkaccess.internetAccessForwardingRule'
+                name          = $rule.Name
+                action        = $rule.ActionValue
+                ruleType      = $rule.RuleType
+                ports         = ($rule.Ports | ForEach-Object { $_.ToString() })
+                protocol      = $rule.Protocol
+                destinations  = $complexDestinations
             }
 
             New-MgBetaNetworkAccessForwardingPolicyRule -ForwardingPolicyId $currentPolicy.Id -BodyParameter $params
         }
-    } elseif ($currentPolicy.TrafficForwardingType -eq "m365") {
+    }
+    elseif ($currentPolicy.TrafficForwardingType -eq 'm365')
+    {
         $rulesParam = @()
-        foreach ($desiredRule in $setParameters.PolicyRules) {
+        foreach ($desiredRule in $setParameters.PolicyRules)
+        {
             $desiredRuleHashtable = Convert-M365DSCDRGComplexTypeToHashtable $desiredRule
             $desiredRuleHashtable.Remove('actionValue')
             $testResult = $false
-            foreach ($currentRule in $currentPolicy.PolicyRules) {
+            foreach ($currentRule in $currentPolicy.PolicyRules)
+            {
                 $currentRuleHashtable = Get-MicrosoftGraphNetworkAccessForwardingPolicyRules -PolicyRules @($currentRule)
-                $currentRuleHashtable.Remove('ActionValue');
+                $currentRuleHashtable.Remove('ActionValue')
                 $testResult = Compare-M365DSCComplexObject `
-                -Source ($currentRuleHashtable) `
-                -Target ($desiredRuleHashtable)
-                if ($testResult) {
+                    -Source ($currentRuleHashtable) `
+                    -Target ($desiredRuleHashtable)
+                if ($testResult)
+                {
                     Write-Verbose "Updating: $($currentRule.Name), $($currentRule.Id)"
                     $rulesParam += @{
                         ruleId = $currentRule.Id
@@ -194,7 +212,8 @@ function Set-TargetResource
                     break
                 }
             }
-            if($testResult -eq $false){
+            if ($testResult -eq $false)
+            {
                 Write-Verbose "Could not find rule with the given specification: $(Convert-M365DscHashtableToString -Hashtable $desiredRuleHashtable), skipping set for this."
             }
         }
@@ -204,7 +223,8 @@ function Set-TargetResource
 
         Invoke-MgGraphRequest -Uri ($Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/networkAccess/forwardingPolicies/$($currentPolicy.ID)/updatePolicyRules") -Method Post -Body $updateParams
     }
-    else {
+    else
+    {
         Write-Verbose "Can not modify the list of poilicy rules for the forwarding policy with name: $($setParameters.Name)"
     }
 }
@@ -234,6 +254,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -279,7 +303,8 @@ function Test-TargetResource
             {
                 $testTargetResource = $false
             }
-            else {
+            else
+            {
                 $ValuesToCheck.Remove($key) | Out-Null
             }
         }
@@ -289,12 +314,12 @@ function Test-TargetResource
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
 
     $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
-    -Source $($MyInvocation.MyCommand.Source) `
-    -DesiredValues $PSBoundParameters `
-    -ValuesToCheck $ValuesToCheck.Keys `
-    -IncludedDrifts $driftedParams
+        -Source $($MyInvocation.MyCommand.Source) `
+        -DesiredValues $PSBoundParameters `
+        -ValuesToCheck $ValuesToCheck.Keys `
+        -IncludedDrifts $driftedParams
 
-    if(-not $TestResult)
+    if (-not $TestResult)
     {
         $testTargetResource = $false
     }
@@ -383,6 +408,7 @@ function Export-TargetResource
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
@@ -403,11 +429,11 @@ function Export-TargetResource
                 -Results $Results `
                 -Credential $Credential
 
-                if ($null -ne $Results.PolicyRules)
-                {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'PolicyRules'
-                }
+            if ($null -ne $Results.PolicyRules)
+            {
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                    -ParameterName 'PolicyRules'
+            }
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -442,17 +468,19 @@ function Get-MicrosoftGraphNetworkAccessForwardingPolicyRules
     )
 
     $newPolicyRules = @()
-    foreach ($rule in $PolicyRules) {
+    foreach ($rule in $PolicyRules)
+    {
         $destinations = @()
-        foreach ($destination in $rule.AdditionalProperties.destinations) {
+        foreach ($destination in $rule.AdditionalProperties.destinations)
+        {
             $destinations += $destination.value
         }
         $newPolicyRules += @{
-            Name = $rule.Name
-            ActionValue = $rule.AdditionalProperties.action
-            RuleType = $rule.AdditionalProperties.ruleType
-            Ports = $rule.AdditionalProperties.ports
-            Protocol = $rule.AdditionalProperties.protocol
+            Name         = $rule.Name
+            ActionValue  = $rule.AdditionalProperties.action
+            RuleType     = $rule.AdditionalProperties.ruleType
+            Ports        = $rule.AdditionalProperties.ports
+            Protocol     = $rule.AdditionalProperties.protocol
             Destinations = $destinations
         }
     }
@@ -480,8 +508,8 @@ function Get-MicrosoftGraphNetworkAccessForwardingPolicyRulesAsString
         $StringContent.Append("                    ActionValue    = '" + $rule.ActionValue + "'`r`n") | Out-Null
         $StringContent.Append("                    RuleType       = '" + $rule.RuleType + "'`r`n") | Out-Null
         $StringContent.Append("                    Protocol       = '" + $rule.Protocol + "'`r`n") | Out-Null
-        $StringContent.Append("                    Ports          = @(" + $($rule.Ports -join ", ") + ")`r`n") | Out-Null
-        $StringContent.Append("                    Destinations   = @(" + $(($rule.Destinations | ForEach-Object { "'$_'" }) -join ", ") + ")`r`n") | Out-Null
+        $StringContent.Append('                    Ports          = @(' + $($rule.Ports -join ', ') + ")`r`n") | Out-Null
+        $StringContent.Append('                    Destinations   = @(' + $(($rule.Destinations | ForEach-Object { "'$_'" }) -join ', ') + ")`r`n") | Out-Null
         $StringContent.Append("                }`r`n") | Out-Null
     }
 

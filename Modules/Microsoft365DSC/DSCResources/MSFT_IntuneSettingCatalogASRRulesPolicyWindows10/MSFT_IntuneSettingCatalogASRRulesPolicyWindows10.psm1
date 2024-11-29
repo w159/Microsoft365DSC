@@ -274,6 +274,7 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($DisplayName))
             {
                 $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
+                    -All `
                     -Filter "Name eq '$DisplayName' and templateReference/TemplateId eq '$templateReferenceId'" `
                     -ErrorAction SilentlyContinue
             }
@@ -1035,8 +1036,8 @@ function Export-TargetResource
             -Filter $Filter `
             -All `
             -ErrorAction Stop | Where-Object -FilterScript {
-                $_.TemplateReference.TemplateId -eq $policyTemplateId
-            }
+            $_.TemplateReference.TemplateId -eq $policyTemplateId
+        }
 
         if ($policies.Length -eq 0)
         {
@@ -1107,7 +1108,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

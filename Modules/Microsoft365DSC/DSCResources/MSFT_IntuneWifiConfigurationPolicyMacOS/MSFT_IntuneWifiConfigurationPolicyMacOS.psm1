@@ -129,20 +129,20 @@ function Get-TargetResource
         #region resource generator code
         if ($null -eq $getValue)
         {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
-            -FilterScript { `
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.macOSWiFiConfiguration' `
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+                -FilterScript { `
+                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.macOSWiFiConfiguration' `
             }
         }
         #endregion
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
+            Write-Verbose -Message "No Intune Wifi Configuration Policy for MacOS with id {$id} was found"
             return $nullResult
         }
 
-        Write-Verbose -Message "Found something with id {$id}"
+        Write-Verbose -Message "Found an Intune Wifi Configuration Policy for MacOS with id {$id}"
         $results = @{
             #region resource generator code
             Id                             = $getValue.Id
@@ -173,8 +173,8 @@ function Get-TargetResource
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 
@@ -750,7 +750,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

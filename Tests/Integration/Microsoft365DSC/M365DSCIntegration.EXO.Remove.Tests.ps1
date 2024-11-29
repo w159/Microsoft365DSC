@@ -259,14 +259,6 @@
                     TenantId              = $TenantId;
                     CertificateThumbprint = $CertificateThumbprint;
                 }
-                EXODataEncryptionPolicy 'ConfigureDataEncryptionPolicy'
-                {
-                    Identity    = 'US Mailboxes'
-                    Ensure      = "Absent"
-                    ApplicationId         = $ApplicationId
-                    TenantId              = $TenantId
-                    CertificateThumbprint = $CertificateThumbprint
-                }
                 EXODistributionGroup 'DemoDG'
                 {
                     DisplayName                        = "My Demo DG";
@@ -429,6 +421,23 @@
                     Name                        = "Contoso Message Classification"
                     DisplayName                 = "Contoso Message Classification"
                     Ensure                      = "Absent"
+                    ApplicationId         = $ApplicationId
+                    TenantId              = $TenantId
+                    CertificateThumbprint = $CertificateThumbprint
+                }
+                EXOMigration 'EXOMigration-test'
+                {
+                    AddUsers             = $False;
+                    BadItemLimit         = "";
+                    CompleteAfter        = "12/31/9999 11:59:59 PM";
+                    Ensure               = "Absent";
+                    Identity             = "test";
+                    LargeItemLimit       = "";
+                    MoveOptions          = @();
+                    NotificationEmails   = @("eac_admin@bellred.org");
+                    SkipMerging          = @();
+                    Status               = "Completed";
+                    Update               = $False;
                     ApplicationId         = $ApplicationId
                     TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint

@@ -24,7 +24,7 @@ function Get-TargetResource
         [Parameter()]
         [System.Int32]
         [ValidateRange(7, 365)]
-        $PasswordAgeDays_AAD,
+        $passwordagedays_aad,
 
         [Parameter()]
         [System.Int32]
@@ -118,7 +118,7 @@ function Get-TargetResource
             -ErrorAction Stop
 
         #Ensure the proper dependencies are installed in the current environment.
-        Confirm-M365DSCDependencies
+        #Confirm-M365DSCDependencies
 
         #region Telemetry
         $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
@@ -237,7 +237,7 @@ function Set-TargetResource
         [Parameter()]
         [System.Int32]
         [ValidateRange(7, 365)]
-        $PasswordAgeDays_AAD,
+        $passwordagedays_aad,
 
         [Parameter()]
         [System.Int32]
@@ -324,7 +324,7 @@ function Set-TargetResource
     )
 
     #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
+    #Confirm-M365DSCDependencies
 
     #region Telemetry
     $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
@@ -433,7 +433,7 @@ function Test-TargetResource
         [Parameter()]
         [System.Int32]
         [ValidateRange(7, 365)]
-        $PasswordAgeDays_AAD,
+        $passwordagedays_aad,
 
         [Parameter()]
         [System.Int32]
@@ -564,7 +564,7 @@ function Test-TargetResource
         {
             $source = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $source
 
-            if ($key -eq "Assignments")
+            if ($key -eq 'Assignments')
             {
                 $testResult = Compare-M365DSCIntunePolicyAssignment `
                     -Source $source `
@@ -740,8 +740,8 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-            $_.Exception -like "*Unable to perform redirect as Location Header is not set in response*" -or `
-            $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Unable to perform redirect as Location Header is not set in response*' -or `
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

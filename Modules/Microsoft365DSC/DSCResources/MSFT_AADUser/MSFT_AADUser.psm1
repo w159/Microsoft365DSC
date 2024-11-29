@@ -513,6 +513,7 @@ function Set-TargetResource
 
             $CreationParams.Add('UserId', $UserPrincipalName)
             Update-MgUser @CreationParams
+            $userId = (Get-MgUser -UserId $UserPrincipalName).Id
         }
         else
         {
@@ -559,6 +560,7 @@ function Set-TargetResource
             $CreationParams.Add('MailNickName', $UserPrincipalName.Split('@')[0])
             Write-Verbose -Message "Creating new user with values: $(Convert-M365DscHashtableToString -Hashtable $CreationParams)"
             $user = New-MgUser @CreationParams
+            $userId = $user.Id
         }
 
         #region Assign Licenses
@@ -611,14 +613,14 @@ function Set-TargetResource
 
                         throw "Cannot add user $UserPrincipalName to group '$memberOfGroup' because it is a dynamic group"
                     }
-                    New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
+                    New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $userId
                 }
             }
             else
             {
                 # user is a member of some groups, ensure that user is only a member of groups listed in MemberOf
                 Compare-Object -ReferenceObject $MemberOf -DifferenceObject $user.MemberOf | ForEach-Object {
-                    $group = Get-MgGroup -Filter "DisplayName eq '$($_.InputObject)" -Property Id, GroupTypes
+                    $group = Get-MgGroup -Filter "DisplayName eq '$($_.InputObject)'" -Property Id, GroupTypes
                     if ($_.SideIndicator -eq '<=')
                     {
                         # Group in MemberOf not present in groups that user is a member of, add user to group
@@ -642,13 +644,14 @@ function Set-TargetResource
 
                             throw "Cannot add user $UserPrincipalName to group '$($_.InputObject)' because it is a dynamic group"
                         }
-                        New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
+                        New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $userId
                     }
                     else
                     {
+
                         # Group that user is a member of is not present in MemberOf, remove user from group
                         # (no need to test for dynamic groups as they are ignored in Get-TargetResource)
-                        Remove-MgGroupMemberDirectoryObjectByRef -GroupId $group.Id -DirectoryObjectId $user.Id
+                        Remove-MgGroupMemberDirectoryObjectByRef -GroupId $group.Id -DirectoryObjectId $userId
                     }
                 }
             }
@@ -675,7 +678,6 @@ function Set-TargetResource
             foreach ($roleDifference in $diffRoles)
             {
                 $roleDefinitionId = (Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter "DisplayName eq '$($roleDifference.InputObject)'").Id
-                $userId = (Get-MgUser -UserId $UserPrincipalName).Id
 
                 # Roles to remove
                 if ($roleDifference.SideIndicator -eq '=>')
@@ -933,104 +935,104 @@ function Export-TargetResource
             ErrorAction = 'Stop'
         }
         $queryTypes = @{
-                        'eq'        = @('assignedPlans/any(a:a/capabilityStatus)',
-                                        'assignedPlans/any(a:a/service)',
-                                        'assignedPlans/any(a:a/servicePlanId)',
-                                        'authorizationInfo/certificateUserIds/any(p:p)',
-                                        'businessPhones/any(p:p)',
-                                        'companyName',
-                                        'createdObjects/any(c:c/id)',
-                                        'employeeHireDate',
-                                        'employeeOrgData/costCenter',
-                                        'employeeOrgData/division',
-                                        'employeeType',
-                                        'faxNumber',
-                                        'mobilePhone',
-                                        'officeLocation',
-                                        'onPremisesExtensionAttributes/extensionAttribute1',
-                                        'onPremisesExtensionAttributes/extensionAttribute10',
-                                        'onPremisesExtensionAttributes/extensionAttribute11',
-                                        'onPremisesExtensionAttributes/extensionAttribute12',
-                                        'onPremisesExtensionAttributes/extensionAttribute13',
-                                        'onPremisesExtensionAttributes/extensionAttribute14',
-                                        'onPremisesExtensionAttributes/extensionAttribute15',
-                                        'onPremisesExtensionAttributes/extensionAttribute2',
-                                        'onPremisesExtensionAttributes/extensionAttribute3',
-                                        'onPremisesExtensionAttributes/extensionAttribute4',
-                                        'onPremisesExtensionAttributes/extensionAttribute5',
-                                        'onPremisesExtensionAttributes/extensionAttribute6',
-                                        'onPremisesExtensionAttributes/extensionAttribute7',
-                                        'onPremisesExtensionAttributes/extensionAttribute8',
-                                        'onPremisesExtensionAttributes/extensionAttribute9',
-                                        'onPremisesSamAccountName',
-                                        'passwordProfile/forceChangePasswordNextSignIn',
-                                        'passwordProfile/forceChangePasswordNextSignInWithMfa',
-                                        'postalCode',
-                                        'preferredLanguage',
-                                        'provisionedPlans/any(p:p/provisioningStatus)',
-                                        'provisionedPlans/any(p:p/service)',
-                                        'showInAddressList',
-                                        'streetAddress')
+            'eq'         = @('assignedPlans/any(a:a/capabilityStatus)',
+                'assignedPlans/any(a:a/service)',
+                'assignedPlans/any(a:a/servicePlanId)',
+                'authorizationInfo/certificateUserIds/any(p:p)',
+                'businessPhones/any(p:p)',
+                'companyName',
+                'createdObjects/any(c:c/id)',
+                'employeeHireDate',
+                'employeeOrgData/costCenter',
+                'employeeOrgData/division',
+                'employeeType',
+                'faxNumber',
+                'mobilePhone',
+                'officeLocation',
+                'onPremisesExtensionAttributes/extensionAttribute1',
+                'onPremisesExtensionAttributes/extensionAttribute10',
+                'onPremisesExtensionAttributes/extensionAttribute11',
+                'onPremisesExtensionAttributes/extensionAttribute12',
+                'onPremisesExtensionAttributes/extensionAttribute13',
+                'onPremisesExtensionAttributes/extensionAttribute14',
+                'onPremisesExtensionAttributes/extensionAttribute15',
+                'onPremisesExtensionAttributes/extensionAttribute2',
+                'onPremisesExtensionAttributes/extensionAttribute3',
+                'onPremisesExtensionAttributes/extensionAttribute4',
+                'onPremisesExtensionAttributes/extensionAttribute5',
+                'onPremisesExtensionAttributes/extensionAttribute6',
+                'onPremisesExtensionAttributes/extensionAttribute7',
+                'onPremisesExtensionAttributes/extensionAttribute8',
+                'onPremisesExtensionAttributes/extensionAttribute9',
+                'onPremisesSamAccountName',
+                'passwordProfile/forceChangePasswordNextSignIn',
+                'passwordProfile/forceChangePasswordNextSignInWithMfa',
+                'postalCode',
+                'preferredLanguage',
+                'provisionedPlans/any(p:p/provisioningStatus)',
+                'provisionedPlans/any(p:p/service)',
+                'showInAddressList',
+                'streetAddress')
 
-                        'startsWith' = @(
-                            'assignedPlans/any(a:a/service)',
-                            'businessPhones/any(p:p)',
-                            'companyName',
-                            'faxNumber',
-                            'mobilePhone',
-                            'officeLocation',
-                            'onPremisesSamAccountName',
-                            'postalCode',
-                            'preferredLanguage',
-                            'provisionedPlans/any(p:p/service)',
-                            'streetAddress'
-                        )
-                        'ge'     = @('employeeHireDate')
-                        'le'     = @('employeeHireDate')
-                        'eq Null' = @(
-                            'city',
-                            'companyName',
-                            'country',
-                            'createdDateTime',
-                            'department',
-                            'displayName',
-                            'employeeId',
-                            'faxNumber',
-                            'givenName',
-                            'jobTitle',
-                            'mail',
-                            'mailNickname',
-                            'mobilePhone',
-                            'officeLocation',
-                            'onPremisesExtensionAttributes/extensionAttribute1',
-                            'onPremisesExtensionAttributes/extensionAttribute10',
-                            'onPremisesExtensionAttributes/extensionAttribute11',
-                            'onPremisesExtensionAttributes/extensionAttribute12',
-                            'onPremisesExtensionAttributes/extensionAttribute13',
-                            'onPremisesExtensionAttributes/extensionAttribute14',
-                            'onPremisesExtensionAttributes/extensionAttribute15',
-                            'onPremisesExtensionAttributes/extensionAttribute2',
-                            'onPremisesExtensionAttributes/extensionAttribute3',
-                            'onPremisesExtensionAttributes/extensionAttribute4',
-                            'onPremisesExtensionAttributes/extensionAttribute5',
-                            'onPremisesExtensionAttributes/extensionAttribute6',
-                            'onPremisesExtensionAttributes/extensionAttribute7',
-                            'onPremisesExtensionAttributes/extensionAttribute8',
-                            'onPremisesExtensionAttributes/extensionAttribute9',
-                            'onPremisesSecurityIdentifier',
-                            'onPremisesSyncEnabled',
-                            'passwordPolicies',
-                            'passwordProfile/forceChangePasswordNextSignIn',
-                            'passwordProfile/forceChangePasswordNextSignInWithMfa',
-                            'postalCode',
-                            'preferredLanguage',
-                            'state',
-                            'streetAddress',
-                            'surname',
-                            'usageLocation',
-                            'userType'
-                            )
-            }
+            'startsWith' = @(
+                'assignedPlans/any(a:a/service)',
+                'businessPhones/any(p:p)',
+                'companyName',
+                'faxNumber',
+                'mobilePhone',
+                'officeLocation',
+                'onPremisesSamAccountName',
+                'postalCode',
+                'preferredLanguage',
+                'provisionedPlans/any(p:p/service)',
+                'streetAddress'
+            )
+            'ge'         = @('employeeHireDate')
+            'le'         = @('employeeHireDate')
+            'eq Null'    = @(
+                'city',
+                'companyName',
+                'country',
+                'createdDateTime',
+                'department',
+                'displayName',
+                'employeeId',
+                'faxNumber',
+                'givenName',
+                'jobTitle',
+                'mail',
+                'mailNickname',
+                'mobilePhone',
+                'officeLocation',
+                'onPremisesExtensionAttributes/extensionAttribute1',
+                'onPremisesExtensionAttributes/extensionAttribute10',
+                'onPremisesExtensionAttributes/extensionAttribute11',
+                'onPremisesExtensionAttributes/extensionAttribute12',
+                'onPremisesExtensionAttributes/extensionAttribute13',
+                'onPremisesExtensionAttributes/extensionAttribute14',
+                'onPremisesExtensionAttributes/extensionAttribute15',
+                'onPremisesExtensionAttributes/extensionAttribute2',
+                'onPremisesExtensionAttributes/extensionAttribute3',
+                'onPremisesExtensionAttributes/extensionAttribute4',
+                'onPremisesExtensionAttributes/extensionAttribute5',
+                'onPremisesExtensionAttributes/extensionAttribute6',
+                'onPremisesExtensionAttributes/extensionAttribute7',
+                'onPremisesExtensionAttributes/extensionAttribute8',
+                'onPremisesExtensionAttributes/extensionAttribute9',
+                'onPremisesSecurityIdentifier',
+                'onPremisesSyncEnabled',
+                'passwordPolicies',
+                'passwordProfile/forceChangePasswordNextSignIn',
+                'passwordProfile/forceChangePasswordNextSignInWithMfa',
+                'postalCode',
+                'preferredLanguage',
+                'state',
+                'streetAddress',
+                'surname',
+                'usageLocation',
+                'userType'
+            )
+        }
 
         # Initialize a flag to indicate whether the filter conditions match the attribute support
         $allConditionsMatched = $true
@@ -1039,12 +1041,16 @@ function Export-TargetResource
         # Assuming the provided PowerShell script is part of a larger context and the variable $Filter is defined elsewhere
 
         # Check if $Filter is not null
-        if ($Filter) {
+        if ($Filter)
+        {
             # Check each condition in the filter against the support list
-            foreach ($condition in $Filter.Split(' ')) {
-                if ($condition -match '(\w+)/(\w+):(\w+)') {
+            foreach ($condition in $Filter.Split(' '))
+            {
+                if ($condition -match '(\w+)/(\w+):(\w+)')
+                {
                     $attribute, $operation, $value = $matches[1], $matches[2], $matches[3]
-                    if (-not $queryTypes.ContainsKey($operation) -or -not $queryTypes[$operation].Contains($attribute)) {
+                    if (-not $queryTypes.ContainsKey($operation) -or -not $queryTypes[$operation].Contains($attribute))
+                    {
                         $allConditionsMatched = $false
                         break
                     }

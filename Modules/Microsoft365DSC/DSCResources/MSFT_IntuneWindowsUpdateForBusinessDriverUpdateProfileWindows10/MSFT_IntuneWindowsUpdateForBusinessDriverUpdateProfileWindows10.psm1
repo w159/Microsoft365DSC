@@ -100,6 +100,7 @@ function Get-TargetResource
 
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
+                # Potentially add support for -All parameter (@odata.nextLink) if needed
                 $uri = '/beta/deviceManagement/windowsDriverUpdateProfiles'
                 $getValue = (Invoke-MgGraphRequest -Method GET -Uri $uri).value | Where-Object -FilterScript {
                     $_.displayName -eq $DisplayName
@@ -145,8 +146,8 @@ function Get-TargetResource
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 

@@ -95,9 +95,10 @@ function Get-TargetResource
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -All `
                     -Filter "DisplayName eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue | Where-Object -FilterScript {
-                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10NetworkBoundaryConfiguration'
+                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10NetworkBoundaryConfiguration'
                 }
             }
         }
@@ -170,14 +171,14 @@ function Get-TargetResource
             AccessTokens                  = $AccessTokens
             #endregion
         }
-        
+
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 
@@ -532,7 +533,7 @@ function Export-TargetResource
         [array]$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter $Filter -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript {
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10NetworkBoundaryConfiguration'
+            $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10NetworkBoundaryConfiguration'
         }
         #endregion
 
@@ -647,7 +648,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }

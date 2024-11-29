@@ -118,7 +118,7 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id  -ErrorAction SilentlyContinue
+        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
 
         if ($null -eq $getValue)
         {
@@ -127,11 +127,12 @@ function Get-TargetResource
             if (-Not [string]::IsNullOrEmpty($DisplayName))
             {
                 $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -All `
                     -Filter "DisplayName eq '$DisplayName'" `
                     -ErrorAction SilentlyContinue | Where-Object `
                     -FilterScript { `
-                        $_.AdditionalProperties.'@odata.type' -eq "#microsoft.graph.windowsKioskConfiguration" `
-                    }
+                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windowsKioskConfiguration' `
+                }
             }
         }
         #endregion
@@ -182,12 +183,12 @@ function Get-TargetResource
                 {
                     $myApps.Add('odataType', $currentApps.'@odata.type'.toString())
                 }
-                if ($myApps.values.Where({$null -ne $_}).count -gt 0)
+                if ($myApps.values.Where({ $null -ne $_ }).count -gt 0)
                 {
                     $complexApps += $myApps
                 }
             }
-            $complexAppConfiguration.Add('Apps',$complexApps)
+            $complexAppConfiguration.Add('Apps', $complexApps)
             $complexAppConfiguration.Add('DisallowDesktopApps', $currentkioskProfiles.appConfiguration.disallowDesktopApps)
             $complexAppConfiguration.Add('ShowTaskBar', $currentkioskProfiles.appConfiguration.showTaskBar)
             $complexAppConfiguration.Add('StartMenuLayoutXml', $currentkioskProfiles.appConfiguration.startMenuLayoutXml)
@@ -220,11 +221,11 @@ function Get-TargetResource
             {
                 $complexUwpApp.Add('odataType', $currentkioskProfiles.appConfiguration.uwpApp.'@odata.type'.toString())
             }
-            if ($complexUwpApp.values.Where({$null -ne $_}).count -eq 0)
+            if ($complexUwpApp.values.Where({ $null -ne $_ }).count -eq 0)
             {
                 $complexUwpApp = $null
             }
-            $complexAppConfiguration.Add('UwpApp',$complexUwpApp)
+            $complexAppConfiguration.Add('UwpApp', $complexUwpApp)
             $complexWin32App = @{}
             $complexWin32App.Add('ClassicAppPath', $currentkioskProfiles.appConfiguration.win32App.classicAppPath)
             $complexWin32App.Add('EdgeKiosk', $currentkioskProfiles.appConfiguration.win32App.edgeKiosk)
@@ -254,20 +255,20 @@ function Get-TargetResource
             {
                 $complexWin32App.Add('odataType', $currentkioskProfiles.appConfiguration.win32App.'@odata.type'.toString())
             }
-            if ($complexWin32App.values.Where({$null -ne $_}).count -eq 0)
+            if ($complexWin32App.values.Where({ $null -ne $_ }).count -eq 0)
             {
                 $complexWin32App = $null
             }
-            $complexAppConfiguration.Add('Win32App',$complexWin32App)
+            $complexAppConfiguration.Add('Win32App', $complexWin32App)
             if ($null -ne $currentkioskProfiles.appConfiguration.'@odata.type')
             {
                 $complexAppConfiguration.Add('odataType', $currentkioskProfiles.appConfiguration.'@odata.type'.toString())
             }
-            if ($complexAppConfiguration.values.Where({$null -ne $_}).count -eq 0)
+            if ($complexAppConfiguration.values.Where({ $null -ne $_ }).count -eq 0)
             {
                 $complexAppConfiguration = $null
             }
-            $mykioskProfiles.Add('AppConfiguration',$complexAppConfiguration)
+            $mykioskProfiles.Add('AppConfiguration', $complexAppConfiguration)
             $mykioskProfiles.Add('ProfileId', $currentkioskProfiles.profileId)
             $mykioskProfiles.Add('ProfileName', $currentkioskProfiles.profileName)
             $complexUserAccountsConfiguration = @()
@@ -284,13 +285,13 @@ function Get-TargetResource
                 {
                     $myUserAccountsConfiguration.Add('odataType', $currentUserAccountsConfiguration.'@odata.type'.toString())
                 }
-                if ($myUserAccountsConfiguration.values.Where({$null -ne $_}).count -gt 0)
+                if ($myUserAccountsConfiguration.values.Where({ $null -ne $_ }).count -gt 0)
                 {
                     $complexUserAccountsConfiguration += $myUserAccountsConfiguration
                 }
             }
-            $mykioskProfiles.Add('UserAccountsConfiguration',$complexUserAccountsConfiguration)
-            if ($mykioskProfiles.values.Where({$null -ne $_}).count -gt 0)
+            $mykioskProfiles.Add('UserAccountsConfiguration', $complexUserAccountsConfiguration)
+            if ($mykioskProfiles.values.Where({ $null -ne $_ }).count -gt 0)
             {
                 $complexKioskProfiles += $mykioskProfiles
             }
@@ -311,7 +312,7 @@ function Get-TargetResource
         {
             $complexWindowsKioskForceUpdateSchedule.Add('StartDateTime', ([DateTimeOffset]$getValue.AdditionalProperties.windowsKioskForceUpdateSchedule.startDateTime).ToString('o'))
         }
-        if ($complexWindowsKioskForceUpdateSchedule.values.Where({$null -ne $_}).count -eq 0)
+        if ($complexWindowsKioskForceUpdateSchedule.values.Where({ $null -ne $_ }).count -eq 0)
         {
             $complexWindowsKioskForceUpdateSchedule = $null
         }
@@ -342,14 +343,14 @@ function Get-TargetResource
             AccessTokens                           = $AccessTokens
             #endregion
         }
-        
+
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
         {
             $assignmentResult += ConvertFrom-IntunePolicyAssignment `
-                                -IncludeDeviceFilter:$true `
-                                -Assignments ($assignmentsValues)
+                -IncludeDeviceFilter:$true `
+                -Assignments ($assignmentsValues)
         }
         $results.Add('Assignments', $assignmentResult)
 
@@ -482,7 +483,7 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
         Write-Verbose -Message "Creating an Intune Device Configuration Kiosk Policy for Windows10 with DisplayName {$DisplayName}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $CreateParameters = ([Hashtable]$BoundParameters).clone()
         $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
@@ -497,13 +498,13 @@ function Set-TargetResource
             }
         }
         #region resource generator code
-        $CreateParameters.Add("@odata.type", "#microsoft.graph.windowsKioskConfiguration")
+        $CreateParameters.Add('@odata.type', '#microsoft.graph.windowsKioskConfiguration')
         $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
 
         if ($policy.id)
         {
-            Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId  $policy.id `
+            Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $policy.id `
                 -Targets $assignmentsHash `
                 -Repository 'deviceManagement/deviceConfigurations'
         }
@@ -512,7 +513,7 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Intune Device Configuration Kiosk Policy for Windows10 with Id {$($currentInstance.Id)}"
-        $BoundParameters.Remove("Assignments") | Out-Null
+        $BoundParameters.Remove('Assignments') | Out-Null
 
         $UpdateParameters = ([Hashtable]$BoundParameters).clone()
         $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
@@ -528,7 +529,7 @@ function Set-TargetResource
             }
         }
         #region resource generator code
-        $UpdateParameters.Add("@odata.type", "#microsoft.graph.windowsKioskConfiguration")
+        $UpdateParameters.Add('@odata.type', '#microsoft.graph.windowsKioskConfiguration')
         Update-MgBetaDeviceManagementDeviceConfiguration  `
             -DeviceConfigurationId $currentInstance.Id `
             -BodyParameter $UpdateParameters
@@ -770,7 +771,7 @@ function Export-TargetResource
             -ErrorAction Stop | Where-Object `
             -FilterScript { `
                 $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windowsKioskConfiguration' `
-            }
+        }
         #endregion
 
         $i = 1
@@ -797,16 +798,16 @@ function Export-TargetResource
             }
             Write-Host "    |---[$i/$($getValue.Count)] $displayedKey" -NoNewline
             $params = @{
-                Id = $config.Id
-                DisplayName           =  $config.DisplayName
-                Ensure = 'Present'
-                Credential = $Credential
-                ApplicationId = $ApplicationId
-                TenantId = $TenantId
-                ApplicationSecret = $ApplicationSecret
+                Id                    = $config.Id
+                DisplayName           = $config.DisplayName
+                Ensure                = 'Present'
+                Credential            = $Credential
+                ApplicationId         = $ApplicationId
+                TenantId              = $TenantId
+                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
-                Managedidentity = $ManagedIdentity.IsPresent
-                AccessTokens    = $AccessTokens
+                Managedidentity       = $ManagedIdentity.IsPresent
+                AccessTokens          = $AccessTokens
             }
 
             $Results = Get-TargetResource @Params
@@ -816,34 +817,34 @@ function Export-TargetResource
             {
                 $complexMapping = @(
                     @{
-                        Name = 'KioskProfiles'
+                        Name            = 'KioskProfiles'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskProfile'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                     @{
-                        Name = 'AppConfiguration'
+                        Name            = 'AppConfiguration'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskAppConfiguration'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                     @{
-                        Name = 'Apps'
+                        Name            = 'Apps'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskAppBase'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                     @{
-                        Name = 'UwpApp'
+                        Name            = 'UwpApp'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskUWPApp'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                     @{
-                        Name = 'Win32App'
+                        Name            = 'Win32App'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskWin32App'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                     @{
-                        Name = 'UserAccountsConfiguration'
+                        Name            = 'UserAccountsConfiguration'
                         CimInstanceName = 'MicrosoftGraphWindowsKioskUser'
-                        IsRequired = $False
+                        IsRequired      = $False
                     }
                 )
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -893,15 +894,15 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.KioskProfiles)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "KioskProfiles" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskProfiles' -IsCIMArray:$True
             }
             if ($Results.WindowsKioskForceUpdateSchedule)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "WindowsKioskForceUpdateSchedule" -isCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'WindowsKioskForceUpdateSchedule' -IsCIMArray:$False
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "Assignments" -isCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -914,7 +915,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }
