@@ -7,6 +7,9 @@
     reading and troubleshooting
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
+* EXOTeamsProtectionPolicy
+  * Initial release
+    FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
 * EXOTransportRule
   * Fixed conditional logic for creation and update.
 * IntuneTrustedRootCertificateIOS
