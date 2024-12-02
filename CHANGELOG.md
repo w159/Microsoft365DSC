@@ -7,6 +7,10 @@
     reading and troubleshooting
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
+* EXOAuthenticationPolicyAssignment
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
+* EXOClientAccessRule
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
 * EXOTeamsProtectionPolicy
   * Initial release
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
@@ -18,6 +22,7 @@
   * Add separate check for strings with ordinal comparison and standardized line breaks.
 * M365DSCUtil
   * Add separate check for strings with ordinal comparison and standardized line breaks.
+
 
 # 1.24.1127.1
 
