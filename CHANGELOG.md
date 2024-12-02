@@ -7,6 +7,8 @@
     reading and troubleshooting
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* IntuneVPNConfigurationPolicyIOS
+  * Initial release.
 * M365DSCDRGUtil
   * Add separate check for strings with ordinal comparison and standardized line breaks.
 * M365DSCUtil
@@ -185,8 +187,6 @@
   * Remove changed property name from export.
     FIXES [#5300](https://github.com/microsoft/Microsoft365DSC/issues/5300)* IntuneSecurityBaselineMicrosoftEdge
   * Deprecate property `authschemes` and replace with `AuthSchemes_AuthSchemes`
-* IntuneVPNConfigurationPolicyIOS
-  * Initial release.
 * M365DSCDRGUtil
   * Restrict CIM instance access to properties that appear multiple times.
   * Switch log type for not found Intune assignments to `Warning`.
