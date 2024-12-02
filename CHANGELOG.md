@@ -4,7 +4,9 @@
 
 * All resources
   * Applying project default formatting on all files, to improve
-    reading and troubleshooting
+    reading and troubleshooting.
+* AADAccessReviewDefinition
+  * Added support for #microsoft.graph.accessReviewInactiveUsersQueryScope in odatatype.
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
 * EXOTeamsProtectionPolicy
