@@ -4,13 +4,17 @@
 
 * All resources
   * Applying project default formatting on all files, to improve
-    reading and troubleshooting
+    reading and troubleshooting.
+* AADAccessReviewDefinition
+  * Added support for #microsoft.graph.accessReviewInactiveUsersQueryScope in odatatype.
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
 * EXOAuthenticationPolicyAssignment
   * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
 * EXOClientAccessRule
   * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
+* EXOManagementRoleAssignment
+  * Changed logic to detect drift.
 * EXOTeamsProtectionPolicy
   * Initial release
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
