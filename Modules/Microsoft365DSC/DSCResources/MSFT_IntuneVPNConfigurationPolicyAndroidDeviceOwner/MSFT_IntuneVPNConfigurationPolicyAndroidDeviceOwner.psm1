@@ -16,52 +16,60 @@ function Get-TargetResource
         [Parameter()]
         [System.String]
         $Description,
-
-        [Parameter()]
-        [System.String]
-        $connectionName,
-
-        [Parameter()]
-        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'customVpn', 'ciscoIPSec', 'citrix', 'ciscoAnyConnectV2', 'paloAltoGlobalProtect', 'zscalerPrivateAccess', 'f5Access2018', 'citrixSso', 'paloAltoGlobalProtectV2', 'ikEv2', 'alwaysOn', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
-        [System.String]
-        $connectionType,
-
-        [Parameter()]
-        [System.Boolean]
-        $enableSplitTunneling,
    
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
+        $authenticationMethod,     
         
         [Parameter()]
-        [System.string[]]
-        $safariDomains,
+        [System.String]
+        $connectionName,   
 
         [Parameter()]
-        [System.string[]]
-        $associatedDomains,
+        [System.String]
+        $role,
 
         [Parameter()]
-        [System.string[]]
-        $excludedDomains,
+        [System.String]
+        $realm,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $servers,
+
+        [Parameter()]
+        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'citrix', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
+        [System.String]
+        $connectionType,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $proxyServer,
 
         [Parameter()]
-        [System.Boolean]
-        $optInToDeviceIdSharing,
-
-        [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
+        $targetedPackageIds, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
-        $server,
+        $targetedMobileApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOn,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOnLockdown,
+
+        [Parameter()]
+        [System.string]
+        $microsoftTunnelSiteId,
+
+        [Parameter()]
+        [System.string[]]
+        $proxyExclusionList, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -70,14 +78,6 @@ function Get-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $customKeyValueData,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $onDemandRules,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $targetedMobileApps,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -115,65 +115,7 @@ function Get-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $AccessTokens,
-
-        #latest updates
-        [Parameter()]
-        [System.UInt32]
-        $version,
-
-        [Parameter()]
-        [System.String]
-        $loginGroupOrDomain,
-
-        [Parameter()]
-        [System.String]
-        $role,
-
-        [Parameter()]
-        [System.String]
-        $realm,
-
-        [Parameter()]
-        [System.String]
-        $identifier,
-
-        [Parameter()]
-        [System.Boolean]
-        $enablePerApp,
-
-        [Parameter()]
-        [ValidateSet('notConfigured', 'appProxy', 'packetTunnel')]
-        [System.String]
-        $providerType,
-
-        [Parameter()]
-        [System.Boolean]
-        $disableOnDemandUserOverride,
-
-        [Parameter()]
-        [System.Boolean]
-        $disconnectOnIdle,
-
-        [Parameter()]
-        [System.UInt32]
-        $disconnectOnIdleTimerInSeconds,
-
-        [Parameter()]
-        [System.String]
-        $microsoftTunnelSiteId,
-
-        [Parameter()]
-        [System.String]
-        $cloudName,
-
-        [Parameter()]
-        [System.Boolean]
-        $strictEnforcement,
-
-        [Parameter()]
-        [System.String]
-        $userDomain
+        $AccessTokens
     )
 
     try
@@ -212,23 +154,23 @@ function Get-TargetResource
         {
             $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
             -FilterScript { `
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosVpnConfiguration' `
+                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidDeviceOwnerVpnConfiguration' `
             }
         }
         #endregion
 
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "No Intune VPN Policy for iOS with Id {$id} was found"
+            Write-Verbose -Message "No Intune VPN Policy for Android Device Owner with Id {$id} was found"
             return $nullResult
         }
 
         $Id = $getValue.Id
 
-        Write-Verbose -Message "An Intune VPN Policy for iOS with id {$id} and DisplayName {$DisplayName} was found"
+        Write-Verbose -Message "An Intune VPN Policy for Android Device Owner with id {$id} and DisplayName {$DisplayName} was found"
 
         $complexServers = @()
-        foreach ($currentservers in $getValue.AdditionalProperties.server)
+        foreach ($currentservers in $getValue.AdditionalProperties.servers)
         {
             $myservers = @{}
             $myservers.Add('address', $currentservers.address)
@@ -296,21 +238,21 @@ function Get-TargetResource
             Id                             = $getValue.Id
             Description                    = $getValue.Description
             DisplayName                    = $getValue.DisplayName
+            authenticationMethod           = $getValue.AdditionalProperties.authenticationMethod    
             connectionName                 = $getValue.AdditionalProperties.connectionName
-            connectionType                 = $getValue.AdditionalProperties.connectionType
-            enableSplitTunneling           = $getValue.AdditionalProperties.enableSplitTunneling
-            authenticationMethod           = $getValue.AdditionalProperties.authenticationMethod
-            safariDomains                  = $getValue.AdditionalProperties.safariDomains
-            associatedDomains              = $getValue.AdditionalProperties.associatedDomains
-            excludedDomains                = $getValue.AdditionalProperties.excludedDomains
-            optInToDeviceIdSharing         = $getValue.AdditionalProperties.optInToDeviceIdSharing
-            excludeList                    = $getValue.AdditionalProperties.excludeList
-            server                         = $complexServers
-            customData                     = $complexCustomData #$getValue.AdditionalProperties.customData
-            customKeyValueData             = $complexCustomKeyValueData #$getValue.AdditionalProperties.customKeyValueData
-            onDemandRules                  = $getValue.AdditionalProperties.onDemandRules
+            role                           = $getValue.AdditionalProperties.role
+            realm                          = $getValue.AdditionalProperties.realm
+            servers                        = $complexServers
+            connectionType                 = $getValue.AdditionalProperties.connectionType 
             proxyServer                    = $complexProxyServers
-            targetedMobileApps             = $complexTargetedMobileApps #$getValue.AdditionalProperties.targetedMobileApps
+            targetedPackageIds             = $getValue.AdditionalProperties.targetedPackageIds 
+            targetedMobileApps             = $complexTargetedMobileApps
+            alwaysOn                       = $getValue.AdditionalProperties.alwaysOn
+            alwaysOnLockdown               = $getValue.AdditionalProperties.alwaysOnLockdown
+            microsoftTunnelSiteId          = $getValue.AdditionalProperties.microsoftTunnelSiteId
+            proxyExclusionList             = $getValue.AdditionalProperties.proxyExclusionList
+            customData                     = $complexCustomData
+            customKeyValueData             = $complexCustomKeyValueData
             Ensure                         = 'Present'
             Credential                     = $Credential
             ApplicationId                  = $ApplicationId
@@ -319,21 +261,6 @@ function Get-TargetResource
             CertificateThumbprint          = $CertificateThumbprint
             Managedidentity                = $ManagedIdentity.IsPresent
             AccessTokens                   = $AccessTokens
-            version                        = $getValue.AdditionalProperties.version
-            loginGroupOrDomain             = $getValue.AdditionalProperties.loginGroupOrDomain
-            role                           = $getValue.AdditionalProperties.role
-            realm                          = $getValue.AdditionalProperties.realm
-            identifier                     = $getValue.AdditionalProperties.identifier
-            enablePerApp                   = $getValue.AdditionalProperties.enablePerApp
-            providerType                   = $getValue.AdditionalProperties.providerType
-            disableOnDemandUserOverride    = $getValue.AdditionalProperties.disableOnDemandUserOverride
-            disconnectOnIdle               = $getValue.AdditionalProperties.disconnectOnIdle
-            disconnectOnIdleTimerInSeconds = $getValue.AdditionalProperties.disconnectOnIdleTimerInSeconds
-            microsoftTunnelSiteId          = $getValue.AdditionalProperties.microsoftTunnelSiteId
-            cloudName                      = $getValue.AdditionalProperties.cloudName
-            strictEnforcement              = $getValue.AdditionalProperties.strictEnforcement
-            userDomain                     = $getValue.AdditionalProperties.userDomain
-
         }
                                           
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Results.Id
@@ -377,52 +304,60 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Description,
-
-        [Parameter()]
-        [System.String]
-        $connectionName,
-
-        [Parameter()]
-        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'customVpn', 'ciscoIPSec', 'citrix', 'ciscoAnyConnectV2', 'paloAltoGlobalProtect', 'zscalerPrivateAccess', 'f5Access2018', 'citrixSso', 'paloAltoGlobalProtectV2', 'ikEv2', 'alwaysOn', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
-        [System.String]
-        $connectionType,
-
-        [Parameter()]
-        [System.Boolean]
-        $enableSplitTunneling,
    
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
+        $authenticationMethod,     
         
         [Parameter()]
-        [System.string[]]
-        $safariDomains,
+        [System.String]
+        $connectionName,   
 
         [Parameter()]
-        [System.string[]]
-        $associatedDomains,
+        [System.String]
+        $role,
 
         [Parameter()]
-        [System.string[]]
-        $excludedDomains,
+        [System.String]
+        $realm,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $servers,
+
+        [Parameter()]
+        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'citrix', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
+        [System.String]
+        $connectionType,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $proxyServer,
 
         [Parameter()]
-        [System.Boolean]
-        $optInToDeviceIdSharing,
-
-        [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
+        $targetedPackageIds, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
-        $server,
+        $targetedMobileApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOn,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOnLockdown,
+
+        [Parameter()]
+        [System.string]
+        $microsoftTunnelSiteId,
+
+        [Parameter()]
+        [System.string[]]
+        $proxyExclusionList, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -431,14 +366,6 @@ function Set-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $customKeyValueData,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $onDemandRules,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $targetedMobileApps,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -476,65 +403,7 @@ function Set-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $AccessTokens,
-        
-        #latest updates
-        [Parameter()]
-        [System.UInt32]
-        $version,
-
-        [Parameter()]
-        [System.String]
-        $loginGroupOrDomain,
-
-        [Parameter()]
-        [System.String]
-        $role,
-
-        [Parameter()]
-        [System.String]
-        $realm,
-
-        [Parameter()]
-        [System.String]
-        $identifier,
-
-        [Parameter()]
-        [System.Boolean]
-        $enablePerApp,
-
-        [Parameter()]
-        [ValidateSet('notConfigured', 'appProxy', 'packetTunnel')]
-        [System.String]
-        $providerType,
-
-        [Parameter()]
-        [System.Boolean]
-        $disableOnDemandUserOverride,
-
-        [Parameter()]
-        [System.Boolean]
-        $disconnectOnIdle,
-
-        [Parameter()]
-        [System.UInt32]
-        $disconnectOnIdleTimerInSeconds,
-
-        [Parameter()]
-        [System.String]
-        $microsoftTunnelSiteId,
-
-        [Parameter()]
-        [System.String]
-        $cloudName,
-
-        [Parameter()]
-        [System.Boolean]
-        $strictEnforcement,
-
-        [Parameter()]
-        [System.String]
-        $userDomain
+        $AccessTokens
     )
 
     try
@@ -567,12 +436,12 @@ function Set-TargetResource
     #creating hashtables now for use later in both present/present and present/absent blocks
     $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
     
-    if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)') 
+ <#    if ($allTargetValues -match '\bservers=\(\{([^\)]+)\}\)') 
     {
         $serverBlock = $matches[1]
     }
 
-    $serverHashtable = @{}
+   $serverHashtable = @{}
     $serverBlock -split ";" | ForEach-Object {
         if ($_ -match '^(.*?)=(.*)$') {
             $key = $matches[1].Trim()
@@ -580,6 +449,7 @@ function Set-TargetResource
             $serverHashtable[$key] = $value
         }
     }
+#>
     if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') 
     {
         $proxyBlock = $matches[1]
@@ -620,12 +490,7 @@ function Set-TargetResource
                 $CreateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $CreateParameters[$key]
             }
         }
-
-        if ($AdditionalProperties.server)
-        {
-            $AdditionalProperties.Remove('server') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
-            $AdditionalProperties.add('server',$serverHashtable) #replaced with the hashtable we created earlier
-        }
+        
         if ($AdditionalProperties.proxyServer)
         {
             $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
@@ -674,20 +539,14 @@ function Set-TargetResource
             }
         }
 
-        if ($AdditionalProperties)
+        if ($AdditionalProperties.proxyServer)
         {
-            
-            if ($AdditionalProperties.server)
-            {
-                $AdditionalProperties.Remove('server') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
-                $AdditionalProperties.add('server',$serverHashtable) #replaced with the hashtable we created earlier
-            }
-            if ($AdditionalProperties.proxyServer)
-            {
-                $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
-                $AdditionalProperties.add('proxyServer',$proxyHashtable) #replaced with the hashtable we created earlier
-            }
-            
+            $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
+            $AdditionalProperties.add('proxyServer',$proxyHashtable) #replaced with the hashtable we created earlier
+        }
+
+        if ($AdditionalProperties)
+        {           
             #add the additional properties to the updateparameters
             $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
         }
@@ -728,52 +587,60 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $Description,
-
-        [Parameter()]
-        [System.String]
-        $connectionName,
-
-        [Parameter()]
-        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'customVpn', 'ciscoIPSec', 'citrix', 'ciscoAnyConnectV2', 'paloAltoGlobalProtect', 'zscalerPrivateAccess', 'f5Access2018', 'citrixSso', 'paloAltoGlobalProtectV2', 'ikEv2', 'alwaysOn', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
-        [System.String]
-        $connectionType,
-
-        [Parameter()]
-        [System.Boolean]
-        $enableSplitTunneling,
    
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
+        $authenticationMethod,     
         
         [Parameter()]
-        [System.string[]]
-        $safariDomains,
+        [System.String]
+        $connectionName,   
 
         [Parameter()]
-        [System.string[]]
-        $associatedDomains,
+        [System.String]
+        $role,
 
         [Parameter()]
-        [System.string[]]
-        $excludedDomains,
+        [System.String]
+        $realm,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $servers,
+
+        [Parameter()]
+        [ValidateSet('ciscoAnyConnect', 'pulseSecure', 'f5EdgeClient', 'dellSonicWallMobileConnect', 'checkPointCapsuleVpn', 'citrix', 'microsoftTunnel', 'netMotionMobility', 'microsoftProtect')]
+        [System.String]
+        $connectionType,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $proxyServer,
 
         [Parameter()]
-        [System.Boolean]
-        $optInToDeviceIdSharing,
-
-        [Parameter()]
         [System.string[]]
-        $excludeList, #not on https://learn.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-applevpnconfiguration?view=graph-rest-beta , but property is in the object
+        $targetedPackageIds, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
-        $server,
+        $targetedMobileApps,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOn,
+
+        [Parameter()]
+        [System.Boolean]
+        $alwaysOnLockdown,
+
+        [Parameter()]
+        [System.string]
+        $microsoftTunnelSiteId,
+
+        [Parameter()]
+        [System.string[]]
+        $proxyExclusionList, 
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -782,14 +649,6 @@ function Test-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $customKeyValueData,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $onDemandRules,
-
-        [Parameter()]
-        [Microsoft.Management.Infrastructure.CimInstance[]]
-        $targetedMobileApps,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -827,64 +686,7 @@ function Test-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $AccessTokens,
-
-        [Parameter()]
-        [System.UInt32]
-        $version,
-
-        [Parameter()]
-        [System.String]
-        $loginGroupOrDomain,
-
-        [Parameter()]
-        [System.String]
-        $role,
-
-        [Parameter()]
-        [System.String]
-        $realm,
-
-        [Parameter()]
-        [System.String]
-        $identifier,
-
-        [Parameter()]
-        [System.Boolean]
-        $enablePerApp,
-
-        [Parameter()]
-        [ValidateSet('notConfigured', 'appProxy', 'packetTunnel')]
-        [System.String]
-        $providerType,
-
-        [Parameter()]
-        [System.Boolean]
-        $disableOnDemandUserOverride,
-
-        [Parameter()]
-        [System.Boolean]
-        $disconnectOnIdle,
-
-        [Parameter()]
-        [System.UInt32]
-        $disconnectOnIdleTimerInSeconds,
-
-        [Parameter()]
-        [System.String]
-        $microsoftTunnelSiteId,
-
-        [Parameter()]
-        [System.String]
-        $cloudName,
-
-        [Parameter()]
-        [System.Boolean]
-        $strictEnforcement,
-
-        [Parameter()]
-        [System.String]
-        $userDomain
+        $AccessTokens
     )
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -1018,7 +820,7 @@ function Export-TargetResource
         [array]$getValue = Get-MgBetaDeviceManagementDeviceConfiguration -Filter $Filter -All `
             -ErrorAction Stop | Where-Object `
             -FilterScript { `
-                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosVpnConfiguration'  `
+                $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidDeviceOwnerVpnConfiguration'  `
         }
         #endregion
 
@@ -1070,33 +872,18 @@ function Export-TargetResource
                 }
             }
 
-            if ($null -ne $Results.server)
+            if ($null -ne $Results.servers)
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.server `
+                    -ComplexObject $Results.servers `
                     -CIMInstanceName 'MicrosoftGraphvpnServer' #MSFT_MicrosoftGraphVpnServer
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
-                    $Results.server = $complexTypeStringResult
+                    $Results.servers = $complexTypeStringResult
                 }
                 else
                 {
-                    $Results.Remove('server') | Out-Null
-                }
-            }
-
-            if ($null -ne $Results.onDemandRules)
-            {
-                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                    -ComplexObject $Results.onDemandRules `
-                    -CIMInstanceName 'MSFT_DeviceManagementConfigurationPolicyVpnOnDemandRule' #MSFT_DeviceManagementConfigurationPolicyVpnOnDemandRule
-                if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                {
-                    $Results.onDemandRules = $complexTypeStringResult
-                }
-                else
-                {
-                    $Results.Remove('onDemandRules') | Out-Null
+                    $Results.Remove('servers') | Out-Null
                 }
             }
 
@@ -1166,14 +953,9 @@ function Export-TargetResource
                 -Results $Results `
                 -Credential $Credential
 
-            if ($Results.server)
+            if ($Results.servers)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "server" -isCIMArray:$True
-            }
-
-            if ($Results.onDemandRules)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "onDemandRules" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "servers" -isCIMArray:$True
             }
 
             if ($Results.proxyServer)
@@ -1248,38 +1030,24 @@ function Get-M365DSCAdditionalProperties
     )
 
     $additionalProperties = @(
+        'authenticationMethod' 
         'connectionName'
-        'connectionType'
-        'enableSplitTunneling'
-        'authenticationMethod'
-        'enablePerApp'
-        'safariDomains'
-        'associatedDomains'
-        'excludedDomains'
-        'disableOnDemandUserOverride'
-        'disconnectOnIdle'
-        'proxyServer'
-        'optInToDeviceIdSharing'
-        'excludeList'
-        'microsoftTunnelSiteId'
-        'server'
-        'customData'
-        'customKeyValueData'
-        'onDemandRules'
-        'targetedMobileApps'
-        'version'
-        'loginGroupOrDomain'
         'role'
         'realm'
-        'identifier'
-        'providerType'
-        'disconnectOnIdleTimerInSeconds'
-        'cloudName'
-        'strictEnforcement'
-        'userDomain'
+        'servers'
+        'connectionType'
+        'proxyServer'
+        'targetedPackageIds'
+        'targetedMobileApps'
+        'alwaysOn'
+        'alwaysOnLockdown'
+        'microsoftTunnelSiteId'
+        'proxyExclusionList'
+        'customData'
+        'customKeyValueData'
     )
 
-    $results = @{'@odata.type' = '#microsoft.graph.iosVpnConfiguration' }
+    $results = @{'@odata.type' = '#microsoft.graph.androidDeviceOwnerVpnConfiguration' }
     $cloneProperties = $Properties.clone()
     foreach ($property in $cloneProperties.Keys)
     {

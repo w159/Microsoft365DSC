@@ -490,7 +490,13 @@ function Set-TargetResource
                 $CreateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $CreateParameters[$key]
             }
         }
-
+        
+        if ($AdditionalProperties.proxyServer)
+        {
+            $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
+            $AdditionalProperties.add('proxyServer',$proxyHashtable) #replaced with the hashtable we created earlier
+        }
+        
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
            
         #region resource generator code
@@ -531,6 +537,12 @@ function Set-TargetResource
             {
                 $UpdateParameters[$key] = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters[$key]
             }
+        }
+
+        if ($AdditionalProperties.proxyServer)
+        {
+            $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
+            $AdditionalProperties.add('proxyServer',$proxyHashtable) #replaced with the hashtable we created earlier
         }
 
         if ($AdditionalProperties)

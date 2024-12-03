@@ -41,8 +41,8 @@ class MSFT_customKeyValueData
     [Write, Description("Value for the custom data entry.")] String value;
 };
 
-[ClassVersion("1.0.0.0"), FriendlyName("IntuneVPNConfigurationPolicyAndroidEnterprise")]
-class MSFT_IntuneVPNConfigurationPolicyAndroidEnterprise : OMI_BaseResource
+[ClassVersion("1.0.0.0"), FriendlyName("IntuneVPNConfigurationPolicyAndroidDeviceOwner")]
+class MSFT_IntuneVPNConfigurationPolicyAndroidDeviceOwner : OMI_BaseResource
 {
     [Write, Description("Id of the Intune policy.")] String Id;
     [Key, Description("Display name of the Intune policy.")] String DisplayName;

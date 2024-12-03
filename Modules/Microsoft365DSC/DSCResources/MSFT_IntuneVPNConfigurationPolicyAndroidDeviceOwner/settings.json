@@ -1,6 +1,6 @@
 {
-    "resourceName": "IntuneVPNConfigurationPolicyIOS",
-    "description": "This resource configures an Intune VPN Configuration Policy for iOS Device.",
+    "resourceName": "IntuneVPNConfigurationPolicyAndroidDeviceOwner",
+    "description": "This resource configures an Intune VPN Configuration Policy for Android Device Owner Devices.",
     "permissions": {
         "graph": {
             "delegated": {
