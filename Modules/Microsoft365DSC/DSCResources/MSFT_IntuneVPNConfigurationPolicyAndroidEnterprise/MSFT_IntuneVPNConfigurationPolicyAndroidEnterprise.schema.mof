@@ -47,7 +47,6 @@ class MSFT_IntuneVPNConfigurationPolicyAndroidEnterprise : OMI_BaseResource
     [Write, Description("Id of the Intune policy.")] String Id;
     [Key, Description("Display name of the Intune policy.")] String DisplayName;
     [Write, Description("Description of the Intune policy.")] String Description;
-    [Write, Description("Version of the device configuration. Inherited from deviceConfiguration.")] uint32 version;
     [Write, Description("Authentication method. Inherited from vpnConfiguration. Possible values are: certificate, usernameAndPassword, sharedSecret, derivedCredential, azureAD."), ValueMap{"certificate", "usernameAndPassword", "sharedSecret", "derivedCredential", "azureAD"}, Values{"certificate", "usernameAndPassword", "sharedSecret", "derivedCredential", "azureAD"}] String authenticationMethod;
     [Write, Description("Connection name displayed to the user.")] String connectionName;
     [Write, Description("Role when connection type is set to Pulse Secure. Inherited from vpnConfiguration.")] String role;
