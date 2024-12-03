@@ -18,6 +18,8 @@
   * Fixed conditional logic for creation and update.
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* IntuneVPNConfigurationPolicyIOS
+  * Initial release.
 * M365DSCDRGUtil
   * Add separate check for strings with ordinal comparison and standardized line breaks.
 * M365DSCUtil
