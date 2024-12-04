@@ -12,6 +12,8 @@
 * AADClaimsMappingPolicy
   * Fixed policy retrieval
     FIXES [#5505](https://github.com/microsoft/Microsoft365DSC/issues/5505)
+* AADIdentityAPIConnector
+  * Changed the export logic to export passwords as credential objects instead of string.
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
 * EXOAuthenticationPolicyAssignment
@@ -20,6 +22,8 @@
   * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
 * EXOManagementRoleAssignment
   * Changed logic to detect drift.
+* EXOServicePrincipal
+  * Removed ObjectID from the return of the Get-TargetResource method.
 * EXOTeamsProtectionPolicy
   * Initial release
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
