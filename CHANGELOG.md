@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1204.1
 
 * All resources
   * Applying project default formatting on all files, to improve
