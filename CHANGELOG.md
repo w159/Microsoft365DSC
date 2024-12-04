@@ -29,6 +29,8 @@
 * MISC
   * M365DSCDRGUtil
     * Add separate check for strings with ordinal comparison and standardized line breaks.
+  * M365DSCReport
+    * Add support for creating report in CSV-format
 
 # 1.24.1127.1
 
