@@ -572,7 +572,11 @@ function New-M365DSCConfigurationToCSV
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $OutputPath
+        $OutputPath,
+
+        [Parameter()]
+        [System.String]
+        $Delimiter = ','
     )
 
     $modelRow = @{'Component Name'=$null; Property=$null; Value = $null}
@@ -640,7 +644,7 @@ function New-M365DSCConfigurationToCSV
             }
         }
     }
-    $csvOutput | Export-Csv -Path $OutputPath -Encoding UTF8 -Delimiter ',' -NoTypeInformation
+    $csvOutput | Export-Csv -Path $OutputPath -Encoding UTF8 -Delimiter $Delimiter -NoTypeInformation
 }
 
 <#
@@ -687,6 +691,31 @@ function New-M365DSCReportFromConfiguration
         [System.String]
         $OutputPath
     )
+    DynamicParam # parameter 'Delimiter' is only available when Type = 'CSV'
+    {
+        $paramDictionary = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+        if ($Type -eq 'CSV')
+        {
+            $delimiterAttr = [System.Management.Automation.ParameterAttribute]::New()
+            $delimiterAttr.Mandatory = $false
+            $attributeCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::New()
+            $attributeCollection.Add($delimiterAttr)
+            $delimiterParam = [System.Management.Automation.RuntimeDefinedParameter]::New("Delimiter", [System.String], $attributeCollection)
+            $delimiterParam.Value = ';' # default value, comma makes a mess when importing a CSV-file in Excel
+            $paramDictionary.Add("Delimiter", $delimiterParam)
+        }
+        return $paramDictionary
+    }
+
+begin
+{
+    if ($PSBoundParameters.ContainsKey('Delimiter'))
+    {
+        $Delimiter = $PSBoundParameters.Delimiter
+    }
+}
+process # required with DynamicParam
+{
 
     # Validate that the latest version of the module is installed.
     Test-M365DSCModuleValidity
@@ -729,7 +758,7 @@ function New-M365DSCReportFromConfiguration
             }
             'CSV'
             {
-                New-M365DSCConfigurationToCSV -ParsedContent $parsedContent -OutputPath $OutputPath
+                New-M365DSCConfigurationToCSV -ParsedContent $parsedContent -OutputPath $OutputPath -Delimiter $Delimiter
             }
         }
     }
@@ -737,6 +766,7 @@ function New-M365DSCReportFromConfiguration
     {
         Write-Warning -Message "Parsed content was null. No report was generated."
     }
+}
 }
 
 <#
