@@ -19,6 +19,8 @@
   * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
 * EXOManagementRoleAssignment
   * Changed logic to detect drift.
+* EXOServicePrincipal
+  * Removed ObjectID from the return of the Get-TargetResource method.
 * EXOTeamsProtectionPolicy
   * Initial release
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
