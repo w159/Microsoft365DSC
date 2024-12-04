@@ -9,6 +9,8 @@
   * Added support for #microsoft.graph.accessReviewInactiveUsersQueryScope in odatatype.
 * AADActivityBasedTimeoutPolicy
   * Added support for AccessTokens.
+* AADIdentityAPIConnector
+  * Changed the export logic to export passwords as credential objects instead of string.
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
 * EXOManagementRoleAssignment
