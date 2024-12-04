@@ -75,6 +75,10 @@
   * Improve verbose output and fix copy-pasted variables.
 * IntuneRoleScopeTag
   * Initial release.
+* IntuneTrustedRootCertificateAndroidDeviceOwner
+  * Initial release.
+* IntuneTrustedRootCertificateAndroidEnterprise
+  * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
 * TeamsUpgradePolicy
