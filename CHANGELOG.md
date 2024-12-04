@@ -11,6 +11,10 @@
   * Added support for AccessTokens.
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
+* EXOAuthenticationPolicyAssignment
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
+* EXOClientAccessRule
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
 * EXOManagementRoleAssignment
   * Changed logic to detect drift.
 * EXOTeamsProtectionPolicy
@@ -29,6 +33,7 @@
 * MISC
   * M365DSCDRGUtil
     * Add separate check for strings with ordinal comparison and standardized line breaks.
+
 
 # 1.24.1127.1
 
