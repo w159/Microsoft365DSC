@@ -47565,7 +47565,7 @@
         "Parameters":  [
                            {
                                "CIMType":  "String",
-                               "Name":  "address",
+                               "Name":  "name",
                                "Option":  "Write"
                            },
                            {
