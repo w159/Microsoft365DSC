@@ -585,6 +585,14 @@ function New-M365DSCConfigurationToCSV
 
     foreach ($resource in $parsedContent)
     {
+        $newRow = $modelRow.Clone()
+        if ($row -gt 0)
+        {
+            write-verbose "add separator-line in CSV-file between resources"
+            $newRow.'Component Name' = '======================'
+            $csvOutput += [pscustomobject]$newRow
+            $row++
+        }
         $beginRow = $row
         foreach ($property in $resource.Keys)
         {
