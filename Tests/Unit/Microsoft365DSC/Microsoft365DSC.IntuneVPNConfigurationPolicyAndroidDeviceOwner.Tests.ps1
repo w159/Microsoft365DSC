@@ -15,7 +15,7 @@ Import-Module -Name (Join-Path -Path $M365DSCTestFolder `
         -Resolve)
 
 $Global:DscHelper = New-M365DscUnitTestHelper -StubModule $CmdletModule `
-    -DscResource 'IntuneVPNConfigurationPolicyAndroidEnterprise' -GenericStubModule $GenericStubPath
+    -DscResource 'IntuneVPNConfigurationPolicyAndroidDeviceOwner' -GenericStubModule $GenericStubPath
 Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
     InModuleScope -ModuleName $Global:DscHelper.ModuleName -ScriptBlock {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
@@ -53,7 +53,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         }
 
         # Test contexts
-        Context -Name "When the IntuneVPNConfigurationPolicyAndroidEnterprise doesn't already exist" -Fixture {
+        Context -Name "When the IntuneVPNConfigurationPolicyAndroidDeviceOwner doesn't already exist" -Fixture {
             BeforeAll {
                $testParams = @{
                     connectionName                             = 'FakeStringValue'
@@ -122,13 +122,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
-            It 'Should create the IntuneVPNConfigurationPolicyAndroidEnterprise from the Set method' {
+            It 'Should create the IntuneVPNConfigurationPolicyAndroidDeviceOwner from the Set method' {
                 Set-TargetResource @testParams
                 Should -Invoke -CommandName 'New-MgBetaDeviceManagementDeviceConfiguration' -Exactly 1
             }
         }
 
-        Context -Name 'When the IntuneVPNConfigurationPolicyAndroidEnterprise already exists and is NOT in the Desired State' -Fixture {
+        Context -Name 'When the IntuneVPNConfigurationPolicyAndroidDeviceOwner already exists and is NOT in the Desired State' -Fixture {
             BeforeAll {
                $testParams = @{
                     DisplayName                               = 'FakeStringValue'
@@ -191,7 +191,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Description                                 = 'FakeStringValue'
                         Id                              = 'FakeStringValue'
                         AdditionalProperties                        = @{
-                            '@odata.type'                           = '#microsoft.graph.androidVpnConfiguration'
+                            '@odata.type'                           = '#microsoft.graph.androidDeviceOwnerVpnConfiguration'
                             authenticationMethod                    = 'usernameAndPassword'
                             connectionName                          = 'FakeStringValue'
                             connectionType                          = 'ciscoAnyConnect'
@@ -242,7 +242,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
-            It 'Should update the IntuneVPNConfigurationPolicyAndroidEnterprise from the Set method' {
+            It 'Should update the IntuneVPNConfigurationPolicyAndroidDeviceOwner from the Set method' {
                 Set-TargetResource @testParams
                 Should -Invoke -CommandName Update-MgBetaDeviceManagementDeviceConfiguration -Exactly 1
                
@@ -310,7 +310,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName                                 = 'FakeStringValue'
                         Description                                 = 'FakeStringValue'
                         AdditionalProperties                        = @{
-                            '@odata.type'                           = '#microsoft.graph.androidVpnConfiguration'
+                            '@odata.type'                           = '#microsoft.graph.androidDeviceOwnerVpnConfiguration'
                             authenticationMethod                    = 'usernameAndPassword'
                             connectionName                          = 'FakeStringValue'
                             connectionType                          = 'ciscoAnyConnect'
@@ -393,7 +393,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName                                  = 'FakeStringValue'
                         Description                                  = 'FakeStringValue'
                         AdditionalProperties                         = @{
-                            '@odata.type'                           = '#microsoft.graph.androidVpnConfiguration'
+                            '@odata.type'                           = '#microsoft.graph.androidDeviceOwnerVpnConfiguration'
                             authenticationMethod                     = 'usernameAndPassword'
                             connectionName                           = 'FakeStringValue'
                             connectionType                           = 'ciscoAnyConnect'
@@ -424,7 +424,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
-            It 'Should remove the IntuneVPNConfigurationPolicyAndroidEnterprise from the Set method' {
+            It 'Should remove the IntuneVPNConfigurationPolicyAndroidDeviceOwner from the Set method' {
                 Set-TargetResource @testParams
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementDeviceConfiguration -Exactly 1
             }
@@ -443,7 +443,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName                                 = 'FakeStringValue'
                         Description                                 = 'FakeStringValue'
                         AdditionalProperties                        = @{
-                            '@odata.type'                           = '#microsoft.graph.androidVpnConfiguration'
+                            '@odata.type'                           = '#microsoft.graph.androidDeviceOwnerVpnConfiguration'
                             authenticationMethod                    = 'usernameAndPassword'
                             connectionName                          = 'FakeStringValue'
                             connectionType                          = 'ciscoAnyConnect'
