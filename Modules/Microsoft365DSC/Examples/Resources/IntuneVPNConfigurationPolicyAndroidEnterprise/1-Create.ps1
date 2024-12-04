@@ -35,7 +35,7 @@ Configuration Example
             DisplayName                        = "IntuneVPNConfigurationPolicyAndroidEnterprise DisplayName";
             Ensure                             = "Present";
             Id                                 = "12345678-1234-abcd-1234-12345678ABCD";
-            server                             = @(
+            servers                            = @(
                 MSFT_MicrosoftGraphvpnServer{
                     isDefaultServer            = $True
                     description                = 'server'
