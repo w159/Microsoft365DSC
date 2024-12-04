@@ -94,7 +94,6 @@ function Get-TargetResource
             AppName               = $servicePrincipal.AppDisplayName
             DisplayName           = $instance.DisplayName
             AppId                 = $instance.AppId
-            ObjectId              = $instance.ObjectId
             Ensure                = 'Present'
             Credential            = $Credential
             ApplicationId         = $ApplicationId
@@ -195,7 +194,6 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         $setParameters.Remove('AppId')
-        $setParameters.Remove('ObjectId')
         Set-ServicePrincipal -DisplayName $DisplayName -Identity $servicePrincipal.Id
     }
     # REMOVE
