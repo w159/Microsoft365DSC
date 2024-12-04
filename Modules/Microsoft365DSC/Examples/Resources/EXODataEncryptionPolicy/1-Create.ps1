@@ -19,8 +19,17 @@ Configuration Example
         $CertificateThumbprint
     )
     Import-DscResource -ModuleName Microsoft365DSC
+
     node localhost
     {
-        
+        EXODataEncryptionPolicy 'ConfigureDataEncryptionPolicy'
+        {
+            Identity              = 'US Mailboxes'
+            Enabled               = $true
+            Ensure                = "Present"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
+        }
     }
 }

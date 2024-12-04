@@ -252,7 +252,7 @@ function Get-TargetResource
             Write-Verbose -Message "Searching for Policy using DisplayName {$DisplayName}"
             $policyInfoArray = Get-MgBetaDeviceAppManagementAndroidManagedAppProtection -ExpandProperty Apps, assignments `
                 -ErrorAction Stop -All:$true
-            $policyInfo = $policyInfoArray | Where-Object -FilterScript {$_.displayName -eq $DisplayName}
+            $policyInfo = $policyInfoArray | Where-Object -FilterScript { $_.displayName -eq $DisplayName }
         }
         if ($null -eq $policyInfo)
         {
@@ -350,14 +350,21 @@ function Get-TargetResource
     }
     catch
     {
-        New-M365DSCLogEntry -Message 'Error retrieving data:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
+        if ($_.Exception.Message -eq 'Multiple Policies with same displayname identified - Module currently only functions with unique names')
+        {
+            throw $_
+        }
+        else
+        {
+            New-M365DSCLogEntry -Message 'Error retrieving data:' `
+                -Exception $_ `
+                -Source $($MyInvocation.MyCommand.Source) `
+                -TenantId $TenantId `
+                -Credential $Credential
 
-        $nullResult = Clear-M365DSCAuthenticationParameter -BoundParameters $nullResult
-        return $nullResult
+            $nullResult = Clear-M365DSCAuthenticationParameter -BoundParameters $nullResult
+            return $nullResult
+        }
     }
 }
 
@@ -1005,14 +1012,14 @@ function Test-TargetResource
             Write-Verbose -Message ('Unspecified Parameter in Config: ' + $param + '  Current Value Will be retained: ' + $CurrentValues.$param)
         }
     }
-    Write-Verbose -Message "Starting Assignments Check"
+    Write-Verbose -Message 'Starting Assignments Check'
     # handle complex parameters - manually for now
     if ($PSBoundParameters.keys -contains 'Assignments' )
     {
         $targetvalues.add('Assignments', $psboundparameters.Assignments)
     }
 
-    Write-Verbose -Message "Starting Exluded Groups Check"
+    Write-Verbose -Message 'Starting Exluded Groups Check'
     if ($PSBoundParameters.keys -contains 'ExcludedGroups' )
     {
         $targetvalues.add('ExcludedGroups', $psboundparameters.ExcludedGroups)
@@ -1164,7 +1171,7 @@ function Export-TargetResource
     catch
     {
         if ($_.Exception -like '*401*' -or $_.ErrorDetails.Message -like "*`"ErrorCode`":`"Forbidden`"*" -or `
-        $_.Exception -like "*Request not applicable to target tenant*")
+                $_.Exception -like '*Request not applicable to target tenant*')
         {
             Write-Host "`r`n    $($Global:M365DSCEmojiYellowCircle) The current tenant is not registered for Intune."
         }
