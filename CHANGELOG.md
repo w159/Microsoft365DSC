@@ -9,6 +9,9 @@
   * Added support for #microsoft.graph.accessReviewInactiveUsersQueryScope in odatatype.
 * AADActivityBasedTimeoutPolicy
   * Added support for AccessTokens.
+* AADClaimsMappingPolicy
+  * Fixed policy retrieval
+    FIXES [#5505](https://github.com/microsoft/Microsoft365DSC/issues/5505)
 * AADRoleManagementPolicyRule
   * Added the logic to handle filters in the Export logic flow.
 * EXOAuthenticationPolicyAssignment
