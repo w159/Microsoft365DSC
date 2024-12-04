@@ -435,20 +435,6 @@ function Set-TargetResource
     #proxy and server values need converting before new- / update- cmdlets will accept parameters
     #creating hashtables now for use later in both present/present and present/absent blocks
     $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
-    
-    if ($allTargetValues -match '\bservers=\(\{([^\)]+)\}\)') 
-    {
-        $serverBlock = $matches[1]
-    }
-
-    $serverHashtable = @{}
-    $serverBlock -split ";" | ForEach-Object {
-        if ($_ -match '^(.*?)=(.*)$') {
-            $key = $matches[1].Trim()
-            $value = $matches[2].Trim()
-            $serverHashtable[$key] = $value
-        }
-    }
 
     if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') 
     {

@@ -436,20 +436,6 @@ function Set-TargetResource
     #creating hashtables now for use later in both present/present and present/absent blocks
     $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
     
- <#    if ($allTargetValues -match '\bservers=\(\{([^\)]+)\}\)') 
-    {
-        $serverBlock = $matches[1]
-    }
-
-   $serverHashtable = @{}
-    $serverBlock -split ";" | ForEach-Object {
-        if ($_ -match '^(.*?)=(.*)$') {
-            $key = $matches[1].Trim()
-            $value = $matches[2].Trim()
-            $serverHashtable[$key] = $value
-        }
-    }
-#>
     if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') 
     {
         $proxyBlock = $matches[1]
