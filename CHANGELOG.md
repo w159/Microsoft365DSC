@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* IntuneFirewallPolicyWindows10
+  * Fix export of properties that appear multiple times in subsections.
 * M365DSCDRGUtil
   * Improve settings catalog handling for nested objects.
 * M365DSCResourceGenerator
