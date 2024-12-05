@@ -524,18 +524,25 @@ function Test-TargetResource
     Write-Verbose -Message "Testing configuration of AndroidDeviceOwnerEnrollmentProfile: {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    $ValuesToCheck = $PSBoundParameters
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
     $ValuesToCheck.Remove('WifiPassword') | Out-Null
+    $ValuesToCheck.Remove("QrCodeImage") | Out-Null
+    $ValuesToCheck.Remove("QrCodeContent") | Out-Null
+    $ValuesToCheck.Remove("TokenValue") | Out-Null
+    $ValuesToCheck.Remove("TokenCreationDateTime") | Out-Null
+    $ValuesToCheck.Remove("TokenExpirationDateTime") | Out-Null
 
     #Compare Cim instances
+    Write-Verbose -Message "Evaluating CIM Instances"
     $TestResult = $true
-    foreach ($key in $PSBoundParameters.Keys)
+    $RemainingValuesToCheck = $ValuesToCheck
+    foreach ($key in $ValuesToCheck.Keys)
     {
-        $source = $PSBoundParameters.$key
+        $source = $ValuesToCheck.$key
         $target = $CurrentValues.$key
         if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
         {
-            $testResult = Compare-M365DSCComplexObject `
+            $TestResult = Compare-M365DSCComplexObject `
                 -Source ($source) `
                 -Target ($target)
 
@@ -545,18 +552,18 @@ function Test-TargetResource
                 break
             }
 
-            $ValuesToCheck.Remove($key) | Out-Null
+            $RemainingValuesToCheck.Remove($key) | Out-Null
         }
     }
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
-    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
+    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $RemainingValuesToCheck)"
     if ($TestResult)
     {
         $TestResult = Test-M365DSCParameterState `
             -CurrentValues $CurrentValues `
             -Source $($MyInvocation.MyCommand.Source) `
             -DesiredValues $PSBoundParameters `
-            -ValuesToCheck $ValuesToCheck.Keys
+            -ValuesToCheck $RemainingValuesToCheck.Keys
 
         Write-Verbose -Message "Test-TargetResource returned $TestResult"
     }
