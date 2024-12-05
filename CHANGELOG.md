@@ -26,6 +26,8 @@
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
 * EXOTransportRule
   * Fixed conditional logic for creation and update.
+* PPPowerAppsEnvironmant
+  * Fixed [[#5508](https://github.com/microsoft/Microsoft365DSC/issues/5508)]
 * IntuneTrustedRootCertificateIOS
   * Initial release
 * IntuneVPNConfigurationPolicyIOS
