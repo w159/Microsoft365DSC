@@ -528,6 +528,7 @@ function Test-TargetResource
     $ValuesToCheck.Remove('WifiPassword') | Out-Null
 
     #Compare Cim instances
+    $TestResult = $true
     foreach ($key in $PSBoundParameters.Keys)
     {
         $source = $PSBoundParameters.$key
@@ -656,7 +657,7 @@ function Export-TargetResource
             if ($Results.QrCodeImage)
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.QrCodeImage `
-                                                                             -CIMInstanceName 'IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfileQRImage'
+                                                                             -CIMInstanceName 'IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfileQRImage'
                 if ($complexTypeStringResult)
                 {
                     $Results.QrCodeImage = $complexTypeStringResult

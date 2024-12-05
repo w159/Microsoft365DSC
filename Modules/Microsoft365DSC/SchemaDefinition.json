@@ -40356,7 +40356,7 @@
                        ]
     },
     {
-        "ClassName":  "MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfileQRImage",
+        "ClassName":  "MSFT_IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfileQRImage",
         "Parameters":  [
                            {
                                "CIMType":  "String",
@@ -40371,7 +40371,7 @@
                        ]
     },
     {
-        "ClassName":  "MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile",
+        "ClassName":  "MSFT_IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile",
         "Parameters":  [
                            {
                                "CIMType":  "String",

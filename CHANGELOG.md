@@ -2,7 +2,7 @@
 
 # UNRELEASED
 
-* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Fixing issue with the way the QrCodeImage property was exported and handled.
 
 # 1.24.12024.1
@@ -384,7 +384,7 @@
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
-* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
