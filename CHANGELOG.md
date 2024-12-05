@@ -3,7 +3,7 @@
 # UNRELEASED
 
 * IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
-  * Fixing issue with the way the QrCodeImage propety was exported and handled.
+  * Fixing issue with the way the QrCodeImage property was exported and handled.
 
 # 1.24.12024.1
 
