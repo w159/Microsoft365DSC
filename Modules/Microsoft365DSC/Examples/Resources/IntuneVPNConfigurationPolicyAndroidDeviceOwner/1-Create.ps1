@@ -28,6 +28,7 @@ Configuration Example
             TenantId                                = $TenantId;
             CertificateThumbprint                   = $CertificateThumbprint;
             Assignments                             = @();
+            alwaysOn                                = $False;
             authenticationMethod                    = "azureAD";
             connectionName                          = "IntuneVPNConfigurationPolicyAndroidDeviceOwner ConnectionName";
             connectionType                          = "microsoftProtect";
