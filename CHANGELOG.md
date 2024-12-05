@@ -2,7 +2,10 @@
 
 # UNRELEASED
 
-# 1.24.1204.1
+* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+  * Fixing issue with the way the QrCodeImage propety was exported and handled.
+
+# 1.24.12024.1
 
 * All resources
   * Applying project default formatting on all files, to improve
