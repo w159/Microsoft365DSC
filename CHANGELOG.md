@@ -4,8 +4,10 @@
 
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Fixing issue with the way the QrCodeImage property was exported and handled.
+* IntuneFirewallPolicyWindows10
+  * Fix export of properties that appear multiple times in subsections.
 
-# 1.24.12024.1
+# 1.24.1204.1
 
 * All resources
   * Applying project default formatting on all files, to improve
