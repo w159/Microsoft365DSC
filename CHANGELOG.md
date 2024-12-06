@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+  * Fixing issue with the way the QrCodeImage property was exported and handled.
 * IntuneFirewallPolicyWindows10
   * Fix export of properties that appear multiple times in subsections.
 
@@ -384,7 +386,7 @@
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
-* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.

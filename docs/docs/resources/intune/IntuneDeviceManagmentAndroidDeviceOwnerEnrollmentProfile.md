@@ -1,4 +1,4 @@
-﻿# IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+﻿# IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
 
 ## Parameters
 
@@ -32,7 +32,7 @@
 | **ManagedIdentity** | Write | Boolean | Managed ID being used for authentication. | |
 | **AccessTokens** | Write | StringArray[] | Access token used for authentication. | |
 
-### MSFT_IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfileQRImage
+### MSFT_IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfileQRImage
 
 #### Parameters
 
@@ -97,8 +97,7 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
-    {
-        IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile "IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
+    {"IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
         {
             AccountId                 = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
             ApplicationId             = $ApplicationId;
@@ -147,7 +146,7 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile "IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
+        "IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
         {
             AccountId                 = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
             ApplicationId             = $ApplicationId;
@@ -195,8 +194,7 @@ Configuration Example
     )
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
-    {
-        IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile "IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
+    {"IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile-MyTestEnrollmentProfile"
         {
             AccountId                 = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
             ApplicationId             = $ApplicationId;
