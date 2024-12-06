@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADFeatureRolloutPolicy
+  * Fixed policy retrieval
+    FIXES [#5521](https://github.com/microsoft/Microsoft365DSC/issues/5521)
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Fixing issue with the way the QrCodeImage property was exported and handled.
 * IntuneFirewallPolicyWindows10
