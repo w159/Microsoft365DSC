@@ -30,6 +30,8 @@
   * Initial release
 * IntuneVPNConfigurationPolicyAndroidDeviceOwner
   * Initial release
+* IntuneVPNConfigurationPolicyAndroidEnterprise
+  * Initial release
 * M365DSCDRGUtil
   * Add separate check for strings with ordinal comparison and standardized line breaks.
 * M365DSCUtil
