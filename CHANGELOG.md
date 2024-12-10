@@ -47,6 +47,10 @@
   * Fixed [[#5508](https://github.com/microsoft/Microsoft365DSC/issues/5508)]
 * IntuneTrustedRootCertificateIOS
   * Initial release
+* IntuneVPNConfigurationPolicyAndroidDeviceOwner
+  * Initial release
+* IntuneVPNConfigurationPolicyAndroidEnterprise
+  * Initial release
 * IntuneVPNConfigurationPolicyIOS
   * Initial release.
 * M365DSCRuleEvaluation
@@ -58,7 +62,6 @@
     * Add separate check for strings with ordinal comparison and standardized line breaks.
   * M365DSCReport
     * Add support for creating report in CSV-format
-
 
 # 1.24.1127.1
 
