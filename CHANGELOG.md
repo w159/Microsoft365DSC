@@ -9,6 +9,10 @@
   * Fixing issue with the way the QrCodeImage property was exported and handled.
 * IntuneFirewallPolicyWindows10
   * Fix export of properties that appear multiple times in subsections.
+* M365DSCDRGUtil
+  * Improve settings catalog handling for nested objects.
+* M365DSCResourceGenerator
+  * Fixes an issue with nested object creation.
 
 # 1.24.1204.1
 
