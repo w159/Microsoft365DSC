@@ -391,7 +391,7 @@ function Get-TargetResource
 
             try
             {
-                $Uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/applications/$($AADBetaApp.Id)/onPremisesPublishing"
+                $Uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/applications/$($AADBetaApp.Id)/onPremisesPublishing"
                 $oppInfo = Invoke-MgGraphRequest -Method GET `
                     -Uri $Uri `
                     -ErrorAction SilentlyContinue
@@ -931,7 +931,7 @@ function Set-TargetResource
                 {
                     $Type = 'directoryObjects'
                 }
-                $ObjectUri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + 'v1.0/{0}/{1}' -f $Type, $diff.InputObject
+                $ObjectUri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + 'v1.0/{0}/{1}' -f $Type, $diff.InputObject
                 $ownerObject = @{
                     '@odata.id' = $ObjectUri
                 }
@@ -1152,7 +1152,7 @@ function Set-TargetResource
         $onPremisesPayload = ConvertTo-Json $onPremisesPublishingValue -Depth 10 -Compress
         Write-Verbose -Message "Updating the OnPremisesPublishing settings for application {$($currentAADApp.DisplayName)} with payload: $onPremisesPayload"
 
-        $Uri = $Global:MSCloudLoginConnectionProfile.MicrosoftGraph.ResourceUrl + "beta/applications/$($currentAADApp.Id)/onPremisesPublishing"
+        $Uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/applications/$($currentAADApp.Id)/onPremisesPublishing"
         Invoke-MgGraphRequest -Method 'PATCH' `
             -Uri $Uri `
             -Body $onPremisesPayload

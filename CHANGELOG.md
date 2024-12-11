@@ -1,5 +1,7 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
 # 1.24.1211.1
 
 * AADApplication
@@ -16,6 +18,8 @@
   * Improve settings catalog handling for nested objects.
 * M365DSCResourceGenerator
   * Fixes an issue with nested object creation.
+* MISC
+  * Migrate `MSCloudLoginAssistant` authentication context access to cmdlets.
 * DEPENDENCIES
   * Updated MSCloudLoginAssistant to version 1.1.29.
 
