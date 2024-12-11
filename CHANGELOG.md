@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1211.1
 
 * AADApplication
   * Changed logic to remove all permissions when an empty array is specified.
