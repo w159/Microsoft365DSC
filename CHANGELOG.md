@@ -2,17 +2,68 @@
 
 # UNRELEASED
 
-* All resources
-  * Applying project default formatting on all files, to improve
-    reading and troubleshooting
+* AADFeatureRolloutPolicy
+  * Fixed policy retrieval
+    FIXES [#5521](https://github.com/microsoft/Microsoft365DSC/issues/5521)
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+  * Fixing issue with the way the QrCodeImage property was exported and handled.
+* IntuneFirewallPolicyWindows10
+  * Fix export of properties that appear multiple times in subsections.
 * IntuneSecurityBaselineWindows10
   * Initial release.
+* M365DSCDRGUtil
+  * Improve settings catalog handling for nested objects.
+* M365DSCResourceGenerator
+  * Fixes an issue with nested object creation.
+
+# 1.24.1204.1
+
+* All resources
+  * Applying project default formatting on all files, to improve
+    reading and troubleshooting.
+* AADAccessReviewDefinition
+  * Added support for #microsoft.graph.accessReviewInactiveUsersQueryScope in odatatype.
+* AADActivityBasedTimeoutPolicy
+  * Added support for AccessTokens.
+* AADClaimsMappingPolicy
+  * Fixed policy retrieval
+    FIXES [#5505](https://github.com/microsoft/Microsoft365DSC/issues/5505)
+* AADIdentityAPIConnector
+  * Changed the export logic to export passwords as credential objects instead of string.
+* AADRoleManagementPolicyRule
+  * Added the logic to handle filters in the Export logic flow.
+* EXOAuthenticationPolicyAssignment
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
+* EXOClientAccessRule
+  * Added $confirm flag to the Set-TargetResource function for PowerShell 7 compatibility.
+* EXOManagementRoleAssignment
+  * Changed logic to detect drift.
+* EXOServicePrincipal
+  * Removed ObjectID from the return of the Get-TargetResource method.
+* EXOTeamsProtectionPolicy
+  * Initial release
+    FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
+* EXOTransportRule
+  * Fixed conditional logic for creation and update.
+* PPPowerAppsEnvironmant
+  * Fixed [[#5508](https://github.com/microsoft/Microsoft365DSC/issues/5508)]
 * IntuneTrustedRootCertificateIOS
   * Initial release
-* M365DSCDRGUtil
-  * Add separate check for strings with ordinal comparison and standardized line breaks.
-* M365DSCUtil
-  * Add separate check for strings with ordinal comparison and standardized line breaks.
+* IntuneVPNConfigurationPolicyAndroidDeviceOwner
+  * Initial release
+* IntuneVPNConfigurationPolicyAndroidEnterprise
+  * Initial release
+* IntuneVPNConfigurationPolicyIOS
+  * Initial release.
+* M365DSCRuleEvaluation
+  * Only attempt to pass AccessTokens if specified.
+* SPORetentionLabelsSettings
+  * Initial release.
+* MISC
+  * M365DSCDRGUtil
+    * Add separate check for strings with ordinal comparison and standardized line breaks.
+  * M365DSCReport
+    * Add support for creating report in CSV-format
 
 # 1.24.1127.1
 
@@ -49,6 +100,10 @@
 * IntuneRoleAssignment
   * Improve verbose output and fix copy-pasted variables.
 * IntuneRoleScopeTag
+  * Initial release.
+* IntuneTrustedRootCertificateAndroidDeviceOwner
+  * Initial release.
+* IntuneTrustedRootCertificateAndroidEnterprise
   * Initial release.
 * TeamsUserPolicyAssignment
   * Added support for the Global policies.
@@ -347,7 +402,7 @@
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
-* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
