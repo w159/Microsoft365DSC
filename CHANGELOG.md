@@ -16,6 +16,8 @@
   * Improve settings catalog handling for nested objects.
 * M365DSCResourceGenerator
   * Fixes an issue with nested object creation.
+* DEPENDENCIES
+  * Updated MSCloudLoginAssistant to version 1.1.29.
 
 # 1.24.1204.1
 
