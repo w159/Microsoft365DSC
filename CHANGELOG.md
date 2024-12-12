@@ -7,6 +7,8 @@
 * AADApplication
   * Changed logic to remove all permissions when an empty array is specified.
     FIXES [#5534](https://github.com/microsoft/Microsoft365DSC/issues/5534)
+  * Changed logic to update AppRoles by first disabling the entry.
+    FIXES [#5524](https://github.com/microsoft/Microsoft365DSC/issues/5524)
 * AADFeatureRolloutPolicy
   * Fixed policy retrieval
     FIXES [#5521](https://github.com/microsoft/Microsoft365DSC/issues/5521)
