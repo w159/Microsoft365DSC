@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* M365DSCUtil
+  * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
+    FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
+
 # 1.24.1211.1
 
 * AADApplication
