@@ -376,15 +376,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Pol_MSS_DisableIPSourceRoutingIPv6 = '1'
                         DisableIPSourceRoutingIPv6 = '0'                        
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
+                        BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
                                 key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
-                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
-                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
-                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
@@ -427,15 +425,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Pol_MSS_DisableIPSourceRoutingIPv6 = '1'
                         DisableIPSourceRoutingIPv6 = '0'                        
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
+                        BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
                                 key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
-                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
-                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
-                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
@@ -446,7 +442,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure = "Absent"
                     Credential = $Credential;
                 }
-            }                
+            }
 
             It 'Should return Values from the Get method' {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
@@ -461,7 +457,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementConfigurationPolicy -Exactly 1
             }
         }
-        
+
         Context -Name "The IntuneSecurityBaselineWindows10 Exists and Values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
@@ -477,15 +473,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Pol_MSS_DisableIPSourceRoutingIPv6 = '1'
                         DisableIPSourceRoutingIPv6 = '0'                        
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
+                        BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
                                 key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
-                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
-                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
-                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
@@ -495,7 +489,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     } -ClientOnly)
                     Ensure = "Present"
                     Credential = $Credential;
-                }               
+                }
             }
 
             It 'Should return true from the Test method' {
@@ -518,15 +512,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Pol_MSS_DisableIPSourceRoutingIPv6 = '1'
                         DisableIPSourceRoutingIPv6 = '0'                        
                         HardenedUNCPaths_Pol_HardenedPaths = '1'
+                        BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
                         pol_hardenedpaths = [CimInstance[]]@(
                             (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths -Property @{
                                 value = "RequireMutualAuthentication=1,RequireIntegrity=1"
                                 key = "\\*\SYSVOL"
                             } -ClientOnly)
                         )
-                        AttackSurfaceReductionRules = (New-CimInstance -ClassName MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules -Property @{
-                            BlockExecutionOfPotentiallyObfuscatedScripts = 'block'
-                        } -ClientOnly)
                     } -ClientOnly)
                     Id = "12345-12345-12345-12345-12345"
                     DisplayName = "My Test"                    
@@ -559,7 +551,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
                 $testParams = @{
                     Credential = $Credential
-                }                
+                }
             }
 
             It 'Should Reverse Engineer resource from the Export method' {

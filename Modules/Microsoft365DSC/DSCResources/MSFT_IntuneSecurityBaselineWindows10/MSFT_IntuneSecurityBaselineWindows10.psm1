@@ -15,7 +15,7 @@ function Get-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $RoleScopeTagIds,       
+        $RoleScopeTagIds,
 
         [Parameter()]
         [System.String]
@@ -67,6 +67,8 @@ function Get-TargetResource
         [System.String[]]
         $AccessTokens
     )
+
+    Write-Verbose -Message "Getting configuration of the Intune Security Baseline for Windows10 with Id {$Id} and Name {$DisplayName}"
 
     try
     {
@@ -124,121 +126,117 @@ function Get-TargetResource
 
         #region resource generator code
         $complexDeviceSettings = @{}
-        $attackSurfaceReductionRules = @{}
         if ($null -ne $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts) {
-            $attackSurfaceReductionRules.Add('BlockExecutionOfPotentiallyObfuscatedScripts', $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts)
+            $complexDeviceSettings.Add('BlockExecutionOfPotentiallyObfuscatedScripts', $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts)
         }
         if ($null -ne $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutionOfPotentiallyObfuscatedScripts_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros) {
-            $attackSurfaceReductionRules.Add('BlockWin32APICallsFromOfficeMacros', $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros)
+            $complexDeviceSettings.Add('BlockWin32APICallsFromOfficeMacros', $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros)
         }
         if ($null -ne $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockWin32APICallsFromOfficeMacros_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion) {
-            $attackSurfaceReductionRules.Add('BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion', $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion)
+            $complexDeviceSettings.Add('BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion', $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion)
         }
         if ($null -ne $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutableFilesRunningUnlessTheyMeetPrevalenceAgeTrustedListCriterion_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses) {
-            $attackSurfaceReductionRules.Add('BlockOfficeCommunicationAppFromCreatingChildProcesses', $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses)
+            $complexDeviceSettings.Add('BlockOfficeCommunicationAppFromCreatingChildProcesses', $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeCommunicationAppFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses) {
-            $attackSurfaceReductionRules.Add('BlockAllOfficeApplicationsFromCreatingChildProcesses', $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses)
+            $complexDeviceSettings.Add('BlockAllOfficeApplicationsFromCreatingChildProcesses', $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAllOfficeApplicationsFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses) {
-            $attackSurfaceReductionRules.Add('BlockAdobeReaderFromCreatingChildProcesses', $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses)
+            $complexDeviceSettings.Add('BlockAdobeReaderFromCreatingChildProcesses', $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAdobeReaderFromCreatingChildProcesses_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem) {
-            $attackSurfaceReductionRules.Add('BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem', $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem)
+            $complexDeviceSettings.Add('BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem', $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem)
         }
         if ($null -ne $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockCredentialStealingFromWindowsLocalSecurityAuthoritySubsystem_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent) {
-            $attackSurfaceReductionRules.Add('BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent', $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent)
+            $complexDeviceSettings.Add('BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent', $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent)
         }
         if ($null -ne $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockJavaScriptOrVBScriptFromLaunchingDownloadedExecutableContent_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockWebshellCreationForServers) {
-            $attackSurfaceReductionRules.Add('BlockWebshellCreationForServers', $policySettings.DeviceSettings.blockWebshellCreationForServers)
+            $complexDeviceSettings.Add('BlockWebshellCreationForServers', $policySettings.DeviceSettings.blockWebshellCreationForServers)
         }
         if ($null -ne $policySettings.DeviceSettings.blockWebshellCreationForServers_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockWebshellCreationForServers_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockWebshellCreationForServers_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockWebshellCreationForServers_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockWebshellCreationForServers_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB) {
-            $attackSurfaceReductionRules.Add('BlockUntrustedUnsignedProcessesThatRunFromUSB', $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB)
+            $complexDeviceSettings.Add('BlockUntrustedUnsignedProcessesThatRunFromUSB', $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB)
         }
         if ($null -ne $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockUntrustedUnsignedProcessesThatRunFromUSB_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockPersistenceThroughWMIEventSubscription) {
-            $attackSurfaceReductionRules.Add('BlockPersistenceThroughWMIEventSubscription', $policySettings.DeviceSettings.blockPersistenceThroughWMIEventSubscription)
+            $complexDeviceSettings.Add('BlockPersistenceThroughWMIEventSubscription', $policySettings.DeviceSettings.blockPersistenceThroughWMIEventSubscription)
         }
         if ($null -ne $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools) {
-            $attackSurfaceReductionRules.Add('BlockUseOfCopiedOrImpersonatedSystemTools', $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools)
+            $complexDeviceSettings.Add('BlockUseOfCopiedOrImpersonatedSystemTools', $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools)
         }
         if ($null -ne $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockUseOfCopiedOrImpersonatedSystemTools_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers) {
-            $attackSurfaceReductionRules.Add('BlockAbuseOfExploitedVulnerableSignedDrivers', $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers)
+            $complexDeviceSettings.Add('BlockAbuseOfExploitedVulnerableSignedDrivers', $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers)
         }
         if ($null -ne $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockAbuseOfExploitedVulnerableSignedDrivers_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands) {
-            $attackSurfaceReductionRules.Add('BlockProcessCreationsFromPSExecAndWMICommands', $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands)
+            $complexDeviceSettings.Add('BlockProcessCreationsFromPSExecAndWMICommands', $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands)
         }
         if ($null -ne $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockProcessCreationsFromPSExecAndWMICommands_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent) {
-            $attackSurfaceReductionRules.Add('BlockOfficeApplicationsFromCreatingExecutableContent', $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent)
+            $complexDeviceSettings.Add('BlockOfficeApplicationsFromCreatingExecutableContent', $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeApplicationsFromCreatingExecutableContent_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses) {
-            $attackSurfaceReductionRules.Add('BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses', $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses)
+            $complexDeviceSettings.Add('BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses', $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses)
         }
         if ($null -ne $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockOfficeApplicationsFromInjectingCodeIntoOtherProcesses_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockRebootingMachineInSafeMode) {
-            $attackSurfaceReductionRules.Add('BlockRebootingMachineInSafeMode', $policySettings.DeviceSettings.blockRebootingMachineInSafeMode)
+            $complexDeviceSettings.Add('BlockRebootingMachineInSafeMode', $policySettings.DeviceSettings.blockRebootingMachineInSafeMode)
         }
         if ($null -ne $policySettings.DeviceSettings.blockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockRebootingMachineInSafeMode_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware) {
-            $attackSurfaceReductionRules.Add('UseAdvancedProtectionAgainstRansomware', $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware)
+            $complexDeviceSettings.Add('UseAdvancedProtectionAgainstRansomware', $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware)
         }
         if ($null -ne $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('UseAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('UseAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.useAdvancedProtectionAgainstRansomware_ASROnlyPerRuleExclusions)
         }
         if ($null -ne $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail) {
-            $attackSurfaceReductionRules.Add('BlockExecutableContentFromEmailClientAndWebmail', $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail)
+            $complexDeviceSettings.Add('BlockExecutableContentFromEmailClientAndWebmail', $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail)
         }
         if ($null -ne $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions) {
-            $attackSurfaceReductionRules.Add('BlockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions)
+            $complexDeviceSettings.Add('BlockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions', $policySettings.DeviceSettings.blockExecutableContentFromEmailClientAndWebmail_ASROnlyPerRuleExclusions)
         }
-        if ($attackSurfaceReductionRules.values.Where({$null -ne $_}).Count -gt 0) {
-            $complexDeviceSettings.Add('AttackSurfaceReductionRules', $attackSurfaceReductionRules)
-        }               
         if ($null -ne $policySettings.DeviceSettings.cPL_Personalization_NoLockScreenCamera) {
             $complexDeviceSettings.Add('CPL_Personalization_NoLockScreenCamera', $policySettings.DeviceSettings.cPL_Personalization_NoLockScreenCamera)
         }
@@ -291,21 +289,21 @@ function Get-TargetResource
             $complexDeviceSettings.Add('hardeneduncpaths_Pol_HardenedPaths', $policySettings.DeviceSettings.hardeneduncpaths_Pol_HardenedPaths)
         }
         if ($null -ne $policySettings.DeviceSettings.pol_hardenedPaths) {            
-            $complexPol_hardenedpaths = @()
+        $complexPol_hardenedpaths = @()
             foreach ($currentPol_hardenedpaths in $policySettings.DeviceSettings.pol_hardenedPaths)
-            {
-                $myPol_hardenedpaths = @{}            
+        {
+            $myPol_hardenedpaths = @{}
                 if ($null -ne $currentPol_hardenedpaths.value) {
-                    $myPol_hardenedpaths.Add('Value', $currentPol_hardenedpaths.value)
+            $myPol_hardenedpaths.Add('Value', $currentPol_hardenedpaths.value)
                 }
                 if ($null -ne $currentPol_hardenedpaths.Key) {
-                    $myPol_hardenedpaths.Add('Key', $currentPol_hardenedpaths.key)
+            $myPol_hardenedpaths.Add('Key', $currentPol_hardenedpaths.key)
                 }            
-                if ($myPol_hardenedpaths.values.Where({$null -ne $_}).Count -gt 0)
-                {
-                    $complexPol_hardenedpaths += $myPol_hardenedpaths
-                }
+            if ($myPol_hardenedpaths.values.Where({$null -ne $_}).Count -gt 0)
+            {
+                $complexPol_hardenedpaths += $myPol_hardenedpaths
             }
+        }
             $complexDeviceSettings.Add('pol_hardenedPaths', $complexPol_hardenedpaths)
         }        
         if ($null -ne $policySettings.DeviceSettings.wCM_BlockNonDomain) {
@@ -1596,7 +1594,7 @@ function Get-TargetResource
             $complexUserSettings = $null
         }
         $policySettings.Remove('UserSettings') | Out-Null
-        #endregion        
+        #endregion
 
         $results = @{
             #region resource generator code
@@ -1655,7 +1653,7 @@ function Set-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $RoleScopeTagIds,       
+        $RoleScopeTagIds,
 
         [Parameter()]
         [System.String]
@@ -1706,6 +1704,8 @@ function Set-TargetResource
         [System.String[]]
         $AccessTokens
     )
+
+    Write-Verbose -Message "Setting configuration of the Intune Security Baseline for Windows10 with Id {$Id} and Name {$DisplayName}"
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -1812,7 +1812,7 @@ function Test-TargetResource
 
         [Parameter()]
         [System.String[]]
-        $RoleScopeTagIds,       
+        $RoleScopeTagIds,
 
         [Parameter()]
         [System.String]
@@ -2059,11 +2059,6 @@ function Export-TargetResource
                         CimInstanceName = 'MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths'
                         IsRequired = $False
                     }
-                    @{
-                        Name = 'AttackSurfaceReductionRules'
-                        CimInstanceName = 'MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules'
-                        IsRequired = $False
-                    }
                 )
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.DeviceSettings `
@@ -2081,28 +2076,9 @@ function Export-TargetResource
             }
             if ($null -ne $Results.UserSettings)
             {
-                $complexMapping = @(
-                    @{
-                        Name = 'UserSettings'
-                        CimInstanceName = 'MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10'
-                        IsRequired = $False
-                    }
-                    @{
-                        Name = 'pol_hardenedpaths'
-                        CimInstanceName = 'MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths'
-                        IsRequired = $False
-                    }
-                    @{
-                        Name = 'AttackSurfaceReductionRules'
-                        CimInstanceName = 'MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules'
-                        IsRequired = $False
-                    }
-                )
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.UserSettings `
-                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10' `
-                    -ComplexTypeMapping $complexMapping
-
+                    -CIMInstanceName 'MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10'
                 if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.UserSettings = $complexTypeStringResult

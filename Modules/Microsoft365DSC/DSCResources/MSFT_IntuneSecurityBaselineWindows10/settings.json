@@ -5,40 +5,40 @@
         "graph":{
             "delegated":{
                 "read":[
-                    {
+                                                 {
                         "name":"DeviceManagementConfiguration.Read.All"
-                    },
-                    {
+                                                 },
+                                                 {
                         "name":"Group.Read.All"
-                    }
-                ],
+                                                 }
+                                             ],
                 "update":[
-                    {
+                                                   {
                         "name":"Group.Read.All"
                     },
                     {
                         "name":"DeviceManagementConfiguration.ReadWrite.All"
-                    }
-                ]
-            },
+                                                   }
+                                               ]
+                                },
             "application":{
                 "read":[
-                    {
+                                                   {
                         "name":"DeviceManagementConfiguration.Read.All"
-                    },
-                    {
+                                                   },
+                                                   {
                         "name":"Group.Read.All"
-                    }
-                ],
+                                                   }
+                                               ],
                 "update":[
-                    {
+                                                     {
                         "name":"Group.Read.All"
                     },
                     {
                         "name":"DeviceManagementConfiguration.ReadWrite.All"
-                    }
-                ]
-            }
-        }
-    }
+                                                     }
+                                                 ]
+                                  }
+              }
+}
 }
