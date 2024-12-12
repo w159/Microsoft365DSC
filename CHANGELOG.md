@@ -1,5 +1,28 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+# 1.24.1211.1
+
+* AADApplication
+  * Changed logic to remove all permissions when an empty array is specified.
+    FIXES [#5534](https://github.com/microsoft/Microsoft365DSC/issues/5534)
+* AADFeatureRolloutPolicy
+  * Fixed policy retrieval
+    FIXES [#5521](https://github.com/microsoft/Microsoft365DSC/issues/5521)
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+  * Fixing issue with the way the QrCodeImage property was exported and handled.
+* IntuneFirewallPolicyWindows10
+  * Fix export of properties that appear multiple times in subsections.
+* M365DSCDRGUtil
+  * Improve settings catalog handling for nested objects.
+* M365DSCResourceGenerator
+  * Fixes an issue with nested object creation.
+* MISC
+  * Migrate `MSCloudLoginAssistant` authentication context access to cmdlets.
+* DEPENDENCIES
+  * Updated MSCloudLoginAssistant to version 1.1.29.
+
 # 1.24.1204.1
 
 * All resources
@@ -29,7 +52,13 @@
     FIXES [#5296](https://github.com/microsoft/Microsoft365DSC/issues/5296)
 * EXOTransportRule
   * Fixed conditional logic for creation and update.
+* PPPowerAppsEnvironmant
+  * Fixed [[#5508](https://github.com/microsoft/Microsoft365DSC/issues/5508)]
 * IntuneTrustedRootCertificateIOS
+  * Initial release
+* IntuneVPNConfigurationPolicyAndroidDeviceOwner
+  * Initial release
+* IntuneVPNConfigurationPolicyAndroidEnterprise
   * Initial release
 * IntuneVPNConfigurationPolicyIOS
   * Initial release.
@@ -40,7 +69,8 @@
 * MISC
   * M365DSCDRGUtil
     * Add separate check for strings with ordinal comparison and standardized line breaks.
-
+  * M365DSCReport
+    * Add support for creating report in CSV-format
 
 # 1.24.1127.1
 
@@ -379,7 +409,7 @@
     selected
   * Fixed retrieval of resource when it cannot be found by `Id`
   * Added a few verbose messages
-* IntuneDeviceManagmentAndroidDeviceOwnerEnrollmentProfile
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Initial release.
 * IntuneEndpointDetectionAndResponsePolicyWindows10
   * Fixes an issue with `AutoFromConnector` as the Configuration package type.
