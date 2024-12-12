@@ -14,6 +14,8 @@
   * Fixing issue with the way the QrCodeImage property was exported and handled.
 * IntuneFirewallPolicyWindows10
   * Fix export of properties that appear multiple times in subsections.
+* TeamsGroupPolicyAssignment
+  * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
 * M365DSCDRGUtil
   * Improve settings catalog handling for nested objects.
 * M365DSCResourceGenerator
