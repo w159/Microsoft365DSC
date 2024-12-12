@@ -28,7 +28,8 @@ Configuration Example
             DeviceSettings = MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBaselineWindows10
             {
                 Pol_MSS_DisableIPSourceRoutingIPv6 = '1'
-                DisableIPSourceRoutingIPv6 = '0'                        
+                DisableIPSourceRoutingIPv6 = '0'
+                BlockExecutionOfPotentiallyObfuscatedScripts = 'block'                             
                 HardenedUNCPaths_Pol_HardenedPaths = '1'
                 pol_hardenedPaths = @(
                     MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths{
@@ -36,9 +37,6 @@ Configuration Example
                         Value = 'RequireMutualAuthentication=1,RequireIntegrity=1'
                     }
                 )
-                AttackSurfaceReductionRules = MSFT_MicrosoftGraphIntuneSettingsCatalogAttackSurfaceReductionRules{
-                    BlockExecutionOfPotentiallyObfuscatedScripts = 'block'                    
-                }
             }
             UserSettings = MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10
             {
