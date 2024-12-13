@@ -30,6 +30,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Get-MSCloudLoginConnectionProfile -MockWith {
             }
 
+            Mock -CommandName New-M365DSCConnection -MockWith {
+                return 'Credentials'
+            }
+
             Mock -CommandName Reset-MSCloudLoginConnectionProfileContext -MockWith {
             }
 
@@ -107,7 +111,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
             }
 
-            It 'Should return true from the Test method' {
+            It 'Should return false from the Test method' {
                 Test-TargetResource @testParams | Should -Be $false
             }
 
