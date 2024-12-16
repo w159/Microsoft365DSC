@@ -6,6 +6,8 @@
   * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
+  * Fixed an issue where the export does not convert tenant name into
+    generic $OrganizationName variable correctly.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
