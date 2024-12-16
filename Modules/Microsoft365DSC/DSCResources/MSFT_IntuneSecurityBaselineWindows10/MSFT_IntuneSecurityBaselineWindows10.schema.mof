@@ -9,8 +9,6 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
     [Write, Description("The collection Id that is the target of the assignment.(ConfigMgr)")] String collectionId;
 };
 
-
-
 [ClassVersion("1.0.0.0")]
 class MSFT_MicrosoftGraphIntuneSettingsCatalogpol_hardenedpaths
 {
@@ -491,6 +489,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [Write, Description("AD Password Encryption Principal - Depends on BackupDirectory")] String ADPasswordEncryptionPrincipal;
     [Write, Description("Password Expiration Protection Enabled - Depends on BackupDirectory (false: Allow configured password expiriration timestamp to exceed maximum password age, true: Do not allow configured password expiriration timestamp to exceed maximum password age)"), ValueMap{"false", "true"}, Values{"false", "true"}] String PasswordExpirationProtectionEnabled;
 };
+
 [ClassVersion("1.0.0.0")]
 class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineWindows10
 {
@@ -506,6 +505,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselin
     [Write, Description("Allow Windows Spotlight Windows Welcome Experience (User) - Depends on AllowWindowsSpotlight (0: Not allowed., 1: Allowed.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowWindowsSpotlightWindowsWelcomeExperience;
     [Write, Description("Allow Third Party Suggestions In Windows Spotlight (User) - Depends on AllowWindowsSpotlight (0: Third-party suggestions not allowed., 1: Third-party suggestions allowed.)"), ValueMap{"0", "1"}, Values{"0", "1"}] String AllowThirdPartySuggestionsInWindowsSpotlight;
 };
+
 [ClassVersion("1.0.0.0"), FriendlyName("IntuneSecurityBaselineWindows10")]
 class MSFT_IntuneSecurityBaselineWindows10 : OMI_BaseResource
 {
