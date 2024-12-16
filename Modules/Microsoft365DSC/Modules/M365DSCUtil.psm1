@@ -1437,7 +1437,7 @@ function Export-M365DSCConfiguration
     try
     {
         Disconnect-MgGraph -ErrorAction Stop | Out-Null
-        Reset-MSCloudLoginConnectionProfileContext
+        Reset-MSCloudLoginConnectionProfileContext -Workload 'MicrosoftGraph'
     }
     catch
     {
