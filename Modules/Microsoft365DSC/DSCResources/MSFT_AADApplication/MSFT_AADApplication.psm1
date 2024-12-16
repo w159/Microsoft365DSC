@@ -791,6 +791,7 @@ function Set-TargetResource
         }
         $apiValue.Add('Oauth2PermissionScopes', $scopeValue)
     }
+    $currentParameters.Remove('KnownClientApplications') | Out-Null
     #endregion
 
     if ($currentParameters.ContainsKey('Api'))
