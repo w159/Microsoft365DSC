@@ -3935,7 +3935,7 @@ function Get-M365DSCExportContentForResource
         }
     }
 
-    if ($partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
+    if ($null -ne $OrganizationName -and $partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
     {
         $partialContent = $partialContent -ireplace [regex]::Escape($OrganizationName + ':'), "`$($OrganizationName):"
         $partialContent = $partialContent -ireplace [regex]::Escape($OrganizationName), "`$OrganizationName"
