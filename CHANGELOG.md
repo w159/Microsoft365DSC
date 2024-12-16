@@ -13,6 +13,7 @@
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
+  * Updated ReverseDSC to version 2.0.0.23.
 
 # 1.24.1211.1
 
