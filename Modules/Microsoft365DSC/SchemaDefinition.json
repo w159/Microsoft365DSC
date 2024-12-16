@@ -910,11 +910,61 @@
                        ]
     },
     {
+        "ClassName":  "MSFT_MicrosoftGraphApiOauth2PermissionScopes",
+        "Parameters":  [
+                           {
+                               "CIMType":  "String",
+                               "Name":  "adminConsentDescription",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "adminConsentDisplayName",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "userConsentDescription",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "userConsentDisplayName",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "value",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "isEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "type",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "String",
+                               "Name":  "id",
+                               "Option":  "Write"
+                           }
+                       ]
+    },
+    {
         "ClassName":  "MSFT_MicrosoftGraphApiApplication",
         "Parameters":  [
                            {
                                "CIMType":  "MSFT_MicrosoftGraphPreAuthorizedApplication[]",
                                "Name":  "PreAuthorizedApplications",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "MSFT_MicrosoftGraphAPIOauth2PermissionScopes[]",
+                               "Name":  "Oauth2PermissionScopes",
                                "Option":  "Write"
                            }
                        ]
