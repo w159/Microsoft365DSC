@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* TeamsMeetingPolicy
+  * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
 * M365DSCUtil
