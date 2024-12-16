@@ -2,9 +2,13 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Added support for Oauth2PermissionScopes.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
+* DEPENDENCIES
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
 
 # 1.24.1211.1
 
