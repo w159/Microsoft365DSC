@@ -4,6 +4,7 @@
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
+  * Fixes comparison issue for permissions.
 * TeamsMeetingPolicy
   * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
