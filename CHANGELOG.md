@@ -11,11 +11,13 @@
   * Fixed an issue where the export does not convert tenant name into
     generic $OrganizationName variable correctly.
   * Fixed an issue where exports were not processing CIM instances correctly.
+  * Reset only necessary authentication context.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
+  * Updated MSCloudLoginAssistant to version 1.1.30.
   * Updated ReverseDSC to version 2.0.0.24.
 
 # 1.24.1211.1
