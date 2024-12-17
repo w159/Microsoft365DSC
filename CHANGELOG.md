@@ -4,6 +4,8 @@
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
+* AADConditionalAccessPolicy
+  * Add disableResilienceDefaults
 * TeamsMeetingPolicy
   * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
