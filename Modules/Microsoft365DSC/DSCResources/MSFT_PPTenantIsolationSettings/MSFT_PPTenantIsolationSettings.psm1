@@ -688,7 +688,7 @@ function Export-TargetResource
             if ($null -ne $Results.Rules)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'Rules'
+                    -ParameterName 'Rules' -IsCIMArray $true
             }
             $dscContent += $currentDSCBlock
 

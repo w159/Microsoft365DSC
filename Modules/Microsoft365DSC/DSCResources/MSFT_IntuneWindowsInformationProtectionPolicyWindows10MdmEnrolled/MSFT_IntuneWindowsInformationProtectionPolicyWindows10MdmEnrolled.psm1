@@ -1201,51 +1201,51 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.DataRecoveryCertificate)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DataRecoveryCertificate' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DataRecoveryCertificate' -IsCIMObject $true
             }
             if ($Results.EnterpriseInternalProxyServers)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseInternalProxyServers' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseInternalProxyServers' -IsCIMArray $true
             }
             if ($Results.EnterpriseIPRanges)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseIPRanges' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseIPRanges' -IsCIMArray $true
             }
             if ($Results.EnterpriseNetworkDomainNames)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseNetworkDomainNames' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseNetworkDomainNames' -IsCIMArray $true
             }
             if ($Results.EnterpriseProtectedDomainNames)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProtectedDomainNames' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProtectedDomainNames' -IsCIMArray $true
             }
             if ($Results.EnterpriseProxiedDomains)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProxiedDomains' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProxiedDomains' -IsCIMArray $true
             }
             if ($Results.EnterpriseProxyServers)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProxyServers' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseProxyServers' -IsCIMArray $true
             }
             if ($Results.ExemptApps)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExemptApps' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExemptApps' -IsCIMArray $true
             }
             if ($Results.NeutralDomainResources)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NeutralDomainResources' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NeutralDomainResources' -IsCIMArray $true
             }
             if ($Results.ProtectedApps)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ProtectedApps' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ProtectedApps' -IsCIMArray $true
             }
             if ($Results.SmbAutoEncryptedFileExtensions)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SmbAutoEncryptedFileExtensions' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SmbAutoEncryptedFileExtensions' -IsCIMArray $true
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
             #removing trailing commas and semi colons between items of an array of cim instances added by Convert-DSCStringParamToVariable
             $currentDSCBlock = $currentDSCBlock.replace( "    ,`r`n" , "    `r`n" )

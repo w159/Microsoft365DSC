@@ -1620,15 +1620,15 @@ function Export-TargetResource
                 -Credential $Credential
             if ($null -ne $Results.AdvancedSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AdvancedSettings'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AdvancedSettings' -IsCIMArray $true
             }
             if ($null -ne $Results.LocaleSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'LocaleSettings'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'LocaleSettings' -IsCIMArray $true
             }
             if ($null -ne $Results.AutoLabelingSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AutoLabelingSettings'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AutoLabelingSettings' -IsCIMObject $true
             }
 
             Write-Host $Global:M365DSCEmojiGreenCheckMark

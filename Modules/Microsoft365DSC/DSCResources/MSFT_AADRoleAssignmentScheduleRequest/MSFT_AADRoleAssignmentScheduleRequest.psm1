@@ -827,12 +827,12 @@ function Export-TargetResource
             if ($null -ne $Results.ScheduleInfo)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'ScheduleInfo'
+                    -ParameterName 'ScheduleInfo' -IsCIMObject $true
             }
             if ($null -ne $Results.TicketInfo)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'TicketInfo'
+                    -ParameterName 'TicketInfo' -IsCIMObject $true
             }
 
             $dscContent += $currentDSCBlock

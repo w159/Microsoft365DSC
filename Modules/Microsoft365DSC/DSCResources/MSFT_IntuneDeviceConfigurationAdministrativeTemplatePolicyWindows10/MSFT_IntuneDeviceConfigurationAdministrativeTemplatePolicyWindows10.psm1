@@ -914,23 +914,23 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
             if ($Results.DefinitionValues)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefinitionValues' -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefinitionValues' -IsCIMArray $true
             }
             if ($Results.DefinitionValues.Definition)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Definition'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Definition' -IsCIMObject $true
             }
             if ($Results.DefinitionValues.PresentationValues)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PresentationValues'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PresentationValues' -IsCIMArray $true
             }
             if ($Results.DefinitionValues.PresentationValues.KeyValuePairValues)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyValuePairValues'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyValuePairValues' -IsCIMArray $true
             }
 
             #removing trailing commas and semi colons between items of an array of cim instances added by Convert-DSCStringParamToVariable

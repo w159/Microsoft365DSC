@@ -586,12 +586,12 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ExpeditedUpdateSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExpeditedUpdateSettings' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExpeditedUpdateSettings' -IsCIMObject $true
             }
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

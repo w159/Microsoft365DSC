@@ -29,12 +29,12 @@ function Get-TargetResource
         [Parameter()]
         [System.Boolean]
         $enableSplitTunneling,
-   
+
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
-        
+        $authenticationMethod,
+
         [Parameter()]
         [System.string[]]
         $safariDomains,
@@ -196,15 +196,15 @@ function Get-TargetResource
         -CommandName $CommandName `
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
-    #endregion    
+    #endregion
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
     try
     {
         if (-not [string]::IsNullOrWhiteSpace($id))
-        { 
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue 
+        {
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
         }
 
         #region resource generator code
@@ -335,7 +335,7 @@ function Get-TargetResource
             userDomain                     = $getValue.AdditionalProperties.userDomain
 
         }
-                                          
+
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Results.Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
@@ -390,12 +390,12 @@ function Set-TargetResource
         [Parameter()]
         [System.Boolean]
         $enableSplitTunneling,
-   
+
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
-        
+        $authenticationMethod,
+
         [Parameter()]
         [System.string[]]
         $safariDomains,
@@ -477,7 +477,7 @@ function Set-TargetResource
         [Parameter()]
         [System.String[]]
         $AccessTokens,
-        
+
         #latest updates
         [Parameter()]
         [System.UInt32]
@@ -566,8 +566,8 @@ function Set-TargetResource
     #proxy and server values need converting before new- / update- cmdlets will accept parameters
     #creating hashtables now for use later in both present/present and present/absent blocks
     $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
-    
-    if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)') 
+
+    if ($allTargetValues -match '\bserver=\(\{([^\)]+)\}\)')
     {
         $serverBlock = $matches[1]
     }
@@ -580,7 +580,7 @@ function Set-TargetResource
             $serverHashtable[$key] = $value
         }
     }
-    if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)') 
+    if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)')
     {
         $proxyBlock = $matches[1]
     }
@@ -633,7 +633,7 @@ function Set-TargetResource
         }
 
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
-           
+
         #region resource generator code
         $policy = New-MgBetaDeviceManagementDeviceConfiguration @CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
@@ -676,7 +676,7 @@ function Set-TargetResource
 
         if ($AdditionalProperties)
         {
-            
+
             if ($AdditionalProperties.server)
             {
                 $AdditionalProperties.Remove('server') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
@@ -687,7 +687,7 @@ function Set-TargetResource
                 $AdditionalProperties.Remove('proxyServer') #this is not in a format Update-MgBetaDeviceManagementDeviceConfiguration will accept
                 $AdditionalProperties.add('proxyServer',$proxyHashtable) #replaced with the hashtable we created earlier
             }
-            
+
             #add the additional properties to the updateparameters
             $UpdateParameters.add('AdditionalProperties', $AdditionalProperties)
         }
@@ -741,12 +741,12 @@ function Test-TargetResource
         [Parameter()]
         [System.Boolean]
         $enableSplitTunneling,
-   
+
         [Parameter()]
         [ValidateSet('certificate', 'usernameAndPassword', 'sharedSecret', 'derivedCredential', 'azureAD')]
         [System.String]
-        $authenticationMethod,        
-        
+        $authenticationMethod,
+
         [Parameter()]
         [System.string[]]
         $safariDomains,
@@ -1104,7 +1104,7 @@ function Export-TargetResource
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.proxyServer `
-                    -CIMInstanceName 'MSFT_MicrosoftvpnProxyServer' 
+                    -CIMInstanceName 'MSFT_MicrosoftvpnProxyServer'
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.proxyServer = $complexTypeStringResult
@@ -1119,7 +1119,7 @@ function Export-TargetResource
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.customData `
-                    -CIMInstanceName 'MSFT_CustomData' 
+                    -CIMInstanceName 'MSFT_CustomData'
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.customData = $complexTypeStringResult
@@ -1134,7 +1134,7 @@ function Export-TargetResource
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.customKeyValueData `
-                    -CIMInstanceName 'MSFT_customKeyValueData' 
+                    -CIMInstanceName 'MSFT_customKeyValueData'
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.customKeyValueData = $complexTypeStringResult
@@ -1144,12 +1144,12 @@ function Export-TargetResource
                     $Results.Remove('customKeyValueData') | Out-Null
                 }
             }
-            
+
             if ($null -ne $Results.targetedMobileApps)
             {
                 $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                     -ComplexObject $Results.targetedMobileApps `
-                    -CIMInstanceName 'MSFT_targetedMobileApps' 
+                    -CIMInstanceName 'MSFT_targetedMobileApps'
                 if (-Not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {
                     $Results.targetedMobileApps = $complexTypeStringResult
@@ -1168,42 +1168,37 @@ function Export-TargetResource
 
             if ($Results.server)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "server" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "server" -IsCIMArray $true
             }
 
             if ($Results.onDemandRules)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "onDemandRules" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "onDemandRules" -IsCIMArray $true
             }
 
             if ($Results.proxyServer)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "proxyServer" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "proxyServer" -IsCIMArray $true
             }
 
             if ($Results.customData)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "customData" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "customData" -IsCIMArray $true
             }
 
             if ($Results.customKeyValueData)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "customKeyValueData" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "customKeyValueData" -IsCIMArray $true
             }
 
             if ($Results.targetedMobileApps)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "targetedMobileApps" -isCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName "targetedMobileApps" -IsCIMArray $true
             }
 
             if ($Results.Assignments)
             {
-                $isCIMArray = $false
-                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

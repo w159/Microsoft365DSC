@@ -672,29 +672,29 @@ function Export-TargetResource
 
                 if ($Results.expirationRule)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'expirationRule' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'expirationRule' -IsCIMObject $true
                 }
 
 
                 if ($Results.notificationRule)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'notificationRule' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'notificationRule' -IsCIMObject $true
                 }
 
 
                 if ($Results.enablementRule)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'enablementRule' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'enablementRule' -IsCIMObject $true
                 }
 
                 if ($Results.approvalRule)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'approvalRule' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'approvalRule' -IsCIMObject $true
                 }
 
                 if ($Results.authenticationContextRule)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'authenticationContextRule' -IsCIMArray:$false
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'authenticationContextRule' -IsCIMObject $true
                 }
                 $dscContent.Append($currentDSCBlock) | Out-Null
                 Save-M365DSCPartialExport -Content $currentDSCBlock `

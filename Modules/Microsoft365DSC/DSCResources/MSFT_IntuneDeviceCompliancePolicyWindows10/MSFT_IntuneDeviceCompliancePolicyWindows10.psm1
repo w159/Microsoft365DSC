@@ -967,16 +967,11 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ValidOperatingSystemBuildRanges)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ValidOperatingSystemBuildRanges'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ValidOperatingSystemBuildRanges' -IsCIMArray $true
             }
             if ($Results.Assignments)
             {
-                $isCIMArray = $false
-                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

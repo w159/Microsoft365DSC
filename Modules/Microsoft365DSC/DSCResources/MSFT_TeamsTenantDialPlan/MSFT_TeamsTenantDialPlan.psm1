@@ -538,7 +538,7 @@ function Export-TargetResource
                 -Results $Results `
                 -Credential $Credential
 
-            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NormalizationRules'
+            $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NormalizationRules' -IsCIMArray $true
             $dscContent += $currentDSCBlock
 
             Save-M365DSCPartialExport -Content $currentDSCBlock `

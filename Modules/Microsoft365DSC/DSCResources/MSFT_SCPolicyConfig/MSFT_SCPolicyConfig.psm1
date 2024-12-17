@@ -1355,84 +1355,84 @@ function Export-TargetResource
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'QuarantineParameters' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.BusinessJustificationList)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'BusinessJustificationList' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.DLPAppGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'DLPAppGroups' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.DLPNetworkShareGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'DLPNetworkShareGroups' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.DLPPrinterGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'DLPPrinterGroups' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.DLPRemovableMediaGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'DLPRemovableMediaGroups' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.SiteGroups)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'SiteGroups' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.UnallowedApp)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'UnallowedApp' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.UnallowedCloudSyncApp)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'UnallowedCloudSyncApp' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.UnallowedBluetoothApp)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'UnallowedBluetoothApp' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.UnallowedBrowser)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'UnallowedBrowser' `
-                -IsCIMArray:$true
+                -IsCIMArray $true
         }
 
         if ($null -ne $Results.EvidenceStoreSettings)
         {
             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
                 -ParameterName 'EvidenceStoreSettings' `
-                -IsCIMArray:$false
+                -IsCIMObject $true
         }
 
         $dscContent += $currentDSCBlock

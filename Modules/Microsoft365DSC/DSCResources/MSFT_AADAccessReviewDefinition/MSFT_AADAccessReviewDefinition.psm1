@@ -955,15 +955,15 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ScopeValue)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScopeValue' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScopeValue' -IsCIMObject $true
             }
             if ($Results.SettingsValue)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SettingsValue' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SettingsValue' -IsCIMObject $true
             }
             if ($Results.StageSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'StageSettings' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'StageSettings' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

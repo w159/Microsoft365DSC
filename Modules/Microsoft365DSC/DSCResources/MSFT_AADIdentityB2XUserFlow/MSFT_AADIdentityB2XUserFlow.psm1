@@ -679,11 +679,11 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ApiConnectorConfiguration)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ApiConnectorConfiguration' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ApiConnectorConfiguration' -IsCIMObject $true
             }
             if ($Results.UserAttributeAssignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserAttributeAssignments' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserAttributeAssignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

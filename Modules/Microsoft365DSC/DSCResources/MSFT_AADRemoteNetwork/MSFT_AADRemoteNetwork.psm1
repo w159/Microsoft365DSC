@@ -526,7 +526,7 @@ function Export-TargetResource
 
             if ($Results.DeviceLinks)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceLinks'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceLinks' -IsCIMObject $true
             }
 
             $dscContent += $currentDSCBlock

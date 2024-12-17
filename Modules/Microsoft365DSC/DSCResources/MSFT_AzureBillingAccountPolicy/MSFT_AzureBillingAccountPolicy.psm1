@@ -446,12 +446,7 @@ function Export-TargetResource
 
             if ($Results.EnterpriseAgreementPolicies)
             {
-                $isCIMArray = $false
-                if ($Results.EnterpriseAgreementPolicies.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseAgreementPolicies' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EnterpriseAgreementPolicies' -IsCIMObject $true
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `

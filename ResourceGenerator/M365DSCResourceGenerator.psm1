@@ -912,7 +912,7 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
             $AssignmentsConvertComplexToVariable = @"
 `r`n            if (`$Results.Assignments)
             {
-                `$currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock `$currentDSCBlock -ParameterName "Assignments" -IsCIMArray:`$true
+                `$currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock `$currentDSCBlock -ParameterName "Assignments" -IsCIMArray `$true
             }`r`n
 "@
         }
@@ -3516,7 +3516,14 @@ function New-M365HashTableMapping
 
                 $convertToVariable += "            if (`$Results.$parameterName)`r`n"
                 $convertToVariable += "            {`r`n"
-                $convertToVariable += "                `$currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock `$currentDSCBlock -ParameterName `"$parameterName`" -IsCIMArray:`$$($property.IsArray)`r`n"
+                if ($property.IsArray)
+                {
+                    $convertToVariable += "                `$currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock `$currentDSCBlock -ParameterName `"$parameterName`" -IsCIMArray `$true`r`n"
+                }
+                else
+                {
+                    $convertToVariable += "                `$currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock `$currentDSCBlock -ParameterName `"$parameterName`" -IsCIMObject `$true`r`n"
+                }
                 $convertToVariable += "            }`r`n"
             }
             if ($property.IsEnumType)

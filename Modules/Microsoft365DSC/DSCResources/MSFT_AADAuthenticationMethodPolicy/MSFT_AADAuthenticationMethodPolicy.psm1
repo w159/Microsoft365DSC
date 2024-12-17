@@ -755,16 +755,16 @@ function Export-TargetResource
                     -Credential $Credential
                 if ($Results.RegistrationEnforcement)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'RegistrationEnforcement' -IsCIMArray:$False
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'RegistrationEnforcement' -IsCIMObject $true
                 }
                 if ($Results.SystemCredentialPreferences)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SystemCredentialPreferences' -IsCIMArray:$False
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SystemCredentialPreferences' -IsCIMObject $true
                 }
 
                 if ($Results.ReportSuspiciousActivitySettings)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ReportSuspiciousActivitySettings' -IsCIMArray:$False
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ReportSuspiciousActivitySettings' -IsCIMObject $true
                 }
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `

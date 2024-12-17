@@ -5969,155 +5969,155 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.BitLockerFixedDrivePolicy)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerFixedDrivePolicy' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerFixedDrivePolicy' -IsCIMObject $true
             }
             if ($Results.BitLockerRemovableDrivePolicy)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerRemovableDrivePolicy' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerRemovableDrivePolicy' -IsCIMObject $true
             }
             if ($Results.BitLockerSystemDrivePolicy)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerSystemDrivePolicy' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'BitLockerSystemDrivePolicy' -IsCIMObject $true
             }
             if ($Results.DefenderDetectedMalwareActions)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefenderDetectedMalwareActions' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefenderDetectedMalwareActions' -IsCIMObject $true
             }
             if ($Results.FirewallProfileDomain)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfileDomain' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfileDomain' -IsCIMObject $true
             }
             if ($Results.FirewallProfilePrivate)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfilePrivate' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfilePrivate' -IsCIMObject $true
             }
             if ($Results.FirewallProfilePublic)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfilePublic' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallProfilePublic' -IsCIMObject $true
             }
             if ($Results.FirewallRules)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallRules' -IsCIMArray:$True
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FirewallRules' -IsCIMArray $true
             }
             if ($Results.UserRightsAccessCredentialManagerAsTrustedCaller)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsAccessCredentialManagerAsTrustedCaller' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsAccessCredentialManagerAsTrustedCaller' -IsCIMObject $true
             }
             if ($Results.UserRightsActAsPartOfTheOperatingSystem)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsActAsPartOfTheOperatingSystem' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsActAsPartOfTheOperatingSystem' -IsCIMObject $true
             }
             if ($Results.UserRightsAllowAccessFromNetwork)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsAllowAccessFromNetwork' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsAllowAccessFromNetwork' -IsCIMObject $true
             }
             if ($Results.UserRightsBackupData)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsBackupData' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsBackupData' -IsCIMObject $true
             }
             if ($Results.UserRightsBlockAccessFromNetwork)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsBlockAccessFromNetwork' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsBlockAccessFromNetwork' -IsCIMObject $true
             }
             if ($Results.UserRightsChangeSystemTime)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsChangeSystemTime' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsChangeSystemTime' -IsCIMObject $true
             }
             if ($Results.UserRightsCreateGlobalObjects)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateGlobalObjects' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateGlobalObjects' -IsCIMObject $true
             }
             if ($Results.UserRightsCreatePageFile)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreatePageFile' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreatePageFile' -IsCIMObject $true
             }
             if ($Results.UserRightsCreatePermanentSharedObjects)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreatePermanentSharedObjects' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreatePermanentSharedObjects' -IsCIMObject $true
             }
             if ($Results.UserRightsCreateSymbolicLinks)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateSymbolicLinks' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateSymbolicLinks' -IsCIMObject $true
             }
             if ($Results.UserRightsCreateToken)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateToken' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsCreateToken' -IsCIMObject $true
             }
             if ($Results.UserRightsDebugPrograms)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDebugPrograms' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDebugPrograms' -IsCIMObject $true
             }
             if ($Results.UserRightsDelegation)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDelegation' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDelegation' -IsCIMObject $true
             }
             if ($Results.UserRightsDenyLocalLogOn)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDenyLocalLogOn' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsDenyLocalLogOn' -IsCIMObject $true
             }
             if ($Results.UserRightsGenerateSecurityAudits)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsGenerateSecurityAudits' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsGenerateSecurityAudits' -IsCIMObject $true
             }
             if ($Results.UserRightsImpersonateClient)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsImpersonateClient' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsImpersonateClient' -IsCIMObject $true
             }
             if ($Results.UserRightsIncreaseSchedulingPriority)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsIncreaseSchedulingPriority' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsIncreaseSchedulingPriority' -IsCIMObject $true
             }
             if ($Results.UserRightsLoadUnloadDrivers)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLoadUnloadDrivers' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLoadUnloadDrivers' -IsCIMObject $true
             }
             if ($Results.UserRightsLocalLogOn)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLocalLogOn' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLocalLogOn' -IsCIMObject $true
             }
             if ($Results.UserRightsLockMemory)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLockMemory' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsLockMemory' -IsCIMObject $true
             }
             if ($Results.UserRightsManageAuditingAndSecurityLogs)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsManageAuditingAndSecurityLogs' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsManageAuditingAndSecurityLogs' -IsCIMObject $true
             }
             if ($Results.UserRightsManageVolumes)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsManageVolumes' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsManageVolumes' -IsCIMObject $true
             }
             if ($Results.UserRightsModifyFirmwareEnvironment)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsModifyFirmwareEnvironment' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsModifyFirmwareEnvironment' -IsCIMObject $true
             }
             if ($Results.UserRightsModifyObjectLabels)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsModifyObjectLabels' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsModifyObjectLabels' -IsCIMObject $true
             }
             if ($Results.UserRightsProfileSingleProcess)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsProfileSingleProcess' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsProfileSingleProcess' -IsCIMObject $true
             }
             if ($Results.UserRightsRemoteDesktopServicesLogOn)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRemoteDesktopServicesLogOn' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRemoteDesktopServicesLogOn' -IsCIMObject $true
             }
             if ($Results.UserRightsRemoteShutdown)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRemoteShutdown' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRemoteShutdown' -IsCIMObject $true
             }
             if ($Results.UserRightsRestoreData)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRestoreData' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsRestoreData' -IsCIMObject $true
             }
             if ($Results.UserRightsTakeOwnership)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsTakeOwnership' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserRightsTakeOwnership' -IsCIMObject $true
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
             #removing trailing commas and semi colons between items of an array of cim instances added by Convert-DSCStringParamToVariable
             $currentDSCBlock = $currentDSCBlock.replace( "    ,`r`n" , "    `r`n" )

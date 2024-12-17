@@ -483,7 +483,7 @@ function Export-TargetResource
             if ($null -ne $Results.Policies)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'Policies'
+                    -ParameterName 'Policies' -IsCIMObject $true
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `

@@ -690,12 +690,7 @@ function Export-TargetResource
 
             if ($Results.Assignments)
             {
-                $isCIMArray = $false
-                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock
