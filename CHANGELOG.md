@@ -4,6 +4,7 @@
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
+  * Fixes comparison issue for permissions.
 * AADConditionalAccessPolicy
   * Add disableResilienceDefaults
 * TeamsMeetingPolicy
@@ -12,6 +13,7 @@
   * Fixed the Fabric web request to use basic parsing.
   * Fixed an issue where the export does not convert tenant name into
     generic $OrganizationName variable correctly.
+  * Reset only necessary authentication context.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)

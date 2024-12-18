@@ -1426,8 +1426,8 @@ function Test-TargetResource
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
-    if ($CurrentValues.Permissions.Length -gt 0 -and `
-        $null -ne $CurrentValues.Permissions.Name)
+    if ($CurrentValues.Permissions.Length -gt 0 -and $null -ne $CurrentValues.Permissions.Name -and `
+        $null -ne $Permissions)
     {
         $differenceObject = $Permissions.Name
         if ($null -eq $differenceObject)
