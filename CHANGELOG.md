@@ -17,7 +17,7 @@
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
-  * Updated MSCloudLoginAssistant to version 1.1.30.
+  * Updated MSCloudLoginAssistant to version 1.1.31.
 
 # 1.24.1211.1
 
