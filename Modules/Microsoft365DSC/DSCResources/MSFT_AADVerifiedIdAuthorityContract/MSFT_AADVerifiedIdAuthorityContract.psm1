@@ -624,12 +624,12 @@ function Export-TargetResource
 
                     if ($Results.displays)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'displays' -IsCIMArray $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'displays' -IsCIMArray:$true
                     }
 
                     if ($Results.rules)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'rules' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'rules' -IsCIMArray:$false
                     }
 
                     $dscContent.Append($currentDSCBlock) | Out-Null

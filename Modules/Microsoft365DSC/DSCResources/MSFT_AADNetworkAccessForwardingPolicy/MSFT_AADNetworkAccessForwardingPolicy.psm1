@@ -432,7 +432,7 @@ function Export-TargetResource
             if ($null -ne $Results.PolicyRules)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'PolicyRules' -IsCIMObject $true
+                    -ParameterName 'PolicyRules'
             }
 
             $dscContent += $currentDSCBlock
