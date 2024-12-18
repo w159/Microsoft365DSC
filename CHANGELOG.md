@@ -1,10 +1,13 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.24.1218.1
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
+* EXOTransportRule
+  * Fixes issue extracting arrays in Get-TargetResource.
+    * FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
 * TeamsMeetingPolicy
   * Adds support for additional Copilot setting value.
     * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
