@@ -532,21 +532,11 @@ function Export-TargetResource
 
                 if ($Results.Notification)
                 {
-                    $isCIMArray = $false
-                    if ($Results.Notification.getType().Fullname -like '*[[\]]')
-                    {
-                        $isCIMArray = $true
-                    }
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Notification' -IsCIMArray:$isCIMArray
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Notification' -IsCIMObject $true
                 }
                 if ($Results.Schedule)
                 {
-                    $isCIMArray = $false
-                    if ($Results.Schedule.getType().Fullname -like '*[[\]]')
-                    {
-                        $isCIMArray = $true
-                    }
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Schedule' -IsCIMArray:$isCIMArray
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Schedule' -IsCIMObject $true
                 }
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `

@@ -1186,23 +1186,23 @@ function Export-TargetResource
 
                 if ($Results.EventGroupingSettings)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EventGroupingSettings' -IsCIMArray:$False
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EventGroupingSettings' -IsCIMObject $true
                 }
                 if ($Results.CustomDetails)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CustomDetails' -IsCIMArray:$False
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CustomDetails' -IsCIMArray $true
                 }
                 if ($Results.EntityMappings)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EntityMappings' -IsCIMArray:$True
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EntityMappings' -IsCIMArray $true
                 }
                 if ($Results.AlertDetailsOverride)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AlertDetailsOverride' -IsCIMArray:$True
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AlertDetailsOverride' -IsCIMArray $true
                 }
                 if ($Results.IncidentConfiguration)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'IncidentConfiguration' -IsCIMArray:$True
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'IncidentConfiguration' -IsCIMArray $true
                 }
 
                 $dscContent += $currentDSCBlock

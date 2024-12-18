@@ -490,12 +490,12 @@ function Export-TargetResource
                     if ($null -ne $Results.AllowPermissions)
                     {
                         $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                            -ParameterName 'AllowPermissions'
+                            -ParameterName 'AllowPermissions' -IsCIMObject $true
                     }
                     if ($null -ne $Results.DenyPermissions)
                     {
                         $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                            -ParameterName 'DenyPermissions'
+                            -ParameterName 'DenyPermissions' -IsCIMObject $true
                     }
 
                     $dscContent += $currentDSCBlock

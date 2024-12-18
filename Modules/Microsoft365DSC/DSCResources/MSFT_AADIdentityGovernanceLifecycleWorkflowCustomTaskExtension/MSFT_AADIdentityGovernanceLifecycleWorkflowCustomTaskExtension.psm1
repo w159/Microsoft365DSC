@@ -567,15 +567,15 @@ function Export-TargetResource
 
             if ($Results.EndpointConfiguration)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EndpointConfiguration' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EndpointConfiguration' -IsCIMObject $true
             }
             if ($Results.ClientConfiguration)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ClientConfiguration' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ClientConfiguration' -IsCIMObject $true
             }
             if ($Results.CallbackConfiguration)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CallbackConfiguration' -IsCIMArray:$False
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CallbackConfiguration' -IsCIMObject $true
             }
 
             $dscContent += $currentDSCBlock

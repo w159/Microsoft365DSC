@@ -2746,106 +2746,51 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.AzureAdSharedDeviceDataClearApps)
             {
-                $isCIMArray = $false
-                if ($Results.AzureAdSharedDeviceDataClearApps.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AzureAdSharedDeviceDataClearApps' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AzureAdSharedDeviceDataClearApps' -IsCIMArray $true
             }
             if ($Results.DetailedHelpText)
             {
-                $isCIMArray = $false
-                if ($Results.DetailedHelpText.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DetailedHelpText' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DetailedHelpText' -IsCIMObject $true
             }
             if ($Results.DeviceOwnerLockScreenMessage)
             {
-                $isCIMArray = $false
-                if ($Results.DeviceOwnerLockScreenMessage.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceOwnerLockScreenMessage' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceOwnerLockScreenMessage' -IsCIMObject $true
             }
             if ($Results.GlobalProxy)
             {
-                $isCIMArray = $false
-                if ($Results.GlobalProxy.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'GlobalProxy' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'GlobalProxy' -IsCIMObject $true
             }
             if ($Results.KioskModeAppPositions)
             {
-                $isCIMArray = $false
-                if ($Results.KioskModeAppPositions.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeAppPositions' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeAppPositions' -IsCIMArray $true
             }
 
             if ($Results.KioskModeApps)
             {
-                $isCIMArray = $false
-                if ($Results.KioskModeApps.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeApps' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeApps' -IsCIMArray $true
             }
 
             if ($Results.KioskModeManagedFolders)
             {
-                $isCIMArray = $false
-                if ($Results.KioskModeManagedFolders.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeManagedFolders' -IsCIMArray:$isCIMArray -Verbose
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeManagedFolders' -IsCIMArray $true
             }
 
             if ($Results.PersonalProfilePersonalApplications)
             {
-                $isCIMArray = $false
-                if ($Results.PersonalProfilePersonalApplications.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PersonalProfilePersonalApplications' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PersonalProfilePersonalApplications' -IsCIMArray $true
             }
             if ($Results.ShortHelpText)
             {
-                $isCIMArray = $false
-                if ($Results.ShortHelpText.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ShortHelpText' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ShortHelpText' -IsCIMObject $true
             }
             if ($Results.SystemUpdateFreezePeriods)
             {
-                $isCIMArray = $false
-                if ($Results.SystemUpdateFreezePeriods.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SystemUpdateFreezePeriods' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'SystemUpdateFreezePeriods' -IsCIMArray $true
             }
 
             if ($Results.Assignments)
             {
-                $isCIMArray = $false
-                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

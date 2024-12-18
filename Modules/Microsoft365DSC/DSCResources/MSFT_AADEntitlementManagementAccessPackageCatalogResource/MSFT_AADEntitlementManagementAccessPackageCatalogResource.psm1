@@ -818,7 +818,7 @@ function Export-TargetResource
 
                 if ($null -ne $Results.Attributes)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Attributes' -IsCIMArray:$true
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Attributes' -IsCIMArray $true
                 }
                 $dscContent += $currentDSCBlock
                 Save-M365DSCPartialExport -Content $currentDSCBlock `

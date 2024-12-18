@@ -539,32 +539,32 @@ function Export-TargetResource
             if ($null -ne $Results.B2BCollaborationInbound)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'B2BCollaborationInbound'
+                    -ParameterName 'B2BCollaborationInbound' -IsCIMObject $true
             }
             if ($null -ne $Results.B2BCollaborationOutbound)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'B2BCollaborationOutbound'
+                    -ParameterName 'B2BCollaborationOutbound' -IsCIMObject $true
             }
             if ($null -ne $Results.B2BDirectConnectInbound)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'B2BDirectConnectInbound'
+                    -ParameterName 'B2BDirectConnectInbound' -IsCIMObject $true
             }
             if ($null -ne $Results.B2BDirectConnectOutbound)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'B2BDirectConnectOutbound'
+                    -ParameterName 'B2BDirectConnectOutbound' -IsCIMObject $true
             }
             if ($null -ne $Results.AutomaticUserConsentSettings)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'AutomaticUserConsentSettings'
+                    -ParameterName 'AutomaticUserConsentSettings' -IsCIMObject $true
             }
             if ($null -ne $Results.InboundTrust)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'InboundTrust'
+                    -ParameterName 'InboundTrust' -IsCIMObject $true
             }
 
             # Fix OrganizationName variable in CIMInstance

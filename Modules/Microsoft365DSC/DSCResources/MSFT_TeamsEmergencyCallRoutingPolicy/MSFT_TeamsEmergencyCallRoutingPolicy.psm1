@@ -428,7 +428,7 @@ function Export-TargetResource
 
             if ($null -ne $result.EmergencyNumbers)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EmergencyNumbers'
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EmergencyNumbers' -IsCIMArray $true
             }
 
             $dscContent += $currentDSCBlock

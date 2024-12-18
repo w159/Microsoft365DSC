@@ -603,22 +603,12 @@ function Export-TargetResource
 
             if ($Results.ScanAuthenticationParams)
             {
-                $isCIMArray = $false
-                if ($Results.ScanAuthenticationParams.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScanAuthenticationParams' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScanAuthenticationParams' -IsCIMObject $true
             }
 
             if ($Results.ScannerAgent)
             {
-                $isCIMArray = $false
-                if ($Results.ScannerAgent.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScannerAgent' -IsCIMArray:$isCIMArray
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ScannerAgent' -IsCIMObject $true
             }
 
             $dscContent += $currentDSCBlock
