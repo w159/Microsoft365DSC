@@ -6,7 +6,7 @@ $Global:SessionSecurityCompliance = $null
 #region Extraction Modes
 $Global:DefaultComponents = @('SPOApp', 'SPOSiteDesign')
 
-$Global:FullComponents = @('AADGroup', 'AADServicePrincipal', 'ADOSecurityPolicy', 'AzureSubscription','FabricAdminTenantSettings', `
+$Global:FullComponents = @('AADRoleManagementPolicyRule', 'AADGroup', 'AADServicePrincipal', 'ADOSecurityPolicy', 'AzureSubscription','FabricAdminTenantSettings', `
         'DefenderSubscriptionPlan', 'EXOCalendarProcessing', 'EXODistributionGroup', 'EXOMailboxAutoReplyConfiguration', `
         'EXOMailboxPermission','EXOMailboxCalendarFolder','EXOMailboxSettings', 'EXOManagementRole', 'O365Group', 'AADUser', `
         'PlannerPlan', 'PlannerBucket', 'PlannerTask', 'PPPowerAppsEnvironment', 'PPTenantSettings', 'SentinelSetting', 'SentinelWatchlist', `
@@ -3755,7 +3755,7 @@ function Get-M365DSCExportContentForResource
     if ($ConnectionMode -like 'ServicePrincipal*' -or `
             $ConnectionMode -eq 'ManagedIdentity')
     {
-        $OrganizationName = $TenantId
+        $OrganizationName = $Results.TenantId
     }
     elseif ($null -ne $Credential.UserName)
     {
@@ -3935,7 +3935,7 @@ function Get-M365DSCExportContentForResource
         }
     }
 
-    if ($null -ne $OrganizationName -and $partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
+    if ($partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
     {
         $partialContent = $partialContent -ireplace [regex]::Escape($OrganizationName + ':'), "`$($OrganizationName):"
         $partialContent = $partialContent -ireplace [regex]::Escape($OrganizationName), "`$OrganizationName"
