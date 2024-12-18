@@ -5,6 +5,8 @@
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
+* IntuneTrustedRootCertificateAndroidWork
+  * Initial Release
 * TeamsMeetingPolicy
   * Adds support for additional Copilot setting value.
     * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
