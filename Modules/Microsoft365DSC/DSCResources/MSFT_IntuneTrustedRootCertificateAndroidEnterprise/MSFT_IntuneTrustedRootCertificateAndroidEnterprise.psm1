@@ -85,17 +85,17 @@ function Get-TargetResource
         -CommandName $CommandName `
         -Parameters $PSBoundParameters
     Add-M365DSCTelemetryEvent -Data $data
-    #endregion
+    #endregion   
 
     $nullResult = $PSBoundParameters
     $nullResult.Ensure = 'Absent'
     try
     {
         if (-not [string]::IsNullOrWhiteSpace($id))
-        {
+        { 
             $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
         }
-
+        
         #region resource generator code
         if ($null -eq $getValue)
         {
@@ -120,9 +120,9 @@ function Get-TargetResource
             #region resource generator code
             Id                             = $getValue.Id
             Description                    = $getValue.Description
-            DisplayName                    = $getValue.DisplayName
+            DisplayName                    = $getValue.DisplayName       
             certFileName                   = $getValue.AdditionalProperties.certFileName
-            trustedRootCertificate         = $getValue.AdditionalProperties.trustedRootCertificate
+            trustedRootCertificate         = $getValue.AdditionalProperties.trustedRootCertificate 
             Ensure                         = 'Present'
             Credential                     = $Credential
             ApplicationId                  = $ApplicationId
@@ -133,7 +133,7 @@ function Get-TargetResource
             AccessTokens                   = $AccessTokens
             version                        = $getValue.AdditionalProperties.version
         }
-
+                                          
         $assignmentsValues = Get-MgBetaDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $Results.Id
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
@@ -282,7 +282,7 @@ function Set-TargetResource
         }
 
         $CreateParameters.add('AdditionalProperties', $AdditionalProperties)
-
+           
         #region resource generator code
         $policy = New-MgBetaDeviceManagementDeviceConfiguration @CreateParameters
         $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $Assignments
@@ -604,7 +604,12 @@ function Export-TargetResource
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
 
             $dscContent += $currentDSCBlock
@@ -613,7 +618,7 @@ function Export-TargetResource
             $i++
             Write-Host $Global:M365DSCEmojiGreenCheckMark
         }
-
+        
         return $dscContent
     }
     catch

@@ -612,12 +612,22 @@ function Export-TargetResource
 
             if ($Results.LocalUserGroupCollection)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'LocalUserGroupCollection' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.LocalUserGroupCollection.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'LocalUserGroupCollection' -IsCIMArray:$isCIMArray
             }
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
 
             $currentDSCBlock = $currentDSCBlock.Replace("`r`n            `");", "`r`n            );")

@@ -1528,11 +1528,11 @@ function Export-TargetResource
 
             if ($null -ne $Results.ContentContainsSensitiveInformation )
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ContentContainsSensitiveInformation' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ContentContainsSensitiveInformation' -IsCIMArray $IsSitCIMArray
             }
             if ($null -ne $Results.ExceptIfContentContainsSensitiveInformation )
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExceptIfContentContainsSensitiveInformation' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ExceptIfContentContainsSensitiveInformation' -IsCIMArray $IsCIMArray
             }
             $dscContent += $currentDSCBlock
 

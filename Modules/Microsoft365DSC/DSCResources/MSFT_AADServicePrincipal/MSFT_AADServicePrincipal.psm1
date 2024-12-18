@@ -1082,29 +1082,29 @@ function Export-TargetResource
                 if ($null -ne $Results.AppRoleAssignedTo)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'AppRoleAssignedTo' -IsCIMObject $true
+                        -ParameterName 'AppRoleAssignedTo'
                 }
                 if ($null -ne $Results.DelegatedPermissionClassifications)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'DelegatedPermissionClassifications' -IsCIMObject $true
+                        -ParameterName 'DelegatedPermissionClassifications'
                 }
                 if ($null -ne $Results.KeyCredentials)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'KeyCredentials' -IsCIMArray $true
+                        -ParameterName 'KeyCredentials' -IsCIMArray:$True
                 }
 
                 if ($null -ne $Results.PasswordCredentials)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'PasswordCredentials' -IsCIMArray $true
+                        -ParameterName 'PasswordCredentials' -IsCIMArray:$True
                 }
 
                 if ($null -ne $Results.CustomSecurityAttributes)
                 {
                     $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'CustomSecurityAttributes' -IsCIMObject $true
+                        -ParameterName 'CustomSecurityAttributes'
                 }
 
                 $dscContent += $currentDSCBlock

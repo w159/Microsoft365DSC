@@ -793,12 +793,12 @@ function Export-TargetResource
                         if ($result.Attachments.Length -gt 0)
                         {
                             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                                -ParameterName 'Attachments' -IsCIMArray $true
+                                -ParameterName 'Attachments'
                         }
                         if ($result.Checklist.Length -gt 0)
                         {
                             $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                                -ParameterName 'Checklist' -IsCIMArray $true
+                                -ParameterName 'Checklist'
                         }
 
                         $dscContent += $currentDSCBlock
