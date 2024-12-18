@@ -275,7 +275,24 @@ function Get-TargetResource
                     $complexPreAuthorizedApplications += $myPreAuthorizedApplications
                 }
             }
+
+            $complexOAuth2Scopes = @()
+            foreach ($currentOAuth2Scope in $AADApp.api.Oauth2PermissionScopes)
+            {
+                $complexOAuth2Scopes += @{
+                    adminConsentDescription = $currentOAuth2Scope.adminConsentDescription
+                    adminConsentDisplayName = $currentOAuth2Scope.adminConsentDisplayName
+                    id                      = $currentOAuth2Scope.id
+                    isEnabled               = $currentOAuth2Scope.isEnabled
+                    type                    = $currentOAuth2Scope.type
+                    userConsentDescription  = $currentOAuth2Scope.userConsentDescription
+                    userConsentDisplayName  = $currentOAuth2Scope.userConsentDisplayName
+                    value                   = $currentOAuth2Scope.value
+                }
+            }
+
             $complexApi.Add('PreAuthorizedApplications', $complexPreAuthorizedApplications)
+            $complexApi.Add('Oauth2PermissionScopes', $complexOAuth2Scopes)
             if ($complexApi.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexApi = $null
@@ -736,18 +753,56 @@ function Set-TargetResource
     }
     $currentParameters.Remove('AvailableToOtherTenants') | Out-Null
     $currentParameters.Remove('PublicClient') | Out-Null
+    $currentParameters.Remove('Verbose') | Out-Null
 
-    if ($currentParameters.KnownClientApplications)
+    #region API
+    $apiValue = @{}
+    if ($currentParameters.Api.KnownClientApplications)
     {
-        $apiValue = @{
-            KnownClientApplications = $currentParameters.KnownClientApplications
+        $apiValue.Add('KnownClientApplications', $currentParameters.Api.KnownClientApplications)
+    }
+    if ($currentParameters.Api.Oauth2PermissionScopes)
+    {
+        Write-Verbose -Message "Oauth2PermissionScopes specified and is not empty"
+        $scopeValue = @()
+        foreach ($scope in $currentParameters.Api.Oauth2PermissionScopes)
+        {
+            $scopeEntry = @{
+                adminConsentDescription = $scope.adminConsentDescription
+                adminConsentDisplayName = $scope.adminConsentDisplayName
+                isEnabled               = $scope.isEnabled
+                type                    = $scope.type
+                userConsentDescription  = $scope.userConsentDescription
+                userConsentDisplayName  = $scope.userConsentDisplayName
+                value                   = $scope.value
+            }
+            if (-not [System.String]::IsNullOrEmpty($scope.id))
+            {
+                Write-Verbose -Message "Adding existing scope id {$($scope.id)}"
+                $scopeEntry.Add('id', $scope.id)
+            }
+            else
+            {
+                Write-Verbose -Message "Generating new scope id"
+                $scopeEntry.Add('id', (New-Guid).ToString())
+            }
+
+            $scopeValue += $scopeEntry
         }
-        $currentParameters.Add('Api', $apiValue)
-        $currentParameters.Remove('KnownClientApplications') | Out-Null
+        $apiValue.Add('Oauth2PermissionScopes', $scopeValue)
+    }
+    $currentParameters.Remove('KnownClientApplications') | Out-Null
+    #endregion
+
+    if ($currentParameters.ContainsKey('Api'))
+    {
+        Write-Verbose "Found existing API parameter. Updating with $(Convert-M365DscHashtableToString -Hashtable $apiValue)"
+        $currentParameters.Api = $apiValue
     }
     else
     {
-        $currentParameters.Remove('KnownClientApplications') | Out-Null
+        Write-Verbose "Adding API parameter with $(Convert-M365DscHashtableToString -Hashtable $apiValue)"
+        $currentParameters.Add('Api', $apiValue)
     }
 
     if ($ReplyUrls -or $LogoutURL -or $Homepage)
@@ -773,7 +828,6 @@ function Set-TargetResource
     $currentParameters.Remove('LogoutURL') | Out-Null
     $currentParameters.Remove('Homepage') | Out-Null
     $currentParameters.Remove('OnPremisesPublishing') | Out-Null
-
 
     $keys = (([Hashtable]$currentParameters).clone()).Keys
     foreach ($key in $keys)
@@ -859,6 +913,7 @@ function Set-TargetResource
         $currentParameters.Remove('ApplicationTemplateId') | Out-Null
         Write-Verbose -Message "Creating New AzureAD Application {$DisplayName} with values:`r`n$($currentParameters | Out-String)"
 
+        Write-Verbose -Message "Parameters with API: $(ConvertTo-Json $currentParameters -Depth 10)"
         $currentAADApp = New-MgApplication @currentParameters
         Write-Verbose -Message "Azure AD Application {$DisplayName} was successfully created"
         $needToUpdatePermissions = $true
@@ -888,6 +943,8 @@ function Set-TargetResource
         }
 
         $currentParameters.Add('ApplicationId', $AppIdValue)
+        $currentParameters.Remove('AppRoles') | Out-Null
+
         Write-Verbose -Message "Updating existing AzureAD Application {$DisplayName} with values:`r`n$($currentParameters | Out-String)"
         Update-MgApplication @currentParameters
 
@@ -898,6 +955,62 @@ function Set-TargetResource
         $needToUpdatePermissions = $true
         $needToUpdateAuthenticationBehaviors = $true
         $needToUpdateKeyCredentials = $true
+
+        # Update AppRoles
+        if ($null -ne $AppRoles)
+        {
+            Write-Verbose -Message "AppRoles were specified."
+
+            # Find roles to Remove
+            $fixedRoles = @()
+            $rolesToRemove = @()
+            foreach ($currentRole in $currentAADApp.AppRoles)
+            {
+                $associatedDesiredRoleEntry = $AppRoles | Where-Object -FilterScript {$_.DisplayName -eq $currentRole.DisplayName}
+                if ($null -eq $associatedDesiredRoleEntry)
+                {
+                    Write-Verbose -Message "Could not find matching AppRole entry in Desired values for {$($currentRole.DisplayName)}. Will remove role."
+                    $fixedRole = $currentRole
+                    $fixedRole.IsEnabled = $false
+                    $fixedRoles += $fixedRole
+                    $rolesToRemove += $currentRole.DisplayName
+                }
+                else
+                {
+                    Write-Verbose -Message "Found matching AppRole entry in Desired values for {$($currentRole.DisplayName)}. Keeping same value as current, but setting to disable."
+                    $entry = @{
+                        AllowedMemberTypes = $currentRole.AllowedMemberTypes
+                        Id                 = $currentRole.Id
+                        IsEnabled          = $false
+                        Origin             = $currentRole.Origin
+                        Value              = $currentRole.Value
+                        DisplayName        = $currentRole.DisplayName
+                        Description        = $currentRole.Description
+                    }
+                    $fixedRoles += $entry
+                }
+            }
+
+            Write-Verbose -Message "Updating AppRoles with the disabled roles to remove: {$($rolesToRemove -join ',')}"
+            Update-MgApplication -ApplicationId $currentAADApp.ObjectId -AppRoles $fixedRoles
+
+            Write-Verbose -Message "Updating the app a second time, this time removing the app roles {$($rolesToRemove -join ',')} and updating the others."
+            $resultingAppRoles = @()
+            foreach ($currentAppRole in $AppRoles)
+            {
+                $entry = @{
+                    AllowedMemberTypes = $currentAppRole.AllowedMemberTypes
+                    Id                 = $currentAppRole.Id
+                    IsEnabled          = $currentAppRole.IsEnabled
+                    Origin             = $currentAppRole.Origin
+                    Value              = $currentAppRole.Value
+                    DisplayName        = $currentAppRole.DisplayName
+                    Description        = $currentAppRole.Description
+                }
+                $resultingAppRoles += $entry
+            }
+            Update-MgApplication -ApplicationId $currentAADApp.ObjectId -AppRoles $resultingAppRoles
+        }
     }
     # App exists but should not
     elseif ($Ensure -eq 'Absent' -and $currentAADApp.Ensure -eq 'Present')
@@ -985,7 +1098,7 @@ function Set-TargetResource
             $allRequiredAccess = @()
         }
         else
-            {
+        {
             $allSourceAPIs = $Permissions.SourceAPI | Select-Object -Unique
             $allRequiredAccess = @()
 
@@ -1039,6 +1152,10 @@ function Set-TargetResource
                         {
                             $roleId = $role.Id
                         }
+                        if ([System.String]::IsNullOrEmpty($roleId))
+                        {
+                            throw "Could not find associated role {$($permission.Name)} for API {$($sourceAPI)}"
+                        }
                         $appPermission = @{
                             Id   = $roleId
                             Type = 'Role'
@@ -1054,6 +1171,7 @@ function Set-TargetResource
         }
 
         Write-Verbose -Message "Updating permissions for Azure AD Application {$($currentAADApp.DisplayName)} with RequiredResourceAccess:`r`n$($allRequiredAccess | Out-String)"
+        Write-Verbose -Message "ResourceAccess:`r`n$($allRequiredAccess.ResourceAccess | Out-String)"
         Write-Verbose -Message "Current App Id: $($currentAADApp.AppId)"
 
         # Even if the property is named ApplicationId, we need to pass in the ObjectId
@@ -1072,7 +1190,8 @@ function Set-TargetResource
             requireClientServicePrincipal = $AuthenticationBehaviors.requireClientServicePrincipal
         }
 
-        Update-MgBetaApplication -ApplicationId $currentAADApp.Id -AuthenticationBehaviors $IAuthenticationBehaviors | Out-Null
+        Update-MgBetaApplication -ApplicationId $currentAADApp.Id `
+                                 -AuthenticationBehaviors $IAuthenticationBehaviors | Out-Null
     }
 
     if ($needToUpdateKeyCredentials -and $KeyCredentials)
@@ -1307,8 +1426,8 @@ function Test-TargetResource
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
-    if ($CurrentValues.Permissions.Length -gt 0 -and `
-        $null -ne $CurrentValues.Permissions.Name)
+    if ($CurrentValues.Permissions.Length -gt 0 -and $null -ne $CurrentValues.Permissions.Name -and `
+        $null -ne $Permissions)
     {
         $differenceObject = $Permissions.Name
         if ($null -eq $differenceObject)
@@ -1504,6 +1623,11 @@ function Export-TargetResource
                             @{
                                 Name            = 'PreAuthorizedApplications'
                                 CimInstanceName = 'MicrosoftGraphPreAuthorizedApplication'
+                                IsRequired      = $False
+                            }
+                            @{
+                                Name            = 'Oauth2PermissionScopes'
+                                CimInstanceName = 'MSFT_MicrosoftGraphApiOauth2PermissionScopes'
                                 IsRequired      = $False
                             }
                         )
