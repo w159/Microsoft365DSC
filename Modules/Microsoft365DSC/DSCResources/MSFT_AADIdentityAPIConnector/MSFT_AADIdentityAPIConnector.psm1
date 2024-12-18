@@ -719,7 +719,7 @@ function Export-TargetResource
 
             if ($Results.Certificates)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Certificates' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Certificates' -IsCIMArray:$True
             }
 
             # Replace the main password variable.

@@ -486,7 +486,7 @@ function Export-TargetResource
 
                 if ($Results.KeyVaultMetadata)
                 {
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyVaultMetadata' -IsCIMObject $true
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyVaultMetadata' -IsCIMArray:$False
                 }
 
                 $dscContent.Append($currentDSCBlock) | Out-Null

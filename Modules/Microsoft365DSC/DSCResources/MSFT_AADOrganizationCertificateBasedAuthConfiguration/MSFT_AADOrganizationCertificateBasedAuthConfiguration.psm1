@@ -456,7 +456,7 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.CertificateAuthorities)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CertificateAuthorities' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CertificateAuthorities' -IsCIMArray:$True
             }
 
             $dscContent += $currentDSCBlock

@@ -575,7 +575,7 @@ function Export-TargetResource
                 -Credential $Credential
             if ($null -ne $Results.FilePlanProperty)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FilePlanProperty' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'FilePlanProperty'
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `

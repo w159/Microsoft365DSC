@@ -6,12 +6,13 @@
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
 * TeamsMeetingPolicy
+  * Adds support for additional Copilot setting value.
+    * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
   * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
   * Fixed an issue where the export does not convert tenant name into
     generic $OrganizationName variable correctly.
-  * Fixed an issue where exports were not processing CIM instances correctly.
   * Reset only necessary authentication context.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
@@ -19,7 +20,7 @@
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
   * Updated MSCloudLoginAssistant to version 1.1.30.
-  * Updated ReverseDSC to version 2.0.0.24.
+  * Updated ReverseDSC to version 2.0.0.23.
 
 # 1.24.1211.1
 

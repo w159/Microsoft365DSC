@@ -443,7 +443,7 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ConnectorActionConfigurations)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ConnectorActionConfigurations' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ConnectorActionConfigurations' -IsCIMArray:$true
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
