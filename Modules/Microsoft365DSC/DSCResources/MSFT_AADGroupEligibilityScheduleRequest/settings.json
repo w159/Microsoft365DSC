@@ -1,0 +1,29 @@
+{
+    "resourceName": "AADGroupEligibilityScheduleRequest",
+    "description": "This resource configures an Azure AD Group Eligibility Schedule Request.",
+    "permissions":    {
+    "graph":  {
+                  "delegated":  {
+                                    "read":  [
+                                                 {
+                                                     "name":  "PrivilegedEligibilitySchedule.Read.AzureADGroup"
+                                                 }
+                                             ],
+                                    "update":  [
+
+                                               ]
+                                },
+                  "application":  {
+                                      "read":  [
+                                                   {
+                                                       "name":  "PrivilegedEligibilitySchedule.Read.AzureADGroup"
+                                                   }
+                                               ],
+                                      "update":  [
+
+                                                 ]
+                                  }
+              }
+}
+
+}
