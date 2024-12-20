@@ -201,7 +201,7 @@ function Get-TargetResource
 
         [Parameter()]
         [System.Boolean]
-        $disableResilienceDefaultsIsEnabled,
+        $DisableResilienceDefaultsIsEnabled,
 
         [Parameter()]
         [System.String]
@@ -711,7 +711,7 @@ function Get-TargetResource
         #no translation needed
         PersistentBrowserIsEnabled               = $false -or $Policy.SessionControls.PersistentBrowser.IsEnabled
         #no translation needed
-        disableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults.IsEnabled
+        DisableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults.IsEnabled
         #make false if undefined, true if true
         PersistentBrowserMode                    = [System.String]$Policy.SessionControls.PersistentBrowser.Mode
         #no translation needed
@@ -937,7 +937,7 @@ function Set-TargetResource
 
         [Parameter()]
         [System.Boolean]
-        $disableResilienceDefaultsIsEnabled,
+        $DisableResilienceDefaultsIsEnabled,
 
         [Parameter()]
         [System.String]
@@ -1745,7 +1745,7 @@ function Set-TargetResource
             $NewParameters.Add('grantControls', $GrantControls)
         }
 
-        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or $disableResilienceDefaultsIsEnabled)
+        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or $DisableResilienceDefaultsIsEnabled)
         {
             Write-Verbose -Message 'Set-Targetresource: process session controls'
             $sessioncontrols = $null
@@ -1812,7 +1812,7 @@ function Set-TargetResource
                 $sessioncontrols.persistentBrowser.isEnabled = $true
                 $sessioncontrols.persistentBrowser.mode = $PersistentBrowserMode
             }
-            if ($disableResilienceDefaultsIsEnabled)
+            if ($DisableResilienceDefaultsIsEnabled)
             {
                 $sessioncontrols.Add('disableResilienceDefaults', $true)
             }
