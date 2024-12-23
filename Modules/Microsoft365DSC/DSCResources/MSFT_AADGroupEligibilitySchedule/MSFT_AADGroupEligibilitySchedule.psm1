@@ -79,7 +79,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Azure AD Group Eligibility Schedule with Id {$Id} and DisplayName {$DisplayName}"
+    Write-Verbose -Message "Getting configuration of the Azure AD Group {$GroupDisplayName}Eligibility Schedule"
 
     try
     {
@@ -102,7 +102,10 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-
+        if($GroupId.Length -eq 0){
+            $Filter = "DisplayName eq '" + $GroupDisplayName + "'"
+            $GroupId = (Get-MgGroup -Filter $Filter).Id
+        }
         if ($Id -notmatch '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_member_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$') {
             $getId = Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule `
                 -Filter "Groupid eq '$GroupId'" `
@@ -116,11 +119,11 @@ function Get-TargetResource
         #endregion
         if ($null -eq $getValue)
         {
-            Write-Verbose -Message "Could not find an Azure AD Group Eligibility Schedule with DisplayName {$DisplayName}."
+            Write-Verbose -Message "Could not find an Azure AD Group Eligibility Schedule with {$GroupDisplayName}."
             return $nullResult
         }
         $Id = $getValue.Id
-        Write-Verbose -Message "An Azure AD Group Eligibility Schedule with Id {$Id} and DisplayName {$DisplayName} was found"
+        Write-Verbose -Message "An Azure AD Group Eligibility Schedule with Id {$Id} and DisplayName {$GroupDisplayName} was found"
 
         #region resource generator code
         $complexScheduleInfo = @{}
@@ -214,13 +217,6 @@ function Get-TargetResource
         }
         #endregion
 
-        #region resource generator code
-        $dateModifiedDateTime = $null
-        if ($null -ne $getValue.ModifiedDateTime)
-        {
-            $dateModifiedDateTime = ([DateTimeOffset]$getValue.ModifiedDateTime).ToString('o')
-        }
-        #endregion
         $PrincipalGroup = Get-MgGroup -GroupId $getvalue.PrincipalId
         if($null -ne $PrincipalGroup){
             $PrincipalType = 'group'
@@ -240,10 +236,7 @@ function Get-TargetResource
             MemberType            = $enumMemberType
             PrincipalType         = $PrincipalType
             PrincipalDisplayname  = $PrincipalDisplayName
-            CreatedUsing          = $getValue.CreatedUsing
-            ModifiedDateTime      = $dateModifiedDateTime
             ScheduleInfo          = $complexScheduleInfo
-            Status                = $getValue.Status
             Id                    = $getValue.Id
             Ensure                = 'Present'
             Credential            = $Credential
@@ -369,7 +362,7 @@ function Set-TargetResource
 
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
-        Write-Verbose -Message "Creating an Azure AD Group Eligibility Schedule with DisplayName {$DisplayName}"
+        Write-Verbose -Message "Creating an Azure AD Group Eligibility Schedule for Group {$GroupDisplayName}"
 
         $createParameters = ([Hashtable]$BoundParameters).Clone()
         $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
@@ -377,14 +370,17 @@ function Set-TargetResource
         $createParameters.Remove('PrincipalType') | Out-Null
         $createParameters.Remove('PrincipalDisplayName') | Out-Null
         $createParameters.Remove('GroupDisplayName') | Out-Null
+        $createParameters.Add('Action', 'adminAssign')
 
-        $GroupId = (Get-MgGroup -DisplayName $GroupDisplayName).Id
+        $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
+        $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
         $createParameters.Add('GroupId', $GroupId)
+        $Filter = "DisplayName eq '" + $PrincipalDisplayname + "'"
         if($PrincipalType -eq 'group'){
-            $PrincipalId = (Get-MgGroup -DisplayName $PrincipalDisplayName).Id
+            $PrincipalId = (Get-MgGroup -Filter $Filter).Id
         }
         else{
-            $PrincipalId = (Get-MgUser -DisplayName $PrincipalDisplayName).Id
+            $PrincipalId = (Get-MgUser -Filter $Filter).Id
         }
         $createParameters.Add('PrincipalId', $PrincipalId)
 
@@ -397,8 +393,7 @@ function Set-TargetResource
             }
         }
         #region resource generator code
-        $createParameters.Add("@odata.type", "#microsoft.graph.PrivilegedAccessGroupEligibilitySchedule")
-        $policy = New-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -BodyParameter $createParameters
+        $policy = New-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -BodyParameter $createParameters
         #endregion
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -412,14 +407,17 @@ function Set-TargetResource
         $updateParameters.Remove('PrincipalType') | Out-Null
         $updateParameters.Remove('PrincipalDisplayName') | Out-Null
         $updateParameters.Remove('GroupDisplayName') | Out-Null
+        $updateParameters.Add('Action', 'adminUpdate')
 
-        $GroupId = (Get-MgGroup -DisplayName $GroupDisplayName).Id
+        $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
+        $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
         $createParameters.Add('GroupId', $GroupId)
+        $Filter = "DisplayName eq '" + $PrincipalDisplayname + "'"
         if($PrincipalType -eq 'group'){
-            $PrincipalId = (Get-MgGroup -DisplayName $PrincipalDisplayName).Id
+            $PrincipalId = (Get-MgGroup -Filter $Filter).Id
         }
         else{
-            $PrincipalId = (Get-MgUser -DisplayName $PrincipalDisplayName).Id
+            $PrincipalId = (Get-MgUser -Filter $Filter).Id
         }
         $updateParameters.Add('PrincipalId', $PrincipalId)
 
