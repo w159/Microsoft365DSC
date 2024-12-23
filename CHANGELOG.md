@@ -1,5 +1,13 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* DefenderDeviceAuthenticatedScanDefinition
+  * Fixed the Data Type export.
+* MISC
+  * DEFENDER
+    * Added support for the UseBasicParsing paramter for REST calls.
+
 # 1.24.1218.1
 
 * AADApplication
