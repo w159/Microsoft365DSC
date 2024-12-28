@@ -11,6 +11,8 @@
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
 
+# 1.24.1218.1
+
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
