@@ -2,13 +2,14 @@
 
 # UNRELEASED
 
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Fixed the primary key of the resource.
+    FIXES [#5523](https://github.com/microsoft/Microsoft365DSC/issues/5523)
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
 * MISC
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
-
-# 1.24.1218.1
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
