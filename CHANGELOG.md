@@ -5,6 +5,8 @@
 * AADOrganizationCertificateBasedAuthConfiguration
   * Fixed the primary key of the resource.
     FIXES [#5523](https://github.com/microsoft/Microsoft365DSC/issues/5523)
+* AADRoleEligibilityScheduleRequest
+  * Fixed error when extracting an entry with a deleted principal.
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
 * MISC
