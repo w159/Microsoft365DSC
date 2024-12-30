@@ -9,6 +9,8 @@
   * Fixed error when extracting an entry with a deleted principal.
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
+* EXOSmtpDaneInbound
+  * initial release
 * MISC
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
