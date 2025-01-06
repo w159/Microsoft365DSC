@@ -26,7 +26,7 @@ Configuration Example
                 StartDateTime = '2024-12-23T08:59:28.1200000+00:00'
                 Expiration = MSFT_MicrosoftGraphExpirationPattern{
                     EndDateTime = '12/23/2025 8:59:00 AM +00:00'
-                    Type = 'notSpecified'
+                    Type = 'afterDateTime'
                 }
             };
         }

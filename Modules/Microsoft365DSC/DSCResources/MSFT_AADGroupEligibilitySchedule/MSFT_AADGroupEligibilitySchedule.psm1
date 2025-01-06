@@ -217,15 +217,16 @@ function Get-TargetResource
         }
         #endregion
 
-        $PrincipalGroup = Get-MgGroup -GroupId $getvalue.PrincipalId
-        if($null -ne $PrincipalGroup){
-            $PrincipalType = 'group'
-            $PrincipalDisplayName = $PrincipalGroup.DisplayName
+        switch ($getValue.PrincipalType)
+        {
+            'group' {
+                $PrincipalDisplayName = (Get-MgGroup -GroupId $getvalue.PrincipalId).DisplayName
+            }
+            'user' {
+                $PrincipalDisplayName = (Get-MgUser -UserId $getvalue.PrincipalId).DisplayName
+            }
         }
-        else{
-            $PrincipalType = 'user'
-            $PrincipalDisplayName = (Get-MgUser -UserId $getvalue.PrincipalId).DisplayName
-        }
+
         $GroupDisplayName = (Get-MgGroup -GroupId $getvalue.GroupId).DisplayName
 
         $results = @{
@@ -341,7 +342,7 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Setting configuration of the Azure AD Group Eligibility Schedule with Id {$Id} and DisplayName {$DisplayName}"
+    Write-Verbose -Message "Setting configuration of the Azure AD Group Eligibility Schedule for group {$GroupId} and DisplayName {$GroupDisplayName}"
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -374,6 +375,60 @@ function Set-TargetResource
 
         $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
         $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
+
+        if($ScheduleInfo.Expiration.Type -eq 'noExpiration'){
+            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $unifiedRoleManagementPolicyId = $p.PolicyId
+            $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
+            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            if($isExpirationRequired){
+                $params = @{
+                    "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
+                    id = "Expiration_Admin_Eligibility"
+                    isExpirationRequired = $false
+                    target = @{
+                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
+                        caller = "Admin"
+                        operations = @(
+                            "All"
+                        )
+                        level = "Eligibility"
+                        inheritableSettings = @(
+                        )
+                        enforcedSettings = @(
+                        )
+                    }
+                }
+                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+            }
+        }
+        elseif($ScheduleInfo.Expiration.Type -eq 'afterDuration'){
+            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $unifiedRoleManagementPolicyId = $p.PolicyId
+            $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
+            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            if(-not $isExpirationRequired){
+                $params = @{
+                    "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
+                    id = "Expiration_Admin_Eligibility"
+                    isExpirationRequired = $true
+                    target = @{
+                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
+                        caller = "Admin"
+                        operations = @(
+                            "All"
+                        )
+                        level = "Eligibility"
+                        inheritableSettings = @(
+                        )
+                        enforcedSettings = @(
+                        )
+                    }
+                }
+                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+            }
+        }
+
         $createParameters.Add('GroupId', $GroupId)
         $Filter = "DisplayName eq '" + $PrincipalDisplayname + "'"
         if($PrincipalType -eq 'group'){
@@ -393,13 +448,21 @@ function Set-TargetResource
             }
         }
         #region resource generator code
-        $policy = New-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -BodyParameter $createParameters
+        New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -BodyParameter $createParameters
         #endregion
     }
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating the Azure AD Group Eligibility Schedule with Id {$($currentInstance.Id)}"
 
+        $scheduledStart = $currentInstance.ScheduleInfo.StartDateTime
+        $scheduledEnd = $currentInstance.ScheduleInfo.Expiration.EndDateTime
+        if($scheduledStart -ne $ScheduleInfo.StartDateTime -or $scheduledEnd -ne $ScheduleInfo.Expiration.EndDateTime){
+            $Action = 'adminExtend'
+        }
+        else{
+            $Action = 'adminUpdate'
+        }
         $updateParameters = ([Hashtable]$BoundParameters).Clone()
         $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
 
@@ -407,11 +470,66 @@ function Set-TargetResource
         $updateParameters.Remove('PrincipalType') | Out-Null
         $updateParameters.Remove('PrincipalDisplayName') | Out-Null
         $updateParameters.Remove('GroupDisplayName') | Out-Null
-        $updateParameters.Add('Action', 'adminUpdate')
+        $updateParameters.Add('Action', $Action)
 
         $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
         $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
-        $createParameters.Add('GroupId', $GroupId)
+        if($ScheduleInfo.Expiration.Type -eq 'noExpiration'){
+            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $unifiedRoleManagementPolicyId = $p.PolicyId
+            $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
+            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            if($isExpirationRequired){
+                $params = @{
+                    "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
+                    id = "Expiration_Admin_Eligibility"
+                    isExpirationRequired = $false
+                    target = @{
+                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
+                        caller = "Admin"
+                        operations = @(
+                            "All"
+                        )
+                        level = "Eligibility"
+                        inheritableSettings = @(
+                        )
+                        enforcedSettings = @(
+                        )
+                    }
+                }
+                Write-Verbose -Message "Updating the expiration policy for the group {$GroupDisplayName}"
+                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+            }
+        }
+        elseif($ScheduleInfo.Expiration.Type -match "^after"){
+            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $unifiedRoleManagementPolicyId = $p.PolicyId
+            $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
+            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            if(-not $isExpirationRequired){
+                $params = @{
+                    "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
+                    id = "Expiration_Admin_Eligibility"
+                    isExpirationRequired = $true
+                    maximumDuration = 'P365D'
+                    target = @{
+                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
+                        caller = "Admin"
+                        operations = @(
+                            "All"
+                        )
+                        level = "Eligibility"
+                        inheritableSettings = @(
+                        )
+                        enforcedSettings = @(
+                        )
+                    }
+                }
+                Write-Verbose -Message "Updating the expiration policy for the group {$GroupDisplayName}"
+                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+            }
+        }
+        $updateParameters.Add('GroupId', $GroupId)
         $Filter = "DisplayName eq '" + $PrincipalDisplayname + "'"
         if($PrincipalType -eq 'group'){
             $PrincipalId = (Get-MgGroup -Filter $Filter).Id
@@ -431,17 +549,45 @@ function Set-TargetResource
         }
 
         #region resource generator code
-        $UpdateParameters.Add("@odata.type", "#microsoft.graph.PrivilegedAccessGroupEligibilitySchedule")
-        Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule `
-            -PrivilegedAccessGroupEligibilityScheduleId $currentInstance.Id `
-            -BodyParameter $UpdateParameters
+        New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -BodyParameter $UpdateParameters
         #endregion
     }
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing the Azure AD Group Eligibility Schedule with Id {$($currentInstance.Id)}"
+        Write-Verbose -Message "Removiong the Azure AD Group Eligibility Schedule with Id {$($currentInstance.Id)}"
+
+        $updateParameters = ([Hashtable]$BoundParameters).Clone()
+        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+
+        $updateParameters.Remove('Id') | Out-Null
+        $updateParameters.Remove('PrincipalType') | Out-Null
+        $updateParameters.Remove('PrincipalDisplayName') | Out-Null
+        $updateParameters.Remove('GroupDisplayName') | Out-Null
+        $updateParameters.Add('Action', 'adminRemove')
+
+        $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
+        $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
+        $updateParameters.Add('GroupId', $GroupId)
+        $Filter = "DisplayName eq '" + $PrincipalDisplayname + "'"
+        if($PrincipalType -eq 'group'){
+            $PrincipalId = (Get-MgGroup -Filter $Filter).Id
+        }
+        else{
+            $PrincipalId = (Get-MgUser -Filter $Filter).Id
+        }
+        $updateParameters.Add('PrincipalId', $PrincipalId)
+
+        $keys = (([Hashtable]$updateParameters).Clone()).Keys
+        foreach ($key in $keys)
+        {
+            if ($null -ne $pdateParameters.$key -and $updateParameters.$key.GetType().Name -like '*CimInstance*')
+            {
+                $updateParameters.$key = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.PrivilegedAccessGroupEligibilityScheduleId
+            }
+        }
+
         #region resource generator code
-        Remove-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -PrivilegedAccessGroupEligibilityScheduleId $currentInstance.Id
+        New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -BodyParameter $UpdateParameters
         #endregion
     }
 }
@@ -539,7 +685,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of the Azure AD Group Eligibility Schedule with Id {$Id} and DisplayName {$DisplayName}"
+    Write-Verbose -Message "Testing configuration of the Azure AD Group Eligibility Schedule for Group {$GroupId} and DisplayName {$GroupDisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()

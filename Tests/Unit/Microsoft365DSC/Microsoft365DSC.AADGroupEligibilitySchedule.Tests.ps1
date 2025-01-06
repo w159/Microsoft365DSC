@@ -39,19 +39,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Remove-PSSession -MockWith {
             }
 
-            Mock -CommandName Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
-            }
-
-            Mock -CommandName New-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
-            }
-
-            Mock -CommandName Remove-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
-            }
-
             Mock -CommandName New-M365DSCConnection -MockWith {
                 return "Credentials"
             }
 
+            Mock  -CommandName Get-MgPolicyRoleManagementPolicyAssignment -MockWith {
+                return @(
+                    @{
+                        PolicyIdId = 'FakeId'
+                    }
+                )
+            }
+
+            Mock -CommandName Get-MgPolicyRoleManagementPolicyRule -MockWith {
+                return @()
+            }
+
+            Mock -CommandName Update-MgPolicyRoleManagementPolicyRule -MockWith {
+                return @()
+            }
             # Mock Write-Host to hide output during the tests
             Mock -CommandName Write-Host -MockWith {
             }
@@ -63,44 +69,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The AADGroupEligibilitySchedule should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessId = "owner"
-                    CreatedUsing = "FakeStringValue"
-                    GroupId = "FakeStringValue"
-                    Id = "FakeStringValue"
+                    AccessId = "member"
+                    GroupDisplayName = "FakeStringValue"
                     MemberType = "direct"
-                    ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    PrincipalId = "FakeStringValue"
-                    ScheduleInfo = (New-CimInstance -ClassName MSFT_MicrosoftGraphrequestSchedule -Property @{
-                        Recurrence = (New-CimInstance -ClassName MSFT_MicrosoftGraphpatternedRecurrence1 -Property @{
-                            Pattern = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrencePattern1 -Property @{
-                                Index = "first"
-                                FirstDayOfWeek = "sunday"
-                                DayOfMonth = 25
-                                Month = 25
-                                DaysOfWeek = @("sunday")
-                                Type = "daily"
-                                Interval = 25
+                    PrincipalDisplayName = "FakePrincipal"
+                    ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
-                            Range = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrenceRange1 -Property @{
-                                StartDate = "2023-01-01T00:00:00.0000000"
-                                EndDate = "2023-01-01T00:00:00.0000000"
-                                RecurrenceTimeZone = "FakeStringValue"
-                                NumberOfOccurrences = 25
-                                Type = "endDate"
-                            } -ClientOnly)
-                        } -ClientOnly)
-                        Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphexpirationPattern -Property @{
-                            EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                            Type = "notSpecified"
-                        } -ClientOnly)
-                        StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    } -ClientOnly)
-                    Status = "FakeStringValue"
                     Ensure = "Present"
                     Credential = $Credential;
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
                     return $null
                 }
             }
@@ -112,90 +99,68 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             It 'Should Create the group from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName New-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -Exactly 1
+                Should -Invoke -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -Exactly 1
             }
         }
 
         Context -Name "The AADGroupEligibilitySchedule exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessId = "owner"
-                    CreatedUsing = "FakeStringValue"
-                    GroupId = "FakeStringValue"
-                    Id = "FakeStringValue"
+                    AccessId = "member"
+                    GroupDisplayName = "FakeStringValue"
                     MemberType = "direct"
-                    ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    PrincipalId = "FakeStringValue"
-                    ScheduleInfo = (New-CimInstance -ClassName MSFT_MicrosoftGraphrequestSchedule -Property @{
-                        Recurrence = (New-CimInstance -ClassName MSFT_MicrosoftGraphpatternedRecurrence1 -Property @{
-                            Pattern = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrencePattern1 -Property @{
-                                Index = "first"
-                                FirstDayOfWeek = "sunday"
-                                DayOfMonth = 25
-                                Month = 25
-                                DaysOfWeek = @("sunday")
-                                Type = "daily"
-                                Interval = 25
+                    PrincipalDisplayName = "FakePrincipal"
+                    ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
-                            Range = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrenceRange1 -Property @{
-                                StartDate = "2023-01-01T00:00:00.0000000"
-                                EndDate = "2023-01-01T00:00:00.0000000"
-                                RecurrenceTimeZone = "FakeStringValue"
-                                NumberOfOccurrences = 25
-                                Type = "endDate"
-                            } -ClientOnly)
-                        } -ClientOnly)
-                        Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphexpirationPattern -Property @{
-                            EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                            Type = "notSpecified"
-                        } -ClientOnly)
-                        StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    } -ClientOnly)
-                    Status = "FakeStringValue"
-                    Ensure = 'Absent'
+                    Ensure = "Absent"
                     Credential = $Credential;
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
                     return @{
-                        AdditionalProperties = @{
-                            groupId = "FakeStringValue"
-                            '@odata.type' = "#microsoft.graph.PrivilegedAccessGroupEligibilitySchedule"
-                            principalId = "FakeStringValue"
-                            memberType = "direct"
-                            accessId = "owner"
-                        }
-                        CreatedUsing = "FakeStringValue"
-                        Id = "FakeStringValue"
-                        ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        ScheduleInfo = @{
-                            Recurrence = @{
-                                Pattern = @{
-                                    Index = "first"
-                                    FirstDayOfWeek = "sunday"
-                                    DayOfMonth = 25
-                                    Month = 25
-                                    DaysOfWeek = @("sunday")
-                                    Type = "daily"
-                                    Interval = 25
-                                }
-                                Range = @{
-                                    StartDate = "2023-01-01T00:00:00.0000000"
-                                    EndDate = "2023-01-01T00:00:00.0000000"
-                                    RecurrenceTimeZone = "FakeStringValue"
-                                    NumberOfOccurrences = 25
-                                    Type = "endDate"
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @(
+                            @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
                                 }
                             }
-                            Expiration = @{
-                                EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                                Type = "notSpecified"
-                            }
-                            StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        }
-                        Status = "FakeStringValue"
-
+                        )
                     }
+                }
+
+                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Invoke-GraphRequest -MockWith {
+                    return @{
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @(
+                            @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
+                                }
+                            }
+                        )
+                    }
+                }
+                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
+                    return $null
                 }
             }
 
@@ -209,91 +174,92 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should Remove the group from the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Remove-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -Exactly 1
+                Should -Invoke -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -Exactly 1
             }
         }
 
         Context -Name "The AADGroupEligibilitySchedule Exists and Values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessId = "owner"
-                    CreatedUsing = "FakeStringValue"
-                    GroupId = "FakeStringValue"
-                    Id = "FakeStringValue"
+                    AccessId = "member"
+                    GroupDisplayName = "FakeStringValue"
                     MemberType = "direct"
-                    ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    PrincipalId = "FakeStringValue"
-                    ScheduleInfo = (New-CimInstance -ClassName MSFT_MicrosoftGraphrequestSchedule -Property @{
-                        Recurrence = (New-CimInstance -ClassName MSFT_MicrosoftGraphpatternedRecurrence1 -Property @{
-                            Pattern = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrencePattern1 -Property @{
-                                Index = "first"
-                                FirstDayOfWeek = "sunday"
-                                DayOfMonth = 25
-                                Month = 25
-                                DaysOfWeek = @("sunday")
-                                Type = "daily"
-                                Interval = 25
+                    PrincipalDisplayName = "FakePrincipal"
+                    ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
-                            Range = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrenceRange1 -Property @{
-                                StartDate = "2023-01-01T00:00:00.0000000"
-                                EndDate = "2023-01-01T00:00:00.0000000"
-                                RecurrenceTimeZone = "FakeStringValue"
-                                NumberOfOccurrences = 25
-                                Type = "endDate"
-                            } -ClientOnly)
-                        } -ClientOnly)
-                        Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphexpirationPattern -Property @{
-                            EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                            Type = "notSpecified"
-                        } -ClientOnly)
-                        StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    } -ClientOnly)
-                    Status = "FakeStringValue"
-                    Ensure = 'Present'
+                    Ensure = "Present"
                     Credential = $Credential;
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
                     return @{
-                        AdditionalProperties = @{
-                            groupId = "FakeStringValue"
-                            '@odata.type' = "#microsoft.graph.PrivilegedAccessGroupEligibilitySchedule"
-                            principalId = "FakeStringValue"
-                            memberType = "direct"
-                            accessId = "owner"
-                        }
-                        CreatedUsing = "FakeStringValue"
-                        Id = "FakeStringValue"
-                        ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        ScheduleInfo = @{
-                            Recurrence = @{
-                                Pattern = @{
-                                    Index = "first"
-                                    FirstDayOfWeek = "sunday"
-                                    DayOfMonth = 25
-                                    Month = 25
-                                    DaysOfWeek = @("sunday")
-                                    Type = "daily"
-                                    Interval = 25
-                                }
-                                Range = @{
-                                    StartDate = "2023-01-01T00:00:00.0000000"
-                                    EndDate = "2023-01-01T00:00:00.0000000"
-                                    RecurrenceTimeZone = "FakeStringValue"
-                                    NumberOfOccurrences = 25
-                                    Type = "endDate"
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @(
+                            @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
                                 }
                             }
-                            Expiration = @{
-                                EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                                Type = "notSpecified"
-                            }
-                            StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        }
-                        Status = "FakeStringValue"
-
+                        )
                     }
                 }
+
+                mock -CommandName Get-MgGroup -MockWith {
+                    return @{
+                        Id = 'FakeId'
+                        DisplayName = 'FakeStringValue'
+                    }
+                }
+
+                Mock -CommandName Invoke-GraphRequest -MockWith {
+                    return @{
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
+                                }
+                        }
+                    }
+                }
+
+                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
+                    return $null
+                }
+
+                Mock  -CommandName Get-MgPolicyRoleManagementPolicyAssignment -MockWith {
+                    return @(
+                        @{
+                            PolicyId = 'FakeId'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgPolicyRoleManagementPolicyRule -MockWith {
+                    return @{
+                        AdditionalProperties = @{
+                            isExpirationRequired = $true
+                        }
+                    }
+                }
+
+                Mock -CommandName Update-MgPolicyRoleManagementPolicyRule -MockWith {
+                    return @()
+                }
+
             }
 
             It 'Should return true from the Test method' {
@@ -304,81 +270,83 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The AADGroupEligibilitySchedule exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessId = "owner"
-                    CreatedUsing = "FakeStringValue"
-                    GroupId = "FakeStringValue"
-                    Id = "FakeStringValue"
+                    AccessId = "member"
+                    GroupDisplayName = "FakeStringValue"
                     MemberType = "direct"
-                    ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    PrincipalId = "FakeStringValue"
-                    ScheduleInfo = (New-CimInstance -ClassName MSFT_MicrosoftGraphrequestSchedule -Property @{
-                        Recurrence = (New-CimInstance -ClassName MSFT_MicrosoftGraphpatternedRecurrence1 -Property @{
-                            Pattern = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrencePattern1 -Property @{
-                                Index = "first"
-                                FirstDayOfWeek = "sunday"
-                                DayOfMonth = 25
-                                Month = 25
-                                DaysOfWeek = @("sunday")
-                                Type = "daily"
-                                Interval = 25
+                    PrincipalDisplayName = "FakePrincipal"
+                    ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
-                            Range = (New-CimInstance -ClassName MSFT_MicrosoftGraphrecurrenceRange1 -Property @{
-                                StartDate = "2023-01-01T00:00:00.0000000"
-                                EndDate = "2023-01-01T00:00:00.0000000"
-                                RecurrenceTimeZone = "FakeStringValue"
-                                NumberOfOccurrences = 25
-                                Type = "endDate"
-                            } -ClientOnly)
-                        } -ClientOnly)
-                        Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphexpirationPattern -Property @{
-                            EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                            Type = "notSpecified"
-                        } -ClientOnly)
-                        StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                    } -ClientOnly)
-                    Status = "FakeStringValue"
-                    Ensure = 'Present'
+                    Ensure = "Present"
                     Credential = $Credential;
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
                     return @{
-                        AdditionalProperties = @{
-                            principalId = "FakeStringValue"
-                            groupId = "FakeStringValue"
-                            memberType = "direct"
-                            accessId = "owner"
-                        }
-                        CreatedUsing = "FakeStringValue"
-                        Id = "FakeStringValue"
-                        ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        ScheduleInfo = @{
-                            Recurrence = @{
-                                Pattern = @{
-                                    Index = "first"
-                                    FirstDayOfWeek = "sunday"
-                                    DayOfMonth = 7
-                                    Month = 7
-                                    DaysOfWeek = @("sunday")
-                                    Type = "daily"
-                                    Interval = 7
-                                }
-                                Range = @{
-                                    StartDate = "2023-01-01T00:00:00.0000000"
-                                    EndDate = "2023-01-01T00:00:00.0000000"
-                                    RecurrenceTimeZone = "FakeStringValue"
-                                    NumberOfOccurrences = 7
-                                    Type = "endDate"
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @(
+                            @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/24/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
                                 }
                             }
-                            Expiration = @{
-                                EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                                Type = "notSpecified"
-                            }
-                            StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        }
-                        Status = "FakeStringValue"
+                        )
                     }
+                }
+
+                mock -CommandName Get-MgGroup -MockWith {
+                    return @{
+                        Id = 'FakeId'
+                        DisplayName = 'FakeStringValue'
+                    }
+                }
+
+                Mock -CommandName Invoke-GraphRequest -MockWith {
+                    return @{
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
+                                }
+                        }
+                    }
+                }
+
+                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
+                    return $null
+                }
+
+                Mock  -CommandName Get-MgPolicyRoleManagementPolicyAssignment -MockWith {
+                    return @(
+                        @{
+                            PolicyId = 'FakeId'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgPolicyRoleManagementPolicyRule -MockWith {
+                    return @{
+                        AdditionalProperties = @{
+                            isExpirationRequired = $true
+                        }
+                    }
+                }
+
+                Mock -CommandName Update-MgPolicyRoleManagementPolicyRule -MockWith {
+                    return @()
                 }
             }
 
@@ -392,7 +360,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 Set-TargetResource @testParams
-                Should -Invoke -CommandName Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -Exactly 1
+                Should -Invoke -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -Exactly 1
             }
         }
 
@@ -406,43 +374,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
                     return @{
-                        AdditionalProperties = @{
-                            groupId = "FakeStringValue"
-                            '@odata.type' = "#microsoft.graph.PrivilegedAccessGroupEligibilitySchedule"
-                            principalId = "FakeStringValue"
-                            memberType = "direct"
-                            accessId = "owner"
-                        }
-                        CreatedUsing = "FakeStringValue"
-                        Id = "FakeStringValue"
-                        ModifiedDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        ScheduleInfo = @{
-                            Recurrence = @{
-                                Pattern = @{
-                                    Index = "first"
-                                    FirstDayOfWeek = "sunday"
-                                    DayOfMonth = 25
-                                    Month = 25
-                                    DaysOfWeek = @("sunday")
-                                    Type = "daily"
-                                    Interval = 25
-                                }
-                                Range = @{
-                                    StartDate = "2023-01-01T00:00:00.0000000"
-                                    EndDate = "2023-01-01T00:00:00.0000000"
-                                    RecurrenceTimeZone = "FakeStringValue"
-                                    NumberOfOccurrences = 25
-                                    Type = "endDate"
+                        AccessId             = 'member'
+                        GroupDisplayName     = 'FakeStringValue'
+                        MemberType           = 'direct'
+                        PrincipalDisplayName = 'FakePrincipal'
+                        ScheduleInfo         = @(
+                            @{
+                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                                Expiration = @{
+                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    type = 'afterDateTime'
                                 }
                             }
-                            Expiration = @{
-                                EndDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                                Type = "notSpecified"
-                            }
-                            StartDateTime = "2023-01-01T00:00:00.0000000+01:00"
-                        }
-                        Status = "FakeStringValue"
-
+                        )
                     }
                 }
             }

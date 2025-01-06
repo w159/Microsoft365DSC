@@ -44,7 +44,7 @@ class MSFT_AADGroupEligibilitySchedule : OMI_BaseResource
 {
     [Write, Description("The identifier of the membership or ownership eligibility to the group that is governed by PIM. Required. The possible values are: owner, member. Supports $filter (eq)."), ValueMap{"owner","member","unknownFutureValue"}, Values{"owner","member","unknownFutureValue"}] String AccessId;
     [Write, Description("The identifier of the group representing the scope of the membership or ownership eligibility through PIM for groups. Required. Supports $filter (eq).")] String GroupId;
-    [Key, Description("Dsiaplyname of the group representing the scope of the membership or ownership eligibility through PIM for groups.")] String GroupDisplayName;
+    [Key, Description("Displayname of the group representing the scope of the membership or ownership eligibility through PIM for groups.")] String GroupDisplayName;
     [Write, Description("Indicates whether the assignment is derived from a group assignment. It can further imply whether the caller can manage the schedule. Required. The possible values are: direct, group, unknownFutureValue. Supports $filter (eq)."), ValueMap{"direct","group","unknownFutureValue"}, Values{"direct","group","unknownFutureValue"}] String MemberType;
     [Write, Description("The identifier of the principal whose membership or ownership eligibility is granted through PIM for groups. Required. Supports $filter (eq).")] String PrincipalId;
     [Write, Description("Principal type user or group"), ValueMap{"user","group"}, Values{"user","group"}] String PrincipalType;

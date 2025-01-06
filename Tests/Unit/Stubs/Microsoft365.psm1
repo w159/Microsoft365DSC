@@ -105439,15 +105439,15 @@ function Update-MgDeviceManagementDeviceConfigurationAssignment
 
 #endregion
 
-#region MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
-function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
+#region MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
+function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
 {
     [CmdletBinding()]
     param
     (
         [Parameter()]
         [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleRequestId,
+        $PrivilegedAccessGroupEligibilityScheduleId,
 
         [Parameter()]
         [PSObject]
@@ -105527,7 +105527,7 @@ function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
     )
 }
 
-function New-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
+function New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
 {
     [CmdletBinding()]
     param
@@ -105654,127 +105654,18 @@ function New-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
     )
 }
 
-function Remove-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
+function Get-MgPolicyRoleManagementPolicyAssignment
 {
     [CmdletBinding()]
     param
     (
         [Parameter()]
         [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleRequestId,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
+        $PolicyAssignmentId,
 
         [Parameter()]
         [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelineAppend,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $PassThru,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm
-    )
-}
-
-function Stop-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleRequestId,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelineAppend,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $PassThru,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm
-    )
-}
-
-#endregion
-
-#region MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
-function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleId,
+        $PolicyId,
 
         [Parameter()]
         [PSObject]
@@ -105854,168 +105745,14 @@ function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
     )
 }
 
-function New-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [PSObject]
-        $BodyParameter,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.String]
-        $AccessId,
-
-        [Parameter()]
-        [System.Collections.Hashtable]
-        $AdditionalProperties,
-
-        [Parameter()]
-        [System.DateTime]
-        $CreatedDateTime,
-
-        [Parameter()]
-        [System.String]
-        $CreatedUsing,
-
-        [Parameter()]
-        [PSObject]
-        $Group,
-
-        [Parameter()]
-        [System.String]
-        $GroupId,
-
-        [Parameter()]
-        [System.String]
-        $Id,
-
-        [Parameter()]
-        [System.String]
-        $MemberType,
-
-        [Parameter()]
-        [System.DateTime]
-        $ModifiedDateTime,
-
-        [Parameter()]
-        [PSObject]
-        $Principal,
-
-        [Parameter()]
-        [System.String]
-        $PrincipalId,
-
-        [Parameter()]
-        [PSObject]
-        $ScheduleInfo,
-
-        [Parameter()]
-        [System.String]
-        $Status,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelineAppend,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm
-    )
-}
-
-function Remove-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
+function Update-MgPolicyRoleManagementPolicyRule
 {
     [CmdletBinding()]
     param
     (
         [Parameter()]
         [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleId,
-
-        [Parameter()]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.String]
-        $ResponseHeadersVariable,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Break,
-
-        [Parameter()]
-        [System.Collections.IDictionary]
-        $Headers,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelineAppend,
-
-        [Parameter()]
-        [PSObject[]]
-        $HttpPipelinePrepend,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $PassThru,
-
-        [Parameter()]
-        [System.Uri]
-        $Proxy,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ProxyCredential,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $ProxyUseDefaultCredentials,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Confirm
-    )
-}
-
-function Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $PrivilegedAccessGroupEligibilityScheduleId,
+        $PolicyRuleId,
 
         [Parameter()]
         [PSObject]
@@ -106030,28 +105767,8 @@ function Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
         $ResponseHeadersVariable,
 
         [Parameter()]
-        [System.String]
-        $AccessId,
-
-        [Parameter()]
         [System.Collections.Hashtable]
         $AdditionalProperties,
-
-        [Parameter()]
-        [System.DateTime]
-        $CreatedDateTime,
-
-        [Parameter()]
-        [System.String]
-        $CreatedUsing,
-
-        [Parameter()]
-        [PSObject]
-        $Group,
-
-        [Parameter()]
-        [System.String]
-        $GroupId,
 
         [Parameter()]
         [System.String]
@@ -106059,27 +105776,39 @@ function Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
 
         [Parameter()]
         [System.String]
-        $MemberType,
-
-        [Parameter()]
-        [System.DateTime]
-        $ModifiedDateTime,
-
-        [Parameter()]
-        [PSObject]
-        $Principal,
+        $Name,
 
         [Parameter()]
         [System.String]
-        $PrincipalId,
+        $PolicyId,
 
         [Parameter()]
-        [PSObject]
-        $ScheduleInfo,
+        [System.String]
+        $PolicyRuleType,
+
+        [Parameter()]
+        [System.String]
+        $PolicyType,
+
+        [Parameter()]
+        [System.String]
+        $Priority,
+
+        [Parameter()]
+        [System.String]
+        $RuleType,
 
         [Parameter()]
         [System.String]
         $Status,
+
+        [Parameter()]
+        [System.String]
+        $TargetType,
+
+        [Parameter()]
+        [System.String]
+        $TargetValue,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -106114,6 +105843,5 @@ function Update-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
         $Confirm
     )
 }
-
 #endregion
 
