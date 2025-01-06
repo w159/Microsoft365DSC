@@ -14,7 +14,6 @@
 * MISC
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
-
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
@@ -34,6 +33,8 @@
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
   * Updated MSCloudLoginAssistant to version 1.1.31.
+* IntuneAppProtectionPolicyiOS
+  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
 
 # 1.24.1211.1
 

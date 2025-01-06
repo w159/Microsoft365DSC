@@ -15,7 +15,73 @@ function Get-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+#my stuff
+        [Parameter()]
+        [System.Boolean]
+        $AllowWidgetContentSync,
 
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfAccountIsClockedOut,
+
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfUnableToAuthenticateUser,
+
+        [Parameter()]
+        [ValidateSet('selectedPublicApps', 'allCoreMicrosoftApps', 'allMicrosoftApps','allApps')]
+        [System.String]
+        $appGroupType,
+
+        [Parameter()]
+        [System.Boolean]
+        $blockDataIngestionIntoOrganizationDocuments,
+
+        [Parameter()]
+        [System.String]
+        $customDialerAppProtocol,
+
+        [Parameter()]
+        [System.UInt32]
+        $deployedAppCount,
+
+        [Parameter()]
+        [ValidateSet('allApps','managedApps','customApp','blocked')]
+        [System.String]
+        $dialerRestrictionLevel,
+
+        [Parameter()]
+        [System.String[]]
+        $exemptedUniversalLinks,
+
+        [Parameter()]
+        [System.String]
+        $gracePeriodToBlockAppsDuringOffClockHours,
+
+        [Parameter()]
+        [System.Boolean]
+        $isAssignedisAssigned,
+
+        [Parameter()]
+        [System.String[]]
+        $managedUniversalLinks,
+
+        [Parameter()]
+        [ValidateSet('notConfigured', 'secured', 'low', 'medium', 'high')]
+        [System.String]
+        $maximumAllowedDeviceThreatLevel,
+
+        [Parameter()]
+        [System.String]
+        $maximumRequiredOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $minimumRequiredOsVersion,
+
+#my stuff
         [Parameter()]
         [System.String]
         $PeriodOfflineBeforeAccessCheck,
@@ -366,6 +432,24 @@ function Get-TargetResource
             Identity                                       = $policy.id
             DisplayName                                    = $policy.DisplayName
             Description                                    = $policy.Description
+
+            AllowWidgetContentSync                         = $policy.AllowWidgetContentSync
+            appActionIfAccountIsClockedOut                 = $policy.appActionIfAccountIsClockedOut
+            appActionIfUnableToAuthenticateUser            = $policy.appActionIfUnableToAuthenticateUser
+            appGroupType                                   = $policy.appGroupType
+            blockDataIngestionIntoOrganizationDocuments    = $policy.blockDataIngestionIntoOrganizationDocuments
+            customDialerAppProtocol                        = $policy.customDialerAppProtocol
+            deployedAppCount                               = $policy.deployedAppCount
+            #DeploymentSummary                             = $DeploymentSummaryArray
+            dialerRestrictionLevel                         = $policy.dialerRestrictionLevel
+            exemptedUniversalLinks                         = $policy.exemptedUniversalLinks
+            gracePeriodToBlockAppsDuringOffClockHours      = $policy.gracePeriodToBlockAppsDuringOffClockHours #duration datatype?! handling as string - https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/main/api-reference/beta/resources/intune-mam-iosmanagedappprotection.md
+            isAssigned                                     = $policy.isAssigned
+            managedUniversalLinks                          = $policy.managedUniversalLinks
+            maximumAllowedDeviceThreatLevel                = $policy.maximumAllowedDeviceThreatLevel
+            maximumRequiredOsVersion                       = $policy.maximumRequiredOsVersion
+            minimumRequiredOsVersion                       = $policy.minimumRequiredOsVersion
+
             PeriodOfflineBeforeAccessCheck                 = $myPeriodOfflineBeforeAccessCheck
             PeriodOnlineBeforeAccessCheck                  = $myPeriodOnlineBeforeAccessCheck
             AllowedInboundDataTransferSources              = [String]$policy.AllowedInboundDataTransferSources
@@ -460,6 +544,10 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowWidgetContentSync
 
         [Parameter()]
         [System.String]
@@ -846,6 +934,10 @@ function Test-TargetResource
         $Description,
 
         [Parameter()]
+        [System.Boolean]
+        $AllowWidgetContentSync
+
+        [Parameter()]
         [System.String]
         $PeriodOfflineBeforeAccessCheck,
 
@@ -966,22 +1058,18 @@ function Test-TargetResource
         [System.String]
         $AppDataEncryptionType,
 
-
         [Parameter()]
         [System.String]
         $MinimumWipeOSVersion,
-
 
         [Parameter()]
         [System.String]
         $MinimumWipeAppVersion,
 
-
         [Parameter()]
         [ValidateSet('block', 'wipe', 'warn')]
         [System.String]
         $AppActionIfDeviceComplianceRequired,
-
 
         [Parameter()]
         [ValidateSet('block', 'wipe', 'warn')]
@@ -992,11 +1080,9 @@ function Test-TargetResource
         [System.String]
         $PinRequiredInsteadOfBiometricTimeout,
 
-
         [Parameter()]
         [System.Uint32]
         $AllowedOutboundClipboardSharingExceptionLength,
-
 
         [Parameter()]
         [ValidateSet('allow', 'blockOrganizationalData', 'block')]
@@ -1020,22 +1106,18 @@ function Test-TargetResource
         [System.String[]]
         $AllowedIosDeviceModels,
 
-
         [Parameter()]
         [ValidateSet('block', 'wipe', 'warn')]
         [System.String]
         $AppActionIfIosDeviceModelNotAllowed,
 
-
         [Parameter()]
         [System.Boolean]
         $FilterOpenInToOnlyManagedApps,
 
-
         [Parameter()]
         [System.Boolean]
         $DisableProtectionOfManagedOutboundOpenInData,
-
 
         [Parameter()]
         [System.Boolean]

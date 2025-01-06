@@ -4,6 +4,23 @@ class MSFT_IntuneAppProtectionPolicyiOS : OMI_BaseResource
     [Key, Description("Display name of the iOS App Protection Policy.")] String DisplayName;
     [Write, Description("Identity of the iOS App Protection Policy.")] String Identity;
     [Write, Description("Description of the iOS App Protection Policy.")] String Description;
+
+    [Write, Description("Indicates if content sync for widgets is allowed for iOS on App Protection Policies.")] Boolean AllowWidgetContentSync;
+    [Write, Description("Defines a managed app behavior, either block or warn, if the user is clocked out (non-working time)."), ValueMap{"block","wipe","warn","blockWhenSettingIsSupported"}, Values{"block","wipe","warn","blockWhenSettingIsSupported"}] String appActionIfAccountIsClockedOut;
+    [Write, Description("If set, it will specify what action to take in the case where the user is unable to checkin because their authentication token is invalid. This happens when the user is deleted or disabled in AAD. ."), ValueMap{"block","wipe","warn","blockWhenSettingIsSupported"}, Values{"block","wipe","warn","blockWhenSettingIsSupported"}] String appActionIfUnableToAuthenticateUser;
+    [Write, Description("Public Apps selection: group or individual Inherited from targetedManagedAppProtection."), ValueMap{"selectedPublicApps","allCoreMicrosoftApps","allMicrosoftApps","allApps"}, Values{"selectedPublicApps","allCoreMicrosoftApps","allMicrosoftApps","allApps"}] String appGroupType;
+    [Write, Description("Indicates whether a user can bring data into org documents.")] boolean blockDataIngestionIntoOrganizationDocuments;
+    [Write, Description("Protocol of a custom dialer app to click-to-open a phone number on iOS, for example, skype:.")] String customDialerAppProtocol;
+    [Write, Description("Count of apps to which the current policy is deployed.")] UInt32 deployedAppCount;
+    [Write, Description("The classes of dialer apps that are allowed to click-to-open a phone number."), ValueMap{"allApps","managedApps","customApp","blocked"}, Values{"allApps","managedApps","customApp","blocked"}] String dialerRestrictionLevel;
+    [Write, Description("A list of custom urls that are allowed to invocate an unmanaged app.")] String ExemptedUniversalLinks[]; 
+    [Write, Description("A grace period before blocking app access during off clock hours.")] String gracePeriodToBlockAppsDuringOffClockHours; 
+    [Write, Description("Indicates if the policy is deployed to any inclusion groups or not.")] Boolean isAssigned;
+    [Write, Description("A list of custom urls that are allowed to invocate a managed app.")] String managedUniversalLinks[];
+    [Write, Description("Maximum allowed device threat level, as reported by the MTD app Inherited from managedAppProtection."), ValueMap{"notConfigured","secured","low","medium","high"}, Values{"notConfigured","secured","low","medium","high"}] String maximumAllowedDeviceThreatLevel;
+    [Write, Description("Versions bigger than the specified version will block the managed app from accessing company data. Inherited from managedAppProtection.")] String maximumRequiredOsVersion;
+    [Write, Description("Versions less than the specified version will block the managed app from accessing company data. Inherited from managedAppProtection.")] String minimumRequiredOsVersion;
+
     [Write, Description("The period after which access is checked when the device is not connected to the internet.")] String PeriodOfflineBeforeAccessCheck;
     [Write, Description("The period after which access is checked when the device is connected to the internet.")] String PeriodOnlineBeforeAccessCheck;
     [Write, Description("Sources from which data is allowed to be transferred. Possible values are: allApps, managedApps, none."), ValueMap{"allApps","managedApps", "none"}, Values{"allApps","managedApps", "none"}] String AllowedInboundDataTransferSources;
