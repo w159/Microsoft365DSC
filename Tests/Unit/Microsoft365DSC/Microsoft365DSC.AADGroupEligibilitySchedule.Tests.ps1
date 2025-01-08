@@ -202,9 +202,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MemberType           = 'direct'
                         PrincipalDisplayName = 'FakePrincipal'
                         ScheduleInfo         = @{
-                            StartDateTime = '2025-01-23T08:59:00.000Z'
+                            StartDateTime = '2025-01-23T08:59:00.0000000+00:00'
                                 Expiration = @{
-                                    EndDateTime = '2025-12-23T08:59:00.000Z'
+                                    EndDateTime = '2025-12-23T08:59:00.0000000+00:00'
                                     type = 'afterDateTime'
                                 }
                         }
