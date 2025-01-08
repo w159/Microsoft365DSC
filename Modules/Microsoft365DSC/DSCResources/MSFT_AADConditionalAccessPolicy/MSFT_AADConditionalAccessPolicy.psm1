@@ -2103,7 +2103,7 @@ function Test-TargetResource
 
         [Parameter()]
         [System.Boolean]
-        $disableResilienceDefaults,
+        $DisableResilienceDefaultsIsEnabled,
 
         [Parameter()]
         [System.String]
