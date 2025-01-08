@@ -12,8 +12,12 @@
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
 * MISC
-  * DEFENDER
-    * Added support for the UseBasicParsing paramter for REST calls.
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
+
+# 1.24.1218.1
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
