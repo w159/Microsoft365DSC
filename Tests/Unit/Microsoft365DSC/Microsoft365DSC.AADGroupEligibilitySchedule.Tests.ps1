@@ -74,9 +74,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MemberType = "direct"
                     PrincipalDisplayName = "FakePrincipal"
                     ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            startDateTime = '2025-01-23T08:59:00.0000000+00:00'
                             Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '23/12/2025 08:59:00 +00:00'
                                     Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
                     Ensure = "Present"
@@ -111,9 +111,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MemberType = "direct"
                     PrincipalDisplayName = "FakePrincipal"
                     ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            startDateTime = '2025-01-23T08:59:00.0000000+00:00'
                             Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '23/12/2025 08:59:00 +00:00'
                                     Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
                     Ensure = "Absent"
@@ -121,20 +121,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
+                    return $null
+                }
+
+                mock -CommandName Get-MgGroup -MockWith {
                     return @{
-                        AccessId             = 'member'
-                        GroupDisplayName     = 'FakeStringValue'
-                        MemberType           = 'direct'
-                        PrincipalDisplayName = 'FakePrincipal'
-                        ScheduleInfo         = @(
-                            @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
-                                Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
-                                    type = 'afterDateTime'
-                                }
-                            }
-                        )
+                        Id = 'FakeId'
+                        DisplayName = 'FakeStringValue'
                     }
                 }
 
@@ -148,20 +141,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         GroupDisplayName     = 'FakeStringValue'
                         MemberType           = 'direct'
                         PrincipalDisplayName = 'FakePrincipal'
-                        ScheduleInfo         = @(
-                            @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                        ScheduleInfo         = @{
+                            StartDateTime = '2025-01-23T08:59:00.000Z'
                                 Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '2025-12-23T08:59:00.000Z'
                                     type = 'afterDateTime'
                                 }
-                            }
-                        )
+                        }
                     }
                 }
-                Mock -CommandName New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest -MockWith {
-                    return $null
-                }
+
             }
 
             It 'Should return Values from the Get method' {
@@ -186,9 +175,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MemberType = "direct"
                     PrincipalDisplayName = "FakePrincipal"
                     ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            startDateTime = '2025-01-23T08:59:00.0000000+00:00'
                             Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '23/12/2025 08:59:00 +00:00'
                                     Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
                     Ensure = "Present"
@@ -196,21 +185,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
-                    return @{
-                        AccessId             = 'member'
-                        GroupDisplayName     = 'FakeStringValue'
-                        MemberType           = 'direct'
-                        PrincipalDisplayName = 'FakePrincipal'
-                        ScheduleInfo         = @(
-                            @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
-                                Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
-                                    type = 'afterDateTime'
-                                }
-                            }
-                        )
-                    }
+                    return $null
                 }
 
                 mock -CommandName Get-MgGroup -MockWith {
@@ -227,9 +202,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MemberType           = 'direct'
                         PrincipalDisplayName = 'FakePrincipal'
                         ScheduleInfo         = @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            StartDateTime = '2025-01-23T08:59:00.000Z'
                                 Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '2025-12-23T08:59:00.000Z'
                                     type = 'afterDateTime'
                                 }
                         }
@@ -275,9 +250,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MemberType = "direct"
                     PrincipalDisplayName = "FakePrincipal"
                     ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            startDateTime = '2025-01-23T08:59:00.0000000+00:00'
                             Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '23/12/2025 08:59:00 +00:00'
                                     Type = 'afterDateTime'} -ClientOnly)
                             } -ClientOnly)
                     Ensure = "Present"
@@ -285,21 +260,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
-                    return @{
-                        AccessId             = 'member'
-                        GroupDisplayName     = 'FakeStringValue'
-                        MemberType           = 'direct'
-                        PrincipalDisplayName = 'FakePrincipal'
-                        ScheduleInfo         = @(
-                            @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
-                                Expiration = @{
-                                    EndDateTime = '12/24/2025 8:59:00 AM +00:00'
-                                    type = 'afterDateTime'
-                                }
-                            }
-                        )
-                    }
+                    return $null
                 }
 
                 mock -CommandName Get-MgGroup -MockWith {
@@ -316,9 +277,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MemberType           = 'direct'
                         PrincipalDisplayName = 'FakePrincipal'
                         ScheduleInfo         = @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
+                            StartDateTime = '2025-01-23T08:59:00.000Z'
                                 Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
+                                    EndDateTime = '2025-12-22T08:59:00.000Z'
                                     type = 'afterDateTime'
                                 }
                         }
@@ -372,21 +333,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
 
+                mock -CommandName Get-MgGroup -MockWith {
+                    return @{
+                        Id = 'FakeId'
+                        DisplayName = 'FakeStringValue'
+                    }
+                }
+
                 Mock -CommandName Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -MockWith {
                     return @{
-                        AccessId             = 'member'
-                        GroupDisplayName     = 'FakeStringValue'
-                        MemberType           = 'direct'
-                        PrincipalDisplayName = 'FakePrincipal'
-                        ScheduleInfo         = @(
-                            @{
-                            StartDateTime = '2025-01-23T08:59:28.1200000+00:00'
-                                Expiration = @{
-                                    EndDateTime = '12/23/2025 8:59:00 AM +00:00'
-                                    type = 'afterDateTime'
-                                }
-                            }
-                        )
+                        Id             = 'FakeStringValue'
                     }
                 }
             }
