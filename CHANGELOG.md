@@ -1,8 +1,23 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* AADAuthenticationRequirement
+  * Changed Export logic to extract instances from all users.
 * AADConditionalAccessPolicy
   * Add disableResilienceDefaults
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Fixed the primary key of the resource.
+    FIXES [#5523](https://github.com/microsoft/Microsoft365DSC/issues/5523)
+* AADRoleEligibilityScheduleRequest
+  * Fixed error when extracting an entry with a deleted principal.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Fixed the Data Type export.
+* MISC
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
 
 # 1.24.1218.1
 
@@ -11,11 +26,11 @@
   * Fixes comparison issue for permissions.
 * EXOTransportRule
   * Fixes issue extracting arrays in Get-TargetResource.
-    * FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
+    FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
 * TeamsMeetingPolicy
   * Adds support for additional Copilot setting value.
-    * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
-  * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
+    FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
+    FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
   * Reset only necessary authentication context.
