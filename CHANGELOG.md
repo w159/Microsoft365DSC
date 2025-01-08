@@ -2,18 +2,58 @@
 
 # UNRELEASED
 
+* AADAuthenticationRequirement
+  * Changed Export logic to extract instances from all users.
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Fixed the primary key of the resource.
+    FIXES [#5523](https://github.com/microsoft/Microsoft365DSC/issues/5523)
+* AADRoleEligibilityScheduleRequest
+  * Fixed error when extracting an entry with a deleted principal.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Fixed the Data Type export.
+* MISC
+  * DEFENDER
+    * Added support for the UseBasicParsing paramter for REST calls.
+
+* AADApplication
+  * Added support for Oauth2PermissionScopes.
+  * Fixes comparison issue for permissions.
+* EXOTransportRule
+  * Fixes issue extracting arrays in Get-TargetResource.
+    * FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
+* TeamsMeetingPolicy
+  * Adds support for additional Copilot setting value.
+    * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
+  * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
+* MISC
+  * Fixed the Fabric web request to use basic parsing.
+  * Reset only necessary authentication context.
+* M365DSCUtil
+  * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
+    FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
+* DEPENDENCIES
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
+  * Updated MSCloudLoginAssistant to version 1.1.31.
+
 # 1.24.1211.1
 
 * AADApplication
   * Changed logic to remove all permissions when an empty array is specified.
     FIXES [#5534](https://github.com/microsoft/Microsoft365DSC/issues/5534)
+  * Changed logic to update AppRoles by first disabling the entry.
+    FIXES [#5524](https://github.com/microsoft/Microsoft365DSC/issues/5524)
 * AADFeatureRolloutPolicy
   * Fixed policy retrieval
     FIXES [#5521](https://github.com/microsoft/Microsoft365DSC/issues/5521)
+* AADRoleEligibilityScheduleRequest
+  * Changed logic to retrieve instance by Service Principal with custom role.
+    FIXES [#5532](https://github.com/microsoft/Microsoft365DSC/issues/5532)
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Fixing issue with the way the QrCodeImage property was exported and handled.
 * IntuneFirewallPolicyWindows10
   * Fix export of properties that appear multiple times in subsections.
+* IntuneSecurityBaselineWindows10
+  * Initial release.
 * TeamsGroupPolicyAssignment
   * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
 * M365DSCDRGUtil
