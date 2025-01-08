@@ -5,6 +5,7 @@ class MSFT_IntuneAppProtectionPolicyiOS : OMI_BaseResource
     [Write, Description("Identity of the iOS App Protection Policy.")] String Identity;
     [Write, Description("Description of the iOS App Protection Policy.")] String Description;
 
+    [Write, Description("Data storage locations where a user may store managed data. Inherited from managedAppProtection.")] String AllowedDataIngestionLocations[];
     [Write, Description("Indicates if content sync for widgets is allowed for iOS on App Protection Policies.")] Boolean AllowWidgetContentSync;
     [Write, Description("Defines a managed app behavior, either block or warn, if the user is clocked out (non-working time)."), ValueMap{"block","wipe","warn","blockWhenSettingIsSupported"}, Values{"block","wipe","warn","blockWhenSettingIsSupported"}] String appActionIfAccountIsClockedOut;
     [Write, Description("If set, it will specify what action to take in the case where the user is unable to checkin because their authentication token is invalid. This happens when the user is deleted or disabled in AAD. ."), ValueMap{"block","wipe","warn","blockWhenSettingIsSupported"}, Values{"block","wipe","warn","blockWhenSettingIsSupported"}] String appActionIfUnableToAuthenticateUser;

@@ -16,6 +16,11 @@ function Get-TargetResource
         [System.String]
         $Description,
 #my stuff
+
+        [Parameter()]
+        [System.String[]]
+        $AllowedDataIngestionLocations,
+
         [Parameter()]
         [System.Boolean]
         $AllowWidgetContentSync,
@@ -474,6 +479,7 @@ function Get-TargetResource
             DisplayName                                    = $policy.DisplayName
             Description                                    = $policy.Description
 
+            AllowedDataIngestionLocations                  = [String[]]$policy.AllowedDataIngestionLocations
             AllowWidgetContentSync                         = $policy.AllowWidgetContentSync
             appActionIfAccountIsClockedOut                 = [string]$policy.appActionIfAccountIsClockedOut
             appActionIfUnableToAuthenticateUser            = [string]$policy.appActionIfUnableToAuthenticateUser
@@ -594,6 +600,10 @@ function Set-TargetResource
         [System.String]
         $Description,
 #my stuff
+        [Parameter()]
+        [System.String[]]
+        $AllowedDataIngestionLocations,
+
         [Parameter()]
         [System.Boolean]
         $AllowWidgetContentSync,
@@ -1102,6 +1112,11 @@ function Test-TargetResource
         [System.String]
         $Description,
 #my stuff
+
+        [Parameter()]
+        [System.String[]]
+        $AllowedDataIngestionLocations,
+
         [Parameter()]
         [System.Boolean]
         $AllowWidgetContentSync,
