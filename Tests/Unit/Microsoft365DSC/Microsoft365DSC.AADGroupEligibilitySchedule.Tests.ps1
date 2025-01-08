@@ -175,10 +175,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MemberType = "direct"
                     PrincipalDisplayName = "FakePrincipal"
                     ScheduleInfo         = (New-CimInstance -ClassName MSFT_MicrosoftGraphRequestSchedule -Property @{
-                            startDateTime = '2025-01-23T08:59:00.0000000+00:00'
                             Expiration = (New-CimInstance -ClassName MSFT_MicrosoftGraphExpirationPattern -Property @{
-                                    EndDateTime = '23/12/2025 08:59:00 +00:00'
-                                    Type = 'afterDateTime'} -ClientOnly)
+                                    Type = 'noExpiration'} -ClientOnly)
                             } -ClientOnly)
                     Ensure = "Present"
                     Credential = $Credential;
@@ -202,10 +200,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MemberType           = 'direct'
                         PrincipalDisplayName = 'FakePrincipal'
                         ScheduleInfo         = @{
-                            StartDateTime = '2025-01-23T08:59:00.0000000+00:00'
                                 Expiration = @{
-                                    EndDateTime = '2025-12-23T08:59:00.0000000+00:00'
-                                    type = 'afterDateTime'
+                                    type = 'noExpiration'
                                 }
                         }
                     }
