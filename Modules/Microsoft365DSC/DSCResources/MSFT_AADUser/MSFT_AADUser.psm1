@@ -1103,7 +1103,7 @@ function Export-TargetResource
                         -Results $Results `
                         -Credential $Credential
 
-                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Password' -IsCIMObject $true
+                    $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Password'
                     $dscContent.Append($currentDSCBlock) | Out-Null
 
                     Save-M365DSCPartialExport -Content $currentDSCBlock `

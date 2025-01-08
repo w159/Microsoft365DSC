@@ -649,7 +649,7 @@ function Export-TargetResource
 
             if ($Results.EndPointConfiguration -ne $null)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EndPointConfiguration' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EndPointConfiguration'
             }
 
             if ($Results.ClaimsForTokenConfiguration -ne $null)

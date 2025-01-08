@@ -830,7 +830,7 @@ function Export-TargetResource
 
             if ($Results.IdentitySources)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'IdentitySources' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'IdentitySources' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock

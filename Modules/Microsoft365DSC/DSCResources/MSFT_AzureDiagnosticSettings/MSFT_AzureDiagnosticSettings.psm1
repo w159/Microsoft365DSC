@@ -503,7 +503,12 @@ function Export-TargetResource
 
             if ($Results.Categories)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Categories' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.Categories.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Categories' -IsCIMArray:$isCIMArray
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `

@@ -2,28 +2,44 @@
 
 # UNRELEASED
 
+* AADAuthenticationRequirement
+  * Changed Export logic to extract instances from all users.
+* AADOrganizationCertificateBasedAuthConfiguration
+  * Fixed the primary key of the resource.
+    FIXES [#5523](https://github.com/microsoft/Microsoft365DSC/issues/5523)
+* AADRoleEligibilityScheduleRequest
+  * Fixed error when extracting an entry with a deleted principal.
+* DefenderDeviceAuthenticatedScanDefinition
+  * Fixed the Data Type export.
+* IntuneVPNConfigurationPolicyAndroidWork
+  * Initial release
+* MISC
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
+
+# 1.24.1218.1
+
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
-* IntuneVPNConfigurationPolicyAndroidWork
-  * Initial release
+* EXOTransportRule
+  * Fixes issue extracting arrays in Get-TargetResource.
+    * FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
 * TeamsMeetingPolicy
   * Adds support for additional Copilot setting value.
     * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
   * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
-  * Fixed an issue where the export does not convert tenant name into
-    generic $OrganizationName variable correctly.
-  * Fixed an issue where exports were not processing CIM instances correctly.
   * Reset only necessary authentication context.
 * M365DSCUtil
   * Update `Get-M365DSCWorkloadsListFromResourceNames` function for more input types.
     FIXES [#5525](https://github.com/microsoft/Microsoft365DSC/issues/5525)
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.202.
-  * Updated MSCloudLoginAssistant to version 1.1.30.
-  * Updated ReverseDSC to version 2.0.0.24.
+  * Updated MSCloudLoginAssistant to version 1.1.31.
 
 # 1.24.1211.1
 

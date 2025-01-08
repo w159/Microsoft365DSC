@@ -899,15 +899,15 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.DetectionScriptParameters)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DetectionScriptParameters' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DetectionScriptParameters' -IsCIMArray:$True
             }
             if ($Results.RemediationScriptParameters)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'RemediationScriptParameters' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'RemediationScriptParameters' -IsCIMArray:$True
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = (Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true).Replace("''", "'")
+                $currentDSCBlock = (Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true).Replace("''", "'")
                 $currentDSCBlock = [Regex]::Replace($currentDSCBlock, "Assignment = '\r\n                ", 'Assignment = ')
                 $currentDSCBlock = $currentDSCBlock.Replace("RunSchedule = '", 'RunSchedule = ').Replace("}'", '}')
                 $currentDSCBlock = [Regex]::Replace($currentDSCBlock, "\r\n            '", '')

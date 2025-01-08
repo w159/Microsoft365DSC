@@ -684,7 +684,7 @@ function Export-TargetResource
 
             if ($Results.QrCodeImage)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'QrCodeImage' -IsCIMObject $false
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'QrCodeImage' -IsCIMArray:$false
 
             }
 

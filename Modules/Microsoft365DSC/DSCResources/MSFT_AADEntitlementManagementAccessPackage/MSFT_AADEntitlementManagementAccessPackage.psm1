@@ -985,7 +985,7 @@ function Export-TargetResource
 
             if ($null -ne $Results.AccessPackageResourceRoleScopes)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AccessPackageResourceRoleScopes' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AccessPackageResourceRoleScopes' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock
