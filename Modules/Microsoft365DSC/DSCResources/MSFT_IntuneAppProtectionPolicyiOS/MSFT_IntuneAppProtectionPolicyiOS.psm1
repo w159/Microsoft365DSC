@@ -56,13 +56,13 @@ function Get-TargetResource
         [System.String[]]
         $exemptedUniversalLinks,
 
-        [Parameter()]
-        [System.String]
-        $gracePeriodToBlockAppsDuringOffClockHours,
+        #[Parameter()]
+        #[System.String]
+        #$gracePeriodToBlockAppsDuringOffClockHours,
 
         [Parameter()]
         [System.Boolean]
-        $isAssignedisAssigned,
+        $isAssigned,
 
         [Parameter()]
         [System.String[]]
@@ -79,7 +79,42 @@ function Get-TargetResource
 
         [Parameter()]
         [System.String]
-        $minimumRequiredOsVersion,
+        $maximumWarningOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $maximumWipeOsVersion,
+
+        [Parameter()]
+        [System.String]   
+        $messagingRedirectAppUrlScheme,
+
+        [Parameter()]
+        [System.String]
+        $minimumWarningSdkVersion,
+
+        [Parameter()]
+        [ValidateSet('defenderOverThirdPartyPartner','thirdPartyPartnerOverDefender','unknownFutureValue')]
+        [System.String]
+        $mobileThreatDefensePartnerPriority,
+
+        [Parameter()]
+        [ValidateSet('block','wipe','warn','blockWhenSettingIsSupported')]
+        [System.String]
+        $mobileThreatDefenseRemediationAction,
+
+        [Parameter()]
+        [System.UInt32]
+        $previousPinBlockCount,
+
+        [Parameter()]
+        [ValidateSet('anyApp','anyManagedApp','specificApps','blocked')]
+        [System.String]
+        $protectedMessagingRedirectAppType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ThirdPartyKeyboardsBlocked,
 
 #my stuff
         [Parameter()]
@@ -434,21 +469,29 @@ function Get-TargetResource
             Description                                    = $policy.Description
 
             AllowWidgetContentSync                         = $policy.AllowWidgetContentSync
-            appActionIfAccountIsClockedOut                 = $policy.appActionIfAccountIsClockedOut
-            appActionIfUnableToAuthenticateUser            = $policy.appActionIfUnableToAuthenticateUser
-            appGroupType                                   = $policy.appGroupType
+            appActionIfAccountIsClockedOut                 = [string]$policy.appActionIfAccountIsClockedOut
+            appActionIfUnableToAuthenticateUser            = [string]$policy.appActionIfUnableToAuthenticateUser
+            appGroupType                                   = [string]$policy.appGroupType
             blockDataIngestionIntoOrganizationDocuments    = $policy.blockDataIngestionIntoOrganizationDocuments
-            customDialerAppProtocol                        = $policy.customDialerAppProtocol
+            customDialerAppProtocol                        = [string]$policy.customDialerAppProtocol
             deployedAppCount                               = $policy.deployedAppCount
             #DeploymentSummary                             = $DeploymentSummaryArray
-            dialerRestrictionLevel                         = $policy.dialerRestrictionLevel
+            dialerRestrictionLevel                         = [string]$policy.dialerRestrictionLevel
             exemptedUniversalLinks                         = $policy.exemptedUniversalLinks
-            gracePeriodToBlockAppsDuringOffClockHours      = $policy.gracePeriodToBlockAppsDuringOffClockHours #duration datatype?! handling as string - https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/main/api-reference/beta/resources/intune-mam-iosmanagedappprotection.md
+            #gracePeriodToBlockAppsDuringOffClockHours      = [string]$policy.gracePeriodToBlockAppsDuringOffClockHours #duration datatype?! handling as string - https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/main/api-reference/beta/resources/intune-mam-iosmanagedappprotection.md
             isAssigned                                     = $policy.isAssigned
             managedUniversalLinks                          = $policy.managedUniversalLinks
-            maximumAllowedDeviceThreatLevel                = $policy.maximumAllowedDeviceThreatLevel
-            maximumRequiredOsVersion                       = $policy.maximumRequiredOsVersion
-            minimumRequiredOsVersion                       = $policy.minimumRequiredOsVersion
+            maximumAllowedDeviceThreatLevel                = [string]$policy.maximumAllowedDeviceThreatLevel
+            maximumRequiredOsVersion                       = [string]$policy.maximumRequiredOsVersion
+            maximumWarningOsVersion                        = [string]$policy.maximumWarningOsVersion     
+            maximumWipeOsVersion                           = [string]$policy.maximumWipeOsVersion
+            messagingRedirectAppUrlScheme                  = [string]$policy.messagingRedirectAppUrlScheme
+            minimumWarningSdkVersion                       = [string]$policy.minimumWarningSdkVersion
+            mobileThreatDefensePartnerPriority             = [string]$policy.mobileThreatDefensePartnerPriority
+            mobileThreatDefenseRemediationAction           = [string]$policy.mobileThreatDefenseRemediationAction
+            previousPinBlockCount                          = $policy.previousPinBlockCount
+            protectedMessagingRedirectAppType              = [string]$policy.protectedMessagingRedirectAppType     
+            thirdPartyKeyboardsBlocked                     = $policy.thirdPartyKeyboardsBlocked          
 
             PeriodOfflineBeforeAccessCheck                 = $myPeriodOfflineBeforeAccessCheck
             PeriodOnlineBeforeAccessCheck                  = $myPeriodOnlineBeforeAccessCheck
@@ -544,11 +587,108 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+#my stuff
+        [Parameter()]
+        [System.Boolean]
+        $AllowWidgetContentSync,
+
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfAccountIsClockedOut,
+
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfUnableToAuthenticateUser,
+
+        [Parameter()]
+        [ValidateSet('selectedPublicApps', 'allCoreMicrosoftApps', 'allMicrosoftApps','allApps')]
+        [System.String]
+        $appGroupType,
 
         [Parameter()]
         [System.Boolean]
-        $AllowWidgetContentSync
+        $blockDataIngestionIntoOrganizationDocuments,
 
+        [Parameter()]
+        [System.String]
+        $customDialerAppProtocol,
+
+        [Parameter()]
+        [System.UInt32]
+        $deployedAppCount,
+
+        [Parameter()]
+        [ValidateSet('allApps','managedApps','customApp','blocked')]
+        [System.String]
+        $dialerRestrictionLevel,
+
+        [Parameter()]
+        [System.String[]]
+        $exemptedUniversalLinks,
+
+        #[Parameter()]
+        #[System.String]
+        #$gracePeriodToBlockAppsDuringOffClockHours,
+
+        [Parameter()]
+        [System.Boolean]
+        $isAssigned,
+
+        [Parameter()]
+        [System.String[]]
+        $managedUniversalLinks,
+
+        [Parameter()]
+        [ValidateSet('notConfigured', 'secured', 'low', 'medium', 'high')]
+        [System.String]
+        $maximumAllowedDeviceThreatLevel,
+
+        [Parameter()]
+        [System.String]
+        $maximumRequiredOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $maximumWarningOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $maximumWipeOsVersion,
+
+        [Parameter()]
+        [System.String]   
+        $messagingRedirectAppUrlScheme,
+
+        [Parameter()]
+        [System.String]
+        $minimumWarningSdkVersion,
+
+        [Parameter()]
+        [ValidateSet('defenderOverThirdPartyPartner','thirdPartyPartnerOverDefender','unknownFutureValue')]
+        [System.String]
+        $mobileThreatDefensePartnerPriority,
+
+        [Parameter()]
+        [ValidateSet('block','wipe','warn','blockWhenSettingIsSupported')]
+        [System.String]
+        $mobileThreatDefenseRemediationAction,
+
+        [Parameter()]
+        [System.UInt32]
+        $previousPinBlockCount,
+
+        [Parameter()]
+        [ValidateSet('anyApp','anyManagedApp','specificApps','blocked')]
+        [System.String]
+        $protectedMessagingRedirectAppType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ThirdPartyKeyboardsBlocked,
+
+#my stuff
         [Parameter()]
         [System.String]
         $PeriodOfflineBeforeAccessCheck,
@@ -873,6 +1013,17 @@ function Set-TargetResource
         $updateParameters.Remove('Apps')
         $updateParameters.TargetedAppManagementLevels = $updateParameters.TargetedAppManagementLevels -join ','
 
+
+        $arrayTemp = @("minimumWarningSdkVersion","maximumRequiredOsVersion","maximumWarningOsVersion","maximumWipeOsVersion")
+        Foreach($item in $arrayTemp)
+        {
+
+                if ($updateParameters.$item -eq "")
+                {
+                    $updateParameters.Remove($item) #for some reason cmdlet can't handle this being blank, which is annoying as we can't enforce it
+                }
+        }
+
         $myApps = Get-IntuneAppProtectionPolicyiOSAppsToHashtable -Parameters $PSBoundParameters
         $myAssignments = Get-IntuneAppProtectionPolicyiOSAssignmentToHashtable -Parameters $PSBoundParameters
 
@@ -932,11 +1083,108 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $Description,
+#my stuff
+        [Parameter()]
+        [System.Boolean]
+        $AllowWidgetContentSync,
+
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfAccountIsClockedOut,
+
+        [Parameter()]
+        [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+        [System.String]
+        $appActionIfUnableToAuthenticateUser,
+
+        [Parameter()]
+        [ValidateSet('selectedPublicApps', 'allCoreMicrosoftApps', 'allMicrosoftApps','allApps')]
+        [System.String]
+        $appGroupType,
 
         [Parameter()]
         [System.Boolean]
-        $AllowWidgetContentSync
+        $blockDataIngestionIntoOrganizationDocuments,
 
+        [Parameter()]
+        [System.String]
+        $customDialerAppProtocol,
+
+        [Parameter()]
+        [System.UInt32]
+        $deployedAppCount,
+
+        [Parameter()]
+        [ValidateSet('allApps','managedApps','customApp','blocked')]
+        [System.String]
+        $dialerRestrictionLevel,
+
+        [Parameter()]
+        [System.String[]]
+        $exemptedUniversalLinks,
+
+        #[Parameter()]
+        #[System.String]
+       # $gracePeriodToBlockAppsDuringOffClockHours,
+
+        [Parameter()]
+        [System.Boolean]
+        $isAssigned,
+
+        [Parameter()]
+        [System.String[]]
+        $managedUniversalLinks,
+
+        [Parameter()]
+        [ValidateSet('notConfigured', 'secured', 'low', 'medium', 'high')]
+        [System.String]
+        $maximumAllowedDeviceThreatLevel,
+
+        [Parameter()]
+        [System.String]
+        $maximumRequiredOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $maximumWarningOsVersion,
+
+        [Parameter()]
+        [System.String]
+        $maximumWipeOsVersion,
+
+        [Parameter()]
+        [System.String]   
+        $messagingRedirectAppUrlScheme,
+
+        [Parameter()]
+        [System.String]
+        $minimumWarningSdkVersion,
+
+        [Parameter()]
+        [ValidateSet('defenderOverThirdPartyPartner','thirdPartyPartnerOverDefender','unknownFutureValue')]
+        [System.String]
+        $mobileThreatDefensePartnerPriority,
+
+        [Parameter()]
+        [ValidateSet('block','wipe','warn','blockWhenSettingIsSupported')]
+        [System.String]
+        $mobileThreatDefenseRemediationAction,
+
+        [Parameter()]
+        [System.UInt32]
+        $previousPinBlockCount,
+
+        [Parameter()]
+        [ValidateSet('anyApp','anyManagedApp','specificApps','blocked')]
+        [System.String]
+        $protectedMessagingRedirectAppType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ThirdPartyKeyboardsBlocked,
+
+#my stuff
         [Parameter()]
         [System.String]
         $PeriodOfflineBeforeAccessCheck,
