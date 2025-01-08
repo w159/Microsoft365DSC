@@ -728,16 +728,16 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.DeviceSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceSettings' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DeviceSettings' -IsCIMArray:$True
             }
             if ($Results.UserSettings)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserSettings' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'UserSettings' -IsCIMArray:$True
             }
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
 
             $dscContent += $currentDSCBlock

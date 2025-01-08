@@ -512,7 +512,7 @@ function Export-TargetResource
             if ($null -ne $Results.Definition)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'Definition' -IsCIMObject $true
+                    -ParameterName 'Definition'
             }
 
             $dscContent += $currentDSCBlock

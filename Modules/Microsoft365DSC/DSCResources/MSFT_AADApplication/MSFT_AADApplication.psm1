@@ -1796,39 +1796,40 @@ function Export-TargetResource
 
                     if ($Results.Api)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Api' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Api' -IsCIMArray:$False
                     }
 
                     if ($null -ne $Results.Permissions)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Permissions' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
+                            -ParameterName 'Permissions'
                     }
                     if ($Results.OptionalClaims)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'OptionalClaims' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'OptionalClaims' -IsCIMArray:$False
                     }
                     if ($Results.OnPremisesPublishing)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'OnPremisesPublishing' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'OnPremisesPublishing' -IsCIMArray:$False
                     }
                     if ($Results.AuthenticationBehaviors)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AuthenticationBehaviors' -IsCIMObject $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AuthenticationBehaviors' -IsCIMArray:$False
                     }
 
                     if ($Results.KeyCredentials)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyCredentials' -IsCIMArray $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KeyCredentials' -IsCIMArray:$True
                     }
 
                     if ($Results.PasswordCredentials)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PasswordCredentials' -IsCIMArray $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'PasswordCredentials' -IsCIMArray:$True
                     }
 
                     if ($Results.AppRoles)
                     {
-                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppRoles' -IsCIMArray $true
+                        $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppRoles' -IsCIMArray:$True
                     }
 
                     $dscContent.Append($currentDSCBlock) | Out-Null

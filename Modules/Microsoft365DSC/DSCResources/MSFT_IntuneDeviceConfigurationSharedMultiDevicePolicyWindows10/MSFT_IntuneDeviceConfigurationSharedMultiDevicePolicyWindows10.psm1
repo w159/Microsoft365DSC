@@ -880,11 +880,11 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.AccountManagerPolicy)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AccountManagerPolicy' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AccountManagerPolicy' -IsCIMArray:$False
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `

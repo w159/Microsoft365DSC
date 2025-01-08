@@ -457,7 +457,7 @@ function Export-TargetResource
             if ($null -ne $Result.UserPermissions)
             {
                 $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'UserPermissions' -IsCIMArray $true
+                    -ParameterName 'UserPermissions'
             }
 
             $dscContent += $currentDSCBlock

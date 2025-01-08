@@ -4868,27 +4868,27 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.DefenderDetectedMalwareActions)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefenderDetectedMalwareActions' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'DefenderDetectedMalwareActions' -IsCIMArray:$False
             }
             if ($Results.EdgeHomeButtonConfiguration)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EdgeHomeButtonConfiguration' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EdgeHomeButtonConfiguration' -IsCIMArray:$False
             }
             if ($Results.EdgeSearchEngine)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EdgeSearchEngine' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'EdgeSearchEngine' -IsCIMArray:$False
             }
             if ($Results.NetworkProxyServer)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NetworkProxyServer' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'NetworkProxyServer' -IsCIMArray:$False
             }
             if ($Results.Windows10AppsForceUpdateSchedule)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Windows10AppsForceUpdateSchedule' -IsCIMObject $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Windows10AppsForceUpdateSchedule' -IsCIMArray:$False
             }
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$true
             }
             #removing trailing commas and semi colons between items of an array of cim instances added by Convert-DSCStringParamToVariable
             $currentDSCBlock = $currentDSCBlock.Replace("    ,`r`n" , "    `r`n" )

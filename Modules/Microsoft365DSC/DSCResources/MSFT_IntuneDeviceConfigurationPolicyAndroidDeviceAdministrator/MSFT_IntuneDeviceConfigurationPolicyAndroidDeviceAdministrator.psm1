@@ -1381,28 +1381,58 @@ function Export-TargetResource
 
             if ($Results.AppsHideList)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsHideList' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.AppsHideList.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsHideList' -IsCIMArray:$isCIMArray
             }
             if ($Results.AppsInstallAllowList)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsInstallAllowList' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.AppsInstallAllowList.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsInstallAllowList' -IsCIMArray:$isCIMArray
             }
             if ($Results.AppsLaunchBlockList)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsLaunchBlockList' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.AppsLaunchBlockList.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AppsLaunchBlockList' -IsCIMArray:$isCIMArray
             }
             if ($Results.CompliantAppsList)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CompliantAppsList' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.CompliantAppsList.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'CompliantAppsList' -IsCIMArray:$isCIMArray
             }
             if ($Results.KioskModeApps)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeApps' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.KioskModeApps.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'KioskModeApps' -IsCIMArray:$isCIMArray
             }
 
             if ($Results.Assignments)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray $true
+                $isCIMArray = $false
+                if ($Results.Assignments.getType().Fullname -like '*[[\]]')
+                {
+                    $isCIMArray = $true
+                }
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'Assignments' -IsCIMArray:$isCIMArray
             }
 
             $dscContent += $currentDSCBlock

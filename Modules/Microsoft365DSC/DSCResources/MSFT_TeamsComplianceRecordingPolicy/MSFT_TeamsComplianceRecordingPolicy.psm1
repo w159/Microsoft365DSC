@@ -622,7 +622,7 @@ function Export-TargetResource
                 -Credential $Credential
             if ($Results.ComplianceRecordingApplications)
             {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ComplianceRecordingApplications' -IsCIMArray $true
+                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ComplianceRecordingApplications' -IsCIMArray:$True
                 $currentDSCBlock = $currentDSCBlock.Replace('ComplianceRecordingApplications         = @("', 'ComplianceRecordingApplications         = @(')
                 $currentDSCBlock = $currentDSCBlock.Replace("            `",`"`r`n", '')
 
