@@ -377,17 +377,16 @@ function Set-TargetResource
         $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
 
         if($ScheduleInfo.Expiration.Type -eq 'noExpiration'){
-            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $p = Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
             $unifiedRoleManagementPolicyId = $p.PolicyId
             $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
-            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            $isExpirationRequired = (Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
             if($isExpirationRequired){
                 $params = @{
                     "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
                     id = "Expiration_Admin_Eligibility"
                     isExpirationRequired = $false
                     target = @{
-                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
                         caller = "Admin"
                         operations = @(
                             "All"
@@ -399,21 +398,21 @@ function Set-TargetResource
                         )
                     }
                 }
-                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+                Update-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
             }
         }
-        elseif($ScheduleInfo.Expiration.Type -eq 'afterDuration'){
-            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+        elseif($ScheduleInfo.Expiration.Type -match "^after"){
+            $p = Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
             $unifiedRoleManagementPolicyId = $p.PolicyId
             $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
-            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            $isExpirationRequired = (Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
             if(-not $isExpirationRequired){
                 $params = @{
                     "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
                     id = "Expiration_Admin_Eligibility"
                     isExpirationRequired = $true
+                    maximumDuration = 'P365D'
                     target = @{
-                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
                         caller = "Admin"
                         operations = @(
                             "All"
@@ -425,7 +424,7 @@ function Set-TargetResource
                         )
                     }
                 }
-                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+                Update-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
             }
         }
 
@@ -475,17 +474,16 @@ function Set-TargetResource
         $GroupFilter = "DisplayName eq '" + $GroupDisplayName + "'"
         $GroupId = (Get-MgGroup -Filter $GroupFilter).Id
         if($ScheduleInfo.Expiration.Type -eq 'noExpiration'){
-            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $p = Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
             $unifiedRoleManagementPolicyId = $p.PolicyId
             $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
-            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            $isExpirationRequired = (Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
             if($isExpirationRequired){
                 $params = @{
                     "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
                     id = "Expiration_Admin_Eligibility"
                     isExpirationRequired = $false
                     target = @{
-                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
                         caller = "Admin"
                         operations = @(
                             "All"
@@ -498,14 +496,14 @@ function Set-TargetResource
                     }
                 }
                 Write-Verbose -Message "Updating the expiration policy for the group {$GroupDisplayName}"
-                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+                Update-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
             }
         }
         elseif($ScheduleInfo.Expiration.Type -match "^after"){
-            $p = Get-MgPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
+            $p = Get-MgBetaPolicyRoleManagementPolicyAssignment -Filter $("scopeId eq '{0}' and scopeType eq 'Group' and RoleDefinitionId eq 'member'" -f $GroupId)
             $unifiedRoleManagementPolicyId = $p.PolicyId
             $unifiedRoleManagementPolicyRuleId = "Expiration_Admin_Eligibility"
-            $isExpirationRequired = (Get-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
+            $isExpirationRequired = (Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId).AdditionalProperties.isExpirationRequired
             if(-not $isExpirationRequired){
                 $params = @{
                     "@odata.type" = "#microsoft.graph.unifiedRoleManagementPolicyExpirationRule"
@@ -513,7 +511,6 @@ function Set-TargetResource
                     isExpirationRequired = $true
                     maximumDuration = 'P365D'
                     target = @{
-                        "@odata.type" = "microsoft.graph.unifiedRoleManagementPolicyRuleTarget"
                         caller = "Admin"
                         operations = @(
                             "All"
@@ -526,7 +523,7 @@ function Set-TargetResource
                     }
                 }
                 Write-Verbose -Message "Updating the expiration policy for the group {$GroupDisplayName}"
-                Update-MgPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
+                Update-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $unifiedRoleManagementPolicyId -UnifiedRoleManagementPolicyRuleId $unifiedRoleManagementPolicyRuleId -BodyParameter $params
             }
         }
         $updateParameters.Add('GroupId', $GroupId)
