@@ -256,6 +256,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 IsEnabled = $True
                                 Mode      = 'Always'
                             }
+                            disableResilienceDefaults       = @{
+                                IsEnabled = $True
+                            }
                         }
                     }
                 }
@@ -373,6 +376,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             PersistentBrowser               = @{
                                 IsEnabled = $True
                                 Mode      = 'Always'
+                            }
+                            disableResilienceDefaults       = @{
+                                IsEnabled = $True
                             }
                         }
                     }
@@ -551,6 +557,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 IsEnabled = $True
                                 Mode      = 'Always'
                             }
+                            disableResilienceDefaults       = @{
+                                IsEnabled = $True
+                            }
                         }
                     }
                 }
@@ -695,6 +704,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 IsEnabled = $True
                                 Mode      = 'Always'
                             }
+                            disableResilienceDefaults       = @{
+                                IsEnabled = $True
+                            }
                         }
                     }
                 }
@@ -811,6 +823,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             PersistentBrowser               = @{
                                 IsEnabled = $True
                                 Mode      = 'Always'
+                            }
+                            disableResilienceDefaults       = @{
+                                IsEnabled = $True
                             }
                         }
                     }
