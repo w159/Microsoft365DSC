@@ -14,7 +14,7 @@ class MSFT_IntuneAppProtectionPolicyiOS : OMI_BaseResource
     [Write, Description("Count of apps to which the current policy is deployed.")] UInt32 deployedAppCount;
     [Write, Description("The classes of dialer apps that are allowed to click-to-open a phone number."), ValueMap{"allApps","managedApps","customApp","blocked"}, Values{"allApps","managedApps","customApp","blocked"}] String dialerRestrictionLevel;
     [Write, Description("A list of custom urls that are allowed to invocate an unmanaged app.")] String ExemptedUniversalLinks[]; 
-    [Write, Description("A grace period before blocking app access during off clock hours.")] String gracePeriodToBlockAppsDuringOffClockHours; 
+
     [Write, Description("Indicates if the policy is deployed to any inclusion groups or not.")] Boolean isAssigned;
     [Write, Description("A list of custom urls that are allowed to invocate a managed app.")] String managedUniversalLinks[];
     [Write, Description("Maximum allowed device threat level, as reported by the MTD app Inherited from managedAppProtection."), ValueMap{"notConfigured","secured","low","medium","high"}, Values{"notConfigured","secured","low","medium","high"}] String maximumAllowedDeviceThreatLevel;

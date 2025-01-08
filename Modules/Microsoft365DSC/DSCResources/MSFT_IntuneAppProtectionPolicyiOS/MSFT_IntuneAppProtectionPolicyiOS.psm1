@@ -56,9 +56,9 @@ function Get-TargetResource
         [System.String[]]
         $exemptedUniversalLinks,
 
-        #[Parameter()]
-        #[System.String]
-        #$gracePeriodToBlockAppsDuringOffClockHours,
+        [Parameter()]
+        [System.String]
+        $gracePeriodToBlockAppsDuringOffClockHours,
 
         [Parameter()]
         [System.Boolean]
@@ -463,6 +463,12 @@ function Get-TargetResource
             $myPinRequiredInsteadOfBiometricTimeout = $policy.PinRequiredInsteadOfBiometricTimeout.toString()
         }
 
+        $myGracePeriodToBlockAppsDuringOffClockHours = $policy.gracePeriodToBlockAppsDuringOffClockHours
+        if ($null -ne $policy.gracePeriodToBlockAppsDuringOffClockHours)
+        {
+            $myGracePeriodToBlockAppsDuringOffClockHours = $policy.gracePeriodToBlockAppsDuringOffClockHours.toString()
+        }
+
         return @{
             Identity                                       = $policy.id
             DisplayName                                    = $policy.DisplayName
@@ -478,7 +484,7 @@ function Get-TargetResource
             #DeploymentSummary                             = $DeploymentSummaryArray
             dialerRestrictionLevel                         = [string]$policy.dialerRestrictionLevel
             exemptedUniversalLinks                         = $policy.exemptedUniversalLinks
-            #gracePeriodToBlockAppsDuringOffClockHours      = [string]$policy.gracePeriodToBlockAppsDuringOffClockHours #duration datatype?! handling as string - https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/main/api-reference/beta/resources/intune-mam-iosmanagedappprotection.md
+            gracePeriodToBlockAppsDuringOffClockHours      = $myGracePeriodToBlockAppsDuringOffClockHours
             isAssigned                                     = $policy.isAssigned
             managedUniversalLinks                          = $policy.managedUniversalLinks
             maximumAllowedDeviceThreatLevel                = [string]$policy.maximumAllowedDeviceThreatLevel
@@ -628,9 +634,9 @@ function Set-TargetResource
         [System.String[]]
         $exemptedUniversalLinks,
 
-        #[Parameter()]
-        #[System.String]
-        #$gracePeriodToBlockAppsDuringOffClockHours,
+        [Parameter()]
+        [System.String]
+        $gracePeriodToBlockAppsDuringOffClockHours,
 
         [Parameter()]
         [System.Boolean]
@@ -970,6 +976,7 @@ function Set-TargetResource
             'PeriodOfflineBeforeWipeIsEnforced'
             'PeriodBeforePinReset'
             'PinRequiredInsteadOfBiometricTimeout'
+            'gracePeriodToBlockAppsDuringOffClockHours'
         )
         foreach ($duration in $durationParameters)
         {
@@ -996,6 +1003,16 @@ function Set-TargetResource
             }
         }
         $createParameters.ExemptedAppProtocols = $myExemptedAppProtocols
+
+        $arrayTemp = @("minimumWarningSdkVersion","maximumRequiredOsVersion","maximumWarningOsVersion","maximumWipeOsVersion")
+        Foreach($item in $arrayTemp)
+        {
+
+                if ($createParameters.$item -eq "")
+                {
+                    $createParameters.Remove($item) #for some reason cmdlet can't handle this being blank, which is annoying as we can't enforce it
+                }
+        }
 
         $policy = New-MgBetaDeviceAppManagementiOSManagedAppProtection -BodyParameter $createParameters
 
@@ -1033,6 +1050,7 @@ function Set-TargetResource
             'PeriodOfflineBeforeWipeIsEnforced'
             'PeriodBeforePinReset'
             'PinRequiredInsteadOfBiometricTimeout'
+            'gracePeriodToBlockAppsDuringOffClockHours'
         )
         foreach ($duration in $durationParameters)
         {
@@ -1124,9 +1142,9 @@ function Test-TargetResource
         [System.String[]]
         $exemptedUniversalLinks,
 
-        #[Parameter()]
-        #[System.String]
-       # $gracePeriodToBlockAppsDuringOffClockHours,
+        [Parameter()]
+        [System.String]
+        $gracePeriodToBlockAppsDuringOffClockHours,
 
         [Parameter()]
         [System.Boolean]
