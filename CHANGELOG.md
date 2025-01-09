@@ -1,6 +1,10 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+* IntuneAppProtectionPolicyiOS
+  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
+
+# 1.25.108.1
 
 * AADAuthenticationRequirement
   * Changed Export logic to extract instances from all users.
@@ -14,6 +18,13 @@
 * MISC
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
+
+# 1.24.1218.1
+
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
