@@ -2,8 +2,14 @@
 
 # UNRELEASED
 
+* AADAuthenticationRequirement
+  * Filtered guests from the export, to prevent errors during export
+    FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
 * AADGroupEligibilitySchedule
   * New resource for Privileged Identity Management (PIM) for Groups
+* AADNamingLocationPolicy
+  * Improved logging and fixed issue that caused creation of duplicate
+    locations with same name.
 * EXOSmtpDaneInbound
   * initial release
 * IntuneVPNConfigurationPolicyAndroidWork
