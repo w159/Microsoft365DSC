@@ -3,6 +3,21 @@
 # UNRELEASED
 
 * AADAuthenticationRequirement
+  * Filtered guests from the export, to prevent errors during export
+    FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
+* AADGroupEligibilitySchedule
+  * New resource for Privileged Identity Management (PIM) for Groups
+* AADNamingLocationPolicy
+  * Improved logging and fixed issue that caused creation of duplicate
+    locations with same name.
+* EXOSmtpDaneInbound
+  * initial release
+* IntuneVPNConfigurationPolicyAndroidWork
+  * Initial release
+
+# 1.25.108.1
+
+* AADAuthenticationRequirement
   * Changed Export logic to extract instances from all users.
 * AADOrganizationCertificateBasedAuthConfiguration
   * Fixed the primary key of the resource.
@@ -12,8 +27,12 @@
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
 * MISC
-  * DEFENDER
-    * Added support for the UseBasicParsing paramter for REST calls.
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
+
+# 1.24.1218.1
 
 * AADApplication
   * Added support for Oauth2PermissionScopes.
