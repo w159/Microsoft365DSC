@@ -14,6 +14,8 @@
   * initial release
 * IntuneVPNConfigurationPolicyAndroidWork
   * Initial release
+* TeamsGroupPolicyAssignment
+  * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
 
 # 1.25.108.1
 
@@ -73,8 +75,6 @@
   * Fix export of properties that appear multiple times in subsections.
 * IntuneSecurityBaselineWindows10
   * Initial release.
-* TeamsGroupPolicyAssignment
-  * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
 * M365DSCDRGUtil
   * Improve settings catalog handling for nested objects.
 * M365DSCResourceGenerator
