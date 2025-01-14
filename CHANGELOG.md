@@ -4,6 +4,9 @@
 
 * AADGroupEligibilitySchedule
   * New resource for Privileged Identity Management (PIM) for Groups
+* AADNamingLocationPolicy
+  * Improved logging and fixed issue that caused creation of duplicate
+    locations with same name.
 * EXOSmtpDaneInbound
   * initial release
 * IntuneVPNConfigurationPolicyAndroidWork
