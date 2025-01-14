@@ -11,8 +11,8 @@ Currently, each Microsoft 365 workload can support a different combination of au
 
 **Important**: The recommendation is to use Service Principal whenever possible because:
 
-- Service principals offers the most granular levels of security and do not introduce the risk of having to send high privileged credentials across the wire to authenticate.
-- Since Desired State Configuration is an unattended process, the use of Multi Factor Authentication for user credentials  is not supported by Microsoft365DSC.
+- Service principals offer the most granular levels of security and do not introduce the risk of having to send high privileged credentials across the wire to authenticate.
+- Since Desired State Configuration is an unattended process, the use of Multi-Factor Authentication for user credentials is not supported by Microsoft365DSC.
   - ***Note:*** The only exception here is creating an Export of an existing tenant. Most often this is an interactive process where the ask for a second factor is possible.
 
 ## Authentication Methods
@@ -66,7 +66,7 @@ Most components of the Microsoft365DSC solution are using the Microsoft Graph Po
 
     This option is using an AzureAD app in the background to call the Graph API (named "Microsoft Graph PowerShell"). However the effective permissions will be the intersection of the delegated permissions **and** the user privileges. By default, the Graph app has no permissions meaning it can't access anything and therefore won't work. You have to grant these permissions to the app before using them. Consent for these permissions can be given <a href="https://docs.microsoft.com/en-us/graph/auth-v2-user" target="_blank">by the user himself</a> or by an admin for all users in the tenant.
 
-    For example: If your account only has permissions on three SharePoint sites, only these sites can be retrieved. Even when the AzureAD app has Sites.FullControll.All permissions granted.
+    For example: If your account only has permissions on three SharePoint sites, only these sites can be retrieved. Even when the AzureAD app has Sites.FullControl.All permissions granted.
 
     <figure markdown>
       ![Using the Graph API with Delegated Permissions and the default App Registration](/Images/PermissionsGraphDelegatedApp.png)
@@ -245,7 +245,7 @@ Add-RoleGroupMember -Identity eDiscoveryManager -Member $SPN.ObjectId
 <li>
 <p><strong>Add the Service Principal as a case admin:</strong>
 
-<p>The Service Principal requires one last permission in order to be able to retrieve values from the Security and COmpliance center cmdlets. Run the following PowerShell command to add it as a case admin:</p>
+<p>The Service Principal requires one last permission in order to be able to retrieve values from the Security and Compliance center cmdlets. Run the following PowerShell command to add it as a case admin:</p>
 
 <a href="/Images/Add-eDiscoveryCaseAdmin.png"><img src="/Images/Add-eDiscoveryCaseAdmin.png" alt="Grant the eDiscovery Case Admin role to your service principal" /></a>
 
