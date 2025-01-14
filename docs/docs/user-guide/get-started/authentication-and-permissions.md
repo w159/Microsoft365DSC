@@ -163,6 +163,8 @@ Use the "<a href="https://pnp.github.io/powershell/cmdlets/Register-PnPManagemen
 
 <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app" target="_blank">Create a new app registration</a> in Azure AD yourself and grant the correct permissions to this app. The documentation on this website for each of the SharePoint Online resources list the permissions needed for the resource.
 
+> Note: Make sure your app has the "Allow Public Client Flows" setting set to "Yes". This is required for SharePoint. More information can be found <a href="https://pnp.github.io/powershell/articles/authentication.html#silent-authentication-with-credentials-for-running-in-pipelines" target="_blank">here</a>
+
 As an alternative, you can use the "<a href="https://pnp.github.io/powershell/cmdlets/Register-PnPAzureADApp.html" target="_blank">Register-PnPAzureADApp</a>" cmdlet to have PnP PowerShell create the app registration for you and grant the correct permissions.
 
 ### Using Application Secret
@@ -205,7 +207,9 @@ Get-M365DSCCompiledPermissionList -ResourceNameList @('EXOAcceptedDomain')
 
 Then make sure your service account is a member of the specified Role Group or has been granted the required roles.
 
-**NOTE:** There are resources, like the <a href="../../../resources/exchange/EXOAddressList/" target="_blank">EXOAddressList</a> which roles by default are not granted to any of the default role groups. Make sure you grant these permissions correctly before using them.
+> **NOTE:** There are resources, like the <a href="../../../resources/exchange/EXOAddressList/" target="_blank">EXOAddressList</a> which roles by default are not granted to any of the default role groups. Make sure you grant these permissions correctly before using them.
+
+When using service principals to authenticate against Exchange, make sure your service principal is created using <a href="https://learn.microsoft.com/en-us/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps#select-and-assign-the-api-permissions-from-the-portal" target="_blank">these instructions</a>.
 
 ## Security and Compliance Center Permissions
 
@@ -352,6 +356,10 @@ would be the best solution. The following parameters are required when using cer
 From the Export-M365DSCConfiguration GUI the following fields should be used:
 
 ![Export using Certificate Path](/Images/CertPath.png){ align=center width=500 }
+
+## Teams Permissions
+
+When using Service Principals to authenticate against Teams, you have to make sure the correct permissions are configured. Besides the permissions specified in the resource documentation, the service principal also needs to get added to the Teams Administrator role in Entra ID. For more information on App-Only authentication with Teams, check <a href="https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-application-authentication" target="_blank">here</a>.
 
 ## Using Authentication in DSC configurations
 
