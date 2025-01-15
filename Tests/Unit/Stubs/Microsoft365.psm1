@@ -50200,6 +50200,75 @@ function Get-MgUserLicenseDetail
         $HttpPipelineAppend
     )
 }
+function Get-MgUserMemberOfAsGroup
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [String]
+        $UserId,
+
+        [Parameter()]
+        [String]
+        $DirectoryObjectId,
+
+        [Parameter()]
+        [Object]
+        $InputObject,
+
+        [Parameter()]
+        [String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [String[]]
+        $Property,
+
+        [Parameter()]
+        [String]
+        $Filter,
+
+        [Parameter()]
+        [String]
+        $Search,
+
+        [Parameter()]
+        [Int32]
+        $Skip,
+
+        [Parameter()]
+        [String[]]
+        $Sort,
+
+        [Parameter()]
+        [Int32]
+        $Top,
+
+        [Parameter()]
+        [String]
+        $ConsistencyLevel,
+
+        [Parameter()]
+        [String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [hashtable]
+        $Headers,
+
+        [Parameter()]
+        [Int32]
+        $PageSize,
+
+        [Parameter()]
+        [switch]
+        $All,
+
+        [Parameter()]
+        [String]
+        $CountVariable
+    )
+}
 function New-MgUser
 {
     [CmdletBinding()]
