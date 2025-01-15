@@ -2,6 +2,14 @@
 
 # UNRELEASED
 
+* M365DSCRuleEvaluation
+  * Making RuleDefinition a key of the resource to allow multiple
+    rules for the same resource type to be provided in the same config.
+  * Adding a new RuleName parameter to make it easier to understand
+    the results in the event logs.
+* DEPENDENCIES
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.203.
+
 # 1.25.108.1
 
 * AADAuthenticationRequirement
