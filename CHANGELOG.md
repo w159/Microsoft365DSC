@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.115.1
 
 * AADAuthenticationRequirement
   * Filtered guests from the export, to prevent errors during export
