@@ -5,8 +5,38 @@
 * AADAuthenticationRequirement
   * Filtered guests from the export, to prevent errors during export
     FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
+* AADGroup
+  * Only get Members & GroupAsMembers when a static group is defined.
 * AADGroupEligibilitySchedule
   * New resource for Privileged Identity Management (PIM) for Groups
+* IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAccountProtectionPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyLinux
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyWindows10SettingCatalog
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAppAndBrowserIsolationPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDeviceControlPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDiskEncryptionMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDiskEncryptionWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyLinux
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneFirewallPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneSettingCatalogASRRulesPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
 * AADNamingLocationPolicy
   * Improved logging and fixed issue that caused creation of duplicate
     locations with same name.
