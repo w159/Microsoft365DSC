@@ -2,11 +2,55 @@
 
 # UNRELEASED
 
+* AADAuthenticationRequirement
+  * Filtered guests from the export, to prevent errors during export
+    FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
+* AADGroup
+  * Only get Members & GroupAsMembers when a static group is defined.
+* AADGroupEligibilitySchedule
+  * New resource for Privileged Identity Management (PIM) for Groups
+* AADNamingLocationPolicy
+  * Improved logging and fixed issue that caused creation of duplicate
+    locations with same name.
+* EXOSmtpDaneInbound
+  * Initial release
+* IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAccountProtectionPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyLinux
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAntivirusPolicyWindows10SettingCatalog
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneAppAndBrowserIsolationPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDeviceControlPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDiskEncryptionMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneDiskEncryptionWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyLinux
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyMacOS
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneEndpointDetectionAndResponsePolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneFirewallPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneSettingCatalogASRRulesPolicyWindows10
+  * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
+* IntuneVPNConfigurationPolicyAndroidWork
+  * Initial release
 * M365DSCRuleEvaluation
   * Making RuleDefinition a key of the resource to allow multiple
     rules for the same resource type to be provided in the same config.
   * Adding a new RuleName parameter to make it easier to understand
     the results in the event logs.
+* TeamsGroupPolicyAssignment
+  * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.203.
 
@@ -21,6 +65,8 @@
   * Fixed error when extracting an entry with a deleted principal.
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
+* IntuneTrustedRootCertificateAndroidWork
+  * Initial Release
 * MISC
   * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
     Remoting is enabled, which is required to convert the DSC config.

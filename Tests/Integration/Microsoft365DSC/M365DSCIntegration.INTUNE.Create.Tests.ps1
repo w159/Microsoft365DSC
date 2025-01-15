@@ -3193,6 +3193,17 @@
                     TenantId               = $TenantId;
                     CertificateThumbprint  = $CertificateThumbprint;
                 }
+                IntuneTrustedRootCertificateAndroidWork 'ConfigureIntuneTrustedRootCertificateAndroidWork'
+                {
+                    Description            = "IntuneTrustedRootCertificateAndroidWork Description";
+                    DisplayName            = "IntuneTrustedRootCertificateAndroidWork DisplayName";
+                    Ensure                 = "Present";
+                    certFileName           = "fakename.cer";
+                    trustedRootCertificate = "insertValidBase64StringHere";
+                    ApplicationId          = $ApplicationId;
+                    TenantId               = $TenantId;
+                    CertificateThumbprint  = $CertificateThumbprint;
+                }
                 IntuneTrustedRootCertificateIOS 'ConfigureIntuneTrustedRootCertificateIOS'
                 {
                     Description            = "IntuneTrustedRootCertificateIOS Description";
@@ -3265,6 +3276,27 @@
                     connectionType                     = "ciscoAnyConnect";
                     Description                        = "IntuneVPNConfigurationPolicyAndroidEnterprise Description";
                     DisplayName                        = "IntuneVPNConfigurationPolicyAndroidEnterprise DisplayName";
+                    Ensure                             = "Present";
+                    Id                                 = "12345678-1234-abcd-1234-12345678ABCD";
+                    servers                            = @(
+                        MSFT_MicrosoftGraphvpnServer{
+                            isDefaultServer            = $True
+                            description                = 'server'
+                            address                    = 'vpn.test.com'
+                        }
+                    );
+                }
+                IntuneVPNConfigurationPolicyAndroidWork 'IntuneVPNConfigurationPolicyAndroidWork-Example'
+                {
+                    ApplicationId                      = $ApplicationId;
+                    TenantId                           = $TenantId;
+                    CertificateThumbprint              = $CertificateThumbprint;
+                    Assignments                        = @();
+                    authenticationMethod               = "usernameAndPassword";
+                    connectionName                     = "IntuneVPNConfigurationPolicyAndroidWork ConnectionName";
+                    connectionType                     = "ciscoAnyConnect";
+                    Description                        = "IntuneVPNConfigurationPolicyAndroidWork Description";
+                    DisplayName                        = "IntuneVPNConfigurationPolicyAndroidWork DisplayName";
                     Ensure                             = "Present";
                     Id                                 = "12345678-1234-abcd-1234-12345678ABCD";
                     servers                            = @(
