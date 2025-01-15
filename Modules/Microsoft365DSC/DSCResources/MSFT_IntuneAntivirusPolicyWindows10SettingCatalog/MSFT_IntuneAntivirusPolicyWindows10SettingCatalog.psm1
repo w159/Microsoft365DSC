@@ -467,7 +467,7 @@ function Get-TargetResource
 
                 if ($policy.Length -gt 1)
                 {
-                    throw "Duplicate Account Protection LAPS Policy named $DisplayName exist in tenant"
+                    throw "Duplicate Intune Antivirus Policy for Windows10 Setting Catalog named $DisplayName exist in tenant"
                 }
             }
         }

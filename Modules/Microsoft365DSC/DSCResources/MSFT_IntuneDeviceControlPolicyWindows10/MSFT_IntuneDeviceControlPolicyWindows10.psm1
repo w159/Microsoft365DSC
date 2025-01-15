@@ -274,7 +274,7 @@ function Get-TargetResource
 
                 if ($getValue.Length -gt 1)
                 {
-                    throw "Duplicate Intune Antivirus Policy for macOS named $DisplayName exist in tenant"
+                    throw "Duplicate Intune Device Control Policy for Windows10 named $DisplayName exist in tenant"
                 }
             }
         }
