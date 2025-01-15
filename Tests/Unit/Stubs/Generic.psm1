@@ -737,7 +737,9 @@ function Get-GlobalAddressList
     [OutputType([System.Collections.Hashtable])]
     param
     (
-
+        [Parameter()]
+        [System.String]
+        $Identity
     )
 }
 
