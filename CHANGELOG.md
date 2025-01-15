@@ -5,6 +5,8 @@
 * AADAuthenticationRequirement
   * Filtered guests from the export, to prevent errors during export
     FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
+* AADCustomAuthenticationExtension
+  * Fixes an issue extracting instances due to the OrganizationName being null.
 * AADGroup
   * Only get Members & GroupAsMembers when a static group is defined.
 * AADGroupEligibilitySchedule
