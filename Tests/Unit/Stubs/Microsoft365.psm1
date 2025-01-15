@@ -105914,3 +105914,170 @@ function Update-MgPolicyRoleManagementPolicyRule
 }
 #endregion
 
+#region Microsoft.Graph.Sites
+function Get-MgAdminSharepointSetting
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [String[]]
+        $Property,
+
+        [Parameter()]
+        [String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [hashtable]
+        $Headers
+    )
+}
+function Update-MgAdminSharepointSetting
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [Object]
+        $BodyParameter,
+
+        [Parameter()]
+        [String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [String[]]
+        $AllowedDomainGuidsForSyncApp,
+
+        [Parameter()]
+        [String[]]
+        $AvailableManagedPathsForSiteCreation,
+
+        [Parameter()]
+        [Int32]
+        $DeletedUserPersonalSiteRetentionPeriodInDays,
+
+        [Parameter()]
+        [String[]]
+        $ExcludedFileExtensionsForSyncApp,
+
+        [Parameter()]
+        [String]
+        $Id,
+
+        [Parameter()]
+        [Object]
+        $IdleSessionSignOut,
+
+        [Parameter()]
+        [String]
+        $ImageTaggingOption,
+
+        [Parameter()]
+        [switch]
+        $IsCommentingOnSitePagesEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsFileActivityNotificationEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsLegacyAuthProtocolsEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsLoopEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsMacSyncAppEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsRequireAcceptingUserToMatchInvitedUserEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsResharingByExternalUsersEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSharePointMobileNotificationEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSharePointNewsfeedEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSiteCreationEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSiteCreationUiEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSitePagesCreationEnabled,
+
+        [Parameter()]
+        [switch]
+        $IsSitesStorageLimitAutomatic,
+
+        [Parameter()]
+        [switch]
+        $IsSyncButtonHiddenOnPersonalSite,
+
+        [Parameter()]
+        [switch]
+        $IsUnmanagedSyncAppForTenantRestricted,
+
+        [Parameter()]
+        [Int64]
+        $PersonalSiteDefaultStorageLimitInMb,
+
+        [Parameter()]
+        [String[]]
+        $SharingAllowedDomainList,
+
+        [Parameter()]
+        [String[]]
+        $SharingBlockedDomainList,
+
+        [Parameter()]
+        [String]
+        $SharingCapability,
+
+        [Parameter()]
+        [String]
+        $SharingDomainRestrictionMode,
+
+        [Parameter()]
+        [String]
+        $SiteCreationDefaultManagedPath,
+
+        [Parameter()]
+        [Int32]
+        $SiteCreationDefaultStorageLimitInMb,
+
+        [Parameter()]
+        [String]
+        $TenantDefaultTimezone,
+
+        [Parameter()]
+        [hashtable]
+        $Headers
+    )
+}
+
+#endregion
