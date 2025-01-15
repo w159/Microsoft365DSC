@@ -26,6 +26,8 @@
   * Fixed error when extracting an entry with a deleted principal.
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
+* IntuneTrustedRootCertificateAndroidWork
+  * Initial Release
 * MISC
   * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
     Remoting is enabled, which is required to convert the DSC config.
