@@ -1745,7 +1745,7 @@ function Set-TargetResource
             $NewParameters.Add('grantControls', $GrantControls)
         }
 
-        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or $DisableResilienceDefaultsIsEnabled)
+        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or !([String]::IsNullOrEmpty($DisableResilienceDefaultsIsEnabled)))
         {
             Write-Verbose -Message 'Set-Targetresource: process session controls'
             $sessioncontrols = $null
@@ -1812,9 +1812,9 @@ function Set-TargetResource
                 $sessioncontrols.persistentBrowser.isEnabled = $true
                 $sessioncontrols.persistentBrowser.mode = $PersistentBrowserMode
             }
-            if ($DisableResilienceDefaultsIsEnabled)
+            if (!([String]::IsNullOrEmpty($DisableResilienceDefaultsIsEnabled)))
             {
-                $sessioncontrols.Add('disableResilienceDefaults', $true)
+                $sessioncontrols.Add('disableResilienceDefaults', $DisableResilienceDefaultsIsEnabled)
             }
             $NewParameters.Add('sessionControls', $sessioncontrols)
             #add SessionControls to the parameter list
