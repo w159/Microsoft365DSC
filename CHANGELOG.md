@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* M365DSCTelemetryEngine
+  * Report LCM details only if running as administrator.
+
 # 1.25.115.1
 
 * AADAuthenticationRequirement
