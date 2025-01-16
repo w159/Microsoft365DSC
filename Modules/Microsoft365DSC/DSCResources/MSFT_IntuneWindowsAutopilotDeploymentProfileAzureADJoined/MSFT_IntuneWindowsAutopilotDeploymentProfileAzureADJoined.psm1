@@ -89,6 +89,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Windows Autopilot Deployment Profile Azure AD Joined with Id {$Id} and DisplayName {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -110,33 +112,43 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -WindowsAutopilotDeploymentProfileId $Id -ErrorAction SilentlyContinue `
-        | Where-Object -FilterScript { $null -ne $_.DisplayName }
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Windows Autopilot Deployment Profile Azure AD Joined with Id {$Id}"
-
-            if (-Not [string]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [string]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue `
-                | Where-Object -FilterScript { $null -ne $_.DisplayName }
+                $getValue = Get-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -WindowsAutopilotDeploymentProfileId $Id -ErrorAction SilentlyContinue `
+                    | Where-Object -FilterScript { $null -ne $_.DisplayName }
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Windows Autopilot Deployment Profile Azure AD Joined with Id {$Id}"
+
+                if (-not [string]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue `
+                    | Where-Object -FilterScript { $null -ne $_.DisplayName }
+                }
+            }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Windows Autopilot Deployment Profile Azure AD Joined with DisplayName {$DisplayName}"
+                return $nullResult
+            }
+
+            if ($getValue -is [array])
+            {
+                throw "The DisplayName {$DisplayName} returned multiple policies, make sure DisplayName is unique."
             }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Windows Autopilot Deployment Profile Azure AD Joined with DisplayName {$DisplayName}"
-            return $nullResult
-        }
-
-        if ($getValue -is [Array])
-        {
-            Throw "The DisplayName {$DisplayName} returned multiple policies, make sure DisplayName is unique."
+            $getValue = $Script:exportedInstance
         }
 
         $Id = $getValue.Id
@@ -697,6 +709,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

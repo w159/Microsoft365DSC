@@ -106,51 +106,57 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Wifi Configuration Policy Android Enterprise Device Owner with Id {$Id}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
             -InboundParameters $PSBoundParameters
-    }
-    catch
-    {
-        Write-Verbose -Message 'Connection to the workload failed.'
-    }
 
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
+        #Ensure the proper dependencies are installed in the current environment.
+        Confirm-M365DSCDependencies
 
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $nullResult = $PSBoundParameters
-    $nullResult.Ensure = 'Absent'
-    try
-    {
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
-
-        #region resource generator code
-        if ($null -eq $getValue)
-        {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
-                -FilterScript { `
-                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidDeviceOwnerWiFiConfiguration' `
-            }
-        }
+        #region Telemetry
+        $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+        $CommandName = $MyInvocation.MyCommand
+        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+            -CommandName $CommandName `
+            -Parameters $PSBoundParameters
+        Add-M365DSCTelemetryEvent -Data $data
         #endregion
 
-        if ($null -eq $getValue)
+        $nullResult = $PSBoundParameters
+        $nullResult.Ensure = 'Absent'
+
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
-            return $nullResult
+            if (-not [string]::IsNullOrEmpty($Id))
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
+            }
+
+            #region resource generator code
+            if ($null -eq $getValue)
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+                    -FilterScript { `
+                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.androidDeviceOwnerWiFiConfiguration' `
+                }
+            }
+            #endregion
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Nothing with id {$Id} was found"
+                return $nullResult
+            }
+        }
+        else
+        {
+            $getValue = $Script:exportedInstance
         }
 
-        Write-Verbose -Message "Found something with id {$id}"
+        Write-Verbose -Message "Found something with id {$Id}"
         $results = @{
             #region resource generator code
             Id                             = $getValue.Id
@@ -561,7 +567,7 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    Write-Verbose -Message "Testing configuration of {$id}"
+    Write-Verbose -Message "Testing configuration of {$Id}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
@@ -732,6 +738,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

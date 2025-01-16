@@ -84,6 +84,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with Id {$Id} and DisplayName {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -105,34 +107,44 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with Id {$Id}"
-
-            if (-Not [string]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue | Where-Object `
-                    -FilterScript { `
-                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windowsDefenderAdvancedThreatProtectionConfiguration' `
-                }
-                if ($null -eq $getValue)
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with Id {$Id}"
+
+                if (-Not [string]::IsNullOrEmpty($DisplayName))
                 {
-                    Write-Verbose -Message "Could not find an Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with DisplayName {$DisplayName}"
-                    return $nullResult
-                }
-                if (([array]$getValue).count -gt 1)
-                {
-                    throw "A policy with a duplicated displayName {'$DisplayName'} was found - Ensure displayName is unique"
+                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue | Where-Object `
+                        -FilterScript { `
+                            $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windowsDefenderAdvancedThreatProtectionConfiguration' `
+                    }
+                    if ($null -eq $getValue)
+                    {
+                        Write-Verbose -Message "Could not find an Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with DisplayName {$DisplayName}"
+                        return $nullResult
+                    }
+                    if (([array]$getValue).count -gt 1)
+                    {
+                        throw "A policy with a duplicated displayName {'$DisplayName'} was found - Ensure displayName is unique"
+                    }
                 }
             }
+            #endregion
         }
-        #endregion
+        else
+        {
+            $getValue = $Script:exportedInstance
+        }
 
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune Device Configuration Defender For Endpoint Onboarding Policy for Windows10 with Id {$Id} and DisplayName {$DisplayName} was found."
@@ -626,6 +638,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @params
             if (-not (Test-M365DSCAuthenticationParameter -BoundParameters $Results))
             {

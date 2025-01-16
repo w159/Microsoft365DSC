@@ -101,22 +101,32 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        $getValue = Get-MgBetaDeviceManagementRoleAssignment -DeviceAndAppManagementRoleAssignmentId $Id -ErrorAction SilentlyContinue
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Role Assignment with Id {$Id}"
+            if (-not [System.String]::IsNullOrEmpty($Id))
+            {
+                $getValue = Get-MgBetaDeviceManagementRoleAssignment -DeviceAndAppManagementRoleAssignmentId $Id -ErrorAction SilentlyContinue
+            }
 
-            $getValue = Get-MgBetaDeviceManagementRoleAssignment `
-                -All `
-                -Filter "displayName eq '$DisplayName'" `
-                -ErrorAction SilentlyContinue
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Role Assignment with Id {$Id}"
+
+                $getValue = Get-MgBetaDeviceManagementRoleAssignment `
+                    -All `
+                    -Filter "displayName eq '$DisplayName'" `
+                    -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Role Assignment with DisplayName {$DisplayName}"
+                return $nullResult
+            }
         }
-
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Role Assignment with DisplayName {$DisplayName}"
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
 
         $Id = $getValue.Id
@@ -675,6 +685,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

@@ -79,29 +79,36 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        if ($PSBoundParameters.ContainsKey('Id'))
+        if (-not $Script:exportedInstance)
         {
-            $getValue = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $Id -ErrorAction SilentlyContinue
-        }
-
-        if ($null -eq $getValue)
-        {
-            Write-Verbose -Message "Could not find an Intune Role Scope Tag with Id {$Id}"
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementRoleScopeTag `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $Id -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Role Scope Tag with Id {$Id}"
+
+                if (-not [System.String]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceManagementRoleScopeTag `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue
+                }
+            }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Role Scope Tag with DisplayName {$DisplayName}."
+                return $nullResult
             }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Role Scope Tag with DisplayName {$DisplayName}."
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
 
         $Id = $getValue.Id
@@ -509,6 +516,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

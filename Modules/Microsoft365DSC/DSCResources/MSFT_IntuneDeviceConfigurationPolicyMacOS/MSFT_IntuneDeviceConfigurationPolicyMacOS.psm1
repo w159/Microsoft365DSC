@@ -305,55 +305,52 @@ function Get-TargetResource
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
             -InboundParameters $PSBoundParameters
-    }
-    catch
-    {
-        Write-Verbose -Message 'Connection to the workload failed.'
-    }
 
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
+        #Ensure the proper dependencies are installed in the current environment.
+        Confirm-M365DSCDependencies
 
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $nullResult = $PSBoundParameters
-    $nullResult.Ensure = 'Absent'
-    try
-    {
-        try
-        {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction Stop
-        }
-        catch
-        {
-            $getValue = $null
-        }
-
-        #region resource generator code
-        if ($null -eq $getValue)
-        {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
-                -FilterScript { `
-                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.macOSGeneralDeviceConfiguration' `
-            }
-
-        }
+        #region Telemetry
+        $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+        $CommandName = $MyInvocation.MyCommand
+        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+            -CommandName $CommandName `
+            -Parameters $PSBoundParameters
+        Add-M365DSCTelemetryEvent -Data $data
         #endregion
 
-        if ($null -eq $getValue)
+        $nullResult = $PSBoundParameters
+        $nullResult.Ensure = 'Absent'
+
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Nothing with id {$id} was found"
-            return $nullResult
+            if (-not [string]::IsNullOrEmpty($Id))
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
+            }
+
+            #region resource generator code
+            if ($null -eq $getValue)
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+                    -FilterScript { `
+                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.macOSGeneralDeviceConfiguration' `
+                }
+
+            }
+            #endregion
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Nothing with id {$Id} was found"
+                return $nullResult
+            }
+        }
+        else
+        {
+            $getValue = $Script:exportedInstance
         }
 
-        Write-Verbose -Message "Found something with id {$($getValue.id)}"
+        Write-Verbose -Message "Found something with id {$($getValue.Id)}"
         $results = @{
 
             #region resource generator code
@@ -1348,6 +1345,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

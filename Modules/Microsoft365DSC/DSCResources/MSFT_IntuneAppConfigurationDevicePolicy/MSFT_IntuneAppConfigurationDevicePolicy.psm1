@@ -95,6 +95,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune App Configuration Device Policy {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -116,26 +118,36 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $Id -ErrorAction SilentlyContinue
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune App Configuration Device Policy with Id {$Id}"
-
-            if (-Not [string]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [string]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -ManagedDeviceMobileAppConfigurationId $Id -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune App Configuration Device Policy with Id {$Id}"
+
+                if (-not [string]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue
+                }
+            }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune App Configuration Device Policy with DisplayName {$DisplayName}"
+                return $nullResult
             }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune App Configuration Device Policy with DisplayName {$DisplayName}"
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune App Configuration Device Policy with Id {$Id} and DisplayName {$DisplayName} was found."
@@ -736,6 +748,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

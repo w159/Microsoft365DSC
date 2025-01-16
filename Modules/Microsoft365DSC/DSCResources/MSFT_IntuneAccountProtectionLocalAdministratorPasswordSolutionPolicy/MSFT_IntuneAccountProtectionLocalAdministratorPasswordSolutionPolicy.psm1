@@ -110,6 +110,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Account Protection LAPS Policy {$DisplayName}"
+
     try
     {
 
@@ -136,26 +138,33 @@ function Get-TargetResource
 
         # Retrieve policy general settings
         $policy = $null
-        if (-not [System.String]::IsNullOrEmpty($Identity))
+        if (-not $Script:exportedInstance)
         {
-            $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
-        }
-
-        if ($null -eq $policy)
-        {
-            Write-Verbose -Message "No Account Protection LAPS Policy with Id {$Identity} was found"
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
+            if (-not [System.String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
-                    -Filter "Name eq '$DisplayName' and templateReference/TemplateId eq '$templateReferenceId'" `
-                    -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+            }
 
-                if ($policy.Length -gt 1)
+            if ($null -eq $policy)
+            {
+                Write-Verbose -Message "No Account Protection LAPS Policy with Id {$Identity} was found"
+
+                if (-not [System.String]::IsNullOrEmpty($DisplayName))
                 {
-                    throw "Duplicate Account Protection LAPS Policy named $DisplayName exist in tenant"
+                    $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
+                        -Filter "Name eq '$DisplayName' and templateReference/TemplateId eq '$templateReferenceId'" `
+                        -ErrorAction SilentlyContinue
+
+                    if ($policy.Length -gt 1)
+                    {
+                        throw "Duplicate Account Protection LAPS Policy named $DisplayName exist in tenant"
+                    }
                 }
             }
+        }
+        else
+        {
+            $policy = $Script:exportedInstance
         }
 
         if ($null -eq $policy)
@@ -714,6 +723,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $policy
             $Results = Get-TargetResource @params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

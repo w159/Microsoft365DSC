@@ -148,6 +148,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune App And Browser Isolation Policy for Windows10 {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -169,34 +171,41 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        if (-not [System.String]::IsNullOrEmpty($Id))
+        if (-not $Script:exportedInstance)
         {
-            $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
-        }
-
-        if ($null -eq $getValue)
-        {
-            Write-Verbose -Message "Could not find an Intune App And Browser Isolation Policy for Windows10 with Id {$Id}"
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
-                    -All `
-                    -Filter "Name eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
+            }
 
-                if ($getValue.Length -gt 1)
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune App And Browser Isolation Policy for Windows10 with Id {$Id}"
+
+                if (-not [System.String]::IsNullOrEmpty($DisplayName))
                 {
-                    throw "Duplicate Intune App And Browser Isolation Policy for Windows10 named $DisplayName exist in tenant"
+                    $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
+                        -All `
+                        -Filter "Name eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue
+
+                    if ($getValue.Length -gt 1)
+                    {
+                        throw "Duplicate Intune App And Browser Isolation Policy for Windows10 named $DisplayName exist in tenant"
+                    }
                 }
             }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune App And Browser Isolation Policy for Windows10 with Name {$DisplayName}."
+                return $nullResult
+            }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune App And Browser Isolation Policy for Windows10 with Name {$DisplayName}."
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune App And Browser Isolation Policy for Windows10 with Id {$Id} and Name {$DisplayName} was found"
@@ -818,6 +827,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

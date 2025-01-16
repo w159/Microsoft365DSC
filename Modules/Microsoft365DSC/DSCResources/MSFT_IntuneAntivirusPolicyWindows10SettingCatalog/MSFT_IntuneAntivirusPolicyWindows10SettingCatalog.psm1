@@ -419,9 +419,11 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Antivirus Policy for Windows10 Setting Catalog {$DisplayName}"
+
     try
     {
-        Write-Verbose -Message "Checking for the Intune Endpoint Protection Policy {$DisplayName}"
+        Write-Verbose -Message "Getting configuration of the Intune Endpoint Protection Policy {$DisplayName}"
 
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
             -InboundParameters $PSBoundParameters `
@@ -446,36 +448,43 @@ function Get-TargetResource
 
         # Retrieve policy general settings
         $policy = $null
-        if (-not [System.String]::IsNullOrEmpty($Identity))
+        if (-not $Script:exportedInstance)
         {
-            $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
-        }
-
-        if ($null -eq $policy)
-        {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy for Windows10 Setting Catalog with Id {$Identity}"
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
+            if (-not [System.String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
-                    -All `
-                    -Filter "Name eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue | Where-Object `
-                    -FilterScript {
-                    $_.TemplateReference.TemplateId -in $templateReferences
-                    }
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+            }
 
-                if ($policy.Length -gt 1)
+            if ($null -eq $policy)
+            {
+                Write-Verbose -Message "Could not find an Intune Antivirus Policy for Windows10 Setting Catalog with Id {$Identity}"
+
+                if (-not [System.String]::IsNullOrEmpty($DisplayName))
                 {
-                    throw "Duplicate Intune Antivirus Policy for Windows10 Setting Catalog named $DisplayName exist in tenant"
+                    $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
+                        -All `
+                        -Filter "Name eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue | Where-Object `
+                        -FilterScript {
+                        $_.TemplateReference.TemplateId -in $templateReferences
+                        }
+
+                    if ($policy.Length -gt 1)
+                    {
+                        throw "Duplicate Intune Antivirus Policy for Windows10 Setting Catalog named $DisplayName exist in tenant"
+                    }
                 }
             }
-        }
 
-        if ($null -eq $policy)
+            if ($null -eq $policy)
+            {
+                Write-Verbose -Message "Could not find an Intune Antivirus Policy for Windows10 Setting Catalog with Name {$DisplayName}"
+                return $nullResult
+            }
+        }
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Policy for Windows10 Setting Catalog with Name {$DisplayName}"
-            return $nullResult
+            $policy = $Script:exportedInstance
         }
         $Identity = $policy.Id
         Write-Verbose -Message "An Intune Antivirus Policy for Windows10 Setting Catalog with Id {$Identity} and Name {$DisplayName} was found."
@@ -1682,6 +1691,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $policy
             $Results = Get-TargetResource @params
             if (-not (Test-M365DSCAuthenticationParameter -BoundParameters $Results))
             {

@@ -112,6 +112,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Device Enrollment Status Page for Windows 10 with Id {$Id} and DisplayName {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -129,8 +131,6 @@ function Get-TargetResource
         Add-M365DSCTelemetryEvent -Data $data
         #endregion
 
-        Write-Verbose -Message "Getting configuration of the Intune Device Enrollment Status Page for Windows 10 with Id {$Id} and DisplayName {$DisplayName}"
-
         $nullResult = $PSBoundParameters
         $nullResult.Ensure = 'Absent'
 
@@ -140,35 +140,45 @@ function Get-TargetResource
         }
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration -DeviceEnrollmentConfigurationId $Id -ErrorAction SilentlyContinue `
-        | Where-Object -FilterScript { $null -ne $_.DisplayName }
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Device Enrollment Configuration for Windows10 with Id {$Id}"
-
-            if (-Not [string]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [string]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue | Where-Object `
-                    -FilterScript { `
-                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration' `
-                } | Where-Object -FilterScript { $null -ne $_.DisplayName }
+                $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration -DeviceEnrollmentConfigurationId $Id -ErrorAction SilentlyContinue `
+                    | Where-Object -FilterScript { $null -ne $_.DisplayName }
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Device Enrollment Configuration for Windows10 with Id {$Id}"
+
+                if (-Not [string]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue | Where-Object `
+                        -FilterScript { `
+                            $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration' `
+                    } | Where-Object -FilterScript { $null -ne $_.DisplayName }
+                }
+            }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Device Enrollment Configuration for Windows10 with DisplayName {$DisplayName}"
+                return $nullResult
+            }
+
+            if ($getValue -is [Array] -and $getValue.Length -gt 1)
+            {
+                Throw "The DisplayName {$DisplayName} returned multiple policies, make sure DisplayName is unique."
             }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Device Enrollment Configuration for Windows10 with DisplayName {$DisplayName}"
-            return $nullResult
-        }
-
-        if ($getValue -is [Array] -and $getValue.Length -gt 1)
-        {
-            Throw "The DisplayName {$DisplayName} returned multiple policies, make sure DisplayName is unique."
+            $getValue = $Script:exportedInstance
         }
 
         $Id = $getValue.Id
@@ -756,6 +766,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

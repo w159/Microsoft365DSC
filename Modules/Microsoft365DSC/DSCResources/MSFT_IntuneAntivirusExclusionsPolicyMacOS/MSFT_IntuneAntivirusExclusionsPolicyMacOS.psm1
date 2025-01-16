@@ -64,6 +64,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Antivirus Exclusions Policy for macOS {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -85,26 +87,36 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Id {$Id}"
-
-            if (-not [System.String]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
-                    -Filter "Name eq '$DisplayName'" `
-                    -All `
-                    -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Id {$Id}"
+
+                if (-not [System.String]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
+                        -Filter "Name eq '$DisplayName'" `
+                        -All `
+                        -ErrorAction SilentlyContinue
+                }
+            }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Name {$DisplayName}."
+                return $nullResult
             }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Antivirus Exclusions Policy for macOS with Name {$DisplayName}."
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune Antivirus Exclusions Policy for macOS with Id {$Id} and Name {$DisplayName} was found"
@@ -586,6 +598,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

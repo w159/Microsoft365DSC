@@ -142,6 +142,8 @@ function Get-TargetResource
         $AccessTokens
     )
 
+    Write-Verbose -Message "Getting configuration of the Intune Device Configuration Windows Team Policy for Windows10 with Id {$Id} and DisplayName {$DisplayName}"
+
     try
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -163,29 +165,39 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
-
-        if ($null -eq $getValue)
+        if (-not $Script:exportedInstance)
         {
-            Write-Verbose -Message "Could not find an Intune Device Configuration Windows Team Policy for Windows10 with Id {$Id}"
-
-            if (-Not [string]::IsNullOrEmpty($DisplayName))
+            #region resource generator code
+            if (-not [string]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
-                    -All `
-                    -Filter "DisplayName eq '$DisplayName'" `
-                    -ErrorAction SilentlyContinue | Where-Object `
-                    -FilterScript { `
-                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10TeamGeneralConfiguration' `
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
+            }
+
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Device Configuration Windows Team Policy for Windows10 with Id {$Id}"
+
+                if (-Not [string]::IsNullOrEmpty($DisplayName))
+                {
+                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                        -All `
+                        -Filter "DisplayName eq '$DisplayName'" `
+                        -ErrorAction SilentlyContinue | Where-Object `
+                        -FilterScript { `
+                            $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.windows10TeamGeneralConfiguration' `
+                    }
                 }
             }
+            #endregion
+            if ($null -eq $getValue)
+            {
+                Write-Verbose -Message "Could not find an Intune Device Configuration Windows Team Policy for Windows10 with DisplayName {$DisplayName}"
+                return $nullResult
+            }
         }
-        #endregion
-        if ($null -eq $getValue)
+        else
         {
-            Write-Verbose -Message "Could not find an Intune Device Configuration Windows Team Policy for Windows10 with DisplayName {$DisplayName}"
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune Device Configuration Windows Team Policy for Windows10 with Id {$Id} and DisplayName {$DisplayName} was found."
@@ -807,6 +819,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

@@ -117,59 +117,57 @@ function Get-TargetResource
     {
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
             -InboundParameters $PSBoundParameters
-    }
-    catch
-    {
-        Write-Verbose -Message 'Connection to the workload failed.'
-    }
 
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
+        #Ensure the proper dependencies are installed in the current environment.
+        Confirm-M365DSCDependencies
 
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
+        #region Telemetry
+        $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+        $CommandName = $MyInvocation.MyCommand
+        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+            -CommandName $CommandName `
+            -Parameters $PSBoundParameters
+        Add-M365DSCTelemetryEvent -Data $data
+        #endregion
 
-    $nullResult = $PSBoundParameters
-    $nullResult.Ensure = 'Absent'
-    try
-    {
-        if (-not [System.String]::IsNullOrEmpty($Id))
+        $nullResult = $PSBoundParameters
+        $nullResult.Ensure = 'Absent'
+
+        $getValue = $null
+        if (-not $Script:exportedInstance)
         {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
+            if (-not [System.String]::IsNullOrEmpty($Id))
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
+            }
+            
+            #region resource generator code
+            if ($null -eq $getValue)
+            {
+                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+                    -FilterScript { `
+                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.aospDeviceOwnerDeviceConfiguration' `
+                }
+            }
+            #endregion
+
+            if ($null -eq $getValue)
+            {
+                if (-not [String]::IsNullOrEmpty($Id))
+                {
+                    Write-Verbose -Message "Nothing with id {$Id} was found"
+                }
+                else
+                {
+                    Write-Verbose -Message "Nothing with display name {$DisplayName} was found"
+                }
+
+                return $nullResult
+            }
         }
         else
         {
-            $getValue = $null
-        }
-
-        #region resource generator code
-        if ($null -eq $getValue)
-        {
-            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
-                -FilterScript { `
-                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.aospDeviceOwnerDeviceConfiguration' `
-            }
-        }
-        #endregion
-
-        if ($null -eq $getValue)
-        {
-            if (-not [String]::IsNullOrEmpty($Id))
-            {
-                Write-Verbose -Message "Nothing with id {$Id} was found"
-            }
-            else
-            {
-                Write-Verbose -Message "Nothing with display name {$DisplayName} was found"
-            }
-
-            return $nullResult
+            $getValue = $Script:exportedInstance
         }
 
         Write-Verbose -Message "Found something with id {$($getValue.Id)}"
@@ -756,6 +754,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

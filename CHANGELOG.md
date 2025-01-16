@@ -6,6 +6,9 @@
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
   * Fix values that have a zero length whitespace character.
+* MISC
+  * Intune workload
+    * Improved resource caching behavior across Intune resources.
 
 # 1.25.115.1
 
