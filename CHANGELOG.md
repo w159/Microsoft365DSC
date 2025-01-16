@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADConditionalAccessPolicy
+  * Fixed DisableResilienceDefaults result
+  * Add DisableResilienceDefaults false szenario
+
+
 # 1.25.115.1
 
 * AADAuthenticationRequirement
