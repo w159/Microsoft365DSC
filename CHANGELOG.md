@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* FabricAdminTenantSettings
+  * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
+    ArtifactOrgAppPreview properties.
+  * Fix values that have a zero length whitespace character.
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
