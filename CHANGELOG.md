@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADDeviceRegistrationPolicy
+  * Fixes an error when trying to disable AAD join.
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
