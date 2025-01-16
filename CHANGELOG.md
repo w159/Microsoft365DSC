@@ -5,6 +5,7 @@
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
+  * Fix values that have a zero length whitespace character.
 
 # 1.25.115.1
 
