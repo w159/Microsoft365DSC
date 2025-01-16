@@ -711,7 +711,7 @@ function Get-TargetResource
         #no translation needed
         PersistentBrowserIsEnabled               = $false -or $Policy.SessionControls.PersistentBrowser.IsEnabled
         #no translation needed
-        DisableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults.IsEnabled
+        DisableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults
         #make false if undefined, true if true
         PersistentBrowserMode                    = [System.String]$Policy.SessionControls.PersistentBrowser.Mode
         #no translation needed
