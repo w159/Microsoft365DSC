@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* FabricAdminTenantSettings
+  * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
+    ArtifactOrgAppPreview properties.
+
 # 1.25.115.1
 
 * AADAuthenticationRequirement
