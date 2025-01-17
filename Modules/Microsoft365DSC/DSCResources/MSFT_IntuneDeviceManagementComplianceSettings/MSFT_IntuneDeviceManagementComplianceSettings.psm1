@@ -67,15 +67,8 @@ function Get-TargetResource
 
         $nullResult = $PSBoundParameters
 
-        if (-not $Script:exportedInstance)
-        {
-            $uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + 'beta/deviceManagement/settings'
-            $settings = Invoke-MgGraphRequest -Method 'GET' -Uri $uri
-        }
-        else
-        {
-            $settings = $Script:exportedInstance
-        }
+        $uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + 'beta/deviceManagement/settings'
+        $settings = Invoke-MgGraphRequest -Method 'GET' -Uri $uri
     
         $results = @{
             IsSingleInstance                     = 'Yes'

@@ -110,36 +110,35 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Intune Account Protection LAPS Policy {$DisplayName}"
+    Write-Verbose -Message "Getting configuration of the Intune Account Protection LAPS Policy with Id {$Identity} and DisplayName {$DisplayName}"
 
     try
     {
-
-        $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-            -InboundParameters $PSBoundParameters `
-            -ErrorAction Stop
-
-        #Ensure the proper dependencies are installed in the current environment.
-        #Confirm-M365DSCDependencies
-
-        #region Telemetry
-        $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-        $CommandName = $MyInvocation.MyCommand
-        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-            -CommandName $CommandName `
-            -Parameters $PSBoundParameters
-        Add-M365DSCTelemetryEvent -Data $data
-        #endregion
-
-        $nullResult = $PSBoundParameters
-        $nullResult.Ensure = 'Absent'
-
-        $templateReferenceId = 'adc46e5a-f4aa-4ff6-aeff-4f27bc525796_1'
-
-        # Retrieve policy general settings
-        $policy = $null
         if (-not $Script:exportedInstance)
         {
+            $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+                -InboundParameters $PSBoundParameters `
+                -ErrorAction Stop
+
+            #Ensure the proper dependencies are installed in the current environment.
+            #Confirm-M365DSCDependencies
+
+            #region Telemetry
+            $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+            $CommandName = $MyInvocation.MyCommand
+            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+                -CommandName $CommandName `
+                -Parameters $PSBoundParameters
+            Add-M365DSCTelemetryEvent -Data $data
+            #endregion
+
+            $nullResult = $PSBoundParameters
+            $nullResult.Ensure = 'Absent'
+
+            $templateReferenceId = 'adc46e5a-f4aa-4ff6-aeff-4f27bc525796_1'
+
+            # Retrieve policy general settings
+            $policy = $null
             if (-not [System.String]::IsNullOrEmpty($Identity))
             {
                 $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue

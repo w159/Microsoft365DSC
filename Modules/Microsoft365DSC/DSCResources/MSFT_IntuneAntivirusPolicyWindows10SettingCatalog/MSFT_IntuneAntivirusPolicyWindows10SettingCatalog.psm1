@@ -419,37 +419,35 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Intune Antivirus Policy for Windows10 Setting Catalog {$DisplayName}"
+    Write-Verbose -Message "Getting configuration of the Intune Antivirus Policy for Windows10 Setting Catalog with Id {$Identity} and DisplayName {$DisplayName}"
 
     try
     {
-        Write-Verbose -Message "Getting configuration of the Intune Endpoint Protection Policy {$DisplayName}"
-
-        $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-            -InboundParameters $PSBoundParameters `
-            -ErrorAction Stop
-
-        #Ensure the proper dependencies are installed in the current environment.
-        Confirm-M365DSCDependencies
-
-        #region Telemetry
-        $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-        $CommandName = $MyInvocation.MyCommand
-        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-            -CommandName $CommandName `
-            -Parameters $PSBoundParameters
-        Add-M365DSCTelemetryEvent -Data $data
-        #endregion
-
-        $nullResult = $PSBoundParameters
-        $nullResult.Ensure = 'Absent'
-
-        $templateReferences = 'd948ff9b-99cb-4ee0-8012-1fbc09685377_1', 'e3f74c5a-a6de-411d-aef6-eb15628f3a0a_1', '45fea5e9-280d-4da1-9792-fb5736da0ca9_1', '804339ad-1553-4478-a742-138fb5807418_1'
-
-        # Retrieve policy general settings
-        $policy = $null
         if (-not $Script:exportedInstance)
         {
+            $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+                -InboundParameters $PSBoundParameters `
+                -ErrorAction Stop
+
+            #Ensure the proper dependencies are installed in the current environment.
+            Confirm-M365DSCDependencies
+
+            #region Telemetry
+            $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+            $CommandName = $MyInvocation.MyCommand
+            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+                -CommandName $CommandName `
+                -Parameters $PSBoundParameters
+            Add-M365DSCTelemetryEvent -Data $data
+            #endregion
+
+            $nullResult = $PSBoundParameters
+            $nullResult.Ensure = 'Absent'
+
+            $templateReferences = 'd948ff9b-99cb-4ee0-8012-1fbc09685377_1', 'e3f74c5a-a6de-411d-aef6-eb15628f3a0a_1', '45fea5e9-280d-4da1-9792-fb5736da0ca9_1', '804339ad-1553-4478-a742-138fb5807418_1'
+
+            # Retrieve policy general settings
+            $policy = $null
             if (-not [System.String]::IsNullOrEmpty($Identity))
             {
                 $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue

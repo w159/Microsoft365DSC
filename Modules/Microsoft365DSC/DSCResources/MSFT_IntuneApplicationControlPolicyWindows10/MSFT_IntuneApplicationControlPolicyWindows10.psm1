@@ -63,32 +63,32 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Intune Endpoint Protection Application Control Policy {$DisplayName}"
+    Write-Verbose -Message "Getting configuration of the Intune Endpoint Protection Application Control Policy with Id {$Id} and DisplayName {$DisplayName}"
 
     try
     {
-        $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-            -InboundParameters $PSBoundParameters -ErrorAction Stop
-
-        #Ensure the proper dependencies are installed in the current environment.
-        Confirm-M365DSCDependencies
-
-        #region Telemetry
-        $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-        $CommandName = $MyInvocation.MyCommand
-        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-            -CommandName $CommandName `
-            -Parameters $PSBoundParameters
-        Add-M365DSCTelemetryEvent -Data $data
-        #endregion
-
-        $nullResult = $PSBoundParameters
-        $nullResult.Ensure = 'Absent'
-
-        $policy = $null
-        #Retrieve policy general settings
         if (-not $Script:exportedInstance)
         {
+            $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+                -InboundParameters $PSBoundParameters -ErrorAction Stop
+
+            #Ensure the proper dependencies are installed in the current environment.
+            Confirm-M365DSCDependencies
+
+            #region Telemetry
+            $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+            $CommandName = $MyInvocation.MyCommand
+            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+                -CommandName $CommandName `
+                -Parameters $PSBoundParameters
+            Add-M365DSCTelemetryEvent -Data $data
+            #endregion
+
+            $nullResult = $PSBoundParameters
+            $nullResult.Ensure = 'Absent'
+
+            $policy = $null
+            #Retrieve policy general settings
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
                 $policy = Get-MgBetaDeviceManagementIntent -DeviceManagementIntentId $Id -ErrorAction Stop
