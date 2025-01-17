@@ -2,13 +2,13 @@
 
 # UNRELEASED
 
-* AADServicePrincipal
-  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
 * AADRoleSetting
   * Fixed issue where missing settings object for a role caused errors.
     FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
+* AADServicePrincipal
+  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
