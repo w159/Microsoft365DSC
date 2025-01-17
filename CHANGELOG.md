@@ -5,7 +5,14 @@
 * AADConditionalAccessPolicy
   * Fixed DisableResilienceDefaults result
   * Add DisableResilienceDefaults false szenario
-
+* AADDeviceRegistrationPolicy
+  * Fixes an error when trying to disable AAD join.
+* AADServicePrincipal
+  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* FabricAdminTenantSettings
+  * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
+    ArtifactOrgAppPreview properties.
+  * Fix values that have a zero length whitespace character.
 
 # 1.25.115.1
 
