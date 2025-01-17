@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADServicePrincipal
+  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
 * FabricAdminTenantSettings
