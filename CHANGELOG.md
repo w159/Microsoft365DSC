@@ -10,6 +10,8 @@
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
   * Fix values that have a zero length whitespace character.
+* M365DSCTelemetryEngine
+  * Report LCM details only if running as administrator.
 
 # 1.25.115.1
 
