@@ -2,15 +2,45 @@
 
 # UNRELEASED
 
-* Export Performance Improvements
-  * Implements the changes described in [#5615](https://github.com/microsoft/Microsoft365DSC/issues/5615)
+* AADConditionalAccessPolicy
+  * Fixed DisableResilienceDefaults result
+  * Add DisableResilienceDefaults false szenario
+* AADDeviceRegistrationPolicy
+  * Fixes an error when trying to disable AAD join.
+* AADRoleSetting
+  * Fixed issue where missing settings object for a role caused errors.
+    FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
+* AADServicePrincipal
+  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* FabricAdminTenantSettings
+  * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
+    ArtifactOrgAppPreview properties.
+  * Fix values that have a zero length whitespace character.
+* M365DSCReport
+  * Fix missing delimiter when called without the parameter.
+    FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
+* M365DSCTelemetryEngine
+  * Report LCM details only if running as administrator.
+* MISC
+  * Export Performance Improvements
+    Implements the changes described in [#5615](https://github.com/microsoft/Microsoft365DSC/issues/5615)
+
+# 1.25.115.1
+
 * AADAuthenticationRequirement
   * Filtered guests from the export, to prevent errors during export
     FIXES [#5625](https://github.com/microsoft/Microsoft365DSC/issues/5625)
+* AADCustomAuthenticationExtension
+  * Fixes an issue extracting instances due to the OrganizationName being null.
 * AADGroup
   * Only get Members & GroupAsMembers when a static group is defined.
 * AADGroupEligibilitySchedule
   * New resource for Privileged Identity Management (PIM) for Groups
+* AADNamingLocationPolicy
+  * Improved logging and fixed issue that caused creation of duplicate
+    locations with same name.
+* EXOSmtpDaneInbound
+  * Initial release
 * IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy
   * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
 * IntuneAccountProtectionPolicyWindows10
@@ -39,15 +69,18 @@
   * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
 * IntuneSettingCatalogASRRulesPolicyWindows10
   * Fixed creation of policy while it was found by name, now it updates existing policies correctly.
-* AADNamingLocationPolicy
-  * Improved logging and fixed issue that caused creation of duplicate
-    locations with same name.
-* EXOSmtpDaneInbound
-  * initial release
 * IntuneVPNConfigurationPolicyAndroidWork
   * Initial release
+* M365DSCRuleEvaluation
+  * Making RuleDefinition a key of the resource to allow multiple
+    rules for the same resource type to be provided in the same config.
+  * Adding a new RuleName parameter to make it easier to understand
+    the results in the event logs.
 * TeamsGroupPolicyAssignment
   * FIXES [[#5527](https://github.com/microsoft/Microsoft365DSC/issues/5527)]
+* DEPENDENCIES
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.203.
+  * Updated MSCloudLoginAssistant to version 1.1.34.
 
 # 1.25.108.1
 

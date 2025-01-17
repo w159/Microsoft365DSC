@@ -302,7 +302,7 @@ function Get-TargetResource
         }
 
         $result = @{
-            AppId                              = $appInstance.DisplayName
+            AppId                              = $AADServicePrincipal.AppId
             AppRoleAssignedTo                  = $AppRoleAssignedToValues
             ObjectID                           = $AADServicePrincipal.Id
             DisplayName                        = $AADServicePrincipal.DisplayName
@@ -326,13 +326,6 @@ function Get-TargetResource
             KeyCredentials                     = $complexKeyCredentials
             PasswordCredentials                = $complexPasswordCredentials
             Ensure                             = 'Present'
-            Credential                         = $Credential
-            ApplicationId                      = $ApplicationId
-            ApplicationSecret                  = $ApplicationSecret
-            TenantId                           = $TenantId
-            CertificateThumbprint              = $CertificateThumbprint
-            Managedidentity                    = $ManagedIdentity.IsPresent
-            AccessTokens                       = $AccessTokens
         }
         Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
         return $result
