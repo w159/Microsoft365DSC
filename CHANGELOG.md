@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixed DisableResilienceDefaults result
+  * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
 * AADRoleSetting
