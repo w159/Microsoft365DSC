@@ -26,6 +26,7 @@
 * MISC
   * Export Performance Improvements
     Implements the changes described in [#5615](https://github.com/microsoft/Microsoft365DSC/issues/5615)
+    Improved resource caching behavior across Intune resources.
 
 # 1.25.115.1
 
