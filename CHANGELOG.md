@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixes CA policy deployment errors when deploying policies based for workload identities.
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
 * FabricAdminTenantSettings
