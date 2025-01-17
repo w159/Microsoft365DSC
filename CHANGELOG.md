@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADServicePrincipal
+  * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* AADDeviceRegistrationPolicy
+  * Fixes an error when trying to disable AAD join.
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
@@ -9,6 +13,8 @@
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
+* M365DSCTelemetryEngine
+  * Report LCM details only if running as administrator.
 
 # 1.25.115.1
 
