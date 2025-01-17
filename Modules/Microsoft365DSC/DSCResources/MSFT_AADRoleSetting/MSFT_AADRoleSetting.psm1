@@ -278,7 +278,7 @@ function Get-TargetResource
     }
 
     #get Policyrule
-    $role = Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $Policy.Policyid
+    $role = Get-MgBetaPolicyRoleManagementPolicyRule -UnifiedRoleManagementPolicyId $Policy.Policyid -ErrorAction SilentlyContinue
 
     $DisplayName = $RoleDefinition.DisplayName
     $ActivationMaxDuration = ($role | Where-Object { $_.Id -eq 'Expiration_EndUser_Assignment' }).AdditionalProperties.maximumDuration
