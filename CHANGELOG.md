@@ -21,6 +21,9 @@
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
 * M365DSCTelemetryEngine
   * Report LCM details only if running as administrator.
+* MISC
+  * Export Performance Improvements
+    Implements the changes described in [#5615](https://github.com/microsoft/Microsoft365DSC/issues/5615)
 
 # 1.25.115.1
 
