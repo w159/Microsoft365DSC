@@ -7,12 +7,17 @@
   * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
+* AADRoleSetting
+  * Fixed issue where missing settings object for a role caused errors.
+    FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
 * AADServicePrincipal
   * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
   * Fix values that have a zero length whitespace character.
+* M365DSCTelemetryEngine
+  * Report LCM details only if running as administrator.
 
 # 1.25.115.1
 
