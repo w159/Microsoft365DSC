@@ -1,6 +1,15 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* AADGroupsNamingPolicy, EXOHostedContentFilterPolicy,
+  SCAutoSensitivityLabelPolicy, SCLabelPolicy, SCSecurityFilter
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
+* EXOTenantAllowBlockListItems
+  * Fixed `Test-TargetResource` by using the correct parameter `DesiredValues`
+    given to `Test-M365DSCParameterState`
 * IntuneAppProtectionPolicyiOS
   * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
 
