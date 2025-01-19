@@ -1,6 +1,9 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* EXOTransportRule
+  * Fix type of `SenderInRecipientList` in schema
 * IntuneAppProtectionPolicyiOS
   * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
 
