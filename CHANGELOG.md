@@ -13,6 +13,8 @@
     FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
 * AADServicePrincipal
   * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* EXOTransportRule
+  * Fix type of `SenderInRecipientList` in schema
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
