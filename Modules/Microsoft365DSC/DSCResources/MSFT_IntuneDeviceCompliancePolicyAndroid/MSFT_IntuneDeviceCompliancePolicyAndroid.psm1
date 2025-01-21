@@ -166,7 +166,7 @@ function Get-TargetResource
     )
 
     Write-Verbose -Message "Getting configuration of the Intune Android Device Compliance Policy {$DisplayName}"
-    
+
     try
     {
         if (-not $Script:exportedInstance)
@@ -730,13 +730,7 @@ function Test-TargetResource
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"
 
-    $ValuesToCheck = $PSBoundParameters
-
-    $testResult = $true
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        $testResult = $false
-    }
+    $ValuesToCheck = $PSBoundParameters    $testResult = $true
     #region Assignments
     if ($testResult)
     {
