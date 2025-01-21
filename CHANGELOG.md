@@ -2,32 +2,67 @@
 
 # UNRELEASED
 
-* EXOAvailabilityConfig
-  * Removed dependency on Microsoft Graph to retrieve user information.
-* EXODistributionGroup
-  * Removed dependency on Microsoft Graph to retrieve user information.
-* IntuneAppProtectionPolicyiOS
-  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
-
 * AADConditionalAccessPolicy
+  * Fixes CA policy deployment errors when deploying policies based for workload identities.
   * Fixed DisableResilienceDefaults result
   * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
+* AADGroupsNamingPolicy
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
 * AADRoleSetting
   * Fixed issue where missing settings object for a role caused errors.
     FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
 * AADServicePrincipal
   * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* EXOAvailabilityConfig
+  * Removed dependency on Microsoft Graph to retrieve user information.
+* EXODistributionGroup
+  * Removed dependency on Microsoft Graph to retrieve user information.
+* EXOHostedContentFilterPolicy
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
+* EXOTenantAllowBlockListItems
+  * Fixed `Test-TargetResource` by using the correct parameter `DesiredValues`
+    given to `Test-M365DSCParameterState`
+* EXOTransportRule
+  * Fix type of `SenderInRecipientList` in schema
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
   * Fix values that have a zero length whitespace character.
+* IntuneAppProtectionPolicyiOS
+  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
+* SCAutoSensitivityLabelPolicy
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
+* SCLabelPolicy
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
+* SCSecurityFilter
+  * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
+    contrary to `EXOTenantAllowBlockListItems` these resources are not affected
+    but we still should use the correct parameter
+* SPOSPOBrowserIdleSignout
+  * Corrected export types where the schema expected a String, but received a different type
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
+* SPOSharingSettings
+  * Corrected export types where the schema expected a String, but received a different type
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
 * M365DSCTelemetryEngine
   * Report LCM details only if running as administrator.
+* M365DSCUtil
+  * In `Test-M365DSCParameterState` try to replace the line endings before
+    making the comparison otherwise it may fail as it did for a few resources
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
 * MISC
   * Export Performance Improvements
     Implements the changes described in [#5615](https://github.com/microsoft/Microsoft365DSC/issues/5615)
