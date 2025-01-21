@@ -3,6 +3,7 @@
 # UNRELEASED
 
 * AADConditionalAccessPolicy
+  * Fixes CA policy deployment errors when deploying policies based for workload identities.
   * Fixed DisableResilienceDefaults result
   * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
@@ -23,6 +24,8 @@
 * EXOTenantAllowBlockListItems
   * Fixed `Test-TargetResource` by using the correct parameter `DesiredValues`
     given to `Test-M365DSCParameterState`
+* EXOTransportRule
+  * Fix type of `SenderInRecipientList` in schema
 * FabricAdminTenantSettings
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
