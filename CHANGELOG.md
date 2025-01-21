@@ -1,6 +1,11 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* EXOAvailabilityConfig
+  * Removed dependency on Microsoft Graph to retrieve user information.
+* EXODistributionGroup
+  * Removed dependency on Microsoft Graph to retrieve user information.
 * IntuneAppProtectionPolicyiOS
   * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
 
