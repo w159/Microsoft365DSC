@@ -1,8 +1,13 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* M365DSCUtil
+  * In `Test-M365DSCParameterState` try to replace the line endings before
+    making the comparison otherwise it may fail as it did for a few resources
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
 * IntuneAppProtectionPolicyiOS
-  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
+  * FIXES [#5589](https://github.com/microsoft/Microsoft365DSC/issues/5589)
 
 * AADConditionalAccessPolicy
   * Fixed DisableResilienceDefaults result
