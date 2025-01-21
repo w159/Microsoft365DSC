@@ -820,7 +820,8 @@ function Test-TargetResource
                 }
             }
         }
-    }    $testResult = $true
+    }
+    $testResult = $true
 
     #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)
