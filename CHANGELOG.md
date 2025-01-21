@@ -3,6 +3,7 @@
 # UNRELEASED
 
 * AADConditionalAccessPolicy
+  * Fixes CA policy deployment errors when deploying policies based for workload identities.
   * Fixed DisableResilienceDefaults result
   * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
