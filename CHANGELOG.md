@@ -1,8 +1,6 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
-* IntuneAppProtectionPolicyiOS
-  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
 
 * AADConditionalAccessPolicy
   * Fixed DisableResilienceDefaults result
@@ -18,6 +16,14 @@
   * Added support for the AllowGetOneLakeUDK, AllowMountDfCreation, AllowOneLakeUDK,
     ArtifactOrgAppPreview properties.
   * Fix values that have a zero length whitespace character.
+* IntuneAppProtectionPolicyiOS
+  * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
+* SPOSPOBrowserIdleSignout
+  * Corrected export types where the schema expected a String, but received a different type
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
+* SPOSharingSettings
+  * Corrected export types where the schema expected a String, but received a different type
+    FIXES [#5648](https://github.com/microsoft/Microsoft365DSC/issues/5648)
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
