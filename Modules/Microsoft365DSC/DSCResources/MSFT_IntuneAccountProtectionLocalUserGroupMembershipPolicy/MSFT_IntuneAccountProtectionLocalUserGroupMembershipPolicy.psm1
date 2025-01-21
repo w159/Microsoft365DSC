@@ -429,7 +429,8 @@ function Test-TargetResource
     Write-Verbose -Message "Testing configuration of Account Protection Local User Group Membership Policy {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()    $testResult = $true
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
+    $testResult = $true
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $PSBoundParameters)"

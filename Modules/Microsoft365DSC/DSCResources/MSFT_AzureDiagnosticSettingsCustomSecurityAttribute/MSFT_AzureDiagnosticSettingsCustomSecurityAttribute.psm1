@@ -356,7 +356,8 @@ function Test-TargetResource
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
-    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"    $testResult = $true
+    Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
+    $testResult = $true
 
     #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)

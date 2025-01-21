@@ -795,7 +795,8 @@ function Test-TargetResource
         throw "An error occured in Get-TargetResource, the policy {$displayName} will not be processed. Refer to the event viewer logs for more information."
     }
 
-    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()    $testResult = $true
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
+    $testResult = $true
 
     #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)

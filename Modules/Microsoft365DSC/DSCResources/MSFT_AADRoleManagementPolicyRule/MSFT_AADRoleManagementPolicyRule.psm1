@@ -386,7 +386,8 @@ function Test-TargetResource
     Write-Verbose -Message "Testing configuration of the Azure AD Role Management Policy Rule with Id {$Id} and DisplayName {$DisplayName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()    $testResult = $true
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
+    $testResult = $true
 
     #Compare Cim instances
     foreach ($key in $PSBoundParameters.Keys)
