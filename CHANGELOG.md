@@ -8,6 +8,8 @@
   * Add DisableResilienceDefaults false szenario
 * AADDeviceRegistrationPolicy
   * Fixes an error when trying to disable AAD join.
+* AADGroup
+  * Added functionality to add & check on Devices in AAD groups.
 * AADGroupsNamingPolicy
   * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
     contrary to `EXOTenantAllowBlockListItems` these resources are not affected
