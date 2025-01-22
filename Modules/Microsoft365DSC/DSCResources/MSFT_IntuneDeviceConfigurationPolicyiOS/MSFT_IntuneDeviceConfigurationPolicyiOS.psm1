@@ -810,55 +810,50 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of the Intune Device Configuration Policy for iOS with Id {$Id} and DisplayName {$DisplayName}"
-
     try
     {
-        if (-not $Script:exportedInstance)
+        $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+            -InboundParameters $PSBoundParameters
+    }
+    catch
+    {
+        Write-Verbose -Message 'Connection to the workload failed.'
+    }
+
+    #Ensure the proper dependencies are installed in the current environment.
+    Confirm-M365DSCDependencies
+
+    #region Telemetry
+    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
+    $CommandName = $MyInvocation.MyCommand
+    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+        -CommandName $CommandName `
+        -Parameters $PSBoundParameters
+    Add-M365DSCTelemetryEvent -Data $data
+    #endregion
+
+    $nullResult = $PSBoundParameters
+    $nullResult.Ensure = 'Absent'
+    try
+    {
+        $getValue = $null
+
+        #region resource generator code
+        $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $id -ErrorAction SilentlyContinue
+
+        if (-not $getValue)
         {
-            $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-                -InboundParameters $PSBoundParameters
-
-            #Ensure the proper dependencies are installed in the current environment.
-            Confirm-M365DSCDependencies
-
-            #region Telemetry
-            $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-            $CommandName = $MyInvocation.MyCommand
-            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-                -CommandName $CommandName `
-                -Parameters $PSBoundParameters
-            Add-M365DSCTelemetryEvent -Data $data
-            #endregion
-
-            $nullResult = $PSBoundParameters
-            $nullResult.Ensure = 'Absent'
-        
-            $getValue = $null
-            #region resource generator code
-            if (-not [string]::IsNullOrEmpty($Id))
-            {
-                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $Id -ErrorAction SilentlyContinue
-            }
-
-            if (-not $getValue)
-            {
-                $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
-                    -FilterScript { `
-                        $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosGeneralDeviceConfiguration' `
-                }
-            }
-            #endregion
-
-            if ($null -eq $getValue)
-            {
-                Write-Verbose -Message "Nothing with id {$id} was found"
-                return $nullResult
+            $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All -Filter "DisplayName eq '$Displayname'" -ErrorAction SilentlyContinue | Where-Object `
+                -FilterScript { `
+                    $_.AdditionalProperties.'@odata.type' -eq '#microsoft.graph.iosGeneralDeviceConfiguration' `
             }
         }
-        else
+        #endregion
+
+        if ($null -eq $getValue)
         {
-            $getValue = $Script:exportedInstance
+            Write-Verbose -Message "Nothing with id {$id} was found"
+            return $nullResult
         }
 
         Write-Verbose -Message "Found something with id {$id}"
@@ -1058,7 +1053,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1075,7 +1070,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1092,7 +1087,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1149,7 +1144,7 @@ function Get-TargetResource
                     foreach ($currentChildValue in $currentValueChildArray)
                     {
                         $currentHash = @{}
-                        $currentHash.add('AppId', $currentValue.appid)
+                        $currentHash.add('AppId', $currentValue.appId)
                         $currentHash.add('Publisher', $currentValue.publisher)
                         $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                         $currentHash.add('Name', $currentValue.name)
@@ -3091,7 +3086,6 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results
