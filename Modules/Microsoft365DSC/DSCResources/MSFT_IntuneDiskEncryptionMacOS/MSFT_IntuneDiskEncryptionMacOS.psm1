@@ -597,7 +597,8 @@ function Test-TargetResource
     }
 
     $ValuesToCheck.Remove('Id') | Out-Null
-    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck    $testResult = $true
+    $ValuesToCheck = Remove-M365DSCAuthenticationParameter -BoundParameters $ValuesToCheck
+    $testResult = $true
     if ($testResult)
     {
         $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
