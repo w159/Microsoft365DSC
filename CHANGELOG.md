@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.122.1
 
 * AADConditionalAccessPolicy
   * Fixes CA policy deployment errors when deploying policies based for workload identities.
