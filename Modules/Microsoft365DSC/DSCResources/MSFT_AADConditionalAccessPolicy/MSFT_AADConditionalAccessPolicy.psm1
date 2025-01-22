@@ -263,56 +263,63 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message 'Getting configuration of AzureAD Conditional Access Policy'
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-        -InboundParameters $PSBoundParameters
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    if ($PSBoundParameters.ContainsKey('Id'))
+    if (-not $Script:exportedInstance)
     {
-        Write-Verbose -Message 'PolicyID was specified'
-        try
+        Write-Verbose -Message 'Getting configuration of AzureAD Conditional Access Policy'
+        $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+            -InboundParameters $PSBoundParameters
+
+        #Ensure the proper dependencies are installed in the current environment.
+        Confirm-M365DSCDependencies
+
+        #region Telemetry
+        $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+        $CommandName = $MyInvocation.MyCommand
+        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+            -CommandName $CommandName `
+            -Parameters $PSBoundParameters
+        Add-M365DSCTelemetryEvent -Data $data
+        #endregion
+
+        if ($PSBoundParameters.ContainsKey('Id'))
         {
-            $Policy = Get-MgBetaIdentityConditionalAccessPolicy -ConditionalAccessPolicyId $Id -ErrorAction Stop
+            Write-Verbose -Message 'PolicyID was specified'
+            try
+            {
+                $Policy = Get-MgBetaIdentityConditionalAccessPolicy -ConditionalAccessPolicyId $Id -ErrorAction Stop
+            }
+            catch
+            {
+                Write-Verbose -Message "Couldn't find existing policy by ID {$Id}"
+                $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$DisplayName'"
+                if ($Policy.Length -gt 1)
+                {
+                    throw "Duplicate CA Policies named $DisplayName exist in tenant"
+                }
+            }
         }
-        catch
+        else
         {
-            Write-Verbose -Message "Couldn't find existing policy by ID {$Id}"
+            Write-Verbose -Message 'Id was NOT specified'
+            ## Can retreive multiple CA Policies since displayname is not unique
             $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$DisplayName'"
             if ($Policy.Length -gt 1)
             {
                 throw "Duplicate CA Policies named $DisplayName exist in tenant"
             }
         }
+
+        if ([String]::IsNullOrEmpty($Policy.id))
+        {
+            Write-Verbose -Message "No existing Policy with name {$DisplayName} were found"
+            $currentValues = $PSBoundParameters
+            $currentValues.Ensure = 'Absent'
+            return $currentValues
+        }
     }
     else
     {
-        Write-Verbose -Message 'Id was NOT specified'
-        ## Can retreive multiple CA Policies since displayname is not unique
-        $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$DisplayName'"
-        if ($Policy.Length -gt 1)
-        {
-            throw "Duplicate CA Policies named $DisplayName exist in tenant"
-        }
-    }
-
-    if ([String]::IsNullOrEmpty($Policy.id))
-    {
-        Write-Verbose -Message "No existing Policy with name {$DisplayName} were found"
-        $currentValues = $PSBoundParameters
-        $currentValues.Ensure = 'Absent'
-        return $currentValues
+        $Policy = $Script:exportedInstance
     }
 
     Write-Verbose -Message 'Get-TargetResource: Found existing Conditional Access policy'
@@ -711,7 +718,7 @@ function Get-TargetResource
         #no translation needed
         PersistentBrowserIsEnabled               = $false -or $Policy.SessionControls.PersistentBrowser.IsEnabled
         #no translation needed
-        DisableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults.IsEnabled
+        DisableResilienceDefaultsIsEnabled       = $false -or $Policy.SessionControls.disableResilienceDefaults
         #make false if undefined, true if true
         PersistentBrowserMode                    = [System.String]$Policy.SessionControls.PersistentBrowser.Mode
         #no translation needed
@@ -1035,7 +1042,6 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: create Conditions object'
         $conditions = @{
             applications = @{}
-            users        = @{}
         }
         #create and provision Application Condition object
         Write-Verbose -Message 'Set-Targetresource: create Application Condition object'
@@ -1122,6 +1128,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process includeusers'
         if ($currentParameters.ContainsKey('IncludeUsers'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.Users.Add('includeUsers', @())
             foreach ($includeuser in $IncludeUsers)
             {
@@ -1169,6 +1179,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process excludeusers'
         if ($currentParameters.ContainsKey('ExcludeUsers'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.users.Add('excludeUsers', @())
             foreach ($excludeuser in $ExcludeUsers)
             {
@@ -1216,6 +1230,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process includegroups'
         if ($currentParameters.ContainsKey('IncludeGroups'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.users.Add('includeGroups', @())
             foreach ($includegroup in $IncludeGroups)
             {
@@ -1266,6 +1284,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process excludegroups'
         if ($currentParameters.ContainsKey('ExcludeGroups'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.users.Add('excludeGroups', @())
             foreach ($ExcludeGroup in $ExcludeGroups)
             {
@@ -1316,6 +1338,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process includeroles'
         if ($currentParameters.ContainsKey('IncludeRoles'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.Users.Add('includeRoles', @())
             if ($IncludeRoles)
             {
@@ -1350,6 +1376,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process excluderoles'
         if ($currentParameters.ContainsKey('ExcludeRoles'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $conditions.users.Add('excludeRoles', @())
             if ($ExcludeRoles)
             {
@@ -1384,6 +1414,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process includeGuestOrExternalUser'
         If ($currentParameters.ContainsKey('IncludeGuestOrExternalUserTypes'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $includeGuestsOrExternalUsers = $null
             if ($IncludeGuestOrExternalUserTypes.Count -ne 0)
             {
@@ -1415,6 +1449,10 @@ function Set-TargetResource
         Write-Verbose -Message 'Set-Targetresource: process excludeGuestsOrExternalUsers'
         If ($currentParameters.ContainsKey('ExcludeGuestOrExternalUserTypes'))
         {
+            if (-not $conditions.ContainsKey('users'))
+            {
+                $conditions.Add('users', @{})
+            }
             $excludeGuestsOrExternalUsers = $null
             if ($ExcludeGuestOrExternalUserTypes.Count -ne 0)
             {
@@ -1745,7 +1783,7 @@ function Set-TargetResource
             $NewParameters.Add('grantControls', $GrantControls)
         }
 
-        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or $DisableResilienceDefaultsIsEnabled)
+        if ($ApplicationEnforcedRestrictionsIsEnabled -or $CloudAppSecurityIsEnabled -or $SignInFrequencyIsEnabled -or $PersistentBrowserIsEnabled -or !([String]::IsNullOrEmpty($DisableResilienceDefaultsIsEnabled)))
         {
             Write-Verbose -Message 'Set-Targetresource: process session controls'
             $sessioncontrols = $null
@@ -1812,9 +1850,9 @@ function Set-TargetResource
                 $sessioncontrols.persistentBrowser.isEnabled = $true
                 $sessioncontrols.persistentBrowser.mode = $PersistentBrowserMode
             }
-            if ($DisableResilienceDefaultsIsEnabled)
+            if (!([String]::IsNullOrEmpty($DisableResilienceDefaultsIsEnabled)))
             {
-                $sessioncontrols.Add('disableResilienceDefaults', $true)
+                $sessioncontrols.Add('disableResilienceDefaults', $DisableResilienceDefaultsIsEnabled)
             }
             $NewParameters.Add('sessionControls', $sessioncontrols)
             #add SessionControls to the parameter list
@@ -1851,7 +1889,7 @@ function Set-TargetResource
         Write-Verbose -Message 'Create Parameters:'
         Write-Verbose -Message (Convert-M365DscHashtableToString $NewParameters)
 
-        if ($newparameters.Conditions.applications.count -gt 0 -and $newparameters.Conditions.Users.count -gt 0 -and ($newparameters.GrantControls.count -gt 0 -or $newparameters.SessionControls.count -gt 0))
+        if ($newparameters.Conditions.applications.count -gt 0 -and ($newparameters.Conditions.Users.count -gt 0 -or $newparameters.Conditions.ClientApplications.count -gt 0) -and ($newparameters.GrantControls.count -gt 0 -or $newparameters.SessionControls.count -gt 0))
         {
             try
             {
@@ -2289,6 +2327,7 @@ function Export-TargetResource
                     Managedidentity       = $ManagedIdentity.IsPresent
                     AccessTokens          = $AccessTokens
                 }
+                $Script:exportedInstance = $Policy
                 $Results = Get-TargetResource @Params
 
                 if ([System.String]::IsNullOrEmpty($Results.DeviceFilterMode))
