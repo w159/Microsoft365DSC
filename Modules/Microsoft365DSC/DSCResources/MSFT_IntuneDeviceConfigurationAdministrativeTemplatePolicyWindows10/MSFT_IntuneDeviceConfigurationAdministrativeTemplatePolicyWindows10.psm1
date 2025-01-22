@@ -706,26 +706,27 @@ function Test-TargetResource
             if ($key -eq 'DefinitionValues')
             {
                 $source = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $source
+                $target = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $target
                 foreach ($definitionValue in $source)
                 {
-                    $definitionValue.remove('Definition')
-                    $definitionValue.remove('Id')
+                    $definitionValue.remove('Definition') | Out-Null
+                    $definitionValue.remove('Id') | Out-Null
                     #Removing Key presentationDefinitionLabel because it is Read-Only and ID as random
                     foreach ($presentationValue in $definitionValue.PresentationValues)
                     {
-                        $presentationValue.remove('presentationDefinitionLabel')
-                        $presentationValue.remove('Id')
+                        $presentationValue.remove('presentationDefinitionLabel') | Out-Null
+                        $presentationValue.remove('Id') | Out-Null
                     }
                 }
                 foreach ($definitionValue in $target)
                 {
-                    $definitionValue.remove('Definition')
-                    $definitionValue.remove('Id')
+                    $definitionValue.remove('Definition') | Out-Null
+                    $definitionValue.remove('Id') | Out-Null
                     #Removing Key presentationDefinitionLabel because it is Read-Only and ID as random
                     foreach ($presentationValue in $definitionValue.PresentationValues)
                     {
-                        $presentationValue.remove('presentationDefinitionLabel')
-                        $presentationValue.remove('Id')
+                        $presentationValue.remove('presentationDefinitionLabel') | Out-Null
+                        $presentationValue.remove('Id') | Out-Null
                     }
                 }
             }
