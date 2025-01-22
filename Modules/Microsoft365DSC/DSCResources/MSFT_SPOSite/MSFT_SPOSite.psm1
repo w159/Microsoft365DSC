@@ -159,7 +159,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration for site collection $Url"
 
@@ -981,7 +981,7 @@ function Export-TargetResource
 
             try
             {
-                $Script:exportedInstance = $site
+                $Script:exportedInstances = $site
                 $Results = Get-TargetResource @Params
 
                 if ([System.String]::IsNullOrEmpty($Results.SharingDomainRestrictionMode))

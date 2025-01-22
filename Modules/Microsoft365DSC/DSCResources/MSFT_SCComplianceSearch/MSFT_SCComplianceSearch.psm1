@@ -92,7 +92,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of SCComplianceSearch for $Name"
             if ($Global:CurrentModeIsExport)
@@ -548,7 +548,7 @@ function Export-TargetResource
 
             Write-Host "        |---[$i/$($searches.Name.Count)] $($search.Name)" -NoNewline
 
-            $Script:exportedInstance = $search
+            $Script:exportedInstances = $search
             $Results = Get-TargetResource @PSBoundParameters -Name $search.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

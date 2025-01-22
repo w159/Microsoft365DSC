@@ -137,7 +137,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of Auto sensitivity Label Policy for $Name"
 
@@ -851,7 +851,7 @@ function Export-TargetResource
 
             Write-Host "    |---[$i/$($policies.Count)] $($policy.Name)" -NoNewline
 
-            $Script:exportedInstance = $policy
+            $Script:exportedInstances = $policy
             $Results = Get-TargetResource @PSBoundParameters -Name $policy.Name
 
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `

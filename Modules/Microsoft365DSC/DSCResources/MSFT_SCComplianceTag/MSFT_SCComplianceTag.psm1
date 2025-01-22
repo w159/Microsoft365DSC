@@ -86,7 +86,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of ComplianceTag for $Name"
 
@@ -562,7 +562,7 @@ function Export-TargetResource
             }
 
             Write-Host "    |---[$i/$($totalTags)] $($tag.Name)" -NoNewline
-            $Script:exportedInstance = $tag
+            $Script:exportedInstances = $tag
             $Results = Get-TargetResource @PSBoundParameters -Name $tag.Name
             $Results.FilePlanProperty = Get-SCFilePlanPropertyAsString $Results.FilePlanProperty
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `

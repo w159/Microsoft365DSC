@@ -78,7 +78,7 @@ function Get-TargetResource
     )
     try
     {
-         if (-not $Script:exportedInstance)
+         if (-not $Script:exportedInstances)
          {
             Write-Verbose -Message "Getting configuration of SCComplianceSearchAction for $SearchName - $Action"
             $ConnectionMode = New-M365DSCConnection -Workload 'SecurityComplianceCenter' `
@@ -578,7 +578,7 @@ function Export-TargetResource
             {
                 $Params.Action = 'Retention'
             }
-            $Script:exportedInstance = $action
+            $Script:exportedInstances = $action
             $Results = Get-TargetResource @PSBoundParameters @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

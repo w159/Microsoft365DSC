@@ -263,7 +263,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    if (-not $Script:exportedInstance)
+    if (-not $Script:exportedInstances)
     {
         Write-Verbose -Message 'Getting configuration of AzureAD Conditional Access Policy'
         $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -2327,7 +2327,7 @@ function Export-TargetResource
                     Managedidentity       = $ManagedIdentity.IsPresent
                     AccessTokens          = $AccessTokens
                 }
-                $Script:exportedInstance = $Policy
+                $Script:exportedInstances = $Policy
                 $Results = Get-TargetResource @Params
 
                 if ([System.String]::IsNullOrEmpty($Results.DeviceFilterMode))

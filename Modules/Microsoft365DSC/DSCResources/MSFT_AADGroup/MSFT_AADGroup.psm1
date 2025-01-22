@@ -110,7 +110,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message 'Getting configuration of AzureAD Group'
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -1304,7 +1304,7 @@ function Export-TargetResource
                 Managedidentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $group
+            $Script:exportedInstances = $group
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

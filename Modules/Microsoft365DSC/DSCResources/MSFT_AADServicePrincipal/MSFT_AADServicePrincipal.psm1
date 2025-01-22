@@ -132,7 +132,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message 'Getting configuration of Azure AD ServicePrincipal'
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -1013,7 +1013,7 @@ function Export-TargetResource
                 AppID                 = $AADServicePrincipal.AppId
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $AADServicePrincipal
+            $Script:exportedInstances = $AADServicePrincipal
             $Results = Get-TargetResource @Params
 
             if ($Results.Ensure -eq 'Present')

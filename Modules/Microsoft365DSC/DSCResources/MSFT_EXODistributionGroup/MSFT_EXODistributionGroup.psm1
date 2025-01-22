@@ -219,7 +219,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of Distribution Group for $Identity"
 
@@ -1058,7 +1058,7 @@ function Export-TargetResource
                 CertificatePath       = $CertificatePath
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $distributionGroup
+            $Script:exportedInstances = $distributionGroup
             $Results = Get-TargetResource @Params
 
             if ($Results.AcceptMessagesOnlyFromSendersOrMembers.Length -eq 0)

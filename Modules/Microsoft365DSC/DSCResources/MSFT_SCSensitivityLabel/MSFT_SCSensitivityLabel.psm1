@@ -303,7 +303,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of Sensitivity Label for $Name"
 
@@ -1593,7 +1593,7 @@ function Export-TargetResource
 
             Write-Host "    |---[$i/$($labels.Count)] $($label.Name)" -NoNewline
 
-            $Script:exportedInstance = $label
+            $Script:exportedInstances = $label
             $Results = Get-TargetResource @PSBoundParameters -Name $label.Name
 
             if ($null -ne $Results.AdvancedSettings)

@@ -48,7 +48,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of Retention Event Type for $Name"
 
@@ -378,7 +378,7 @@ function Export-TargetResource
 
             Write-Host "        |---[$i/$($EventTypes.Length)] $($eventType.Name)" -NoNewline
 
-            $Script:exportedInstance = $eventType
+            $Script:exportedInstances = $eventType
             $Results = Get-TargetResource @PSBoundParameters -Name $eventType.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

@@ -62,7 +62,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             New-M365DSCConnection -Workload 'MicrosoftGraph' `
                 -InboundParameters $PSBoundParameters | Out-Null
@@ -439,7 +439,7 @@ function Export-TargetResource
             $consentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
             $Params.Add('DataSharingConsetGranted', $consentInstance.Granted)
 
-            $Script:exportedInstance = $config
+            $Script:exportedInstances = $config
             $Results = Get-TargetResource @Params
 
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `

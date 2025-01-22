@@ -71,7 +71,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message 'Getting configuration of Azure AD role definition'
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -470,7 +470,7 @@ function Export-TargetResource
                 RolePermissions       = @('temp')
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $AADRoleDefinition
+            $Script:exportedInstances = $AADRoleDefinition
             $Results = Get-TargetResource @Params
 
             if ($Results.Ensure -eq 'Present' -and ([array]$results.RolePermissions).Length -gt 0)

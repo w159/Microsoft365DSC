@@ -136,7 +136,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of Office 365 User $UserPrincipalName"
 
@@ -1091,7 +1091,7 @@ function Export-TargetResource
                     AccessTokens          = $AccessTokens
                 }
 
-                $Script:exportedInstance = $user
+                $Script:exportedInstances = $user
                 $Results = Get-TargetResource @Params
                 $Results.Password = "New-Object System.Management.Automation.PSCredential('Password', (ConvertTo-SecureString ((New-Guid).ToString()) -AsPlainText -Force));"
                 if ($null -ne $Results.UserPrincipalName)

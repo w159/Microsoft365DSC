@@ -81,7 +81,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting Message Classification Configuration for $($Identity)"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -524,7 +524,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstance = $MessageClassification
+            $Script:exportedInstances = $MessageClassification
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

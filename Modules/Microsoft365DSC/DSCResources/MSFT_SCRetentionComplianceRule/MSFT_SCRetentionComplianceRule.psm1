@@ -79,7 +79,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of RetentionComplianceRule for $Name"
 
@@ -594,7 +594,7 @@ function Export-TargetResource
 
                 Write-Host "        |---[$i/$($rules.Length)] $($rule.Name)" -NoNewline
 
-                $Script:exportedInstance = $rule
+                $Script:exportedInstances = $rule
                 $Results = Get-TargetResource @PSBoundParameters `
                     -Name $rule.Name `
                     -Policy $rule.Policy

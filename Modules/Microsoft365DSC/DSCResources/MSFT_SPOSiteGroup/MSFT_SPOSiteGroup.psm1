@@ -63,7 +63,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting SPOSiteGroups for {$Url}"
 
@@ -570,7 +570,7 @@ function Export-TargetResource
                 }
                 try
                 {
-                    $Script:exportedInstance = $siteGroup
+                    $Script:exportedInstances = $siteGroup
                     $Results = Get-TargetResource @Params
                     if ($Results.Ensure -eq 'Present')
                     {

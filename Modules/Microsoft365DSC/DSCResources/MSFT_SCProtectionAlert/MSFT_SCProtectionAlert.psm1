@@ -141,7 +141,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of SCProtectionAlert for $Name"
 
@@ -670,7 +670,7 @@ function Export-TargetResource
             }
 
             Write-Host "    |---[$i/$($totalAlerts)] $($alert.Name)" -NoNewline
-            $Script:exportedInstance = $alert
+            $Script:exportedInstances = $alert
             $Results = Get-TargetResource @PSBoundParameters -Name $Alert.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

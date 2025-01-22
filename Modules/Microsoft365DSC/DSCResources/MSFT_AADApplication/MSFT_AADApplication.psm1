@@ -131,7 +131,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
                 -InboundParameters $PSBoundParameters
@@ -1592,7 +1592,7 @@ function Export-TargetResource
             }
             try
             {
-                $Script:exportedInstance = $AADApp
+                $Script:exportedInstances = $AADApp
                 $Results = Get-TargetResource @Params
                 if ($Results.Ensure -eq 'Present')
                 {

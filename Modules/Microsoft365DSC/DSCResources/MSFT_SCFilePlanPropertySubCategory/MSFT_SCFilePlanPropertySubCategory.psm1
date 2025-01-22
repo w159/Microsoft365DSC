@@ -48,7 +48,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of SCFilePlanPropertySubCategory for $Name"
 
@@ -388,7 +388,7 @@ function Export-TargetResource
             $parent = Get-FilePlanPropertyCategory | Where-Object -FilterScript { $_.Guid -like "*$($property.ParentId)*" }
             Write-Host "    |---[$i/$($Properties.Length)] $($Property.Name)" -NoNewline
 
-            $Script:exportedInstance = $Property
+            $Script:exportedInstances = $Property
             $Results = Get-TargetResource @PSBoundParameters `
                 -Name $Property.DisplayName `
                 -Category $parent.DisplayName

@@ -130,7 +130,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting Global Address List configuration for $Name"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -734,7 +734,7 @@ function Export-TargetResource
                 CertificatePath       = $CertificatePath
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $GlobalAddressList
+            $Script:exportedInstances = $GlobalAddressList
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

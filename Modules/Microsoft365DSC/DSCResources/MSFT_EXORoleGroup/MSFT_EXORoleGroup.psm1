@@ -61,7 +61,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting Role Group configuration for $Name"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -456,7 +456,7 @@ function Export-TargetResource
                 CertificatePath       = $CertificatePath
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstance = $RoleGroup
+            $Script:exportedInstances = $RoleGroup
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

@@ -45,7 +45,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting configuration of SCAuditConfigurationPolicy for Workload {$Workload}"
             Write-Verbose -Message 'Connecting to Security and Compliance Center'
@@ -363,7 +363,7 @@ function Export-TargetResource
 
             Write-Host "    |---[$i/$($policies.Length)] $($policy.Workload)" -NoNewline
 
-            $Script:exportedInstance = $policy
+            $Script:exportedInstances = $policy
             $Results = Get-TargetResource @PSBoundParameters -Workload $policy.Workload
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

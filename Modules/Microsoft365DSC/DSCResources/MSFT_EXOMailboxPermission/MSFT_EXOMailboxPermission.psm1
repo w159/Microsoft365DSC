@@ -70,7 +70,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance)
+        if (-not $Script:exportedInstances)
         {
             Write-Verbose -Message "Getting permissions for Mailbox {$Identity}"
 
@@ -459,7 +459,7 @@ function Export-TargetResource
                     AccessTokens          = $AccessTokens
                 }
 
-                $Script:exportedInstance = $permission
+                $Script:exportedInstances = $permission
                 $Results = Get-TargetResource @Params
 
                 if ($Results -is [System.Collections.Hashtable] -and $Results.Count -gt 1)
