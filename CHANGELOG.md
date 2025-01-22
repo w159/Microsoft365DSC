@@ -57,6 +57,8 @@
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
+  * Add configuration validation to inform about comparisons against empty or invalid configurations.
+    FIXES [#5658](https://github.com/microsoft/Microsoft365DSC/issues/5658)
 * M365DSCTelemetryEngine
   * Report LCM details only if running as administrator.
 * M365DSCUtil
