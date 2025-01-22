@@ -60,7 +60,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Setting configuration of Office 365 Group $DisplayName"
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -620,7 +620,7 @@ function Export-TargetResource
                 MailNickName          = $group.MailNickName
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstances = $group
+            $Script:exportedInstance = $group
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

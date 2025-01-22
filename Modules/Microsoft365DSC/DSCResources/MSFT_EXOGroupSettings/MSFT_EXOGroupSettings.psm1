@@ -249,7 +249,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of Office 365 Group Settings for $DisplayName"
 
@@ -1022,7 +1022,7 @@ function Export-TargetResource
                     CertificatePath       = $CertificatePath
                     AccessTokens          = $AccessTokens
                 }
-                $Script:exportedInstances = $group
+                $Script:exportedInstance = $group
                 $Results = Get-TargetResource @Params
 
                 if ($Results -is [System.Collections.Hashtable] -and $Results.Count -gt 1)

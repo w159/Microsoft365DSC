@@ -76,7 +76,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration for hub site collection $Url"
 
@@ -685,7 +685,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstances = $hub
+            $Script:exportedInstance = $hub
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

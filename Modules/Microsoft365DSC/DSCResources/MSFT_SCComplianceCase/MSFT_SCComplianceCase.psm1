@@ -53,7 +53,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of SCComplianceCase for $Name"
 
@@ -403,7 +403,7 @@ function Export-TargetResource
 
             Write-Host "    eDiscovery: [$i/$($Cases.Count)] $($Case.Name)" -NoNewline
 
-            $Script:exportedInstances = $Case
+            $Script:exportedInstance = $Case
             $Results = Get-TargetResource @PSBoundParameters -Name $Case.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

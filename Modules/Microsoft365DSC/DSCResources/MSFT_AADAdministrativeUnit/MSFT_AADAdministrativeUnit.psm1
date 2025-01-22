@@ -84,7 +84,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             try
             {
@@ -135,7 +135,7 @@ function Get-TargetResource
         }
         else
         {
-            $getValue = $Script:exportedInstances
+            $getValue = $Script:exportedInstance
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Azure AD Administrative Unit with Id {$Id} and DisplayName {$DisplayName} was found."
@@ -1087,7 +1087,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstances = $config
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
 
             if ($null -ne $Results.ScopedRoleMembers)

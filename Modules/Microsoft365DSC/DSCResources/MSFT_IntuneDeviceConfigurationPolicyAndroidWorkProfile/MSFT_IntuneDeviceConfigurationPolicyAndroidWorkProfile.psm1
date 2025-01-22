@@ -240,7 +240,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             $M365DSCConnectionSplat = @{
                 Workload          = 'MicrosoftGraph'
@@ -1071,7 +1071,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstances = $policy
+            $Script:exportedInstance = $policy
             $Results = Get-TargetResource @Params
 
             if ($Results.Assignments)

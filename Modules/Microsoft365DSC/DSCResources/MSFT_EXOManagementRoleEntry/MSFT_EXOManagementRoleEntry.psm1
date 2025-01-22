@@ -52,7 +52,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting Management Role Entry configuration for {$Identity}"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -379,7 +379,7 @@ function Export-TargetResource
                 CertificatePath       = $CertificatePath
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstances = $roleEntry
+            $Script:exportedInstance = $roleEntry
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

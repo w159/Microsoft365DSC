@@ -52,7 +52,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of SCFilePlanPropertyCitation for $Name"
 
@@ -387,7 +387,7 @@ function Export-TargetResource
 
             Write-Host "    |---[$i/$($Properties.Length)] $($Property.Name)" -NoNewline
 
-            $Script:exportedInstances = $Property
+            $Script:exportedInstance = $Property
             $Results = Get-TargetResource @PSBoundParameters -Name $Property.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

@@ -67,7 +67,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting Data classification policy for $($Identity)"
 
@@ -467,7 +467,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstances = $DataClassification
+            $Script:exportedInstance = $DataClassification
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

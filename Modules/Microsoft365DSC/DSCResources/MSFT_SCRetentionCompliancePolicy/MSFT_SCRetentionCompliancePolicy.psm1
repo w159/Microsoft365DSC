@@ -120,7 +120,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of RetentionCompliancePolicy for $Name"
 
@@ -1090,7 +1090,7 @@ function Export-TargetResource
 
             Write-Host "    |---[$i/$($policies.Length)] $($policy.Name)" -NoNewline
 
-            $Script:exportedInstances = $policy
+            $Script:exportedInstance = $policy
             $Results = Get-TargetResource @PSBoundParameters -Name $policy.Name
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

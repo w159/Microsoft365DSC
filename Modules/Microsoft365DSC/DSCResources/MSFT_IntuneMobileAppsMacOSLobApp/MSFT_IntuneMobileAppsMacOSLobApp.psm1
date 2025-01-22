@@ -830,7 +830,7 @@ function Export-TargetResource
                 AccessTokens          = $AccessTokens
             }
 
-            $Script:exportedInstances = $config
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

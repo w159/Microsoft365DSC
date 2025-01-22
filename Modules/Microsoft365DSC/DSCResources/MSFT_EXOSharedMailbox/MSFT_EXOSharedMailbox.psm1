@@ -64,7 +64,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of Office 365 Shared Mailbox $DisplayName"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -538,7 +538,7 @@ function Export-TargetResource
                     CertificatePath       = $CertificatePath
                     AccessTokens          = $AccessTokens
                 }
-                $Script:exportedInstances = $mailbox
+                $Script:exportedInstance = $mailbox
                 $Results = Get-TargetResource @Params
                 $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                     -Results $Results

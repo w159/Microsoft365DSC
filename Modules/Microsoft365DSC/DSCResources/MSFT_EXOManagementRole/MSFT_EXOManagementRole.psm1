@@ -57,7 +57,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting Management Role configuration for $Name"
             $ConnectionMode = New-M365DSCConnection -Workload 'ExchangeOnline' `
@@ -408,7 +408,7 @@ function Export-TargetResource
                 Parent                = $ManagementRole.Parent
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstances = $ManagementRole
+            $Script:exportedInstance = $ManagementRole
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

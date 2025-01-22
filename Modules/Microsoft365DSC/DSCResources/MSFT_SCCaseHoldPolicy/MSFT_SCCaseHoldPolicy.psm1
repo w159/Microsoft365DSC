@@ -68,7 +68,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message "Getting configuration of SCCaseHoldPolicy for $Name"
 
@@ -513,7 +513,7 @@ function Export-TargetResource
 
                 Write-Host "        |---[$j/$($policies.Count)] $($policy.Name)" -NoNewline
 
-                $Script:exportedInstances = $policy
+                $Script:exportedInstance = $policy
                 $Results = Get-TargetResource @PSBoundParameters `
                     -Name $policy.Name `
                     -Case $case.Name

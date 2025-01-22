@@ -59,7 +59,7 @@ function Get-TargetResource
     )
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message 'Getting configuration of AzureAD Token Lifetime Policy'
             $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -419,7 +419,7 @@ function Export-TargetResource
                 ID                    = $AADPolicy.ID
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstances = $AADPolicy
+            $Script:exportedInstance = $AADPolicy
             $Results = Get-TargetResource @Params
 
             # Fix quotes inside the Definition's JSON;

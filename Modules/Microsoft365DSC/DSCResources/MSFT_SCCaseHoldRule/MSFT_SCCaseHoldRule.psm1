@@ -60,7 +60,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             #Ensure the proper dependencies are installed in the current environment.
             Confirm-M365DSCDependencies
@@ -407,7 +407,7 @@ function Export-TargetResource
             {
                 $policy = Get-CaseHoldPolicy -Identity $Rule.Policy -ErrorAction Stop
 
-                $Script:exportedInstances = $Rule
+                $Script:exportedInstance = $Rule
                 $Results = Get-TargetResource @PSBoundParameters `
                     -Name $Rule.Name `
                     -Policy $policy.Name

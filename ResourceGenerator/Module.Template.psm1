@@ -64,7 +64,7 @@ function Get-TargetResource
         $nullResult.Ensure = 'Absent'
 
         $getValue = $null
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             <#ResourceGenerator
             #region resource generator code
@@ -397,7 +397,7 @@ function Export-TargetResource
                 AccessTokens = $AccessTokens
             }
 
-            $Script:exportedInstances = $config
+            $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
             $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
                 -Results $Results

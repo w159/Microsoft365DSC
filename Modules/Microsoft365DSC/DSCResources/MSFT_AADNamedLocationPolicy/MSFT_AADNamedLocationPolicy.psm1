@@ -74,7 +74,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstances)
+        if (-not $Script:exportedInstance)
         {
             Write-Verbose -Message 'Getting configuration of AAD Named Location'
 
@@ -544,7 +544,7 @@ function Export-TargetResource
                 Managedidentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
-            $Script:exportedInstances = $AADNamedLocation
+            $Script:exportedInstance = $AADNamedLocation
             $Results = Get-TargetResource @Params
 
             if ($Results.Ensure -eq 'Present')
