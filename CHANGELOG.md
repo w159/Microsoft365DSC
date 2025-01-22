@@ -36,6 +36,8 @@
   * Fix values that have a zero length whitespace character.
 * IntuneAppProtectionPolicyiOS
   * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
+* IntuneDeviceConfigurationPolicyiOS
+  * Fixes [#5594] https://github.com/microsoft/Microsoft365DSC/issues/5594
 * SCAutoSensitivityLabelPolicy
   * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
     contrary to `EXOTenantAllowBlockListItems` these resources are not affected
