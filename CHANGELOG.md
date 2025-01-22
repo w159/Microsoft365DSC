@@ -17,6 +17,10 @@
     FIXES [#5602](https://github.com/microsoft/Microsoft365DSC/issues/5602)
 * AADServicePrincipal
   * FIXES [#5549](https://github.com/microsoft/Microsoft365DSC/issues/5549)
+* EXOAvailabilityConfig
+  * Removed dependency on Microsoft Graph to retrieve user information.
+* EXODistributionGroup
+  * Removed dependency on Microsoft Graph to retrieve user information.
 * EXOHostedContentFilterPolicy
   * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
     contrary to `EXOTenantAllowBlockListItems` these resources are not affected
