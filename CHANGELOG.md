@@ -9,6 +9,21 @@
 * IntuneAppProtectionPolicyAndroid
   * Fixes an error retrieving the group id for assignment which resulted
     in a 500 error when creating or updating an instance.
+* IntuneAccountProtectionLocalUserGroupMembershipPolicy
+  * Fixes an issue where not all details were exported.
+* IntuneAccountProtectionPolicy
+  * Fixes an issue where not all details were exported.
+* IntuneAppConfigurationPolicy
+  * Fixes an issue with fetching a policy that does not exist.
+    FIXES [#5666](https://github.com/microsoft/Microsoft365DSC/issues/5666)
+* IntuneApplicationControlPolicyWindows10
+  * Fixes an issue with fetching a policy that does not exist.
+* IntuneAppProtectionPolicyAndroid
+  * Fixes an issue with fetching a policy that does not exist.
+* IntuneDeviceEnrollmentPlatformRestriction
+  * Fixes an issue with fetching a policy that does not exist.
+* M365DSCReverse
+  * Only fetch tenant name if not in correct format.
 * O365SearchAndIntelligenceConfigurations
   * Added support for Meeting Insights settings.
   * Added support for Service Principal authentication.
@@ -153,19 +168,28 @@
   * Fixed error when extracting an entry with a deleted principal.
 * DefenderDeviceAuthenticatedScanDefinition
   * Fixed the Data Type export.
+* IntuneTrustedRootCertificateAndroidWork
+  * Initial Release
 * MISC
   * DEFENDER
     * Added support for the UseBasicParsing paramter for REST calls.
+  * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
+    Remoting is enabled, which is required to convert the DSC config.
+  * Defender
+    * Added support for the UseBasicParsing parameter for REST calls.
+
+# 1.24.1218.1
+
 * AADApplication
   * Added support for Oauth2PermissionScopes.
   * Fixes comparison issue for permissions.
 * EXOTransportRule
   * Fixes issue extracting arrays in Get-TargetResource.
-    * FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
+    FIXES [#5575](https://github.com/microsoft/Microsoft365DSC/issues/5575)
 * TeamsMeetingPolicy
   * Adds support for additional Copilot setting value.
-    * FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
-  * FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
+    FIXES [#5573](https://github.com/microsoft/Microsoft365DSC/issues/5573)
+    FIXES [#5550](https://github.com/microsoft/Microsoft365DSC/issues/5550)
 * MISC
   * Fixed the Fabric web request to use basic parsing.
   * Reset only necessary authentication context.

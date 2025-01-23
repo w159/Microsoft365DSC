@@ -235,8 +235,7 @@ function Test-TargetResource
     Write-Verbose -Message "Testing configuration of the Azure AD Authentication Requirement for a user with UPN {$UserPrincipalName}"
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
-    $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
-
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
     $testResult = $true
 
     $CurrentValues.remove('Id') | Out-Null
@@ -310,7 +309,9 @@ function Export-TargetResource
 
     try
     {
-        [array]$getValue = Get-MgUser -ErrorAction Stop | Where-Object -FilterScript { $null -ne $_.Id }
+        [array]$getValue = Get-MgUser -Filter "userType eq 'member'" -All -ErrorAction Stop | Where-Object -FilterScript {
+            $null -ne $_.Id -and $_.UserPrincipalName -notlike "*#EXT#*"
+        }
 
         $i = 1
         $dscContent = ''

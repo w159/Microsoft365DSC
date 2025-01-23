@@ -72,88 +72,95 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message 'Getting configuration of AAD Named Location'
-
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-        -InboundParameters $PSBoundParameters
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
     try
     {
-        $nullReturn = $PSBoundParameters
-        $nullReturn.Ensure = 'Absent'
-        try
+        if (-not $Script:exportedInstance)
         {
-            if ($Id)
-            {
-                $NamedLocation = Get-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $Id -ErrorAction Stop
-            }
-        }
-        catch
-        {
-            Write-Verbose -Message "Could not retrieve AAD Named Location by ID {$Id}"
-        }
-        if ($null -eq $NamedLocation)
-        {
+            Write-Verbose -Message 'Getting configuration of AAD Named Location'
+
+            $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+                -InboundParameters $PSBoundParameters
+
+            #Ensure the proper dependencies are installed in the current environment.
+            Confirm-M365DSCDependencies
+
+            #region Telemetry
+            $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
+            $CommandName = $MyInvocation.MyCommand
+            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
+                -CommandName $CommandName `
+                -Parameters $PSBoundParameters
+            Add-M365DSCTelemetryEvent -Data $data
+            #endregion
+
+
+            $nullReturn = $PSBoundParameters
+            $nullReturn.Ensure = 'Absent'
             try
             {
-                $NamedLocation = Get-MgBetaIdentityConditionalAccessNamedLocation -ErrorAction SilentlyContinue | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
-                if ($NamedLocation.Length -gt 1)
+                if ($Id)
                 {
-                    throw "More than one instance of a Named Location Policy with name {$DisplayName} was found. Please provide the ID parameter."
+                    $NamedLocation = Get-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $Id -ErrorAction Stop
                 }
             }
             catch
             {
-                New-M365DSCLogEntry -Message 'Error retrieving data:' `
-                    -Exception $_ `
-                    -Source $($MyInvocation.MyCommand.Source) `
-                    -TenantId $TenantId `
-                    -Credential $Credential
+                Write-Verbose -Message "Could not retrieve AAD Named Location by ID {$Id}"
+            }
 
+            if ($null -eq $NamedLocation)
+            {
+                try
+                {
+                    $NamedLocation = Get-MgBetaIdentityConditionalAccessNamedLocation -ErrorAction Stop | Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
+                    if ($NamedLocation.Length -gt 1)
+                    {
+                        throw "More than one instance of a Named Location Policy with name {$DisplayName} was found. Please provide the ID parameter."
+                    }
+                }
+                catch
+                {
+                    New-M365DSCLogEntry -Message 'Error retrieving data:' `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+
+                    return $nullReturn
+                }
+            }
+            if ($null -eq $NamedLocation)
+            {
+                Write-Verbose "No existing AAD Named Location found with DisplayName {$DisplayName}"
                 return $nullReturn
             }
         }
-        if ($null -eq $NamedLocation)
-        {
-            return $nullReturn
-        }
         else
         {
-            Write-Verbose "Found existing AAD Named Location {$($NamedLocation.DisplayName)}"
-            $Result = @{
-                OdataType                         = $NamedLocation.AdditionalProperties.'@odata.type'
-                Id                                = $NamedLocation.Id
-                DisplayName                       = $NamedLocation.DisplayName
-                IpRanges                          = $NamedLocation.AdditionalProperties.ipRanges.cidrAddress
-                IsTrusted                         = $NamedLocation.AdditionalProperties.isTrusted
-                CountriesAndRegions               = [String[]]$NamedLocation.AdditionalProperties.countriesAndRegions
-                CountryLookupMethod               = $NamedLocation.AdditionalProperties.countryLookupMethod
-                IncludeUnknownCountriesAndRegions = $NamedLocation.AdditionalProperties.includeUnknownCountriesAndRegions
-                Ensure                            = 'Present'
-                ApplicationSecret                 = $ApplicationSecret
-                ApplicationId                     = $ApplicationId
-                TenantId                          = $TenantId
-                CertificateThumbprint             = $CertificateThumbprint
-                Credential                        = $Credential
-                Managedidentity                   = $ManagedIdentity.IsPresent
-                AccessTokens                      = $AccessTokens
-            }
-
-            Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
-            return $result
+            $NamedLocation = $Script:exportedInstance
         }
+        Write-Verbose "Found existing AAD Named Location {$($NamedLocation.DisplayName)}"
+        $Result = @{
+            OdataType                         = $NamedLocation.AdditionalProperties.'@odata.type'
+            Id                                = $NamedLocation.Id
+            DisplayName                       = $NamedLocation.DisplayName
+            IpRanges                          = $NamedLocation.AdditionalProperties.ipRanges.cidrAddress
+            IsTrusted                         = $NamedLocation.AdditionalProperties.isTrusted
+            CountriesAndRegions               = [String[]]$NamedLocation.AdditionalProperties.countriesAndRegions
+            CountryLookupMethod               = $NamedLocation.AdditionalProperties.countryLookupMethod
+            IncludeUnknownCountriesAndRegions = $NamedLocation.AdditionalProperties.includeUnknownCountriesAndRegions
+            Ensure                            = 'Present'
+            ApplicationSecret                 = $ApplicationSecret
+            ApplicationId                     = $ApplicationId
+            TenantId                          = $TenantId
+            CertificateThumbprint             = $CertificateThumbprint
+            Credential                        = $Credential
+            Managedidentity                   = $ManagedIdentity.IsPresent
+            AccessTokens                      = $AccessTokens
+        }
+
+        Write-Verbose -Message "Get-TargetResource Result: `n $(Convert-M365DscHashtableToString -Hashtable $result)"
+        return $result
     }
     catch
     {
@@ -312,24 +319,25 @@ function Set-TargetResource
     if ($Ensure -eq 'Present' -and $currentAADNamedLocation.Ensure -eq 'Absent')
     {
         $VerboseAttributes = ($desiredValues | Out-String)
-        Write-Verbose -Message "Creating New AAD Named Location {$Displayname)} with attributes: $VerboseAttributes"
+        Write-Verbose -Message "Creating New AAD Named Location {$Displayname} with attributes: $VerboseAttributes"
+
         $JSONValue = ConvertTo-Json $desiredValues | Out-String
         Write-Verbose -Message "JSON: $JSONValue"
+
         $APIUrl = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + 'v1.0/identity/conditionalAccess/namedLocations'
         Invoke-MgGraphRequest -Method POST `
             -Uri $APIUrl `
             -Body $JSONValue | Out-Null
     }
     # Named Location should exist and will be configured to desired state
-    elseif ($Ensure -eq 'Present' -and $CurrentAADNamedLocation.Ensure -eq 'Present')
+    elseif ($Ensure -eq 'Present' -and $currentAADNamedLocation.Ensure -eq 'Present')
     {
         $VerboseAttributes = ($desiredValues | Out-String)
-        Write-Verbose -Message "Updating existing AAD Named Location {$Displayname)} with attributes: $VerboseAttributes"
+        Write-Verbose -Message "Updating existing AAD Named Location {$Displayname} with attributes: $VerboseAttributes"
 
-        $VerboseAttributes = ($desiredValues | Out-String)
-        Write-Verbose -Message "Updating AAD Named Location {$Displayname)} with attributes: $VerboseAttributes"
         $JSONValue = ConvertTo-Json $desiredValues | Out-String
         Write-Verbose -Message "JSON: $JSONValue"
+
         $APIUrl = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "v1.0/identity/conditionalAccess/namedLocations/$($currentAADNamedLocation.Id)"
         Invoke-MgGraphRequest -Method PATCH `
             -Uri $APIUrl `
@@ -536,6 +544,7 @@ function Export-TargetResource
                 Managedidentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
+            $Script:exportedInstance = $AADNamedLocation
             $Results = Get-TargetResource @Params
 
             if ($Results.Ensure -eq 'Present')

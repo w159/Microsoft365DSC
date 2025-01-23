@@ -709,6 +709,7 @@ function New-M365DSCReportFromConfiguration
             $delimiterParam = [System.Management.Automation.RuntimeDefinedParameter]::New("Delimiter", [System.String], $attributeCollection)
             $delimiterParam.Value = ';' # default value, comma makes a mess when importing a CSV-file in Excel
             $paramDictionary.Add("Delimiter", $delimiterParam)
+            $PSBoundParameters.Add("Delimiter", $delimiterParam.Value)
         }
         return $paramDictionary
     }
@@ -722,22 +723,29 @@ function New-M365DSCReportFromConfiguration
     }
     process # required with DynamicParam
     {
-    
+        # Test if Windows Remoting is enabled, which is needed to run this function.
+        $result = Test-WSMan -ErrorAction SilentlyContinue
+        if ($null -eq $result)
+        {
+            Write-Error -Message 'Windows Remoting is NOT configured yet. Please configure Windows Remoting (by running `Enable-PSRemoting -SkipNetworkProfileCheck`) before running this function.'
+            return
+        }
+
         # Validate that the latest version of the module is installed.
         Test-M365DSCModuleValidity
-    
+
         #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
-    
+
         #region Telemetry
         $data = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
         $data.Add('Event', 'Report')
         $data.Add('Type', $Type)
         Add-M365DSCTelemetryEvent -Data $data -Type 'NewReport'
         #endregion
-    
+
         [Array] $parsedContent = Initialize-M365DSCReporting -ConfigurationPath $ConfigurationPath
-    
+
         if ($null -ne $parsedContent)
         {
             switch ($Type)
@@ -2065,8 +2073,12 @@ function Initialize-M365DSCReporting
         $parsedContent = ConvertTo-DSCObject -Content $fileContent
     }
 
-    return $parsedContent
+    if ($null -eq $parsedContent)
+    {
+        Write-Warning -Message "No configuration found in $ConfigurationPath. Either the configuration was empty or the file was not a valid DSC configuration."
+    }
 
+    return $parsedContent
 }
 
 Export-ModuleMember -Function @(
