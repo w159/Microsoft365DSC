@@ -1,5 +1,7 @@
 # Change log for Microsoft365DSC
 
+#
+
 # 1.25.122.1
 
 * AADConditionalAccessPolicy

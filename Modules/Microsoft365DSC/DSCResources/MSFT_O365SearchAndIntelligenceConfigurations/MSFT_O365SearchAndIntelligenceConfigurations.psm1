@@ -19,6 +19,10 @@ function Get-TargetResource
 
         [Parameter()]
         [System.Boolean]
+        $MeetingInsightsIsEnabledInOrganization,
+
+        [Parameter()]
+        [System.Boolean]
         $PersonInsightsIsEnabledInOrganization,
 
         [Parameter()]
@@ -126,6 +130,10 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $ItemInsightsDisabledForGroup,
+
+        [Parameter()]
+        [System.Boolean]
+        $MeetingInsightsIsEnabledInOrganization,
 
         [Parameter()]
         [System.Boolean]
@@ -239,6 +247,10 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $ItemInsightsDisabledForGroup,
+
+        [Parameter()]
+        [System.Boolean]
+        $MeetingInsightsIsEnabledInOrganization,
 
         [Parameter()]
         [System.Boolean]
