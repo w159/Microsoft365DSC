@@ -285,16 +285,24 @@ function Get-TargetResource
         {
             foreach ($assignment in $policyInfo.Assignments)
             {
+                $groupInfo = Get-MgGroup -GroupId $assignment.Target.AdditionalProperties.groupId -ErrorAction SilentlyContinue
+                $groupValue = $assignment.Target.AdditionalProperties.groupId
+                if ($null -ne $groupInfo)
+                {
+                    $groupValue = $groupInfo.DisplayName
+                }
+
                 switch ($assignment.Target.AdditionalProperties.'@odata.type')
                 {
                     '#microsoft.graph.groupAssignmentTarget'
                     {
-                        $assignmentsArray += $assignment.Target.AdditionalProperties.groupId
+
+                        $assignmentsArray += $groupValue
                     }
 
                     '#microsoft.graph.exclusionGroupAssignmentTarget'
                     {
-                        $exclusionArray += $assignment.Target.AdditionalProperties.groupId
+                        $exclusionArray += $groupValue
                     }
                 }
             }
@@ -350,6 +358,7 @@ function Get-TargetResource
     }
     catch
     {
+        Write-Verbose -Message $_
         if ($_.Exception.Message -eq 'Multiple Policies with same displayname identified - Module currently only functions with unique names')
         {
             throw $_
@@ -651,7 +660,13 @@ function Set-TargetResource
         $PSBoundParameters.Assignments | ForEach-Object {
             if ($_ -ne $null)
             {
-                $assignmentsArray += set-JSONstring -id $_ -type 'Assignments'
+                $groupInfo = Get-MgGroup -Filter "DisplayName eq '$_'"
+                $idValue = $_
+                if (-not [System.String]::IsNullOrEmpty($groupInfo))
+                {
+                    $idValue = $groupInfo.Id
+                }
+                $assignmentsArray += set-JSONstring -id $idValue -type 'Assignments'
             }
         }
         $configstring += ( 'Assignments' + ":`r`n" + ($PSBoundParameters.Assignments | Out-String) + "`r`n" )
@@ -710,7 +725,7 @@ function Set-TargetResource
         $setParams.add('AndroidManagedAppProtectionId', $currentPolicy.id)
         Update-MgBetaDeviceAppManagementAndroidManagedAppProtection @setParams
 
-        Write-Verbose -Message 'Setting Group Assignments...'
+        Write-Verbose -Message "Setting Group Assignments with values:`r`n$(ConvertTo-Json $assignmentsArray -Depth 10)"
         Set-MgBetaDeviceAppManagementTargetedManagedAppConfiguration -TargetedManagedAppConfigurationId $setParams.AndroidManagedAppProtectionId -Assignments $assignmentsArray
 
     }
@@ -1016,7 +1031,20 @@ function Test-TargetResource
     # handle complex parameters - manually for now
     if ($PSBoundParameters.keys -contains 'Assignments' )
     {
-        $targetvalues.add('Assignments', $psboundparameters.Assignments)
+        $assignmentsValue = @()
+        foreach ($assignment in $Assignments)
+        {
+            $groupInfo = Get-MgGroup -GroupId $assignment -ErrorAction SilentlyContinue
+            if ($null -ne $groupInfo)
+            {
+                $assignmentsValue += $groupInfo.DisplayName
+            }
+            else
+            {
+                $assignmentsValue += $assignment
+            }
+        }
+        $targetvalues.add('Assignments', $assignmentsValue)
     }
 
     Write-Verbose -Message 'Starting Exluded Groups Check'
