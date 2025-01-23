@@ -245,7 +245,7 @@ function Get-TargetResource
             {
                 Write-Verbose -Message "Searching for Policy using Id {$Id}"
                 $policyInfo = Get-MgBetaDeviceAppManagementAndroidManagedAppProtection -Filter "Id eq '$Id'" -ExpandProperty Apps, assignments `
-                    -ErrorAction Stop
+                    -ErrorAction SilentlyContinue
             }
 
             if ($null -eq $policyInfo)
