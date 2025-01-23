@@ -4,6 +4,7 @@
 
 * O365SearchAndIntelligenceConfigurations
   * Added support for Meeting Insights settings.
+  * Added support for Service Principal authentication.
 
 # 1.25.122.1
 
