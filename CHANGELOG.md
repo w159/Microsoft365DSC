@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* FabricAdminTenantSettings
+  * Fix titles that have a zero length whitespace character.
 * IntuneAccountProtectionLocalUserGroupMembershipPolicy
   * Fixes an issue where not all details were exported.
 * IntuneAccountProtectionPolicy
@@ -17,6 +19,9 @@
   * Fixes an issue with fetching a policy that does not exist.
 * M365DSCReverse
   * Only fetch tenant name if not in correct format.
+* O365SearchAndIntelligenceConfigurations
+  * Added support for Meeting Insights settings.
+  * Added support for Service Principal authentication.
 
 # 1.25.122.1
 
