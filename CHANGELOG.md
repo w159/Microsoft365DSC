@@ -1,6 +1,9 @@
 # Change log for Microsoft365DSC
 
-#
+# UNRELEASED
+
+* O365SearchAndIntelligenceConfigurations
+  * Added support for Meeting Insights settings.
 
 # 1.25.122.1
 
