@@ -2,6 +2,34 @@
 
 # UNRELEASED
 
+* AADRoleEligibilityScheduleRequest
+  * Fixed overall logic to prevent errors complaining about existing permissions.
+* FabricAdminTenantSettings
+  * Fix titles that have a zero length whitespace character.
+* IntuneAppProtectionPolicyAndroid
+  * Fixes an error retrieving the group id for assignment which resulted
+    in a 500 error when creating or updating an instance.
+* IntuneAccountProtectionLocalUserGroupMembershipPolicy
+  * Fixes an issue where not all details were exported.
+* IntuneAccountProtectionPolicy
+  * Fixes an issue where not all details were exported.
+* IntuneAppConfigurationPolicy
+  * Fixes an issue with fetching a policy that does not exist.
+    FIXES [#5666](https://github.com/microsoft/Microsoft365DSC/issues/5666)
+* IntuneApplicationControlPolicyWindows10
+  * Fixes an issue with fetching a policy that does not exist.
+* IntuneAppProtectionPolicyAndroid
+  * Fixes an issue with fetching a policy that does not exist.
+* IntuneDeviceEnrollmentPlatformRestriction
+  * Fixes an issue with fetching a policy that does not exist.
+* M365DSCReverse
+  * Only fetch tenant name if not in correct format.
+* O365SearchAndIntelligenceConfigurations
+  * Added support for Meeting Insights settings.
+  * Added support for Service Principal authentication.
+
+# 1.25.122.1
+
 * AADConditionalAccessPolicy
   * Fixes CA policy deployment errors when deploying policies based for workload identities.
   * Fixed DisableResilienceDefaults result
@@ -59,6 +87,8 @@
 * M365DSCReport
   * Fix missing delimiter when called without the parameter.
     FIXES [#5634](https://github.com/microsoft/Microsoft365DSC/issues/5634)
+  * Add configuration validation to inform about comparisons against empty or invalid configurations.
+    FIXES [#5658](https://github.com/microsoft/Microsoft365DSC/issues/5658)
 * M365DSCTelemetryEngine
   * Report LCM details only if running as administrator.
 * M365DSCUtil
@@ -143,6 +173,8 @@
 * IntuneTrustedRootCertificateAndroidWork
   * Initial Release
 * MISC
+  * DEFENDER
+    * Added support for the UseBasicParsing paramter for REST calls.
   * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
     Remoting is enabled, which is required to convert the DSC config.
   * Defender
