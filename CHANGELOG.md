@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.122.2
 
 * AADAdminConsentRequestPolicy
   * Refactored the export to use a common CIMInstance function.
