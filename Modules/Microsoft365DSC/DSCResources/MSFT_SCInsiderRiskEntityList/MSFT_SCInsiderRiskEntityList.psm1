@@ -843,7 +843,7 @@ function Set-TargetResource
         {
             Set-M365DSCSCInsiderRiskExclusionGroup -CurrentValues $currentInstance.ExceptionKeyworkGroups `
                 -DesiredValues $ExceptionKeyworkGroups `
-                -Name 'IrmXSGExcludedKeywords'
+                -Name 'IrmXSGExceptionKeywords'
         }
         elseif ($null -ne $ExcludedKeyworkGroups -and $ExcludedKeyworkGroups.Length -gt 0)
         {
