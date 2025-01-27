@@ -2,8 +2,13 @@
 
 # UNRELEASED
 
+* AADRoleEligibilityScheduleRequest
+  * Fixed overall logic to prevent errors complaining about existing permissions.
 * FabricAdminTenantSettings
   * Fix titles that have a zero length whitespace character.
+* IntuneAppProtectionPolicyAndroid
+  * Fixes an error retrieving the group id for assignment which resulted
+    in a 500 error when creating or updating an instance.
 * IntuneAccountProtectionLocalUserGroupMembershipPolicy
   * Fixes an issue where not all details were exported.
 * IntuneAccountProtectionPolicy
@@ -166,6 +171,8 @@
 * IntuneTrustedRootCertificateAndroidWork
   * Initial Release
 * MISC
+  * DEFENDER
+    * Added support for the UseBasicParsing paramter for REST calls.
   * Added check to `New-M365DSCReportFromConfiguration` to make sure Windows
     Remoting is enabled, which is required to convert the DSC config.
   * Defender
