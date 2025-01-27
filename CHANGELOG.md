@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.122.2
 
 * AADAdminConsentRequestPolicy
   * Refactored the export to use a common CIMInstance function.
@@ -48,6 +48,9 @@
 * O365SearchAndIntelligenceConfigurations
   * Added support for Meeting Insights settings.
   * Added support for Service Principal authentication.
+* SCInsiderRiskEntityList
+  * Fixed trailing whitespaces in the name of some properties when attempting
+    to set values.
 * TeamsEmergencyCallRoutingPolicy
   * Refactored the export to use a common CIMInstance function.
 * TeamsTenantDialPlan
