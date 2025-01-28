@@ -145,14 +145,40 @@
             [Array] $requests = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($PrincipalInstance.Id)' and RoleDefinitionId eq '$($RoleDefinitionId)' and DirectoryScopeId eq '$($DirectoryScopeId)'"
             if ($requests.Length -eq 0)
             {
-                return $nullResult
-            }
+                # We need to make sure we're not ending up here because the role is a custom role (which has a different id).
+                # We start by retrieving all schedules for the given principal.
+                [Array] $schedulesForPrincipal = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($PrincipalInstance.Id)' and DirectoryScopeId eq '$($DirectoryScopeId)'"
+                
+                # Loop through the role associated with each schedule to check and see if we have a match on the name.
+                $schedule = $null
+                foreach ($foundSchedule in $schedulesForPrincipal)
+                {
+                    $scheduleRoleId = $foundSchedule.RoleDefinitionId
+                    $roleEntry = Get-MgBetaRoleManagementDirectoryRoleDefinition -UnifiedRoleDefinitionId $scheduleRoleId
+                    if ($roleEntry.DisplayName -eq $RoleDefinition)
+                    {
+                        $RoleDefinitionId = $roleEntry.Id
+                        $schedule = $foundSchedule
+                        break
+                    }
+                }
 
-            $request = $requests[0]
+                if ($null -eq $schedule)
+                {
+                    return $nullResult
+                }
+            }
+            else
+            {
+                $request = $requests[0]
+            }
         }
 
-        $schedules = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($request.PrincipalId)'"
-        $schedule = $schedules | Where-Object -FilterScript { $_.RoleDefinitionId -eq $RoleDefinitionId }
+        if ($null -eq $schedule)
+        {
+            $schedules = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($request.PrincipalId)'"
+            $schedule = $schedules | Where-Object -FilterScript { $_.RoleDefinitionId -eq $RoleDefinitionId }
+        }
         if ($null -eq $schedule)
         {
             foreach ($instance in $schedules)
@@ -166,15 +192,11 @@
             }
         }
 
-        if ($null -eq $schedule -or $null -eq $request)
+        if ($null -eq $schedule)
         {
             if ($null -eq $schedule)
             {
                 Write-Verbose -Message "Could not retrieve the schedule for {$($request.PrincipalId)} & RoleDefinitionId {$RoleDefinitionId}"
-            }
-            if ($null -eq $request)
-            {
-                Write-Verbose -Message "Could not request the schedule for {$RoleDefinition}"
             }
             return $nullResult
         }
@@ -224,12 +246,12 @@
             Principal             = $PrincipalValue
             PrincipalType         = $PrincipalType
             RoleDefinition        = $RoleDefinition
-            DirectoryScopeId      = $request.DirectoryScopeId
-            AppScopeId            = $request.AppScopeId
-            Action                = $request.Action
-            Id                    = $request.Id
-            Justification         = $request.Justification
-            IsValidationOnly      = $request.IsValidationOnly
+            DirectoryScopeId      = $schedule.DirectoryScopeId
+            AppScopeId            = $schedule.AppScopeId
+            Action                = $schedule.Action
+            Id                    = $schedule.Id
+            Justification         = $schedule.Justification
+            IsValidationOnly      = $schedule.IsValidationOnly
             ScheduleInfo          = $ScheduleInfoValue
             Ensure                = 'Present'
             Credential            = $Credential
