@@ -10,6 +10,7 @@
   * Refactored the export to use a common CIMInstance function.
 * AADGroup
   * Refactored the export to use a common CIMInstance function.
+  * Added functionality to add & check on Devices in AAD groups.
 * AADHomeRealmDiscoveryPolicy
   * Refactored the export to use a common CIMInstance function.
 * AADIdentityGovernanceLifecycleWorkflow
