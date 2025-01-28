@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AAD Workload
+  * Improved performance of various resources during export.
+
 # 1.25.122.2
 
 * AADAdminConsentRequestPolicy
