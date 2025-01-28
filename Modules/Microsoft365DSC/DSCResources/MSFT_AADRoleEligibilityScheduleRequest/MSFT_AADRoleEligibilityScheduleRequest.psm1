@@ -621,7 +621,10 @@ function Test-TargetResource
             return $false
         }
     }
-    $ValuesToCheck.Remove('ScheduleInfo') | Out-Null
+    $ValuesToCheck.Remove('ScheduleInfo') | Out-Null    
+    $ValuesToCheck.Remove('Action') | Out-Null
+    $ValuesToCheck.Remove('IsValidationOnly') | Out-Null
+    $ValuesToCheck.Remove('Justification') | Out-Null
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
