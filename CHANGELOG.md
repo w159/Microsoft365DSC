@@ -26,7 +26,7 @@
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Refactored the export to use a common CIMInstance function.
 * AADGroup
-  * Added functionality to add & check on Devices in AAD groups.
+  * Refactored the export to use a common CIMInstance function.
 * AADHomeRealmDiscoveryPolicy
   * Refactored the export to use a common CIMInstance function.
 * AADIdentityGovernanceLifecycleWorkflow
