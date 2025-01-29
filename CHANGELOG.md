@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADApplication
+  * Refactored logic for CIM Instance evaluation in Test-TargetResource.
+* AADGroup
+  * Refactored logic for CIM Instance evaluation in Test-TargetResource.
+
 # 1.25.129.1
 
 * AADRoleEligibilityScheduleRequest

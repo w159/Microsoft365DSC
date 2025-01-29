@@ -659,19 +659,49 @@ function Compare-M365DSCComplexObject
 
         foreach ($item in $Source)
         {
+            $foundMatch = $false
             foreach ($targetItem in $Target)
             {
-                $compareResult = Compare-M365DSCComplexObject `
-                    -Source $item `
-                    -Target $targetItem
-
-                if ($compareResult)
+                if (-not $foundMatch)
                 {
-                    break
+                    $compareResult = Compare-M365DSCComplexObject `
+                        -Source $item `
+                        -Target $targetItem
+
+                    if ($compareResult)
+                    {
+                        $foundMatch = $true
+                    }
                 }
             }
 
-            if (-not $compareResult)
+            if (-not $foundMatch)
+            {
+                Write-Verbose -Message 'Configuration drift - The complex array items are not identical'
+                return $false
+            }
+        }
+
+        # Do the opposite check
+        foreach ($item in $target)
+        {
+            $foundMatch = $false
+            foreach ($targetItem in $Source)
+            {
+                if (-not $foundMatch)
+                {
+                    $compareResult = Compare-M365DSCComplexObject `
+                        -Source $item `
+                        -Target $targetItem
+
+                    if ($compareResult)
+                    {
+                        $foundMatch = $true
+                    }
+                }
+            }
+
+            if (-not $foundMatch)
             {
                 Write-Verbose -Message 'Configuration drift - The complex array items are not identical'
                 return $false
