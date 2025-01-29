@@ -7,6 +7,9 @@
 * AADServicePrincipal
   * Fixes a regression issue when trying to export instances, the authentication
     parameters were no longer returned by the Get-TargetResource function.
+* MISC
+  * AAD Workload
+    * Improved performance of various resources during export.
 
 # 1.25.122.2
 
