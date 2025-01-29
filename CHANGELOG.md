@@ -2,8 +2,16 @@
 
 # UNRELEASED
 
-* AAD Workload
-  * Improved performance of various resources during export.
+* AADGroup
+  * Changed the logic to evaluate a drift in the assigned licenses.
+* AADRoleEligibilityScheduleRequest
+  * Changed the mapping logic to find Id of a custom role.
+* AADServicePrincipal
+  * Fixes a regression issue when trying to export instances, the authentication
+    parameters were no longer returned by the Get-TargetResource function.
+* MISC
+  * AAD Workload
+    * Improved performance of various resources during export.
 
 # 1.25.122.2
 
