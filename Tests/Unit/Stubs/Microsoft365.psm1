@@ -105524,7 +105524,7 @@ function Update-MgDeviceManagementDeviceConfigurationAssignment
 #endregion
 
 #region MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
-function Get-MgIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
+function Get-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilitySchedule
 {
     [CmdletBinding()]
     param
