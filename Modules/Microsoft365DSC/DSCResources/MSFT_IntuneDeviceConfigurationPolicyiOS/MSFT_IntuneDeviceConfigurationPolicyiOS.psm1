@@ -833,7 +833,7 @@ function Get-TargetResource
 
             $nullResult = $PSBoundParameters
             $nullResult.Ensure = 'Absent'
-        
+
             $getValue = $null
             #region resource generator code
             if (-not [string]::IsNullOrEmpty($Id))
@@ -1058,7 +1058,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1075,7 +1075,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1092,7 +1092,7 @@ function Get-TargetResource
             foreach ($currentValue in $currentValueArray)
             {
                 $currentHash = @{}
-                $currentHash.add('AppId', $currentValue.appid)
+                $currentHash.add('AppId', $currentValue.appId)
                 $currentHash.add('Publisher', $currentValue.publisher)
                 $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                 $currentHash.add('Name', $currentValue.name)
@@ -1149,7 +1149,7 @@ function Get-TargetResource
                     foreach ($currentChildValue in $currentValueChildArray)
                     {
                         $currentHash = @{}
-                        $currentHash.add('AppId', $currentValue.appid)
+                        $currentHash.add('AppId', $currentValue.appId)
                         $currentHash.add('Publisher', $currentValue.publisher)
                         $currentHash.add('AppStoreUrl', $currentValue.appStoreUrl)
                         $currentHash.add('Name', $currentValue.name)
@@ -2948,12 +2948,6 @@ function Test-TargetResource
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).clone()
-
-    if ($CurrentValues.Ensure -ne $Ensure)
-    {
-        Write-Verbose -Message "Test-TargetResource returned $false"
-        return $false
-    }
     $testResult = $true
 
     #Compare Cim instances
