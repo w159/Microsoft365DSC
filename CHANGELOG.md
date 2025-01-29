@@ -1,12 +1,14 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.129.1
 
 * AADRoleEligibilityScheduleRequest
   * Changed the mapping logic to find Id of a custom role.
 * AADServicePrincipal
   * Fixes a regression issue when trying to export instances, the authentication
     parameters were no longer returned by the Get-TargetResource function.
+* IntuneDeviceConfigurationPolicyiOS
+  * Fixes [#5594] https://github.com/microsoft/Microsoft365DSC/issues/5594
 * MISC
   * AAD Workload
     * Improved performance of various resources during export.
@@ -104,8 +106,6 @@
   * Fix values that have a zero length whitespace character.
 * IntuneAppProtectionPolicyiOS
   * Fixes [#5589] https://github.com/microsoft/Microsoft365DSC/issues/5589
-* IntuneDeviceConfigurationPolicyiOS
-  * Fixes [#5594] https://github.com/microsoft/Microsoft365DSC/issues/5594
 * SCAutoSensitivityLabelPolicy
   * Use correct parameter `DesiredValues` given to `Test-M365DSCParameterState`,
     contrary to `EXOTenantAllowBlockListItems` these resources are not affected
