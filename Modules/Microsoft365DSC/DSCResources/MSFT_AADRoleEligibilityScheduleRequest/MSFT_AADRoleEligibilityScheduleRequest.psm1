@@ -99,17 +99,16 @@
     $nullResult.Ensure = 'Absent'
     try
     {
-        $request = $null
         if (-not [System.String]::IsNullOrEmpty($Id))
         {
             if ($null -ne $Script:exportedInstances -and $Script:ExportMode)
             {
-                $request = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
+                $schedule = $Script:exportedInstances | Where-Object -FilterScript { $_.Id -eq $Id }
             }
             else
             {
                 Write-Verbose -Message "Getting Role Eligibility by Id {$Id}"
-                $request = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -UnifiedRoleEligibilityScheduleId $Id `
+                $schedule = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -UnifiedRoleEligibilityScheduleId $Id `
                     -ErrorAction SilentlyContinue
             }
         }
@@ -139,7 +138,7 @@
         $RoleDefinitionId = (Get-MgBetaRoleManagementDirectoryRoleDefinition -Filter "DisplayName eq '$RoleDefinition'").Id
         Write-Verbose -Message "Retrieved role definition {$RoleDefinition} with ID {$RoleDefinitionId}"
 
-        if ($null -eq $request)
+        if ($null -eq $schedule)
         {
             Write-Verbose -Message "Retrieving the request by PrincipalId {$($PrincipalInstance.Id)}, RoleDefinitionId {$($RoleDefinitionId)} and DirectoryScopeId {$($DirectoryScopeId)}"
             [Array] $requests = Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -Filter "PrincipalId eq '$($PrincipalInstance.Id)' and RoleDefinitionId eq '$($RoleDefinitionId)' and DirectoryScopeId eq '$($DirectoryScopeId)'"
@@ -170,7 +169,7 @@
             }
             else
             {
-                $request = $requests[0]
+                $schedule = $requests[0]
             }
         }
 
