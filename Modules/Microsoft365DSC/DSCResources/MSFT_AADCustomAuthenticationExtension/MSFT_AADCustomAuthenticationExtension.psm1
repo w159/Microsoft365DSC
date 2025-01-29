@@ -530,9 +530,12 @@ function Test-TargetResource
         -DesiredValues $PSBoundParameters `
         -ValuesToCheck $ValuesToCheck.Keys
 
-    Write-Verbose -Message "Test-TargetResource returned $testResult"
-
-    return $testResult
+    if (-not $TestResult)
+    {
+        $testTargetResource = $false
+    }
+    Write-Verbose -Message "Test-TargetResource returned $testTargetResource"
+    return $testTargetResource
 }
 
 function Export-TargetResource

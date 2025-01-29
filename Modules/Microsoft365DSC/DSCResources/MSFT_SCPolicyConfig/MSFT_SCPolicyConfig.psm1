@@ -1185,6 +1185,7 @@ function Test-TargetResource
 
     #Compare Cim instances
     $testResult = $true
+    $testTargetResource = $true
     foreach ($key in $PSBoundParameters.Keys)
     {
         $source = $PSBoundParameters.$key
@@ -1197,6 +1198,7 @@ function Test-TargetResource
 
             if (-not $testResult)
             {
+                $testTargetResource = $false
                 break
             }
 
@@ -1209,9 +1211,12 @@ function Test-TargetResource
         -DesiredValues $PSBoundParameters `
         -ValuesToCheck $ValuesToCheck.Keys
 
-    Write-Verbose -Message "Test-TargetResource returned $testResult"
-
-    return $testResult
+    if (-not $testResult)
+    {
+        $testTargetResource = $false
+    }
+    Write-Verbose -Message "Test-TargetResource returned $testTargetResource"
+    return $testTargetResource
 }
 
 function Export-TargetResource
