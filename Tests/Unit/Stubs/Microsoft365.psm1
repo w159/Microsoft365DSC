@@ -105738,7 +105738,7 @@ function New-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilityScheduleReq
     )
 }
 
-function Get-MgPolicyRoleManagementPolicyAssignment
+function Get-MgBetaPolicyRoleManagementPolicyAssignment
 {
     [CmdletBinding()]
     param
@@ -105829,7 +105829,7 @@ function Get-MgPolicyRoleManagementPolicyAssignment
     )
 }
 
-function Update-MgPolicyRoleManagementPolicyRule
+function Update-MgBetaPolicyRoleManagementPolicyRule
 {
     [CmdletBinding()]
     param
