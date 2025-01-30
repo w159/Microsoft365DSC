@@ -1,6 +1,14 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.129.2
+
+* M365DSCRuleEvaluation
+  * Only provide the ManagedIdentity parameter for resources which supports it.
+* SCDLPComplianceRule
+  * Added the comments property on creation.
+* SCPolicyConfig
+  * Changed parsing logic to account for $null or missing properties in the
+    API response.
 
 # 1.25.129.1
 
