@@ -11,7 +11,7 @@
   # RootModule = ''
 
   # Version number of this module.
-  ModuleVersion     = '1.25.129.1'
+  ModuleVersion     = '1.25.129.2'
 
   # Supported PSEditions
   # CompatiblePSEditions = @()
@@ -147,16 +147,13 @@
       IconUri      = 'https://github.com/microsoft/Microsoft365DSC/blob/Dev/Modules/Microsoft365DSC/Dependencies/Images/Logo.png?raw=true'
 
       # ReleaseNotes of this module
-      ReleaseNotes = '* AADRoleEligibilityScheduleRequest
-  * Changed the mapping logic to find Id of a custom role.
-* AADServicePrincipal
-  * Fixes a regression issue when trying to export instances, the authentication
-    parameters were no longer returned by the Get-TargetResource function.
-* IntuneDeviceConfigurationPolicyiOS
-  * Fixes [#5594] https://github.com/microsoft/Microsoft365DSC/issues/5594
-* MISC
-  * AAD Workload
-    * Improved performance of various resources during export.'
+      ReleaseNotes = '* M365DSCRuleEvaluation
+  * Only provide the ManagedIdentity parameter for resources which supports it.
+* SCDLPComplianceRule
+  * Added the comments property on creation.
+* SCPolicyConfig
+  * Changed parsing logic to account for $null or missing properties in the
+    API response.'
 
       # Flag to indicate whether the module requires explicit user acceptance for install/update
       # RequireLicenseAcceptance = $false

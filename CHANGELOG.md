@@ -1,7 +1,19 @@
 # Change log for Microsoft365DSC
 
+# 1.25.129.2
+
+* M365DSCRuleEvaluation
+  * Only provide the ManagedIdentity parameter for resources which supports it.
+* SCDLPComplianceRule
+  * Added the comments property on creation.
+* SCPolicyConfig
+  * Changed parsing logic to account for $null or missing properties in the
+    API response.
+
 # 1.25.129.1
 
+* AADGroup
+  * Added functionality to add & check on Devices in AAD groups.
 * AADRoleEligibilityScheduleRequest
   * Changed the mapping logic to find Id of a custom role.
 * AADServicePrincipal
@@ -23,7 +35,6 @@
   * Refactored the export to use a common CIMInstance function.
 * AADGroup
   * Refactored the export to use a common CIMInstance function.
-  * Added functionality to add & check on Devices in AAD groups.
 * AADHomeRealmDiscoveryPolicy
   * Refactored the export to use a common CIMInstance function.
 * AADIdentityGovernanceLifecycleWorkflow
