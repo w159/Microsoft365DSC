@@ -335,8 +335,10 @@ function Set-TargetResource
     elseif ($EndpointType -eq 'ExchangeRemoteMove')
     {
         # Removing mailbox permission parameter as this is valid only for outlook anywhere migration
-        $setParams.Remove('MailboxPermission')
-        $newParams.Remove('MailboxPermission')
+        $setParams.Remove('MailboxPermission') | Out-Null
+        $newParams.Remove('MailboxPermission') | Out-Null
+        $newParams.Remove("AcceptUntrustedCertificates") | Out-Null
+        $setParams.Remove("AcceptUntrustedCertificates") | Out-Null
 
         # adding skip verification switch to skip verifying
         # that the remote server is reachable when creating a migration endpoint.
@@ -351,16 +353,19 @@ function Set-TargetResource
     # CREATE
     if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
     {
+        Write-Verbose -Message "Creating new migration endpoint with parameters:`r`n$(ConvertTo-Json $newParams -Depth 10)"
         New-MigrationEndpoint @newParams
     }
     # UPDATE
     elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
     {
+        Write-Verbose -Message "Updating migration endpoint with parameters:`r`n$(ConvertTo-Json $setParams -Depth 10)"
         Set-MigrationEndpoint @setParams
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
+        Write-Verbose -Message "Removing migration endpoint with id {$Identity}"
         Remove-MigrationEndpoint -Identity $Identity
     }
 }
