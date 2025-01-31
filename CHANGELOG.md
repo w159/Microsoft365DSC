@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.129.3
 
 * EXOMigrationEndpoint
   * Added support for EntpointType value of ExchangeRemoteMove.
