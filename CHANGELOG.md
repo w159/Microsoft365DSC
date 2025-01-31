@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* EXOMigrationEndpoint
+  * Added support for EntpointType value of ExchangeRemoteMove.
 * M365DSCRuleEvaluation
   * Changed logic to evaluate cases where the rule results in no results.
 * SPDLPComplianceRule

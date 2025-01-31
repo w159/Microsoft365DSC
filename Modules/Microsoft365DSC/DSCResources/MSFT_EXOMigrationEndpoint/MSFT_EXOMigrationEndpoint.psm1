@@ -25,7 +25,7 @@ function Get-TargetResource
         $Authentication,
 
         [Parameter()]
-        [ValidateSet('IMAP')]
+        [ValidateSet('IMAP', 'ExchangeRemoteMove')]
         [System.String]
         $EndpointType,
 
@@ -208,7 +208,7 @@ function Set-TargetResource
         $Authentication,
 
         [Parameter()]
-        [ValidateSet('IMAP')]
+        [ValidateSet('IMAP', 'ExchangeRemoteMove')]
         [System.String]
         $EndpointType,
 
@@ -305,14 +305,14 @@ function Set-TargetResource
 
     $currentInstance = Get-TargetResource @PSBoundParameters
 
-    $setParams = [System.Collections.Hashtable]($PSBoundParameters)
+    $setParams = ([Hashtable]$PSBoundParameters).Clone()
     $setParams = Remove-M365DSCAuthenticationParameter -BoundParameters $setParams
     $setParams.Remove('RemoteTenant')
     $setParams.Remove('EndpointType')
     $setParams.Remove('UseAutoDiscover')
     $setParams.Add('Confirm', $false)
 
-    $newParams = [System.Collections.Hashtable]($PSBoundParameters)
+    $newParams = ([Hashtable]$PSBoundParameters).Clone()
     $newParams = Remove-M365DSCAuthenticationParameter -BoundParameters $newParams
     $newParams.Remove('EndpointType')
     $newParams.Remove('Identity')
@@ -331,6 +331,19 @@ function Set-TargetResource
         $newParams.Add('SkipVerification', [Switch]$true)
 
         $newParams.Add('IMAP', [Switch]$true)
+    }
+    elseif ($EndpointType -eq 'ExchangeRemoteMove')
+    {
+        # Removing mailbox permission parameter as this is valid only for outlook anywhere migration
+        $setParams.Remove('MailboxPermission')
+        $newParams.Remove('MailboxPermission')
+
+        # adding skip verification switch to skip verifying
+        # that the remote server is reachable when creating a migration endpoint.
+        $setParams.Add('SkipVerification', [Switch]$true)
+        $newParams.Add('SkipVerification', [Switch]$true)
+
+        $newParams.Add('ExchangeRemoteMove', [Switch]$true)
     }
 
     # add the logic for other endpoint types ('Exchange Remote', 'Outlook Anywhere', 'Google Workspace')
@@ -379,7 +392,7 @@ function Test-TargetResource
         $Authentication,
 
         [Parameter()]
-        [ValidateSet('IMAP')]
+        [ValidateSet('IMAP', 'ExchangeRemoteMove')]
         [System.String]
         $EndpointType,
 
