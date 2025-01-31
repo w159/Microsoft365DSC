@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* M365DSCRuleEvaluation
+  * Changed logic to evaluate cases where the rule results in no results.
 * DEPENDENCIES
   * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.205.
   * Updated MicrosoftTeams to version 6.8.0.
