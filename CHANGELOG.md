@@ -1,5 +1,18 @@
 # Change log for Microsoft365DSC
 
+# 1.25.129.3
+
+* EXOMigrationEndpoint
+  * Added support for EntpointType value of ExchangeRemoteMove.
+* M365DSCRuleEvaluation
+  * Changed logic to evaluate cases where the rule results in no results.
+* SPDLPComplianceRule
+  * Fix for the SensitiveInfoType ID cleaning logic in Get-TargetResource.
+* DEPENDENCIES
+  * Updated Microsoft.PowerApps.Administration.PowerShell to version 2.0.205.
+  * Updated MicrosoftTeams to version 6.8.0.
+  * Updated MSCloudLoginAssistant to version 1.1.35.
+
 # 1.25.129.2
 
 * M365DSCRuleEvaluation
