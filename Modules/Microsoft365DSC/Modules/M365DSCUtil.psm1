@@ -667,7 +667,7 @@ function Test-M365DSCParameterState
             $propertyName = $existingDrift.Keys[0]
             $value =  $existingDrift."$propertyName"
             $start = $value.IndexOf('</CurrentValue>')
-            $currentValue = $value.Substring(0, $start).Replace('<CurrentValue>', '')            
+            $currentValue = $value.Substring(0, $start).Replace('<CurrentValue>', '')
             $desiredValue = $value.Substring($start+15, ($value.Length)-($start+15)).Replace('<DesiredValue>', '').Replace('</DesiredValue>', '')
             $DriftObject.DriftInfo.Add($propertyName, @{
                 PropertyName = $propertyName
@@ -1881,7 +1881,7 @@ function New-M365DSCConnection
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('AdminAPI', 'Azure', 'AzureDevOPS', 'DefenderForEndPoint', 'ExchangeOnline', 'Fabric', 'Intune', `
+        [ValidateSet('AdminAPI', 'Azure', 'AzureDevOPS', 'DefenderForEndPoint', 'ExchangeOnline', 'Fabric', 'Intune', 'Licensing', `
                 'SecurityComplianceCenter', 'PnP', 'PowerPlatforms', `
                 'MicrosoftTeams', 'MicrosoftGraph', 'SharePointOnlineREST', 'Tasks', 'AdminAPI')]
         [System.String]
