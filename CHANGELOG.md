@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADConditionalAccessPolicy
+  * Changed the InsiderRiskTypes property to a string array.
+
 # 1.25.129.3
 
 * EXOMigrationEndpoint
