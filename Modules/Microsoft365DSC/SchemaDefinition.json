@@ -3543,7 +3543,7 @@
                                "Option":  "Write"
                            },
                            {
-                               "CIMType":  "String",
+                               "CIMType":  "String[]",
                                "Name":  "InsiderRiskLevels",
                                "Option":  "Write"
                            },
