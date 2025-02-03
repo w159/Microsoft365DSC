@@ -4,6 +4,8 @@
 
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
+* MISC
+  * Changed the CIMInstance logic of various resources to us common logic.
 
 # 1.25.129.3
 
