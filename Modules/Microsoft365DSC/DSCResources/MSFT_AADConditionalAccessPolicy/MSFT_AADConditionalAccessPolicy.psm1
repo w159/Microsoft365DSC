@@ -649,6 +649,12 @@ function Get-TargetResource
         }
     }
 
+    $InsiderRiskLevelsValue = $null
+    if (-not [System.String]::IsNullOrEmpty($Policy.Conditions.InsiderRiskLevels))
+    {
+        $InsiderRiskLevelsValue = $Policy.Conditions.InsiderRiskLevels.Split(',')
+    }
+
     $result = @{
         DisplayName                              = $Policy.DisplayName
         Id                                       = $Policy.Id
@@ -727,7 +733,7 @@ function Get-TargetResource
         TransferMethods                          = [System.String]$Policy.Conditions.AuthenticationFlows.TransferMethods
         #Standard part
         TermsOfUse                               = $termOfUseName
-        InsiderRiskLevels                        = $Policy.Conditions.InsiderRiskLevels.Split(',')
+        InsiderRiskLevels                        = $InsiderRiskLevelsValue
         Ensure                                   = 'Present'
         Credential                               = $Credential
         ApplicationSecret                        = $ApplicationSecret
