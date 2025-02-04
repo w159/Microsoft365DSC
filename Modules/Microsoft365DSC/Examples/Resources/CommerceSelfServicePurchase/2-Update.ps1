@@ -21,6 +21,15 @@ Configuration Example
     Import-DscResource -ModuleName Microsoft365DSC
     node localhost
     {
-        
+        CommerceSelfServicePurchase "Power Apps per user"
+        {
+            ApplicationId         = $ApplicationId;
+            CertificateThumbprint = $CertificateThumbprint;
+            Ensure                = "Present";
+            PolicyValue           = "Enabled";
+            ProductId             = "CFQ7TTC0LH2H";
+            ProductName           = "Power Apps per user";
+            TenantId              = $TenantId;
+        }
     }
 }

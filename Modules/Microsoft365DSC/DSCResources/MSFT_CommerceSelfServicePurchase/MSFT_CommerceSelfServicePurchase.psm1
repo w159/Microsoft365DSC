@@ -13,7 +13,7 @@ function Get-TargetResource
         $ProductName,
 
         [Parameter()]
-        [ValidateSet('Enabled', 'Disabled')]
+        [ValidateSet('Enabled', 'Disabled', 'OnlyTrialsWithoutPaymentMethod')]
         [System.String]
         $PolicyValue,
 
@@ -75,10 +75,15 @@ function Get-TargetResource
             $uri = (Get-MSCloudLoginConnectionProfile -Workload 'Licensing').HostUrl + "/v1/policies/AllowSelfServicePurchase/products/$($ProductId)"
             $instance = Invoke-M365DSCLicensingWebRequest -Uri $uri -Method 'GET'
         }
-        if ($null -eq $instance)
+        if ($null -eq $instance.items)
         {
             return $nullResult
         }
+        elseif ($instance.items.Length -gt 1)
+        {
+            throw "Multiple instances with ProductId {$($ProductId)} were found."
+        }
+        $instance = $instance.items[0]
 
         $results = @{
             ProductId             = $instance.ProductId
@@ -122,7 +127,7 @@ function Set-TargetResource
 
         [Parameter()]
         [System.String]
-        [ValidateSet('Enabled', 'Disabled')]
+        [ValidateSet('Enabled', 'Disabled', 'OnlyTrialsWithoutPaymentMethod')]
         $PolicyValue,
 
         [Parameter()]
@@ -199,7 +204,7 @@ function Test-TargetResource
 
         [Parameter()]
         [System.String]
-        [ValidateSet('Enabled', 'Disabled')]
+        [ValidateSet('Enabled', 'Disabled', 'OnlyTrialsWithoutPaymentMethod')]
         $PolicyValue,
 
         [Parameter()]

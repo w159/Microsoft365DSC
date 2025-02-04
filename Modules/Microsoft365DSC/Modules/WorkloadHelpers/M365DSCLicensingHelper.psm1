@@ -20,10 +20,17 @@ function Invoke-M365DSCLicensingWebRequest
         Authorization = (Get-MSCloudLoginConnectionProfile -Workload 'Licensing').AccessToken
     }
 
+    $bodyValue = $null
+    if (-not [System.String]::IsNullOrEmpty($Body))
+    {
+        $bodyValue = ConvertTo-Json $Body -Depth 10 -Compress
+    }
+
     $response = Invoke-WebRequest -Method $Method `
                                   -Uri $Uri `
                                   -Headers $headers `
-                                  -Body $Body `
+                                  -Body $bodyValue `
+                                  -ContentType 'application-json' `
                                   -UseBasicParsing
     $result = ConvertFrom-Json $response.Content
     return $result
