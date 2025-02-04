@@ -76,13 +76,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Invoke-M365DSCLicensingWebRequest -MockWith {
                     return @{
-                        items = @(
-                            @{
-                                policyValue = "Enabled"
-                                productId   = "CFQ7TTC0LH2H";
-                                productName = "Power Apps per user";
-                            }
-                        )
+                        policyValue = "Enabled"
+                        productId   = "CFQ7TTC0LH2H";
+                        productName = "Power Apps per user";
                     }
                 }
             }
@@ -104,13 +100,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Invoke-M365DSCLicensingWebRequest -MockWith {
                     return @{
-                        items = @(
-                            @{
-                                policyValue = "Disabled" # Drift
-                                productId   = "CFQ7TTC0LH2H";
-                                productName = "Power Apps per user";
-                            }
-                        )
+                        policyValue = "Disabled" # Drift
+                        productId   = "CFQ7TTC0LH2H";
+                        productName = "Power Apps per user";
                     }
                 }
             }
