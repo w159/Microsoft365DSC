@@ -4,8 +4,11 @@
 
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
+* EXOSmtpDaneInbound
+  * Updated authentication properties to align with MOF definition.
+    FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
 * MISC
-  * Changed the CIMInstance logic of various resources to us common logic.
+  * Changed the CIMInstance logic of various resources to use common logic.
 
 # 1.25.129.3
 
