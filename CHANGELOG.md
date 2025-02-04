@@ -6,6 +6,7 @@
   * Changed the InsiderRiskTypes property to a string array.
 * AADServicePrincipal
   * Fixes comparison of assigned roles for null values.
+    FIXES [#5717](https://github.com/microsoft/Microsoft365DSC/issues/5717)
 * MISC
   * Changed the CIMInstance logic of various resources to us common logic.
   * Added support for specifying a proxy in Update-M365DSCModule.
