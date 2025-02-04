@@ -77,6 +77,11 @@ function Get-TargetResource
             $instance = $instances.items | Where-Object -FilterScript {$_.ProductId -eq $ProductId}
         }
 
+        if ($null -eq $instance)
+        {
+            return $nullResult
+        }
+
         $results = @{
             ProductId             = $instance.ProductId
             ProductName           = $instance.ProductName
