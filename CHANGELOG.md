@@ -4,6 +4,8 @@
 
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
+* AADServicePrincipal
+  * Fixes comparison of assigned roles for null values.
 * MISC
   * Changed the CIMInstance logic of various resources to us common logic.
   * Added support for specifying a proxy in Update-M365DSCModule.
