@@ -6,6 +6,7 @@
   * Changed the InsiderRiskTypes property to a string array.
 * MISC
   * Changed the CIMInstance logic of various resources to us common logic.
+  * Added support for specifying a proxy in Update-M365DSCModule.
 
 # 1.25.129.3
 
