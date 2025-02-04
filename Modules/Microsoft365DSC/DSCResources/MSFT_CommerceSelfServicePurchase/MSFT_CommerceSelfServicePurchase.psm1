@@ -73,17 +73,9 @@ function Get-TargetResource
         else
         {
             $uri = (Get-MSCloudLoginConnectionProfile -Workload 'Licensing').HostUrl + "/v1/policies/AllowSelfServicePurchase/products/$($ProductId)"
-            $instance = Invoke-M365DSCLicensingWebRequest -Uri $uri -Method 'GET'
+            $instances = Invoke-M365DSCLicensingWebRequest -Uri $uri -Method 'GET'
+            $instance = $instances.items | Where-Object -FilterScript {$_.ProductId -eq $ProductId}
         }
-        if ($null -eq $instance.items)
-        {
-            return $nullResult
-        }
-        elseif ($instance.items.Length -gt 1)
-        {
-            throw "Multiple instances with ProductId {$($ProductId)} were found."
-        }
-        $instance = $instance.items[0]
 
         $results = @{
             ProductId             = $instance.ProductId
