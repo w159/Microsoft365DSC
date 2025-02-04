@@ -30,7 +30,7 @@ function Invoke-M365DSCLicensingWebRequest
                                   -Uri $Uri `
                                   -Headers $headers `
                                   -Body $bodyValue `
-                                  -ContentType 'application-json' `
+                                  -ContentType 'application/json' `
                                   -UseBasicParsing
     $result = ConvertFrom-Json $response.Content
     return $result
