@@ -4,11 +4,19 @@
 
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
+* AADServicePrincipal
+  * Fixes comparison of assigned roles for null values.
+    FIXES [#5717](https://github.com/microsoft/Microsoft365DSC/issues/5717)
+* CommerceSelfServicePurchase
+  * Initial release.
 * EXOSmtpDaneInbound
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
 * MISC
-  * Changed the CIMInstance logic of various resources to use common logic.
+  * Changed the CIMInstance logic of various resources to us common logic.
+  * Added support for specifying a proxy in Update-M365DSCModule.
+* DEPENDENCIES
+  * Updated MSCloudLoginAssistant to version 1.1.36.
 
 # 1.25.129.3
 
