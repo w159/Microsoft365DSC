@@ -846,7 +846,11 @@ function Compare-M365DSCComplexObject
 
                     $compareResult = $true
                     $ordinalComparison = [System.String]::Equals($referenceObject, $differenceObject, [System.StringComparison]::Ordinal)
-                    if ($ordinalComparison)
+                    if (-not $ordinalComparison)
+                    {
+                        $compareResult = $false
+                    }
+                    elseif ($ordinalComparison)
                     {
                         $compareResult = $null
                     }

@@ -358,12 +358,13 @@ function Test-TargetResource
 
     $CurrentValues = Get-TargetResource @PSBoundParameters
     $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
+    $testTargetResource = $true
 
     Write-Verbose -Message "Current Values: $(Convert-M365DscHashtableToString -Hashtable $CurrentValues)"
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
-     #Compare Cim instances
-     foreach ($key in $PSBoundParameters.Keys)
-     {
+    #Compare Cim instances
+    foreach ($key in $PSBoundParameters.Keys)
+    {
          $source = $PSBoundParameters.$key
          $target = $CurrentValues.$key
          if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
@@ -382,7 +383,7 @@ function Test-TargetResource
                  $ValuesToCheck.Remove($key) | Out-Null
              }
          }
-     }
+    }
 
     $testResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
         -Source $($MyInvocation.MyCommand.Source) `
