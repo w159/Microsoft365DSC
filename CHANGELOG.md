@@ -13,6 +13,8 @@
     FIXES [#5717](https://github.com/microsoft/Microsoft365DSC/issues/5717)
 * CommerceSelfServicePurchase
   * Initial release.
+* SCRoleGroupMember
+  * Error handling if the Members parameter is omitted.
 * MISC
   * Changed the CIMInstance logic of various resources to us common logic.
   * Added support for specifying a proxy in Update-M365DSCModule.
