@@ -202,20 +202,20 @@ function Set-TargetResource
         -InboundParameters $PSBoundParameters
 
     # CASE: Role Group has different member values than the desired ones
+    $MembersValue = $Members
     if ([System.String]::IsNullOrEmpty($Members))
     {
-        $Members = @()
-    }
-    if ([System.String]::IsNullOrEmpty($currentRoleGroupConfig.Members))
-    {
-        $currentRoleGroupConfig.Members = @()
+        $MembersValue = @()
     }
 
-    $differences = $null
-    if ($Members.Count -gt 0 -or $currentRoleGroupConfig.Members.Count -gt 0)
+    $currentMembersValue = $currentRoleGroupConfig.Members
+    if ([System.String]::IsNullOrEmpty($currentRoleGroupConfig.Members))
     {
-        $differences = (Compare-Object -ReferenceObject $($currentRoleGroupConfig.Members) -DifferenceObject $Members)
+        $currentMembersValue = @()
     }
+
+    $differences = Compare-Object -ReferenceObject $currentMembersValue -DifferenceObject $MembersValue
+
     if ($Ensure -eq 'Present' -and $currentRoleGroupConfig.Ensure -eq 'Present' -and $null -ne $differences)
     {
         Write-Verbose -Message "Role Group '$($Name)' exists, but members need updating."
