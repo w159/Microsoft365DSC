@@ -862,7 +862,7 @@ function Compare-M365DSCComplexObject
                         -DifferenceObject ($differenceObject)
                 }
 
-                if ($null -ne $compareResult -and -not $compareResult)
+                if ($null -ne $compareResult -and $compareResult.Length -gt 0)
                 {
                     Write-Verbose -Message "Configuration drift - simple object key: $key"
                     Write-Verbose -Message "Source {$sourceValue}"
