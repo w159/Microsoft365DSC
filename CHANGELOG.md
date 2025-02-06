@@ -2,12 +2,13 @@
 
 # 1.25.205.1
 
+* AADApplication
+  * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
 * AADConnectorGroupApplicationProxy
   * Fixes an issue where the Get-TargetResource was not able to retrieve
     instances by names.
-* AADGroup
   * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADServicePrincipal
   * Fixes comparison of assigned roles for null values.
