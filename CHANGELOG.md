@@ -2,8 +2,12 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
+* AADGroup
+  * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADServicePrincipal
   * Fixes comparison of assigned roles for null values.
     FIXES [#5717](https://github.com/microsoft/Microsoft365DSC/issues/5717)
@@ -12,6 +16,8 @@
 * EXOSmtpDaneInbound
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
+* SCRoleGroupMember
+  * Error handling if the Members parameter is omitted.
 * MISC
   * Changed the CIMInstance logic of various resources to us common logic.
   * Added support for specifying a proxy in Update-M365DSCModule.
