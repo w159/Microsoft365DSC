@@ -83,7 +83,7 @@ function Get-TargetResource
             if ($null -eq $getValue -and -not [string]::IsNullOrEmpty($Id))
             {
                 Write-Verbose -Message "Could not find an Azure AD Connector Group Application Proxy with Name {$Name}"
-                if (-not [string]::IsNullOrEmpty($DisplayName))
+                if (-not [string]::IsNullOrEmpty($Name))
                 {
                     $getValue = Get-MgBetaOnPremisePublishingProfileConnectorGroup -OnPremisesPublishingProfileId 'applicationProxy' -Filter "Name eq '$Name'" -ErrorAction Stop
                 }
