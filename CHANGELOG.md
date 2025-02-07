@@ -1,4 +1,8 @@
 # Change log for Microsoft365DSC
+# UNRELEASED
+
+* AADGroupEligibilitySchedule
+  * FIXES [#5741] Missing -All variable which prevented enumeration of more than 100 Groups
 
 # 1.25.205.1
 
