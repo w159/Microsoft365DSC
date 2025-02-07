@@ -17,6 +17,7 @@
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
+  * Simplify export behavior for all resources and complex objects.
 * DEPENDENCIES
   * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
   * Updated MSCloudLoginAssistant to version 1.1.37.
