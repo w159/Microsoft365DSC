@@ -55,6 +55,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableBingVideoSearch                         = $false
                     DisableShareWithEveryone                       = $false
                     EnableGuestsToMake                             = $false
+                    EnableDesktopFlowDataPolicyManagement          = $false
                     ShareWithColleaguesUserLimit                   = 10000
                     Credential                                     = $Credential
                 }
@@ -106,6 +107,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 DisableTrialEnvironmentCreationByNonAdminUsers = $testParams.DisableTrialEnvironmentCreationByNonAdminUsers
                                 DisableCapacityAllocationByEnvironmentAdmins   = $testParams.DisableCapacityAllocationByEnvironmentAdmins
                                 DisableSupportTicketsVisibleByAllUsers         = $testParams.DisableSupportTicketsVisibleByAllUsers
+                                EnableDesktopFlowDataPolicyManagement          = $false
                                 powerPlatform                                  = @(
                                     @{
                                         search = @{
