@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* EXORetentionPolicyTag
+  * Initial release.
+
 # 1.25.205.1
 
 * AADApplication
