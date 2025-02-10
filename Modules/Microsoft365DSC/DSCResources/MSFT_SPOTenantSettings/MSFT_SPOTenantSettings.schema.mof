@@ -2,6 +2,16 @@
 class MSFT_SPOTenantSettings : OMI_BaseResource
 {
     [Key, Description("Specifies the resource is a single instance, the value must be 'Yes'"),ValueMap{"Yes"},Values{"Yes"}] String IsSingleInstance;
+    [Write, Description("Enables OneDrive and SharePoint integration with Microsoft Entra B2B.")] boolean EnableAzureADB2BIntegration;
+    [Write, Description("Determines what level of sharing is available for OneDrive and SharePoint sites."), ValueMap{"ExternalUserAndGuestSharing", "Disabled", "ExternalUserSharingOnly", "ExistingExternalUserSharingOnly"}, Values{"ExternalUserAndGuestSharing", "Disabled", "ExternalUserSharingOnly", "ExistingExternalUserSharingOnly"}] string SharingCapability;
+    [Write, Description("Determines what level of sharing is available for OneDrive sites. It corresponds to the SharingCapabilities for OneDrive sites."), ValueMap{"ExternalUserAndGuestSharing", "Disabled", "ExternalUserSharingOnly", "ExistingExternalUserSharingOnly"}, Values{"ExternalUserAndGuestSharing", "Disabled", "ExternalUserSharingOnly", "ExistingExternalUserSharingOnly"}] string OneDriveSharingCapability;
+    [Write, Description("Prevents external users from resharing files, folders, and sites that they do not own.")] boolean PreventExternalUsersFromResharing;
+    [Write, Description("Specifies the external sharing mode for domains."), ValueMap{"None", "AllowList", "BlockList"}, Values{"None", "AllowList", "BlockList"}] string SharingDomainRestrictionMode;
+    [Write, Description("Specifies a list of email domains that are allowed for sharing with the external collaborators. Use the space character as the delimiter for entering multiple values. For example, "contoso.com fabrikam.com".")] string SharingAllowedDomainList;
+    [Write, Description("Lets administrators choose the default link type in the sharing dialog box in OneDrive for Business and SharePoint Online."), ValueMap{"None", "Direct", "Internal", "AnonymousAccess"}, Values{"None", "Direct", "Internal", "AnonymousAccess"}] string DefaultSharingLinkType;
+    [Write, Description("Specifies whether to enable the external user expiration policy, where external users will be expired and removed from the site collection in a given number of days.")] boolean ExternalUserExpirationRequired;
+    [Write, Description("Specifies the number of days before an external user will expire and be removed from the site collection if the policy is enabled. Value can be from 30 to 730 days.")] uint32 ExternalUserExpireInDays;
+    [Write, Description("This parameter sets the default share link role on OneDrive sites. It replaces the DefaultLinkPermission."), ValueMap{"None", "View", "Edit", "Review", "RestrictedView"}, Values{"None", "View", "Edit", "Review", "RestrictedView"}] string DefaultLinkPermission;
     [Write, Description("Specifies the lower bound on the compatibility level for new sites.")] uint32 MinCompatibilityLevel;
     [Write, Description("Specifies the upper bound on the compatibility level for new sites.")] uint32 MaxCompatibilityLevel;
     [Write, Description("Removes the search capability from People Picker. Note, recently resolved names will still appear in the list until browser cache is cleared or expired.")] boolean SearchResolveExactEmailOrUPN;

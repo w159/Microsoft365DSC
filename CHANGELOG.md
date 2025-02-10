@@ -4,6 +4,8 @@
 
 * EXORetentionPolicyTag
   * Initial release.
+* SPOTenantSettings
+  * Add EnableAzureADB2BIntegration, SharingCapability, OneDriveSharingCapability, PreventExternalUsersFromResharing, SharingDomainRestrictionMode, SharingAllowedDomainList, DefaultSharingLinkType, ExternalUserExpirationRequired, ExternalUserExpireInDays, DefaultLinkPermission properties
 
 # 1.25.205.1
 

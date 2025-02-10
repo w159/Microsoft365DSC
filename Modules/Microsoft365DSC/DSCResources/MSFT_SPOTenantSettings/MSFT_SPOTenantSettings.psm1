@@ -10,6 +10,51 @@ function Get-TargetResource
         $IsSingleInstance,
 
         [Parameter()]
+        [System.Boolean]
+        $EnableAzureADB2BIntegration,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $SharingCapability,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $OneDriveSharingCapability,
+
+        [Parameter()]
+        [System.Boolean]
+        $PreventExternalUsersFromResharing,
+
+        [Parameter()]
+        [ValidateSet('None', 'AllowList', 'BlockList')]
+        [System.String]
+        $SharingDomainRestrictionMode,
+
+        [Parameter()]
+        [System.String]
+        $SharingAllowedDomainList,
+
+        [Parameter()]
+        [ValidateSet('None', 'Direct', 'Internal', 'AnonymousAccess')]
+        [System.String]
+        $DefaultSharingLinkType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ExternalUserExpirationRequired,
+
+        [Parameter()]
+        [System.UInt32]
+        $ExternalUserExpireInDays,
+
+        [Parameter()]
+        [ValidateSet('None', 'View', 'Edit', 'Review', 'RestrictedView')]
+        [System.String]
+        $DefaultLinkPermission,
+
+        [Parameter()]
         [System.UInt32]
         $MinCompatibilityLevel,
 
@@ -209,7 +254,17 @@ function Get-TargetResource
             'AllowSelectSGsInODBListInTenant',
             'DenySelectSGsInODBListInTenant',
             'DenySelectSecurityGroupsInSPSitesList',
-            'AllowSelectSecurityGroupsInSPSitesList')
+            'AllowSelectSecurityGroupsInSPSitesList',
+            'EnableAzureADB2BIntegration',
+            'SharingCapability',
+            'OneDriveSharingCapability',
+            'PreventExternalUsersFromResharing',
+            'SharingDomainRestrictionMode',
+            'SharingAllowedDomainList',
+            'DefaultSharingLinkType',
+            'ExternalUserExpirationRequired',
+            'ExternalUserExpireInDays',
+            'DefaultLinkPermission')
 
         $response = Invoke-PnPSPRestMethod -Method Get `
             -Url "$((Get-MSCloudLoginConnectionProfile -Workload PnP).AdminUrl)/_api/SPO.Tenant?`$select=$($parametersToRetrieve -join ',')"
@@ -222,6 +277,16 @@ function Get-TargetResource
             DenySelectSGsInODBListInTenant                         = $response.DenySelectSGsInODBListInTenant
             DenySelectSecurityGroupsInSPSitesList                  = $response.DenySelectSecurityGroupsInSPSitesList
             AllowSelectSecurityGroupsInSPSitesList                 = $response.AllowSelectSecurityGroupsInSPSitesList
+            EnableAzureADB2BIntegration                            = $response.EnableAzureADB2BIntegration
+            SharingCapability                                      = $response.SharingCapability
+            OneDriveSharingCapability                              = $response.OneDriveSharingCapability
+            PreventExternalUsersFromResharing                      = $response.PreventExternalUsersFromResharing
+            SharingDomainRestrictionMode                           = $response.SharingDomainRestrictionMode
+            SharingAllowedDomainList                               = $response.SharingAllowedDomainList
+            DefaultSharingLinkType                                 = $response.DefaultSharingLinkType
+            ExternalUserExpirationRequired                         = $response.ExternalUserExpirationRequired
+            ExternalUserExpireInDays                               = $response.ExternalUserExpireInDays
+            DefaultLinkPermission                                  = $response.DefaultLinkPermission
             MinCompatibilityLevel                                  = $MinCompat
             MaxCompatibilityLevel                                  = $MaxCompat
             SearchResolveExactEmailOrUPN                           = $SPOTenantSettings.SearchResolveExactEmailOrUPN
@@ -282,6 +347,51 @@ function Set-TargetResource
         [ValidateSet('Yes')]
         [String]
         $IsSingleInstance,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableAzureADB2BIntegration,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $SharingCapability,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $OneDriveSharingCapability,
+
+        [Parameter()]
+        [System.Boolean]
+        $PreventExternalUsersFromResharing,
+
+        [Parameter()]
+        [ValidateSet('None', 'AllowList', 'BlockList')]
+        [System.String]
+        $SharingDomainRestrictionMode,
+
+        [Parameter()]
+        [System.String]
+        $SharingAllowedDomainList,
+
+        [Parameter()]
+        [ValidateSet('None', 'Direct', 'Internal', 'AnonymousAccess')]
+        [System.String]
+        $DefaultSharingLinkType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ExternalUserExpirationRequired,
+
+        [Parameter()]
+        [System.UInt32]
+        $ExternalUserExpireInDays,
+
+        [Parameter()]
+        [ValidateSet('None', 'View', 'Edit', 'Review', 'RestrictedView')]
+        [System.String]
+        $DefaultLinkPermission,
 
         [Parameter()]
         [System.UInt32]
@@ -476,6 +586,16 @@ function Set-TargetResource
     $CurrentParameters.Remove('DenySelectSGsInODBListInTenant') | Out-Null
     $CurrentParameters.Remove('DenySelectSecurityGroupsInSPSitesList') | Out-Null
     $CurrentParameters.Remove('AllowSelectSecurityGroupsInSPSitesList') | Out-Null
+    $CurrentParameters.Remove('EnableAzureADB2BIntegration') | Out-Null
+    $CurrentParameters.Remove('OneDriveSharingCapability') | Out-Null
+    $CurrentParameters.Remove('PreventExternalUsersFromResharing') | Out-Null
+    $CurrentParameters.Remove('SharingDomainRestrictionMode') | Out-Null
+    $CurrentParameters.Remove('SharingAllowedDomainList') | Out-Null
+    $CurrentParameters.Remove('DefaultSharingLinkType') | Out-Null
+    $CurrentParameters.Remove('ExternalUserExpireInDays') | Out-Null
+    $CurrentParameters.Remove('ExternalUserExpirationRequired') | Out-Null
+    $CurrentParameters.Remove('ExternalUserExpireInDays') | Out-Null
+    $CurrentParameters.Remove('DefaultLinkPermission') | Out-Null
 
     $CurrentParameters.Remove('TenantDefaultTimezone') | Out-Null # this one is updated separately using Graph
     if ($CurrentParameters.Keys.Contains('UserVoiceForFeedbackEnabled'))
@@ -532,6 +652,66 @@ function Set-TargetResource
             $paramsToUpdate.Add('AllowSelectSecurityGroupsInSPSitesList', $AllowSelectSecurityGroupsInSPSitesList)
         }
 
+        if ($null -ne $EnableAzureADB2BIntegration)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('EnableAzureADB2BIntegration', $EnableAzureADB2BIntegration)
+        }
+
+        if ($null -ne $SharingCapability)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('SharingCapability', $SharingCapability)
+        }
+
+        if ($null -ne $OneDriveSharingCapability)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('OneDriveSharingCapability', $OneDriveSharingCapability)
+        }
+
+        if ($null -ne $PreventExternalUsersFromResharing)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('PreventExternalUsersFromResharing', $PreventExternalUsersFromResharing)
+        }
+
+        if ($null -ne $SharingDomainRestrictionMode)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('SharingDomainRestrictionMode', $SharingDomainRestrictionMode)
+        }
+
+        if ($null -ne $SharingAllowedDomainList)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('SharingAllowedDomainList', $SharingAllowedDomainList)
+        }
+
+        if ($null -ne $DefaultSharingLinkType)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('DefaultSharingLinkType', $DefaultSharingLinkType)
+        }
+
+        if ($null -ne $ExternalUserExpirationRequired)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('ExternalUserExpirationRequired', $ExternalUserExpirationRequired)
+        }
+
+        if ($null -ne $ExternalUserExpireInDays)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('ExternalUserExpireInDays', $ExternalUserExpireInDays)
+        }
+
+        if ($null -ne $DefaultLinkPermission)
+        {
+            $needToUpdate = $true
+            $paramsToUpdate.Add('DefaultLinkPermission', $DefaultLinkPermission)
+        }
+
         if ($needToUpdate)
         {
             Write-Verbose -Message 'Updating properties via REST PATCH call.'
@@ -563,6 +743,51 @@ function Test-TargetResource
         [ValidateSet('Yes')]
         [String]
         $IsSingleInstance,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableAzureADB2BIntegration,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $SharingCapability,
+
+        [Parameter()]
+        [ValidateSet('ExternalUserAndGuestSharing', 'Disabled', 'ExternalUserSharingOnly', 'ExistingExternalUserSharingOnly')]
+        [System.String]
+        $OneDriveSharingCapability,
+
+        [Parameter()]
+        [System.Boolean]
+        $PreventExternalUsersFromResharing,
+
+        [Parameter()]
+        [ValidateSet('None', 'AllowList', 'BlockList')]
+        [System.String]
+        $SharingDomainRestrictionMode,
+
+        [Parameter()]
+        [System.String]
+        $SharingAllowedDomainList,
+
+        [Parameter()]
+        [ValidateSet('None', 'Direct', 'Internal', 'AnonymousAccess')]
+        [System.String]
+        $DefaultSharingLinkType,
+
+        [Parameter()]
+        [System.Boolean]
+        $ExternalUserExpirationRequired,
+
+        [Parameter()]
+        [System.UInt32]
+        $ExternalUserExpireInDays,
+
+        [Parameter()]
+        [ValidateSet('None', 'View', 'Edit', 'Review', 'RestrictedView')]
+        [System.String]
+        $DefaultLinkPermission,
 
         [Parameter()]
         [System.UInt32]
