@@ -6,6 +6,8 @@
   * Initial release.
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
+* DEPENDENCIES
+  * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
 
 # 1.25.205.1
 

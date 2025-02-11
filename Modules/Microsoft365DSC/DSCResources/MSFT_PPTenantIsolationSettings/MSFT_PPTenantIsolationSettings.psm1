@@ -220,11 +220,11 @@ function Set-TargetResource
     $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
         -InboundParameters $PSBoundParameters
 
-    $tenantid = (Get-MgContext).TenantId
+    $tenantinfo = (Get-MgContext).TenantId
 
     $tenantIsolationPolicy = @{
         properties = @{
-            tenantId = $tenantId
+            tenantId = $tenantinfo
             isDisabled = $false
             allowedTenants = @()
         }
@@ -657,6 +657,8 @@ function Export-TargetResource
 
     try
     {
+        $ConnectionMode = New-M365DSCConnection -Workload 'PowerPlatformREST' `
+            -InboundParameters $PSBoundParameters
         if ($null -ne $Global:M365DSCExportResourceInstancesCount)
         {
             $Global:M365DSCExportResourceInstancesCount++
