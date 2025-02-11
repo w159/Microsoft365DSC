@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Changing the AuthenticationBehaviors parameters to string to allow
+    for null values.
 * EXORetentionPolicyTag
   * Initial release.
 * MISC
