@@ -54606,10 +54606,10 @@
                        ]
     },
     {
-        "ClassName":  "MSFT_PPPowerAPpPolicyUrlPatternsRule",
+        "ClassName":  "MSFT_PPPowerAppPolicyUrlPatternsRule",
         "Parameters":  [
                            {
-                               "CIMType":  "String",
+                               "CIMType":  "UInt32",
                                "Name":  "order",
                                "Option":  "Write"
                            },
