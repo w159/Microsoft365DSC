@@ -4,6 +4,8 @@
 
 * EXORetentionPolicyTag
   * Initial release.
+* MISC
+  * PowerPlatform resource revamp to use direct REST API calls.
 
 # 1.25.205.1
 
