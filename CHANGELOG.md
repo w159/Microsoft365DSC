@@ -24,6 +24,7 @@
   * Simplify export behavior for all resources and complex objects.
 * DEPENDENCIES
   * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
+  * Updated DSCParser to version 2.0.0.15.
   * Updated MSCloudLoginAssistant to version 1.1.37.
   * Updated ReverseDSC to version 2.0.0.25.
 
