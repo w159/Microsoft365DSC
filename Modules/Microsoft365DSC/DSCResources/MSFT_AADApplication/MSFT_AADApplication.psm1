@@ -1177,7 +1177,7 @@ function Set-TargetResource
         $IAuthenticationBehaviors = @{
             blockAzureADGraphAccess       = $AuthenticationBehaviors.blockAzureADGraphAccess
             removeUnverifiedEmailClaim    = $AuthenticationBehaviors.removeUnverifiedEmailClaim
-            #requireClientServicePrincipal = $AuthenticationBehaviors.requireClientServicePrincipal
+            requireClientServicePrincipal = $AuthenticationBehaviors.requireClientServicePrincipal
         }
 
         $uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/applications/$($currentAADApp.Id)/authenticationBehaviors"
