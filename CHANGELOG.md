@@ -20,6 +20,7 @@
 * DEPENDENCIES
   * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
   * Updated MSCloudLoginAssistant to version 1.1.37.
+  * Updated ReverseDSC to version 2.0.0.25.
 
 # 1.25.205.1
 
