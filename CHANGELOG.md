@@ -5,6 +5,11 @@
 * AADApplication
   * Changing the AuthenticationBehaviors parameters to string to allow
     for null values.
+* AADCrossTenantAccessPolicyConfigurationDefault
+  * Fixes an issue with CIM class export.
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Fixes an issue with CIM class export.
+    FIXES [#5711](https://github.com/microsoft/Microsoft365DSC/issues/5711)
 * EXORetentionPolicyTag
   * Initial release.
 * EXOSmtpDaneInbound
