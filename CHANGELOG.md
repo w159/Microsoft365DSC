@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Changing the AuthenticationBehaviors parameters to string to allow
+    for null values.
 * AADCrossTenantAccessPolicyConfigurationDefault
   * Fixes an issue with CIM class export.
 * AADCrossTenantAccessPolicyConfigurationPartner
@@ -9,6 +12,11 @@
     FIXES [#5711](https://github.com/microsoft/Microsoft365DSC/issues/5711)
 * EXORetentionPolicyTag
   * Initial release.
+* MISC
+  * PowerPlatform resource revamp to use direct REST API calls.
+* DEPENDENCIES
+  * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
+  * Updated MSCloudLoginAssistant to version 1.1.37.
 
 # 1.25.205.1
 
