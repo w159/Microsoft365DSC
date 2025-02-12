@@ -836,7 +836,6 @@ function Compare-M365DSCComplexObject
                     }
                     elseif ($targetType -eq 'String')
                     {
-                        Write-Verbose -Message "Parameter {$($key)} is a String"
                         # Align line breaks
                         if (-not [System.String]::IsNullOrEmpty($referenceObject))
                         {
