@@ -1235,8 +1235,6 @@ function Export-TargetResource
             }
             $Script:exportedInstance = $group
             $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
 
             if ($null -ne $Results.AssignedLicenses)
             {
@@ -1265,12 +1263,8 @@ function Export-TargetResource
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
-            if ($null -ne $Results.AssignedLicenses)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'AssignedLicenses'
-            }
+                -Credential $Credential `
+                -NoEscape @('AssignedLicenses')
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName
@@ -1340,36 +1334,6 @@ function Get-M365DSCAzureADGroupLicenses
     }
 
     return $returnValue
-}
-
-function Get-M365DSCAzureADGroupLicensesAsString
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param(
-        [Parameter(Mandatory = $true)]
-        [System.Collections.ArrayList]
-        $AssignedLicenses
-    )
-
-    $StringContent = [System.Text.StringBuilder]::new()
-    $StringContent.Append('@(') | Out-Null
-    foreach ($assignedLicense in $AssignedLicenses)
-    {
-        $StringContent.Append("MSFT_AADGroupLicense { `r`n") | Out-Null
-        if ($assignedLicense.DisabledPlans.Length -gt 0)
-        {
-            $StringContent.Append("                DisabledPlans = @('" + ($assignedLicense.DisabledPlans -join "','") + "')`r`n") | Out-Null
-        }
-        else
-        {
-            $StringContent.Append("                DisabledPlans = @()`r`n") | Out-Null
-        }
-        $StringContent.Append("                SkuId         = '" + $assignedLicense.SkuId + "'`r`n") | Out-Null
-        $StringContent.Append("            }`r`n") | Out-Null
-    }
-    $StringContent.Append('            )') | Out-Null
-    return $StringContent.ToString()
 }
 
 function Get-M365DSCCombinedLicenses
