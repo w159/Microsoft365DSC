@@ -2,10 +2,33 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Changing the AuthenticationBehaviors parameters to string to allow
+    for null values.
+* AADCrossTenantAccessPolicyConfigurationDefault
+  * Fixes an issue with CIM class export.
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Fixes an issue with CIM class export.
+    FIXES [#5711](https://github.com/microsoft/Microsoft365DSC/issues/5711)
 * EXORetentionPolicyTag
   * Initial release.
+* EXOSmtpDaneInbound
+  * Updated authentication properties to align with MOF definition.
+    FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
 * SPOTenantSettings
-  * Add EnableAzureADB2BIntegration, SharingCapability, OneDriveSharingCapability, PreventExternalUsersFromResharing, SharingDomainRestrictionMode, SharingAllowedDomainList, DefaultSharingLinkType, ExternalUserExpirationRequired, ExternalUserExpireInDays, DefaultLinkPermission properties
+  * Add EnableAzureADB2BIntegration, SharingCapability, OneDriveSharingCapability, 
+    PreventExternalUsersFromResharing, SharingDomainRestrictionMode, 
+    SharingAllowedDomainList, DefaultSharingLinkType, 
+    ExternalUserExpirationRequired, ExternalUserExpireInDays, DefaultLinkPermission 
+    properties
+
+* MISC
+  * PowerPlatform resource revamp to use direct REST API calls.
+  * Simplify export behavior for all resources and complex objects.
+* DEPENDENCIES
+  * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
+  * Updated MSCloudLoginAssistant to version 1.1.37.
+  * Updated ReverseDSC to version 2.0.0.25.
 
 # 1.25.205.1
 
