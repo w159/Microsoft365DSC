@@ -2,20 +2,35 @@
 
 # UNRELEASED
 
+* EXORetentionPolicyTag
+  * Initial release.
+* EXOSmtpDaneInbound
+  * Updated authentication properties to align with MOF definition.
+    FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
+* MISC
+  * PowerPlatform resource revamp to use direct REST API calls.
+* DEPENDENCIES
+  * Removed dependency on Microsoft.PowerApps.Administration.PowerShell.
+  * Updated MSCloudLoginAssistant to version 1.1.37.
+
+# 1.25.205.1
+
 * AADApplication
   * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADConditionalAccessPolicy
   * Changed the InsiderRiskTypes property to a string array.
-* AADGroup
+* AADConnectorGroupApplicationProxy
+  * Fixes an issue where the Get-TargetResource was not able to retrieve
+    instances by names.
   * Refactored logic for CIM Instance evaluation in Test-TargetResource.
 * AADServicePrincipal
   * Fixes comparison of assigned roles for null values.
     FIXES [#5717](https://github.com/microsoft/Microsoft365DSC/issues/5717)
 * CommerceSelfServicePurchase
   * Initial release.
-* EXOSmtpDaneInbound
-  * Updated authentication properties to align with MOF definition.
-    FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
+* SCPolicyConfig
+  * Fixes and issue where Get-TargetResource was returning an empty array
+    instead of a null value when no values were defined.
 * SCRoleGroupMember
   * Error handling if the Members parameter is omitted.
 * MISC
