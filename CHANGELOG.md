@@ -4,7 +4,7 @@
 * AADGroupEligibilitySchedule
   * FIXES [#5741] Missing -All variable which prevented enumeration of more than 100 Groups
 
-# UNRELEASED
+# 1.25.212.1
 
 * AADApplication
   * Changing the AuthenticationBehaviors parameters to string to allow
