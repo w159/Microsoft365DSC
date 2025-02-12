@@ -3,8 +3,11 @@
 
 * AADGroupEligibilitySchedule
   * FIXES [#5741] Missing -All variable which prevented enumeration of more than 100 Groups
+* AADRoleEligibilityScheduleRequest
+  * Reduce call count when reconciling object type
+    FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
 
-# UNRELEASED
+# 1.25.212.1
 
 * AADApplication
   * Changing the AuthenticationBehaviors parameters to string to allow
