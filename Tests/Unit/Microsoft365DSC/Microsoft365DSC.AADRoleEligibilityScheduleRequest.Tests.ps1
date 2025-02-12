@@ -101,8 +101,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilityScheduleRequest -MockWith {
                     return $null
                 }
-                
-                
+
                 Mock -CommandName Get-MgBetaRoleManagementDirectoryRoleEligibilitySchedule -MockWith {
                     return $null
                 }
@@ -309,6 +308,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     }
                 }
             }
+
             It 'Should Reverse Engineer resource from the Export method' {
                 $result = Export-TargetResource @testParams
                 $result | Should -Not -BeNullOrEmpty
