@@ -3810,13 +3810,24 @@ function Get-M365DSCExportContentForResource
 
         [Parameter()]
         [System.String[]]
-        $NoEscape
+        $NoEscape,
+
+        [Parameter()]
+        [switch]
+        $SkipAuthenticationUpdate,
+
+        [Parameter()]
+        [switch]
+        $AllowVariablesInStrings
     )
 
-    $withoutAuthentication = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-        -Results $Results
-    $Results = $withoutAuthentication.Results
-    $NoEscape += $withoutAuthentication.NoEscape
+    if (-not $SkipAuthenticationUpdate)
+    {
+        $withoutAuthentication = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
+            -Results $Results
+        $Results = $withoutAuthentication.Results
+        $NoEscape += $withoutAuthentication.NoEscape
+    }
     $NoEscape = $NoEscape | Select-Object -Unique
 
     $OrganizationName = ''
@@ -3952,7 +3963,7 @@ function Get-M365DSCExportContentForResource
     $content = [System.Text.StringBuilder]::New()
     [void]$content.Append("        $ResourceName `"$instanceName`"`r`n")
     [void]$content.Append("        {`r`n")
-    $partialContent = Get-DSCBlock -Params $Results -ModulePath $ModulePath -NoEscape $NoEscape
+    $partialContent = Get-DSCBlock -Params $Results -ModulePath $ModulePath -NoEscape $NoEscape -AllowVariablesInStrings:$AllowVariablesInStrings
 
     if ($partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
     {

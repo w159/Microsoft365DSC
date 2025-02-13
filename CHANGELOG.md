@@ -4,6 +4,8 @@
 
 * M365DSCUtil
   * Fixes an issue with `Credential` property being escaped and indentation.
+  * Adds the possibility to allow variables in strings and no authentication
+    results update during conversion to final export. 
 
 # 1.25.212.1
 
