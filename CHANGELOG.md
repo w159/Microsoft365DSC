@@ -7,6 +7,11 @@
   * Adds the possibility to allow variables in strings and no authentication
     results update during conversion to final export. 
 
+# 1.25.212.2
+
+* MISC
+  * Fixing connection errors in Power Platforms resources.
+
 # 1.25.212.1
 
 * AADApplication
