@@ -3603,6 +3603,7 @@ function Update-M365DSCExportAuthenticationResults
     if ($ConnectionMode -eq 'Credentials')
     {
         $Results.Credential = Resolve-Credentials -UserName 'credential'
+        $noEscape += 'Credential'
         if ($Results.ContainsKey('ApplicationId'))
         {
             $Results.Remove('ApplicationId') | Out-Null
@@ -3631,6 +3632,7 @@ function Update-M365DSCExportAuthenticationResults
     elseif ($ConnectionMode -eq 'CredentialsWithTenantId')
     {
         $Results.Credential = Resolve-Credentials -UserName 'credential'
+        $noEscape += 'Credential'
         if ($Results.ContainsKey('ApplicationId'))
         {
             $Results.Remove('ApplicationId') | Out-Null
@@ -3661,6 +3663,7 @@ function Update-M365DSCExportAuthenticationResults
         elseif ($Results.ContainsKey('Credential') -and $ConnectionMode -eq 'CredentialsWithApplicationId')
         {
             $Results.Credential = Resolve-Credentials -UserName 'credential'
+            $noEscape += 'Credential'
         }
         if (-not [System.String]::IsNullOrEmpty($Results.ApplicationId))
         {
@@ -3950,55 +3953,6 @@ function Get-M365DSCExportContentForResource
     [void]$content.Append("        $ResourceName `"$instanceName`"`r`n")
     [void]$content.Append("        {`r`n")
     $partialContent = Get-DSCBlock -Params $Results -ModulePath $ModulePath -NoEscape $NoEscape
-    # Test for both Credentials and CredentialsWithApplicationId
-    if ($ConnectionMode -match 'Credentials')
-    {
-        $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-            -ParameterName 'Credential'
-        if (![System.String]::IsNullOrEmpty($Results.ApplicationId))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'ApplicationId'
-        }
-    }
-    else
-    {
-        if (![System.String]::IsNullOrEmpty($Results.ApplicationId))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'ApplicationId'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.TenantId))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'TenantId'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.ApplicationSecret))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'ApplicationSecret'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.CertificatePath))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'CertificatePath'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.CertificateThumbprint))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'CertificateThumbprint'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.CertificatePassword))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'CertificatePassword'
-        }
-        if (![System.String]::IsNullOrEmpty($Results.AccessTokens))
-        {
-            $partialContent = Convert-DSCStringParamToVariable -DSCBlock $partialContent `
-                -ParameterName 'AccessTokens'
-        }
-    }
 
     if ($partialContent.ToLower().IndexOf($OrganizationName.ToLower()) -gt 0)
     {

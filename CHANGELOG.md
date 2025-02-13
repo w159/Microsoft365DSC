@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* M365DSCUtil
+  * Fixes an issue with `Credential` property being escaped and indentation.
+
 # 1.25.212.1
 
 * AADApplication
