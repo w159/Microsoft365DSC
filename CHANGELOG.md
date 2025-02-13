@@ -16,11 +16,7 @@
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
 * SPOTenantSettings
-  * Add EnableAzureADB2BIntegration, SharingCapability, OneDriveSharingCapability, 
-    PreventExternalUsersFromResharing, SharingDomainRestrictionMode, 
-    SharingAllowedDomainList, DefaultSharingLinkType, 
-    ExternalUserExpirationRequired, ExternalUserExpireInDays, DefaultLinkPermission 
-    properties
+  * Add EnableAzureADB2BIntegration and OneDriveSharingCapability properties
 
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
