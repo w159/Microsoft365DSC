@@ -602,7 +602,7 @@ function Set-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
-    $ConnectionMode = New-M365DSCConnection -Workload 'PowerPlatforms' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'PowerPlatformREST' `
         -InboundParameters $PSBoundParameters
 
     $SetParameters = $PSBoundParameters
@@ -1087,7 +1087,7 @@ function Set-M365DSCPPTenantSettings
         $Body
     )
 
-    $url = "$((Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatforms').ResourceUrl)/providers/Microsoft.BusinessAppPlatform/scopes/admin/updateTenantSettings?api-version=2016-11-01"
+    $url = "$((Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').ResourceUrl)/providers/Microsoft.BusinessAppPlatform/scopes/admin/updateTenantSettings?api-version=2016-11-01"
 
 }
 
@@ -1100,9 +1100,9 @@ function Get-M365DSCPPTenantSettings
         $Body
     )
 
-    $url = "$((Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatforms').ResourceUrl)/providers/Microsoft.BusinessAppPlatform/scopes/admin/getTenantSettings?api-version=2016-11-01"
+    $url = "$((Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').ResourceUrl)/providers/Microsoft.BusinessAppPlatform/scopes/admin/getTenantSettings?api-version=2016-11-01"
     $headers = @{
-        Authorization = (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatforms').AccessToken
+        Authorization = (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').AccessToken
     }
     Invoke-WebRequest -Uri $url -Headers $headers -ContentType "application/json"
 }
