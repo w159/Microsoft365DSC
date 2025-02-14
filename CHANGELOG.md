@@ -10,7 +10,10 @@
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
 * TeamsAppPermissionPolicy
   * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
-    FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+    FIXES [#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+* TeamsM365App
+  * Remove `Ensure` property from being exported.
+    FIXES [#5781](https://github.com/microsoft/Microsoft365DSC/issues/5781)
 
 # 1.25.212.2
 
