@@ -5,6 +5,9 @@
 * AADRoleEligibilityScheduleRequest
   * Reduce call count when reconciling object type
     FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
+* ADOSecurityPolicy
+  * Fixes an issues where the resource threw an error trying to parse the default
+    values.
 * M365DSCUtil
   * Add M365DSC prefix to `Remove-EmptyValue`.
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
