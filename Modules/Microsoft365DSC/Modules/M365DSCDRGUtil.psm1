@@ -292,7 +292,7 @@ function Get-M365DSCDRGComplexTypeToString
     {
         $currentProperty = @()
         $IndentLevel++
-        for($i = 0; $i -lt $ComplexObject.Count; $i++)
+        for ($i = 0; $i -lt $ComplexObject.Count; $i++)
         {
             $item = $ComplexObject[$i]
             $splat = @{
@@ -413,6 +413,8 @@ function Get-M365DSCDRGComplexTypeToString
                         }
                         if ($i -ne 0)
                         {
+                            # Remove the line break at the start because every item contains a trailing line break
+                            # which would lead to two line breaks between each item
                             $nestedPropertyString = $nestedPropertyString.Substring(2)
                         }
                         $currentProperty += $nestedPropertyString
