@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* M365DSCUtil
+  * Add M365DSC prefix to `Remove-EmptyValue`.
+    FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
+
 # 1.25.212.2
 
 * MISC
