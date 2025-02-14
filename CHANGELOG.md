@@ -1,8 +1,9 @@
 # Change log for Microsoft365DSC
-# UNRELEASED
 
-* AADGroupEligibilitySchedule
-  * FIXES [#5741] Missing -All variable which prevented enumeration of more than 100 Groups
+# 1.25.212.2
+
+* MISC
+  * Fixing connection errors in Power Platforms resources.
 
 # 1.25.212.1
 
@@ -14,6 +15,8 @@
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Fixes an issue with CIM class export.
     FIXES [#5711](https://github.com/microsoft/Microsoft365DSC/issues/5711)
+* AADGroupEligibilitySchedule
+  * FIXES [#5741] Missing -All variable which prevented enumeration of more than 100 Groups
 * EXORetentionPolicyTag
   * Initial release.
 * EXOSmtpDaneInbound
