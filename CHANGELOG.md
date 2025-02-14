@@ -28,6 +28,10 @@
 * EXOSmtpDaneInbound
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
+* TeamsAppPermissionPolicy
+  * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
+    FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
   * Simplify export behavior for all resources and complex objects.
