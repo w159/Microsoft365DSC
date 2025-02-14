@@ -715,6 +715,7 @@ function Export-TargetResource
             # Replace the certificate variables.
             $currentDSCBlock = $currentDSCBlock.Replace("'New-Object System.", "New-Object System.").Replace(" -Force))'", " -Force))")
             $currentDSCBlock = $currentDSCBlock.Replace("(ConvertTo-SecureString (''", "(ConvertTo-SecureString ('").Replace("''Password''", "'Password'").Replace("'') -AsPlainText", "') -AsPlainText")
+            $currentDSCBlock = $currentDSCBlock.Replace(''') -AsPlainText -Force))"', "') -AsPlainText -Force))")
 
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
