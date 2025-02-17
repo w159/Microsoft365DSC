@@ -23,6 +23,9 @@
 * TeamsM365App
   * Remove `Ensure` property from being exported.
     FIXES [#5781](https://github.com/microsoft/Microsoft365DSC/issues/5781)
+ * **AADConditionalAccessPolicy**
+  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
+    FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
 * DEPENDENCIES
   * Updated ReverseDSC to version 2.0.0.27
 
