@@ -292,9 +292,8 @@ function Get-M365DSCDRGComplexTypeToString
     {
         $currentProperty = @()
         $IndentLevel++
-        for ($i = 0; $i -lt $ComplexObject.Count; $i++)
+        foreach ($item in $ComplexObject)
         {
-            $item = $ComplexObject[$i]
             $splat = @{
                 'ComplexObject'   = $item
                 'CIMInstanceName' = $CIMInstanceName
@@ -387,7 +386,7 @@ function Get-M365DSCDRGComplexTypeToString
                     if ($ComplexObject.$key.Count -gt 0)
                     {
                         $currentProperty += $indent + $key + ' = '
-                        $currentProperty += "@("
+                        $currentProperty += '@('
                     }
                 }
 
