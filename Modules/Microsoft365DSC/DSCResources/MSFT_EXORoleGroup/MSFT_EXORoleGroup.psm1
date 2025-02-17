@@ -102,7 +102,7 @@ function Get-TargetResource
         $result = @{
             Name                  = $RoleGroup.Name
             Description           = $RoleGroup.Description
-            Members               = $roleGroupMember.DisplayName
+            Members               = $roleGroupMember.PrimarySmtpAddress
             Roles                 = $RoleGroup.Roles
             Ensure                = 'Present'
             Credential            = $Credential
