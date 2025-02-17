@@ -8,6 +8,8 @@
 * ADOSecurityPolicy
   * Fixes an issue where the resource threw an error trying to parse the default
     values.
+* AADServicePrincipal
+  * FIXES [#5359](https://github.com/microsoft/Microsoft365DSC/issues/5359) AADServicePrincipal fails on Managed Identities when DelegatedPermissions returns 500 response
 * M365DSCUtil
   * Add M365DSC prefix to `Remove-EmptyValue`.
   * Fixes an issue with `Credential` property being escaped and indentation.
