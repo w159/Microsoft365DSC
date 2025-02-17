@@ -15,7 +15,11 @@
   * Fixes invalid accepted content type values.
 * TeamsAppPermissionPolicy
   * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
-    FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+* TeamsAppSetupPolicy
+  * FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+* TeamsM365App
+  * Remove `Ensure` property from being exported.
+    FIXES [#5781](https://github.com/microsoft/Microsoft365DSC/issues/5781)
 * DEPENDENCIES
   * Updated ReverseDSC to version 2.0.0.26
 
