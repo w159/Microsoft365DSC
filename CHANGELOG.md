@@ -11,9 +11,13 @@
 * M365DSCUtil
   * Add M365DSC prefix to `Remove-EmptyValue`.
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
+* SCSensitivityLabel
+  * Fixes invalid accepted content type values.
 * TeamsAppPermissionPolicy
   * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
     FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
+* DEPENDENCIES
+  * Updated ReverseDSC to version 2.0.0.26
 
 # 1.25.212.2
 
