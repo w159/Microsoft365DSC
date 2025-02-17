@@ -17,7 +17,7 @@
   * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
     FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
 * DEPENDENCIES
-  * Updated ReverseDSC to version 2.0.0.26
+  * Updated ReverseDSC to version 2.0.0.27
 
 # 1.25.212.2
 
