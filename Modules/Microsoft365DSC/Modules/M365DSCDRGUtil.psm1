@@ -370,7 +370,6 @@ function Get-M365DSCDRGComplexTypeToString
                 {
                     $hashPropertyType = ([Array]($ComplexTypeMapping | Where-Object -FilterScript { $_.Name -eq $key }).CimInstanceName)[0]
                     $hashProperty = $itemValue
-                    #$currentProperty += "`r`n"
                 }
                 else
                 {
@@ -418,6 +417,10 @@ function Get-M365DSCDRGComplexTypeToString
                             $nestedPropertyString = $nestedPropertyString.Substring(2)
                         }
                         $currentProperty += $nestedPropertyString
+                        if (-not $currentProperty.EndsWith("`r`n"))
+                        {
+                            $currentProperty += "`r`n"
+                        }
                     }
                     $IndentLevel--
                 }
@@ -483,28 +486,12 @@ function Get-M365DSCDRGComplexTypeToString
     $indent = ''
     $indent = '    ' * ($IndentLevel -1)
 
-    if ($key -in $ComplexTypeMapping.Name)
+    if ($key -in $ComplexTypeMapping.Name -and -not $currentProperty.EndsWith("`r`n"))
     {
         $currentProperty += "`r`n"
     }
 
     $currentProperty += "$indent}"
-    <#
-    if ($IsArray -or $IndentLevel -gt 4)
-    {
-        $currentProperty += "`r`n"
-    }
-    #>
-
-    #Indenting last parenthesis when the cim instance is an array
-    <#
-    if ($IndentLevel -eq 5)
-    {
-        $indent = '    ' * ($IndentLevel -2)
-        $currentProperty += $indent
-    }
-    #>
-
     $emptyCIM = $currentProperty.Replace(' ', '').Replace("`r`n", '')
     if ($emptyCIM -eq "MSFT_$CIMInstanceName{}")
     {

@@ -10,6 +10,9 @@
     values.
 * M365DSCUtil
   * Add M365DSC prefix to `Remove-EmptyValue`.
+  * Fixes an issue with `Credential` property being escaped and indentation.
+  * Adds the possibility to allow variables in strings and no authentication
+    results update during conversion to final export.
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
 * SCSensitivityLabel
   * Fixes invalid accepted content type values.
