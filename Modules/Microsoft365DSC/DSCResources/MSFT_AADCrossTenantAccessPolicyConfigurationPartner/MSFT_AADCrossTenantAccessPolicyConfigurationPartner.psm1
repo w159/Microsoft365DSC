@@ -505,8 +505,6 @@ function Export-TargetResource
 
             $Script:exportedInstance = $entry
             $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
 
             if ($null -ne $Results.B2BCollaborationInbound)
             {
@@ -575,7 +573,7 @@ function Export-TargetResource
             {
                 $complexMapping = @(
                     @{
-                        Name            = 'B2BCollaborationInbound'
+                        Name            = 'B2BCollaborationOutbound'
                         CimInstanceName = 'AADCrossTenantAccessPolicyB2BSetting'
                         IsRequired      = $False
                     },
@@ -614,7 +612,7 @@ function Export-TargetResource
             {
                 $complexMapping = @(
                     @{
-                        Name            = 'B2BCollaborationInbound'
+                        Name            = 'B2BDirectConnectInbound'
                         CimInstanceName = 'AADCrossTenantAccessPolicyB2BSetting'
                         IsRequired      = $False
                     },
@@ -653,7 +651,7 @@ function Export-TargetResource
             {
                 $complexMapping = @(
                     @{
-                        Name            = 'B2BCollaborationInbound'
+                        Name            = 'B2BDirectConnectOutbound'
                         CimInstanceName = 'AADCrossTenantAccessPolicyB2BSetting'
                         IsRequired      = $False
                     },
@@ -716,32 +714,8 @@ function Export-TargetResource
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
-
-            if ($Results.B2BCollaborationInbound)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'B2BCollaborationInbound' -IsCIMArray:$True
-            }
-            if ($Results.B2BCollaborationOutbound)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'B2BCollaborationOutbound' -IsCIMArray:$True
-            }
-            if ($Results.B2BDirectConnectInbound)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'B2BDirectConnectInbound' -IsCIMArray:$True
-            }
-            if ($Results.B2BDirectConnectOutbound)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'B2BDirectConnectOutbound' -IsCIMArray:$True
-            }
-            if ($Results.InboundTrust)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'InboundTrust' -IsCIMArray:$True
-            }
-            if ($Results.AutomaticUserConsentSettings)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'AutomaticUserConsentSettings' -IsCIMArray:$True
-            }
+                -Credential $Credential `
+                -NoEscape @('B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'AutomaticUserConsentSettings')
 
             # Fix OrganizationName variable in CIMInstance
             $currentDSCBlock = $currentDSCBlock.Replace('@$OrganizationName''', "@' + `$OrganizationName")
