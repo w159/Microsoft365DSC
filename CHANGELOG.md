@@ -5,6 +5,8 @@
 * AADRoleEligibilityScheduleRequest
   * Reduce call count when reconciling object type
     FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
+  * Add check if object lookup fails
+    FIXES [#5801](https://github.com/microsoft/Microsoft365DSC/issues/5801)
 * ADOSecurityPolicy
   * Fixes an issue where the resource threw an error trying to parse the default
     values.
