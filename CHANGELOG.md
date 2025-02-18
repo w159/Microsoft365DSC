@@ -16,6 +16,12 @@
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
 * SCSensitivityLabel
   * Fixes invalid accepted content type values.
+* IntuneDeviceCompliancePolicyAndroidDeviceOwner
+  * Adds support for Scheduled Actions and other missing properties
+    FIXES [#5593] (https://github.com/microsoft/Microsoft365DSC/issues/5593)
+* IntuneDeviceCompliancePolicyAndroidWorkProfile
+  * Adds support for Scheduled Actions and other missing properties
+    FIXES [#5593] (https://github.com/microsoft/Microsoft365DSC/issues/5592)
 * TeamsAppPermissionPolicy
   * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
 * TeamsAppSetupPolicy
