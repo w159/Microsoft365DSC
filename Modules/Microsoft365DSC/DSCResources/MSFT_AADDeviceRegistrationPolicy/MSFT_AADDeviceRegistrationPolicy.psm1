@@ -406,8 +406,8 @@ function Set-TargetResource
             isAdminConfigurable = $AzureADJoinIsAdminConfigurable
             allowedToJoin       = @{
                 '@odata.type' = $azureADRegistrationAllowedToRegister
-                users         = $AzureADAllowedToJoinUsers
-                groups        = $AzureADAllowedToJoinGroups
+                users         = $azureADRegistrationAllowedUsers
+                groups        = $azureADRegistrationAllowedGroups
             }
             localAdmins         = @{
                 enableGlobalAdmins = $LocalAdminsEnableGlobalAdmins
