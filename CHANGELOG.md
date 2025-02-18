@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADDeviceRegistrationPolicy
+  * FIXES [#5798](https://github.com/microsoft/Microsoft365DSC/issues/5798) - Fix issue setting Selected Users and Groups for Entra Join
 * AADRoleEligibilityScheduleRequest
   * Reduce call count when reconciling object type
     FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
