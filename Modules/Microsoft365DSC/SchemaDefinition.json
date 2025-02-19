@@ -53559,6 +53559,11 @@
                                "Option":  "Write"
                            },
                            {
+                               "CIMType":  "String",
+                               "Name":  "Filter",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "MSFT_Credential",
                                "Name":  "Credential",
                                "Option":  "Write"
@@ -58819,7 +58824,7 @@
                                "Option":  "Write"
                            },
                            {
-                               "CIMType":  "String",
+                               "CIMType":  "String[]",
                                "Name":  "MDATPTriageStatus",
                                "Option":  "Write"
                            },
