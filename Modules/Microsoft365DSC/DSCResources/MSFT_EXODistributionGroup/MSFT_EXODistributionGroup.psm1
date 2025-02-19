@@ -241,7 +241,7 @@ function Get-TargetResource
             $nullReturn = $PSBoundParameters
             $nullReturn.Ensure = 'Absent'
 
-            if ($null -ne $PrimarySmtpAddress)
+            if (-not [System.String]::IsNullOrEmpty($PrimarySmtpAddress))
             {
                 $distributionGroup = Get-DistributionGroup -Identity $PrimarySmtpAddress -ErrorAction Stop
             }
@@ -261,7 +261,7 @@ function Get-TargetResource
             $distributionGroup = $Script:exportedInstance
         }
 
-        if ($null -ne $PrimarySmtpAddress)
+        if (-not [System.String]::IsNullOrEmpty($PrimarySmtpAddress))
         {
             $distributionGroupMembers = Get-DistributionGroupMember -Identity $PrimarySmtpAddress `
                 -ErrorAction 'Stop' `
@@ -272,6 +272,13 @@ function Get-TargetResource
             $distributionGroupMembers = Get-DistributionGroupMember -Identity $Identity `
                     -ErrorAction 'Stop' `
                     -ResultSize 'Unlimited'
+        }
+
+        $distributionMembersValue = @()
+        foreach ($member in $distributionGroupMembers)
+        {
+            $user = Get-User -Identity $member -ErrorAction Stop
+            $distributionMembersValue += $user.UserPrincipalName
         }
 
         Write-Verbose -Message "Found existing Distribution Group {$Identity}."
@@ -331,7 +338,7 @@ function Get-TargetResource
             ManagedBy                              = $ManagedByValue
             MemberDepartRestriction                = $distributionGroup.MemberDepartRestriction
             MemberJoinRestriction                  = $distributionGroup.MemberJoinRestriction
-            Members                                = $distributionGroupMembers.Name
+            Members                                = $distributionMembersValue
             ModeratedBy                            = $ModeratedByValue
             ModerationEnabled                      = $distributionGroup.ModerationEnabled
             Name                                   = $distributionGroup.Name

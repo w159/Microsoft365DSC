@@ -175,14 +175,12 @@ function Get-TargetResource
                     $appInstance = Get-MgApplication -Filter "DisplayName eq '$AppId'"
                     if ($appInstance)
                     {
-                        $AADServicePrincipal = Get-MgServicePrincipal -Filter "AppID eq '$($appInstance.AppId)'" `
-                            -Expand 'AppRoleAssignedTo'
+                        $AADServicePrincipal = Get-MgServicePrincipal -Filter "AppID eq '$($appInstance.AppId)'"
                     }
                 }
                 else
                 {
-                    $AADServicePrincipal = Get-MgServicePrincipal -Filter "AppID eq '$($AppId)'" `
-                        -Expand 'AppRoleAssignedTo'
+                    $AADServicePrincipal = Get-MgServicePrincipal -Filter "AppID eq '$($AppId)'"
                 }
             }
             if ($null -eq $AADServicePrincipal)
@@ -196,7 +194,8 @@ function Get-TargetResource
         }
 
         $AppRoleAssignedToValues = @()
-        foreach ($principal in $AADServicePrincipal.AppRoleAssignedTo)
+        $assignmentsValue = Get-MgServicePrincipalAppROleAssignedTo -ServicePrincipalId $AADServicePrincipal.Id -ErrorAction SilentlyContinue
+        foreach ($principal in $assignmentsValue)
         {
             $currentAssignment = @{
                 PrincipalType = $null
@@ -206,7 +205,7 @@ function Get-TargetResource
             {
                 $user = Get-MgUser -UserId $principal.PrincipalId
                 $currentAssignment.PrincipalType = 'User'
-                $currentAssignment.Identity = $user.UserPrincipalName.Split('@')[0]
+                $currentAssignment.Identity = $user.UserPrincipalName
                 $AppRoleAssignedToValues += $currentAssignment
             }
             elseif ($principal.PrincipalType -eq 'Group')
