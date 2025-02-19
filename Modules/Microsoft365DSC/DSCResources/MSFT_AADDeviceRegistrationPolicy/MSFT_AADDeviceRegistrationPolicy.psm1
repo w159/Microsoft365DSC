@@ -215,6 +215,7 @@ function Get-TargetResource
         }
         $results = @{
             IsSingleInstance                        = 'Yes'
+            AzureADJoinIsAdminConfigurable          = [Boolean]$getValue.AzureAdJoin.IsAdminConfigurable
             AzureADAllowedToJoin                    = $AzureADAllowedToJoin
             AzureADAllowedToJoinGroups              = $AzureADAllowedToJoinGroups
             AzureADAllowedToJoinUsers               = $AzureADAllowedToJoinUsers
