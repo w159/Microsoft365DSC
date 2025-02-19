@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADAccessReviewPolicy
+  * Missing AccessReview permission for Application Read access
+    FIXES [#5796](https://github.com/microsoft/Microsoft365DSC/issues/5796)
 * AADApplication
   * Test-TargetResource logic updated to skip evaluating CIMArrays that are empty
     when passed as desired values.
