@@ -715,33 +715,15 @@ function Export-TargetResource
             Write-Host "    |---[$i/$($Script:exportedInstances.Count)] $displayedKey" -NoNewline
             # Find the Principal Type
             $principalType = 'User'
-            $userInfo = Get-MgUser -UserId $config.PrincipalId -ErrorAction SilentlyContinue
-
-            if ($null -eq $userInfo)
+            $userInfo = Get-MgBetaDirectoryObjectById -Ids $config.PrincipalId -ErrorAction SilentlyContinue
+            $principalType = $userInfo.AdditionalProperties['@odata.type'].Split('.')[2]
+            $PrincipalValue = if ($principalType -eq 'user' )
             {
-                $principalType = 'Group'
-                $groupInfo = Get-MgGroup -GroupId $config.PrincipalId -ErrorAction SilentlyContinue
-                if ($null -eq $groupInfo)
-                {
-                    $principalType = 'ServicePrincipal'
-                    $spnInfo = Get-MgServicePrincipal -ServicePrincipalId $config.PrincipalId -ErrorAction SilentlyContinue
-                    if ($null -ne $spnInfo)
-                    {
-                        $PrincipalValue = $spnInfo.DisplayName
-                    }
-                    else
-                    {
-                        $PrincipalValue = $null
-                    }
-                }
-                else
-                {
-                    $PrincipalValue = $groupInfo.DisplayName
-                }
+                $userInfo.AdditionalProperties['userPrincipalName']
             }
             else
             {
-                $PrincipalValue = $userInfo.UserPrincipalName
+                $userInfo.AdditionalProperties['displayName']
             }
 
             if ($null -ne $PrincipalValue)
@@ -765,8 +747,6 @@ function Export-TargetResource
             }
 
             $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
 
             if ($Results.ScheduleInfo)
             {
@@ -808,17 +788,8 @@ function Export-TargetResource
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
-            if ($Results.ScheduleInfo)
-            {
-                $isCIMArray = $false
-                if ($Results.ScheduleInfo.getType().Fullname -like '*[[\]]')
-                {
-                    $isCIMArray = $true
-                }
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                        -ParameterName 'ScheduleInfo' -IsCIMArray:$isCIMArray
-            }
+                -Credential $Credential `
+                -NoEscape @('ScheduleInfo')
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName

@@ -521,7 +521,7 @@ function Test-TargetResource
 
                 $driftedRules.($existingRule.TenantName) = @{
                     CurrentValue = "Direction: $($existingRule.Direction)"
-                    DesiredValue = 'Should not exist'
+                    DesiredValue = "Direction: $($rule.Direction)"
                 }
                 $result = $false
             }
@@ -702,20 +702,13 @@ function Export-TargetResource
                     $Results.Remove('Rules') | Out-Null
                 }
             }
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
+                -Credential $Credential `
+                -NoEscape @('Rules')
 
-            if ($null -ne $Results.Rules)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'Rules' `
-                    -IsCIMArray:$True
-            }
             $dscContent += $currentDSCBlock
 
             Save-M365DSCPartialExport -Content $currentDSCBlock `

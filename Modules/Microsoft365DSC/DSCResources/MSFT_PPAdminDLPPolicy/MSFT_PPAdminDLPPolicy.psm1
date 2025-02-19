@@ -88,7 +88,7 @@ function Get-TargetResource
 
         $results = @{
             DisplayName           = $instance.properties.displayName
-            PolicyName            = $instance.PolicyName
+            PolicyName            = $instance.name
             Environments          = [array]$instance.properties.definition.constraints.environmentFilter1.parameters.environments.name
             FilterType            = $instance.properties.definition.constraints.environmentFilter1.parameters.filterType
             Ensure                = 'Present'
@@ -465,8 +465,6 @@ function Export-TargetResource
             }
 
             $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
 
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `

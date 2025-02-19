@@ -46,7 +46,7 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    New-M365DSCConnection -Workload 'PowerPlatforms' `
+    New-M365DSCConnection -Workload 'PowerPlatformREST' `
         -InboundParameters $PSBoundParameters | Out-Null
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -321,6 +321,7 @@ function Test-TargetResource
     Write-Verbose -Message "Target Values: $(Convert-M365DscHashtableToString -Hashtable $ValuesToCheck)"
 
     #Compare Cim instances
+    $testResult = $true
     foreach ($key in $PSBoundParameters.Keys)
     {
         $source = $PSBoundParameters.$key
@@ -444,8 +445,6 @@ function Export-TargetResource
             }
 
             $Results = Get-TargetResource @Params
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
 
             if ($null -ne $Results.ConnectorActionConfigurations)
             {
@@ -473,11 +472,8 @@ function Export-TargetResource
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
-            if ($Results.ConnectorActionConfigurations)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock -ParameterName 'ConnectorActionConfigurations' -IsCIMArray:$true
-            }
+                -Credential $Credential `
+                -NoEscape @('ConnectorActionConfigurations')
             $dscContent += $currentDSCBlock
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName

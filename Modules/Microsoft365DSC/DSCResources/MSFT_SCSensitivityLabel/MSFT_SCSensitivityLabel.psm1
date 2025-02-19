@@ -194,7 +194,7 @@ function Get-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -401,14 +401,6 @@ function Get-TargetResource
         $currentContentType = @()
         switch -Regex ($label.ContentType)
         {
-            'File, Email'
-            {
-                $currentContentType += 'File, Email'
-            }
-            'Site, UnifiedGroup'
-            {
-                $currentContentType += 'Site, UnifiedGroup'
-            }
             'PurviewAssets'
             {
                 $currentContentType += 'PurviewAssets'
@@ -420,6 +412,22 @@ function Get-TargetResource
             'SchematizedData'
             {
                 $currentContentType += 'SchematizedData'
+            }
+            'File'
+            {
+                $currentContentType += 'File'
+            }
+            'Email'
+            {
+                $currentContentType += 'Email'
+            }
+            'Site'
+            {
+                $currentContentType += 'Site'
+            }
+            'UnifiedGroup'
+            {
+                $currentContentType += 'UnifiedGroup'
             }
         }
 
@@ -809,7 +817,7 @@ function Set-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -1348,7 +1356,7 @@ function Test-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -1688,32 +1696,12 @@ function Export-TargetResource
                 }
             }
 
-            $Results = Update-M365DSCExportAuthenticationResults -ConnectionMode $ConnectionMode `
-                -Results $Results
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
-
-            if ($null -ne $Results.AdvancedSettings)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'AdvancedSettings' `
-                    -IsCIMArray:$True
-            }
-            if ($null -ne $Results.LocaleSettings)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'LocaleSettings' `
-                    -IsCIMArray:$True
-            }
-            if ($null -ne $Results.AutoLabelingSettings)
-            {
-                $currentDSCBlock = Convert-DSCStringParamToVariable -DSCBlock $currentDSCBlock `
-                    -ParameterName 'AutoLabelingSettings' `
-                    -IsCIMArray:$True
-            }
+                -Credential $Credential `
+                -NoEscape @('AdvancedSettings', 'LocaleSettings', 'AutoLabelingSettings')
 
             Write-Host $Global:M365DSCEmojiGreenCheckMark
             $dscContent += $currentDSCBlock
