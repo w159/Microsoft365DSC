@@ -277,8 +277,15 @@ function Get-TargetResource
         $distributionMembersValue = @()
         foreach ($member in $distributionGroupMembers)
         {
-            $user = Get-User -Identity $member -ErrorAction Stop
-            $distributionMembersValue += $user.UserPrincipalName
+            $user = Get-User -Identity $member.DisplayName -ErrorAction SilentlyContinue
+            if ($null -ne $user)
+            {
+                $distributionMembersValue += $user.UserPrincipalName
+            }
+            else
+            {
+                $distributionMembersValue += $member.DisplayName
+            }
         }
 
         Write-Verbose -Message "Found existing Distribution Group {$Identity}."
