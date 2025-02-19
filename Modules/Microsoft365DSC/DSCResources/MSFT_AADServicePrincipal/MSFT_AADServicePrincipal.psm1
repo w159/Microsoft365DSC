@@ -229,8 +229,17 @@ function Get-TargetResource
         }
 
         [Array]$complexDelegatedPermissionClassifications = @()
-        $Uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "v1.0/servicePrincipals/$($AADServicePrincipal.Id)/delegatedPermissionClassifications"
-        $permissionClassifications = Invoke-MgGraphRequest -Uri $Uri -Method Get
+        #Managed Identities in AzureGov return exception when pulling delegatedPermissionClassifications
+        try
+        {
+            $Uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "v1.0/servicePrincipals/$($AADServicePrincipal.Id)/delegatedPermissionClassifications"
+            $permissionClassifications = Invoke-MgGraphRequest -Uri $Uri -Method Get
+        }
+        catch
+        {
+            Write-Verbose -Message "Service Principal didn't return delegated permission classifications. Expected for Managedidentities."
+        }
+
         foreach ($permissionClassification in $permissionClassifications.Value)
         {
             $hashtable = @{
