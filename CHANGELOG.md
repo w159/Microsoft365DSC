@@ -15,6 +15,8 @@
 * EXOSmtpDaneInbound
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
+* EXOReportSubmissionPolicy
+  * Add ReportChatMessageEnabled, ReportChatMessageToCustomizedAddressEnabled
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
 * DEPENDENCIES
