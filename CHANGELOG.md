@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.219.1
 
 * AADAccessReviewPolicy
   * Missing AccessReview permission for Application Read access
@@ -22,7 +22,7 @@
   * Add check if object lookup fails
     FIXES [#5801](https://github.com/microsoft/Microsoft365DSC/issues/5801)
 * AADServicePrincipal
-  * Evaluating assigned users based on UPN and not just on DisplayName.  
+  * Evaluating assigned users based on UPN and not just on DisplayName.
   * FIXES [#5359](https://github.com/microsoft/Microsoft365DSC/issues/5359) AADServicePrincipal fails on Managed Identities when DelegatedPermissions returns 500 response
 * ADOSecurityPolicy
   * Fixes an issue where the resource threw an error trying to parse the default
@@ -64,6 +64,8 @@
   * FIXES [#5792](https://github.com/microsoft/Microsoft365DSC/issues/5792) issue where complete DSC isn't exported after generated
   * FIXES [#5793](https://github.com/microsoft/Microsoft365DSC/issues/5793) issue where PrincipalType isn't correctly captured in AzureGov
 * DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.7.1
+  * Updated Microsoft.Graph modules to version 2.26.0
   * Updated ReverseDSC to version 2.0.0.27
 
 # 1.25.212.2
