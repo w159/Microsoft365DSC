@@ -11,6 +11,8 @@
 * AADDeviceRegistrationPolicy
   * Fixed an issue where the AzureADJoinIsAdminConfigurable was not returned by the
     Get-TargetResource function.
+  * Fix issue setting Selected Users and Groups for Entra Join.
+    FIXES [#5798](https://github.com/microsoft/Microsoft365DSC/issues/5798)
 * AADGroup
   * Returns an empty array for roles and licenses from the Get-TargetResource
     function instead of null when no instances are found.
