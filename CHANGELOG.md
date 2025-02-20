@@ -20,7 +20,7 @@
   * Reduce call count when reconciling object type
     FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
 * AADServicePrincipal
-  * Evaluating assigned users based on UPN and not just on DisplayName.  
+  * Evaluating assigned users based on UPN and not just on DisplayName.
   * FIXES [#5359](https://github.com/microsoft/Microsoft365DSC/issues/5359) AADServicePrincipal fails on Managed Identities when DelegatedPermissions returns 500 response
 * ADOSecurityPolicy
   * Fixes an issue where the resource threw an error trying to parse the default
@@ -53,6 +53,8 @@
   * Remove `Ensure` property from being exported.
     FIXES [#5781](https://github.com/microsoft/Microsoft365DSC/issues/5781)
 * DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.7.1
+  * Updated Microsoft.Graph modules to version 2.26.0
   * Updated ReverseDSC to version 2.0.0.27
 
 # 1.25.212.2
