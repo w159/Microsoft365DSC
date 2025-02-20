@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.219.1
 
 * AADAccessReviewPolicy
   * Missing AccessReview permission for Application Read access
