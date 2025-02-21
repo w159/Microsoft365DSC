@@ -710,35 +710,38 @@ function Set-TargetResource
         $currentParameters.Remove('Type') | Out-Null
 
         # Members
-        $membersDiff = Compare-Object -ReferenceObject $currentDistributionGroup.Members -DifferenceObject $Members
-        $membersToAdd = @()
-        $membersToRemove = @()
-        foreach ($difference in $membersDiff)
+        if ($null -ne $Members)
         {
-            if ($difference.SideIndicator -eq '=>')
+            $membersDiff = Compare-Object -ReferenceObject $currentDistributionGroup.Members -DifferenceObject $Members
+            $membersToAdd = @()
+            $membersToRemove = @()
+            foreach ($difference in $membersDiff)
             {
-                $membersToAdd += $difference.InputObject
+                if ($difference.SideIndicator -eq '=>')
+                {
+                    $membersToAdd += $difference.InputObject
+                }
+                elseif ($difference.SideIndicator -eq '<=')
+                {
+                    $membersToRemove += $difference.InputObject
+                }
             }
-            elseif ($difference.SideIndicator -eq '<=')
-            {
-                $membersToRemove += $difference.InputObject
-            }
-        }
 
-        foreach ($member in $membersToAdd)
-        {
-            Write-Verbose -Message "Adding member {$member}"
-            Add-DistributionGroupMember -Identity $Identity -Member $member -BypassSecurityGroupManagerCheck
+            foreach ($member in $membersToAdd)
+            {
+                Write-Verbose -Message "Adding member {$member}"
+                Add-DistributionGroupMember -Identity $Identity -Member $member -BypassSecurityGroupManagerCheck
+            }
+            foreach ($member in $membersToRemove)
+            {
+                Write-Verbose -Message "Removing member {$member}"
+                Remove-DistributionGroupMember -Identity $Identity `
+                                            -Member $member `
+                                            -BypassSecurityGroupManagerCheck `
+                                            -Confirm:$false
+            }
+            $currentParameters.Remove('Members') | Out-Null
         }
-        foreach ($member in $membersToRemove)
-        {
-            Write-Verbose -Message "Removing member {$member}"
-            Remove-DistributionGroupMember -Identity $Identity `
-                                           -Member $member `
-                                           -BypassSecurityGroupManagerCheck `
-                                           -Confirm:$false
-        }
-        $currentParameters.Remove('Members') | Out-Null
 
 
         if ($EmailAddresses.Length -gt 0)
