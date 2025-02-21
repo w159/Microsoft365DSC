@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+
 # 1.25.219.1
 
 * AADAccessReviewPolicy
