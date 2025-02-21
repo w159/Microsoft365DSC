@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneDeviceComplianceScriptWindows10
+  * Initial release.
+
 # 1.25.219.1
 
 * AADAccessReviewPolicy
