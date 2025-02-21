@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* Security & Compliance
+  * Updated export functions to remove skipping of loading module, to prevent
+    missing cmdlet errors that are causing failing exports.
+
 # 1.25.219.1
 
 * AADAccessReviewPolicy
