@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* EXOCalendarProcessing
+  * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
 
