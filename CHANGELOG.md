@@ -6,6 +6,9 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
+* SCPolicyConfig
+  * Handle default values in the Get-TargetResource function.
+  * Added support for the FileCopiedToCloudFullUrlEnabled property.
 
 # 1.25.219.2
 
