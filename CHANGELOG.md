@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADAppplication
+  * Fixed an issue where specifying an empty ReplyURLs array would not remove
+    the existing entries.
 * EXOCalendarProcessing
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
