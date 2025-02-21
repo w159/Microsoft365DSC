@@ -1,6 +1,11 @@
 # Change log for Microsoft365DSC
 
-# 1.25.219.1
+# UNRELEASED
+
+* EXODistributionGroup
+  * Fixed the ability to set members.
+
+# 1.25.219.2
 
 * AADAccessReviewPolicy
   * Missing AccessReview permission for Application Read access
