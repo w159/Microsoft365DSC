@@ -2,11 +2,21 @@
 
 # UNRELEASED
 
+* AADAppplication
+  * Fixed an issue where specifying an empty ReplyURLs array would not remove
+    the existing entries.
+* EXOCalendarProcessing
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXODistributionGroup
+  * Fixed the ability to set members.
 * Security & Compliance
   * Updated export functions to remove skipping of loading module, to prevent
     missing cmdlet errors that are causing failing exports.
+* SCPolicyConfig
+  * Handle default values in the Get-TargetResource function.
+  * Added support for the FileCopiedToCloudFullUrlEnabled property.
 
-# 1.25.219.1
+# 1.25.219.2
 
 * AADAccessReviewPolicy
   * Missing AccessReview permission for Application Read access
