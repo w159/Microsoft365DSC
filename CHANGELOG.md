@@ -7,6 +7,9 @@
     the existing entries.
 * AADAuthenticationMethodPolicy
   * DEPRECATED - PolicyMigrationState property is now deprecated since it
+* AADAuthenticationMethodPolicyFido2
+  * Fixed issue where the Set-TargetResource was throwing an internal server
+    error.
   cannot be set.
 * EXOCalendarProcessing
   * Changed the Get-TargetResource logic to return UPN instead of id.
