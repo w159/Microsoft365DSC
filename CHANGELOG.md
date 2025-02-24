@@ -9,7 +9,6 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
-
 * EXOGroupSettings
   * Removed Id from being evaluated in the Test-TargetResource function.
 * EXOMailboxAutoReplyConfiguration
