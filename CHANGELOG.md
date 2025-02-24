@@ -9,6 +9,16 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
+* EXOGroupSettings
+  * Removed Id from being evaluated in the Test-TargetResource function.
+* EXOMailboxAutoReplyConfiguration
+  * Changed the Get-TargetResource logic to return UPN instead of Identity.
+* EXOMailboxCalendarFolder
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXOMailboxPermission
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXOSweepRule
+  * Changed the Get-TargetResource logic to return UPN instead of id.
 * IntuneDeviceComplianceScriptWindows10
   * Initial release.
 * Security & Compliance
