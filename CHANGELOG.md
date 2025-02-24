@@ -5,6 +5,9 @@
 * AADAppplication
   * Fixed an issue where specifying an empty ReplyURLs array would not remove
     the existing entries.
+* AADAuthenticationMethodPolicy
+  * DEPRECATED - PolicyMigrationState property is now deprecated since it
+  cannot be set.
 * EXOCalendarProcessing
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
