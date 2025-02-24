@@ -9,6 +9,8 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
+* IntuneDeviceComplianceScriptWindows10
+  * Initial release.
 * Security & Compliance
   * Updated export functions to remove skipping of loading module, to prevent
     missing cmdlet errors that are causing failing exports.
