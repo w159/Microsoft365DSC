@@ -21404,6 +21404,16 @@
                                "Option":  "Write"
                            },
                            {
+                               "CIMType":  "Boolean",
+                               "Name":  "ReportChatMessageEnabled",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
+                               "Name":  "ReportChatMessageToCustomizedAddressEnabled",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "String",
                                "Name":  "Ensure",
                                "Option":  "Write"
