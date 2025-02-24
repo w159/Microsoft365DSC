@@ -47,6 +47,8 @@
     values.
 * EXODistributionGroup
   * Changed logic to retrieve existing members by UserPrincipalName.
+* EXOReportSubmissionPolicy
+  * Add ReportChatMessageEnabled, ReportChatMessageToCustomizedAddressEnabled
 * EXORoleGroup
   * Evaluating assigned users based on UPN and not just on DisplayName if they
     have an associated mailbox.
