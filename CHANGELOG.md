@@ -33,6 +33,11 @@
 * SCPolicyConfig
   * Handle default values in the Get-TargetResource function.
   * Added support for the FileCopiedToCloudFullUrlEnabled property.
+* DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.7.1.
+  * Updated Microsoft.Graph to version 2.26.1.
+  * Updated MSCloudLoginAssistant to version1 1.1.38.
+
 
 # 1.25.219.2
 
