@@ -26,10 +26,6 @@
 * AADConditionalAccessPolicy
   * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
     FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
-* AADGroupEligibilitySchedule
-  * FIXES [#5792](https://github.com/microsoft/Microsoft365DSC/issues/5792) issue where complete DSC isn't exported after generated
-  * FIXES [#5793](https://github.com/microsoft/Microsoft365DSC/issues/5793) issue where PrincipalType isn't correctly captured in AzureGov
-
 * DEPENDENCIES
   * Updated ReverseDSC to version 2.0.0.27
 
