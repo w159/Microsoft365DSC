@@ -799,19 +799,21 @@ function Set-TargetResource
         $currentParameters.Add('Api', $apiValue)
     }
 
-    if ($ReplyUrls -or $LogoutURL -or $Homepage)
+    if ($PSBoundParameters.ContainsKey('ReplyUrls') -or `
+        $PSBoundParameters.ContainsKey('LogoutURL') -or `
+        $PSBoundParameters.ContainsKey('Homepage'))
     {
         $webValue = @{}
 
-        if ($ReplyUrls)
+        if ($PSBoundParameters.ContainsKey('ReplyUrls'))
         {
             $webValue.Add('RedirectUris', $currentParameters.ReplyURLs)
         }
-        if ($LogoutURL)
+        if ($PSBoundParameters.ContainsKey('LogoutURL'))
         {
             $webValue.Add('LogoutUrl', $currentParameters.LogoutURL)
         }
-        if ($Homepage)
+        if ($PSBoundParameters.ContainsKey('Homepage'))
         {
             $webValue.Add('HomePageUrl', $currentParameters.Homepage)
         }
@@ -1425,14 +1427,21 @@ function Test-TargetResource
         $target = $CurrentValues.$key
         if ($null -ne $source -and $source.GetType().Name -like '*CimInstance*')
         {
-            $testResult = Compare-M365DSCComplexObject `
-                -Source ($source) `
-                -Target ($target)
-
-            if (-not $testResult)
+            if (-not ($source.GetType().Name -eq 'CimInstance[]' -and $source.Count -eq 0))
             {
-                Write-Verbose "TestResult returned False for $source"
-                $testTargetResource = $false
+                $testResult = Compare-M365DSCComplexObject `
+                    -Source ($source) `
+                    -Target ($target)
+
+                if (-not $testResult)
+                {
+                    Write-Verbose "TestResult returned False for $source"
+                    $testTargetResource = $false
+                }
+                else
+                {
+                    $ValuesToCheck.Remove($key) | Out-Null
+                }
             }
             else
             {

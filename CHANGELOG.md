@@ -2,30 +2,135 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
+    FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
+* AADPasswordRuleSettings
+  * Updated schema to only accept values 'Enforced' and 'Audit' for parameter BannedPasswordCheckOnPremisesMode
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+* PPTenantSettings
+  * Corrected issue in the resource schema. The description was a multi-line
+    string, which is not allowed.
+* SPOSiteScript
+  * Fix error in Get-TargetResource when a site-script is identified by title only
+    FIXES [#5821](https://github.com/microsoft/Microsoft365DSC/issues/5821)
+* TeamsChannel
+  * Apply ordering during export.
+    FIXES [#5829](https://github.com/microsoft/Microsoft365DSC/issues/5829)
+* TeamsTeam
+  * Apply ordering during export.
+* TeamsUser
+  * Apply ordering during export.
+
+# 1.25.219.3
+
+* AADApplication
+  * Fixed an issue where specifying an empty ReplyURLs array would not remove
+    the existing entries.
+* AADAuthenticationMethodPolicy
+  * DEPRECATED - PolicyMigrationState property is now deprecated since it
+* AADAuthenticationMethodPolicyFido2
+  * Fixed issue where the Set-TargetResource was throwing an internal server
+    error.
+* AADConditionalAccessPolicy
+  * Added check to ensure the cached policy (export) is the current policy when
+    evaluating in the Get-TargetResource function.
+* EXOCalendarProcessing
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXODistributionGroup
+  * Fixed the ability to set members.
+* EXOGroupSettings
+  * Removed Id from being evaluated in the Test-TargetResource function.
+* EXOMailboxAutoReplyConfiguration
+  * Changed the Get-TargetResource logic to return UPN instead of Identity.
+* EXOMailboxCalendarFolder
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXOMailboxPermission
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* EXOSweepRule
+  * Changed the Get-TargetResource logic to return UPN instead of id.
+* IntuneDeviceComplianceScriptWindows10
+  * Initial release.
+* M365DSCRuleEvaluation
+  * Clear the cached instances from the export operation after evaluating the rules.
+* Security & Compliance
+  * Updated export functions to remove skipping of loading module, to prevent
+    missing cmdlet errors that are causing failing exports.
+* SCPolicyConfig
+  * Handle default values in the Get-TargetResource function.
+  * Added support for the FileCopiedToCloudFullUrlEnabled property.
+* DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.7.1.
+  * Updated Microsoft.Graph to version 2.26.1.
+  * Updated MSCloudLoginAssistant to version1 1.1.38.
+
+# 1.25.219.2
+
+* AADAccessReviewPolicy
+  * Missing AccessReview permission for Application Read access
+    FIXES [#5796](https://github.com/microsoft/Microsoft365DSC/issues/5796)
+* AADApplication
+  * Test-TargetResource logic updated to skip evaluating CIMArrays that are empty
+    when passed as desired values.
+* AADDeviceRegistrationPolicy
+  * Fixed an issue where the AzureADJoinIsAdminConfigurable was not returned by the
+    Get-TargetResource function.
+  * Fix issue setting Selected Users and Groups for Entra Join.
+    FIXES [#5798](https://github.com/microsoft/Microsoft365DSC/issues/5798)
+* AADGroup
+  * Returns an empty array for roles and licenses from the Get-TargetResource
+    function instead of null when no instances are found.
 * AADRoleEligibilityScheduleRequest
   * Reduce call count when reconciling object type
     FIXES [#5621](https://github.com/microsoft/Microsoft365DSC/issues/5621)
+  * Add check if object lookup fails
+    FIXES [#5801](https://github.com/microsoft/Microsoft365DSC/issues/5801)
+* AADServicePrincipal
+  * Evaluating assigned users based on UPN and not just on DisplayName.
+  * FIXES [#5359](https://github.com/microsoft/Microsoft365DSC/issues/5359) AADServicePrincipal fails on Managed Identities when DelegatedPermissions returns 500 response
 * ADOSecurityPolicy
   * Fixes an issue where the resource threw an error trying to parse the default
     values.
+* EXODistributionGroup
+  * Changed logic to retrieve existing members by UserPrincipalName.
+* EXOReportSubmissionPolicy
+  * Add ReportChatMessageEnabled, ReportChatMessageToCustomizedAddressEnabled
+* EXORoleGroup
+  * Evaluating assigned users based on UPN and not just on DisplayName if they
+    have an associated mailbox.
+* IntuneDeviceManagementEnrollmentAndroidGooglePlay
+  * Marked the Id property as mandatory in the resource.
+* M365DSCRuleEvaluation
+  * Added support for specifying a Filter property.
 * M365DSCUtil
   * Add M365DSC prefix to `Remove-EmptyValue`.
   * Fixes an issue with `Credential` property being escaped and indentation.
   * Adds the possibility to allow variables in strings and no authentication
     results update during conversion to final export.
     FIXES [#3861](https://github.com/microsoft/Microsoft365DSC/issues/3861)
+* SCInsiderRiskPolicy
+  * Enforces the MDATPTriageStatus to be a string array.
 * SCSensitivityLabel
   * Fixes invalid accepted content type values.
+* IntuneDeviceCompliancePolicyAndroidDeviceOwner
+  * Adds support for Scheduled Actions and other missing properties
+    FIXES [#5593] (https://github.com/microsoft/Microsoft365DSC/issues/5593)
+* IntuneDeviceCompliancePolicyAndroidWorkProfile
+  * Adds support for Scheduled Actions and other missing properties
+    FIXES [#5593] (https://github.com/microsoft/Microsoft365DSC/issues/5592)
 * TeamsAppPermissionPolicy
-  * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps before adding them to the policy
+  * Updated correct Typecasting for AppPresetMeeting and PinnedMessagebarApps
+    before adding them to the policy
 * TeamsAppSetupPolicy
   * FIXES [[#5752](https://github.com/microsoft/Microsoft365DSC/issues/5752)
 * TeamsM365App
   * Remove `Ensure` property from being exported.
     FIXES [#5781](https://github.com/microsoft/Microsoft365DSC/issues/5781)
-* AADConditionalAccessPolicy
-  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
-    FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
+* AADGroupEligibilitySchedule
+  * FIXES [#5792](https://github.com/microsoft/Microsoft365DSC/issues/5792) issue where complete DSC isn't exported after generated
+  * FIXES [#5793](https://github.com/microsoft/Microsoft365DSC/issues/5793) issue where PrincipalType isn't correctly captured in AzureGov
 * DEPENDENCIES
   * Updated ReverseDSC to version 2.0.0.27
 
@@ -51,7 +156,6 @@
 * EXOSmtpDaneInbound
   * Updated authentication properties to align with MOF definition.
     FIXES [#5709](https://github.com/microsoft/Microsoft365DSC/issues/5709)
-
 * MISC
   * PowerPlatform resource revamp to use direct REST API calls.
   * Simplify export behavior for all resources and complex objects.
