@@ -29,6 +29,8 @@
   * Apply ordering during export.
 * TeamsUser
   * Apply ordering during export.
+* DEPENDENCIES
+  * Updated MSCloudLoginAssistant to version 1.1.39.
 
 # 1.25.219.3
 
