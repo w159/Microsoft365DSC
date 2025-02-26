@@ -1,15 +1,19 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.226.1
 
 * AADConditionalAccessPolicy
-  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
+  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.
     FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
+  * Added verbose to the Get-TargetResource function to print out the retrieved
+    policies from calling the cmdlet.
 * AADPasswordRuleSettings
   * Updated schema to only accept values 'Enforced' and 'Audit' for parameter BannedPasswordCheckOnPremisesMode
 * IntuneDeviceCompliancePolicyWindows10
-  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property.
     FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+* O365OrgSettings
+  * Added support for the AllowPlannerCopilot setting.
 * PPTenantSettings
   * Corrected issue in the resource schema. The description was a multi-line
     string, which is not allowed.
@@ -25,6 +29,8 @@
   * Apply ordering during export.
 * TeamsUser
   * Apply ordering during export.
+* DEPENDENCIES
+  * Updated MSCloudLoginAssistant to version 1.1.39.
 
 # 1.25.219.3
 

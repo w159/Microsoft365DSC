@@ -287,11 +287,16 @@ function Get-TargetResource
             try
             {
                 $Policy = Get-MgBetaIdentityConditionalAccessPolicy -ConditionalAccessPolicyId $Id -ErrorAction Stop
+                $jsonPolicy = ConvertTo-Json $Policy -ErrorAction SilentlyContinue
+                Write-Verbose -Message "Retrieved policy:`r`n$($jsonPolicy)"
             }
             catch
             {
                 Write-Verbose -Message "Couldn't find existing policy by ID {$Id}"
                 $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$DisplayName'"
+                $jsonPolicy = ConvertTo-Json $Policy -ErrorAction SilentlyContinue
+                Write-Verbose -Message "Retrieved policy:`r`n$($jsonPolicy)"
+
                 if ($Policy.Length -gt 1)
                 {
                     throw "Duplicate CA Policies named $DisplayName exist in tenant"
@@ -303,6 +308,9 @@ function Get-TargetResource
             Write-Verbose -Message 'Id was NOT specified'
             ## Can retreive multiple CA Policies since displayname is not unique
             $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$DisplayName'"
+            $jsonPolicy = ConvertTo-Json $Policy -ErrorAction SilentlyContinue
+            Write-Verbose -Message "Retrieved policy:`r`n$($jsonPolicy)"
+
             if ($Policy.Length -gt 1)
             {
                 throw "Duplicate CA Policies named $DisplayName exist in tenant"
