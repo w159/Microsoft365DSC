@@ -54200,6 +54200,11 @@
                            },
                            {
                                "CIMType":  "Boolean",
+                               "Name":  "AllowPlannerCopilot",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "Boolean",
                                "Name":  "ToDoIsExternalJoinEnabled",
                                "Option":  "Write"
                            },
