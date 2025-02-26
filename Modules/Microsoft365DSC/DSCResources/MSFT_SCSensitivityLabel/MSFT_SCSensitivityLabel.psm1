@@ -194,7 +194,7 @@ function Get-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -401,14 +401,6 @@ function Get-TargetResource
         $currentContentType = @()
         switch -Regex ($label.ContentType)
         {
-            'File, Email'
-            {
-                $currentContentType += 'File, Email'
-            }
-            'Site, UnifiedGroup'
-            {
-                $currentContentType += 'Site, UnifiedGroup'
-            }
             'PurviewAssets'
             {
                 $currentContentType += 'PurviewAssets'
@@ -420,6 +412,22 @@ function Get-TargetResource
             'SchematizedData'
             {
                 $currentContentType += 'SchematizedData'
+            }
+            'File'
+            {
+                $currentContentType += 'File'
+            }
+            'Email'
+            {
+                $currentContentType += 'Email'
+            }
+            'Site'
+            {
+                $currentContentType += 'Site'
+            }
+            'UnifiedGroup'
+            {
+                $currentContentType += 'UnifiedGroup'
             }
         }
 
@@ -809,7 +817,7 @@ function Set-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -1348,7 +1356,7 @@ function Test-TargetResource
         $ApplyWaterMarkingText,
 
         [Parameter()]
-        [ValidateSet('File, Email', 'Site, UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
+        [ValidateSet('File', 'Email', 'Site', 'UnifiedGroup', 'PurviewAssets', 'Teamwork', 'SchematizedData')]
         [System.String[]]
         $ContentType,
 
@@ -1555,8 +1563,7 @@ function Export-TargetResource
         $AccessTokens
     )
     $ConnectionMode = New-M365DSCConnection -Workload 'SecurityComplianceCenter' `
-        -InboundParameters $PSBoundParameters `
-        -SkipModuleReload $true
+        -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -1694,6 +1701,8 @@ function Export-TargetResource
                 -Results $Results `
                 -Credential $Credential `
                 -NoEscape @('AdvancedSettings', 'LocaleSettings', 'AutoLabelingSettings')
+
+            $currentDSCBlock = $currentDSCBlock.Replace("''", "'")
 
             Write-Host $Global:M365DSCEmojiGreenCheckMark
             $dscContent += $currentDSCBlock

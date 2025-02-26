@@ -241,7 +241,7 @@ function Get-TargetResource
             $nullReturn = $PSBoundParameters
             $nullReturn.Ensure = 'Absent'
 
-            if ($null -ne $PrimarySmtpAddress)
+            if (-not [System.String]::IsNullOrEmpty($PrimarySmtpAddress))
             {
                 $distributionGroup = Get-DistributionGroup -Identity $PrimarySmtpAddress -ErrorAction Stop
             }
@@ -261,7 +261,7 @@ function Get-TargetResource
             $distributionGroup = $Script:exportedInstance
         }
 
-        if ($null -ne $PrimarySmtpAddress)
+        if (-not [System.String]::IsNullOrEmpty($PrimarySmtpAddress))
         {
             $distributionGroupMembers = Get-DistributionGroupMember -Identity $PrimarySmtpAddress `
                 -ErrorAction 'Stop' `
@@ -272,6 +272,20 @@ function Get-TargetResource
             $distributionGroupMembers = Get-DistributionGroupMember -Identity $Identity `
                     -ErrorAction 'Stop' `
                     -ResultSize 'Unlimited'
+        }
+
+        $distributionMembersValue = @()
+        foreach ($member in $distributionGroupMembers)
+        {
+            $user = Get-User -Identity $member.DisplayName -ErrorAction SilentlyContinue
+            if ($null -ne $user)
+            {
+                $distributionMembersValue += $user.UserPrincipalName
+            }
+            else
+            {
+                $distributionMembersValue += $member.DisplayName
+            }
         }
 
         Write-Verbose -Message "Found existing Distribution Group {$Identity}."
@@ -331,7 +345,7 @@ function Get-TargetResource
             ManagedBy                              = $ManagedByValue
             MemberDepartRestriction                = $distributionGroup.MemberDepartRestriction
             MemberJoinRestriction                  = $distributionGroup.MemberJoinRestriction
-            Members                                = $distributionGroupMembers.Name
+            Members                                = $distributionMembersValue
             ModeratedBy                            = $ModeratedByValue
             ModerationEnabled                      = $distributionGroup.ModerationEnabled
             Name                                   = $distributionGroup.Name
@@ -694,7 +708,41 @@ function Set-TargetResource
         }
         $currentParameters.Remove('OrganizationalUnit') | Out-Null
         $currentParameters.Remove('Type') | Out-Null
-        $currentParameters.Remove('Members') | Out-Null
+
+        # Members
+        if ($null -ne $Members)
+        {
+            $membersDiff = Compare-Object -ReferenceObject $currentDistributionGroup.Members -DifferenceObject $Members
+            $membersToAdd = @()
+            $membersToRemove = @()
+            foreach ($difference in $membersDiff)
+            {
+                if ($difference.SideIndicator -eq '=>')
+                {
+                    $membersToAdd += $difference.InputObject
+                }
+                elseif ($difference.SideIndicator -eq '<=')
+                {
+                    $membersToRemove += $difference.InputObject
+                }
+            }
+
+            foreach ($member in $membersToAdd)
+            {
+                Write-Verbose -Message "Adding member {$member}"
+                Add-DistributionGroupMember -Identity $Identity -Member $member -BypassSecurityGroupManagerCheck
+            }
+            foreach ($member in $membersToRemove)
+            {
+                Write-Verbose -Message "Removing member {$member}"
+                Remove-DistributionGroupMember -Identity $Identity `
+                                            -Member $member `
+                                            -BypassSecurityGroupManagerCheck `
+                                            -Confirm:$false
+            }
+            $currentParameters.Remove('Members') | Out-Null
+        }
+
 
         if ($EmailAddresses.Length -gt 0)
         {
