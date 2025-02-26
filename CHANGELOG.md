@@ -9,6 +9,9 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
   * Fixed the ability to set members.
+* PPTenantSettings
+  * Corrected issue in the resource schema. The description was a multi-line
+    string, which is not allowed.
 * Security & Compliance
   * Updated export functions to remove skipping of loading module, to prevent
     missing cmdlet errors that are causing failing exports.
