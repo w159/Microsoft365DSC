@@ -5,6 +5,13 @@
 * PPTenantSettings
   * Corrected issue in the resource schema. The description was a multi-line
     string, which is not allowed.
+* TeamsChannel
+  * Apply ordering during export.
+    FIXES [#5829](https://github.com/microsoft/Microsoft365DSC/issues/5829)
+* TeamsTeam
+  * Apply ordering during export.
+* TeamsUser
+  * Apply ordering during export.
 
 # 1.25.219.3
 
