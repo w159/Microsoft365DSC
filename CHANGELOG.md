@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADPasswordRuleSettings
+  * Updated schema to only accept values 'Enforced' and 'Audit' for parameter BannedPasswordCheckOnPremisesMode
 * IntuneDeviceCompliancePolicyWindows10
   * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
     FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
