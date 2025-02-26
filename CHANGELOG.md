@@ -5,6 +5,13 @@
 * SPOSiteScript
   * Fix error in Get-TargetResource when a site-script is identified by title only
     FIXES [#5821](https://github.com/microsoft/Microsoft365DSC/issues/5821)
+* TeamsChannel
+  * Apply ordering during export.
+    FIXES [#5829](https://github.com/microsoft/Microsoft365DSC/issues/5829)
+* TeamsTeam
+  * Apply ordering during export.
+* TeamsUser
+  * Apply ordering during export.
 
 # 1.25.219.3
 
