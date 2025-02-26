@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
+    FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
 * AADPasswordRuleSettings
   * Updated schema to only accept values 'Enforced' and 'Audit' for parameter BannedPasswordCheckOnPremisesMode
 * IntuneDeviceCompliancePolicyWindows10
