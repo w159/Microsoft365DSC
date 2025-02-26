@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* PPTenantSettings
+  * Corrected issue in the resource schema. The description was a multi-line
+    string, which is not allowed.
+
 # 1.25.219.3
 
 * AADApplication
@@ -31,9 +37,6 @@
   * Initial release.
 * M365DSCRuleEvaluation
   * Clear the cached instances from the export operation after evaluating the rules.
-* PPTenantSettings
-  * Corrected issue in the resource schema. The description was a multi-line
-    string, which is not allowed.
 * Security & Compliance
   * Updated export functions to remove skipping of loading module, to prevent
     missing cmdlet errors that are causing failing exports.
