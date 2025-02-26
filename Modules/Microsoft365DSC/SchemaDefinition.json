@@ -63584,6 +63584,16 @@
                                "Option":  "Key"
                            },
                            {
+                               "CIMType":  "boolean",
+                               "Name":  "EnableAzureADB2BIntegration",
+                               "Option":  "Write"
+                           },
+                           {
+                               "CIMType":  "string",
+                               "Name":  "OneDriveSharingCapability",
+                               "Option":  "Write"
+                           },
+                           {
                                "CIMType":  "uint32",
                                "Name":  "MinCompatibilityLevel",
                                "Option":  "Write"
