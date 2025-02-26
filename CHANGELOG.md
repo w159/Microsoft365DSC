@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
 * PPTenantSettings
   * Corrected issue in the resource schema. The description was a multi-line
     string, which is not allowed.
