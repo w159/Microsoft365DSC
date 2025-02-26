@@ -1,5 +1,16 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* TeamsChannel
+  * Apply ordering during export.
+    FIXES [#5829](https://github.com/microsoft/Microsoft365DSC/issues/5829)
+* TeamsTeam
+  * Apply ordering during export.
+* TeamsUser
+  * Apply ordering during export.
+
+
 # 1.25.219.3
 
 * AADApplication
