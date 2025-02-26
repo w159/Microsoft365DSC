@@ -1778,12 +1778,13 @@ function Set-TargetResource
                 }
             }
 
-            if ($TermsOfUse)
-            {
-                Write-Verbose -Message "Gettign Terms of Use {$TermsOfUse}"
-                $TermsOfUseObj = Get-MgBetaAgreement | Where-Object -FilterScript { $_.DisplayName -eq $TermsOfUse }
-                $GrantControls.Add('termsOfUse', $TermsOfUseObj.Id)
-            }
+           if ($TermsOfUse)
+           {
+               Write-Verbose -Message "Getting Terms of Use {$TermsOfUse}"
+               $TermsOfUseObj = Get-MgBetaAgreement | Where-Object -FilterScript { $_.DisplayName -eq $TermsOfUse }
+               $GrantControls.Add('termsOfUse', @($TermsOfUseObj.Id))
+           }
+
 
             #no translation or conversion needed
             Write-Verbose -Message 'Set-Targetresource: Adding processed grant controls'

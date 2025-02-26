@@ -1,8 +1,30 @@
 # Change log for Microsoft365DSC
 
 # UNRELEASED
+
+* AADConditionalAccessPolicy
+  * Fixed an issue where `TermsOfUse` was not passed as an array, causing failures in GCC-High environments.  
+    FIXES [#5742](https://github.com/microsoft/Microsoft365DSC/issues/5742)
+* AADPasswordRuleSettings
+  * Updated schema to only accept values 'Enforced' and 'Audit' for parameter BannedPasswordCheckOnPremisesMode
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+* PPTenantSettings
+  * Corrected issue in the resource schema. The description was a multi-line
+    string, which is not allowed.
+* SPOSiteScript
+  * Fix error in Get-TargetResource when a site-script is identified by title only
+    FIXES [#5821](https://github.com/microsoft/Microsoft365DSC/issues/5821)
 * SPOTenantSettings
   * Add EnableAzureADB2BIntegration and OneDriveSharingCapability properties
+* TeamsChannel
+  * Apply ordering during export.
+    FIXES [#5829](https://github.com/microsoft/Microsoft365DSC/issues/5829)
+* TeamsTeam
+  * Apply ordering during export.
+* TeamsUser
+  * Apply ordering during export.
 
 # 1.25.219.3
 
