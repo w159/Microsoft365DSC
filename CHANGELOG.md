@@ -2,7 +2,13 @@
 
 # UNRELEASED
 
-* AADAppplication
+* IntuneDeviceCompliancePolicyWindows10
+  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
+    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+
+# 1.25.219.3
+
+* AADApplication
   * Fixed an issue where specifying an empty ReplyURLs array would not remove
     the existing entries.
 * AADAuthenticationMethodPolicy
@@ -10,7 +16,9 @@
 * AADAuthenticationMethodPolicyFido2
   * Fixed issue where the Set-TargetResource was throwing an internal server
     error.
-  cannot be set.
+* AADConditionalAccessPolicy
+  * Added check to ensure the cached policy (export) is the current policy when
+    evaluating in the Get-TargetResource function.
 * EXOCalendarProcessing
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * EXODistributionGroup
@@ -27,15 +35,18 @@
   * Changed the Get-TargetResource logic to return UPN instead of id.
 * IntuneDeviceComplianceScriptWindows10
   * Initial release.
-* IntuneDeviceCompliancePolicyWindows10
-  * Fixes the handling of the `DeviceCompliancePolicyScript` property. 
-    FIXES [#5510](https://github.com/microsoft/Microsoft365DSC/issues/5510)
+* M365DSCRuleEvaluation
+  * Clear the cached instances from the export operation after evaluating the rules.
 * Security & Compliance
   * Updated export functions to remove skipping of loading module, to prevent
     missing cmdlet errors that are causing failing exports.
 * SCPolicyConfig
   * Handle default values in the Get-TargetResource function.
   * Added support for the FileCopiedToCloudFullUrlEnabled property.
+* DEPENDENCIES
+  * Updated ExchangeOnlineManagement to version 3.7.1.
+  * Updated Microsoft.Graph to version 2.26.1.
+  * Updated MSCloudLoginAssistant to version1 1.1.38.
 
 # 1.25.219.2
 
