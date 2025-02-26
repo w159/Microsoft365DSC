@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.25.219.3
 
 * AADApplication
   * Fixed an issue where specifying an empty ReplyURLs array would not remove
@@ -41,7 +41,6 @@
   * Updated ExchangeOnlineManagement to version 3.7.1.
   * Updated Microsoft.Graph to version 2.26.1.
   * Updated MSCloudLoginAssistant to version1 1.1.38.
-
 
 # 1.25.219.2
 
