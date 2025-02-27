@@ -241,7 +241,6 @@ function Get-TargetResource
             HubUrl                                      = $CurrentHubUrl
             Classification                              = $site.Classification
             DisableFlows                                = $DisableFlowValue
-            LogoFilePath                                = $LogoFilePath
             SharingCapability                           = $site.SharingCapability
             StorageMaximumLevel                         = $site.StorageQuota
             StorageWarningLevel                         = $site.StorageQuotaWarningLevel
@@ -255,7 +254,6 @@ function Get-TargetResource
             LocaleId                                    = $site.LocaleId
             RestrictedToRegion                          = $site.RestrictedToGeo
             SocialBarOnSitePagesDisabled                = $site.SocialBarOnSitePagesDisabled
-            SiteDesign                                  = $SiteDesign
             DenyAddAndCustomizePages                    = $DenyAddAndCustomizePagesValue
             SharingAllowedDomainList                    = $site.SharingAllowedDomainList
             SharingBlockedDomainList                    = $site.SharingBlockedDomainList
