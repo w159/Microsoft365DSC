@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* M365DSCDRGUtil
+  * Fixes an issue with fancy double quotes being replaced that break the string.  
+    FIXES [#5775](https://github.com/microsoft/Microsoft365DSC/issues/5775)  
+    FIXES [#5623](https://github.com/microsoft/Microsoft365DSC/issues/5623)
+
 # 1.25.226.1
 
 * AADConditionalAccessPolicy
