@@ -1,5 +1,13 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* O365SearchAndIntelligenceConfigurations
+  * Added note that only Credentials are supported for the resource.
+* TeamsOrgWideAppSettings
+  * Added note that only Credentials are supported for the resource.
+    FIXES [#3394](https://github.com/microsoft/Microsoft365DSC/issues/3394)
+
 # 1.25.226.1
 
 * AADConditionalAccessPolicy
