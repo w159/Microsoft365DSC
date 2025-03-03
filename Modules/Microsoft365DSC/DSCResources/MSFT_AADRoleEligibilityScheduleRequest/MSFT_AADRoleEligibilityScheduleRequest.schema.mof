@@ -31,7 +31,7 @@ class MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence
 class MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration
 {
     [Write, Description("The requestor's desired duration of access represented in ISO 8601 format for durations. For example, PT3H refers to three hours. If specified in a request, endDateTime should not be present and the type property should be set to afterDuration.")] String duration;
-    [Write, Description("Timestamp of date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.")] String endDateTime;
+    [Write, Description("Timestamp of date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.")] DATETIME endDateTime;
     [Write, Description("The requestor's desired expiration pattern type. The possible values are: notSpecified, noExpiration, afterDateTime, afterDuration."), ValueMap{"notSpecified","noExpiration","afterDateTime","afterDuration"}, Values{"notSpecified","noExpiration","afterDateTime","afterDuration"}] String type;
 };
 
@@ -40,7 +40,7 @@ class MSFT_AADRoleEligibilityScheduleRequestSchedule
 {
     [Write, Description("When the eligible or active assignment expires."), EmbeddedInstance("MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration")] String expiration;
     [Write, Description("The frequency of the eligible or active assignment. This property is currently unsupported in PIM."), EmbeddedInstance("MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence")] String recurrence;
-    [Write, Description("When the eligible or active assignment becomes active.")] String startDateTime;
+    [Write, Description("When the eligible or active assignment becomes active.")] DATETIME startDateTime;
 };
 
 [ClassVersion("1.0.0.0"), FriendlyName("AADRoleEligibilityScheduleRequest")]
