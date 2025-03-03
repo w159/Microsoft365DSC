@@ -4,6 +4,9 @@
 
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
+* IntuneDeviceEnrollmentPlatformRestriction
+  * Added note that update is no longer possible.
+    FIXES [#5127](https://github.com/microsoft/Microsoft365DSC/issues/5127)
 
 # 1.25.226.1
 
