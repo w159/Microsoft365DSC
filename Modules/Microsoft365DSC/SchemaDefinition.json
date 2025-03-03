@@ -8488,7 +8488,7 @@
                                "Option":  "Write"
                            },
                            {
-                               "CIMType":  "String",
+                               "CIMType":  "DATETIME",
                                "Name":  "endDateTime",
                                "Option":  "Write"
                            },
@@ -8513,7 +8513,7 @@
                                "Option":  "Write"
                            },
                            {
-                               "CIMType":  "String",
+                               "CIMType":  "DATETIME",
                                "Name":  "startDateTime",
                                "Option":  "Write"
                            }
