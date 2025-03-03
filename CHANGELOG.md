@@ -2,8 +2,6 @@
 
 # UNRELEASED
 
-* AADEntitlementManagementAccessPackageAssignmentPolicy
-  * Updated startdatetime property to be of type DATETIME.
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
 * MISC
