@@ -498,14 +498,6 @@ function Get-M365DSCDRGComplexTypeToString
         $currentProperty = [string]::Empty
     }
 
-    if ($null -ne $currentProperty)
-    {
-        $fancySingleQuotes = "[\u2019\u2018]"
-        $fancyDoubleQuotes = "[\u201C\u201D]"
-        $currentProperty = [regex]::Replace($currentProperty, $fancySingleQuotes, "''")
-        $currentProperty = [regex]::Replace($currentProperty, $fancyDoubleQuotes, '"')
-    }
-
     return $currentProperty
 }
 
@@ -539,8 +531,15 @@ function Get-M365DSCDRGSimpleObjectTypeToString
             {
                 $key = 'odataType'
             }
-            $Value = $Value.Replace('`', '``').Replace('$', '`$').Replace('"', '`"')
-            $returnValue = $Space + $Key + ' = "' + $Value + """`r`n"
+            #0x201E = „
+            #0x201C = “
+            #0x201D = ”
+            $newString = $Value.Replace('`', '``').Replace('$', '`$')
+            $newString = $newString.Replace("$([char]0x201E)", "``$([char]0x201E)")
+            $newString = $newString.Replace("$([char]0x201C)", "``$([char]0x201C)")
+            $newString = $newString.Replace("$([char]0x201D)", "``$([char]0x201D)")
+            $newString = $newString.Replace('"', '`"')
+            $returnValue = $Space + $Key + ' = "' + $newString + """`r`n"
         }
         '*.DateTime'
         {
