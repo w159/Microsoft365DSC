@@ -17,6 +17,9 @@
     FIXES [#5127](https://github.com/microsoft/Microsoft365DSC/issues/5127)
 * PPEnvironmentAppsEnvironment
   * Added support for legacy Basic and Standard EnvironmentSKU.
+* SPOSite
+  * Fixed an issue where the exported properties were not defined.
+    FIXES [#4773](https://github.com/microsoft/Microsoft365DSC/issues/4773)
 * TeamsOrgWideAppSettings
   * Added note that only Credentials are supported for the resource.
     FIXES [#3394](https://github.com/microsoft/Microsoft365DSC/issues/3394)
