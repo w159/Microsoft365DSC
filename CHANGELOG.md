@@ -4,7 +4,7 @@
 
 * AADAuthenticationMethodPolicyQRCodeImage
   * Initial release.
-* AADGroups
+* AADGroupSettings
   * Filtered EnableMSStandardBlockedWords parameter from the policy results,
     to prevent issues with this deprecated parameter
 * AADRoleEligibilityScheduleRequest
