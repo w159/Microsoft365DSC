@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADAuthenticationMethodPolicyQRCodeImage
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
 * IntuneDeviceEnrollmentPlatformRestriction
