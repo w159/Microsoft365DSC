@@ -6,11 +6,12 @@
   * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
+* FabricAdminTenantSettings
+  * Fixed issue where the export would add double quotes in front of boolean
+    variables
 * IntuneDeviceEnrollmentPlatformRestriction
   * Added note that update is no longer possible.
     FIXES [#5127](https://github.com/microsoft/Microsoft365DSC/issues/5127)
-* O365SearchAndIntelligenceConfigurations
-  * Added note that only Credentials are supported for the resource.
 * PPEnvironmentAppsEnvironment
   * Added support for legacy Basic and Standard EnvironmentSKU.
 * TeamsOrgWideAppSettings
