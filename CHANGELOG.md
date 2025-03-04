@@ -4,6 +4,9 @@
 
 * AADAuthenticationMethodPolicyQRCodeImage
   * Initial release.
+* AADGroups
+  * Filtered EnableMSStandardBlockedWords parameter from the policy results,
+    to prevent issues with this deprecated parameter
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
 * FabricAdminTenantSettings
