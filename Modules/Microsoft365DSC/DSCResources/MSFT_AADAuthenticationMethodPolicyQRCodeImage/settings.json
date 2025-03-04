@@ -3,27 +3,47 @@
     "description": "This resource configures an Azure AD Authentication Method Policy QR Code Image.",
     "roles": {
         "read": [
-            "Role"
+            "Security Reader"
         ],
         "update": [
-            "Role"
+            "Authentication Policy Administrator"
         ]
     },
     "permissions": {
         "graph": {
             "delegated": {
-                "read": [],
-                "update": []
-            },
-            "application": {
                 "read": [
                     {
-                        "name": "Permission for Monitoring and Export"
+                        "name": "Policy.ReadWrite.AuthenticationMethod"
+                    },
+                    {
+                        "name": "Policy.Read.All"
                     }
                 ],
                 "update": [
                     {
-                        "name": "Permission for deploying"
+                        "name": "Policy.ReadWrite.AuthenticationMethod"
+                    },
+                    {
+                        "name": "Policy.Read.All"
+                    }
+                ]
+            },
+            "application": {
+                "read": [
+                    {
+                        "name": "Policy.ReadWrite.AuthenticationMethod"
+                    },
+                    {
+                        "name": "Policy.Read.All"
+                    }
+                ],
+                "update": [
+                    {
+                        "name": "Policy.ReadWrite.AuthenticationMethod"
+                    },
+                    {
+                        "name": "Policy.Read.All"
                     }
                 ]
             }
