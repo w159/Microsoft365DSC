@@ -65,7 +65,7 @@
 | Parameter | Attribute | DataType | Description | Allowed Values |
 | --- | --- | --- | --- | --- |
 | **duration** | Write | String | The requestor's desired duration of access represented in ISO 8601 format for durations. For example, PT3H refers to three hours. If specified in a request, endDateTime should not be present and the type property should be set to afterDuration. | |
-| **endDateTime** | Write | DateTime | Timestamp of date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. | |
+| **endDateTime** | Write | String | Timestamp of date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. | |
 | **type** | Write | String | The requestor's desired expiration pattern type. The possible values are: notSpecified, noExpiration, afterDateTime, afterDuration. | `notSpecified`, `noExpiration`, `afterDateTime`, `afterDuration` |
 
 ### MSFT_AADRoleEligibilityScheduleRequestSchedule
@@ -76,7 +76,7 @@
 | --- | --- | --- | --- | --- |
 | **expiration** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleExpiration | When the eligible or active assignment expires. | |
 | **recurrence** | Write | MSFT_AADRoleEligibilityScheduleRequestScheduleRecurrence | The frequency of the eligible or active assignment. This property is currently unsupported in PIM. | |
-| **startDateTime** | Write | DateTime | When the eligible or active assignment becomes active. | |
+| **startDateTime** | Write | String | When the eligible or active assignment becomes active. | |
 
 
 ## Description
