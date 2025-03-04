@@ -832,12 +832,10 @@ function Compare-M365DSCComplexObject
                     if ($targetType -like '*Date*')
                     {
                         $compareResult = $true
-                        $sourceDate = [DateTime]::Parse($differenceObject)
-                        $targetDate = [DateTime]::Parse($referenceObject)
-                        $diff = [DateTime]::Compare($sourceDate, $targetDate)
-                        if ($diff -ne 0)
+                        $sourceDate = [DateTime]$Source.$key
+                        if ($sourceDate -ne $targetType)
                         {
-                            $compareResult = $false
+                            $compareResult = $null
                         }
                     }
                     elseif ($targetType -eq 'String')
