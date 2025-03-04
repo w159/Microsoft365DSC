@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADAuthenticationMethodPolicyQRCodeImage
+  * Initial release.
 * AADRoleEligibilityScheduleRequest
   * Updated startdatetime and enddatetime properties to be of type DATETIME.
 * IntuneDeviceEnrollmentPlatformRestriction
@@ -9,12 +11,18 @@
     FIXES [#5127](https://github.com/microsoft/Microsoft365DSC/issues/5127)
 * O365SearchAndIntelligenceConfigurations
   * Added note that only Credentials are supported for the resource.
+* PPEnvironmentAppsEnvironment
+  * Added support for legacy Basic and Standard EnvironmentSKU.
 * SPOSite
   * Fixed an issue where the exported properties were not defined.
     FIXES [#4773](https://github.com/microsoft/Microsoft365DSC/issues/4773)
 * TeamsOrgWideAppSettings
   * Added note that only Credentials are supported for the resource.
     FIXES [#3394](https://github.com/microsoft/Microsoft365DSC/issues/3394)
+* M365DSCDRGUtil
+  * Fixes an issue with fancy double quotes being replaced that break the string.
+    FIXES [#5775](https://github.com/microsoft/Microsoft365DSC/issues/5775)
+    FIXES [#5623](https://github.com/microsoft/Microsoft365DSC/issues/5623)
 
 # 1.25.226.1
 
