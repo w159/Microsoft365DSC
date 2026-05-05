@@ -1,0 +1,25 @@
+{
+  "templates": {
+    "IntuneAssignments": {
+      "relations": [
+        {
+          "property": "Assignments",
+          "childProperty": "groupDisplayName",
+          "targetResource": "AADGroup",
+          "targetKeyProperty": "DisplayName",
+          "condition": "dataType in ['#microsoft.graph.groupAssignmentTarget', '#microsoft.graph.exclusionGroupAssignmentTarget']"
+        }
+      ]
+    },
+    "IntuneAssignmentFilter": {
+      "relations": [
+        {
+          "property": "Assignments",
+          "childProperty": "deviceAndAppManagementAssignmentFilterId",
+          "targetResource": "IntuneDeviceAndAppManagementAssignmentFilter",
+          "targetKeyProperty": "DisplayName"
+        }
+      ]
+    }
+  }
+}

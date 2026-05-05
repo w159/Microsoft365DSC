@@ -69,5 +69,6 @@
         "Get-MgGroup"
       ]
     }
-  ]
+  ],
+  "relationsTemplate": "IntuneAssignments"
 }
