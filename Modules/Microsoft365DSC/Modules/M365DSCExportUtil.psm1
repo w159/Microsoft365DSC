@@ -576,7 +576,11 @@ function Get-M365DSCExportContentForResource
 
         [Parameter()]
         [switch]
-        $AllowVariablesInStrings
+        $AllowVariablesInStrings,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $RawResults
     )
 
     $OrganizationName = ''
@@ -729,9 +733,14 @@ function Get-M365DSCExportContentForResource
     # Resolve cross-resource relations and register dependencies
     if ($null -ne $Global:M365DSCExportDependencies)
     {
+        $resolveResults = $Results
+        if ($null -ne $RawResults)
+        {
+            $resolveResults = $RawResults
+        }
         Resolve-M365DSCExportRelations -ResourceName $ResourceName `
             -InstanceName $instanceName `
-            -Results $Results `
+            -Results $resolveResults `
             -ModulePath $ModulePath
     }
 
@@ -1259,7 +1268,7 @@ function Resolve-M365DSCExportRelations
     )
 
     # Load settings.json for this resource
-    $settingsPath = Join-Path -Path (Split-Path -Path $ModulePath -Parent) -ChildPath 'settings.json'
+    $settingsPath = Join-Path -Path $ModulePath -ChildPath 'settings.json'
     if (-not (Test-Path -Path $settingsPath))
     {
         return
@@ -1334,7 +1343,7 @@ function Resolve-M365DSCExportRelations
         }
         else
         {
-            # Simple string property referencing a target resource key
+            # Simple string property referencing a target resource key directly
             Register-M365DSCExportDependency -SourceInstanceName $InstanceName `
                 -SourceResourceName $ResourceName `
                 -TargetResourceType $relation.targetResource `
@@ -1557,11 +1566,11 @@ function Add-M365DSCExportDependsOn
             $dependsOnEntries = $targets | ForEach-Object { "`"$_`"" }
             if ($dependsOnEntries.Count -eq 1)
             {
-                $dependsOnLine = "            DependsOn = @($($dependsOnEntries[0]))`r`n"
+                $dependsOnLine = "            DependsOn = @($($dependsOnEntries[0]))"
             }
             else
             {
-                $dependsOnLine = "            DependsOn = @($($dependsOnEntries -join ', '))`r`n"
+                $dependsOnLine = "            DependsOn = @($($dependsOnEntries -join ', '))"
             }
 
             # Find the closing brace of this resource block and inject DependsOn before it
@@ -1571,10 +1580,10 @@ function Add-M365DSCExportDependsOn
             {
                 # Find the closing "        }" for this block
                 $searchFrom = $blockStart + $blockPattern.Length
-                $closingBrace = $DSCContent.IndexOf("        }`r`n", $searchFrom)
+                $closingBrace = $DSCContent.IndexOf("`r`n        }`r`n", $searchFrom)
                 if ($closingBrace -gt 0)
                 {
-                    $DSCContent = $DSCContent.Insert($closingBrace, $dependsOnLine)
+                    $DSCContent = $DSCContent.Insert($closingBrace + 1, $dependsOnLine)
                 }
             }
         }
@@ -1587,10 +1596,11 @@ function Add-M365DSCExportDependsOn
         if (-not [System.String]::IsNullOrEmpty($stubContent))
         {
             # Insert stubs before the closing "    }" of the Node block
-            $nodeClose = $DSCContent.LastIndexOf("    }`r`n")
+            # Just after the last resource block's closing brace
+            $nodeClose = $DSCContent.LastIndexOf("        }`r`n")
             if ($nodeClose -gt 0)
             {
-                $DSCContent = $DSCContent.Insert($nodeClose, $stubContent)
+                $DSCContent = $DSCContent.Insert($nodeClose + 11, $stubContent)
             }
         }
     }
@@ -1657,7 +1667,15 @@ function Get-M365DSCMinimalExportBlocks
                 {
                     [void]$stubBuilder.Append("            IsSingleInstance = `"Yes`"`r`n")
                 }
-                elseif ($prop.Name -in @('DisplayName', 'Name', 'Title', 'Identity', 'Id'))
+                elseif ($prop.Name -eq 'MailEnabled')
+                {
+                    [void]$stubBuilder.Append("            $($prop.Name) = `$false`r`n")
+                }
+                elseif ($prop.Name -eq 'SecurityEnabled')
+                {
+                    [void]$stubBuilder.Append("            $($prop.Name) = `$true`r`n")
+                }
+                elseif ($prop.Name -in @('DisplayName', 'MailNickName', 'Name', 'Title', 'Identity', 'Id'))
                 {
                     [void]$stubBuilder.Append("            $($prop.Name) = `"$targetKey`"`r`n")
                     $targetKeyPropertyName = $prop.Name
