@@ -541,7 +541,7 @@ function Set-TargetResource
                 {
                     throw "AU {$($DisplayName)}: Invalid ScopedRoleMember.RoleMemberInfo.Type {$($roleMember.RoleMemberInfo.Type)}"
                 }
-                if ($roleMemberIdentity.Count -gt 1)
+                if ($roleMemberIdentity.GetType().BaseType -eq 'System.Array' -and $roleMemberIdentity.Count -gt 1)
                 {
                     throw "AU {$($DisplayName)}: ScopedRoleMember for role {$($roleMember.RoleName)}: $($roleMember.RoleMemberInfo.Type) {$($roleMember.RoleMemberInfo.Identity)} is not unique"
                 }
