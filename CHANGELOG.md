@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADAdministrativeUnit
+  * Fixed validation of scoped role members' uniqueness
 * AADGroup
   * Various timing-related fixes for new group
 * AADEntitlementManagementAccessPackageAssignmentPolicy
