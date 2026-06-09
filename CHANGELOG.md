@@ -4,6 +4,9 @@
 
 * AADAdministrativeUnit
   * Fixed validation of scoped role members' uniqueness
+* AADApplication
+  * Fixed an issue where the delegated permissions were not returned as an array.
+    FIXES [#7190] (https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7190)
 * AADGroup
   * Various timing-related fixes for new group
 * AADEntitlementManagementAccessPackageAssignmentPolicy
