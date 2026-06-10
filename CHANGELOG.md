@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* SPOSharingSettings
+  * Reduced Get-TargetResource cost from O(n) (where n = number of non-OneDrive site collections in the tenant) to O(1) on the common path. Falls back to the original enumeration when the URL cannot be resolved.
+  * This fixed an issue where tenants with large numbers of sites could spend 15 minutes or more on this single resource.
 * AADAdministrativeUnit
   * Fixed validation of scoped role members' uniqueness
 * AADGroup

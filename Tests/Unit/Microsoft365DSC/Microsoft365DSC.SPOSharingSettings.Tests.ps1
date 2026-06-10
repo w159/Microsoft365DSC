@@ -171,6 +171,102 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $result | Should -Not -BeNullOrEmpty
             }
         }
+        Context -Name 'My Site Host lookup (perf fix)' -Fixture {
+            BeforeAll {
+                $optParams = @{
+                    Credential       = $Credential
+                    IsSingleInstance = 'Yes'
+                }
+
+                # Mock Get-PnPTenantSite once for the whole context. It responds
+                # to BOTH the direct -Identity lookup AND the legacy -Filter
+                # enumeration so either path can be exercised by overriding
+                # Get-PnPConnection per-It below.
+                Mock -CommandName Get-PnPTenantSite -MockWith {
+                    if (-not [string]::IsNullOrEmpty($Identity) -and $Identity -like '*-my.*')
+                    {
+                        return @{
+                            Url               = 'https://contoso-my.sharepoint.com/'
+                            Template          = 'SPSMSITEHOST#0'
+                            SharingCapability = 'Disabled'
+                        }
+                    }
+                    if ($null -ne $Filter)
+                    {
+                        return @{
+                            Url      = 'https://contoso-my.sharepoint.com/'
+                            Template = 'SPSMSITEHOST#0'
+                        }
+                    }
+                    return $null
+                }
+
+                Mock -CommandName Get-PnPTenant -MockWith {
+                    return @{
+                        SharingCapability                          = 'Disabled'
+                        ShowEveryoneClaim                          = $false
+                        ShowAllUsersClaim                          = $false
+                        ShowEveryoneExceptExternalUsersClaim       = $true
+                        ProvisionSharedWithEveryoneFolder          = $false
+                        EnableGuestSignInAcceleration              = $false
+                        BccExternalSharingInvitations              = $false
+                        BccExternalSharingInvitationsList          = ''
+                        RequireAnonymousLinksExpireInDays          = 730
+                        SharingAllowedDomainList                   = ''
+                        SharingBlockedDomainList                   = ''
+                        SharingDomainRestrictionMode               = ''
+                        DefaultSharingLinkType                     = 'AnonymousAccess'
+                        PreventExternalUsersFromResharing          = $false
+                        ShowPeoplePickerSuggestionsForGuestUsers   = $false
+                        FileAnonymousLinkType                      = 'Edit'
+                        FolderAnonymousLinkType                    = 'Edit'
+                        NotifyOwnersWhenItemsReshared              = $true
+                        DefaultLinkPermission                      = 'View'
+                        RequireAcceptingAccountMatchInvitedAccount = $false
+                    }
+                }
+            }
+
+            It 'Resolves the My Site Host with a single -Identity call when the URL can be derived' {
+                # Mock-in-It (rather than BeforeAll) so this Get-PnPConnection
+                # state is unambiguous regardless of any prior context's mocks.
+                Mock -CommandName Get-PnPConnection -MockWith {
+                    return @{ Url = 'https://contoso.sharepoint.com' }
+                }
+
+                $null = Get-TargetResource @optParams
+
+                Should -Invoke -CommandName Get-PnPTenantSite -Times 1 -Exactly `
+                    -ParameterFilter { $Identity -like '*-my.*' }
+                Should -Invoke -CommandName Get-PnPTenantSite -Times 0 -Exactly `
+                    -ParameterFilter { $null -ne $Filter }
+            }
+
+            It 'Returns SharingCapability read from the direct -Identity lookup as MySiteSharingCapability' {
+                Mock -CommandName Get-PnPConnection -MockWith {
+                    return @{ Url = 'https://contoso.sharepoint.com' }
+                }
+
+                $result = Get-TargetResource @optParams
+                $result.MySiteSharingCapability | Should -Be 'Disabled'
+            }
+
+            It 'Falls back to the -Filter enumeration when the My Site Host URL cannot be resolved' {
+                # Return a concrete object with an empty Url so $null -ne (Get-PnPConnection)
+                # but $connectionUrl ends up empty -> optimized branch must skip.
+                # (Returning bare $null from a Pester mock script block is unreliable;
+                # the real cmdlet can leak through when the mock produces "no output".)
+                Mock -CommandName Get-PnPConnection -MockWith { return @{ Url = $null } }
+
+                $null = Get-TargetResource @optParams
+
+                # Tripwire: confirm our Get-PnPConnection mock actually fired.
+                Should -Invoke -CommandName Get-PnPConnection -Times 1
+
+                Should -Invoke -CommandName Get-PnPTenantSite -Times 1 -Exactly `
+                    -ParameterFilter { $null -ne $Filter }
+            }
+        }
     }#inmodulescope
 }#describe
 
