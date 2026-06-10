@@ -293,11 +293,10 @@ function Set-TargetResource
         $Policy = New-MgBetaDirectorySetting -TemplateId '62375ab9-6b52-47ed-826b-58e47e0e304b' | Out-Null
         $needToUpdate = $true
     }
-    elseif ($currentPolicy.Ensure -eq 'Present')
-    {
-        $Policy = Get-MgBetaDirectorySetting -All | Where-Object -FilterScript { $_.DisplayName -eq 'Group.Unified' }
-    }
 
+    $Policy = Invoke-M365DSCCommand -ScriptBlock {
+        Get-MgBetaDirectorySetting -DirectorySettingId $Policy.id
+    } -RetryOnNotFoundError
     if (($Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present') -or $needToUpdate)
     {
         $groupObject = $null
@@ -367,10 +366,7 @@ function Set-TargetResource
             values = $newValues
         }
         Write-Verbose -Message "Updating Policy's Values with $($body | ConvertTo-Json -Depth 10)"
-        Invoke-M365DSCCommand -ScriptBlock  {
-            Update-MgBetaDirectorySetting -DirectorySettingId $Policy.id -BodyParameter $body
-        } -RetryOnNotFoundError
-
+        Update-MgBetaDirectorySetting -DirectorySettingId $Policy.id -BodyParameter $body
     }
     elseif ($Ensure -eq 'Absent' -and $currentPolicy.Ensure -eq 'Present')
     {
