@@ -6,6 +6,8 @@
   * Fixed validation of scoped role members' uniqueness
 * AADGroup
   * Various timing-related fixes for new group
+* AADGroupsSettings
+  * Fixed issue with handling of existing DirectorySetting-object during update
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * Fixed comparison in New-M365DSCDeltaReport
 * AADServicePrincipal
