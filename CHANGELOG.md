@@ -33,6 +33,9 @@
     FIXES [#7185](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7185)
 * O365OrgSettings
   * Fixed intermittent exception comparing install-options
+* SCDLPCompliancePolicy
+  * Fixed a parameter binding issue when resolving groups.
+    FIXES [#7209](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7209)
 * SPOTenantSettings
   * Improve handling of parameters when updating settings
 * M365DSCPermissions
