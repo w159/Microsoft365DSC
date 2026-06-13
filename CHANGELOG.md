@@ -21,6 +21,8 @@
     FIXES [#7201](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7201)
 * AADUser
   * Fixed issues for timing-related new user
+  * Fixed an issue where Administrative Units were exported in the `MemberOf` collection.
+    FIXES [#7198](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7198)
 * EXOHostedContentFilterPolicy
   * Fixed export of AllowedSenderDomains, AllowedSenders, BlockedSenderDomains, BlockedSenders
 * IntuneAntivirusPolicyLinux
