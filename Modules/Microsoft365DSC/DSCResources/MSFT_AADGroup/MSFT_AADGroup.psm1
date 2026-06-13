@@ -591,8 +591,8 @@ function Set-TargetResource
 
                 $skuInfo = $allSkus | Where-Object -FilterScript { ($_.SkuPartNumber -replace [char]0xFEFF, '') -eq $assignedLicense.SkuId }
                 $licensesToAdd += @{
-                    DisabledPlans = $disabledPlansValues
-                    SkuId         = $skuInfo.SkuId
+                    disabledPlans = $disabledPlansValues
+                    skuId         = $skuInfo.SkuId
                 }
             }
             elseif ($toRemove.Contains($assignedLicense.SkuId))
@@ -1308,10 +1308,12 @@ function Export-TargetResource
                 SecurityEnabled       = $true
                 MailEnabled           = $true
                 Id                    = $group.Id
+                Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint
-                Credential            = $Credential
+                CertificatePath       = $CertificatePath
+                CertificatePassword   = $CertificatePassword
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
@@ -1410,8 +1412,8 @@ function Get-M365DSCAzureADGroupLicenses
             $disabledPlansValues += $foundItem.ServicePlanName
         }
         $currentLicense = @{
-            DisabledPlans = $disabledPlansValues
-            SkuId         = $skuPartNumber.SkuPartNumber -replace [char]0xFEFF
+            disabledPlans = $disabledPlansValues
+            skuId         = $skuPartNumber.SkuPartNumber -replace [char]0xFEFF
         }
         $returnValue += $currentLicense
     }
@@ -1440,8 +1442,8 @@ function Get-M365DSCCombinedLicenses
         {
             Write-Verbose -Message "Including Current $license"
             $result += @{
-                SkuId         = $license.SkuId
-                DisabledPlans = $license.DisabledPlans
+                skuId         = $license.SkuId
+                disabledPlans = $license.DisabledPlans
             }
         }
     }
@@ -1454,17 +1456,17 @@ function Get-M365DSCCombinedLicenses
             if ($result.Length -eq 0)
             {
                 $result += @{
-                    SkuId         = $licenseSkuId
-                    DisabledPlans = $license.DisabledPlans
+                    skuId         = $licenseSkuId
+                    disabledPlans = $license.DisabledPlans
                 }
             }
             else
             {
-                if (-not $result.SkuId.Contains($licenseSkuId))
+                if (-not $result.skuId.Contains($licenseSkuId))
                 {
                     $result += @{
-                        SkuId         = $licenseSkuId
-                        DisabledPlans = $license.DisabledPlans
+                        skuId         = $licenseSkuId
+                        disabledPlans = $license.DisabledPlans
                     }
                 }
                 else
@@ -1472,9 +1474,9 @@ function Get-M365DSCCombinedLicenses
                     # Set the Desired Disabled Plans if the sku is already added to the list
                     foreach ($item in $result)
                     {
-                        if ($item.SkuId -eq $licenseSkuId)
+                        if ($item.skuId -eq $licenseSkuId)
                         {
-                            $item.DisabledPlans = $license.DisabledPlans
+                            $item.disabledPlans = $license.disabledPlans
                         }
                     }
                 }
