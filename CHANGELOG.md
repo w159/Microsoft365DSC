@@ -4,6 +4,9 @@
 
 * AADAdministrativeUnit
   * Fixed validation of scoped role members' uniqueness
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Fixed an issue where not all properties were exported.
+    FIXES [#7203](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7203)
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue when adding a new value to an existing definition.
     FIXES [#7191](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7191)
