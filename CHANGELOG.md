@@ -43,6 +43,10 @@
     FIXES [#7205](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7205)
 * SettingsCatalogHelper - C#
   * Added forward slash character replacement in property names.
+* MISC
+  * Fixed an issue where `CertificatePath` and `CertificatePassword` parameters
+    were omitted during export of several resources.
+    FIXES [#7208](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7208)
 
 # 1.26.603.1
 

@@ -1308,10 +1308,12 @@ function Export-TargetResource
                 SecurityEnabled       = $true
                 MailEnabled           = $true
                 Id                    = $group.Id
+                Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
                 CertificateThumbprint = $CertificateThumbprint
-                Credential            = $Credential
+                CertificatePath       = $CertificatePath
+                CertificatePassword   = $CertificatePassword
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
