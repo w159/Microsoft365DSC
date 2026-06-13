@@ -15,17 +15,21 @@
     FIXES [#7192](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7192)
 * AADTenantAppManagementPolicy
   * Fixed an issue when updating the resource.
-  FIXES [#7201](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7201)
+    FIXES [#7201](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7201)
 * AADUser
-  * Fixes for timing-related new user
+  * Fixed issues for timing-related new user
 * EXOHostedContentFilterPolicy
-  * Fixes export of AllowedSenderDomains, AllowedSenders, BlockedSenderDomains, BlockedSenders
+  * Fixed export of AllowedSenderDomains, AllowedSenders, BlockedSenderDomains, BlockedSenders
+* IntuneAntivirusPolicyLinux
+  * Added support for new properties and fixed an issue where values were not exported correctly.
 * O365OrgSettings
-  * Fixes intermittent exception comparing install-options
+  * Fixed intermittent exception comparing install-options
 * SPOTenantSettings
   * Improve handling of parameters when updating settings
 * M365DSCPermissions
   * Fixed an issue when updating app certs.
+* SettingsCatalogHelper - C#
+  * Added forward slash character replacement in property names.
 
 # 1.26.603.1
 
@@ -35,7 +39,9 @@
 * AADFilteringPolicyRule
   * Fixed an issue where an incorrect number of instances to export was shown.
 * AADOrganizationCertificateBasedAuthConfiguration
-  * Fixed an issue where the `Certificate` property was incorrectly converted using `ToBase64String` when the Graph SDK already returns it as a Base64 string. FIXES [#7193](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7193)
+  * Fixed an issue where the `Certificate` property was incorrectly converted using `ToBase64String`
+    when the Graph SDK already returns it as a Base64 string.
+    FIXES [#7193](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7193)
 * AzureRoleDefinition
   * Initial Release
     FIXES [#7077](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7077)
