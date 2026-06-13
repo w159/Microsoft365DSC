@@ -36,6 +36,9 @@
 * IntuneAntivirusPolicyLinux
   * Added support for new properties and fixed an issue where values were not exported correctly.
     FIXES [#7185](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7185)
+* IntuneDeviceCompliancePolicyMacOS
+  * Fixed an issue where `ScheduledActionsForRule` was exported as a String array.
+    FIXES [#7220](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7220)
 * O365OrgSettings
   * Fixed intermittent exception comparing install-options
 * SCDLPCompliancePolicy
