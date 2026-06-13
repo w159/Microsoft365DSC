@@ -10,6 +10,9 @@
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue when adding a new value to an existing definition.
     FIXES [#7191](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7191)
+* AADEntitlementManagementRoleAssignment
+  * Fixed an issue when resolving a user principal during the Set operation.
+    FIXES [#7223](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7223)
 * AADGroup
   * Various timing-related fixes for new group
   * Fixed an issue with invalid casing of properties.
