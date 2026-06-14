@@ -49,6 +49,8 @@
     FIXES [#7209](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7209)
 * SPOTenantSettings
   * Improve handling of parameters when updating settings
+* M365DSCGraphShim
+  * Fixed an issue where uris with a # were not resolved properly.
 * M365DSCPermissions
   * Fixed an issue when updating app certificates.
     FIXES [#7205](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7205)
