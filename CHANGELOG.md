@@ -17,6 +17,7 @@
   * Various timing-related fixes for new group
   * Fixed an issue with invalid casing of properties.
     FIXES [#7224](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7224)
+  * Fixed an issue when updating the `MemberOf` property.
 * AADGroupsSettings
   * Fixed issue with handling of existing DirectorySetting-object during update
 * AADEntitlementManagementAccessPackageAssignmentPolicy
