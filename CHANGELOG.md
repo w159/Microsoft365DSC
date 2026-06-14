@@ -10,6 +10,9 @@
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue when adding a new value to an existing definition.
     FIXES [#7191](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7191)
+* AADEntitlementManagementAccessPackageAssignmentPolicy
+  * Fixed comparison in New-M365DSCDeltaReport.
+  * Fixed an issue where a `description` property was exported within a reviewer.
 * AADEntitlementManagementRoleAssignment
   * Fixed an issue when resolving a user principal during the Set operation.
     FIXES [#7223](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7223)
@@ -20,8 +23,6 @@
   * Fixed an issue when updating the `MemberOf` property.
 * AADGroupsSettings
   * Fixed issue with handling of existing DirectorySetting-object during update
-* AADEntitlementManagementAccessPackageAssignmentPolicy
-  * Fixed comparison in New-M365DSCDeltaReport
 * AADServicePrincipal
   * Fixed and issue where Custom SecurityAttributes were not handled properly.
     FIXES [#7192](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7192)
