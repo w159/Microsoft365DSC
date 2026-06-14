@@ -53,7 +53,9 @@
   * Fixed a parameter binding issue when resolving groups.
     FIXES [#7209](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7209)
 * SPOTenantSettings
-  * Improve handling of parameters when updating settings
+  * Improved handling of parameters when updating settings.
+  * Fixed an issue where Graph parameters were skipped.
+    FIXES [#7227](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7227)
 * M365DSCGraphShim
   * Fixed an issue where uris with a # were not resolved properly.
 * M365DSCPermissions
@@ -65,6 +67,8 @@
   * Fixed an issue where `CertificatePath` and `CertificatePassword` parameters
     were omitted during export of several resources.
     FIXES [#7208](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7208)
+  * Fixed an issue where `-Force` was not used for `Set-PnPTenant`.
+    FIXES [#7226](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7226)
 
 # 1.26.603.1
 
