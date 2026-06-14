@@ -43,6 +43,9 @@
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was exported as a String array.
     FIXES [#7220](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7220)
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Fixed an issue where a wrong instance name was used for `KioskModeAppPositions`.
+    FIXES [#7186](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7186)
 * O365OrgSettings
   * Fixed intermittent exception comparing install-options
 * SCDLPCompliancePolicy
