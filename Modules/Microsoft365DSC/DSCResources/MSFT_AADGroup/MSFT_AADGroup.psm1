@@ -933,7 +933,7 @@ function Set-TargetResource
                     if ($diff.SideIndicator -eq '=>')
                     {
                         # see if memberOfGroup contains property SecurityEnabled (it can be true or false)
-                        if ($memberOfGroup.psobject.Typenames -match 'Group')
+                        if ($memberOfGroup.SecurityEnabled)
                         {
                             Write-Verbose -Message "Adding AAD group {$($currentGroup.DisplayName)} as member of AAD group {$($memberOfGroup.DisplayName)}"
                             New-MgGroupMemberByRef -GroupId ($memberOfGroup.Id) -BodyParameter @{
@@ -947,7 +947,7 @@ function Set-TargetResource
                     }
                     elseif ($diff.SideIndicator -eq '<=')
                     {
-                        if ($memberOfGroup.psobject.Typenames -match 'Group')
+                        if ($memberOfGroup.SecurityEnabled)
                         {
                             Write-Verbose -Message "Removing AAD Group {$($currentGroup.DisplayName)} from AAD group {$($memberOfGroup.DisplayName)}"
                             Remove-MgGroupMemberDirectoryObjectByRef -GroupId ($memberOfGroup.Id) -DirectoryObjectId ($currentGroup.Id) | Out-Null

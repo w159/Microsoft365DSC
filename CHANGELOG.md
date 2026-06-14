@@ -10,6 +10,9 @@
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue when adding a new value to an existing definition.
     FIXES [#7191](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7191)
+* AADEntitlementManagementAccessPackageAssignmentPolicy
+  * Fixed comparison in New-M365DSCDeltaReport.
+  * Fixed an issue where a `description` property was exported within a reviewer.
 * AADEntitlementManagementRoleAssignment
   * Fixed an issue when resolving a user principal during the Set operation.
     FIXES [#7223](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7223)
@@ -17,10 +20,9 @@
   * Various timing-related fixes for new group
   * Fixed an issue with invalid casing of properties.
     FIXES [#7224](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7224)
+  * Fixed an issue when updating the `MemberOf` property.
 * AADGroupsSettings
   * Fixed issue with handling of existing DirectorySetting-object during update
-* AADEntitlementManagementAccessPackageAssignmentPolicy
-  * Fixed comparison in New-M365DSCDeltaReport
 * AADServicePrincipal
   * Fixed and issue where Custom SecurityAttributes were not handled properly.
     FIXES [#7192](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7192)
@@ -42,6 +44,9 @@
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was exported as a String array.
     FIXES [#7220](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7220)
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Fixed an issue where a wrong instance name was used for `KioskModeAppPositions`.
+    FIXES [#7186](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7186)
 * O365OrgSettings
   * Fixed intermittent exception comparing install-options
 * SCDLPCompliancePolicy
@@ -49,6 +54,8 @@
     FIXES [#7209](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7209)
 * SPOTenantSettings
   * Improve handling of parameters when updating settings
+* M365DSCGraphShim
+  * Fixed an issue where uris with a # were not resolved properly.
 * M365DSCPermissions
   * Fixed an issue when updating app certificates.
     FIXES [#7205](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7205)
