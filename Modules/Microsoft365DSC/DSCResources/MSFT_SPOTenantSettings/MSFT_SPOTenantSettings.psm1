@@ -712,7 +712,7 @@ function Set-TargetResource
     }
 
     $null = New-M365DSCConnection -Workload 'PNP' -InboundParameters $PSBoundParameters
-    $null = Set-PnPTenant @CurrentParameters
+    $null = Set-PnPTenant @CurrentParameters -Force
 
     # Updating via REST
     try

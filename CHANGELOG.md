@@ -67,6 +67,8 @@
   * Fixed an issue where `CertificatePath` and `CertificatePassword` parameters
     were omitted during export of several resources.
     FIXES [#7208](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7208)
+  * Fixed an issue where `-Force` was not used for `Set-PnPTenant`.
+    FIXES [#7226](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7226)
 
 # 1.26.603.1
 
