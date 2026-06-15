@@ -1711,6 +1711,8 @@ function Export-TargetResource
                 DisplayName           = $AADApp.DisplayName
                 ObjectID              = $AADApp.Id
                 Credential            = $Credential
+                CertificatePath       = $CertificatePath
+                CertificatePassword   = $CertificatePassword
                 ManagedIdentity       = $ManagedIdentity.IsPresent
                 AccessTokens          = $AccessTokens
             }
