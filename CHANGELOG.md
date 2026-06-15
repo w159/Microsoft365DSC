@@ -26,6 +26,8 @@
   * Fixed an issue when updating the `MemberOf` property.
   * Fixed an issue where an empty `Id` would result in all groups being returned.
     FIXES [#7225](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7225)
+  * Fixed an issue where `MemberOf` and `GroupAsMembers` could not be set if both
+    properties were set to an empty array.
 * AADGroupsSettings
   * Fixed issue with handling of existing DirectorySetting-object during update
 * AADServicePrincipal
