@@ -152,7 +152,7 @@ function Get-TargetResource
             $nullReturn.AssignedToRole = @()
             $nullReturn.AssignedLicenses = @()
 
-            if ($PSBoundParameters.ContainsKey('Id'))
+            if ($PSBoundParameters.ContainsKey('Id') -and -not [System.String]::IsNullOrEmpty($Id))
             {
                 Write-Verbose -Message 'GroupID was specified'
                 try

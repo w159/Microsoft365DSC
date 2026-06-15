@@ -4,6 +4,9 @@
 
 * AADAdministrativeUnit
   * Fixed validation of scoped role members' uniqueness
+* AADConditionalAccessPolicy
+  * Fixed an issue where an empty `Id` would result in all policies being returned.
+    FIXES [#7225](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7225)
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Fixed an issue where not all properties were exported.
     FIXES [#7203](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7203)
@@ -21,6 +24,8 @@
   * Fixed an issue with invalid casing of properties.
     FIXES [#7224](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7224)
   * Fixed an issue when updating the `MemberOf` property.
+  * Fixed an issue where an empty `Id` would result in all groups being returned.
+    FIXES [#7225](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7225)
 * AADGroupsSettings
   * Fixed issue with handling of existing DirectorySetting-object during update
 * AADServicePrincipal
