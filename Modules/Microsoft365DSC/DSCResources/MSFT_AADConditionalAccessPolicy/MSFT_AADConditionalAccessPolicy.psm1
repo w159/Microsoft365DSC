@@ -312,7 +312,7 @@ function Get-TargetResource
             Add-M365DSCTelemetryEvent -Data $data
             #endregion
 
-            if ($PSBoundParameters.ContainsKey('Id'))
+            if ($PSBoundParameters.ContainsKey('Id') -and -not [System.String]::IsNullOrEmpty($Id))
             {
                 Write-Verbose -Message 'PolicyID was specified'
                 try
