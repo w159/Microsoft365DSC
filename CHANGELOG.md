@@ -36,6 +36,8 @@
 * AADServicePrincipal
   * Fixed and issue where Custom SecurityAttributes were not handled properly.
     FIXES [#7192](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7192)
+  * Fixed an issue where adding `AppRoleAssignedTo` assignments could send a null app role id.
+    FIXES [#7235](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7235)
 * AADTenantAppManagementPolicy
   * Fixed an issue when updating the resource.
     FIXES [#7201](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7201)

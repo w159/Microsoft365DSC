@@ -693,7 +693,7 @@ function Set-TargetResource
                     $PrincipalIdValue = $group.Id
                 }
 
-                $appRoleId = ($newSP.AppRoles | Where-Object -FilterScript { $_.DisplayName -eq $assignment.PrincipalType }).Id
+                $appRoleId = Get-M365DSCAADServicePrincipalAppRoleId -AppRoles $newSP.AppRoles -PrincipalType $assignment.PrincipalType
                 $bodyParam = @{
                     principalId = $PrincipalIdValue
                     resourceId  = $newSP.Id
@@ -796,7 +796,7 @@ function Set-TargetResource
                             $PrincipalIdValue = $group.Id
                         }
 
-                        $appRoleId = ($appInstance.AppRoles | Where-Object -FilterScript { $_.DisplayName -eq $assignment.PrincipalType }).Id
+                        $appRoleId = Get-M365DSCAADServicePrincipalAppRoleId -AppRoles $appInstance.AppRoles -PrincipalType $assignment.PrincipalType
                         $bodyParam = @{
                             principalId = $PrincipalIdValue
                             resourceId  = $currentAADServicePrincipal.ObjectID
@@ -1504,6 +1504,30 @@ function Get-CompareParameters
     return @{
         ExcludedProperties = @('ObjectId', 'KeyCredentials', 'PasswordCredentials', 'ReplyUrls', 'LogoutUrl')
     }
+}
+
+function Get-M365DSCAADServicePrincipalAppRoleId
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter()]
+        [AllowNull()]
+        [System.Object[]]
+        $AppRoles,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $PrincipalType
+    )
+
+    $appRoleId = ($AppRoles | Where-Object -FilterScript { $_.DisplayName -eq $PrincipalType } | Select-Object -First 1).Id
+    if ([System.String]::IsNullOrEmpty($appRoleId))
+    {
+        $appRoleId = '00000000-0000-0000-0000-000000000000'
+    }
+
+    return $appRoleId
 }
 
 Export-ModuleMember -Function @('*-TargetResource', 'Get-CompareParameters')
