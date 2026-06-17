@@ -1,14 +1,5 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
-
-* IntuneDeviceConfigurationPlatformScriptMacOS
-  * Removed `Id` as being a mandatory parameter
-    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
-* IntuneDeviceConfigurationPlatformScriptWindows
-  * Removed `Id` as being a mandatory parameter
-    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
-
 # 1.26.617.1
 
 * AADAdministrativeUnit
@@ -65,6 +56,12 @@
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was exported as a String array.
     FIXES [#7220](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7220)
+* IntuneDeviceConfigurationPlatformScriptMacOS
+  * Removed `Id` as being a mandatory parameter
+    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
+* IntuneDeviceConfigurationPlatformScriptWindows
+  * Removed `Id` as being a mandatory parameter
+    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
   * Fixed an issue where a wrong instance name was used for `KioskModeAppPositions`.
     FIXES [#7186](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7186)
