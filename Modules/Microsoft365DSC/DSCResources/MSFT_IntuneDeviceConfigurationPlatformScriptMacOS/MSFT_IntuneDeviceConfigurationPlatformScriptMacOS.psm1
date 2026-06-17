@@ -44,7 +44,7 @@ function Get-TargetResource
         [System.String]
         $ScriptContent,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Id,
 
