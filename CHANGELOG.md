@@ -1,5 +1,14 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneDeviceConfigurationPlatformScriptMacOS
+  * Removed `Id` as being a mandatory parameter
+    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
+* IntuneDeviceConfigurationPlatformScriptWindows
+  * Removed `Id` as being a mandatory parameter
+    FIXES [#7243](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7243)
+
 # 1.26.617.1
 
 * AADAdministrativeUnit
