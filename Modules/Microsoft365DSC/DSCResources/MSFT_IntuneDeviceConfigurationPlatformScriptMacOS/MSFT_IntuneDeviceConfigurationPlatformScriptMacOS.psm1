@@ -119,10 +119,13 @@ function Get-TargetResource
 
         $getValue = $null
         #region resource generator code
-        $getValue = Get-MgBetaDeviceManagementDeviceShellScript `
-            -DeviceShellScriptId $Id `
-            -ExpandProperty 'assignments' `
-            -ErrorAction SilentlyContinue
+        if (-not [System.String]::IsNullOrEmpty($Id))
+        {
+            $getValue = Get-MgBetaDeviceManagementDeviceShellScript `
+                -DeviceShellScriptId $Id `
+                -ExpandProperty 'assignments' `
+                -ErrorAction SilentlyContinue
+        }
 
         if ($null -eq $getValue)
         {
