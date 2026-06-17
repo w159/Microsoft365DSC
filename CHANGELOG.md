@@ -47,6 +47,8 @@
     FIXES [#7198](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7198)
 * EXOHostedContentFilterPolicy
   * Fixed export of AllowedSenderDomains, AllowedSenders, BlockedSenderDomains, BlockedSenders
+* EXOManagementRole
+  * Added retry and logging when `Get-ManagementRole` returns no results.
 * IntuneAntivirusPolicyLinux
   * Added support for new properties and fixed an issue where values were not exported correctly.
     FIXES [#7185](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7185)
