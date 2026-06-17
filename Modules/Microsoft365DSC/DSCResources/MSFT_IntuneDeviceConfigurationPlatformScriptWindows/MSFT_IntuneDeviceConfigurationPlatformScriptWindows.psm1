@@ -238,7 +238,7 @@ function Set-TargetResource
         [System.String]
         $ScriptContent,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Id,
 
@@ -399,7 +399,7 @@ function Test-TargetResource
         [System.String]
         $ScriptContent,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Id,
 
