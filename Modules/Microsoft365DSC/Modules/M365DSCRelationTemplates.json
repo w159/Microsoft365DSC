@@ -8,14 +8,10 @@
           "targetResource": "AADGroup",
           "targetKeyProperty": "DisplayName",
           "condition": "dataType in ['#microsoft.graph.groupAssignmentTarget', '#microsoft.graph.exclusionGroupAssignmentTarget']"
-        }
-      ]
-    },
-    "IntuneAssignmentFilter": {
-      "relations": [
+        },
         {
           "property": "Assignments",
-          "childProperty": "deviceAndAppManagementAssignmentFilterId",
+          "childProperty": "deviceAndAppManagementAssignmentFilterDisplayName",
           "targetResource": "IntuneDeviceAndAppManagementAssignmentFilter",
           "targetKeyProperty": "DisplayName"
         }
