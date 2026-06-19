@@ -1,6 +1,16 @@
 $Script:M365DSCStringReplacementMap = @{}
 $Script:M365DSCMandatoryKeyCache = @{}
 $Script:M365DSCCompiledRegexCache = @{}
+$Script:M365DSCAuthenticationParameterSet = @{
+    ServicePrincipalWithThumbprint = @('ApplicationId', 'CertificateThumbprint', 'TenantId')
+    ServicePrincipalWithSecret = @('ApplicationId', 'ApplicationSecret', 'TenantId')
+    ServicePrincipalWithPath = @('ApplicationId', 'CertificatePath', 'CertificatePassword', 'TenantId')
+    CredentialsWithTenantId = @('Credential', 'TenantId')
+    CredentialsWithApplicationId = @('Credential', 'ApplicationId')
+    Credentials = @('Credential')
+    ManagedIdentity = @('ManagedIdentity', 'TenantId')
+    AccessTokens = @('AccessTokens', 'TenantId')
+}
 
 <#
 .Description
@@ -333,11 +343,11 @@ function Export-M365DSCConfiguration
     }
 
     $Tenant = Get-M365DSCTenantNameFromParameterSet -ParameterSet $PSBoundParameters
-    $ConnectionMode = Get-M365DSCAuthenticationMode $PSBoundParameters
+    $Script:ConnectionMode = Get-M365DSCAuthenticationMode $PSBoundParameters
     $data.Add('Tenant', $Tenant)
     $currentExportID = (New-Guid).ToString()
     $data.Add('M365DSCExportId', $currentExportID)
-    $data.Add('ConnectionMode', $ConnectionMode)
+    $data.Add('ConnectionMode', $Script:ConnectionMode)
 
     $telemetryParams = Get-M365DSCTelemetryConnectionParameter
     # Define connection to Graph parameters because it is required by the telemetry.
@@ -461,7 +471,7 @@ function Export-M365DSCConfiguration
         $data.Add('Tenant', $Tenant)
     }
     $data.Add('M365DSCExportId', $currentExportID)
-    $data.Add('ConnectionMode', $ConnectionMode)
+    $data.Add('ConnectionMode', $Script:ConnectionMode)
     $timeTaken = [System.DateTime]::Now.Subtract($currentStartDateTime)
     $data.Add('TotalSeconds', $timeTaken.TotalSeconds)
     Add-M365DSCTelemetryEvent -Type 'ExportCompleted' -Data $data
@@ -1627,7 +1637,7 @@ function Get-M365DSCMinimalExportBlocks
         $UnresolvedTargets
     )
 
-    $stubBuilder = [System.Text.StringBuilder]::New()
+    $stubBuilder = [System.Text.StringBuilder]::new()
     [void]$stubBuilder.Append("`r`n        # Dependency stubs - minimal resource blocks for referenced resources`r`n")
 
     $dictionary = $null
@@ -1660,7 +1670,6 @@ function Get-M365DSCMinimalExportBlocks
         if ($null -ne $resourceInfo)
         {
             $keyProps = $resourceInfo.Properties | Where-Object -FilterScript { $_.IsMandatory }
-            $targetKeyPropertyName = 'DisplayName'
             foreach ($prop in $keyProps)
             {
                 if ($prop.Name -eq 'IsSingleInstance')
@@ -1678,7 +1687,18 @@ function Get-M365DSCMinimalExportBlocks
                 elseif ($prop.Name -in @('DisplayName', 'MailNickName', 'Name', 'Title', 'Identity', 'Id'))
                 {
                     [void]$stubBuilder.Append("            $($prop.Name) = `"$targetKey`"`r`n")
-                    $targetKeyPropertyName = $prop.Name
+                }
+            }
+
+            foreach ($prop in $Script:M365DSCAuthenticationParameterSet.$($Script:ConnectionMode))
+            {
+                if ($prop -eq 'ManagedIdentity')
+                {
+                    [void]$stubBuilder.Append("            $($prop) = `$true`r`n")
+                }
+                else
+                {
+                    [void]$stubBuilder.Append("            $($prop) = `$ConfigurationData.NonNodeData.$($prop)`r`n")
                 }
             }
         }
