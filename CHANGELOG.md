@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* IntuneRoleAssignment
+  * Fixed an issue where creating or updating a resource failed if the property
+    `ResourceScopes` was omitted.
+    FIXES [#7247](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7247)
+
 # 1.26.617.1
 
 * AADAdministrativeUnit
