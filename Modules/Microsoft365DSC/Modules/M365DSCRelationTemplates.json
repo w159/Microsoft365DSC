@@ -16,6 +16,15 @@
           "targetKeyProperty": "DisplayName"
         }
       ]
+    },
+    "IntuneRootCertificateProfile": {
+      "relations": [
+        {
+          "property": "RootCertificateDisplayName",
+          "targetResource": "IntuneDeviceConfigurationTrustedCertificatePolicyWindows10",
+          "targetKeyProperty": "DisplayName"
+        }
+      ]
     }
   }
 }

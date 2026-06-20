@@ -1573,7 +1573,7 @@ function Add-M365DSCExportDependsOn
             $srcInstanceName = $Matches[2]
 
             # Build DependsOn line
-            $dependsOnEntries = $targets | ForEach-Object { "`"$_`"" }
+            $dependsOnEntries = Get-M365DSCArrayFromProperty -PropertyValue ($targets | ForEach-Object { "`"$_`"" }) -ElementType ([System.String])
             if ($dependsOnEntries.Count -eq 1)
             {
                 $dependsOnLine = "            DependsOn = @($($dependsOnEntries[0]))"
