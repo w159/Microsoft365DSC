@@ -553,7 +553,6 @@ function Export-TargetResource
         }
 
         $Results = Get-TargetResource @Params
-        $rawResults = $Results.Clone()
 
         if ($Results.Ensure -eq 'Present' -and $null -ne $Results.Devices -and $Results.Devices.Count -gt 0)
         {
