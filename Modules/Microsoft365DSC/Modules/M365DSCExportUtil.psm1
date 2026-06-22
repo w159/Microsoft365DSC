@@ -11,6 +11,15 @@ $Script:M365DSCAuthenticationParameterSet = @{
     ManagedIdentity = @('ManagedIdentity', 'TenantId')
     AccessTokens = @('AccessTokens', 'TenantId')
 }
+$templatesPath = Join-Path -Path $PSScriptRoot -ChildPath 'M365DSCRelationTemplates.json'
+$jsonContent = Get-Content -Path $templatesPath -Raw | ConvertFrom-Json
+$Script:RelationTemplates = @{
+    templates = @{}
+}
+foreach ($template in $jsonContent.templates.psobject.Properties)
+{
+    $Script:RelationTemplates.templates[$template.Name] = $template.Value
+}
 
 <#
 .Description
@@ -219,6 +228,12 @@ function Export-M365DSCConfiguration
         [Switch]
         $IncludeDependencies
     )
+
+    if ($IncludeDependencies.IsPresent)
+    {
+        Write-Warning -Message "The -IncludeDependencies parameter is currently in preview. Please review the generated configuration to ensure it captures the dependencies as expected.
+         If you encounter any issues or have feedback, please report it at https://github.com/Microsoft365DSC/Microsoft365DSC."
+    }
 
     $currentStartDateTime = [System.DateTime]::Now
     $Global:M365DSCExportInProgress = $true
@@ -750,8 +765,7 @@ function Get-M365DSCExportContentForResource
         }
         Resolve-M365DSCExportRelations -ResourceName $ResourceName `
             -InstanceName $instanceName `
-            -Results $resolveResults `
-            -ModulePath $ModulePath
+            -Results $resolveResults
     }
 
     $content = [System.Text.StringBuilder]::new()
@@ -1270,43 +1284,30 @@ function Resolve-M365DSCExportRelations
 
         [Parameter(Mandatory = $true)]
         [System.Collections.Hashtable]
-        $Results,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $ModulePath
+        $Results
     )
 
-    # Load settings.json for this resource
-    $settingsPath = Join-Path -Path $ModulePath -ChildPath 'settings.json'
-    if (-not (Test-Path -Path $settingsPath))
+    # Determine relations from template
+    $relations = @()
+    foreach ($template in $Script:RelationTemplates.templates.GetEnumerator())
     {
-        return
-    }
-
-    $settings = Get-Content -Path $settingsPath -Raw | ConvertFrom-Json
-
-    # Determine relations - either inline or from template
-    $relations = $null
-    if ($null -ne $settings.relations)
-    {
-        $relations = $settings.relations
-    }
-    elseif (-not [System.String]::IsNullOrEmpty($settings.relationsTemplate))
-    {
-        $templatesPath = Join-Path -Path $PSScriptRoot -ChildPath 'M365DSCRelationTemplates.json'
-        if (Test-Path -Path $templatesPath)
+        if ($template.Value.resources.Contains($ResourceName))
         {
-            $templates = Get-Content -Path $templatesPath -Raw | ConvertFrom-Json
-            $templateName = $settings.relationsTemplate
-            if ($null -ne $templates.templates.$templateName)
+            $resourceRelations = $template.Value.relations
+            foreach ($relation in $resourceRelations)
             {
-                $relations = $templates.templates.$templateName.relations
+                if ($null -ne $relation.'$ref')
+                {
+                    $templateName = $relation.'$ref'.Split("/")[-1]
+                    $relations += $Script:RelationTemplates.templates.$templateName.relations
+                    continue
+                }
+                $relations += $relation
             }
         }
     }
 
-    if ($null -eq $relations -or $relations.Count -eq 0)
+    if ($relations.Count -eq 0)
     {
         return
     }

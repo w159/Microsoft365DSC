@@ -82,6 +82,5 @@
         "Get-MSCloudLoginConnectionProfile"
       ]
     }
-  ],
-  "relationsTemplate": "IntuneRootCertificateProfile"
+  ]
 }

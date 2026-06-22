@@ -15,6 +15,10 @@
           "targetResource": "IntuneDeviceAndAppManagementAssignmentFilter",
           "targetKeyProperty": "DisplayName"
         }
+      ],
+      "resources": [
+        "IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy",
+        "IntuneAntivirusExclusionsPolicyMacOS"
       ]
     },
     "IntuneRootCertificateProfile": {
@@ -23,7 +27,13 @@
           "property": "RootCertificateDisplayName",
           "targetResource": "IntuneDeviceConfigurationTrustedCertificatePolicyWindows10",
           "targetKeyProperty": "DisplayName"
+        },
+        {
+          "$ref": "#/templates/IntuneAssignments"
         }
+      ],
+      "resources": [
+        "IntuneDeviceConfigurationSCEPCertificatePolicyWindows10"
       ]
     }
   }
