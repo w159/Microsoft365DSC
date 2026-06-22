@@ -11,6 +11,10 @@
   * Fixed an issue where creating or updating a resource failed if the property
     `ResourceScopes` was omitted.
     FIXES [#7247](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7247)
+* M365DSCExportUtil
+  * **PREVIEW**: Added the parameter `-IncludeDependencies` to `Export-M365DSCConfiguration`
+    to automatically export resources that are referenced by other resources.
+    FIXES [#597](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/597)
 
 # 1.26.617.1
 

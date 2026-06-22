@@ -1314,17 +1314,39 @@ function Resolve-M365DSCExportRelations
 
     foreach ($relation in $relations)
     {
-        $propertyName = $relation.property
         $propertyValue = $Results
-        for ($i = 0; $i -lt ($propertyName.Split('.').Count + 1); $i++)
+        $splittedProperty = $relation.property.Split('.')
+        for ($i = 0; $i -lt $splittedProperty.Count; $i++)
         {
-            $propertyName = $propertyName.Split('.')[$i]
-            if (-not $propertyValue.ContainsKey($propertyName))
+            $propertyName = $splittedProperty[$i]
+            if ($propertyValue -is [System.Array])
             {
-                continue
+                if ($propertyValue.Count -eq 0)
+                {
+                    continue
+                }
+
+                $found = $false
+                $propertyValue | Foreach-Object {
+                    if ($_ -is [System.Collections.IDictionary] -and $_.Contains($propertyName))
+                    {
+                        $found = $true
+                    }
+                }
+                if (-not $found)
+                {
+                    continue
+                }
+            }
+            else
+            {
+                if (-not $propertyValue.ContainsKey($propertyName))
+                {
+                    continue
+                }
             }
 
-            $propertyValue = $propertyValue[$propertyName]
+            $propertyValue = $propertyValue.$propertyName
             if ($null -eq $propertyValue)
             {
                 continue
@@ -1346,7 +1368,7 @@ function Resolve-M365DSCExportRelations
                 }
             }
         }
-        elseif ($propertyValue -is [System.Collections.Hashtable] -or $propertyValue -is [Microsoft.Management.Infrastructure.CimInstance])
+        elseif ($propertyValue -is [System.Collections.IDictionary] -or $propertyValue -is [Microsoft.Management.Infrastructure.CimInstance])
         {
             $targetKey = Get-M365DSCRelationTargetKey -Item $propertyValue -Relation $relation
             if (-not [System.String]::IsNullOrEmpty($targetKey))
@@ -1404,9 +1426,9 @@ function Get-M365DSCRelationTargetKey
     $childProperty = $Relation.childProperty
     $value = $null
 
-    if ($Item -is [System.Collections.Hashtable])
+    if ($Item -is [System.Collections.IDictionary])
     {
-        if ($Item.ContainsKey($childProperty))
+        if ($Item.Contains($childProperty))
         {
             $value = $Item[$childProperty]
         }
