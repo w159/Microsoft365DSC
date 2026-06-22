@@ -1,10 +1,10 @@
 <#
-.Description
-This function orchestrate the export process between Export-M365DSCConfiguration
-and the ReverseDSC module.
+.DESCRIPTION
+    This function orchestrate the export process between Export-M365DSCConfiguration
+    and the ReverseDSC module.
 
-.Functionality
-Internal
+.FUNCTIONALITY
+    Internal
 #>
 function Start-M365DSCConfigurationExtract
 {

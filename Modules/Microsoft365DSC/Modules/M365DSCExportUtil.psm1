@@ -22,68 +22,68 @@ foreach ($template in $jsonContent.templates.psobject.Properties)
 }
 
 <#
-.Description
-This is the main Microsoft365DSC.Reverse function that extracts the DSC configuration from an existing Microsoft 365 Tenant.
+.DESCRIPTION
+    This is the main Microsoft365DSC.Reverse function that extracts the DSC configuration from an existing Microsoft 365 Tenant.
 
-.Parameter LaunchWebUI
-Adding this parameter will open the WebUI in a browser.
+.PARAMETER LaunchWebUI
+    Adding this parameter will open the WebUI in a browser.
 
-.Parameter Path
-Specifies the path in which the exported DSC configuration should be stored.
+.PARAMETER Path
+    Specifies the path in which the exported DSC configuration should be stored.
 
-.Parameter FileName
-Specifies the name of the file in which the exported DSC configuration should be stored.
+.PARAMETER FileName
+    Specifies the name of the file in which the exported DSC configuration should be stored.
 
-.Parameter ConfigurationName
-Specifies the name of the configuration that will be generated.
+.PARAMETER ConfigurationName
+    Specifies the name of the configuration that will be generated.
 
-.Parameter Components
-Specifies the components for which an export should be created.
+.PARAMETER Components
+    Specifies the components for which an export should be created.
 
-.Parameter ExcludeComponents
-Specifies the components to skip when creating the export
+.PARAMETER ExcludeComponents
+    Specifies the components to skip when creating the export
 
-.Parameter Workloads
-Specifies the workload for which an export should be created for all resources.
+.PARAMETER Workloads
+    Specifies the workload for which an export should be created for all resources.
 
-.Parameter Mode
-Specifies the mode of the export: Default or Full.
+.PARAMETER Mode
+    Specifies the mode of the export: Default or Full.
 
-.Parameter GenerateInfo
-Specifies if each exported resource should get a link to the Wiki article of the resource.
+.PARAMETER GenerateInfo
+    Specifies if each exported resource should get a link to the Wiki article of the resource.
 
-.Parameter ApplicationId
-Specifies the application id to be used for authentication.
+.PARAMETER ApplicationId
+    Specifies the application id to be used for authentication.
 
-.Parameter ApplicationSecret
-Specifies the application secret of the application to be used for authentication.
+.PARAMETER ApplicationSecret
+    Specifies the application secret of the application to be used for authentication.
 
-.Parameter TenantId
-Specifies the id of the tenant.
+.PARAMETER TenantId
+    Specifies the id of the tenant.
 
-.Parameter CertificateThumbprint
-Specifies the thumbprint to be used for authentication.
+.PARAMETER CertificateThumbprint
+    Specifies the thumbprint to be used for authentication.
 
-.Parameter Credential
-Specifies the credentials to be used for authentication.
+.PARAMETER Credential
+    Specifies the credentials to be used for authentication.
 
-.Parameter CertificatePassword
-Specifies the password of the PFX file which is used for authentication.
+.PARAMETER CertificatePassword
+    Specifies the password of the PFX file which is used for authentication.
 
-.Parameter CertificatePath
-Specifies the path of the PFX file which is used for authentication.
+.PARAMETER CertificatePath
+    Specifies the path of the PFX file which is used for authentication.
 
-.Parameter Filters
-Specifies resource level filters to apply in order to reduce the number of instances exported.
+.PARAMETER Filters
+    Specifies resource level filters to apply in order to reduce the number of instances exported.
 
 .PARAMETER AccessTokens
     Specifies the access token to use for authentication.
 
-.Parameter ManagedIdentity
-Specifies use of managed identity for authentication.
+.PARAMETER ManagedIdentity
+    Specifies use of managed identity for authentication.
 
-.Parameter Validate
-Specifies that the configuration needs to be validated for conflicts or issues after its extraction is completed.
+.PARAMETER Validate
+    Specifies that the configuration needs to be validated for conflicts or issues after its extraction is completed.
 
 .PARAMETER Parallel
     Specifies that the export is executed in parallel.
@@ -94,23 +94,29 @@ Specifies that the configuration needs to be validated for conflicts or issues a
 .PARAMETER WithStatistics
     Specifies that statistics about the export should be shown after completion.
 
-.Example
-Export-M365DSCConfiguration -Components @("AADApplication", "AADConditionalAccessPolicy", "AADGroupsSettings") -Credential $Credential
+.PARAMETER IncludeDependencies
+    Specifies that resource dependencies should be included in the export.
 
-.Example
-Export-M365DSCConfiguration -Mode 'Default' -ApplicationId '2560bb7c-bc85-415f-a799-841e10ec4f9a' -TenantId 'contoso.sharepoint.com' -ApplicationSecret 'abcdefghijkl'
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Components @("AADApplication", "AADConditionalAccessPolicy", "AADGroupsSettings") -Credential $Credential
 
-.Example
-Export-M365DSCConfiguration -Components @("AADApplication", "AADConditionalAccessPolicy", "AADGroupsSettings") -Credential $Credential -Path 'C:\DSC' -FileName 'MyConfig.ps1'
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Mode 'Default' -ApplicationId '2560bb7c-bc85-415f-a799-841e10ec4f9a' -TenantId 'contoso.sharepoint.com' -ApplicationSecret 'abcdefghijkl'
 
-.Example
-Export-M365DSCConfiguration -Credential $Credential -Filters @{AADApplication = "DisplayName eq 'MyApp'"} -TokenReplacement @{ 'alternate-email.onmicrosoft.com' = 'AlternateEmail' }
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Components @("AADApplication", "AADConditionalAccessPolicy", "AADGroupsSettings") -Credential $Credential -Path 'C:\DSC' -FileName 'MyConfig.ps1'
 
-.Example
-Export-M365DSCConfiguration -Workloads @("SPO") -ExcludeComponents @("SPOPropertyBag") -Credential $Credential
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Credential $Credential -Filters @{AADApplication = "DisplayName eq 'MyApp'"} -TokenReplacement @{ 'alternate-email.onmicrosoft.com' = 'AlternateEmail' }
 
-.Functionality
-Public
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Workloads @("SPO") -ExcludeComponents @("SPOPropertyBag") -Credential $Credential
+
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Workloads @("SPO") -ApplicationId $clientId -TenantId $tenantName -CertificateThumbprint $certThumbprint -IncludeDependencies
+
+.FUNCTIONALITY
+    Public
 #>
 function Export-M365DSCConfiguration
 {
