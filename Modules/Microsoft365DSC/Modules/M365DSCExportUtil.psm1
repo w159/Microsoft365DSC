@@ -1315,15 +1315,20 @@ function Resolve-M365DSCExportRelations
     foreach ($relation in $relations)
     {
         $propertyName = $relation.property
-        if (-not $Results.ContainsKey($propertyName))
+        $propertyValue = $Results
+        for ($i = 0; $i -lt ($propertyName.Split('.').Count + 1); $i++)
         {
-            continue
-        }
+            $propertyName = $propertyName.Split('.')[$i]
+            if (-not $propertyValue.ContainsKey($propertyName))
+            {
+                continue
+            }
 
-        $propertyValue = $Results[$propertyName]
-        if ($null -eq $propertyValue)
-        {
-            continue
+            $propertyValue = $propertyValue[$propertyName]
+            if ($null -eq $propertyValue)
+            {
+                continue
+            }
         }
 
         # Handle array of complex objects (e.g., Assignments)

@@ -545,8 +545,7 @@ function Export-TargetResource
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential `
-                -NoEscape @('Conditions', 'NotificationChannels') `
-                -RawResults $rawResults
+                -NoEscape @('Conditions', 'NotificationChannels')
 
             [void]$dscContent.Append($currentDSCBlock)
             Save-M365DSCPartialExport -Content $currentDSCBlock `
