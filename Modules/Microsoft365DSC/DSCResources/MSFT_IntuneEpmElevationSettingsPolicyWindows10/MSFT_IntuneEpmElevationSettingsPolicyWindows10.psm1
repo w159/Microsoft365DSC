@@ -34,7 +34,7 @@ function Get-TargetResource
         $DefaultElevationResponse,
 
         [Parameter()]
-        [ValidateSet(0, 1)]
+        [ValidateSet(1, 2)]
         [System.Int32[]]
         $DefaultBehaviorValidation,
 
@@ -242,7 +242,7 @@ function Set-TargetResource
         $DefaultElevationResponse,
 
         [Parameter()]
-        [ValidateSet(0, 1)]
+        [ValidateSet(1, 2)]
         [System.Int32[]]
         $DefaultBehaviorValidation,
 
@@ -431,7 +431,7 @@ function Test-TargetResource
         $DefaultElevationResponse,
 
         [Parameter()]
-        [ValidateSet(0, 1)]
+        [ValidateSet(1, 2)]
         [System.Int32[]]
         $DefaultBehaviorValidation,
 

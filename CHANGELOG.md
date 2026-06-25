@@ -7,6 +7,10 @@
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
     or `TenantAdminNotificationForDelayedDelicensingState` were null.
     FIXES [#7248](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7248)
+* IntuneEpmElevationSettingsPolicyWindows10
+  * Fixed an issue where property `DefaultBehaviorValidation` didn't have the
+    correct validate set which could result in failing the compilation to MOF
+    FIXES [#7256](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7256)
 * IntuneRoleAssignment
   * Fixed an issue where creating or updating a resource failed if the property
     `ResourceScopes` was omitted.
