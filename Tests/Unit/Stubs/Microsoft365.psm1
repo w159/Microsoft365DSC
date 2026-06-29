@@ -82158,7 +82158,11 @@ function Get-PnPBrowserIdleSignout
         $Connection
     )
 }
-function Get-PnPConnection { [CmdletBinding()] param( ) }
+function Get-PnPConnection
+{
+    [CmdletBinding()]
+    param()
+}
 function Get-PnPContext
 {
     [CmdletBinding()]
