@@ -18,8 +18,14 @@
 * IntuneSettingCatalogCustomPolicyWindows10
   * Fixed an issue where simple settings with whitespaces were not exported correctly.
     FIXES [#7207](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7207)
+* IntuneWindowsAutopilotDeploymentProfileAzureADJoined
+  * Fixed an issue where updating assignments could include assignments through Policy Sets.
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
+* IntunePolicyAssignmentComparer
+  * Fixed an issue where comparing assignments would skip assignments
+    if the `groupId` property was omitted.
+    FIXES [#7254](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7254)
 * M365DSCExportUtil
   * **PREVIEW**: Added the parameter `-IncludeDependencies` to `Export-M365DSCConfiguration`
     to automatically export resources that are referenced by other resources.
