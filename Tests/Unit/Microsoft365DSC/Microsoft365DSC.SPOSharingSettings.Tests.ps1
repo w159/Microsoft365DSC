@@ -178,10 +178,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsSingleInstance = 'Yes'
                 }
 
-                # Mock Get-PnPTenantSite once for the whole context. It responds
-                # to BOTH the direct -Identity lookup AND the legacy -Filter
-                # enumeration so either path can be exercised by overriding
-                # Get-PnPConnection per-It below.
                 Mock -CommandName Get-PnPTenantSite -MockWith {
                     if (-not [string]::IsNullOrEmpty($Identity) -and $Identity -like '*-my.*')
                     {
@@ -228,8 +224,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Resolves the My Site Host with a single -Identity call when the URL can be derived' {
-                # Mock-in-It (rather than BeforeAll) so this Get-PnPConnection
-                # state is unambiguous regardless of any prior context's mocks.
                 Mock -CommandName Get-PnPConnection -MockWith {
                     return @{ Url = 'https://contoso.sharepoint.com' }
                 }
@@ -252,22 +246,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Falls back to the -Filter enumeration when the My Site Host URL cannot be resolved' {
-                # Return a concrete object with an empty Url so $null -ne (Get-PnPConnection)
-                # but $connectionUrl ends up empty -> optimized branch must skip.
-                # (Returning bare $null from a Pester mock script block is unreliable;
-                # the real cmdlet can leak through when the mock produces "no output".)
                 Mock -CommandName Get-PnPConnection -MockWith { return @{ Url = $null } }
 
                 $null = Get-TargetResource @optParams
 
-                # Tripwire: confirm our Get-PnPConnection mock actually fired.
                 Should -Invoke -CommandName Get-PnPConnection -Times 1
-
                 Should -Invoke -CommandName Get-PnPTenantSite -Times 1 -Exactly `
                     -ParameterFilter { $null -ne $Filter }
             }
         }
-    }#inmodulescope
-}#describe
+    }
+}
 
 Invoke-Command -ScriptBlock $Global:DscHelper.CleanupScript -NoNewScope

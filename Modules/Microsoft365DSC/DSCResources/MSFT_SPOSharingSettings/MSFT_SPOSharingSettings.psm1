@@ -177,21 +177,9 @@ function Get-TargetResource
 
         # Resolve the My Site Host directly at its deterministic URL
         # (https://<tenant>-my.<spo-domain>/) instead of enumerating every site
-        # collection in the tenant just to read its SharingCapability. The
-        # previous Get-PnPTenantSite -Filter call applied the filter client-side
-        # (Where-Object) and scaled linearly with the number of site collections,
-        # dominating apply time on large tenants.
-        #
-        # The host is derived from the active connection URL, which may be the
-        # root URL (app/cert/managed-identity auth) or the -admin URL (credential
-        # auth). We strip a trailing '-admin' from the tenant label and insert
-        # '-my', preserving the SPO domain suffix so the logic works across
-        # Commercial, GCC, GCC High (sharepoint.us / sharepoint-mil.us) and
-        # 21Vianet (sharepoint.cn) clouds.
-        # NOTE: $MySiteSharingCapability is a [ValidateSet] parameter of this
-        # function; never assign $null to it (PowerShell enforces ValidateSet on
-        # assignment -> ValidateSetFailure). It defaults to $null as an unbound
-        # parameter, so we only ever assign a valid value to it.
+        # collection in the tenant just to read its SharingCapability.
+        # Derive host from the active connection URL, which may be the
+        # root URL (app/cert/managed-identity auth) or the -admin URL (credential auth)
         $MySite = $null
         $MySiteHostUrl = $null
         try
@@ -211,12 +199,7 @@ function Get-TargetResource
             $MySiteHostUrl = $null
         }
 
-        # Track whether the direct lookup resolved the My Site Host. We can't
-        # gate the fallback on $MySiteSharingCapability itself: it is a [string]
-        # parameter, so when unbound PowerShell initializes it to "" (empty
-        # string), not $null. It can also carry a caller-supplied value when
-        # Get-TargetResource is invoked with a desired-state hashtable. Use an
-        # explicit flag for unambiguous control flow.
+        # Track whether the direct lookup resolved the My Site Host
         $resolvedFromDirectLookup = $false
         if (-not [System.String]::IsNullOrEmpty($MySiteHostUrl))
         {
@@ -228,9 +211,8 @@ function Get-TargetResource
             }
         }
 
-        # Fallback to the original enumeration when the direct lookup didn't
-        # resolve. Local filtering because server side filtering intermittently
-        # fails.
+        # Fallback to the original enumeration when the direct lookup didn't resolve.
+        # Local filtering because server side filtering intermittently fails.
         if (-not $resolvedFromDirectLookup)
         {
             $MySite = Get-PnPTenantSite -Filter "Url -like '-my.sharepoint.'" | Where-Object -FilterScript { $_.Template -match '^SPSMSITEHOST#' }
