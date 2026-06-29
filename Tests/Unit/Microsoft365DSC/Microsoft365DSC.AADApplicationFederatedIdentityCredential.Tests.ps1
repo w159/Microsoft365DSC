@@ -75,7 +75,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The federated identity credential should exist but it does not' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ApplicationObjectId = '11111111-1111-1111-1111-111111111111'
+                    ApplicationDisplayName = 'App1'
                     Name                = 'github-main'
                     Issuer              = 'https://token.actions.githubusercontent.com'
                     Subject             = 'repo:contoso/app:ref:refs/heads/main'
@@ -108,7 +108,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The federated identity credential exists but it should not' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ApplicationObjectId = '11111111-1111-1111-1111-111111111111'
+                    ApplicationDisplayName = 'App1'
                     Name                = 'github-main'
                     Issuer              = 'https://token.actions.githubusercontent.com'
                     Subject             = 'repo:contoso/app:ref:refs/heads/main'
@@ -137,7 +137,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The federated identity credential exists and values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ApplicationObjectId = '11111111-1111-1111-1111-111111111111'
+                    ApplicationDisplayName = 'App1'
                     Name                = 'github-main'
                     Issuer              = 'https://token.actions.githubusercontent.com'
                     Subject             = 'repo:contoso/app:ref:refs/heads/main'
@@ -161,7 +161,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'Values are not in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ApplicationObjectId = '11111111-1111-1111-1111-111111111111'
+                    ApplicationDisplayName = 'App1'
                     Name                = 'github-main'
                     Issuer              = 'https://token.actions.githubusercontent.com'
                     Subject             = 'repo:contoso/app:ref:refs/heads/main'

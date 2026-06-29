@@ -1,47 +1,5 @@
 Confirm-M365DSCModuleDependency -ModuleName 'MSFT_AADApplicationFederatedIdentityCredential'
 
-function Get-M365DSCFederatedIdentityCredentialBody
-{
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Name,
-
-        [Parameter()]
-        [System.String]
-        $Issuer,
-
-        [Parameter()]
-        [System.String]
-        $Subject,
-
-        [Parameter()]
-        [System.String[]]
-        $Audiences,
-
-        [Parameter()]
-        [System.String]
-        $Description
-    )
-
-    $bodyParameter = @{
-        name      = $Name
-        issuer    = $Issuer
-        subject   = $Subject
-        audiences = $Audiences
-    }
-
-    if ($PSBoundParameters.ContainsKey('Description'))
-    {
-        $bodyParameter.Add('description', $Description)
-    }
-
-    return $bodyParameter
-}
-
 function Get-TargetResource
 {
     [CmdletBinding()]
@@ -49,6 +7,10 @@ function Get-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.String]
+        $ApplicationDisplayName,
+
+        [Parameter()]
         [System.String]
         $ApplicationObjectId,
 
@@ -118,11 +80,11 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting federated identity credential {$Name} for application {$ApplicationObjectId}"
+    Write-Verbose -Message "Getting federated identity credential {$Name} for application {$ApplicationDisplayName}"
 
     try
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $Name -or $Script:exportedInstance.ApplicationObjectId -ne $ApplicationObjectId)
+        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $Name -or $Script:exportedInstance.ApplicationDisplayName -ne $ApplicationDisplayName)
         {
             $null = New-M365DSCConnection -Workload 'MicrosoftGraph' `
                 -InboundParameters $PSBoundParameters
@@ -140,6 +102,56 @@ function Get-TargetResource
 
             $nullReturn = $PSBoundParameters
             $nullReturn.Ensure = 'Absent'
+
+            $application = $null
+            try
+            {
+                if (-not [System.String]::IsNullOrEmpty($ApplicationObjectId))
+                {
+                    $application = Get-MgApplication `
+                        -ApplicationId $ApplicationObjectId `
+                        -Property @('id', 'displayName') `
+                        -ErrorAction SilentlyContinue
+                }
+            }
+            catch
+            {
+                Write-Verbose -Message "Could not retrieve Azure AD application by ID {$ApplicationObjectId}"
+            }
+
+            if ($null -eq $application)
+            {
+                try
+                {
+                    [array]$application = Get-MgApplication `
+                        -Filter "DisplayName eq '$($ApplicationDisplayName -replace "'", "''")'" `
+                        -Property @('id', 'displayName') `
+                        -ErrorAction SilentlyContinue
+                }
+                catch
+                {
+                    New-M365DSCLogEntry -Message 'Error retrieving application data:' `
+                        -Exception $_ `
+                        -Source $($MyInvocation.MyCommand.Source) `
+                        -TenantId $TenantId `
+                        -Credential $Credential
+                }
+            }
+
+            if ($null -eq $application)
+            {
+                return $nullReturn
+            }
+
+            if ($application.Count -gt 1)
+            {
+                throw "Multiple Azure AD applications with the display name $($ApplicationDisplayName) exist in the tenant."
+            }
+
+            $ApplicationObjectId = $application.Id
+            $ApplicationDisplayName = $application.DisplayName
+            $nullReturn.ApplicationObjectId = $ApplicationObjectId
+            $nullReturn.ApplicationDisplayName = $ApplicationDisplayName
 
             $federatedIdentityCredential = $null
             try
@@ -183,32 +195,35 @@ function Get-TargetResource
 
             if ($federatedIdentityCredential.Count -gt 1)
             {
-                throw "Multiple federated identity credentials with the name $($Name) exist for application $($ApplicationObjectId)."
+                throw "Multiple federated identity credentials with the name $($Name) exist for application $($ApplicationDisplayName)."
             }
         }
         else
         {
             $federatedIdentityCredential = $Script:exportedInstance
+            $ApplicationObjectId = $Script:exportedInstance.ApplicationObjectId
+            $ApplicationDisplayName = $Script:exportedInstance.ApplicationDisplayName
         }
 
         $result = @{
-            ApplicationObjectId  = $ApplicationObjectId
-            Name                 = $federatedIdentityCredential.Name
-            Id                   = $federatedIdentityCredential.Id
-            Issuer               = $federatedIdentityCredential.Issuer
-            Subject              = $federatedIdentityCredential.Subject
-            Audiences            = $federatedIdentityCredential.Audiences
-            Description          = $federatedIdentityCredential.Description
-            Ensure               = 'Present'
-            Credential           = $Credential
-            ApplicationId        = $ApplicationId
-            ApplicationSecret    = $ApplicationSecret
-            TenantId             = $TenantId
+            ApplicationDisplayName = $ApplicationDisplayName
+            ApplicationObjectId    = $ApplicationObjectId
+            Name                   = $federatedIdentityCredential.Name
+            Id                     = $federatedIdentityCredential.Id
+            Issuer                 = $federatedIdentityCredential.Issuer
+            Subject                = $federatedIdentityCredential.Subject
+            Audiences              = $federatedIdentityCredential.Audiences
+            Description            = $federatedIdentityCredential.Description
+            Ensure                 = 'Present'
+            Credential             = $Credential
+            ApplicationId          = $ApplicationId
+            ApplicationSecret      = $ApplicationSecret
+            TenantId               = $TenantId
             CertificateThumbprint = $CertificateThumbprint
-            CertificatePath      = $CertificatePath
-            CertificatePassword  = $CertificatePassword
-            ManagedIdentity      = $ManagedIdentity.IsPresent
-            AccessTokens         = $AccessTokens
+            CertificatePath        = $CertificatePath
+            CertificatePassword    = $CertificatePassword
+            ManagedIdentity        = $ManagedIdentity.IsPresent
+            AccessTokens           = $AccessTokens
         }
 
         return $result
@@ -231,6 +246,10 @@ function Set-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.String]
+        $ApplicationDisplayName,
+
+        [Parameter()]
         [System.String]
         $ApplicationObjectId,
 
@@ -300,7 +319,7 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Setting federated identity credential {$Name} for application {$ApplicationObjectId}"
+    Write-Verbose -Message "Setting federated identity credential {$Name} for application {$ApplicationDisplayName}"
 
     Confirm-M365DSCDependencies
 
@@ -314,24 +333,35 @@ function Set-TargetResource
     #endregion
 
     $currentFederatedIdentityCredential = Get-TargetResource @PSBoundParameters
-    $bodyParameter = Get-M365DSCFederatedIdentityCredentialBody -Name $Name `
-        -Issuer $Issuer `
-        -Subject $Subject `
-        -Audiences $Audiences `
-        -Description $Description
+    $bodyParameter = @{
+        name      = $Name
+        issuer    = $Issuer
+        subject   = $Subject
+        audiences = $Audiences
+    }
+
+    if ($PSBoundParameters.ContainsKey('Description'))
+    {
+        $bodyParameter.Add('description', $Description)
+    }
 
     if ($Ensure -eq 'Present' -and $currentFederatedIdentityCredential.Ensure -eq 'Absent')
     {
+        if ([System.String]::IsNullOrEmpty($currentFederatedIdentityCredential.ApplicationObjectId))
+        {
+            throw "Could not find Azure AD application with display name {$ApplicationDisplayName}."
+        }
+
         Write-Verbose -Message "Creating federated identity credential {$Name}"
         New-MgApplicationFederatedIdentityCredential `
-            -ApplicationId $ApplicationObjectId `
+            -ApplicationId $currentFederatedIdentityCredential.ApplicationObjectId `
             -BodyParameter $bodyParameter
     }
     elseif ($Ensure -eq 'Present' -and $currentFederatedIdentityCredential.Ensure -eq 'Present')
     {
         Write-Verbose -Message "Updating federated identity credential {$Name}"
         Update-MgApplicationFederatedIdentityCredential `
-            -ApplicationId $ApplicationObjectId `
+            -ApplicationId $currentFederatedIdentityCredential.ApplicationObjectId `
             -FederatedIdentityCredentialId $currentFederatedIdentityCredential.Id `
             -BodyParameter $bodyParameter
     }
@@ -339,7 +369,7 @@ function Set-TargetResource
     {
         Write-Verbose -Message "Removing federated identity credential {$Name}"
         Remove-MgApplicationFederatedIdentityCredential `
-            -ApplicationId $ApplicationObjectId `
+            -ApplicationId $currentFederatedIdentityCredential.ApplicationObjectId `
             -FederatedIdentityCredentialId $currentFederatedIdentityCredential.Id
     }
 }
@@ -351,6 +381,10 @@ function Test-TargetResource
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.String]
+        $ApplicationDisplayName,
+
+        [Parameter()]
         [System.String]
         $ApplicationObjectId,
 
@@ -524,21 +558,24 @@ function Export-TargetResource
 
                 Write-M365DSCHost -Message "    |---[$i/$($federatedIdentityCredentials.Count)] $($application.DisplayName) - $($federatedIdentityCredential.Name)" -DeferWrite
                 $params = @{
-                    Credential          = $Credential
-                    ApplicationId       = $ApplicationId
-                    ApplicationSecret   = $ApplicationSecret
-                    TenantId            = $TenantId
+                    Credential            = $Credential
+                    ApplicationId         = $ApplicationId
+                    ApplicationSecret     = $ApplicationSecret
+                    TenantId              = $TenantId
                     CertificateThumbprint = $CertificateThumbprint
-                    CertificatePath     = $CertificatePath
-                    CertificatePassword = $CertificatePassword
-                    ManagedIdentity     = $ManagedIdentity.IsPresent
-                    ApplicationObjectId = $application.Id
-                    Name                = $federatedIdentityCredential.Name
-                    Id                  = $federatedIdentityCredential.Id
-                    AccessTokens        = $AccessTokens
+                    CertificatePath       = $CertificatePath
+                    CertificatePassword   = $CertificatePassword
+                    ManagedIdentity       = $ManagedIdentity.IsPresent
+                    ApplicationDisplayName = $application.DisplayName
+                    ApplicationObjectId   = $application.Id
+                    Name                  = $federatedIdentityCredential.Name
+                    Id                    = $federatedIdentityCredential.Id
+                    AccessTokens          = $AccessTokens
                 }
                 $Script:exportedInstance = $federatedIdentityCredential | Add-Member -MemberType NoteProperty -Name ApplicationObjectId -Value $application.Id -PassThru
+                $Script:exportedInstance = $Script:exportedInstance | Add-Member -MemberType NoteProperty -Name ApplicationDisplayName -Value $application.DisplayName -PassThru
                 $results = Get-TargetResource @params
+                $results.Remove('ApplicationObjectId') | Out-Null
 
                 if ($results.Ensure -eq 'Present')
                 {
