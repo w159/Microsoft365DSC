@@ -18787,6 +18787,31 @@ function Get-MgApplication
         $HttpPipelineAppend
     )
 }
+function Get-MgApplicationFederatedIdentityCredential
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $FederatedIdentityCredentialId,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [Switch]
+        $All
+    )
+}
 function Get-MgApplicationOwner
 {
     [CmdletBinding()]
@@ -19255,6 +19280,19 @@ function New-MgApplication
         $Break
     )
 }
+function New-MgApplicationFederatedIdentityCredential
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $BodyParameter
+    )
+}
 function New-MgApplicationOwnerByRef
 {
     [CmdletBinding()]
@@ -19614,6 +19652,19 @@ function Remove-MgApplication
         $HttpPipelineAppend
     )
 }
+function Remove-MgApplicationFederatedIdentityCredential
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $FederatedIdentityCredentialId
+    )
+}
 function Remove-MgApplicationOwnerDirectoryObjectByRef
 {
     [CmdletBinding()]
@@ -19951,6 +20002,23 @@ function Update-MgApplication
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $Break
+    )
+}
+function Update-MgApplicationFederatedIdentityCredential
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $FederatedIdentityCredentialId,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $BodyParameter
     )
 }
 function Update-MgServicePrincipal
