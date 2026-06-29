@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADApplicationFederatedIdentityCredential
+  * Added resource to manage federated identity credentials for Azure AD applications.
 * EXOOrganizationConfig
   * Fixed an issue where processing would fail if any of the properties
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
