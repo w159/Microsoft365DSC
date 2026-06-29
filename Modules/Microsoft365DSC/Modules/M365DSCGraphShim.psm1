@@ -105,6 +105,10 @@ function Invoke-M365DSCGraphShimRequest
                 Write-Verbose "Graph API returned $statusCode. Retrying in $delay seconds (attempt $attempt/$maxRetries)..."
                 Start-Sleep -Seconds $delay
             }
+            elseif ($statusCode -eq 400 -and $_.ErrorDetails.Message -match 'Header ''x-msft-approval-justification'' is required to request approval')
+            {
+                throw [System.InvalidOperationException] 'Multi Admin Approval (MAA) is enabled for this resource type. Microsoft365DSC does not support running with MAA enabled. Please exclude the app registration from MAA or disable MAA for this resource type.'
+            }
             else
             {
                 throw

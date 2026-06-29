@@ -24,6 +24,8 @@
   * **PREVIEW**: Added the parameter `-IncludeDependencies` to `Export-M365DSCConfiguration`
     to automatically export resources that are referenced by other resources.
     FIXES [#597](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/597)
+* M365DSCGraphShim
+  * Added error handling for Multi Admin Approval in Intune.
 
 # 1.26.617.1
 
