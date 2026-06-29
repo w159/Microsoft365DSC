@@ -18,6 +18,10 @@
 * IntuneSettingCatalogCustomPolicyWindows10
   * Fixed an issue where simple settings with whitespaces were not exported correctly.
     FIXES [#7207](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7207)
+* M365DSCExportUtil
+  * **PREVIEW**: Added the parameter `-IncludeDependencies` to `Export-M365DSCConfiguration`
+    to automatically export resources that are referenced by other resources.
+    FIXES [#597](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/597)
 
 # 1.26.617.1
 

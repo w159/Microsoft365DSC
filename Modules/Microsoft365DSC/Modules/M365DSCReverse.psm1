@@ -1,10 +1,10 @@
 <#
-.Description
-This function orchestrate the export process between Export-M365DSCConfiguration
-and the ReverseDSC module.
+.DESCRIPTION
+    This function orchestrate the export process between Export-M365DSCConfiguration
+    and the ReverseDSC module.
 
-.Functionality
-Internal
+.FUNCTIONALITY
+    Internal
 #>
 function Start-M365DSCConfigurationExtract
 {
@@ -106,7 +106,11 @@ function Start-M365DSCConfigurationExtract
 
         [Parameter()]
         [Switch]
-        $WithStatistics
+        $WithStatistics,
+
+        [Parameter()]
+        [Switch]
+        $IncludeDependencies
     )
 
     # Start by checking to see if a new version of the tool is available in the PowerShell Gallery
@@ -845,6 +849,14 @@ function Start-M365DSCConfigurationExtract
         foreach ($resource in $($synchronizedHashtable.ResourcesResult.Keys | Sort-Object))
         {
             [void]$DSCContent.Append($synchronizedHashtable.ResourcesResult[$resource])
+        }
+
+        # Post-process: inject DependsOn declarations and generate stub blocks
+        if ($IncludeDependencies.IsPresent)
+        {
+            $processedContent = Add-M365DSCExportDependsOn -DSCContent $DSCContent.ToString()
+            $DSCContent = [System.Text.StringBuilder]::new()
+            $DSCContent.Append($processedContent) | Out-Null
         }
 
         foreach ($pair in (Get-M365DSCStringReplacementMap).GetEnumerator())
