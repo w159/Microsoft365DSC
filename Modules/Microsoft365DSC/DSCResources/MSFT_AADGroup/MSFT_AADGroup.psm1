@@ -236,8 +236,10 @@ function Get-TargetResource
         $MembersValues = [System.Collections.Generic.List[System.String]]::new()
         $GroupAsMembersValues = [System.Collections.Generic.List[System.String]]::new()
 
-        # If the Members and GroupAsMembers parameters are not specified, do not attempt to retrieve them as part of the Get-TargetResource.
-        if ($Group.MembershipRuleProcessingState -ne 'On' -and ($PSBoundParameters.ContainsKey('Members') -or $PSBoundParameters.ContainsKey('GroupAsMembers')))
+        # If the Members and GroupAsMembers parameters are not specified or are empty, do not attempt to retrieve them as part of the Get-TargetResource.
+        if ($Group.MembershipRuleProcessingState -ne 'On' -and `
+            (($PSBoundParameters.ContainsKey('Members') -and $Members.Count -gt 0) -or `
+                ($PSBoundParameters.ContainsKey('GroupAsMembers') -and $GroupAsMembers.Count -gt 0)))
         {
             # Members
             $groupMembers = $Group.Members
