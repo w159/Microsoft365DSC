@@ -2,6 +2,12 @@
 
 # UNRELEASED
 
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Fixed an issue when updating the policy with invalid property names.
+    FIXES [#7272](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7272)
+* EXOEmailAddressPolicy
+  * Fixed an issue when updating the default policy.
+    FIXES [#7271](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7271)
 * EXOOrganizationConfig
   * Fixed an issue where processing would fail if any of the properties
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
