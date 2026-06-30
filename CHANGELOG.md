@@ -32,6 +32,9 @@
     FIXES [#597](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/597)
 * M365DSCGraphShim
   * Added error handling for Multi Admin Approval in Intune.
+* SentinelAlertRule
+  * Fixed an issue where creating a new rule fails due to $null type coercion
+    FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
 
 # 1.26.617.1
 
