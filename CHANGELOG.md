@@ -7,6 +7,12 @@
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
     or `TenantAdminNotificationForDelayedDelicensingState` were null.
     FIXES [#7248](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7248)
+* IntuneAntivirusPolicyLinux
+  * Added support for the properties `offlinedefinitionupdatefallbacktocloud`,
+    `offlinedefinitionupdateurl`, `scheduledScan_dailyConfiguration_timeOfDay`,
+    `scheduledScan_interval`, `scheduledScan_runScanWhenIdle` and
+    `scheduledScan_weeklyConfiguration_timeOfDay`.
+    FIXES [#7267](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7267)
 * IntuneEpmElevationSettingsPolicyWindows10
   * Fixed an issue where property `DefaultBehaviorValidation` didn't have the
     correct validate set which could result in failing the compilation to MOF
