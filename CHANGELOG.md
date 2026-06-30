@@ -26,6 +26,10 @@
     FIXES [#7207](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7207)
 * IntuneWindowsAutopilotDeploymentProfileAzureADJoined
   * Fixed an issue where updating assignments could include assignments through Policy Sets.
+* M365DSCTelemetryEngine
+  * Fixed an issue where connection setup to Microsoft Graph would fail for
+    non-public clouds.
+    FIXES [#7255](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7255)
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
 * IntunePolicyAssignmentComparer
