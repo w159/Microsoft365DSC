@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADGroup
+  * Fixed an issue where empty `Members` or `GroupAsMembers` arrays triggered a full
+    group membership enumeration during `Get-TargetResource`.
+    FIXES [#7274](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7274)
 * EXOOrganizationConfig
   * Fixed an issue where processing would fail if any of the properties
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
