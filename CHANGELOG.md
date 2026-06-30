@@ -35,6 +35,8 @@
 * SentinelAlertRule
   * Fixed an issue where creating a new rule fails due to $null type coercion
     FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
+* MISC
+  * Added Viva selector to the web-based GUI.
 
 # 1.26.617.1
 
