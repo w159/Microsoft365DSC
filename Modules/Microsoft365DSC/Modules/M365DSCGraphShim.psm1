@@ -559,6 +559,54 @@ function Add-MgBetaGroupToLifecyclePolicy
     return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/groupLifecyclePolicies/$($GroupLifecyclePolicyId)/addGroup" -Method 'POST' -ExtraExcludeParams @('GroupLifecyclePolicyId') -ErrorAction $ErrorActionPreference
 }
 
+function Clear-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DeviceManagementConfigurationPolicyId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
+    )
+
+    return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/deviceManagement/configurationPolicies/$($DeviceManagementConfigurationPolicyId)/clearEnrollmentTimeDeviceMembershipTarget" -Method 'POST' -ExtraExcludeParams @('DeviceManagementConfigurationPolicyId') -ErrorAction $ErrorActionPreference
+}
+
 function Get-MgAdminSharepointSetting
 {
     [CmdletBinding()]
@@ -3261,6 +3309,54 @@ function Get-MgBetaDeviceManagementConfigurationPolicyAssignment
 
     $singleItemUri = if ($PSBoundParameters.ContainsKey('DeviceManagementConfigurationPolicyAssignmentId') -and -not [System.String]::IsNullOrEmpty($DeviceManagementConfigurationPolicyAssignmentId)) { "/beta/deviceManagement/configurationPolicies/$($DeviceManagementConfigurationPolicyId)/assignments/$($DeviceManagementConfigurationPolicyAssignmentId)" } else { $null }
     return Invoke-M365DSCGraphShimGetResource -BoundParameters $PSBoundParameters -CollectionUri "/beta/deviceManagement/configurationPolicies/$($DeviceManagementConfigurationPolicyId)/assignments" -SingleItemUri $singleItemUri -ErrorAction $ErrorActionPreference
+}
+
+function Get-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DeviceManagementConfigurationPolicyId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
+    )
+
+    return Invoke-M365DSCGraphShimGetResource -BoundParameters $PSBoundParameters -CollectionUri "/beta/deviceManagement/configurationPolicies/$($DeviceManagementConfigurationPolicyId)/retrieveEnrollmentTimeDeviceMembershipTarget" -ErrorAction $ErrorActionPreference
 }
 
 function Get-MgBetaDeviceManagementConfigurationPolicySetting
@@ -18084,6 +18180,10 @@ function New-MgApplication
         $Certification,
 
         [Parameter()]
+        [System.String]
+        $CreatedByAppId,
+
+        [Parameter()]
         [System.DateTime]
         $CreatedDateTime,
 
@@ -18145,6 +18245,10 @@ function New-MgApplication
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
+        $IsDisabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
         $IsFallbackPublicClient,
 
         [Parameter()]
@@ -18154,6 +18258,10 @@ function New-MgApplication
         [Parameter()]
         [System.String]
         $LogoInputFile,
+
+        [Parameter()]
+        [System.String[]]
+        $ManagerApplications,
 
         [Parameter()]
         [System.String]
@@ -27005,6 +27113,10 @@ function New-MgBetaPolicyCrossTenantAccessPolicyPartner
 
         [Parameter()]
         [System.Object]
+        $AppServiceConnectInbound,
+
+        [Parameter()]
+        [System.Object]
         $AutomaticUserConsentSettings,
 
         [Parameter()]
@@ -27022,6 +27134,10 @@ function New-MgBetaPolicyCrossTenantAccessPolicyPartner
         [Parameter()]
         [System.Object]
         $B2BDirectConnectOutbound,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $BlockServiceProviderOutboundAccess,
 
         [Parameter()]
         [System.DateTime]
@@ -27042,6 +27158,18 @@ function New-MgBetaPolicyCrossTenantAccessPolicyPartner
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $IsServiceProvider,
+
+        [Parameter()]
+        [System.Object]
+        $M365Capabilities,
+
+        [Parameter()]
+        [System.Object]
+        $M365CollaborationInbound,
+
+        [Parameter()]
+        [System.Object]
+        $M365CollaborationOutbound,
 
         [Parameter()]
         [System.String]
@@ -29072,6 +29200,10 @@ function New-MgGroup
         $Id,
 
         [Parameter()]
+        [System.String[]]
+        $InfoCatalogs,
+
+        [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $IsArchived,
 
@@ -29200,6 +29332,14 @@ function New-MgGroup
         $RenewedDateTime,
 
         [Parameter()]
+        [System.String[]]
+        $ResourceBehaviorOptions,
+
+        [Parameter()]
+        [System.String[]]
+        $ResourceProvisioningOptions,
+
+        [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $SecurityEnabled,
 
@@ -29250,6 +29390,10 @@ function New-MgGroup
         [Parameter()]
         [System.String]
         $Visibility,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $WelcomeMessageEnabled,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -29860,6 +30004,10 @@ function New-MgServicePrincipal
         $ClaimsMappingPolicies,
 
         [Parameter()]
+        [System.String]
+        $CreatedByAppId,
+
+        [Parameter()]
         [System.Object]
         $CreatedObjects,
 
@@ -29910,6 +30058,10 @@ function New-MgServicePrincipal
         [Parameter()]
         [System.Object]
         $Info,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsDisabled,
 
         [Parameter()]
         [System.Object]
@@ -30442,6 +30594,10 @@ function New-MgUser
         [Parameter()]
         [System.Object]
         $Identities,
+
+        [Parameter()]
+        [System.String]
+        $IdentityParentId,
 
         [Parameter()]
         [System.String[]]
@@ -37359,6 +37515,66 @@ function Restore-MgBetaDirectoryDeletedItem
     return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/directory/deletedItems/$($DirectoryObjectId)/restore" -Method 'POST' -ExtraExcludeParams @('DirectoryObjectId') -ErrorAction $ErrorActionPreference
 }
 
+function Set-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DeviceManagementConfigurationPolicyId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.Object]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Object]
+        $EnrollmentTimeDeviceMembershipTargets,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
+    )
+
+    return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/deviceManagement/configurationPolicies/$($DeviceManagementConfigurationPolicyId)/setEnrollmentTimeDeviceMembershipTarget" -Method 'POST' -ExtraExcludeParams @('DeviceManagementConfigurationPolicyId') -ErrorAction $ErrorActionPreference
+}
+
 function Set-MgBetaEntitlementManagementAccessPackageAssignmentPolicy
 {
     [CmdletBinding()]
@@ -38192,6 +38408,10 @@ function Update-MgApplication
         $Certification,
 
         [Parameter()]
+        [System.String]
+        $CreatedByAppId,
+
+        [Parameter()]
         [System.DateTime]
         $CreatedDateTime,
 
@@ -38253,6 +38473,10 @@ function Update-MgApplication
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
+        $IsDisabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
         $IsFallbackPublicClient,
 
         [Parameter()]
@@ -38262,6 +38486,10 @@ function Update-MgApplication
         [Parameter()]
         [System.String]
         $LogoInputFile,
+
+        [Parameter()]
+        [System.String[]]
+        $ManagerApplications,
 
         [Parameter()]
         [System.String]
@@ -38522,6 +38750,10 @@ function Update-MgBetaApplication
         [Parameter()]
         [System.String]
         $LogoInputFile,
+
+        [Parameter()]
+        [System.String[]]
+        $ManagerApplications,
 
         [Parameter()]
         [System.String]
@@ -40425,6 +40657,10 @@ function Update-MgBetaDeviceManagement
 
         [Parameter()]
         [System.Object]
+        $AndroidAppConfigurationSchema,
+
+        [Parameter()]
+        [System.Object]
         $AndroidDeviceOwnerEnrollmentProfiles,
 
         [Parameter()]
@@ -40862,6 +41098,10 @@ function Update-MgBetaDeviceManagement
         [Parameter()]
         [System.Object]
         $RoleScopeTags,
+
+        [Parameter()]
+        [System.Object]
+        $SamsungEFotaFirmwareVersions,
 
         [Parameter()]
         [System.Object]
@@ -46080,7 +46320,7 @@ function Update-MgBetaNetworkAccessForwardingProfile
         $InputObject,
 
         [Parameter()]
-        [System.Object]
+        [System.Collections.Hashtable]
         $BodyParameter,
 
         [Parameter()]
@@ -47849,6 +48089,10 @@ function Update-MgBetaPolicyCrossTenantAccessPolicyPartner
 
         [Parameter()]
         [System.Object]
+        $AppServiceConnectInbound,
+
+        [Parameter()]
+        [System.Object]
         $AutomaticUserConsentSettings,
 
         [Parameter()]
@@ -47866,6 +48110,10 @@ function Update-MgBetaPolicyCrossTenantAccessPolicyPartner
         [Parameter()]
         [System.Object]
         $B2BDirectConnectOutbound,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $BlockServiceProviderOutboundAccess,
 
         [Parameter()]
         [System.DateTime]
@@ -47886,6 +48134,18 @@ function Update-MgBetaPolicyCrossTenantAccessPolicyPartner
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $IsServiceProvider,
+
+        [Parameter()]
+        [System.Object]
+        $M365Capabilities,
+
+        [Parameter()]
+        [System.Object]
+        $M365CollaborationInbound,
+
+        [Parameter()]
+        [System.Object]
+        $M365CollaborationOutbound,
 
         [Parameter()]
         [System.String]
@@ -49408,6 +49668,10 @@ function Update-MgGroup
         $Id,
 
         [Parameter()]
+        [System.String[]]
+        $InfoCatalogs,
+
+        [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $IsArchived,
 
@@ -49536,6 +49800,14 @@ function Update-MgGroup
         $RenewedDateTime,
 
         [Parameter()]
+        [System.String[]]
+        $ResourceBehaviorOptions,
+
+        [Parameter()]
+        [System.String[]]
+        $ResourceProvisioningOptions,
+
+        [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $SecurityEnabled,
 
@@ -49586,6 +49858,10 @@ function Update-MgGroup
         [Parameter()]
         [System.String]
         $Visibility,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $WelcomeMessageEnabled,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -49868,6 +50144,10 @@ function Update-MgServicePrincipal
         $ClaimsMappingPolicies,
 
         [Parameter()]
+        [System.String]
+        $CreatedByAppId,
+
+        [Parameter()]
         [System.Object]
         $CreatedObjects,
 
@@ -49918,6 +50198,10 @@ function Update-MgServicePrincipal
         [Parameter()]
         [System.Object]
         $Info,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsDisabled,
 
         [Parameter()]
         [System.Object]
@@ -50304,6 +50588,10 @@ function Update-MgUser
         $Identities,
 
         [Parameter()]
+        [System.String]
+        $IdentityParentId,
+
+        [Parameter()]
         [System.String[]]
         $ImAddresses,
 
@@ -50658,6 +50946,7 @@ function Update-MgUser
 # Export all wrapper functions
 Export-ModuleMember -Function @(
     'Add-MgBetaGroupToLifecyclePolicy',
+    'Clear-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget',
     'Get-MgAdminSharepointSetting',
     'Get-MgApplication',
     'Get-MgBetaAgreement',
@@ -50689,6 +50978,7 @@ Export-ModuleMember -Function @(
     'Get-MgBetaDeviceManagementAssignmentFilter',
     'Get-MgBetaDeviceManagementConfigurationPolicy',
     'Get-MgBetaDeviceManagementConfigurationPolicyAssignment',
+    'Get-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget',
     'Get-MgBetaDeviceManagementConfigurationPolicySetting',
     'Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate',
     'Get-MgBetaDeviceManagementDataSharingConsent',
@@ -51101,6 +51391,7 @@ Export-ModuleMember -Function @(
     'Remove-MgServicePrincipalOwnerDirectoryObjectByRef',
     'Remove-MgUser',
     'Restore-MgBetaDirectoryDeletedItem',
+    'Set-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget',
     'Set-MgBetaEntitlementManagementAccessPackageAssignmentPolicy',
     'Set-MgBetaIdentityB2XUserFlowPostAttributeCollectionByRef',
     'Set-MgBetaIdentityB2XUserFlowPostFederationSignupByRef',
