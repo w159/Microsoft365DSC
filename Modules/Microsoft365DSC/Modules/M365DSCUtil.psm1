@@ -213,11 +213,7 @@ function Test-M365DSCParameterState
     #region Telemetry
     if (Test-IsM365DSCTelemetryEnabled)
     {
-        $data = [System.Collections.Generic.Dictionary[[System.String], [System.String]]]::new()
-        $data.Add('Resource', "$Source")
-        $data.Add('Method', 'Test-TargetResource')
-
-        $dataEvaluation = [System.Collections.Generic.Dictionary[[System.String], [System.String]]]::new()
+        $dataEvaluation = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
         $dataEvaluation.Add('Resource', "$Source")
         $dataEvaluation.Add('Method', 'Test-TargetResource')
         $dataEvaluation.Add('Tenant', $TenantName)
@@ -307,7 +303,7 @@ function Test-M365DSCParameterState
 
         if (Test-IsM365DSCTelemetryEnabled)
         {
-            $driftedData = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
+            $driftedData = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
             $driftedData.Add('Resource', $source.Split('_')[1])
             $driftedData.Add('Tenant', $TenantName)
 
@@ -390,7 +386,7 @@ function Test-M365DSCParameterState
     if (Test-IsM365DSCTelemetryEnabled)
     {
         $timeTaken = [System.DateTime]::Now.Subtract($startTime).TotalMilliseconds
-        $data = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
+        $data = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
         $data.Add('Resource', $Source)
         $data.Add('Method', 'Test-M365DSCParameterState')
         $data.Add('TimeTakenMilliseconds', $timeTaken)
@@ -995,7 +991,7 @@ function Assert-M365DSCBlueprint
     Confirm-M365DSCDependencies
 
     #region Telemetry
-    $data = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
+    $data = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
     $data.Add('Event', 'AssertBlueprint')
     $data.Add('BluePrint', $BluePrintUrl)
     Add-M365DSCTelemetryEvent -Data $data
