@@ -51,6 +51,8 @@
 * SentinelAlertRule
   * Fixed an issue where creating a new rule fails due to $null type coercion
     FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
+* DEPENDENCIES
+  * Updated `MSCloudLoginAssistant` to version `1.1.68`.
 * MISC
   * Added Viva selector to the web-based GUI.
 
