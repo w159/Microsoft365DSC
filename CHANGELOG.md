@@ -35,6 +35,9 @@
 * IntuneWindowsAutopilotDevicePreparationAutomaticPolicy
   * Initial release.
     FIXES [#7259](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7259)
+* IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy
+  * Initial release.
+    FIXES [#7259](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7259)
 * M365DSCTelemetryEngine
   * Fixed an issue where connection setup to Microsoft Graph would fail for
     non-public clouds.
