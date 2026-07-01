@@ -36,6 +36,10 @@
   * Fixed an issue where connection setup to Microsoft Graph would fail for
     non-public clouds.
     FIXES [#7255](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7255)
+* M365DSCUtil
+  * Added support for sending push notifications through new function
+    `Send-M365DSCPushNotification`, currently it's only called after finishing
+    an export
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
 * IntunePolicyAssignmentComparer
