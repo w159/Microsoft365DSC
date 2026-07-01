@@ -2322,7 +2322,7 @@ function Send-M365DSCPushNotification
     [OutputType($null)]
     param
     (
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Body
     )
