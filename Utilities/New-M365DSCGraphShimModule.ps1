@@ -237,6 +237,10 @@ function Invoke-M365DSCGraphShimRequest
     }
     if ($PSBoundParameters.ContainsKey('Body') -and $null -ne $Body)
     {
+        if ($Body -isnot [string])
+        {
+            $Body = $Body | ConvertTo-Json -Depth 99
+        }
         $invokeParams['Body'] = $Body
         $invokeParams['ContentType'] = 'application/json'
     }

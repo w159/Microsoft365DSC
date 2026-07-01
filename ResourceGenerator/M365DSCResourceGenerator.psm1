@@ -543,6 +543,7 @@ $($userDefinitionSettings.MOF -join "`r`n")
         else
         {
             $getAlternativeFilterString.AppendLine("                    -ErrorAction SilentlyContinue | Where-Object ``") | Out-Null
+            $getAlternativeFilterString.AppendLine("                    -All ``") | Out-Null
             $getAlternativeFilterString.AppendLine("                    -FilterScript {") | Out-Null
             $getAlternativeFilterString.AppendLine("                        `$_.$alternativeKey -eq `"`$(`$$alternativeKey -replace `"'`", `"''`")`" ``") | Out-Null
             $getAlternativeFilterString.AppendLine("                        -and `$_.'@odata.type' -eq `"`#microsoft.graph.$SelectedODataType`"") | Out-Null

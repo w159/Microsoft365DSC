@@ -165,8 +165,9 @@ function Get-TargetResource
                 {
                     $getValue = Invoke-M365DSCCommand -ScriptBlock {
                         Get-MgBetaDeviceManagementConfigurationPolicy `
+                            -All `
                             -Filter "Name eq '$($DisplayName -replace "'", "''")'" `
-                        -ErrorAction SilentlyContinue
+                            -ErrorAction SilentlyContinue
                     }
                 }
             }
@@ -435,9 +436,7 @@ function Set-TargetResource
         $newScripts = @()
         foreach ($script in $batchResponsesScripts.body.value)
         {
-            $newScripts += @{
-                id = $script.id
-            }
+            $newScripts += $script.id
         }
         $boundParameters.Add('allowedScriptIds', $newScripts)
     }
@@ -540,13 +539,13 @@ function Set-TargetResource
         {
             if (-not [System.String]::IsNullOrEmpty($AssignmentTarget))
             {
-                $groupId = Get-MgGroup -Filter "displayName eq '$AssignmentTarget'" -Property "id" -ErrorAction Stop
+                $group = Get-MgGroup -Filter "displayName eq '$AssignmentTarget'" -Property "id" -ErrorAction Stop
                 Set-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget `
-                    -DeviceManagementConfigurationPolicyId $policy.Id `
+                    -DeviceManagementConfigurationPolicyId $currentInstance.Id `
                     -BodyParameter @{
                         enrollmentTimeDeviceMembershipTargets = @(
                             @{
-                                targetId = $groupId.Id
+                                targetId = $group.Id
                                 targetType = 'staticSecurityGroup'
                             }
                         )
