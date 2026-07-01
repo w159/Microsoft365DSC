@@ -2,6 +2,12 @@
 $Global:SessionSecurityCompliance = $null
 #endregion
 
+#region Push Notifications
+$Global:M365DSCPushNotificationsURI = $null
+$Global:M365DSCPushNotificationsHeaders = $null
+$Global:M365DSCPushNotificationsBody = $null
+#endregion
+
 $Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
 
 <#
@@ -2294,6 +2300,53 @@ function Update-M365DSCAuthenticationTargets
     }
 }
 
+<#
+.DESCRIPTION
+    This function sends a push notification to $Global:M365DSCPushNotificationsURI
+    (if defined) with optional headers $Global:M365DSCPushNotificationsHeaders
+    and body $Body
+
+.PARAMETER Body
+    This is the body that will be sent to the push notification which can be
+    overriden by defining $Global:M365DSCPushNotificationsBody
+
+.EXAMPLE
+    PS> Send-M365DSCPushNotification -Body "This is a test"
+
+.FUNCTIONALITY
+    Internal
+#>
+function Send-M365DSCPushNotification
+{
+    [CmdletBinding()]
+    [OutputType($null)]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Body
+    )
+
+    if (-not [System.String]::IsNullOrEmpty($Global:M365DSCPushNotificationsURI))
+    {
+        if (-not [System.String]::IsNullOrEmpty($Global:M365DSCPushNotificationsBody))
+        {
+            $Body = $Global:M365DSCPushNotificationsBody
+        }
+        $postRequest = @{
+            Method      = "Post"
+            URI         = $Global:M365DSCPushNotificationsURI
+            Body        = $Body
+            ErrorAction = "SilentlyContinue"
+        }
+        if (-not [System.String]::IsNullOrEmpty($Global:M365DSCPushNotificationsHeaders))
+        {
+            $postRequest.Add("Headers", $Global:M365DSCPushNotificationsHeaders)
+        }
+        $null = Invoke-RestMethod @postRequest
+    }
+}
+
 Export-ModuleMember -Function @(
     'Assert-M365DSCBlueprint',
     'Clear-M365DSCHostMessageCache',
@@ -2323,6 +2376,7 @@ Export-ModuleMember -Function @(
     'New-M365DSCMissingResourcesExample',
     'Remove-M365DSCAuthenticationParameter',
     'Remove-NullEntriesFromHashtable',
+    'Send-M365DSCPushNotification',
     'Set-M365DSCAllResourcesDictionary',
     'Test-CodePage',
     'Test-M365DSCParameterState',
