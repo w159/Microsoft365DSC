@@ -5,6 +5,9 @@
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Fixed an issue when updating the policy with invalid property names.
     FIXES [#7272](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7272)
+* AADDomain
+  * Fixed an issue with invalid casing of properties.
+    FIXES [#7285](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7285)
 * EXOEmailAddressPolicy
   * Fixed an issue when updating the default policy.
     FIXES [#7271](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7271)
