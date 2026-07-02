@@ -286,6 +286,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Get-TargetResource @testParams
                 Should -Invoke -CommandName 'Get-MgGroupMember' -Exactly 0
             }
+
+            It 'Should return existing group members so empty desired members can detect drift' {
+                $result = Get-TargetResource @testParams
+
+                $result.Members | Should -Contain 'user1.contoso.com'
+                Should -Invoke -CommandName 'Get-MgGroupMember' -Exactly 0
+            }
         }
 
         Context -Name 'The Group Exists and is a member of another group. Values are already in the desired state' -Fixture {

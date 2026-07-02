@@ -236,14 +236,13 @@ function Get-TargetResource
         $MembersValues = [System.Collections.Generic.List[System.String]]::new()
         $GroupAsMembersValues = [System.Collections.Generic.List[System.String]]::new()
 
-        # If the Members and GroupAsMembers parameters are not specified or are empty, do not attempt to retrieve them as part of the Get-TargetResource.
-        if ($Group.MembershipRuleProcessingState -ne 'On' -and `
-            (($PSBoundParameters.ContainsKey('Members') -and $Members.Count -gt 0) -or `
-                ($PSBoundParameters.ContainsKey('GroupAsMembers') -and $GroupAsMembers.Count -gt 0)))
+        # If the Members and GroupAsMembers parameters are not specified, do not attempt to retrieve them as part of the Get-TargetResource.
+        if ($Group.MembershipRuleProcessingState -ne 'On' -and ($PSBoundParameters.ContainsKey('Members') -or $PSBoundParameters.ContainsKey('GroupAsMembers')))
         {
             # Members
             $groupMembers = $Group.Members
-            if ($Group.Members.Count -eq 20 -or $Script:requireGroupMemberFetching -eq $true)
+            if ((($Members.Count -gt 0 -or $GroupAsMembers.Count -gt 0) -and $Group.Members.Count -eq 20) -or `
+                $Script:requireGroupMemberFetching -eq $true)
             {
                 # Fetch all group members
                 $groupMembers = Get-MgGroupMember -GroupId $Group.Id -All -Top 999
