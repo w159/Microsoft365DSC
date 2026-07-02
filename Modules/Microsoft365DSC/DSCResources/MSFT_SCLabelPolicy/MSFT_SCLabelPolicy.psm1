@@ -364,41 +364,48 @@ function Set-TargetResource
     $CurrentPolicy = Get-TargetResource @PSBoundParameters
     $boundParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    foreach ($param in @('ModernGroupLocation', 'ModernGroupLocationException', 'ExchangeLocation', 'ExchangeLocationException'))
+    foreach ($locationProperty in @('ModernGroupLocation', 'ModernGroupLocationException', 'ExchangeLocation', 'ExchangeLocationException'))
     {
-        if ($PSBoundParameters.ContainsKey($param))
+        if (-not $PSBoundParameters.ContainsKey($locationProperty))
         {
-            [array]$diffs = Compare-Object -ReferenceObject $CurrentPolicy.$param -DifferenceObject $PSBoundParameters[$param]
-            if ($diffs.Count -gt 0)
+            continue
+        }
+
+        $desiredLocations = $PSBoundParameters[$locationProperty]
+        $currentLocations = $CurrentPolicy.$locationProperty
+
+        [array]$diffs = Compare-Object `
+            -ReferenceObject @($currentLocations | Where-Object { $null -ne $_ }) `
+            -DifferenceObject @($desiredLocations | Where-Object { $null -ne $_ })
+        if ($diffs.Count -gt 0)
+        {
+            $add = @()
+            $remove = @()
+            foreach ($diff in $diffs)
             {
-                $add = @()
-                $remove = @()
-                foreach ($diff in $diffs)
+                if ($diff.SideIndicator -eq '<=')
                 {
-                    if ($diff.SideIndicator -eq '<=')
-                    {
-                        Write-Verbose "Removing $param $($diff.InputObject) from policy $Name."
-                        $remove += $diff.InputObject
-                    }
-                    elseif ($diff.SideIndicator -eq '=>')
-                    {
-                        Write-Verbose "Adding $param $($diff.InputObject) to policy $Name."
-                        $add += $diff.InputObject
-                    }
+                    Write-Verbose "Removing $locationProperty $($diff.InputObject) from policy $Name."
+                    $remove += $diff.InputObject
                 }
-
-                if ($add.Count -gt 0)
+                elseif ($diff.SideIndicator -eq '=>')
                 {
-                    $boundParams["Add$param"] = $add
-                }
-
-                if ($remove.Count -gt 0)
-                {
-                    $boundParams["Remove$param"] = $remove
+                    Write-Verbose "Adding $locationProperty $($diff.InputObject) to policy $Name."
+                    $add += $diff.InputObject
                 }
             }
-            $boundParams.Remove($param) | Out-Null
+
+            if ($add.Count -gt 0)
+            {
+                $boundParams["Add$locationProperty"] = $add
+            }
+
+            if ($remove.Count -gt 0)
+            {
+                $boundParams["Remove$locationProperty"] = $remove
+            }
         }
+        $boundParams.Remove($locationProperty) | Out-Null
     }
 
     if ($Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Absent')
@@ -698,80 +705,45 @@ function Test-TargetResource
         $ValuesToCheck.Remove('AdvancedSettings') | Out-Null
     }
 
-    if ($null -ne $RemoveModernGroupLocation -or $null -ne $AddModernGroupLocation -or $null -ne $ModernGroupLocation)
-    {
-        $configData = New-PolicyData -configData $ModernGroupLocation -currentData $CurrentValues.ModernGroupLocation `
-            -removedData $RemoveModernGroupLocation -additionalData $AddModernGroupLocation
-        if ($null -ne $configData)
-        {
-            $ValuesToCheck['ModernGroupLocation'] = $configData
-        }
-        if ($null -eq $configData -and $null -ne $CurrentValues.ModernGroupLocation `
-                -and $null -ne $RemoveModernGroupLocation)
-        {
-            return $false
-        }
-        $ValuesToCheck.Remove('RemoveModernGroupLocation') | Out-Null
-        $ValuesToCheck.Remove('AddModernGroupLocation') | Out-Null
-        $ValuesToCheck.Remove('ModernGroupLocation') | Out-Null
+    $locationDriftProperties = @{
+        ModernGroupLocation          = @{ Add = $AddModernGroupLocation;          Remove = $RemoveModernGroupLocation;          Desired = $ModernGroupLocation }
+        ModernGroupLocationException = @{ Add = $AddModernGroupLocationException; Remove = $RemoveModernGroupLocationException; Desired = $ModernGroupLocationException }
+        ExchangeLocation             = @{ Add = $AddExchangeLocation;             Remove = $RemoveExchangeLocation;             Desired = $ExchangeLocation }
+        ExchangeLocationException    = @{ Add = $AddExchangeLocationException;    Remove = $RemoveExchangeLocationException;    Desired = $ExchangeLocationException }
     }
 
-    if ($null -ne $RemoveModernGroupLocationException -or $null -ne $AddModernGroupLocationException `
-            -or $null -ne $ModernGroupLocationException)
+    foreach ($locationProperty in $locationDriftProperties.Keys)
     {
-        $configData = New-PolicyData -configData $ModernGroupLocationException -currentData $CurrentValues.ModernGroupLocationException `
-            -removedData $RemoveModernGroupLocationException -additionalData $AddModernGroupLocationException
-
-        if ($null -ne $configData)
+        $entry = $locationDriftProperties[$locationProperty]
+        if ($null -eq $entry.Desired -and $null -eq $entry.Add -and $null -eq $entry.Remove)
         {
-            $ValuesToCheck['ModernGroupLocationException'] = $configData
+            continue
         }
-        if ($null -eq $configData -and $null -ne $CurrentValues.ModernGroupLocationException `
-                -and $null -ne $RemoveModernGroupLocationException)
+
+        $configData = New-PolicyData -configData $entry.Desired `
+            -currentData $CurrentValues.$locationProperty `
+            -removedData $entry.Remove `
+            -additionalData $entry.Add
+
+        if ($null -eq $configData -and $null -ne $CurrentValues.$locationProperty -and $null -ne $entry.Remove)
         {
             return $false
         }
-        $ValuesToCheck.Remove('RemoveModernGroupLocationException') | Out-Null
-        $ValuesToCheck.Remove('AddModernGroupLocationException') | Out-Null
-        $ValuesToCheck.Remove('ModernGroupLocationException') | Out-Null
-    }
 
-    if ($null -ne $RemoveExchangeLocation -or $null -ne $AddExchangeLocation -or $null -ne $ExchangeLocation)
-    {
-        $configData = New-PolicyData -configData $ExchangeLocation -currentData $CurrentValues.ExchangeLocation `
-            -removedData $RemoveExchangeLocation -additionalData $AddExchangeLocation
-        if ($null -ne $configData)
+        $current = @($CurrentValues.$locationProperty | Where-Object { $null -ne $_ -and '' -ne $_ })
+        $expected = @($configData | Where-Object { $null -ne $_ -and '' -ne $_ })
+
+        if ($current.Count -ne $expected.Count -or `
+            ($expected.Count -gt 0 -and `
+                (Compare-Object -ReferenceObject $current -DifferenceObject $expected).Count -gt 0))
         {
-            $ValuesToCheck['ExchangeLocation'] = $configData
-        }
-        if ($null -eq $configData -and $null -ne $CurrentValues.ExchangeLocation `
-                -and $null -ne $RemoveExchangeLocation)
-        {
+            Write-Verbose -Message "$locationProperty drift detected on policy $Name. Current: $($current -join ', '); Expected: $($expected -join ', ')"
             return $false
         }
-        $ValuesToCheck.Remove('RemoveExchangeLocation') | Out-Null
-        $ValuesToCheck.Remove('AddExchangeLocation') | Out-Null
-        $ValuesToCheck.Remove('ExchangeLocation') | Out-Null
-    }
 
-    if ($null -ne $RemoveExchangeLocationException -or $null -ne $AddExchangeLocationException -or $null -ne $ExchangeLocationException)
-    {
-        $configData = New-PolicyData -configData $ExchangeLocationException -currentData $CurrentValues.ExchangeLocationException `
-            -removedData $RemoveExchangeLocationException -additionalData $AddExchangeLocationException
-
-        if ($null -ne $configData)
-        {
-            $ValuesToCheck['ExchangeLocationException'] = $configData
-        }
-
-        if ($null -eq $configData -and $null -ne $CurrentValues.ExchangeLocationException `
-                -and $null -ne $RemoveExchangeLocationException)
-        {
-            return $false
-        }
-        $ValuesToCheck.Remove('RemoveExchangeLocationException') | Out-Null
-        $ValuesToCheck.Remove('AddExchangeLocationException') | Out-Null
-        $ValuesToCheck.Remove('ExchangeLocationException') | Out-Null
+        $ValuesToCheck.Remove("Remove$locationProperty") | Out-Null
+        $ValuesToCheck.Remove("Add$locationProperty") | Out-Null
+        $ValuesToCheck.Remove($locationProperty) | Out-Null
     }
 
     if ($null -ne $RemoveLabels -or $null -ne $AddLabels -or $null -ne $Labels)
@@ -949,6 +921,7 @@ function Convert-StringToAdvancedSettings
     )
 
     $settings = @()
+    $labelLookup = $null
     foreach ($setting in $AdvancedSettings)
     {
         Write-Verbose -Message "SETTING: $setting"
@@ -972,8 +945,23 @@ function Convert-StringToAdvancedSettings
             {
                 if ($values -ne 'None')
                 {
-                    $label = Get-Label -Identity $values
-                    $values = $label.DisplayName
+                    if ($null -eq $labelLookup)
+                    {
+                        $labelLookup = @{}
+                        foreach ($lbl in (Get-Label -ErrorAction SilentlyContinue))
+                        {
+                            if ($null -ne $lbl.ImmutableId)
+                            {
+                                $labelLookup[$lbl.ImmutableId.ToString()] = $lbl.DisplayName
+                            }
+                        }
+                    }
+
+                    $resolved = $labelLookup[$values.ToString()]
+                    if (-not [System.String]::IsNullOrEmpty($resolved))
+                    {
+                        $values = $resolved
+                    }
                 }
             }
 
