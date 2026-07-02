@@ -82,10 +82,12 @@ foreach ($file in $settingsFiles)
 $map | ConvertTo-Json -Depth 10 | Out-File -FilePath "$PSScriptRoot\cmdlet-source-modules.json" -Encoding UTF8
 
 if (-not $SkipCmdletMappingGeneration) {
+    Write-Host "Build Cmdlet Mapping..."
     & "$PSScriptRoot\Build-CmdletMapping.ps1" -CmdletSourceModulesPath "$PSScriptRoot\cmdlet-source-modules.json" -OutputPath $CmdletMappingPath
 }
 
 if (-not $SkipFunctionSignatureGeneration) {
+    Write-Host "Extract Function Signatures..."
     & "$PSScriptRoot\Extract-FunctionSignatures.ps1" -CmdletSourceModulesPath "$PSScriptRoot\cmdlet-source-modules.json" -OutputPath $FunctionSignaturesPath
 }
 
@@ -235,6 +237,10 @@ function Invoke-M365DSCGraphShimRequest
     }
     if ($PSBoundParameters.ContainsKey('Body') -and $null -ne $Body)
     {
+        if ($Body -isnot [string])
+        {
+            $Body = $Body | ConvertTo-Json -Depth 99
+        }
         $invokeParams['Body'] = $Body
         $invokeParams['ContentType'] = 'application/json'
     }

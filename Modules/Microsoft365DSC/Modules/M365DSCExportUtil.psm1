@@ -336,7 +336,7 @@ function Export-M365DSCConfiguration
     }
 
     #region Telemetry
-    $data = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
+    $data = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
 
     $data.Add('Path', [System.String]::IsNullOrEmpty($Path))
     $data.Add('FileName', $null -ne [System.String]::IsNullOrEmpty($FileName))
@@ -482,7 +482,7 @@ function Export-M365DSCConfiguration
     $Global:M365DSCExportDependencies = $null
     $Global:M365DSCExportInProgress = $false
 
-    $data = [System.Collections.Generic.Dictionary[[String], [String]]]::new()
+    $data = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()
     if ([System.String]::IsNullOrEmpty($data.Tenant) -and -not [System.String]::IsNullOrEmpty($TenantId))
     {
         $data.Add('Tenant', $TenantId)

@@ -2,10 +2,19 @@
 
 # UNRELEASED
 
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Fixed an issue when updating the policy with invalid property names.
+    FIXES [#7272](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7272)
+* AADDomain
+  * Fixed an issue with invalid casing of properties.
+    FIXES [#7285](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7285)
 * AADGroup
   * Fixed an issue where empty `Members` or `GroupAsMembers` arrays triggered a full
     group membership enumeration during `Get-TargetResource`.
     FIXES [#7274](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7274)
+* EXOEmailAddressPolicy
+  * Fixed an issue when updating the default policy.
+    FIXES [#7271](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7271)
 * EXOOrganizationConfig
   * Fixed an issue where processing would fail if any of the properties
     `DelayedDelicensingEnabledState`, `EndUserMailNotificationForDelayedDelicensingState`
@@ -17,6 +26,9 @@
     `scheduledScan_interval`, `scheduledScan_runScanWhenIdle` and
     `scheduledScan_weeklyConfiguration_timeOfDay`.
     FIXES [#7267](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7267)
+* IntuneDiagnosticSettings
+  * Initial release.
+    FIXES [#7282](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7282)
 * IntuneEpmElevationSettingsPolicyWindows10
   * Fixed an issue where property `DefaultBehaviorValidation` didn't have the
     correct validate set which could result in failing the compilation to MOF
@@ -30,6 +42,25 @@
     FIXES [#7207](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7207)
 * IntuneWindowsAutopilotDeploymentProfileAzureADJoined
   * Fixed an issue where updating assignments could include assignments through Policy Sets.
+* IntuneWindowsAutopilotDevicePreparationAutomaticPolicy
+  * Initial release.
+    FIXES [#7259](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7259)
+* IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy
+  * Initial release.
+    FIXES [#7259](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7259)
+* M365DSCTelemetryEngine
+  * Fixed an issue where connection setup to Microsoft Graph would fail for
+    non-public clouds.
+    FIXES [#7255](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7255)
+* M365DSCUtil
+  * Added support for sending push notifications through new function
+    `Send-M365DSCPushNotification`, currently it's only called after finishing
+    an export
+* SCLabelPolicy
+  * Added support for handling `ModernGroupLocation` and `ExchangeLocation`
+    during apply of the resource.
+  * Fixed an issue with drift detection.
+    FIXES [#7276](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7276)
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
 * IntunePolicyAssignmentComparer
@@ -45,6 +76,8 @@
 * SentinelAlertRule
   * Fixed an issue where creating a new rule fails due to $null type coercion
     FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
+* DEPENDENCIES
+  * Updated `MSCloudLoginAssistant` to version `1.1.68`.
 * MISC
   * Added Viva selector to the web-based GUI.
 

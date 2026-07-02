@@ -1,4 +1,4 @@
-Confirm-M365DSCModuleDependency -ModuleName 'MSFT_AADDomain'
+Confirm-M365DSCModuleDependency -ModuleName 'MSFT_IntuneDiagnosticSettings'
 
 function Get-TargetResource
 {
@@ -8,43 +8,31 @@ function Get-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Id,
+        $Name,
 
         [Parameter()]
         [System.String]
-        $AuthenticationType,
+        $StorageAccountId,
 
         [Parameter()]
         [System.String]
-        $AvailabilityStatus,
+        $ServiceBusRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsAdminManaged,
+        [System.String]
+        $EventHubAuthorizationRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsDefault,
+        [System.String]
+        $EventHubName,
 
         [Parameter()]
-        [System.Boolean]
-        $IsRoot,
+        [System.String]
+        $WorkspaceId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsVerified,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordNotificationWindowInDays,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordValidityPeriodInDays,
-
-        [Parameter()]
-        [System.String[]]
-        $SupportedServices,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Categories,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -62,10 +50,6 @@ function Get-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -88,13 +72,13 @@ function Get-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Getting configuration of AzureAD Domain for Id {$Id}"
+    Write-Verbose -Message "Getting configuration of Intune Diagnostic Settings for Name $Name"
 
     try
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.Id -ne $Id)
+        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $Name)
         {
-            $null = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+            $null = New-M365DSCConnection -Workload 'Azure' `
                 -InboundParameters $PSBoundParameters
 
             #Ensure the proper dependencies are installed in the current environment.
@@ -112,38 +96,47 @@ function Get-TargetResource
             $nullResult = $PSBoundParameters
             $nullResult.Ensure = 'Absent'
 
-            $instance = Get-MgBetaDomain -DomainId $Id -ErrorAction SilentlyContinue
-
-            if ($null -eq $instance)
-            {
-                return $nullResult
-            }
+            $response = Invoke-AzRestMethod -Uri "$((Get-MSCloudLoginConnectionProfile -Workload Azure).ManagementUrl)providers/microsoft.intune/diagnosticsettings?api-version=2017-04-01-preview" `
+                -Method Get
+            $instances = (ConvertFrom-Json $response.Content).value
+            $instance = $instances | Where-Object -FilterScript { $_.name -eq $Name }
         }
         else
         {
             $instance = $Script:exportedInstance
         }
 
+        if ($null -eq $instance)
+        {
+            return $nullResult
+        }
+
+        $CategoriesValue = @()
+        foreach ($category in $instance.properties.logs)
+        {
+            $CategoriesValue += @{
+                category = $category.category
+                enabled  = $category.enabled
+            }
+        }
+
         $results = @{
-            Id                               = $instance.Id
-            AuthenticationType               = $instance.AuthenticationType
-            AvailabilityStatus               = $instance.AvailabilityStatus
-            IsAdminManaged                   = $instance.IsAdminManaged
-            IsDefault                        = $instance.IsDefault
-            IsRoot                           = $instance.IsRoot
-            IsVerified                       = $instance.IsVerified
-            PasswordNotificationWindowInDays = $instance.PasswordNotificationWindowInDays
-            PasswordValidityPeriodInDays     = $instance.PasswordValidityPeriodInDays
-            Ensure                           = 'Present'
-            Credential                       = $Credential
-            ApplicationId                    = $ApplicationId
-            TenantId                         = $TenantId
-            ApplicationSecret                = $ApplicationSecret
-            CertificateThumbprint            = $CertificateThumbprint
-            CertificatePath                  = $CertificatePath
-            CertificatePassword              = $CertificatePassword
-            ManagedIdentity                  = $ManagedIdentity.IsPresent
-            AccessTokens                     = $AccessTokens
+            Name                        = $instance.Name
+            StorageAccountId            = $instance.properties.storageAccountId
+            ServiceBusRuleId            = $instance.properties.serviceBusRuleId
+            EventHubAuthorizationRuleId = $instance.properties.eventHubAuthorizationRuleId
+            EventHubName                = $instance.properties.eventHubName
+            WorkspaceId                 = $instance.properties.workspaceId
+            Categories                  = $CategoriesValue
+            Ensure                      = 'Present'
+            Credential                  = $Credential
+            ApplicationId               = $ApplicationId
+            TenantId                    = $TenantId
+            CertificateThumbprint       = $CertificateThumbprint
+            CertificatePath             = $CertificatePath
+            CertificatePassword         = $CertificatePassword
+            ManagedIdentity             = $ManagedIdentity.IsPresent
+            AccessTokens                = $AccessTokens
         }
         return $results
     }
@@ -166,43 +159,31 @@ function Set-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Id,
+        $Name,
 
         [Parameter()]
         [System.String]
-        $AuthenticationType,
+        $StorageAccountId,
 
         [Parameter()]
         [System.String]
-        $AvailabilityStatus,
+        $ServiceBusRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsAdminManaged,
+        [System.String]
+        $EventHubAuthorizationRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsDefault,
+        [System.String]
+        $EventHubName,
 
         [Parameter()]
-        [System.Boolean]
-        $IsRoot,
+        [System.String]
+        $WorkspaceId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsVerified,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordNotificationWindowInDays,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordValidityPeriodInDays,
-
-        [Parameter()]
-        [System.String[]]
-        $SupportedServices,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Categories,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -220,10 +201,6 @@ function Set-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -246,7 +223,7 @@ function Set-TargetResource
         $AccessTokens
     )
 
-    Write-Verbose -Message "Setting configuration of AzureAD Domain for Id {$Id}"
+    Write-Verbose -Message "Setting configuration of Intune Diagnostic Settings for Name $Name"
 
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
@@ -261,60 +238,65 @@ function Set-TargetResource
     #endregion
 
     $currentInstance = Get-TargetResource @PSBoundParameters
-    $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
 
-    # CREATE
-    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
-    {
-        $NeedAdditionalUpdate = $false
-        $UpdatePasswordNotificationWindowInDays = $false
-        if (-not [System.String]::IsNullOrEmpty($PasswordNotificationWindowInDays))
-        {
-            $NeedAdditionalUpdate = $true
-            $UpdatePasswordNotificationWindowInDays = $true
-            $setParameters.Remove('PasswordNotificationWindowInDays') | Out-Null
-        }
-        $UpdatePasswordValidityPeriodInDays = $false
-        if (-not [System.String]::IsNullOrEmpty($PasswordValidityPeriodInDays))
-        {
-            $NeedAdditionalUpdate = $true
-            $UpdatePasswordValidityPeriodInDays = $true
-            $setParameters.Remove('PasswordValidityPeriodInDays') | Out-Null
-        }
-
-        Write-Verbose -Message "Creating new custom domain name {$Id}"
-        $domain = New-MgBetaDomain -BodyParameter $setParameters
-
-        if ($NeedAdditionalUpdate)
-        {
-            $UpdateParams = @{}
-            if ($UpdatePasswordNotificationWindowInDays)
-            {
-                Write-Verbose -Message "Updating PasswordNotificationWindowInDays for domain {$Id}"
-                $UpdateParams.Add('passwordNotificationWindowInDays', $PasswordNotificationWindowInDays)
-            }
-            if ($UpdatePasswordValidityPeriodInDays)
-            {
-                Write-Verbose -Message "Updating PasswordValidityPeriodInDays for domain {$Id}"
-                $UpdateParams.Add('passwordValidityPeriodInDays', $PasswordValidityPeriodInDays)
-            }
-
-            Update-MgBetaDomain -DomainId $domain.Id -BodyParameter $UpdateParams
+    $instanceParams = @{
+        name       = $Name
+        properties = @{
+            logs = @()
         }
     }
-    # UPDATE
-    elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
+
+    foreach ($category in $Categories)
     {
-        $setParameters.Remove('Id') | Out-Null
-        $setParameters.Remove('IsVerified') | Out-Null
-        Write-Verbose -Message "Updating custom domain name {$Id}"
-        Update-MgBetaDomain -DomainId $Id -BodyParameter $setParameters
+        $instanceParams.properties.logs += @{
+            category = $category.category
+            enabled  = $category.enabled
+        }
+    }
+
+    if (-not [System.String]::IsNullOrEmpty($StorageAccountId))
+    {
+        $instanceParams.properties.Add('storageAccountId', $StorageAccountId)
+    }
+    if (-not [System.String]::IsNullOrEmpty($WorkspaceId))
+    {
+        $instanceParams.properties.Add('workspaceId', $WorkspaceId)
+    }
+    if (-not [System.String]::IsNullOrEmpty($ServiceBusRuleId))
+    {
+        $instanceParams.properties.Add('eventHubName', $EventHubName)
+    }
+    if (-not [System.String]::IsNullOrEmpty($EventHubName))
+    {
+        $instanceParams.properties.Add('workspaceId', $WorkspaceId)
+    }
+    if (-not [System.String]::IsNullOrEmpty($EventHubAuthorizationRuleId))
+    {
+        $instanceParams.properties.Add('eventHubAuthorizationRuleId', $EventHubAuthorizationRuleId)
+    }
+    $payload = ConvertTo-Json $instanceParams -Depth 10 -Compress
+
+    # CREATE/UPDATE
+    if ($Ensure -eq 'Present')
+    {
+        if ($currentInstance.Ensure -eq 'Absent')
+        {
+            Write-Verbose -Message "Creating new diagnostic setting {$Name}"
+        }
+        else
+        {
+            Write-Verbose -Message "Updating diagnostic setting {$Name}"
+        }
+        $null = Invoke-AzRestMethod -Uri "$((Get-MSCloudLoginConnectionProfile -Workload Azure).ManagementUrl)providers/microsoft.intune/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
+            -Method PUT `
+            -Payload $payload
     }
     # REMOVE
     elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
     {
-        Write-Verbose -Message "Removing custom domain name {$Id}"
-        Invoke-MgBetaForceDomainDelete -DomainId $Id
+        Write-Verbose -Message "Removing diagnostic setting {$Name}"
+        $null = Invoke-AzRestMethod -Uri "$((Get-MSCloudLoginConnectionProfile -Workload Azure).ManagementUrl)providers/microsoft.intune/diagnosticsettings/$($Name)?api-version=2017-04-01-preview" `
+            -Method DELETE
     }
 }
 
@@ -326,43 +308,31 @@ function Test-TargetResource
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Id,
+        $Name,
 
         [Parameter()]
         [System.String]
-        $AuthenticationType,
+        $StorageAccountId,
 
         [Parameter()]
         [System.String]
-        $AvailabilityStatus,
+        $ServiceBusRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsAdminManaged,
+        [System.String]
+        $EventHubAuthorizationRuleId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsDefault,
+        [System.String]
+        $EventHubName,
 
         [Parameter()]
-        [System.Boolean]
-        $IsRoot,
+        [System.String]
+        $WorkspaceId,
 
         [Parameter()]
-        [System.Boolean]
-        $IsVerified,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordNotificationWindowInDays,
-
-        [Parameter()]
-        [System.UInt32]
-        $PasswordValidityPeriodInDays,
-
-        [Parameter()]
-        [System.String[]]
-        $SupportedServices,
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $Categories,
 
         [Parameter()]
         [ValidateSet('Present', 'Absent')]
@@ -380,10 +350,6 @@ function Test-TargetResource
         [Parameter()]
         [System.String]
         $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
 
         [Parameter()]
         [System.String]
@@ -427,10 +393,6 @@ function Export-TargetResource
     param
     (
         [Parameter()]
-        [System.String]
-        $Filter,
-
-        [Parameter()]
         [System.Management.Automation.PSCredential]
         $Credential,
 
@@ -467,7 +429,7 @@ function Export-TargetResource
         $AccessTokens
     )
 
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
+    $ConnectionMode = New-M365DSCConnection -Workload 'Azure' `
         -InboundParameters $PSBoundParameters
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -484,11 +446,9 @@ function Export-TargetResource
 
     try
     {
-        [array] $exportedInstances = Get-MgBetaDomain `
-            -All `
-            -Filter $Filter `
-            -ErrorAction Stop
-
+        $response = Invoke-AzRestMethod -Uri "$((Get-MSCloudLoginConnectionProfile -Workload Azure).ManagementUrl)providers/microsoft.intune/diagnosticsettings?api-version=2017-04-01-preview" `
+            -Method Get
+        [array] $exportedInstances = (ConvertFrom-Json $response.Content).value
         $i = 1
         $dscContent = [System.Text.StringBuilder]::new()
         if ($exportedInstances.Length -eq 0)
@@ -506,14 +466,13 @@ function Export-TargetResource
                 $Global:M365DSCExportResourceInstancesCount++
             }
 
-            $displayedKey = $config.Id
+            $displayedKey = $config.Name
             Write-M365DSCHost -Message "    |---[$i/$($exportedInstances.Count)] $displayedKey" -DeferWrite
             $params = @{
-                Id                    = $config.Id
+                Name                  = $config.Name
                 Credential            = $Credential
                 ApplicationId         = $ApplicationId
                 TenantId              = $TenantId
-                ApplicationSecret     = $ApplicationSecret
                 CertificateThumbprint = $CertificateThumbprint
                 CertificatePath       = $CertificatePath
                 CertificatePassword   = $CertificatePassword
@@ -524,11 +483,25 @@ function Export-TargetResource
             $Script:exportedInstance = $config
             $Results = Get-TargetResource @Params
 
+            if ($Results.Categories)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Categories -CIMInstanceName AzureDiagnosticSettingsCategory
+                if ($complexTypeStringResult)
+                {
+                    $Results.Categories = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('Categories') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
-                -Credential $Credential
+                -Credential $Credential `
+                -NoEscape @('Categories')
             [void]$dscContent.Append($currentDSCBlock)
             Save-M365DSCPartialExport -Content $currentDSCBlock `
                 -FileName $Global:PartialExportFileName
