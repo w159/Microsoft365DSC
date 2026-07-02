@@ -8,6 +8,10 @@
 * AADDomain
   * Fixed an issue with invalid casing of properties.
     FIXES [#7285](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7285)
+* AADGroup
+  * Fixed an issue where empty `Members` or `GroupAsMembers` arrays triggered a full
+    group membership enumeration during `Get-TargetResource`.
+    FIXES [#7274](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7274)
 * EXOEmailAddressPolicy
   * Fixed an issue when updating the default policy.
     FIXES [#7271](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7271)
