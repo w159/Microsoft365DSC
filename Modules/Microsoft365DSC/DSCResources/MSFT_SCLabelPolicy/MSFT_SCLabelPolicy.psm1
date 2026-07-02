@@ -182,34 +182,6 @@ function Get-TargetResource
             $advancedSettingsValue = Convert-StringToAdvancedSettings -AdvancedSettings $policy.Settings
         }
 
-        $ExchangeLocationValue = $null
-        if ($null -ne $policy.ExchangeLocation)
-        {
-            Write-Verbose -Message 'Converting ExchangeLocation to an Array.'
-            $ExchangeLocationValue = Convert-ArrayList -CurrentProperty $policy.ExchangeLocation
-        }
-
-        $ExchangeLocationExceptionValue = $null
-        if ($null -ne $policy.ExchangeLocationException)
-        {
-            Write-Verbose -Message 'Converting ExchangeLocationException to an Array.'
-            $ExchangeLocationExceptionValue = Convert-ArrayList -CurrentProperty $policy.ExchangeLocationException
-        }
-
-        $ModernGroupLocationValue = $null
-        if ($null -ne $policy.ModernGroupLocation)
-        {
-            Write-Verbose -Message 'Converting ModernGroupLocation to an Array.'
-            $ModernGroupLocationValue = Convert-ArrayList -CurrentProperty $policy.ModernGroupLocation
-        }
-
-        $ModernGroupLocationExceptionValue = $null
-        if ($null -ne $policy.ModernGroupLocationException)
-        {
-            Write-Verbose -Message 'Converting ModernGroupLocationException to an Array.'
-            $ModernGroupLocationExceptionValue = Convert-ArrayList -CurrentProperty $policy.ModernGroupLocationException
-        }
-
         Write-Verbose "Found existing Sensitivity Label policy $($Name)"
         $result = @{
             Name                         = $policy.Name
@@ -223,10 +195,10 @@ function Get-TargetResource
             CertificatePassword          = $CertificatePassword
             Ensure                       = 'Present'
             Labels                       = $policy.Labels
-            ExchangeLocation             = $ExchangeLocationValue
-            ExchangeLocationException    = $ExchangeLocationExceptionValue
-            ModernGroupLocation          = $ModernGroupLocationValue
-            ModernGroupLocationException = $ModernGroupLocationExceptionValue
+            ExchangeLocation             = Get-M365DSCArrayFromProperty -PropertyValue $policy.ExchangeLocation.Name -ElementType ([System.String])
+            ExchangeLocationException    = Get-M365DSCArrayFromProperty -PropertyValue $policy.ExchangeLocationException.Name -ElementType ([System.String])
+            ModernGroupLocation          = Get-M365DSCArrayFromProperty -PropertyValue $policy.ModernGroupLocation.Name -ElementType ([System.String])
+            ModernGroupLocationException = Get-M365DSCArrayFromProperty -PropertyValue $policy.ModernGroupLocationException.Name -ElementType ([System.String])
             AccessTokens                 = $AccessTokens
         }
 
@@ -390,12 +362,49 @@ function Set-TargetResource
     #endregion
 
     $CurrentPolicy = Get-TargetResource @PSBoundParameters
+    $boundParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+
+    foreach ($param in @('ModernGroupLocation', 'ModernGroupLocationException', 'ExchangeLocation', 'ExchangeLocationException'))
+    {
+        if ($PSBoundParameters.ContainsKey($param))
+        {
+            [array]$diffs = Compare-Object -ReferenceObject $CurrentPolicy.$param -DifferenceObject $PSBoundParameters[$param]
+            if ($diffs.Count -gt 0)
+            {
+                $add = @()
+                $remove = @()
+                foreach ($diff in $diffs)
+                {
+                    if ($diff.SideIndicator -eq '<=')
+                    {
+                        Write-Verbose "Removing $param $($diff.InputObject) from policy $Name."
+                        $remove += $diff.InputObject
+                    }
+                    elseif ($diff.SideIndicator -eq '=>')
+                    {
+                        Write-Verbose "Adding $param $($diff.InputObject) to policy $Name."
+                        $add += $diff.InputObject
+                    }
+                }
+
+                if ($add.Count -gt 0)
+                {
+                    $boundParams["Add$param"] = $add
+                }
+
+                if ($remove.Count -gt 0)
+                {
+                    $boundParams["Remove$param"] = $remove
+                }
+            }
+            $boundParams.Remove($param) | Out-Null
+        }
+    }
 
     if ($Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Absent')
     {
         Write-Verbose "Creating new Sensitivity label policy '$Name'."
-
-        $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+        $CreationParams = $boundParams
 
         if ($PSBoundParameters.ContainsKey('AdvancedSettings'))
         {
@@ -432,7 +441,7 @@ function Set-TargetResource
         {
             Start-Sleep 5
             Write-Verbose "Updating Sensitivity label policy '$Name' settings."
-            $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+            $SetParams = $boundParams
 
             if ($PSBoundParameters.ContainsKey('AdvancedSettings'))
             {
@@ -462,8 +471,7 @@ function Set-TargetResource
     elseif ($Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Present')
     {
         Write-Verbose "Updating existing Sensitivity label policy '$Name'."
-
-        $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
+        $SetParams = $boundParams
 
         if ($PSBoundParameters.ContainsKey('AdvancedSettings'))
         {
@@ -668,7 +676,7 @@ function Test-TargetResource
     Write-Verbose -Message "Testing configuration of Sensitivity label for $Name"
     $CurrentValues = Get-TargetResource @PSBoundParameters
 
-    $ValuesToCheck = $PSBoundParameters
+    $ValuesToCheck = ([Hashtable]$PSBoundParameters).Clone()
     $ValuesToCheck.Remove('AddLabels') | Out-Null
     $ValuesToCheck.Remove('AddExchangeLocation') | Out-Null
     $ValuesToCheck.Remove('AddExchangeLocationException') | Out-Null
@@ -1062,25 +1070,6 @@ function Test-AdvancedSettings
 
     Write-Verbose -Message "Test AdvancedSettings returned {$foundSettings}"
     return $foundSettings
-}
-
-function Convert-ArrayList
-{
-    [CmdletBinding()]
-    [OutputType([System.Collections.ArrayList])]
-    param
-    (
-        [Parameter()]
-        $CurrentProperty
-    )
-
-    $currentItems = [System.Collections.ArrayList]::new()
-    foreach ($currentProp in $CurrentProperty)
-    {
-        $currentItems.Add($currentProp.Name) | Out-Null
-    }
-
-    return $currentItems
 }
 
 function New-PolicyData
