@@ -49,6 +49,11 @@
   * Added support for sending push notifications through new function
     `Send-M365DSCPushNotification`, currently it's only called after finishing
     an export
+* SCLabelPolicy
+  * Added support for handling `ModernGroupLocation` and `ExchangeLocation`
+    during apply of the resource.
+  * Fixed an issue with drift detection.
+    FIXES [#7276](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7276)
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
 * IntunePolicyAssignmentComparer
