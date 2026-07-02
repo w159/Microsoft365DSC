@@ -934,12 +934,15 @@ function Start-M365DSCConfigurationExtract
         Write-M365DSCHost -Message "Failed exports: {$($synchronizedHashtable.FailedResources)}"
         if ($($synchronizedHashtable.FailedResources) -eq 0)
         {
-            Write-M365DSCHost -Message "$($Global:M365DSCEmojiGreenCheckmark) Export completed successfully." -ForegroundColor Green
+            $Message = "$($Global:M365DSCEmojiGreenCheckmark) Export completed successfully."
+            Write-M365DSCHost -Message $Message -ForegroundColor Green
         }
         else
         {
-            Write-M365DSCHost -Message "$($Global:M365DSCEmojiRedX) Export completed with errors." -ForegroundColor Red
+            $Message = "$($Global:M365DSCEmojiRedX) Export completed with errors."
+            Write-M365DSCHost -Message $Message -ForegroundColor Red
         }
+        Send-M365DSCPushNotification -Body $Message
         #endregion
 
         $sessions = Get-PSSession | Where-Object -FilterScript { $_.Name -like 'SfBPowerShellSessionViaTeamsModule_*' -or `

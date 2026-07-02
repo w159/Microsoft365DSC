@@ -439,6 +439,7 @@ function Set-TargetResource
         #region new Intune assignment management
         $currentAssignments = @()
         $currentAssignments += Get-MgBetaDeviceManagementWindowsAutopilotDeploymentProfileAssignment -WindowsAutopilotDeploymentProfileId $currentInstance.id
+        $currentAssignments = $currentAssignments | Where-Object -FilterScript { $_.source -eq 'direct' }
 
         $intuneAssignments = @()
         if ($null -ne $Assignments -and $Assignments.Count -gt 0)
