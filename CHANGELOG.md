@@ -22,6 +22,9 @@
     `scheduledScan_interval`, `scheduledScan_runScanWhenIdle` and
     `scheduledScan_weeklyConfiguration_timeOfDay`.
     FIXES [#7267](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7267)
+* IntuneDiagnosticSettings
+  * Initial release.
+    FIXES [#7282](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7282)
 * IntuneEpmElevationSettingsPolicyWindows10
   * Fixed an issue where property `DefaultBehaviorValidation` didn't have the
     correct validate set which could result in failing the compilation to MOF
