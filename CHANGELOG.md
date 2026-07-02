@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.701.1
 
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Fixed an issue when updating the policy with invalid property names.
@@ -48,19 +48,14 @@
 * IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy
   * Initial release.
     FIXES [#7259](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7259)
-* M365DSCTelemetryEngine
-  * Fixed an issue where connection setup to Microsoft Graph would fail for
-    non-public clouds.
-    FIXES [#7255](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7255)
-* M365DSCUtil
-  * Added support for sending push notifications through new function
-    `Send-M365DSCPushNotification`, currently it's only called after finishing
-    an export
 * SCLabelPolicy
   * Added support for handling `ModernGroupLocation` and `ExchangeLocation`
     during apply of the resource.
   * Fixed an issue with drift detection.
     FIXES [#7276](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7276)
+* SentinelAlertRule
+  * Fixed an issue where creating a new rule fails due to $null type coercion
+    FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
 * SPOSharingSettings
   * Improved host site look from O(n) to O(1) with fallback logic.
 * IntunePolicyAssignmentComparer
@@ -73,9 +68,14 @@
     FIXES [#597](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/597)
 * M365DSCGraphShim
   * Added error handling for Multi Admin Approval in Intune.
-* SentinelAlertRule
-  * Fixed an issue where creating a new rule fails due to $null type coercion
-    FIXES [#7265](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7265)
+* M365DSCTelemetryEngine
+  * Fixed an issue where connection setup to Microsoft Graph would fail for
+    non-public clouds.
+    FIXES [#7255](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7255)
+* M365DSCUtil
+  * Added support for sending push notifications through new function
+    `Send-M365DSCPushNotification`, currently it's only called after finishing
+    an export
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version `1.1.68`.
 * MISC
