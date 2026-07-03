@@ -444,7 +444,8 @@ function Get-TargetResource
         }
         if ($getValue.assignments.Count -gt 0)
         {
-            $results.Add('Assignments', (ConvertFrom-IntunePolicyAssignment -Assignments $getValue.assignments -IncludeDeviceFilter $false))
+            [array]$assignmentsValues = $getValue.assignments | Where-Object -FilterScript { $_.source -eq 'direct' }
+            $results.Add('Assignments', (ConvertFrom-IntunePolicyAssignment -Assignments $assignmentsValues -IncludeDeviceFilter $false))
         }
 
         return $results

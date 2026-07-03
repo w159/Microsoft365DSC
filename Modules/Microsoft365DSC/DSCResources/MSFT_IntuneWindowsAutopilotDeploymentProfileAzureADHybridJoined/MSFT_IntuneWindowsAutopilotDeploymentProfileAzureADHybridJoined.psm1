@@ -237,6 +237,7 @@ function Get-TargetResource
         $assignmentResult = @()
         if ($null -ne $rawAssignments -and $rawAssignments.Count -gt 0)
         {
+            [array]$rawAssignments = $rawAssignments | Where-Object -FilterScript { $_.source -eq 'direct' }
             $assignmentResult += ConvertFrom-IntunePolicyAssignment -Assignments $rawAssignments -IncludeDeviceFilter $false
         }
         $results.Add('Assignments', $assignmentResult)

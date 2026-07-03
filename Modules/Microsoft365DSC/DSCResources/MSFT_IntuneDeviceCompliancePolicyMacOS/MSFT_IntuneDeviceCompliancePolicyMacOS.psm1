@@ -186,13 +186,16 @@ function Get-TargetResource
 
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $devicePolicy = Get-MgBetaDeviceManagementDeviceCompliancePolicy -DeviceCompliancePolicyId $Id -ErrorAction SilentlyContinue
+                $devicePolicy = Get-MgBetaDeviceManagementDeviceCompliancePolicy -DeviceCompliancePolicyId $Id `
+                    -ExpandProperty 'scheduledActionsForRule($expand=scheduledActionConfigurations)' `
+                    -ErrorAction SilentlyContinue
             }
 
             if ($null -eq $devicePolicy)
             {
                 $devicePolicy = Get-MgBetaDeviceManagementDeviceCompliancePolicy `
                     -All `
+                    -ExpandProperty 'scheduledActionsForRule($expand=scheduledActionConfigurations)' `
                     -Filter "DisplayName eq '$($DisplayName -replace "'", "''")' and isof('microsoft.graph.macOSCompliancePolicy')" `
                     -ErrorAction Stop
             }
@@ -284,6 +287,7 @@ function Get-TargetResource
         $graphAssignments = Get-MgBetaDeviceManagementDeviceCompliancePolicyAssignment -DeviceCompliancePolicyId $devicePolicy.Id
         if ($graphAssignments.Count -gt 0)
         {
+            [array]$graphAssignments = $graphAssignments | Where-Object -FilterScript { $_.source -eq 'direct' }
             $returnAssignments += ConvertFrom-IntunePolicyAssignment `
                 -IncludeDeviceFilter:$true `
                 -Assignments ($graphAssignments)

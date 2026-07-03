@@ -296,7 +296,7 @@ function Set-TargetResource
     foreach ($passwordCred in $ApplicationRestrictions.PasswordCredentials)
     {
         $newItem = @{
-            restrictForAppsCreatedAfterDateTime = [System.DateTime]::Parse($passwordCred.RestrictForAppsCreatedAfterDateTime)
+            restrictForAppsCreatedAfterDateTime = $passwordCred.RestrictForAppsCreatedAfterDateTime
             restrictionType                     = $passwordCred.RestrictionType
             state                               = $passwordCred.State
         }
@@ -310,7 +310,7 @@ function Set-TargetResource
     foreach ($keyCred in $ApplicationRestrictions.KeyCredentials)
     {
         $newItem = @{
-            restrictForAppsCreatedAfterDateTime = [System.DateTime]::Parse($keyCred.RestrictForAppsCreatedAfterDateTime)
+            restrictForAppsCreatedAfterDateTime = $keyCred.RestrictForAppsCreatedAfterDateTime
             restrictionType                     = $keyCred.RestrictionType
             state                               = $keyCred.State
         }
@@ -336,7 +336,7 @@ function Set-TargetResource
     foreach ($passwordCred in $ServicePrincipalRestrictions.PasswordCredentials)
     {
         $newItem = @{
-            restrictForAppsCreatedAfterDateTime = [System.DateTime]::Parse($passwordCred.RestrictForAppsCreatedAfterDateTime)
+            restrictForAppsCreatedAfterDateTime = $passwordCred.RestrictForAppsCreatedAfterDateTime
             restrictionType                     = $passwordCred.RestrictionType
             state                               = $passwordCred.State
         }
@@ -350,7 +350,7 @@ function Set-TargetResource
     foreach ($keyCred in $ServicePrincipalRestrictions.KeyCredentials)
     {
         $newItem = @{
-            restrictForAppsCreatedAfterDateTime = [System.DateTime]::Parse($keyCred.RestrictForAppsCreatedAfterDateTime)
+            restrictForAppsCreatedAfterDateTime = $keyCred.RestrictForAppsCreatedAfterDateTime
             restrictionType                     = $keyCred.RestrictionType
             state                               = $keyCred.State
         }
