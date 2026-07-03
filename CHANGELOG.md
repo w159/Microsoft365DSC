@@ -14,6 +14,8 @@
 * MISC
   * Fixed an issue where assignments through a policy set were exported for
     resources that were not of the `IntunePolicySets` type.
+  * Added Dockerfile and an ancillary script which is used to install
+    Microsoft365Dsc module and its dependencies on that Windows docker image
 
 # 1.26.701.1
 
