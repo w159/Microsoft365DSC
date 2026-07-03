@@ -324,7 +324,7 @@ function Get-TargetResource
             Owners                        = $OwnersValues
             MemberOf                      = $MemberOfValues
             Description                   = $Group.Description
-            GroupTypes                    = [System.String[]]$Group.GroupTypes
+            GroupTypes                    = Get-M365DSCArrayFromProperty -PropertyValue $Group.GroupTypes -ElementType ([System.String])
             MembershipRule                = $Group.MembershipRule
             MembershipRuleProcessingState = $Group.MembershipRuleProcessingState
             GroupAsMembers                = $GroupAsMembersValues

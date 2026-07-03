@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADGroup
+  * Fixed an issue where `GroupTypes` would be returned as a null object.
+    FIXES [#7253](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7253)
 * AADTenantAppManagementPolicy
   * Fixed an issue where the `RestrictForAppsCreatedAfterDateTime` timestamp
     was incorrectly converted to a DateTime object.
