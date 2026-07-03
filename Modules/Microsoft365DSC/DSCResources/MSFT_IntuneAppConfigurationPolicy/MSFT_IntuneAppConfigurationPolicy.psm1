@@ -211,6 +211,7 @@ function Get-TargetResource
         $graphAssignments = Get-MgBetaDeviceAppManagementTargetedManagedAppConfigurationAssignment -TargetedManagedAppConfigurationId $configPolicy.Id
         if ($graphAssignments.Count -gt 0)
         {
+            [array]$graphAssignments = $graphAssignments | Where-Object -FilterScript { $_.source -eq 'direct' }
             $returnAssignments += ConvertFrom-IntunePolicyAssignment `
                 -IncludeDeviceFilter:$true `
                 -Assignments ($graphAssignments)

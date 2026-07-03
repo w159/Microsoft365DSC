@@ -269,6 +269,7 @@ function Get-TargetResource
         $assignmentResult = @()
         if ($assignmentsValues.Count -gt 0)
         {
+            [array]$assignmentsValues = $assignmentsValues | Where-Object -FilterScript { $_.source -eq 'direct' }
             $assignmentResult += ConvertFrom-IntuneMobileAppAssignment -Assignments $assignmentsValues -IncludeDeviceFilter $true
         }
         foreach ($assignment in $assignmentResult)

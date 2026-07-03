@@ -266,6 +266,7 @@ function Get-TargetResource
         $appAssignments = Get-MgBetaDeviceAppManagementMobileAppAssignment -MobileAppId $instance.Id
         if ($null -ne $appAssignments -and $appAssignments.Count -gt 0)
         {
+            [array]$appAssignments = $appAssignments | Where-Object -FilterScript { $_.source -eq 'direct' }
             $resultAssignments += ConvertFrom-IntuneMobileAppAssignment `
                 -IncludeDeviceFilter:$true `
                 -Assignments ($appAssignments)

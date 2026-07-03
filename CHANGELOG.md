@@ -1,5 +1,20 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADGroup
+  * Fixed an issue where `GroupTypes` would be returned as a null object.
+    FIXES [#7253](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7253)
+* AADTenantAppManagementPolicy
+  * Fixed an issue where the `RestrictForAppsCreatedAfterDateTime` timestamp
+    was incorrectly converted to a DateTime object.
+    FIXES [#7291](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7291)
+* IntuneDeviceCompliancePolicyMacOS
+  * Fixed an issue where `ScheduledActionsForRule` was not compared correctly.
+* MISC
+  * Fixed an issue where assignments through a policy set were exported for
+    resources that were not of the `IntunePolicySets` type.
+
 # 1.26.701.1
 
 * AADCrossTenantAccessPolicyConfigurationPartner
