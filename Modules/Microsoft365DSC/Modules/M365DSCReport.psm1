@@ -980,14 +980,6 @@ function New-M365DSCReportFromConfiguration
     }
     process # required with DynamicParam
     {
-        # Test if Windows Remoting is enabled, which is needed to run this function.
-        $result = Test-WSMan -ErrorAction SilentlyContinue
-        if ($null -eq $result)
-        {
-            Write-Error -Message 'Windows Remoting is NOT configured yet. Please configure Windows Remoting (by running `Enable-PSRemoting -SkipNetworkProfileCheck`) before running this function.'
-            return
-        }
-
         # Validate that the latest version of the module is installed.
         Test-M365DSCModuleValidity
 

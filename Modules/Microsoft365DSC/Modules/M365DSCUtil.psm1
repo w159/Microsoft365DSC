@@ -10,6 +10,11 @@ $Global:M365DSCPushNotificationsBody = $null
 
 $Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
 
+if ([System.String]::IsNullOrEmpty($env:TEMP) -and $PSEdition -eq 'Core' -and -not $IsWindows)
+{
+    $env:TEMP = '/tmp'
+}
+
 <#
 .Description
 This function retrieves a Teams team by its name
@@ -932,6 +937,10 @@ function Assert-M365DSCBlueprint
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificatePath,
 
@@ -942,6 +951,14 @@ function Assert-M365DSCBlueprint
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens,
 
         [Parameter()]
         [System.String]
@@ -1078,7 +1095,9 @@ function Assert-M365DSCBlueprint
             -TenantId $TenantId `
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
-            -CertificatePassword $CertificatePassword
+            -CertificatePassword $CertificatePassword `
+            -ManagedIdentity $ManagedIdentity.IsPresent `
+            -AccessTokens $AccessTokens
 
         # Call the New-M365DSCDeltaReport configuration to generate the Delta Report between
         # the BluePrint and the extracted resources;
@@ -1844,6 +1863,11 @@ function Write-M365DSCHost
         [switch]
         $CommitWrite
     )
+
+    if ([int]$ForegroundColor -eq -1)
+    {
+        $ForegroundColor = [System.ConsoleColor]::Gray
+    }
 
     if (-not [System.String]::IsNullOrEmpty($Message))
     {
