@@ -45,7 +45,7 @@ try
     Set-ExecutionPolicy Unrestricted -Force
 
     Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules" -Recurse | Unblock-File
-    New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client' -Name MaxEnvelopeSizekb -Value 1039440 -PropertyType DWORD -Force | Out-Null
+    $null = New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client' -Name MaxEnvelopeSizekb -Value 1039440 -PropertyType DWORD -Force
 
     $computerSystem = Get-CimInstance -ClassName "Win32_ComputerSystem"
     $totalPhysicalMemory = $computerSystem.TotalPhysicalMemory
@@ -56,7 +56,7 @@ try
 
     [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine)
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage" -Name "ACP" -Value 65001 -Force
-    New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force | Out-Null
+    $null = New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
     Write-Output "Configuring PowerShell 7 environment"
     & pwsh -Command {
@@ -71,6 +71,7 @@ try
             -f $PSVersion, $PSVersion, $SDKVersion
         $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
         Copy-Item -Path $path -Destination $basePath
+        $null = Enable-PSRemoting -Force -SkipNetworkProfileCheck
     }
     if ($LASTEXITCODE -ne 0)
     {
