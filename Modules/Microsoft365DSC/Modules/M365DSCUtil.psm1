@@ -251,8 +251,8 @@ function Test-M365DSCParameterState
         $LCMState = $null
         try
         {
-            if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) `
-                -and $null -eq $Script:LCMInfo)
+            if (($PSEdition -eq 'Desktop' -or $IsWindows) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) `
+                -and $null -eq $Script:LCMInfo )
             {
                 $Script:LCMInfo = Get-DscLocalConfigurationManager -ErrorAction Stop
 
@@ -664,23 +664,21 @@ function Install-M365DSCDevBranch
         #region Install All Dependencies
         $manifest = Import-PowerShellDataFile "$extractPath\Microsoft365DSC-Dev\Modules\Microsoft365DSC\Microsoft365DSC.psd1"
         $dependencies = $manifest.RequiredModules
-        if ((-not(([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) -and ($Scope -eq 'AllUsers'))
+        if (($PSEdition -eq 'Desktop' -or $IsWindows) -and (-not(([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) -and ($Scope -eq 'AllUsers'))
         {
-            Write-Error 'Cannot update the dependencies for Microsoft365DSC. You need to run this command as a local administrator.'
+            throw 'Cannot update the dependencies for Microsoft365DSC. You need to run this command as a local administrator.'
         }
-        else
+
+        foreach ($dependency in $dependencies)
         {
-            foreach ($dependency in $dependencies)
+            Write-Host "Installing {$($dependency.ModuleName)}..." -NoNewline
+            $existingModule = Get-Module $dependency.ModuleName -ListAvailable | Where-Object -FilterScript { $_.Version -eq $dependency.RequiredVersion }
+            if ($null -eq $existingModule)
             {
-                Write-Host "Installing {$($dependency.ModuleName)}..." -NoNewline
-                $existingModule = Get-Module $dependency.ModuleName -ListAvailable | Where-Object -FilterScript { $_.Version -eq $dependency.RequiredVersion }
-                if ($null -eq $existingModule)
-                {
-                    Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -Force -AllowClobber -Scope $Scope | Out-Null
-                }
-                Import-Module $dependency.ModuleName -Force | Out-Null
-                Write-Host 'Done' -ForegroundColor Green
+                Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -Force -AllowClobber -Scope $Scope | Out-Null
             }
+            Import-Module $dependency.ModuleName -Force | Out-Null
+            Write-Host 'Done' -ForegroundColor Green
         }
         #endregion
 

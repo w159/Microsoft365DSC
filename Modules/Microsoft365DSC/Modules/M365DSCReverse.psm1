@@ -1034,7 +1034,7 @@ function Start-M365DSCConfigurationExtract
         {
             try
             {
-                if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+                if ($PSEdition -eq 'Desktop' -or $IsWindows -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
                 {
                     $LCMConfig = Get-DscLocalConfigurationManager
                     if ($null -ne $LCMConfig.CertificateID)
