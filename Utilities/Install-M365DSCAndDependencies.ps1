@@ -36,15 +36,16 @@ try
     & pwsh -Command {
         Update-M365DSCDependencies
     }
+    if ($LASTEXITCODE -ne 0)
+    {
+        throw "Could not install Microsoft365DSC module dependencies in PowerShell 7"
+    }
 
     Write-Output "Configuring Windows PowerShell environment"
-    Enable-PSRemoting -Force -SkipNetworkProfileCheck
-    winrm quickconfig -force
     Set-ExecutionPolicy Unrestricted -Force
 
     Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules" -Recurse | Unblock-File
-    Set-Item -Path WSMan:\localhost\MaxEnvelopeSizekb -Value 1039440
-    New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client' -Name MaxEnvelopeSizekb -Value 1039440 -PropertyType DWORD -Force
+    New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client' -Name MaxEnvelopeSizekb -Value 1039440 -PropertyType DWORD -Force | Out-Null
 
     $computerSystem = Get-CimInstance -ClassName "Win32_ComputerSystem"
     $totalPhysicalMemory = $computerSystem.TotalPhysicalMemory
@@ -59,10 +60,21 @@ try
 
     Write-Output "Configuring PowerShell 7 environment"
     & pwsh -Command {
-        $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\7.6.2\powershell.windows.x64\7.6.2\tools\net10.0\any"
-        Copy-Item -Path "$basePath\runtimes\win-x64\native\pwrshplugin.dll" -Destination $basePath
-        Enable-PSRemoting -Force -SkipNetworkProfileCheck
-        winrm quickconfig -force
+        $PSVersion = [System.String]$PSVersionTable.PSVersion
+        $SDK = dotnet --list-sdks
+        if ($LASTEXITCODE -ne 0)
+        {
+            throw "Could not get .NET SDK version"
+        }
+        $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
+        $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
+            -f $PSVersion, $PSVersion, $SDKVersion
+        $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
+        Copy-Item -Path $path -Destination $basePath
+    }
+    if ($LASTEXITCODE -ne 0)
+    {
+        throw "Could not configure PowerShell 7 environment"
     }
 }
 catch
