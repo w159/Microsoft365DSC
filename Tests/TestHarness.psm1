@@ -33,7 +33,7 @@ function Invoke-TestHarness
     $testCoverageFiles = @()
     if ($IgnoreCodeCoverage.IsPresent -eq $false)
     {
-        Get-ChildItem -Path "$repoDir/Modules/Microsoft365DSC/DSCResources/**/*.psm1" -Recurse | ForEach-Object {
+        Get-ChildItem -Path "$repoDir/Modules/Microsoft365DSC/DscResources/**/*.psm1" -Recurse | ForEach-Object {
             if ($_.FullName -notlike '*\DSCResource.Tests\*')
             {
                 $testCoverageFiles += $_.FullName
