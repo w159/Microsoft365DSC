@@ -679,7 +679,7 @@ function Export-TargetResource
                     -ComplexObject $Results.Settings `
                     -CIMInstanceName 'MicrosoftGraphdeviceManagementConfigurationSetting' `
                     -ComplexTypeMapping $complexMapping `
-                    -IsArray:$true
+                    -IsArray
 
                 if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                 {

@@ -1096,7 +1096,7 @@ function Assert-M365DSCBlueprint
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
             -CertificatePassword $CertificatePassword `
-            -ManagedIdentity $ManagedIdentity.IsPresent `
+            -ManagedIdentity:$ManagedIdentity.IsPresent `
             -AccessTokens $AccessTokens
 
         # Call the New-M365DSCDeltaReport configuration to generate the Delta Report between
