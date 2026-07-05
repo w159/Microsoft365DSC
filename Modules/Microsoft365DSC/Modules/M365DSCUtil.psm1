@@ -10,6 +10,11 @@ $Global:M365DSCPushNotificationsBody = $null
 
 $Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
 
+if ([System.String]::IsNullOrEmpty($env:TEMP) -and $PSEdition -eq 'Core' -and -not $IsWindows)
+{
+    $env:TEMP = '/tmp'
+}
+
 <#
 .Description
 This function retrieves a Teams team by its name
@@ -251,8 +256,8 @@ function Test-M365DSCParameterState
         $LCMState = $null
         try
         {
-            if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) `
-                -and $null -eq $Script:LCMInfo)
+            if (($PSEdition -eq 'Desktop' -or $IsWindows) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) `
+                -and $null -eq $Script:LCMInfo )
             {
                 $Script:LCMInfo = Get-DscLocalConfigurationManager -ErrorAction Stop
 
@@ -664,23 +669,21 @@ function Install-M365DSCDevBranch
         #region Install All Dependencies
         $manifest = Import-PowerShellDataFile "$extractPath\Microsoft365DSC-Dev\Modules\Microsoft365DSC\Microsoft365DSC.psd1"
         $dependencies = $manifest.RequiredModules
-        if ((-not(([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) -and ($Scope -eq 'AllUsers'))
+        if (($PSEdition -eq 'Desktop' -or $IsWindows) -and (-not(([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) -and ($Scope -eq 'AllUsers'))
         {
-            Write-Error 'Cannot update the dependencies for Microsoft365DSC. You need to run this command as a local administrator.'
+            throw 'Cannot update the dependencies for Microsoft365DSC. You need to run this command as a local administrator.'
         }
-        else
+
+        foreach ($dependency in $dependencies)
         {
-            foreach ($dependency in $dependencies)
+            Write-Host "Installing {$($dependency.ModuleName)}..." -NoNewline
+            $existingModule = Get-Module $dependency.ModuleName -ListAvailable | Where-Object -FilterScript { $_.Version -eq $dependency.RequiredVersion }
+            if ($null -eq $existingModule)
             {
-                Write-Host "Installing {$($dependency.ModuleName)}..." -NoNewline
-                $existingModule = Get-Module $dependency.ModuleName -ListAvailable | Where-Object -FilterScript { $_.Version -eq $dependency.RequiredVersion }
-                if ($null -eq $existingModule)
-                {
-                    Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -Force -AllowClobber -Scope $Scope | Out-Null
-                }
-                Import-Module $dependency.ModuleName -Force | Out-Null
-                Write-Host 'Done' -ForegroundColor Green
+                Install-Module $dependency.ModuleName -RequiredVersion $dependency.RequiredVersion -Force -AllowClobber -Scope $Scope | Out-Null
             }
+            Import-Module $dependency.ModuleName -Force | Out-Null
+            Write-Host 'Done' -ForegroundColor Green
         }
         #endregion
 
@@ -934,6 +937,10 @@ function Assert-M365DSCBlueprint
         $TenantId,
 
         [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ApplicationSecret,
+
+        [Parameter()]
         [System.String]
         $CertificatePath,
 
@@ -944,6 +951,14 @@ function Assert-M365DSCBlueprint
         [Parameter()]
         [System.String]
         $CertificateThumbprint,
+
+        [Parameter()]
+        [Switch]
+        $ManagedIdentity,
+
+        [Parameter()]
+        [System.String[]]
+        $AccessTokens,
 
         [Parameter()]
         [System.String]
@@ -1080,7 +1095,9 @@ function Assert-M365DSCBlueprint
             -TenantId $TenantId `
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
-            -CertificatePassword $CertificatePassword
+            -CertificatePassword $CertificatePassword `
+            -ManagedIdentity $ManagedIdentity.IsPresent `
+            -AccessTokens $AccessTokens
 
         # Call the New-M365DSCDeltaReport configuration to generate the Delta Report between
         # the BluePrint and the extracted resources;
@@ -1146,7 +1163,7 @@ function Get-M365DSCAllResources
     [CmdletBinding()]
     param ()
 
-    $allResources = Get-ChildItem -Path ($PSScriptRoot + '/../DSCResources/') -Recurse -Filter '*.psm1'
+    $allResources = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1'
     $result = @()
     foreach ($resource in $allResources)
     {
@@ -1224,8 +1241,8 @@ function Get-M365DSCResourceDifferences
     }
 
     # Get resources from each version by scanning their DSCResources folders
-    $currentResourcesPath = Join-Path -Path $currentModule.ModuleBase -ChildPath 'DSCResources'
-    $previousResourcesPath = Join-Path -Path $previousModule.ModuleBase -ChildPath 'DSCResources'
+    $currentResourcesPath = Join-Path -Path $currentModule.ModuleBase -ChildPath 'DscResources'
+    $previousResourcesPath = Join-Path -Path $previousModule.ModuleBase -ChildPath 'DscResources'
 
     $currentResources = Get-ChildItem -Path $currentResourcesPath -Recurse -Filter '*.psm1' |
         ForEach-Object { $_.Name -replace 'MSFT_', '' -replace '\.psm1', '' }
@@ -1847,6 +1864,11 @@ function Write-M365DSCHost
         $CommitWrite
     )
 
+    if ([int]$ForegroundColor -eq -1)
+    {
+        $ForegroundColor = [System.ConsoleColor]::Gray
+    }
+
     if (-not [System.String]::IsNullOrEmpty($Message))
     {
         if ($null -eq $Script:M365DSCHostMessages)
@@ -2089,7 +2111,7 @@ function Get-M365DSCResourceComparisonParameters
 
         if ($null -eq $module)
         {
-            $resourceModulePath = Join-Path -Path $PSScriptRoot -ChildPath "../DSCResources/$moduleName/$moduleName.psm1"
+            $resourceModulePath = Join-Path -Path $PSScriptRoot -ChildPath "../DscResources/$moduleName/$moduleName.psm1"
             if (Test-Path -Path $resourceModulePath)
             {
                 $previousValue = $moduleConfig.skipModuleDependencyValidation

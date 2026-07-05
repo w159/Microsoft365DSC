@@ -629,7 +629,7 @@ function Start-M365DSCConfigurationExtract
 
         Write-Verbose -Message 'Retrieving resources path'
         $resourcesPath = Join-Path -Path $PSScriptRoot `
-            -ChildPath '../DSCResources/' `
+            -ChildPath '../DscResources/' `
             -Resolve
         Write-Verbose -Message 'Loop through all resources files.'
         $allResoures = Get-ChildItem $resourcesPath -Recurse | Where-Object { $_.Name -like 'MSFT_*.psm1' }
@@ -1034,7 +1034,7 @@ function Start-M365DSCConfigurationExtract
         {
             try
             {
-                if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+                if ($PSEdition -eq 'Desktop' -or $IsWindows -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
                 {
                     $LCMConfig = Get-DscLocalConfigurationManager
                     if ($null -ne $LCMConfig.CertificateID)
@@ -1152,7 +1152,7 @@ function Get-M365DSCResourcesByWorkloads
         $Mode = 'Default'
     )
 
-    $modules = Get-ChildItem -Path ($PSScriptRoot + '/../DSCResources/') -Recurse -Filter '*.psm1'
+    $modules = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1'
     $Components = @()
     foreach ($Workload in $Workloads)
     {
