@@ -413,16 +413,16 @@ function Export-M365DSCConfiguration
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
             -CertificatePassword $CertificatePassword `
-            -ManagedIdentity:$ManagedIdentity `
+            -ManagedIdentity:$ManagedIdentity.IsPresent `
             -AccessTokens $AccessTokens `
             -GenerateInfo $GenerateInfo `
             -Filters $Filters `
-            -Validate:$Validate `
-            -Parallel:$Parallel `
+            -Validate:$Validate.IsPresent `
+            -Parallel:$Parallel.IsPresent `
             -ResourceSettings $resourceSettings `
             -ErrorAction $ErrorActionPreference `
-            -WithStatistics:$WithStatistics `
-            -IncludeDependencies:$IncludeDependencies
+            -WithStatistics:$WithStatistics.IsPresent `
+            -IncludeDependencies:$IncludeDependencies.IsPresent
     }
     elseif ($null -ne $Components)
     {
@@ -438,16 +438,16 @@ function Export-M365DSCConfiguration
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
             -CertificatePassword $CertificatePassword `
-            -ManagedIdentity:$ManagedIdentity `
+            -ManagedIdentity:$ManagedIdentity.IsPresent `
             -AccessTokens $AccessTokens `
             -GenerateInfo $GenerateInfo `
             -Filters $Filters `
-            -Validate:$Validate `
-            -Parallel:$Parallel `
+            -Validate:$Validate.IsPresent `
+            -Parallel:$Parallel.IsPresent `
             -ResourceSettings $resourceSettings `
             -ErrorAction $ErrorActionPreference `
-            -WithStatistics:$WithStatistics `
-            -IncludeDependencies:$IncludeDependencies
+            -WithStatistics:$WithStatistics.IsPresent `
+            -IncludeDependencies:$IncludeDependencies.IsPresent
     }
     elseif ($null -ne $Mode)
     {
@@ -463,17 +463,17 @@ function Export-M365DSCConfiguration
             -CertificateThumbprint $CertificateThumbprint `
             -CertificatePath $CertificatePath `
             -CertificatePassword $CertificatePassword `
-            -ManagedIdentity:$ManagedIdentity `
+            -ManagedIdentity:$ManagedIdentity.IsPresent `
             -AccessTokens $AccessTokens `
             -GenerateInfo $GenerateInfo `
             -AllComponents `
             -Filters $Filters `
-            -Validate:$Validate `
-            -Parallel:$Parallel `
+            -Validate:$Validate.IsPresent `
+            -Parallel:$Parallel.IsPresent `
             -ResourceSettings $resourceSettings `
             -ErrorAction $ErrorActionPreference `
-            -WithStatistics:$WithStatistics `
-            -IncludeDependencies:$IncludeDependencies
+            -WithStatistics:$WithStatistics.IsPresent `
+            -IncludeDependencies:$IncludeDependencies.IsPresent
     }
 
     # Clear the exported resource instances' names Global variable
