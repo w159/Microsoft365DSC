@@ -114,7 +114,8 @@ try
             {
                 Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
                 $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" -f $PSVersion, $PSVersion, $SDKVersion
+                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
+                    -f $PSVersion, $PSVersion, $SDKVersion
                 $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
                 Copy-Item -Path $path -Destination $basePath -Force
             }
@@ -137,7 +138,7 @@ try
         {
             throw "Could not get .NET SDK version"
         }
-        if (![String]::IsNullOrEmpty($SDK))
+        if (-not [String]::IsNullOrEmpty($SDK))
         {
             $PSVersion = [System.String]$PSVersionTable.PSVersion
             $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
