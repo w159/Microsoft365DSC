@@ -657,8 +657,8 @@ function Install-M365DSCDevBranch
         #region Download and Extract Dev branch's ZIP
         Write-Host 'Downloading the Zip package...' -NoNewline
         $url = 'https://github.com/microsoft/Microsoft365DSC/archive/Dev.zip'
-        $output = "$($env:Temp)\dev.zip"
-        $extractPath = $env:Temp + '\O365Dev'
+        $output = "$($env:TEMP)/dev.zip"
+        $extractPath = "$($env:TEMP)/O365Dev"
         Write-Host 'Done' -ForegroundColor Green
 
         Invoke-WebRequest -Uri $url -OutFile $output -UseBasicParsing
@@ -1013,7 +1013,7 @@ function Assert-M365DSCBlueprint
     #endregion
 
     $TempBluePrintName = 'TempBlueprint_' + (New-Guid).ToString() + '.M365'
-    $LocalBluePrintPath = Join-Path -Path $env:Temp -ChildPath $TempBluePrintName
+    $LocalBluePrintPath = Join-Path -Path $env:TEMP -ChildPath $TempBluePrintName
     try
     {
         # Download the BluePrint locally in a temp location
@@ -1087,7 +1087,7 @@ function Assert-M365DSCBlueprint
         Write-Host "Initiating the Export of those ($($ResourcesInBluePrint.Length)) components from the tenant..."
         $TempExportName = 'TempExport_' + (New-Guid).ToString() + '.ps1'
         Export-M365DSCConfiguration -Components $ResourcesInBluePrint `
-            -Path $env:temp `
+            -Path $env:TEMP `
             -FileName $TempExportName `
             -Credential $Credentials `
             -ApplicationId $ApplicationId `
@@ -1101,7 +1101,7 @@ function Assert-M365DSCBlueprint
 
         # Call the New-M365DSCDeltaReport configuration to generate the Delta Report between
         # the BluePrint and the extracted resources;
-        $ExportPath = Join-Path -Path $env:Temp -ChildPath $TempExportName
+        $ExportPath = Join-Path -Path $env:TEMP -ChildPath $TempExportName
         $deltaReportParams = @{
             Source                = $ExportPath
             Destination           = $LocalBluePrintPath

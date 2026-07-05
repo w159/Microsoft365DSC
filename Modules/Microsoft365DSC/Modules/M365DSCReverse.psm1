@@ -997,9 +997,9 @@ function Start-M365DSCConfigurationExtract
             {
                 foreach ($fileToCopy in $filesToDownload)
                 {
-                    if (-not [System.String]::IsNullOrEmpty($env:Temp))
+                    if (-not [System.String]::IsNullOrEmpty($env:TEMP))
                     {
-                        $filePath = Join-Path $env:Temp $fileToCopy.Name -Resolve
+                        $filePath = Join-Path $env:TEMP $fileToCopy.Name -Resolve
                         $destPath = Join-Path $OutputDSCPath $fileToCopy.Name
                         Copy-Item -Path $filePath -Destination $destPath -Force
                     }
@@ -1095,7 +1095,7 @@ function Start-M365DSCConfigurationExtract
         Close-M365DSCPartialExport
 
         # Remove Temp Partial Export File
-        if (-not [System.String]::IsNullOrEmpty($env:Temp))
+        if (-not [System.String]::IsNullOrEmpty($env:TEMP))
         {
             $partialPath = Join-Path $env:TEMP -ChildPath "$($Global:PartialExportFileName)"
             if (Test-Path $partialPath)
@@ -1120,7 +1120,7 @@ function Start-M365DSCConfigurationExtract
         # Close the partial export StreamWriter
         Close-M365DSCPartialExport
 
-        if (-not [System.String]::IsNullOrEmpty($env:Temp))
+        if (-not [System.String]::IsNullOrEmpty($env:TEMP))
         {
             $partialPath = Join-Path $env:TEMP -ChildPath "$($Global:PartialExportFileName)"
             Write-M365DSCHost -Message "Partial Export file was saved at: $partialPath"
