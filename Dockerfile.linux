@@ -42,14 +42,6 @@ COPY ./Utilities/Install-M365DSCAndDependencies.ps1 /DSC/Install-M365DSCAndDepen
 
 RUN pwsh -File "./Install-M365DSCAndDependencies.ps1"
 
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCDRGUtil.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCExportUtil.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCLogEngine.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCModuleMgmt.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCReport.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCReverse.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCTelemetryEngine.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-#COPY ./Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
 COPY ./Modules/Microsoft365DSC/Modules/*.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
 
 RUN pwsh -Command "Import-Module -Force 'Microsoft365DSC'; Update-M365DSCDependencies"

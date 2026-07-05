@@ -449,7 +449,7 @@ function Export-TargetResource
             {
                 $appInstanceUrl = $tenantAppCatalogPath + '/AppCatalog/' + $file.Name
                 $appFileName = $appInstanceUrl.Split('/')[$appInstanceUrl.Split('/').Length - 1]
-                Get-PnPFile -Url $appInstanceUrl -Path $env:Temp -Filename $appFileName -AsFile -Force | Out-Null
+                Get-PnPFile -Url $appInstanceUrl -Path $env:TEMP -Filename $appFileName -AsFile -Force | Out-Null
             }
         }
         else
