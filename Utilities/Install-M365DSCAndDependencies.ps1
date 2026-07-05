@@ -1,5 +1,9 @@
 [CmdletBinding()]
-param()
+param(
+    [Parameter()]
+    [switch]
+    $CopyPwrshPluginDll
+)
 
 $isWindowsPlatform = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
     [System.Runtime.InteropServices.OSPlatform]::Windows)
@@ -51,6 +55,21 @@ try
 
     if ($isWindowsPlatform)
     {
+        Write-Output "Testing if PowerShell 7 is installed"
+        $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+        if (-not $pwshPath)
+        {
+            $ProgressPreference = 'SilentlyContinue'
+            Write-Output "PowerShell 7 not found, installing it now"
+            Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.6.3/PowerShell-7.6.3-win-x64.zip" -OutFile "PowerShell-7.6.3-win-x64.zip"
+            Unblock-File "PowerShell-7.6.3-win-x64.zip"
+            $null = New-Item -ItemType Directory -Path "C:\Program Files\PowerShell\7" -Force
+            Expand-Archive "PowerShell-7.6.3-win-x64.zip" -DestinationPath "C:\Program Files\PowerShell\7"
+            Remove-Item "PowerShell-7.6.3-win-x64.zip" -Force
+            [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH + ";C:\Program Files\PowerShell\7", [System.EnvironmentVariableTarget]::Machine)
+            $env:PATH += ";C:\Program Files\PowerShell\7"
+        }
+
         Write-Output "Installing Microsoft365DSC module dependencies in PowerShell 7"
         & pwsh -Command {
             Update-M365DSCDependencies
@@ -79,19 +98,28 @@ try
 
         Write-Output "Configuring PowerShell 7 environment"
         & pwsh -Command {
+            param(
+                [Parameter()]
+                [System.Boolean]
+                $CopyPwrshPluginDll
+            )
             $PSVersion = [System.String]$PSVersionTable.PSVersion
             $SDK = dotnet --list-sdks
             if ($LASTEXITCODE -ne 0)
             {
                 throw "Could not get .NET SDK version"
             }
-            $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-            $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
-                -f $PSVersion, $PSVersion, $SDKVersion
-            $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
-            Copy-Item -Path $path -Destination $basePath
+
+            if ($CopyPwrshPluginDll)
+            {
+                Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
+                $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
+                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" -f $PSVersion, $PSVersion, $SDKVersion
+                $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
+                Copy-Item -Path $path -Destination $basePath -Force
+            }
             $null = Enable-PSRemoting -Force -SkipNetworkProfileCheck
-        }
+        } -args $CopyPwrshPluginDll.IsPresent
         if ($LASTEXITCODE -ne 0)
         {
             throw "Could not configure PowerShell 7 environment"
