@@ -114,7 +114,8 @@ try
             {
                 Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
                 $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" -f $PSVersion, $PSVersion, $SDKVersion
+                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
+                    -f $PSVersion, $PSVersion, $SDKVersion
                 $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
                 Copy-Item -Path $path -Destination $basePath -Force
             }
@@ -137,11 +138,19 @@ try
         {
             throw "Could not get .NET SDK version"
         }
-        $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-        $moduleBasePath = (Get-Module -Name Microsoft365DSC).ModuleBase
-        $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
-            -f $PSVersion, $PSVersion, $SDKVersion
+        if (-not [String]::IsNullOrEmpty($SDK))
+        {
+            $PSVersion = [System.String]$PSVersionTable.PSVersion
+            $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
+            $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
+                -f $PSVersion, $PSVersion, $SDKVersion
+        }
+        else
+        {
+            $destinationPath = "/opt/microsoft/powershell/7/Modules/Microsoft365DSC"
+        }
         $null = New-Item -Path $destinationPath -ItemType Directory -Force
+        $moduleBasePath = (Get-Module -Name Microsoft365DSC).ModuleBase
         Copy-Item -Path "$moduleBasePath/*" -Recurse -Destination $destinationPath -Force
         Rename-Item -Path "$destinationPath/DSCResources" -NewName "DscResources" -Force
         Remove-Item -Path $moduleBasePath -Recurse -Force
