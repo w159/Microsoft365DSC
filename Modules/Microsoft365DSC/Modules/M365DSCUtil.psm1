@@ -657,8 +657,8 @@ function Install-M365DSCDevBranch
         #region Download and Extract Dev branch's ZIP
         Write-Host 'Downloading the Zip package...' -NoNewline
         $url = 'https://github.com/microsoft/Microsoft365DSC/archive/Dev.zip'
-        $output = "$($env:TEMP)\dev.zip"
-        $extractPath = $env:TEMP + '\O365Dev'
+        $output = "$($env:TEMP)/dev.zip"
+        $extractPath = "$($env:TEMP)/O365Dev"
         Write-Host 'Done' -ForegroundColor Green
 
         Invoke-WebRequest -Uri $url -OutFile $output -UseBasicParsing
