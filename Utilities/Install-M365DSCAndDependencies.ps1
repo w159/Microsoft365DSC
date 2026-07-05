@@ -98,6 +98,11 @@ try
 
         Write-Output "Configuring PowerShell 7 environment"
         & pwsh -Command {
+            param(
+                [Parameter()]
+                [System.Boolean]
+                $CopyPwrshPluginDll
+            )
             $PSVersion = [System.String]$PSVersionTable.PSVersion
             $SDK = dotnet --list-sdks
             if ($LASTEXITCODE -ne 0)
@@ -107,14 +112,14 @@ try
 
             if ($CopyPwrshPluginDll)
             {
+                Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
                 $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
-                    -f $PSVersion, $PSVersion, $SDKVersion
+                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" -f $PSVersion, $PSVersion, $SDKVersion
                 $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
-                Copy-Item -Path $path -Destination $basePath
+                Copy-Item -Path $path -Destination $basePath -Force
             }
             $null = Enable-PSRemoting -Force -SkipNetworkProfileCheck
-        }
+        } -args $CopyPwrshPluginDll.IsPresent
         if ($LASTEXITCODE -ne 0)
         {
             throw "Could not configure PowerShell 7 environment"
