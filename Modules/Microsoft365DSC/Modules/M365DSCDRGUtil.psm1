@@ -391,38 +391,41 @@ function Write-M365DSCDriftsToEventLog
     if ($null -ne $Drifts -and $Drifts.DriftInfo.Length -gt 0)
     {
 
-        # Get LCMState
-        $LCMState = $null
-        try
+        if ($PSEdition -eq 'Desktop' -or $IsWindows)
         {
-            if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+            # Get LCMState
+            $LCMState = $null
+            try
             {
-                $LCMInfo = Get-DscLocalConfigurationManager -ErrorAction Stop
+                if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+                {
+                    $LCMInfo = Get-DscLocalConfigurationManager -ErrorAction Stop
 
-                if ($LCMInfo.LCMStateDetail -eq 'LCM is performing a consistency check.' -or `
-                        $LCMInfo.LCMStateDetail -eq 'LCM exécute une vérification de cohérence.' -or `
-                        $LCMInfo.LCMStateDetail -eq 'LCM führt gerade eine Konsistenzüberprüfung durch.')
-                {
-                    $LCMState = 'ConsistencyCheck'
+                    if ($LCMInfo.LCMStateDetail -eq 'LCM is performing a consistency check.' -or `
+                            $LCMInfo.LCMStateDetail -eq 'LCM exécute une vérification de cohérence.' -or `
+                            $LCMInfo.LCMStateDetail -eq 'LCM führt gerade eine Konsistenzüberprüfung durch.')
+                    {
+                        $LCMState = 'ConsistencyCheck'
+                    }
+                    elseif ($LCMInfo.LCMStateDetail -eq 'LCM is testing node against the configuration.')
+                    {
+                        $LCMState = 'ManualTestDSCConfiguration'
+                    }
+                    elseif ($LCMInfo.LCMStateDetail -eq 'LCM is applying a new configuration.' -or `
+                            $LCMInfo.LCMStateDetail -eq 'LCM applique une nouvelle configuration.')
+                    {
+                        $LCMState = 'Initial'
+                    }
                 }
-                elseif ($LCMInfo.LCMStateDetail -eq 'LCM is testing node against the configuration.')
+                else
                 {
-                    $LCMState = 'ManualTestDSCConfiguration'
-                }
-                elseif ($LCMInfo.LCMStateDetail -eq 'LCM is applying a new configuration.' -or `
-                        $LCMInfo.LCMStateDetail -eq 'LCM applique une nouvelle configuration.')
-                {
-                    $LCMState = 'Initial'
+                    $LCMState = 'Unauthorized'
                 }
             }
-            else
+            catch
             {
-                $LCMState = 'Unauthorized'
+                Write-Verbose -Message $_.Exception
             }
-        }
-        catch
-        {
-            Write-Verbose -Message $_.Exception
         }
 
         if (-not $ResourceName.StartsWith('MSFT_'))
