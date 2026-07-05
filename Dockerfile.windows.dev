@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime:10.0-windowsservercore-ltsc2025
+FROM mcr.microsoft.com/dotnet/sdk:10.0-windowsservercore-ltsc2025
 
 WORKDIR /DSC
 
@@ -6,6 +6,6 @@ COPY ./Utilities/Install-M365DSCAndDependencies.ps1 /DSC/Install-M365DSCAndDepen
 
 SHELL ["cmd", "/S", "/C"]
 
-RUN powershell "& "".\Install-M365DSCAndDependencies.ps1"""
+RUN powershell "& "".\Install-M365DSCAndDependencies.ps1 -CopyPwrshPluginDll"""
 
 ENTRYPOINT ["pwsh", "-NoLogo", "-NoProfile"]
