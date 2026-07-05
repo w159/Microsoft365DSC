@@ -658,7 +658,7 @@ function Get-Base64EncodedImage
     )
 
     $IconPath = Join-Path -Path $PSScriptRoot `
-        -ChildPath "..\dependencies\Images\$($IconName)" `
+        -ChildPath "..\Dependencies\Images\$($IconName)" `
         -Resolve
 
     if (Test-Path -Path $IconPath)

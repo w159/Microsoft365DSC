@@ -27,7 +27,7 @@ if ($null -eq $Script:M365DSCDependencies)
 
     $commandToModuleMap = @{}
     $Script:M365DSCResourceSettings = [System.Collections.Generic.Dictionary[System.String, System.Object]]::new([System.StringComparer]::OrdinalIgnoreCase)
-    foreach ($file in (Get-ChildItem -Path "$PSScriptRoot/../DSCResources" -Filter 'settings.json' -Recurse)) {
+    foreach ($file in (Get-ChildItem -Path "$PSScriptRoot/../DscResources" -Filter 'settings.json' -Recurse)) {
         Write-Verbose -Message "Processing settings.json file at path: $($file.FullName)"
         $jsonContent = [System.IO.File]::ReadAllText($file.FullName) | ConvertFrom-Json
         foreach ($commandMap in ($jsonContent.commands | Where-Object { $_.module -notin $Script:M365DSCDevDependencies.Keys })) {

@@ -653,7 +653,7 @@ function Get-M365DSCExportContentForResource
             if (-not (Get-Module $moduleFullName))
             {
                 $m365dscModuleBase = (Get-Module -Name 'Microsoft365DSC').ModuleBase
-                $moduleFullNamePath = Join-Path -Path $m365dscModuleBase -ChildPath "DSCResources/$moduleFullName/$moduleFullName.psm1"
+                $moduleFullNamePath = Join-Path -Path $m365dscModuleBase -ChildPath "DscResources/$moduleFullName/$moduleFullName.psm1"
                 Import-Module $moduleFullNamePath -Force
             }
             $cmdInfo = Get-Command $moduleFullName\Get-TargetResource -ErrorAction SilentlyContinue

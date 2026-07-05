@@ -1163,7 +1163,7 @@ function Get-M365DSCAllResources
     [CmdletBinding()]
     param ()
 
-    $allResources = Get-ChildItem -Path ($PSScriptRoot + '/../DSCResources/') -Recurse -Filter '*.psm1'
+    $allResources = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1'
     $result = @()
     foreach ($resource in $allResources)
     {
@@ -1241,8 +1241,8 @@ function Get-M365DSCResourceDifferences
     }
 
     # Get resources from each version by scanning their DSCResources folders
-    $currentResourcesPath = Join-Path -Path $currentModule.ModuleBase -ChildPath 'DSCResources'
-    $previousResourcesPath = Join-Path -Path $previousModule.ModuleBase -ChildPath 'DSCResources'
+    $currentResourcesPath = Join-Path -Path $currentModule.ModuleBase -ChildPath 'DscResources'
+    $previousResourcesPath = Join-Path -Path $previousModule.ModuleBase -ChildPath 'DscResources'
 
     $currentResources = Get-ChildItem -Path $currentResourcesPath -Recurse -Filter '*.psm1' |
         ForEach-Object { $_.Name -replace 'MSFT_', '' -replace '\.psm1', '' }
@@ -1742,7 +1742,7 @@ function Get-M365DSCConfigurationConflict
     The parameters to pass to the function.
 
 .EXAMPLE
-    Invoke-PowerShellCoreResource -Path 'C:\Program Files\...\DSCResources\MSFT_Resource\MSFT_Resource.psm1' -FunctionName Test-TargetResource -Parameters @{ Name = 'Value' }
+    Invoke-PowerShellCoreResource -Path 'C:\Program Files\...\DscResources\MSFT_Resource\MSFT_Resource.psm1' -FunctionName Test-TargetResource -Parameters @{ Name = 'Value' }
 
 .EXAMPLE
     # From inside of a DSC resource
@@ -2111,7 +2111,7 @@ function Get-M365DSCResourceComparisonParameters
 
         if ($null -eq $module)
         {
-            $resourceModulePath = Join-Path -Path $PSScriptRoot -ChildPath "../DSCResources/$moduleName/$moduleName.psm1"
+            $resourceModulePath = Join-Path -Path $PSScriptRoot -ChildPath "../DscResources/$moduleName/$moduleName.psm1"
             if (Test-Path -Path $resourceModulePath)
             {
                 $previousValue = $moduleConfig.skipModuleDependencyValidation
