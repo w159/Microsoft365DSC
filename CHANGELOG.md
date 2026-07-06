@@ -16,6 +16,9 @@
     resource import.
 * M365DSCReport
   * Removed check for PowerShell remoting.
+* M365DSCTelemetryEngine
+  * Removed the output when connecting to Microsoft Graph for telemetry.
+    FIXES [#7302](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7302)
 * M365DSCUtil
   * Added `ApplicationSecret`, `ManagedIdentity` `AccessTokens` to the
     `Assert-M365DSCBlueprint` function.

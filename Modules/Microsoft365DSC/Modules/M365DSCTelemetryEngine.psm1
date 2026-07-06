@@ -160,7 +160,7 @@ function Add-M365DSCTelemetryEvent
             $telemetryParameters = Get-M365DSCTelemetryConnectionParameter
             if ($null -eq $telemetryParameters -or $telemetryParameters.Count -eq 0)
             {
-                New-M365DSCConnection -Workload 'MicrosoftGraph' -InboundParameters $Data.PSBoundParameters
+                $null = New-M365DSCConnection -Workload 'MicrosoftGraph' -InboundParameters $Data.PSBoundParameters
             }
 
             if ($null -ne $dataNew.ConnectionMode -and $dataNew.ConnectionMode.StartsWith('Credential'))
