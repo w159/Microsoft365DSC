@@ -136,7 +136,7 @@ function Get-TargetResource
         $qualityUpdateReleaseDateTime = $getValue.ExpeditedUpdateSettings.qualityUpdateRelease
         if ($null -ne $qualityUpdateReleaseDateTime)
         {
-            $qualityUpdateReleaseDateTime = [DateTime]::Parse($qualityUpdateReleaseDateTime).ToString('yyyy-MM-ddTHH:mm:ssZ')
+            $qualityUpdateReleaseDateTime = $qualityUpdateReleaseDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ')
         }
         $complexExpeditedUpdateSettings = [ordered]@{}
         $complexExpeditedUpdateSettings.Add('DaysUntilForcedReboot', $getValue.ExpeditedUpdateSettings.daysUntilForcedReboot)

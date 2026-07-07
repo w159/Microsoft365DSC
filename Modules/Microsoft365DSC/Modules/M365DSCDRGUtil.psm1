@@ -387,6 +387,9 @@ function Write-M365DSCDriftsToEventLog
         $DesiredValues
     )
 
+    $CurrentValues = Set-M365DSCAuthenticationParameterMask -BoundParameters $CurrentValues
+    $DesiredValues = Set-M365DSCAuthenticationParameterMask -BoundParameters $DesiredValues
+
     # If ExistingDrifts is null, then this is the main call and not a recursive one. Write to the Event log.
     if ($null -ne $Drifts -and $Drifts.DriftInfo.Length -gt 0)
     {

@@ -266,7 +266,6 @@ function Get-TargetResource
             try
             {
                 $currentVivaInsightsSettings = Invoke-M365DSCCommand -ScriptBlock { Get-DefaultTenantMyAnalyticsFeatureConfig } -RetryOnNotFoundError
-                Write-Verbose -Message "Current Viva Insights Settings: $($currentVivaInsightsSettings | ConvertTo-Json -Depth 5)" -Verbose
                 if ($null -ne $currentVivaInsightsSettings)
                 {
                     $results += @{

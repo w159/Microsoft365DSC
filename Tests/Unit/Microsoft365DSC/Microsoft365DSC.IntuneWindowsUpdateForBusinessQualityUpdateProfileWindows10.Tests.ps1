@@ -58,7 +58,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "IntuneQualityUpdate"
                     ExpeditedUpdateSettings = @{
                         DaysUntilForcedReboot = 0
-                        QualityUpdateRelease = "2024-12-31T23:59:59Z"
+                        QualityUpdateRelease = [DateTime]::Parse("2024-12-31T23:59:59Z").ToUniversalTime()
                     }
                     Id = "FakeStringValue"
                     RoleScopeTagIds = @("0")

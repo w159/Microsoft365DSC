@@ -1626,11 +1626,11 @@ function New-M365DSCMissingResourcesExample
 }
 
 <#
-.Description
-This function removes the authentication parameters from the hashtable.
+.DESCRIPTION
+    This function removes the authentication parameters from the hashtable.
 
-.Functionality
-Internal
+.FUNCTIONALITY
+    Internal
 #>
 function Remove-M365DSCAuthenticationParameter
 {
@@ -1668,14 +1668,51 @@ function Remove-M365DSCAuthenticationParameter
 }
 
 <#
-.Description
-This function analyzes an M365DSC configuration file and returns information about potential issues (e.g., duplicate primary keys).
+.DESCRIPTION
+    This function replaces the authentication parameters in the hashtable with a *** value.
 
-.Example
-Get-M365DSCConfigurationConflict -ConfigurationContent "content"
+.FUNCTIONALITY
+    Internal
+#>
+function Set-M365DSCAuthenticationParameterMask
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $BoundParameters
+    )
 
-.Functionality
-Public
+    $keysToReplace = @(
+        'ApplicationSecret',
+        'Credential',
+        'CertificatePassword',
+        'CertificatePath',
+        'CertificateThumbprint',
+        'Password'
+    )
+
+    foreach ($key in $keysToReplace)
+    {
+        if ($BoundParameters.ContainsKey($key))
+        {
+            $BoundParameters[$key] = '***'
+        }
+    }
+
+    return $BoundParameters
+}
+
+<#
+.DESCRIPTION
+    This function analyzes an M365DSC configuration file and returns information about potential issues (e.g., duplicate primary keys).
+
+.EXAMPLE
+    PS> Get-M365DSCConfigurationConflict -ConfigurationContent "content"
+
+.FUNCTIONALITY
+    Public
 #>
 function Get-M365DSCConfigurationConflict
 {
@@ -2394,6 +2431,7 @@ Export-ModuleMember -Function @(
     'New-M365DSCMissingResourcesExample',
     'Remove-M365DSCAuthenticationParameter',
     'Remove-NullEntriesFromHashtable',
+    'Set-M365DSCAuthenticationParameterMask',
     'Send-M365DSCPushNotification',
     'Set-M365DSCAllResourcesDictionary',
     'Test-CodePage',
