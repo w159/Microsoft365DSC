@@ -449,7 +449,16 @@ function Export-TargetResource
     try
     {
         #region resource generator code
-        [array]$getValue = (Get-MgBetaEntitlementManagementAccessPackage -All -Filter $Filter -ErrorAction Stop) | Select-Object -Unique CatalogId | Select-Object -ExpandProperty CatalogId
+        [array]$packages = Get-MgBetaEntitlementManagementAccessPackage -All -Filter $Filter -ErrorAction Stop
+        $catalogIds = @()
+        foreach ($pkg in $packages)
+        {
+            if ($null -ne $pkg.CatalogId)
+            {
+                $catalogIds += $pkg.CatalogId
+            }
+        }
+        [array]$getValue = $catalogIds | Select-Object -Unique
         #endregion
         $i = 1
         $dscContent = [System.Text.StringBuilder]::new()

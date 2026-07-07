@@ -2,6 +2,12 @@
 
 # UNRELEASED
 
+* AADAdministrativeUnit
+  * Fixed issue that made unit tests under Windows PowerShell fail
+* AADEntitlementManagementAccessPackageCatalog
+  * Fixed issue that made unit tests under Windows PowerShell fail
+* AzureBillingAccountScheduledAction
+  * Fixed issue that made unit tests under Windows PowerShell fail
 * AADGroup
   * Fixed an issue where `GroupTypes` would be returned as a null object.
     FIXES [#7253](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7253)
@@ -16,6 +22,8 @@
     resources that were not of the `IntunePolicySets` type.
   * Added Dockerfile and an ancillary script which is used to install
     Microsoft365Dsc module and its dependencies on that Windows docker image
+  * Fixed unit tests so that they all pass under both Windows PowerShell and
+    PowerShell 7
 
 # 1.26.701.1
 
