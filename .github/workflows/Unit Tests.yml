@@ -23,7 +23,7 @@ jobs:
           Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
           Install-PSResource -Name DSCParser -Scope AllUsers -TrustRepository
           Install-PSResource -Name PSDesiredStateConfiguration -Scope AllUsers -TrustRepository
-          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository
+          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 5.7.1
           [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
 
       - name: Generate SchemaDefinition.json
@@ -79,7 +79,7 @@ jobs:
           Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
           Install-PSResource -Name DSCParser -Scope AllUsers -TrustRepository
           Install-PSResource -Name PSDesiredStateConfiguration -Scope AllUsers -TrustRepository
-          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository
+          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 5.7.1
           [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
 
       - name: Generate SchemaDefinition.json

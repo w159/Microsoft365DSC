@@ -4575,6 +4575,8 @@
     null
     FIXES [#3971](https://github.com/microsoft/Microsoft365DSC/issues/3971)
   * Fixed compare logic for CIM instances in Test-TargetResource
+* IntuneWindowsUpdateForBusinessQualityUpdateProfileWindows10
+  * Fixed an issue with parsing the returned DateTime value object.
 * M365DSCRuleEvaluation
   * Fix issue when it didn't find any matching resources and it tried to make a
     comparison
