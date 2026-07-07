@@ -682,7 +682,7 @@ function Set-TargetResource
             $compareCurrentScopedRoleMembersValue = @()
             foreach ($roleMember in $currentScopedRoleMembersValue)
             {
-                $compareCurrentScopedRoleMembersValue += @{
+                $compareCurrentScopedRoleMembersValue += [PSCustomObject]@{
                     RoleName = $roleMember.RoleName
                     Identity = $roleMember.RoleMemberInfo.Identity
                     Type     = $roleMember.RoleMemberInfo.Type
@@ -691,7 +691,7 @@ function Set-TargetResource
             $compareDesiredScopedRoleMembersValue = @()
             foreach ($roleMember in $desiredScopedRoleMembersValue)
             {
-                $compareDesiredScopedRoleMembersValue += @{
+                $compareDesiredScopedRoleMembersValue += [PSCustomObject]@{
                     RoleName = $roleMember.RoleName
                     Identity = $roleMember.RoleMemberInfo.Identity
                     Type     = $roleMember.RoleMemberInfo.Type

@@ -118,14 +118,33 @@ function Get-TargetResource
         $ScheduleValue = $null
         if ($null -ne $instance.properties.schedule)
         {
+            $startDateVal = $instance.properties.schedule.startDate
+            if ($null -ne $startDateVal -and $startDateVal -isnot [DateTime])
+            {
+                try
+                {
+                    $startDateVal = [DateTime]::Parse($startDateVal)
+                }
+                catch { }
+            }
+            $endDateVal = $instance.properties.schedule.endDate
+            if ($null -ne $endDateVal -and $endDateVal -isnot [DateTime])
+            {
+                try
+                {
+                    $endDateVal = [DateTime]::Parse($endDateVal)
+                }
+                catch { }
+            }
+
             $ScheduleValue = @{
                 frequency    = $instance.properties.schedule.frequency
                 hourOfDay    = $instance.properties.schedule.hourOfDay
                 daysOfWeek   = [Array]($instance.properties.schedule.daysOfWeek)
                 weeksofMonth = [Array]($instance.properties.schedule.weeksofMonth)
                 dayOfMonth   = $instance.properties.schedule.dayOfMonth
-                startDate    = $instance.properties.schedule.startDate.ToString('yyyy-MM-ddTHH:mm:ssZ')
-                endDate      = $instance.properties.schedule.endDate.ToString('yyyy-MM-ddTHH:mm:ssZ')
+                startDate    = if ($startDateVal -is [DateTime]) { $startDateVal.ToString('yyyy-MM-ddTHH:mm:ssZ') } else { $startDateVal }
+                endDate      = if ($endDateVal -is [DateTime]) { $endDateVal.ToString('yyyy-MM-ddTHH:mm:ssZ') } else { $endDateVal }
             }
         }
 
