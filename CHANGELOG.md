@@ -6,8 +6,6 @@
   * Fixed issue that made unit tests under Windows PowerShell fail
 * AADEntitlementManagementAccessPackageCatalog
   * Fixed issue that made unit tests under Windows PowerShell fail
-* AzureBillingAccountScheduledAction
-  * Fixed issue that made unit tests under Windows PowerShell fail
 * AADGroup
   * Fixed an issue where `GroupTypes` would be returned as a null object.
     FIXES [#7253](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7253)
@@ -15,6 +13,8 @@
   * Fixed an issue where the `RestrictForAppsCreatedAfterDateTime` timestamp
     was incorrectly converted to a DateTime object.
     FIXES [#7291](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7291)
+* AzureBillingAccountScheduledAction
+  * Fixed issue that made unit tests under Windows PowerShell fail
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was not compared correctly.
 * M365DSCExportUtil
