@@ -122,7 +122,7 @@ function Get-TargetResource
             if ($null -ne $startDateVal -and -not ($startDateVal -is [DateTime]))
             {
                 try {
-                    $startDateVal = [DateTime]::Parse($startDateVal).ToString('yyyy-MM-ddTHH:mm:ssZ')
+                    $startDateVal = [DateTime]::Parse($startDateVal)
                 }
                 catch { }
             }
@@ -130,7 +130,7 @@ function Get-TargetResource
             if ($null -ne $endDateVal -and -not ($endDateVal -is [DateTime]))
             {
                 try {
-                    $endDateVal = [DateTime]::Parse($endDateVal).ToString('yyyy-MM-ddTHH:mm:ssZ')
+                    $endDateVal = [DateTime]::Parse($endDateVal)
                 }
                 catch { }
             }
