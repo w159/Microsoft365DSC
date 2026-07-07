@@ -31,12 +31,13 @@
   * Fixed an issue with the foreground color when run under Linux.
   * Fixed an issue where `$env:TEMP` was not defined when run under Linux.
 * MISC
+  * Added Dockerfile and an ancillary script which is used to install
+    Microsoft365DSC module and its dependencies on that Windows docker image.
   * Fixed an issue where assignments through a policy set were exported for
     resources that were not of the `IntunePolicySets` type.
-  * Added Dockerfile and an ancillary script which is used to install
-    Microsoft365Dsc module and its dependencies on that Windows docker image
   * Fixed unit tests so that they all pass under both Windows PowerShell and
-    PowerShell 7
+    PowerShell 7.
+  * Updated the drift event to mask authentication parameters in the message.
 
 # 1.26.701.1
 
