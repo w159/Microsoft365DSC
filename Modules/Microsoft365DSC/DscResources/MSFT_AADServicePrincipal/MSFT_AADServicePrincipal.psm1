@@ -1303,7 +1303,7 @@ function Export-TargetResource
                         -ComplexObject $Results.CustomSecurityAttributes `
                         -CIMInstanceName 'AADServicePrincipalAttributeSet' `
                         -ComplexTypeMapping $complexMapping `
-                        -IsArray:$true
+                        -IsArray
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.CustomSecurityAttributes = $complexTypeStringResult

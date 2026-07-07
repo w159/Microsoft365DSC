@@ -17,6 +17,19 @@
     FIXES [#7291](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7291)
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was not compared correctly.
+* M365DSCExportUtil
+  * Updated the export to use the Microsoft365DSC module path as base for the
+    resource import.
+* M365DSCReport
+  * Removed check for PowerShell remoting.
+* M365DSCTelemetryEngine
+  * Removed the output when connecting to Microsoft Graph for telemetry.
+    FIXES [#7302](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7302)
+* M365DSCUtil
+  * Added `ApplicationSecret`, `ManagedIdentity` `AccessTokens` to the
+    `Assert-M365DSCBlueprint` function.
+  * Fixed an issue with the foreground color when run under Linux.
+  * Fixed an issue where `$env:TEMP` was not defined when run under Linux.
 * MISC
   * Fixed an issue where assignments through a policy set were exported for
     resources that were not of the `IntunePolicySets` type.
