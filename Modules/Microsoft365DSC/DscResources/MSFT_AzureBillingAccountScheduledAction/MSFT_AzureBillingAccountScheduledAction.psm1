@@ -119,17 +119,19 @@ function Get-TargetResource
         if ($null -ne $instance.properties.schedule)
         {
             $startDateVal = $instance.properties.schedule.startDate
-            if ($null -ne $startDateVal -and -not ($startDateVal -is [DateTime]))
+            if ($null -ne $startDateVal -and $startDateVal -isnot [DateTime])
             {
-                try {
+                try
+                {
                     $startDateVal = [DateTime]::Parse($startDateVal)
                 }
                 catch { }
             }
             $endDateVal = $instance.properties.schedule.endDate
-            if ($null -ne $endDateVal -and -not ($endDateVal -is [DateTime]))
+            if ($null -ne $endDateVal -and $endDateVal -isnot [DateTime])
             {
-                try {
+                try
+                {
                     $endDateVal = [DateTime]::Parse($endDateVal)
                 }
                 catch { }
