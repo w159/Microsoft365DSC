@@ -321,19 +321,21 @@ function Set-TargetResource
         foreach ($allowedValue in $AllowedValues)
         {
             $existingAllowedValue = $currentInstance.AllowedValues | Where-Object { $_.Id -eq $allowedValue.ValueId }
-            if ($null -eq $existingAllowedValue -or $existingAllowedValue.IsActive -ne $allowedValue.IsActive)
+            if ($null -eq $existingAllowedValue)
             {
-                # Add new allowed value or update existing one
-                Update-MgBetaDirectoryCustomSecurityAttributeDefinition `
+                # Add new allowed value
+                New-MgBetaDirectoryCustomSecurityAttributeDefinitionAllowedValue `
                     -CustomSecurityAttributeDefinitionId $currentInstance.Id `
-                    -BodyParameter @{
-                        'allowedValues@delta' = @(
-                            @{
-                                id       = $allowedValue.ValueId
-                                isActive = $allowedValue.IsActive
-                            }
-                        )
-                    }
+                    -Id $allowedValue.ValueId `
+                    -IsActive:$allowedValue.IsActive
+            }
+            elseif ($existingAllowedValue.IsActive -ne $allowedValue.IsActive)
+            {
+                # Update existing allowed value
+                Update-MgBetaDirectoryCustomSecurityAttributeDefinitionAllowedValue `
+                    -CustomSecurityAttributeDefinitionId $currentInstance.Id `
+                    -AllowedValueId $allowedValue.ValueId `
+                    -IsActive:$allowedValue.IsActive
             }
         }
     }

@@ -3,8 +3,12 @@
 # UNRELEASED
 
 * AADAdministrativeUnit
-  * Fixed an issue that made unit tests under Windows PowerShell fail.
   * Added test for duplicated DisplayName across AUs
+  * Fixed an issue that made unit tests under Windows PowerShell fail.
+* AADCustomSecurityAttributeDefinition
+  * Fixed an issue where missing allowed values were not added to existing
+    custom security attribute definitions.
+    FIXES [#7305](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7305)
 * AADEntitlementManagementAccessPackageCatalog
   * Fixed an issue that made unit tests under Windows PowerShell fail.
 * AADGroup
