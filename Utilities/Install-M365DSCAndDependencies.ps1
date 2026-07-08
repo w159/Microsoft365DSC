@@ -2,7 +2,7 @@
 param(
     [Parameter()]
     [switch]
-    $CopyPwrshPluginDll
+    $IsSDK
 )
 
 $isWindowsPlatform = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
@@ -11,14 +11,24 @@ $isWindowsPlatform = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPl
 try
 {
     Write-Output "Detecting current platform"
+    $message = "Platform detected: "
     if ($isWindowsPlatform)
     {
-        Write-Output "Platform detected: Windows"
+        $message += "Windows"
     }
     else
     {
-        Write-Output "Platform detected: Other"
+        $message += "Other"
     }
+    if ($IsSDK.IsPresent)
+    {
+        $message += " (.NET SDK)"
+    }
+    else
+    {
+        $message += " (.NET Runtime)"
+    }
+    Write-Output $message
 
     $nugetProvider = Get-PackageProvider -Name "NuGet" -ErrorAction SilentlyContinue
     if (-not $nugetProvider)
@@ -40,15 +50,62 @@ try
     }
     Install-Module @parameters
 
-    Write-Output "Installing Microsoft365DSC module"
+    Write-Output "Installing PSDesiredStateConfiguration module"
     $Parameters = @{
-        Name                = "Microsoft365DSC"
+        Name                = "PSDesiredStateConfiguration"
         Repository          = "PSGallery"
         Scope               = "AllUsers"
-        Force               = [Switch]$true
-        SkipPublisherCheck  = [Switch]$true
+        SkipDependencyCheck = [Switch]$true
+        TrustRepository     = [Switch]$true
+        AcceptLicense       = [Switch]$true
+        Prerelease          = [Switch]$true
     }
-    Install-Module @Parameters
+    Install-PSResource @Parameters
+
+    if (-not $IsSDK.IsPresent)
+    {
+        Write-Output "Installing Microsoft365DSC module"
+        $Parameters = @{
+            Name                = "Microsoft365DSC"
+            Repository          = "PSGallery"
+            Scope               = "AllUsers"
+            Force               = [Switch]$true
+            SkipPublisherCheck  = [Switch]$true
+        }
+        Install-Module @Parameters
+    }
+    else
+    {
+        Write-Output "Adding symbolic link from repository folder to module path"
+        $Parameters = @{
+            ItemType = "SymbolicLink"
+            Force    = [Switch]$true
+        }
+        if ($isWindowsPlatform)
+        {
+            $Parameters.Add("Path", "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC")
+            $Parameters.Add("Target", "C:\DSC\Modules\Microsoft365DSC")
+        }
+        else
+        {
+            $Parameters.Add("Path", "/usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC")
+            $Parameters.Add("Target", "/DSC/Modules/Microsoft365DSC")
+        }
+        $null = New-Item @Parameters
+    }
+
+    Write-Output "Installing Pester module"
+    $Parameters = @{
+        Name                = "Pester"
+        Repository          = "PSGallery"
+        Scope               = "AllUsers"
+        Version            = "5.7.1"
+        SkipDependencyCheck = [Switch]$true
+        TrustRepository     = [Switch]$true
+        AcceptLicense       = [Switch]$true
+        Prerelease          = [Switch]$true
+    }
+    Install-PSResource @Parameters
 
     Write-Output "Installing Microsoft365DSC module dependencies"
     Update-M365DSCDependencies
@@ -101,59 +158,91 @@ try
             param(
                 [Parameter()]
                 [System.Boolean]
-                $CopyPwrshPluginDll
+                $IsSDK
             )
-            $PSVersion = [System.String]$PSVersionTable.PSVersion
-            $SDK = dotnet --list-sdks
-            if ($LASTEXITCODE -ne 0)
-            {
-                throw "Could not get .NET SDK version"
-            }
-
-            if ($CopyPwrshPluginDll)
+            if ($IsSDK)
             {
                 Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
+                $PSVersion = [System.String]$PSVersionTable.PSVersion
+                $SDK = dotnet --list-sdks
+                if ($LASTEXITCODE -ne 0)
+                {
+                    throw "Could not get .NET SDK version"
+                }
                 $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-                $basePath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
+                $destinationPath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
                     -f $PSVersion, $PSVersion, $SDKVersion
-                $path = Join-Path -Path $basePath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
-                Copy-Item -Path $path -Destination $basePath -Force
+                $path = Join-Path -Path $destinationPath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
+                Copy-Item -Path $path -Destination $destinationPath -Force
             }
             $null = Enable-PSRemoting -Force -SkipNetworkProfileCheck
-        } -args $CopyPwrshPluginDll.IsPresent
+        } -args $IsSDK.IsPresent
         if ($LASTEXITCODE -ne 0)
         {
             throw "Could not configure PowerShell 7 environment"
         }
+
+        $RemoveAliases = @"
+Write-Output "Removing aliases gacfg and sacfg if they exist and importing PSDesiredStateConfiguration module"
+if (Get-Alias gacfg -ErrorAction SilentlyContinue) {
+    Remove-Item Alias:gacfg -Force
+}
+if (Get-Alias sacfg -ErrorAction SilentlyContinue) {
+    Remove-Item Alias:sacfg -Force
+}
+Import-Module PSDesiredStateConfiguration -Force
+"@
+
+        $profileFolderPath = "C:\Users\ContainerAdministrator\Documents\PowerShell"
+        $profileFilePath = Join-Path -Path $profileFolderPath -ChildPath "Microsoft.PowerShell_profile.ps1"
+        if (-not (Test-Path -Path $profileFolderPath))
+        {
+            $message = "Creating PowerShell 7 profile folder at {0}" -f $profileFolderPath
+            Write-Output $message
+            $null = New-Item -ItemType Directory -Path $profileFolderPath -Force
+        }
+        Write-Output "Setting `$PROFILE for PowerShell 7"
+        Set-Content -Path $profileFilePath -Value $RemoveAliases -Force
     }
     else
     {
         Write-Output "Configuring OS environment"
         [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Process)
 
-        Write-Output "Copying Microsoft365DSC module to PowerShell 7 module path"
-        $PSVersion = [System.String]$PSVersionTable.PSVersion
-        $SDK = dotnet --list-sdks
-        if ($LASTEXITCODE -ne 0)
-        {
-            throw "Could not get .NET SDK version"
-        }
-        if (-not [String]::IsNullOrEmpty($SDK))
+        if ($IsSDK.IsPresent)
         {
             $PSVersion = [System.String]$PSVersionTable.PSVersion
+            $SDK = dotnet --list-sdks
+            if ($LASTEXITCODE -ne 0)
+            {
+                throw "Could not get .NET SDK version"
+            }
             $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
+            $moduleBasePath = "/DSC/Modules/Microsoft365DSC"
             $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
                 -f $PSVersion, $PSVersion, $SDKVersion
+
+            Write-Output "Generating SchemaDefinition.json"
+            $M365DSCSchemaHandlerPath = Join-Path -Path $moduleBasePath -ChildPath "Modules/M365DSCSchemaHandler.psm1"
+            Import-Module $M365DSCSchemaHandlerPath
+            New-M365DSCSchemaDefinition
+
+            Write-Output "Building DLL files"
+            & "/DSC/Utilities/Build-DllFiles.ps1" -Configuration Release
+            if ($LASTEXITCODE -ne 0)
+            {
+                throw "Could not build DLL files"
+            }
         }
         else
         {
-            $destinationPath = "/opt/microsoft/powershell/7/Modules/Microsoft365DSC"
+            $moduleBasePath = (Get-Module -Name Microsoft365DSC).ModuleBase
+            $DSCResourcesPath = Join-Path -Path $moduleBasePath -ChildPath "DSCResources"
+            if (Test-Path -Path $DSCResourcesPath)
+            {
+                Rename-Item -Path $DSCResourcesPath -NewName "DscResources" -Force
+            }
         }
-        $null = New-Item -Path $destinationPath -ItemType Directory -Force
-        $moduleBasePath = (Get-Module -Name Microsoft365DSC).ModuleBase
-        Copy-Item -Path "$moduleBasePath/*" -Recurse -Destination $destinationPath -Force
-        Rename-Item -Path "$destinationPath/DSCResources" -NewName "DscResources" -Force
-        Remove-Item -Path $moduleBasePath -Recurse -Force
     }
 }
 catch
@@ -162,6 +251,6 @@ catch
 }
 
 Write-Output ' '
-$Message = "Finished installing Microsoft365DSC, dependencies and configuration " + `
+$message = "Finished installing Microsoft365DSC, dependencies and configuration " + `
     "successfully {0}" -f [Char]::ConvertFromUtf32(0x2705)
-Write-Output $Message
+Write-Output $message

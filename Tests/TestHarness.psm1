@@ -13,11 +13,7 @@ function Invoke-TestHarness
 
         [Parameter()]
         [Switch]
-        $IgnoreCodeCoverage,
-
-        [Parameter()]
-        [System.String]
-        $ModuleDirectory = (Join-Path -Path $PSScriptRoot -ChildPath '../Modules/Microsoft365DSC' -Resolve)
+        $IgnoreCodeCoverage
     )
 
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
@@ -26,9 +22,6 @@ function Invoke-TestHarness
     Write-Host -Object 'Running all Microsoft365DSC Unit Tests'
 
     $repoDir = Join-Path -Path $PSScriptRoot -ChildPath '../' -Resolve
-
-    $oldModPath = $env:PSModulePath
-    $env:PSModulePath = $env:PSModulePath + [System.IO.Path]::PathSeparator + $ModuleDirectory
 
     $testCoverageFiles = @()
     if ($IgnoreCodeCoverage.IsPresent -eq $false)
@@ -124,7 +117,6 @@ function Invoke-TestHarness
     $message = 'Running the tests took {0} hours, {1} minutes, {2} seconds' -f $sw.Elapsed.Hours, $sw.Elapsed.Minutes, $sw.Elapsed.Seconds
     Write-Host -Object $message
 
-    $env:PSModulePath = $oldModPath
     Write-Host -Object 'Completed running all Microsoft365DSC Unit Tests'
 
     return $results
@@ -187,9 +179,6 @@ function Invoke-QualityChecksHarness
 
     $repoDir = Join-Path -Path $PSScriptRoot -ChildPath '../' -Resolve
 
-    $oldModPath = $env:PSModulePath
-    $env:PSModulePath = $env:PSModulePath + [System.IO.Path]::PathSeparator + (Join-Path -Path $repoDir -ChildPath 'Modules/Microsoft365DSC')
-
     # DSC Common Tests
     $getChildItemParameters = @{
         Path   = (Join-Path -Path $repoDir -ChildPath './Tests/QA')
@@ -232,7 +221,6 @@ function Invoke-QualityChecksHarness
     $message = 'Running the tests took {0} hours, {1} minutes, {2} seconds' -f $sw.Hours, $sw.Minutes, $sw.Seconds
     Write-Host -Object $message
 
-    $env:PSModulePath = $oldModPath
     Write-Host -Object 'Completed running all Quality Check Tests'
 
     return $results
