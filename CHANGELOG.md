@@ -3,13 +3,13 @@
 # UNRELEASED
 
 * AADAdministrativeUnit
-  * Fixed issue that made unit tests under Windows PowerShell fail
+  * Fixed an issue that made unit tests under Windows PowerShell fail.
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue where missing allowed values were not added to existing
     custom security attribute definitions.
     FIXES [#7305](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7305)
 * AADEntitlementManagementAccessPackageCatalog
-  * Fixed issue that made unit tests under Windows PowerShell fail
+  * Fixed an issue that made unit tests under Windows PowerShell fail.
 * AADGroup
   * Fixed an issue where `GroupTypes` would be returned as a null object.
     FIXES [#7253](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7253)
@@ -18,7 +18,7 @@
     was incorrectly converted to a DateTime object.
     FIXES [#7291](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7291)
 * AzureBillingAccountScheduledAction
-  * Fixed issue that made unit tests under Windows PowerShell fail
+  * Fixed an issue that made unit tests under Windows PowerShell fail.
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was not compared correctly.
 * M365DSCExportUtil
@@ -41,6 +41,7 @@
     resources that were not of the `IntunePolicySets` type.
   * Fixed unit tests so that they all pass under both Windows PowerShell and
     PowerShell 7.
+  * Updated all unit tests for Pester v6.0.0.
   * Updated the drift event to mask authentication parameters in the message.
 
 # 1.26.701.1

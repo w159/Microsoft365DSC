@@ -3,9 +3,9 @@ applyTo: '**/*.Tests.ps1'
 description: 'PowerShell Pester testing best practices based on Pester v5 conventions'
 ---
 
-# PowerShell Pester v5 Testing Guidelines
+# PowerShell Pester v6 Testing Guidelines
 
-This guide provides PowerShell-specific instructions for creating automated tests using PowerShell Pester v5 module. Follow PowerShell cmdlet development guidelines in [powershell.instructions.md](./powershell.instructions.md) for general PowerShell scripting best practices.
+This guide provides PowerShell-specific instructions for creating automated tests using PowerShell Pester v6 module. Follow PowerShell cmdlet development guidelines in [powershell.instructions.md](./powershell.instructions.md) for general PowerShell scripting best practices.
 
 ## File Naming and Structure
 
@@ -62,6 +62,9 @@ Describe 'FunctionName' {
 - **`Should -Invoke`**: Verify mock was called specific number of times
 - **`Should -InvokeVerifiable`**: Verify all verifiable mocks were called
 - **Scope**: Mocks default to containing block scope
+
+If a mock is defined with a `-ParameterFilter` and the test may call the function with different parameters, a fallback mock should be defined without a `-ParameterFilter` to avoid unmocked calls.
+For example, if a function is called with different parameters in different tests, define a general mock without a filter as a fallback to catch all calls.
 
 ```powershell
 Mock Get-Service { @{ Status = 'Running' } } -ParameterFilter { $Name -eq 'TestService' }

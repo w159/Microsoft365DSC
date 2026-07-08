@@ -38,11 +38,8 @@ RUN wget -q https://github.com/microsoft/PowerShell-DSC-for-Linux/releases/downl
 RUN mv /etc/opt/omi/conf/dsc/configuration/baseregistration /etc/opt/omi/conf/dsc/configuration/BaseRegistration && \
     mv /etc/opt/omi/conf/dsc/configuration/BaseRegistration/baseresource.schema.mof /etc/opt/omi/conf/dsc/configuration/BaseRegistration/BaseResource.schema.mof
 
-COPY ./Utilities/Install-M365DSCAndDependencies.ps1 /DSC/Install-M365DSCAndDependencies.ps1
+COPY . .
 
-RUN pwsh -File "./Install-M365DSCAndDependencies.ps1"
+RUN pwsh -Command ./Utilities/Install-M365DSCAndDependencies.ps1 -IsSDK
 
-COPY ./Modules/Microsoft365DSC/Modules/*.psm1 /usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC/Modules
-RUN pwsh -Command "Import-Module -Force 'Microsoft365DSC'; Update-M365DSCDependencies"
-
-ENTRYPOINT ["pwsh", "-NoLogo", "-NoProfile"]
+ENTRYPOINT ["pwsh", "-NoLogo"]

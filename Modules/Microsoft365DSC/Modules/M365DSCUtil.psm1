@@ -1240,7 +1240,7 @@ function Get-M365DSCResourceDifferences
         throw "Microsoft365DSC version '$PreviousVersion' is not installed."
     }
 
-    # Get resources from each version by scanning their DSCResources folders
+    # Get resources from each version by scanning their DscResources folders
     $currentResourcesPath = Join-Path -Path $currentModule.ModuleBase -ChildPath 'DscResources'
     $previousResourcesPath = Join-Path -Path $previousModule.ModuleBase -ChildPath 'DscResources'
 

@@ -8,4 +8,4 @@ SHELL ["cmd", "/S", "/C"]
 
 RUN powershell -Command .\Install-M365DSCAndDependencies.ps1
 
-ENTRYPOINT ["pwsh", "-NoLogo", "-NoProfile"]
+ENTRYPOINT ["pwsh", "-NoLogo"]
