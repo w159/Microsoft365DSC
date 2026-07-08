@@ -4,6 +4,7 @@
 
 * AADAdministrativeUnit
   * Fixed an issue that made unit tests under Windows PowerShell fail.
+  * Added test for duplicated DisplayName across AUs
 * AADEntitlementManagementAccessPackageCatalog
   * Fixed an issue that made unit tests under Windows PowerShell fail.
 * AADGroup
