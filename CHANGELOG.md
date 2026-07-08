@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.708.1
 
 * AADAdministrativeUnit
   * Added test for duplicated DisplayName across AUs
