@@ -123,7 +123,7 @@ function Get-TargetResource
             {
                 try
                 {
-                    $startDateVal = [DateTime]::Parse($startDateVal)
+                    $startDateVal = [DateTime]::Parse($startDateVal).ToUniversalTime()
                 }
                 catch { }
             }
@@ -132,7 +132,7 @@ function Get-TargetResource
             {
                 try
                 {
-                    $endDateVal = [DateTime]::Parse($endDateVal)
+                    $endDateVal = [DateTime]::Parse($endDateVal).ToUniversalTime()
                 }
                 catch { }
             }
