@@ -3,6 +3,7 @@
 # UNRELEASED
 
 * AADAdministrativeUnit
+  * Added test for duplicated DisplayName across AUs
   * Fixed an issue that made unit tests under Windows PowerShell fail.
 * AADCustomSecurityAttributeDefinition
   * Fixed an issue where missing allowed values were not added to existing

@@ -144,6 +144,11 @@ function Get-TargetResource
             $getValue = $Script:exportedInstance
         }
 
+        if ($getValue.GetType().FullName -eq 'System.Object[]' -and $getValue.Count -gt 1)
+        {
+            throw "Multiple Azure AD Administrative Units with DisplayName {$DisplayName} were found. Please specify the Id of the desired Administrative Unit."
+        }
+
         $Id = $getValue.Id
         Write-Verbose -Message "An Azure AD Administrative Unit with Id {$Id} and DisplayName {$DisplayName} was found."
         $results = @{
@@ -564,7 +569,7 @@ function Set-TargetResource
         #region resource generator code
         Write-Verbose -Message "Creating new Administrative Unit with: $(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
         $policy = New-MgDirectoryAdministrativeUnit -BodyParameter $CreateParameters
-        Start-Sleep -Seconds 2 # Sleep added to allow for AU to be fully available before adding members
+        Start-Sleep -Seconds 5 # Sleep added to allow for AU to be fully available before adding members
 
         if ($MembershipType -ne 'Dynamic')
         {
@@ -573,13 +578,19 @@ function Set-TargetResource
                 Write-Verbose -Message "Adding new assigned member {$($member)}"
                 $url = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "v1.0/directoryObjects/$($member)"
 
-                New-MgDirectoryAdministrativeUnitMemberByRef -AdministrativeUnitId $policy.Id -BodyParameter @{ "@odata.id" = $url }
+                Invoke-M365DSCCommand -ScriptBLock {
+                    New-MgDirectoryAdministrativeUnitMemberByRef -AdministrativeUnitId $policy.Id -BodyParameter @{
+                        "@odata.id" = $url
+                    }
+                } -RetryOnNotFoundError
             }
         }
 
         foreach ($scopedRoleMember in $scopedRoleMemberSpecification)
         {
-            New-MgDirectoryAdministrativeUnitScopedRoleMember -AdministrativeUnitId $policy.Id -BodyParameter $scopedRoleMember
+            Invoke-M365DSCCommand -ScriptBLock {
+                New-MgDirectoryAdministrativeUnitScopedRoleMember -AdministrativeUnitId $policy.Id -BodyParameter $scopedRoleMember
+            } -RetryOnNotFoundError
         }
         #endregion
     }
