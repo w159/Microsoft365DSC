@@ -47,7 +47,7 @@ function ConvertTo-M365DSCSettingsCatalogPropertyModel
     }
     if ($null -ne $TemplateSetting.Options -and $TemplateSetting.Options.Count -gt 0)
     {
-        $optionTexts = @($TemplateSetting.Options | ForEach-Object { "$($_.Id): $($_.Name.Replace('"', "'"))" })
+        $optionTexts = @($TemplateSetting.Options | ForEach-Object { "$($_.Id): $($_.Name -replace '"', "'")" })
         $description += ' (' + ($optionTexts -join ', ') + ')'
     }
     if ($null -ne $TemplateSetting.ValueRestriction -and -not [System.String]::IsNullOrEmpty($TemplateSetting.ValueRestriction.Description))

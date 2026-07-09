@@ -159,7 +159,6 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
             $complexDeviceSettings.Add('Pol_SecGuide_SMB1ClientDriver', $policySettings.DeviceSettings.pol_SecGuide_SMB1ClientDriver)
             $complexDeviceSettings.Add('Pol_SecGuide_0001_SMBv1_Server', $policySettings.DeviceSettings.pol_SecGuide_0001_SMBv1_Server)
             $complexDeviceSettings.Add('Pol_SecGuide_0102_SEHOP', $policySettings.DeviceSettings.pol_SecGuide_0102_SEHOP)
-            $complexDeviceSettings.Add('Pol_SecGuide_0202_WDigestAuthn', $policySettings.DeviceSettings.pol_SecGuide_0202_WDigestAuthn)
             $complexDeviceSettings.Add('Pol_MSS_DisableIPSourceRoutingIPv6', $policySettings.DeviceSettings.pol_MSS_DisableIPSourceRoutingIPv6)
             $complexDeviceSettings.Add('DisableIPSourceRoutingIPv6', $policySettings.DeviceSettings.disableIPSourceRoutingIPv6)
             $complexDeviceSettings.Add('Pol_MSS_DisableIPSourceRouting', $policySettings.DeviceSettings.pol_MSS_DisableIPSourceRouting)
@@ -201,6 +200,7 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
             $complexDeviceSettings.Add('RestrictDriverInstallationToAdministrators', $policySettings.DeviceSettings.restrictDriverInstallationToAdministrators)
             $complexDeviceSettings.Add('ConfigureCopyFilesPolicy', $policySettings.DeviceSettings.configureCopyFilesPolicy)
             $complexDeviceSettings.Add('CopyFilesPolicy_Enum', $policySettings.DeviceSettings.copyFilesPolicy_Enum)
+            $complexDeviceSettings.Add('IncludeCmdLine', $policySettings.DeviceSettings.includeCmdLine)
             $complexDeviceSettings.Add('AllowEncryptionOracle', $policySettings.DeviceSettings.allowEncryptionOracle)
             $complexDeviceSettings.Add('AllowEncryptionOracleDrop', $policySettings.DeviceSettings.allowEncryptionOracleDrop)
             $complexDeviceSettings.Add('AllowProtectedCreds', $policySettings.DeviceSettings.allowProtectedCreds)
@@ -452,7 +452,6 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
             $complexDeviceSettings.Add('Disable_Security_Settings_Check', $policySettings.DeviceSettings.disable_Security_Settings_Check)
             $complexDeviceSettings.Add('DisableBlockAtFirstSeen', $policySettings.DeviceSettings.disableBlockAtFirstSeen)
             $complexDeviceSettings.Add('RealtimeProtection_DisableScanOnRealtimeEnable', $policySettings.DeviceSettings.realtimeProtection_DisableScanOnRealtimeEnable)
-            $complexDeviceSettings.Add('Scan_DisablePackedExeScanning', $policySettings.DeviceSettings.scan_DisablePackedExeScanning)
             $complexDeviceSettings.Add('DisableRoutinelyTakingAction', $policySettings.DeviceSettings.disableRoutinelyTakingAction)
             $complexDeviceSettings.Add('TS_CLIENT_DISABLE_PASSWORD_SAVING_2', $policySettings.DeviceSettings.tS_CLIENT_DISABLE_PASSWORD_SAVING_2)
             $complexDeviceSettings.Add('TS_CLIENT_DRIVE_M', $policySettings.DeviceSettings.tS_CLIENT_DRIVE_M)
@@ -638,6 +637,7 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
             $complexDeviceSettings.Add('Passwordagedays_aad', $policySettings.DeviceSettings.passwordagedays_aad)
             $complexDeviceSettings.Add('ADPasswordEncryptionPrincipal', $policySettings.DeviceSettings.aDPasswordEncryptionPrincipal)
             $complexDeviceSettings.Add('PasswordExpirationProtectionEnabled', $policySettings.DeviceSettings.passwordExpirationProtectionEnabled)
+            $complexDeviceSettings.Add('DisableInternetExplorerLaunchViaCOM', $policySettings.DeviceSettings.disableInternetExplorerLaunchViaCOM)
             $complexDeviceSettings.Add('EnableConvertWarnToBlock', $policySettings.DeviceSettings.enableConvertWarnToBlock)
             $complexDeviceSettings.Add('HideExclusionsFromLocalUsers', $policySettings.DeviceSettings.hideExclusionsFromLocalUsers)
             $complexDeviceSettings.Add('OobeEnableRtpAndSigUpdate', $policySettings.DeviceSettings.oobeEnableRtpAndSigUpdate)
@@ -772,7 +772,7 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
             $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
 
-        $templateReferenceId = '66df8dce-0166-4b82-92f7-1f74e3ca17a3_4'
+        $templateReferenceId = '66df8dce-0166-4b82-92f7-1f74e3ca17a3_5'
         $platforms = 'windows10'
         $technologies = 'mdm'
 
@@ -867,7 +867,7 @@ class IntuneSecurityBaselineWindows10 : M365DSCResourceBase
         try
         {
             #region resource generator code
-            $policyTemplateID = '66df8dce-0166-4b82-92f7-1f74e3ca17a3_4'
+            $policyTemplateID = '66df8dce-0166-4b82-92f7-1f74e3ca17a3_5'
             $baseFilter = "templateReference/templateId eq '$policyTemplateID'"
             $mergedFilter = $baseFilter
             if (-not [System.String]::IsNullOrEmpty($this.Filter))
@@ -1061,11 +1061,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $Pol_SecGuide_0102_SEHOP
 
     [DscProperty()]
-    [System.ComponentModel.Description('WDigest Authentication (disabling may require KB2871997) (0: Disabled, 1: Enabled)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $Pol_SecGuide_0202_WDigestAuthn
-
-    [DscProperty()]
     [System.ComponentModel.Description('MSS: (DisableIPSourceRouting IPv6) IP source routing protection level (protects against packet spoofing) (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $Pol_MSS_DisableIPSourceRoutingIPv6
@@ -1184,6 +1179,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $CopyFilesPolicy_Enum
 
     [DscProperty()]
+    [System.ComponentModel.Description('Include command line in process creation events: (Device) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $IncludeCmdLine
+
+    [DscProperty()]
     [System.ComponentModel.Description('Encryption Oracle Remediation (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $AllowEncryptionOracle
@@ -1204,13 +1204,13 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $DeviceInstall_Classes_Deny
 
     [DscProperty()]
-    [System.ComponentModel.Description('Prevented Classes - Depends on DeviceInstall_Classes_Deny')]
-    [System.String[]] $DeviceInstall_Classes_Deny_List
-
-    [DscProperty()]
     [System.ComponentModel.Description('Also apply to matching devices that are already installed. - Depends on DeviceInstall_Classes_Deny (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $DeviceInstall_Classes_Deny_Retroactive
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Prevented Classes - Depends on DeviceInstall_Classes_Deny')]
+    [System.String[]] $DeviceInstall_Classes_Deny_List
 
     [DscProperty()]
     [System.ComponentModel.Description('Boot-Start Driver Initialization Policy (0: Disabled, 1: Enabled)')]
@@ -1389,8 +1389,8 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $EnableSmartScreen
 
     [DscProperty()]
-    [System.ComponentModel.Description('Pick one of the following settings: (Device) - Depends on EnableSmartScreen (block: Warn and prevent bypass, warn: Warn)')]
-    [ValidateSet('block', 'warn')]
+    [System.ComponentModel.Description('Pick one of the following settings: (Device) - Depends on EnableSmartScreen (Block: Warn and prevent bypass, Warn: Warn)')]
+    [ValidateSet('Block', 'Warn')]
     [System.String] $EnableSmartScreenDropdown
 
     [DscProperty()]
@@ -1429,7 +1429,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $Advanced_SetWinInetProtocols
 
     [DscProperty()]
-    [System.ComponentModel.Description('Secure Protocol combinations - Depends on Advanced_SetWinInetProtocols (0: Use no secure protocols, 8: Only use SSL 2.0, 32: Only use SSL 3.0, 40: Use SSL 2.0 and SSL 3.0, 128: Only use TLS 1.0, 136: Use SSL 2.0 and TLS 1.0, 160: Use SSL 3.0 and TLS 1.0, 168: Use SSL 2.0, SSL 3.0, and TLS 1.0, 512: Only use TLS 1.1, 520: Use SSL 2.0 and TLS 1.1, 544: Use SSL 3.0 and TLS 1.1, 552: Use SSL 2.0, SSL 3.0, and TLS 1.1, 640: Use TLS 1.0 and TLS 1.1, 648: Use SSL 2.0, TLS 1.0, and TLS 1.1, 672: Use SSL 3.0, TLS 1.0, and TLS 1.1, 680: Use SSL 2.0, SSL 3.0, TLS 1.0, and TLS 1.1, 2048: Only use TLS 1.2, 2056: Use SSL 2.0 and TLS 1.2, 2080: Use SSL 3.0 and TLS 1.2, 2088: Use SSL 2.0, SSL 3.0, and TLS 1.2, 2176: Use TLS 1.0 and TLS 1.2, 2184: Use SSL 2.0, TLS 1.0, and TLS 1.2, 2208: Use SSL 3.0, TLS 1.0, and TLS 1.2, 2216: Use SSL 2.0, SSL 3.0, TLS 1.0, and TLS 1.2, 2560: Use TLS 1.1 and TLS 1.2, 2568: Use SSL 2.0, TLS 1.1, and TLS 1.2, 2592: Use SSL 3.0, TLS 1.1, and TLS 1.2, 2600: Use SSL 2.0, SSL 3.0, TLS 1.1, and TLS 1.2, 2688: Use TLS 1.0, TLS 1.1, and TLS 1.2, 2696: Use SSL 2.0, TLS 1.0, TLS 1.1, and TLS 1.2, 2720: Use SSL 3.0, TLS 1.0, TLS 1.1, and TLS 1.2, 2728: Use SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1, and TLS 1.2, 8192: Only use TLS 1.3, 10240: Use TLS 1.2 and TLS 1.3, 10752: Use TLS 1.1, TLS 1.2, and TLS 1.3, 10880: Use TLS 1.0, TLS 1.1, TLS 1.2, and TLS 1.3, 10912: Use SSL 3.0, TLS 1.0, TLS 1.1, TLS 1.2, and TLS 1.3)')]
+    [System.ComponentModel.Description('Secure Protocol combinations - Depends on Advanced_SetWinInetProtocols (0: Use no secure protocols, 8: [Obsolete] Only use SSL 2.0, 32: Only use SSL 3.0, 40: [Obsolete] Use SSL 2.0 and SSL 3.0, 128: Only use TLS 1.0, 136: [Obsolete] Use SSL 2.0 and TLS 1.0, 160: Use SSL 3.0 and TLS 1.0, 168: [Obsolete] Use SSL 2.0, SSL 3.0, and TLS 1.0, 512: Only use TLS 1.1, 520: [Obsolete] Use SSL 2.0 and TLS 1.1, 544: Use SSL 3.0 and TLS 1.1, 552: [Obsolete] Use SSL 2.0, SSL 3.0, and TLS 1.1, 640: Use TLS 1.0 and TLS 1.1, 648: [Obsolete] Use SSL 2.0, TLS 1.0, and TLS 1.1, 672: Use SSL 3.0, TLS 1.0, and TLS 1.1, 680: [Obsolete] Use SSL 2.0, SSL 3.0, TLS 1.0, and TLS 1.1, 2048: Only use TLS 1.2, 2056: [Obsolete] Use SSL 2.0 and TLS 1.2, 2080: Use SSL 3.0 and TLS 1.2, 2088: [Obsolete] Use SSL 2.0, SSL 3.0, and TLS 1.2, 2176: Use TLS 1.0 and TLS 1.2, 2184: [Obsolete] Use SSL 2.0, TLS 1.0, and TLS 1.2, 2208: Use SSL 3.0, TLS 1.0, and TLS 1.2, 2216: [Obsolete] Use SSL 2.0, SSL 3.0, TLS 1.0, and TLS 1.2, 2560: Use TLS 1.1 and TLS 1.2, 2568: [Obsolete] Use SSL 2.0, TLS 1.1, and TLS 1.2, 2592: Use SSL 3.0, TLS 1.1, and TLS 1.2, 2600: [Obsolete] Use SSL 2.0, SSL 3.0, TLS 1.1, and TLS 1.2, 2688: Use TLS 1.0, TLS 1.1, and TLS 1.2, 2696: [Obsolete] Use SSL 2.0, TLS 1.0, TLS 1.1, and TLS 1.2, 2720: Use SSL 3.0, TLS 1.0, TLS 1.1, and TLS 1.2, 2728: [Obsolete] Use SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1, and TLS 1.2, 8192: Only use TLS 1.3, 10240: Use TLS 1.2 and TLS 1.3, 10752: Use TLS 1.1, TLS 1.2, and TLS 1.3, 10880: Use TLS 1.0, TLS 1.1, TLS 1.2, and TLS 1.3, 10912: Use SSL 3.0, TLS 1.0, TLS 1.1, TLS 1.2, and TLS 1.3)')]
     [ValidateSet('0', '8', '32', '40', '128', '136', '160', '168', '512', '520', '544', '552', '640', '648', '672', '680', '2048', '2056', '2080', '2088', '2176', '2184', '2208', '2216', '2560', '2568', '2592', '2600', '2688', '2696', '2720', '2728', '8192', '10240', '10752', '10880', '10912')]
     [System.String] $Advanced_WinInetProtocolOptions
 
@@ -2434,11 +2434,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $RealtimeProtection_DisableScanOnRealtimeEnable
 
     [DscProperty()]
-    [System.ComponentModel.Description('Scan packed executables (0: Disabled, 1: Enabled)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $Scan_DisablePackedExeScanning
-
-    [DscProperty()]
     [System.ComponentModel.Description('Turn off routine remediation (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $DisableRoutinelyTakingAction
@@ -2479,7 +2474,7 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $Disable_Downloading_of_Enclosures
 
     [DscProperty()]
-    [System.ComponentModel.Description('Enable MPR notifications for the system (0: Disabled, 1: Enabled)')]
+    [System.ComponentModel.Description('Configure the transmission of the user''s password in the content of MPR notifications sent by winlogon. (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $EnableMPRNotifications
 
@@ -3315,6 +3310,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('Password Expiration Protection Enabled - Depends on BackupDirectory (false: Allow configured password expiriration timestamp to exceed maximum password age, true: Do not allow configured password expiriration timestamp to exceed maximum password age)')]
     [ValidateSet('false', 'true')]
     [System.String] $PasswordExpirationProtectionEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Disable Internet Explorer 11 Launch Via COM Automation (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.String] $DisableInternetExplorerLaunchViaCOM
 
     [DscProperty()]
     [System.ComponentModel.Description('Enable Convert Warn To Block (1: Warn verdicts are converted to block, 0: Warn verdicts are not converted to block)')]

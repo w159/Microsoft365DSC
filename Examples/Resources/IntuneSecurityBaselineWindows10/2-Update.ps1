@@ -75,7 +75,6 @@ Configuration Example
                 Pol_SecGuide_0001_SMBv1_Server               = '0'
                 Pol_SecGuide_0102_SEHOP                      = '1'
                 Pol_SecGuide_0201_LATFP                      = '1'
-                Pol_SecGuide_0202_WDigestAuthn               = '0'
                 RestrictDriverInstallationToAdministrators   = '1'
                 ShellPreventWPWDownload_2                    = '1'
                 Turn_Off_Multicast                           = '1'

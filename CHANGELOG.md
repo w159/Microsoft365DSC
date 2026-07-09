@@ -375,6 +375,14 @@
   * Added support for the `TemplateId` property.
 * IntuneSecurityBaselineMicrosoftEdge
   * [BREAKING CHANGE] Removed deprecated properties `WebSQLAccess` and `EdgeEnhanceImagesEnabled`.
+* IntuneSecurityBaselineWindows10
+  * Updated the resource to the 25H2 baseline version.
+  * [BREAKING CHANGE] Removed properties `Pol_SecGuide_0202_WDigestAuthn` and
+    `Scan_DisablePackedExeScanning`.
+  * [BREAKING CHANGE] Changed the accepted values of `EnableSmartScreenDropdown`
+    from `block` and `warn` to `Block` and `Warn`.
+  * Added support for the `IncludeCmdLine` and `DisableInternetExplorerLaunchViaCOM`
+    properties.
 * IntuneSettingCatalogCustomPolicyWindows10
   * Fixed an issue where some nested properties didn't have the correct type.
 * IntuneUserSettingsPolicyWindows365
