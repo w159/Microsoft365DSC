@@ -20,6 +20,8 @@
     FIXES [#7291](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7291)
 * AzureBillingAccountScheduledAction
   * Fixed an issue that made unit tests under Windows PowerShell fail.
+* EXOMigration
+  * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneDeviceCompliancePolicyMacOS
   * Fixed an issue where `ScheduledActionsForRule` was not compared correctly.
 * M365DSCExportUtil
