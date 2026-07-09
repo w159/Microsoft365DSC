@@ -93,6 +93,10 @@ function Start-M365DSCConfigurationExtract
         $AccessTokens,
 
         [Parameter()]
+        [System.String]
+        $SubscriptionId,
+
+        [Parameter()]
         [Switch]
         $Validate,
 
@@ -779,6 +783,12 @@ function Start-M365DSCConfigurationExtract
                     {
                         Write-M365DSCHost -Message "    `r`n$($Global:M365DSCEmojiYellowCircle) You specified a filter for resource {$resourceName} but it doesn't support filters. Filter will be ignored and all instances of the resource will be captured." -ForegroundColor DarkYellow -CommitWrite
                     }
+                }
+
+                # Check for SubscriptionId if Azure resource
+                if ($resourceName -like "Azure*" -and -not [System.String]::IsNullOrEmpty($using:SubscriptionId))
+                {
+                    $parameters.Add('SubscriptionId', $using:SubscriptionId)
                 }
 
                 # Check for ErrorAction Preference
