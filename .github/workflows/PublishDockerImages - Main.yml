@@ -1,4 +1,4 @@
-name: Publish Docker Images
+name: Publish Docker Images (Release)
 
 on:
   workflow_run:
@@ -15,11 +15,7 @@ jobs:
         include:
           - dockerfile: Dockerfile.linux
             runner: ubuntu-latest
-          - dockerfile: Dockerfile.linux.dev
-            runner: ubuntu-latest
           - dockerfile: Dockerfile.windows
-            runner: windows-latest
-          - dockerfile: Dockerfile.windows.dev
             runner: windows-latest
 
     runs-on: ${{ matrix.runner }}
