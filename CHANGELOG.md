@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AzureRoleDefinition
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+    FIXES [#7321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7321)
 * EXOAvailabilityAddressSpace
   * Fixed an issue where the `Credentials` property had the correct
     parameter type in its definition.
