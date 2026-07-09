@@ -373,6 +373,18 @@
   * Added support for the `RoleScopeTagIds` property.
 * IntuneRoleDefinitionWindows365
   * Added support for the `TemplateId` property.
+* IntuneSecurityBaselineMicrosoft365AppsForEnterprise
+  * Updated the resource to the v2512 baseline version.
+  * [BREAKING CHANGE] Removed property
+    `MicrosoftAccess_Security_TrustCenter_L_RequirethatApplicationExtensionsaresigned`.
+  * [BREAKING CHANGE] Changed the accepted values of `Pol_SecGuide_Block_Flash` to
+    `Block all Flash activation`, `Block embedded Flash activation only` and
+    `Allow all Flash activation`.
+  * Added support for the `L_ExcelFileBlockExternalLinks`, `L_BlockInsecureProtocols`,
+    `L_BlockOLEGraph`, `L_BlockOrgChart`, `L_BlockWecFallback`, `L_OLEActions`,
+    `L_OLEActions_L_Empty` and
+    `MicrosoftProjectV3_Security_TrustCenter_L_BlockMacroExecutionFromInternet`
+    properties.
 * IntuneSecurityBaselineMicrosoftEdge
   * [BREAKING CHANGE] Removed deprecated properties `WebSQLAccess` and `EdgeEnhanceImagesEnabled`.
 * IntuneSecurityBaselineWindows10
