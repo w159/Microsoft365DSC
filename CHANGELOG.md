@@ -7,6 +7,8 @@
 * MISC
   * Added Docker image publishing for Windows and Linux platforms.
   * Updated workflow triggers for GitHub Actions.
+  * Stopped pinning Pester dependency to `5.7.1` on Docker images since all
+    tests were made compatible in previous release with version `6.x`
 
 # 1.26.708.1
 
