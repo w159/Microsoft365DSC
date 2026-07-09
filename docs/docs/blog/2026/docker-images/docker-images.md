@@ -31,8 +31,8 @@ Before using the images, validate the following:
 - Docker Engine or Docker Desktop is installed and running.
 - You can pull images from Docker Hub (network/proxy/firewall allows access).
 - You know which container mode you need:
-  - Linux containers for `*-linux` and `*-linux.dev` tags.
-  - Windows containers for `*-windows` and `*-windows.dev` tags.
+  - Linux containers for `*-linux` and `*-linux.dev-nightly` tags.
+  - Windows containers for `*-windows` and `*-windows.dev-nightly` tags.
 - If you use Windows images, your host supports Windows containers (changeable in Docker Desktop).
 - You have Microsoft 365 credentials or app-based authentication material available for your scenario.
 - You have a local folder ready to mount into the container for exported configuration files and logs.
@@ -46,6 +46,11 @@ Images are published to Docker Hub under:
 You can browse tags here:
 
 `https://hub.docker.com/r/fabientschanz/microsoft365dsc/tags`
+
+We're providing two different flavors of images for each platform:
+
+- Stable images: `*-linux` and `*-windows` tags, which are built from the latest stable release of Microsoft365DSC.
+- Development images: `*-linux.dev-nightly` and `*-windows.dev-nightly` tags, which are built from the latest Dev branch of Microsoft365DSC.
 
 ## Understanding tags and variants
 
@@ -61,16 +66,16 @@ The format is:
 Examples:
 
 - `1.26.708.1-linux`
-- `1.26.708.1-linux.dev`
 - `1.26.708.1-windows`
-- `1.26.708.1-windows.dev`
+- `linux.dev-nightly`
+- `windows.dev-nightly`
 
 Variants map directly to the four Dockerfiles in the repository:
 
 - `Dockerfile.linux` -> `linux`
-- `Dockerfile.linux.dev` -> `linux.dev`
+- `Dockerfile.linux.dev` -> `linux.dev-nightly`
 - `Dockerfile.windows` -> `windows`
-- `Dockerfile.windows.dev` -> `windows.dev`
+- `Dockerfile.windows.dev` -> `windows.dev-nightly`
 
 ## Pull and run examples
 
