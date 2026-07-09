@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADIdentityGovernanceProgram
+  * Deprecated resource. It is superseded by the access review resources.
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneWifiConfigurationPolicyIOS
