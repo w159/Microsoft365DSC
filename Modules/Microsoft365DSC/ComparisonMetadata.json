@@ -79,6 +79,10 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "EXOAvailabilityAddressSpace": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Credentials"
+    },
     "EXOAvailabilityConfig": {
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
