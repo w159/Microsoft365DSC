@@ -1,9 +1,12 @@
 # Change log for Microsoft365DSC
 
-# Unreleased
+# UNRELEASED
 
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
+* MISC
+  * Added Docker image publishing for Windows and Linux platforms.
+  * Updated workflow triggers for GitHub Actions.
 
 # 1.26.708.1
 
