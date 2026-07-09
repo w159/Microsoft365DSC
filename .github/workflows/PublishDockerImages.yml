@@ -64,6 +64,14 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
         run: |
-          $imageTag = "$($env:DOCKERHUB_USERNAME)/microsoft365dsc:${{ steps.moduleversion.outputs.value }}-${{ steps.tag.outputs.value }}"
-          docker build --file ./${{ matrix.dockerfile }} --tag $imageTag .
-          docker push $imageTag
+          $baseName = "$($env:DOCKERHUB_USERNAME)/microsoft365dsc"
+          $imageTag = "$($baseName):${{ steps.moduleversion.outputs.value }}-${{ steps.tag.outputs.value }}"
+          if ('${{ matrix.dockerfile}}' -eq 'Dockerfile.windows') {
+            Write-Host "Building with version and latest tag for ${{ matrix.dockerfile }}"
+            $imageTagLatest = "$($baseName):latest"
+            docker build --file ./${{ matrix.dockerfile }} --tag $imageTagLatest --tag $imageTag .
+          } else {
+            Write-Host "Building with version tag for ${{ matrix.dockerfile }}"
+            docker build --file ./${{ matrix.dockerfile }} --tag $imageTag .
+          }
+          docker image push $baseName --all-tags
