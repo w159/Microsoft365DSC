@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* EXOAvailabilityAddressSpace
+  * Fixed an issue where the `Credentials` property had the correct
+    parameter type in its definition.
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneWifiConfigurationPolicyIOS
