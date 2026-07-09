@@ -878,37 +878,29 @@ function Start-M365DSCConfigurationExtract
         {
             'CertificatePath'
             {
-                $certCreds = $Global:CredsRepo[0]
                 $credsContent = ''
-                $credsContent += '        ' + (Resolve-Credentials $certCreds) + " = Get-Credential -Message `"Certificate Password`""
+                $credsContent += '        $CredsCertificatePassword = Get-Credential -Message "Certificate Password"'
                 $credsContent += "`r`n"
                 $startPosition = $DSCContent.ToString().IndexOf('<# Credentials #>') + 19
                 $DSCContent = $DSCContent.Insert($startPosition, $credsContent)
-                $launchCommand += " -CertificatePassword `$CertificatePassword"
+                $launchCommand += " -CertificatePassword `$CredsCertificatePassword"
             }
             { $_ -in 'Credentials', 'CredentialsWithApplicationId' }
             {
                 #region Add the Prompt for Required Credentials at the top of the Configuration
                 $credsContent = ''
-                foreach ($credEntry in $Global:CredsRepo)
+                if (-not $AzureAutomation)
                 {
-                    if (-not $credEntry.ToLower().StartsWith('builtin'))
-                    {
-                        if (!$AzureAutomation)
-                        {
-                            $credsContent += '        ' + (Resolve-Credentials $credEntry) + " = Get-Credential -Message `"Credentials`"`r`n"
-                        }
-                        else
-                        {
-                            $resolvedName = (Resolve-Credentials $credEntry)
-                            $credsContent += '    ' + $resolvedName + ' = Get-AutomationPSCredential -Name ' + ($resolvedName.Replace('$', '')) + "`r`n"
-                        }
-                    }
+                    $credsContent += '        $CredsCredential ' + "= Get-Credential -Message `"Credentials`"`r`n"
+                }
+                else
+                {
+                    $credsContent += '    $CredsCredential = Get-AutomationPSCredential -Name ' + ($resolvedName.Replace('$', '')) + "`r`n"
                 }
                 $credsContent += "`r`n"
                 $startPosition = $DSCContent.ToString().IndexOf('<# Credentials #>') + 19
                 $DSCContent = $DSCContent.Insert($startPosition, $credsContent)
-                $launchCommand += " -Credential `$Credential"
+                $launchCommand += " -Credential `$CredsCredential"
                 #endregion
             }
         }

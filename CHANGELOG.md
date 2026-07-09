@@ -4,6 +4,15 @@
 
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
+* IntuneWifiConfigurationPolicyIOS
+  * Added `wpa3Personal` to the `WifiSecurityType` property.
+* SettingsCatalogHelper
+  * Fixed an issue where complex administrative template names
+    were not handled correctly.
+* M365DSCExportUtil
+  * Fixed a formatting issue with `CertificatePassword` during export.
+* M365DSCReverse
+  * Fixed an issue with `Credential` and `CertificatePassword` parameters.
 * MISC
   * Added Docker image publishing for Windows and Linux platforms.
   * Updated workflow triggers for GitHub Actions.

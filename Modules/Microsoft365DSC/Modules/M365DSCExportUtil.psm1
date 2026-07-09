@@ -1203,6 +1203,7 @@ function Update-M365DSCExportAuthenticationResults
         if ($null -ne $Results.CertificatePassword)
         {
             $Results.CertificatePassword = Resolve-Credentials -UserName 'CertificatePassword'
+            $noEscape += 'CertificatePassword'
         }
         else
         {
