@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADIdentityGovernanceProgram
+  * Deprecated resource. It is superseded by the access review resources.
 * AzureRoleDefinition
   * Added `SubscriptionId` parameter to specify the Azure subscription
     that is used to connect to.
