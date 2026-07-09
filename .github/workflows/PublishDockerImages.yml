@@ -1,12 +1,10 @@
 name: Publish Docker Images
 
 on:
-  push:
-    branches:
-      - Master
-    paths:
-      - Dockerfile.*
-      - .github/workflows/PublishDockerImages.yml
+  workflow_run:
+    workflows: [Publish to PowerShell Gallery]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -35,6 +33,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        if: matrix.runner == 'ubuntu-latest'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
