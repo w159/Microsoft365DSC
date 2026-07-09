@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# Unreleased
+
+* EXOMigration
+  * Fixed unit-tests so datetimes are parsed in US-format
+
 # 1.26.708.1
 
 * AADAdministrativeUnit
