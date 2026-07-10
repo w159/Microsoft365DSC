@@ -71,6 +71,10 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "AzureRoleDefinition": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
     "DefenderDeviceAuthenticatedScanDefinition": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: ScanAuthenticationParams"
@@ -78,6 +82,10 @@
     "EXOATPBuiltInProtectionRule": {
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
+    },
+    "EXOAvailabilityAddressSpace": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Credentials"
     },
     "EXOAvailabilityConfig": {
       "HasCustomComparison": true,

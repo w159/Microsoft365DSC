@@ -2,6 +2,40 @@
 
 # UNRELEASED
 
+* Teams
+  * Updated resource settings to use the Teams Reader role and remove Graph
+    permissions from resources that do not require Microsoft Graph modules.
+
+# UNRELEASED
+
+* AADIdentityGovernanceProgram
+  * Deprecated resource. It is superseded by the access review resources.
+* AzureRoleDefinition
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+    FIXES [#7321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7321)
+* EXOAvailabilityAddressSpace
+  * Fixed an issue where the `Credentials` property had the correct
+    parameter type in its definition.
+* EXOMigration
+  * Fixed unit-tests so datetimes are parsed in US-format
+* IntuneWifiConfigurationPolicyIOS
+  * Added `wpa3Personal` to the `WifiSecurityType` property.
+* SettingsCatalogHelper
+  * Fixed an issue where complex administrative template names
+    were not handled correctly.
+* M365DSCExportUtil
+  * Fixed a formatting issue with `CertificatePassword` during export.
+* M365DSCReverse
+  * Fixed an issue with `Credential` and `CertificatePassword` parameters.
+* MISC
+  * Added Docker image publishing for Windows and Linux platforms.
+  * Updated workflow triggers for GitHub Actions.
+  * Stopped pinning Pester dependency to `5.7.1` on Docker images since all
+    tests were made compatible in previous release with version `6.x`
+
+# 1.26.708.1
+
 * AADAdministrativeUnit
   * Added test for duplicated DisplayName across AUs
   * Fixed an issue that made unit tests under Windows PowerShell fail.
@@ -44,10 +78,6 @@
     PowerShell 7.
   * Updated all unit tests for Pester v6.0.0.
   * Updated the drift event to mask authentication parameters in the message.
-* Teams
-  * Updated resource settings to use the Teams Reader role and remove Graph
-    permissions from resources that do not require Microsoft Graph modules.
-
 # 1.26.701.1
 
 * AADCrossTenantAccessPolicyConfigurationPartner
