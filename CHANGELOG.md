@@ -44,6 +44,9 @@
     PowerShell 7.
   * Updated all unit tests for Pester v6.0.0.
   * Updated the drift event to mask authentication parameters in the message.
+* Teams
+  * Updated resource settings to use the Teams Reader role and remove Graph
+    permissions from resources that do not require Microsoft Graph modules.
 
 # 1.26.701.1
 
