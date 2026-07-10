@@ -2,12 +2,6 @@
 
 # UNRELEASED
 
-* Teams
-  * Updated resource settings to use the Teams Reader role and remove Graph
-    permissions from resources that do not require Microsoft Graph modules.
-
-# UNRELEASED
-
 * AADIdentityGovernanceProgram
   * Deprecated resource. It is superseded by the access review resources.
 * AzureRoleDefinition
@@ -24,6 +18,9 @@
 * SettingsCatalogHelper
   * Fixed an issue where complex administrative template names
     were not handled correctly.
+* Teams
+  * Updated resource settings to use the Teams Reader role and remove Graph
+    permissions from resources that do not require Microsoft Graph modules.
 * M365DSCExportUtil
   * Fixed a formatting issue with `CertificatePassword` during export.
 * M365DSCReverse
