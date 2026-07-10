@@ -4,10 +4,40 @@
 
 * AADIdentityGovernanceProgram
   * Deprecated resource. It is superseded by the access review resources.
+* AzureBillingAccountPolicy
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureBillingAccountsAssociatedTenant
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureBillingAccountScheduledAction
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureBillingAccountsRoleAssignment
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureDiagnosticSettings
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureDiagnosticSettingsCustomSecurityAttribute
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureRoleAssignmentScheduleRequest
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureRoleAssignmentScheduleRequest
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
 * AzureRoleDefinition
   * Added `SubscriptionId` parameter to specify the Azure subscription
     that is used to connect to.
     FIXES [#7321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7321)
+* AzureRoleEligibilityScheduleRequest
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
+* AzureRoleEligibilityScheduleSettings
+  * Added `SubscriptionId` parameter to specify the Azure subscription
+    that is used to connect to.
 * EXOAvailabilityAddressSpace
   * Fixed an issue where the `Credentials` property had the correct
     parameter type in its definition.

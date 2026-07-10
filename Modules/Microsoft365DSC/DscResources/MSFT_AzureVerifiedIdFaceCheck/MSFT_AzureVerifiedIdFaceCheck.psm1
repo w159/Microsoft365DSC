@@ -460,5 +460,3 @@ function Export-TargetResource
         throw
     }
 }
-
-Export-ModuleMember -Function *-TargetResource
