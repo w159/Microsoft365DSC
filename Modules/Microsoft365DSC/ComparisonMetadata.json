@@ -71,7 +71,43 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "AzureBillingAccountPolicy": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureBillingAccountsAssociatedTenant": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureBillingAccountScheduledAction": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureBillingAccountsRoleAssignment": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureDiagnosticSettings": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureDiagnosticSettingsCustomSecurityAttribute": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureRoleAssignmentScheduleRequest": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Justification, SubscriptionId"
+    },
     "AzureRoleDefinition": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SubscriptionId"
+    },
+    "AzureRoleEligibilityScheduleRequest": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Justification, SubscriptionId"
+    },
+    "AzureRoleEligibilityScheduleSettings": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: SubscriptionId"
     },
