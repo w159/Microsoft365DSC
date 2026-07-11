@@ -43,6 +43,8 @@
     parameter type in its definition.
 * EXODistributionGroup
   * Deprecate property `Notes`
+* EXOIRMConfiguration
+  * Deprecate property `EnablePortalTrackingLogs`
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneWifiConfigurationPolicyIOS

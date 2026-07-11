@@ -152,6 +152,10 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "EXOIRMConfiguration": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: EnablePortalTrackingLogs"
+    },
     "EXOMailContact": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: OrganizationalUnit"
