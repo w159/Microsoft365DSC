@@ -51,17 +51,20 @@ function Get-PropertyReport
             'Debug',
         'Credential',
         'ApplicationId',
+        'ApplicationSecret',
         'Ensure',
         'TenantId',
         'CertificateThumbprint',
         'CertificatePath',
         'CertificatePassword',
+        'AccessTokens',
+        'ManagedIdentity',
         'IsSingleInstance')
 
     # list of M365 workloads to check
     $workloads = @(
-        @{Name = 'ExchangeOnline'; ModuleName = 'ExchangeOnlineManagement'; CommandName = 'Get-Mailbox'; Prefix = 'EXO'; }
         @{Name = 'MicrosoftTeams'; ModuleName = 'MicrosoftTeams'; Prefix = 'Teams'; }
+        @{Name = 'ExchangeOnline'; ModuleName = 'ExchangeOnlineManagement'; CommandName = 'Get-Mailbox'; Prefix = 'EXO'; }
         @{Name = 'SecurityComplianceCenter'; ModuleName = 'ExchangeOnlineManagement'; CommandName = 'Set-ComplianceCase'; Prefix = 'SC'; }
     )
 
