@@ -218,7 +218,7 @@ function Export-M365DSCConfiguration
         $AccessTokens,
 
         [Parameter(ParameterSetName = 'Export')]
-        [ValidateScript({ $Workloads -contains 'AZURE' -or $($Components | Where-Object { $_ -like "Azure*" }).Count -gt 0 })]
+        [ValidateScript({ $Workloads -contains 'AZURE' -or ($Components -like "Azure*").Count -gt 0 })]
         [System.String]
         $SubscriptionId,
 
@@ -1717,7 +1717,7 @@ function Get-M365DSCMinimalExportBlocks
 
         if ($null -ne $resourceInfo)
         {
-            $keyProps = $resourceInfo.Properties | Where-Object -FilterScript { $_.IsMandatory }
+            $keyProps = $resourceInfo.Properties | Where-Object -Property IsMandatory -EQ $true
             foreach ($prop in $keyProps)
             {
                 if ($prop.Name -eq 'IsSingleInstance')

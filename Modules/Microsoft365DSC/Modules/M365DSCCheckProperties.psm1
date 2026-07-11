@@ -107,7 +107,7 @@ function Get-PropertyReport
         }
 
         $cmdlets = Get-Command -CommandType 'Function' -Module $CurrentModuleName
-        $setCmdlets = $cmdlets | Where-Object { $_.Name -like 'Set-*' }
+        $setCmdlets = $cmdlets | Where-Object -Property Name -Like 'Set-*'
 
         Write-Verbose "Found $($setCmdlets.Count) Set-* cmdlets for $($Module.ModuleName) ($($cmdlets.Count) in total)"
 
@@ -127,7 +127,7 @@ function Get-PropertyReport
             {
                 $resourceName = $resourceName -replace ('TeamsCs', 'Teams')
             }
-            $foundInFiles = Get-ChildItem -Path $folderPath | Where-Object { $_.Name -like $resourceName }
+            $foundInFiles = Get-ChildItem -Path $folderPath | Where-Object -Property Name -Like $resourceName
 
             if ($null -eq $foundInFiles)
             {
@@ -135,7 +135,7 @@ function Get-PropertyReport
                 if ($null -ne $resourceNameFromMapping)
                 {
                     $resourceName = 'MSFT_' + $module.Prefix + $resourceNameFromMapping
-                    $foundInFiles = Get-ChildItem -Path $folderPath | Where-Object { $_.Name -like $resourceName }
+                    $foundInFiles = Get-ChildItem -Path $folderPath | Where-Object -Property Name -Like $resourceName
                     if ($null -ne $foundInFiles)
                     {
                         $resourceExists = $true
@@ -180,8 +180,8 @@ function Get-PropertyReport
                 # Compare properties
                 Write-Verbose "Compare parameters of $resourceName"
                 $difference = Compare-Object -ReferenceObject @($targetParameters | Select-Object) -DifferenceObject @($resourceParamters | Select-Object) -IncludeEqual
-                $missingProperties = ($difference | Where-Object { $_.SideIndicator -eq '<=' }).InputObject
-                $additionalProperties = ($difference | Where-Object { $_.SideIndicator -eq '=>' }).InputObject
+                $missingProperties = ($difference | Where-Object -Property SideIndicator -EQ '<=' ).InputObject
+                $additionalProperties = ($difference | Where-Object -Property SideIndicator -EQ '=>' ).InputObject
 
                 # Add to report
                 $cmdletResult = [PSCustomObject]@{

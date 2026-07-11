@@ -211,13 +211,13 @@ function Start-M365DSCConfigurationExtract
 
         if ($null -ne $Components)
         {
-            $allM365DscResources = Get-M365DSCAllResources
+            [System.String[]]$allM365DscResources = Get-M365DSCAllResources
             $newComponents = @()
             foreach ($component in $Components)
             {
                 if ($component.Contains('*'))
                 {
-                    $matchingResources = $allM365DscResources | Where-Object { $_ -like $component }
+                    $matchingResources = $allM365DscResources -like $component
                     if ($matchingResources.Count -eq 0)
                     {
                         Write-Warning -Message "The component filter '$component' did not match any resources and will be ignored."
@@ -311,7 +311,7 @@ function Start-M365DSCConfigurationExtract
         {
             Write-Verbose -Message 'Retrieving all resources'
             $selectedItems = Compare-Object -ReferenceObject $allResourcesInModule `
-                -DifferenceObject $ComponentsToSkip | Where-Object -FilterScript { $_.SideIndicator -eq '<=' }
+                -DifferenceObject $ComponentsToSkip | Where-Object -Property SideIndicator -EQ '<='
             $selectedResources = @()
             foreach ($item in $selectedItems)
             {
@@ -347,13 +347,14 @@ function Start-M365DSCConfigurationExtract
             }
             # Filter null elements in case one resource was provided and is not supported with the provided authentication method
             # to avoid Compare-Object from throwing a ParameterArgumentValidationErrorNullNotAllowed error
+            # allSupportedResourcesWithMostSecureAuthMethod is a List, so -ne $null evaluates each element in the list
             $allSupportedResourcesWithMostSecureAuthMethodArray = @()
-            foreach ($resource in $allSupportedResourcesWithMostSecureAuthMethod | Where-Object -FilterScript { $null -ne $_ })
+            foreach ($resource in ($allSupportedResourcesWithMostSecureAuthMethod -ne $null))
             {
                 $allSupportedResourcesWithMostSecureAuthMethodArray += $resource.Resource
             }
             [Array]$compareResourcesResult = Compare-Object -ReferenceObject $allSupportedResourcesWithMostSecureAuthMethodArray `
-                -DifferenceObject $selectedResources | Where-Object -FilterScript { $_.SideIndicator -eq '=>' }
+                -DifferenceObject $selectedResources | Where-Object -Property SideIndicator -EQ '=>'
         }
         catch
         {
@@ -620,11 +621,11 @@ function Start-M365DSCConfigurationExtract
             -Description 'Default Value Used to Ensure a Configuration Data File is Generated'
 
         Write-Verbose -Message 'Retrieving resources path'
-        $resourcesPath = Join-Path -Path $PSScriptRoot `
+        $dscResourcesPath = Join-Path -Path $PSScriptRoot `
             -ChildPath '../DscResources/' `
             -Resolve
         Write-Verbose -Message 'Loop through all resources files.'
-        $allResoures = Get-ChildItem $resourcesPath -Recurse | Where-Object { $_.Name -like 'MSFT_*.psm1' }
+        $allResoures = Get-ChildItem $dscResourcesPath -Recurse -File -Filter "MSFT_*.psm1"
 
         $ResourcesToExport = @()
         $resourcesPath = @()
@@ -640,7 +641,7 @@ function Start-M365DSCConfigurationExtract
                         $resourcesNotSupported -notcontains $resourceName -and `
                         -not $resourceName.StartsWith('M365DSC'))
                 {
-                    $authMethod = $allSupportedResourcesWithMostSecureAuthMethod | Where-Object -FilterScript { $_.Resource -eq $ResourceName }
+                    $authMethod = $allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $ResourceName
                     $resourceInfo = @{
                         Name                 = $ResourceName
                         AuthenticationMethod = $authMethod.AuthMethod
@@ -695,7 +696,7 @@ function Start-M365DSCConfigurationExtract
             $resource = $_
             Set-M365DSCAllResourcesDictionary -DscResourceDictionary $using:resourceDictionary
             $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
-            $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object { $_.Resource -eq $resourceName }).AuthMethod
+            $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceName).AuthMethod
 
             Import-Module $resource.FullName -Force | Out-Null
             $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
@@ -817,7 +818,7 @@ function Start-M365DSCConfigurationExtract
             {
                 Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
                 $requiredModules = [System.Collections.Generic.List[System.String]]::new(25)
-                foreach ($resource in $($ResourcesToExport | Where-Object { $_.Name -like "$workload*" }))
+                foreach ($resource in $($ResourcesToExport | Where-Object -Property Name -Like "$workload*"))
                 {
                     foreach ($module in $resourceSettings[$resource.Name].requiredModules)
                     {
@@ -834,7 +835,7 @@ function Start-M365DSCConfigurationExtract
                 {
                     $arguments.Add('ModuleName', $requiredModules)
                 }
-                $resourcesPath | Where-Object { $_ -like "*MSFT_$workload*" } | Invoke-Parallel @arguments -Verbose
+                $resourcesPath -like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
         }
         else
@@ -1135,7 +1136,7 @@ function Get-M365DSCResourcesByWorkloads
         $Mode = 'Default'
     )
 
-    $modules = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1'
+    $modules = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -File -Filter '*.psm1'
     $Components = @()
     foreach ($Workload in $Workloads)
     {
