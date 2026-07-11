@@ -538,9 +538,6 @@ function Start-M365DSCConfigurationExtract
                     -Description 'Local path to the .pfx certificate to use for authentication'
 
                 $newline = $true
-
-                # Add the Certificate Password to the Credentials List
-                Save-Credentials -UserName 'certificatepassword'
             }
             'ApplicationWithSecret'
             {
@@ -588,10 +585,6 @@ function Start-M365DSCConfigurationExtract
                 $postParamContent.Append("    `$OrganizationName = `$CredsCredential.UserName.Split('@')[1]`r`n") | Out-Null
 
                 $newline = $true
-
-                # Add the Credential to the Credentials List
-                Write-Verbose -Message 'Adding the provided credentials to the list of variables'
-                Save-Credentials -UserName 'credential'
             }
             'ManagedIdentity'
             {
@@ -899,14 +892,7 @@ function Start-M365DSCConfigurationExtract
             {
                 #region Add the Prompt for Required Credentials at the top of the Configuration
                 $credsContent = ''
-                if (-not $AzureAutomation)
-                {
-                    $credsContent += '        $CredsCredential ' + "= Get-Credential -Message `"Credentials`"`r`n"
-                }
-                else
-                {
-                    $credsContent += '    $CredsCredential = Get-AutomationPSCredential -Name ' + ($resolvedName.Replace('$', '')) + "`r`n"
-                }
+                $credsContent += '        $CredsCredential ' + "= Get-Credential -Message `"Credentials`"`r`n"
                 $credsContent += "`r`n"
                 $startPosition = $DSCContent.ToString().IndexOf('<# Credentials #>') + 19
                 $DSCContent = $DSCContent.Insert($startPosition, $credsContent)
