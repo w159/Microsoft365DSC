@@ -1167,7 +1167,7 @@ function Get-CompareParameters
     param()
 
     return @{
-        ExcludedProperties = 'Notes'
+        ExcludedProperties = @('Notes')
         PostProcessing = {
             param($DesiredValues, $CurrentValues, $ValuesToCheck, $ignore)
             if (-not $ValuesToCheck.OrganizationalUnit)
