@@ -693,8 +693,6 @@ function Set-TargetResource
     # Update even if we just created the group. There are properties that can only be set with the set- cmdlet.
     if ($Ensure -eq 'Present')
     {
-
-
         # If this is a newly created group, use the new group identity
         if ($null -ne $newGroup)
         {
