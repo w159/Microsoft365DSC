@@ -51,6 +51,11 @@
 * Teams
   * Updated resource settings to use the Teams Reader role and remove Graph
     permissions from resources that do not require Microsoft Graph modules.
+* M365DSCCheckProperties
+  * Fixed an issue with function `Get-PropertyReport` where it wasn't working
+    because the `Teams` module was being loaded last and causing conflicts
+  * Added authentication methods `ApplicationSecret`, `AccesstTokens` and
+    `ManagedIdentity` as internal M365DSC properties that should to be ignored
 * M365DSCExportUtil
   * Fixed a formatting issue with `CertificatePassword` during export.
   * Removed usage of function `Resolve-Credentials` and instead just use the
