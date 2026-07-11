@@ -52,6 +52,8 @@
   * Fixed a formatting issue with `CertificatePassword` during export.
 * M365DSCReverse
   * Fixed an issue with `Credential` and `CertificatePassword` parameters.
+* DEPENDENCIES
+  * Updated `MSCloudLoginAssistant` to version `1.1.69`.
 * MISC
   * Added Docker image publishing for Windows and Linux platforms.
   * Updated workflow triggers for GitHub Actions.
