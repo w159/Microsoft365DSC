@@ -129,7 +129,7 @@
     },
     "EXODistributionGroup": {
       "HasCustomComparison": true,
-      "Description": "Uses PostProcessing scriptblock"
+      "Description": "Excludes properties: Notes; Uses PostProcessing scriptblock"
     },
     "EXODynamicDistributionGroup": {
       "HasCustomComparison": true,

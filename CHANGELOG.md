@@ -41,6 +41,8 @@
 * EXOAvailabilityAddressSpace
   * Fixed an issue where the `Credentials` property had the correct
     parameter type in its definition.
+* EXODistributionGroup
+  * Deprecate property `Notes`
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneWifiConfigurationPolicyIOS

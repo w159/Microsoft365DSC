@@ -236,6 +236,11 @@ function Get-TargetResource
 
     Write-Verbose -Message "Getting configuration of Distribution Group for $Identity"
 
+    if ($PSBoundParameters.ContainsKey('Notes'))
+    {
+        Write-Warning "Property 'Notes' is deprecated and will be removed“
+    }
+
     try
     {
         if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $Name)
@@ -622,6 +627,11 @@ function Set-TargetResource
 
     Write-Verbose -Message "Setting configuration of Distribution Group for $Identity"
 
+    if ($PSBoundParameters.ContainsKey('Notes'))
+    {
+        Write-Warning "Property 'Notes' is deprecated and will be removed“
+    }
+
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
@@ -683,6 +693,8 @@ function Set-TargetResource
     # Update even if we just created the group. There are properties that can only be set with the set- cmdlet.
     if ($Ensure -eq 'Present')
     {
+
+
         # If this is a newly created group, use the new group identity
         if ($null -ne $newGroup)
         {
@@ -1155,6 +1167,7 @@ function Get-CompareParameters
     param()
 
     return @{
+        ExcludedProperties = 'Notes'
         PostProcessing = {
             param($DesiredValues, $CurrentValues, $ValuesToCheck, $ignore)
             if (-not $ValuesToCheck.OrganizationalUnit)
