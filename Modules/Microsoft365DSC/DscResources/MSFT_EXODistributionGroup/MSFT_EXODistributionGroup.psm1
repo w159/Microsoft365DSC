@@ -238,6 +238,7 @@ function Get-TargetResource
 
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
+        $PSBoundParameters.Remove('Notes') | Out-Null
         Write-Warning "Property 'Notes' is deprecated and will be removed“
     }
 
@@ -629,6 +630,7 @@ function Set-TargetResource
 
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
+        $PSBoundParameters.Remove('Notes') | Out-Null
         Write-Warning "Property 'Notes' is deprecated and will be removed“
     }
 
