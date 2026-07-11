@@ -50,8 +50,14 @@
     were not handled correctly.
 * M365DSCExportUtil
   * Fixed a formatting issue with `CertificatePassword` during export.
+  * Removed usage of function `Resolve-Credentials` and instead just use the
+    appropriate hardcoded strings
 * M365DSCReverse
   * Fixed an issue with `Credential` and `CertificatePassword` parameters.
+  * Fixed an issue generating the blueprint if using Azure Automation with
+    `Credential` parameter.
+  * Removed usage of function `Save-Credentials` since it's not required any
+    longer.
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version `1.1.69`.
 * MISC

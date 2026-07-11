@@ -1136,7 +1136,7 @@ function Update-M365DSCExportAuthenticationResults
 
     if ($ConnectionMode -in @('Credentials', 'CredentialsWithTenantId'))
     {
-        $Results.Credential = Resolve-Credentials -UserName 'credential'
+        $Results.Credential = '$CredsCredential'
         $noEscape += 'Credential'
 
         # Credentials mode removes TenantId; CredentialsWithTenantId keeps it.
@@ -1161,7 +1161,7 @@ function Update-M365DSCExportAuthenticationResults
         {
             if ($ConnectionMode -eq 'CredentialsWithApplicationId')
             {
-                $Results.Credential = Resolve-Credentials -UserName 'credential'
+                $Results.Credential = '$CredsCredential'
                 $noEscape += 'Credential'
             }
             else
@@ -1213,7 +1213,7 @@ function Update-M365DSCExportAuthenticationResults
         # CertificatePassword gets resolved as credentials
         if ($null -ne $Results.CertificatePassword)
         {
-            $Results.CertificatePassword = Resolve-Credentials -UserName 'CertificatePassword'
+            $Results.CertificatePassword = '$CredsCertificatePassword'
             $noEscape += 'CertificatePassword'
         }
         else
