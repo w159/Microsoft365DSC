@@ -48,6 +48,9 @@
 * SettingsCatalogHelper
   * Fixed an issue where complex administrative template names
     were not handled correctly.
+* Teams
+  * Updated resource settings to use the Teams Reader role and remove Graph
+    permissions from resources that do not require Microsoft Graph modules.
 * M365DSCExportUtil
   * Fixed a formatting issue with `CertificatePassword` during export.
 * M365DSCReverse
@@ -102,7 +105,6 @@
     PowerShell 7.
   * Updated all unit tests for Pester v6.0.0.
   * Updated the drift event to mask authentication parameters in the message.
-
 # 1.26.701.1
 
 * AADCrossTenantAccessPolicyConfigurationPartner
