@@ -139,12 +139,6 @@ function Get-TargetResource
 
     Write-Verbose -Message "Getting configuration for Place for $($Identity)"
 
-    # TODO: Remove property 'DisplayName' in next breaking change
-    if ($PSBoundParameters.ContainsKey('DisplayName'))
-    {
-        $PSBoundParameters.Remove('DisplayName') | Out-Null
-        Write-Warning "Property 'DisplayName' is deprecated and will be removed“
-    }
     # TODO: Remove property 'Desks' in next breaking change
     if ($PSBoundParameters.ContainsKey('Desks'))
     {
@@ -400,12 +394,6 @@ function Set-TargetResource
 
     Write-Verbose -Message "Setting configuration of Place for $($Identity)"
 
-    # TODO: Remove property 'DisplayName' in next breaking change
-    if ($PSBoundParameters.ContainsKey('DisplayName'))
-    {
-        $PSBoundParameters.Remove('DisplayName') | Out-Null
-        Write-Warning "Property 'DisplayName' is deprecated and will be removed“
-    }
     # TODO: Remove property 'Desks' in next breaking change
     if ($PSBoundParameters.ContainsKey('Desks'))
     {
@@ -702,7 +690,7 @@ function Get-CompareParameters
     param()
 
     return @{
-        ExcludedProperties = @('DisplayName', 'Desks')
+        ExcludedProperties = @('Desks')
     }
 }
 

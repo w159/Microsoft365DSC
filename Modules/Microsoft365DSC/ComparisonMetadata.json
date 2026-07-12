@@ -166,7 +166,7 @@
     },
     "EXOPlace": {
       "HasCustomComparison": true,
-      "Description": "Excludes properties: DisplayName, Desks"
+      "Description": "Excludes properties: Desks"
     },
     "EXOSafeLinksPolicy": {
       "HasCustomComparison": true,

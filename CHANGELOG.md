@@ -50,7 +50,7 @@
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * EXOPlace
-  * Deprecate properties `DisplayName` and `Desks`
+  * Deprecate property `Desks`
 * IntuneWifiConfigurationPolicyIOS
   * Added `wpa3Personal` to the `WifiSecurityType` property.
 * SettingsCatalogHelper
