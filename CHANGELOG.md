@@ -51,6 +51,26 @@
 * Teams
   * Updated resource settings to use the Teams Reader role and remove Graph
     permissions from resources that do not require Microsoft Graph modules.
+* TeamsCallQueue
+  * Added new properties `AutoRecordingTemplateId`, `CallbackEmailNotificationTarget`,
+    `CallbackOfferAudioFilePromptResourceId`, `CallbackOfferTextToSpeechPrompt`,
+    `CallbackRequestDtmf`, `CallToAgentRatioThresholdBeforeOfferingCallback`,
+    `ComplianceRecordingForCallQueueTemplateId`, `CustomAudioFileAnnouncementForCR`,
+    `CustomAudioFileAnnouncementForCRFailure`, `EnableNoAgentSharedVoicemailSystemPromptSuppression`,
+    `EnableNoAgentSharedVoicemailTranscription`, `EnableOverflowSharedVoicemailSystemPromptSuppression`,
+    `EnableTimeoutSharedVoicemailSystemPromptSuppression`, `IsCallbackEnabled`, `NoAgentAction`,
+    `NoAgentActionCallPriority`, `NoAgentActionTarget`, `NoAgentApplyTo`,
+    `NoAgentDisconnectAudioFilePrompt`, `NoAgentDisconnectTextToSpeechPrompt`,
+    `NoAgentRedirectPersonAudioFilePrompt`, `NoAgentRedirectPersonTextToSpeechPrompt`,
+    `NoAgentRedirectPhoneNumberAudioFilePrompt`, `NoAgentRedirectPhoneNumberTextToSpeechPrompt`,
+    `NoAgentRedirectVoiceAppAudioFilePrompt`, `NoAgentRedirectVoiceAppTextToSpeechPrompt`,
+    `NoAgentRedirectVoicemailAudioFilePrompt`, `NoAgentRedirectVoicemailTextToSpeechPrompt`,
+    `NoAgentSharedVoicemailAudioFilePrompt`, `NoAgentSharedVoicemailTextToSpeechPrompt`,
+    `NumberOfCallsInQueueBeforeOfferingCallback`, `OverflowActionCallPriority`,
+    `ServiceLevelThresholdResponseTimeInSecond`, `SharedCallQueueHistoryTemplateId`,
+    `ShiftsSchedulingGroupId`, `ShiftsTeamId`,
+    `ShouldOverwriteCallableChannelProperty`, `TimeoutActionCallPriority`,
+    `WaitTimeBeforeOfferingCallbackInSecond`, `WelcomeTextToSpeechPrompt`
 * M365DSCCheckProperties
   * Fixed an issue with function `Get-PropertyReport` where it wasn't working
     because the `Teams` module was being loaded last and causing conflicts
