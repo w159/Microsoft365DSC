@@ -63,7 +63,7 @@ function Get-TargetResource
     if ($PSBoundParameters.ContainsKey('Type'))
     {
         $PSBoundParameters.Remove('Type') | Out-Null
-        Write-Warning "Property 'Type' is deprecated and will be removed“
+        Write-Warning "Property 'Type' is deprecated and will be removed"
     }
 
     try
@@ -192,7 +192,7 @@ function Set-TargetResource
     if ($PSBoundParameters.ContainsKey('Type'))
     {
         $PSBoundParameters.Remove('Type') | Out-Null
-        Write-Warning "Property 'Type' is deprecated and will be removed“
+        Write-Warning "Property 'Type' is deprecated and will be removed"
     }
 
     #Ensure the proper dependencies are installed in the current environment.

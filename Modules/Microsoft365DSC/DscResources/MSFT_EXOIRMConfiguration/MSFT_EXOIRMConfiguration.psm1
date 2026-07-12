@@ -120,7 +120,7 @@ function Get-TargetResource
     if ($PSBoundParameters.ContainsKey('EnablePortalTrackingLogs'))
     {
         $PSBoundParameters.Remove('EnablePortalTrackingLogs') | Out-Null
-        Write-Warning "Property 'EnablePortalTrackingLogs' is deprecated and will be removed“
+        Write-Warning "Property 'EnablePortalTrackingLogs' is deprecated and will be removed"
     }
 
     try
@@ -336,7 +336,7 @@ function Set-TargetResource
     if ($PSBoundParameters.ContainsKey('EnablePortalTrackingLogs'))
     {
         $PSBoundParameters.Remove('EnablePortalTrackingLogs') | Out-Null
-        Write-Warning "Property 'EnablePortalTrackingLogs' is deprecated and will be removed“
+        Write-Warning "Property 'EnablePortalTrackingLogs' is deprecated and will be removed"
     }
 
     $null = New-M365DSCConnection -Workload 'ExchangeOnline' `

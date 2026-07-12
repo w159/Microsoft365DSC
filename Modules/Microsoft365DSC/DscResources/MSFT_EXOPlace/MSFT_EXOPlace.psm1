@@ -143,7 +143,7 @@ function Get-TargetResource
     if ($PSBoundParameters.ContainsKey('Desks'))
     {
         $PSBoundParameters.Remove('Desks') | Out-Null
-        Write-Warning "Property 'Desks' is deprecated and will be removed“
+        Write-Warning "Property 'Desks' is deprecated and will be removed"
     }
 
     try
@@ -398,7 +398,7 @@ function Set-TargetResource
     if ($PSBoundParameters.ContainsKey('Desks'))
     {
         $PSBoundParameters.Remove('Desks') | Out-Null
-        Write-Warning "Property 'Desks' is deprecated and will be removed“
+        Write-Warning "Property 'Desks' is deprecated and will be removed"
     }
 
     $null = New-M365DSCConnection -Workload 'ExchangeOnline' `

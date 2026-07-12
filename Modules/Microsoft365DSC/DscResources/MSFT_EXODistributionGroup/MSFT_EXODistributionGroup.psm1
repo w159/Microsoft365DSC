@@ -240,7 +240,7 @@ function Get-TargetResource
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
         $PSBoundParameters.Remove('Notes') | Out-Null
-        Write-Warning "Property 'Notes' is deprecated and will be removed“
+        Write-Warning "Property 'Notes' is deprecated and will be removed"
     }
 
     try
@@ -633,7 +633,7 @@ function Set-TargetResource
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
         $PSBoundParameters.Remove('Notes') | Out-Null
-        Write-Warning "Property 'Notes' is deprecated and will be removed“
+        Write-Warning "Property 'Notes' is deprecated and will be removed"
     }
 
     #Ensure the proper dependencies are installed in the current environment.
