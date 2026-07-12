@@ -160,6 +160,10 @@
       "HasCustomComparison": true,
       "Description": "Excludes properties: OrganizationalUnit"
     },
+    "EXOManagementRoleEntry": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Type"
+    },
     "EXOSafeLinksPolicy": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: UseTranslatedNotificationText"

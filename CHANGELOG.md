@@ -45,6 +45,8 @@
   * Deprecate property `Notes`
 * EXOIRMConfiguration
   * Deprecate property `EnablePortalTrackingLogs`
+* EXOManagementRoleEntry
+  * Deprecate property `Type`
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
 * IntuneWifiConfigurationPolicyIOS
