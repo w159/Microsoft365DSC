@@ -81,6 +81,10 @@
   * Updated workflow triggers for GitHub Actions.
   * Stopped pinning Pester dependency to `5.7.1` on Docker images since all
     tests were made compatible in previous release with version `6.x`
+* Added `License Requirements` section to README.md documenting Microsoft
+    365 E5 / Defender for Office 365 Plan 2 licensing requirements for EXO
+    Defender resources.
+
 
 # 1.26.708.1
 
