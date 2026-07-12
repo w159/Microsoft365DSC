@@ -236,6 +236,7 @@ function Get-TargetResource
 
     Write-Verbose -Message "Getting configuration of Distribution Group for $Identity"
 
+    # TODO: Remove property 'Notes' in next breaking change
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
         $PSBoundParameters.Remove('Notes') | Out-Null
@@ -628,6 +629,7 @@ function Set-TargetResource
 
     Write-Verbose -Message "Setting configuration of Distribution Group for $Identity"
 
+    # TODO: Remove property 'Notes' in next breaking change
     if ($PSBoundParameters.ContainsKey('Notes'))
     {
         $PSBoundParameters.Remove('Notes') | Out-Null

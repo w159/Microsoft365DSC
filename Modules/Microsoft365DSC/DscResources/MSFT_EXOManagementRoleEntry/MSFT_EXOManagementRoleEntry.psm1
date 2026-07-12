@@ -59,6 +59,7 @@ function Get-TargetResource
 
     Write-Verbose -Message "Getting Management Role Entry configuration for {$Identity}"
 
+    # TODO: Remove property 'Type' in next breaking change
     if ($PSBoundParameters.ContainsKey('Type'))
     {
         $PSBoundParameters.Remove('Type') | Out-Null
@@ -187,6 +188,7 @@ function Set-TargetResource
 
     Write-Verbose -Message "Setting Management Role Entry configuration for {$Identity}"
 
+    # TODO: Remove property 'Type' in next breaking change
     if ($PSBoundParameters.ContainsKey('Type'))
     {
         $PSBoundParameters.Remove('Type') | Out-Null

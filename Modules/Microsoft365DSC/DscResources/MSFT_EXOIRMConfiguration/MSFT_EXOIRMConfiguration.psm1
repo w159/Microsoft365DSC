@@ -116,6 +116,7 @@ function Get-TargetResource
 
     Write-Verbose -Message 'Getting IRM Configuration'
 
+    # TODO: Remove property 'EnablePortalTrackingLogs' in next breaking change
     if ($PSBoundParameters.ContainsKey('EnablePortalTrackingLogs'))
     {
         $PSBoundParameters.Remove('EnablePortalTrackingLogs') | Out-Null
@@ -331,6 +332,7 @@ function Set-TargetResource
 
     Write-Verbose -Message 'Setting configuration of Resource Configuration'
 
+    # TODO: Remove property 'EnablePortalTrackingLogs' in next breaking change
     if ($PSBoundParameters.ContainsKey('EnablePortalTrackingLogs'))
     {
         $PSBoundParameters.Remove('EnablePortalTrackingLogs') | Out-Null
