@@ -21,34 +21,45 @@ function Get-PropertyReport
     )
 
     # list of cmdlet parameters to be ignored
-    $invalidParameters = @('ErrorVariable', `
-            'ErrorAction', `
-            'InformationVariable', `
-            'InformationAction', `
-            'WarningVariable', `
-            'WarningAction', `
-            'OutVariable', `
-            'OutBuffer', `
-            'PipelineVariable', `
-            'Verbose', `
-            'WhatIf', `
-            'Debug',
+    $invalidParameters = @(
+        'ErrorVariable',
+        'ErrorAction',
+        'Force',
+        'HttpPipelinePrepend',
+        'InformationVariable',
+        'InformationAction',
+        'MsftInternalProcessingMode',
+        'WarningVariable',
+        'WarningAction',
+        'OutVariable',
+        'OutBuffer',
+        'PipelineVariable',
+        'Verbose',
+        'WhatIf',
+        'Debug',
         'Confirm',
-        'AsJob')
+        'AsJob'
+    )
 
     # list of M365 DSC resource properties to be ignored
-    $invalidProperties = @('ErrorVariable', `
-            'ErrorAction', `
-            'InformationVariable', `
-            'InformationAction', `
-            'WarningVariable', `
-            'WarningAction', `
-            'OutVariable', `
-            'OutBuffer', `
-            'PipelineVariable', `
-            'Verbose', `
-            'WhatIf', `
-            'Debug',
+    $invalidProperties = @(
+        'ErrorVariable',
+        'ErrorAction',
+        'Force',
+        'HttpPipelinePrepend',
+        'InformationVariable',
+        'InformationAction',
+        'MsftInternalProcessingMode',
+        'WarningVariable',
+        'WarningAction',
+        'OutVariable',
+        'OutBuffer',
+        'PipelineVariable',
+        'Verbose',
+        'WhatIf',
+        'Debug',
+        'Confirm',
+        'AsJob'
         'Credential',
         'ApplicationId',
         'ApplicationSecret',
@@ -59,7 +70,8 @@ function Get-PropertyReport
         'CertificatePassword',
         'AccessTokens',
         'ManagedIdentity',
-        'IsSingleInstance')
+        'IsSingleInstance'
+    )
 
     # list of M365 workloads to check
     $workloads = @(
@@ -155,7 +167,7 @@ function Get-PropertyReport
                 # Get parameter of cmdlet
                 Write-Verbose "Get parameters of cmdlet $($cmdlet.Name)"
                 $targetParameters = @()
-                $resourceParamters = @()
+                $resourceParameters = @()
                 $cmdletParameters = (Get-Command $cmdlet.Name).Parameters
 
                 foreach ($parameter in $cmdletParameters.Keys)
@@ -175,14 +187,14 @@ function Get-PropertyReport
                 {
                     if ($property -notin $invalidProperties)
                     {
-                        $resourceParamters += $property
+                        $resourceParameters += $property
                     }
                 }
                 Remove-Module -Name $resourceName -Force -Confirm:$false
 
                 # Compare properties
                 Write-Verbose "Compare parameters of $resourceName"
-                $difference = Compare-Object -ReferenceObject @($targetParameters | Select-Object) -DifferenceObject @($resourceParamters | Select-Object) -IncludeEqual
+                $difference = Compare-Object -ReferenceObject @($targetParameters | Select-Object) -DifferenceObject @($resourceParameters | Select-Object) -IncludeEqual
                 $missingProperties = ($difference | Where-Object -Property SideIndicator -EQ '<=' ).InputObject
                 $additionalProperties = ($difference | Where-Object -Property SideIndicator -EQ '=>' ).InputObject
 
