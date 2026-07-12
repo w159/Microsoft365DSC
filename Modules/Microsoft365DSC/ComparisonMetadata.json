@@ -129,7 +129,7 @@
     },
     "EXODistributionGroup": {
       "HasCustomComparison": true,
-      "Description": "Uses PostProcessing scriptblock"
+      "Description": "Excludes properties: Notes; Uses PostProcessing scriptblock"
     },
     "EXODynamicDistributionGroup": {
       "HasCustomComparison": true,
@@ -152,9 +152,21 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "EXOIRMConfiguration": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: EnablePortalTrackingLogs"
+    },
     "EXOMailContact": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: OrganizationalUnit"
+    },
+    "EXOManagementRoleEntry": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Type"
+    },
+    "EXOPlace": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: Desks"
     },
     "EXOSafeLinksPolicy": {
       "HasCustomComparison": true,

@@ -41,8 +41,16 @@
 * EXOAvailabilityAddressSpace
   * Fixed an issue where the `Credentials` property had the correct
     parameter type in its definition.
+* EXODistributionGroup
+  * Deprecate property `Notes`
+* EXOIRMConfiguration
+  * Deprecate property `EnablePortalTrackingLogs`
+* EXOManagementRoleEntry
+  * Deprecate property `Type`
 * EXOMigration
   * Fixed unit-tests so datetimes are parsed in US-format
+* EXOPlace
+  * Deprecate property `Desks`
 * IntuneWifiConfigurationPolicyIOS
   * Added `wpa3Personal` to the `WifiSecurityType` property.
 * SettingsCatalogHelper
