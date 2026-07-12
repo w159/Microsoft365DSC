@@ -164,6 +164,10 @@
       "HasCustomComparison": true,
       "Description": "Excludes properties: Type"
     },
+    "EXOPlace": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: DisplayName, Desks"
+    },
     "EXOSafeLinksPolicy": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: UseTranslatedNotificationText"
