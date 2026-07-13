@@ -480,6 +480,10 @@
       "HasCustomComparison": true,
       "Description": "Excludes properties: GroupID, NewDisplayName"
     },
+    "TeamsGuestMessagingConfiguration": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: UsersCanDeleteBotMessages"
+    },
     "TeamsGroupPolicyAssignment": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: GroupId"
@@ -488,9 +492,17 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "TeamsOnlineVoicemailUserSettings": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: OofGreetingFollowCalendarEnabled"
+    },
     "TeamsTeam": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: GroupID"
+    },
+    "TeamsTenantNetworkSite": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: SiteAddress"
     },
     "TeamsTenantNetworkSubnet": {
       "HasCustomComparison": true,
