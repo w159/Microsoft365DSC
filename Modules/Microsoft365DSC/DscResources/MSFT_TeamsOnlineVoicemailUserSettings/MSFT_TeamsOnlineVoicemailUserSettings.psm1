@@ -137,7 +137,6 @@ function Get-TargetResource
             DefaultOofGreetingPromptOverwrite        = $instance.DefaultOofGreetingPromptOverwrite
             OofGreetingEnabled                       = $instance.OofGreetingEnabled
             OofGreetingFollowAutomaticRepliesEnabled = $instance.OofGreetingFollowAutomaticRepliesEnabled
-            OofGreetingFollowCalendarEnabled         = $instance.OofGreetingFollowCalendarEnabled
             PromptLanguage                           = $instance.PromptLanguage
             ShareData                                = $instance.ShareData
             TransferTarget                           = $instance.TransferTarget

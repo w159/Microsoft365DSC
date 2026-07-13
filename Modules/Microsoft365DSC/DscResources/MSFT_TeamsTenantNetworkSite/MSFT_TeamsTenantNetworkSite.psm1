@@ -133,7 +133,6 @@ function Get-TargetResource
             LocationPolicy             = $instance.LocationPolicy
             NetworkRegionID            = $instance.NetworkRegionID
             NetworkRoamingPolicy       = $instance.NetworkRoamingPolicy
-            SiteAddress                = $instance.SiteAddress
             Ensure                     = 'Present'
             Credential                 = $Credential
             ApplicationId              = $ApplicationId

@@ -123,7 +123,6 @@ function Get-TargetResource
             AllowMemes                = $config.AllowMemes
             AllowStickers             = $config.AllowStickers
             AllowImmersiveReader      = $config.AllowImmersiveReader
-            UsersCanDeleteBotMessages = $config.UsersCanDeleteBotMessages
             IsSingleInstance          = 'Yes'
             Credential                = $Credential
             ApplicationId             = $ApplicationId
