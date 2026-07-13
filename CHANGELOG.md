@@ -79,6 +79,12 @@
     `ShiftsSchedulingGroupId`, `ShiftsTeamId`,
     `ShouldOverwriteCallableChannelProperty`, `TimeoutActionCallPriority`,
     `WaitTimeBeforeOfferingCallbackInSecond`, `WelcomeTextToSpeechPrompt`
+* TeamsGuestMessagingConfiguration
+  * Deprecated property `UsersCanDeleteBotMessages`
+* TeamsOnlineVoicemailUserSettings
+  * Deprecated property `OofGreetingFollowCalendarEnabled`
+* TeamsTenantNetworkSite
+  * Deprecated property `SiteAddress`
 * M365DSCCheckProperties
   * Fixed an issue with function `Get-PropertyReport` where it wasn't working
     because the `Teams` module was being loaded last and causing conflicts
