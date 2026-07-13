@@ -91,6 +91,13 @@ function Get-TargetResource
 
     Write-Verbose -Message "Getting the Teams Online Voicemail User Settings $($Identity)"
 
+    # TODO: Remove property 'OofGreetingFollowCalendarEnabled' in next breaking change
+    if ($PSBoundParameters.ContainsKey('OofGreetingFollowCalendarEnabled'))
+    {
+        $PSBoundParameters.Remove('OofGreetingFollowCalendarEnabled') | Out-Null
+        Write-Warning "Property 'OofGreetingFollowCalendarEnabled' is deprecated and will be removed"
+    }
+
     try
     {
         if (-not $Script:exportMode)
@@ -248,6 +255,13 @@ function Set-TargetResource
 
     Write-Verbose -Message 'Setting Teams Online Voicemail User Settings'
 
+    # TODO: Remove property 'OofGreetingFollowCalendarEnabled' in next breaking change
+    if ($PSBoundParameters.ContainsKey('OofGreetingFollowCalendarEnabled'))
+    {
+        $PSBoundParameters.Remove('OofGreetingFollowCalendarEnabled') | Out-Null
+        Write-Warning "Property 'OofGreetingFollowCalendarEnabled' is deprecated and will be removed"
+    }
+
     #Ensure the proper dependencies are installed in the current environment.
     Confirm-M365DSCDependencies
 
@@ -377,8 +391,10 @@ function Test-TargetResource
     Add-M365DSCTelemetryEvent -Data $data
     #endregion
 
+    $compareParameters = Get-CompareParameters
     $result = Test-M365DSCTargetResource -DesiredValues $PSBoundParameters `
-        -ResourceName $($MyInvocation.MyCommand.Source).Replace('MSFT_', '')
+        -ResourceName $($MyInvocation.MyCommand.Source).Replace('MSFT_', '') `
+        @compareParameters
     return $result
 }
 
@@ -503,4 +519,16 @@ function Export-TargetResource
     }
 }
 
-Export-ModuleMember -Function *-TargetResource
+function Get-CompareParameters
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param()
+
+    return @{
+        ExcludedProperties = @('OofGreetingFollowCalendarEnabled')
+    }
+}
+
+Export-ModuleMember -Function @('*-TargetResource', 'Get-CompareParameters')
+
