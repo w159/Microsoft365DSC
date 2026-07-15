@@ -63,6 +63,10 @@
   * Fixed unit-tests so datetimes are parsed in US-format
 * EXOPlace
   * Deprecate property `Desks`
+* IntuneDeviceEnrollmentScopeConfigurationMam
+  * Fixed issue where function `Get-CompareParameters` was not being exported
+* IntuneDeviceEnrollmentScopeConfigurationMdm
+  * Fixed issue where function `Get-CompareParameters` was not being exported
 * IntuneWifiConfigurationPolicyIOS
   * Added `wpa3Personal` to the `WifiSecurityType` property.
 * SettingsCatalogHelper
