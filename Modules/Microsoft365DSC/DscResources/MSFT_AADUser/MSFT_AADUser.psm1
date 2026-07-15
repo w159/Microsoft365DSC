@@ -524,6 +524,11 @@ function Set-TargetResource
         }
         $creationParams = Remove-NullEntriesFromHashtable -Hash $CreationParams
         $creationParams = Rename-M365DSCCimInstanceParameter -Properties $creationParams
+        if ($creationParams.ContainsKey("BusinessPhones"))
+        {
+            $BusinessPhones = Get-M365DSCArrayFromProperty -PropertyValue $PhoneNumber -ElementType ([System.String])
+            $creationParams["BusinessPhones"] = $BusinessPhones
+        }
 
         #region Licenses
         if ($null -ne $LicenseAssignment)
@@ -579,7 +584,6 @@ function Set-TargetResource
         }
         else
         {
-
             if ($null -ne $Password)
             {
                 $passwordValue = $Password.GetNetworkCredential().Password

@@ -10,6 +10,8 @@
 * AADUser
   * Deprecate property `PasswordNeverExpires`
     FIXES [#7339](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7339)
+  * Fixed issue with how `BusinessPhones` property was being sent when trying to
+    set that value
 * AzureBillingAccountPolicy
   * Added `SubscriptionId` parameter to specify the Azure subscription
     that is used to connect to.
