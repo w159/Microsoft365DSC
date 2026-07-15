@@ -94,6 +94,8 @@
   * Fixed a formatting issue with `CertificatePassword` during export.
   * Removed usage of function `Resolve-Credentials` and instead just use the
     appropriate hardcoded strings
+* M365DSCModuleMgmt
+  * Fixed invalid arg used in Confirm-M365DSCLoadedModule when run in Windows Powershell 5.1
 * M365DSCReverse
   * Fixed an issue with `Credential` and `CertificatePassword` parameters.
   * Fixed an issue generating the blueprint if using Azure Automation with
