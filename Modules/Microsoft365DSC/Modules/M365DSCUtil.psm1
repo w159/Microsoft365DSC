@@ -10,11 +10,6 @@ $Global:M365DSCPushNotificationsBody = $null
 
 $Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
 
-if ([System.String]::IsNullOrEmpty($env:TEMP) -and $PSEdition -eq 'Core' -and -not $IsWindows)
-{
-    $env:TEMP = '/tmp'
-}
-
 <#
 .Description
 The Get-TemporaryPath function will return the temporary
