@@ -835,7 +835,7 @@ function Start-M365DSCConfigurationExtract
                 {
                     $arguments.Add('ModuleName', $requiredModules)
                 }
-                $resourcesPath -like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
+                $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
         }
         else

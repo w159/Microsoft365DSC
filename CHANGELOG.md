@@ -102,9 +102,13 @@
     because the `Teams` module was being loaded last and causing conflicts
   * Added authentication methods `ApplicationSecret`, `AccesstTokens` and
     `ManagedIdentity` as internal M365DSC properties that should to be ignored
+* M365DSCDllLoader
+  * Fixed an issue when trying to load assemblies that were already loaded.
 * M365DSCDocGenerator
   * Moved function `Get-TemporaryPath` to `M365DSCUtil` and use `$env:TEMP`
     directly instead of the function's output
+* M365DSCErrorHandler
+  * Fixed an issue when writing in parallel to the same export file.
 * M365DSCExportUtil
   * Fixed a formatting issue with `CertificatePassword` during export.
   * Removed usage of function `Resolve-Credentials` and instead just use the
@@ -115,6 +119,7 @@
   * Fixed an issue with `Credential` and `CertificatePassword` parameters.
   * Fixed an issue generating the blueprint if using Azure Automation with
     `Credential` parameter.
+  * Fixed an issue when exporting resources in parallel.
   * Removed usage of function `Save-Credentials` since it's not required any
     longer.
 * M365DSCUtil
