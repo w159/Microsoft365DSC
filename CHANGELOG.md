@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.715.1
 
 * AADConditionalAccessPolicy
   * Updated the code to return a GUID for `IncludeApplications` and
