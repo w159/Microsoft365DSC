@@ -227,7 +227,13 @@ function Confirm-M365DSCLoadedModule
             # Ensure Microsoft.Graph.Authentication is loaded first
             Confirm-M365DSCLoadedModule -ModuleName 'Microsoft.Graph.Authentication'
 
-            Import-Module -Name "$PSScriptRoot/M365DSCGraphShim.psd1" -Global -Force -DisableNameChecking -Function * -Cmdlet @() -Variable @() -Alias @() -SkipEditionCheck
+            if ($IsCoreCLR) {
+                $skipEditionArg = @{SkipEditionCheck = $true}
+            } else {
+                $skipEditionArg = @{}
+            }
+
+            Import-Module -Name "$PSScriptRoot/M365DSCGraphShim.psd1" -Global -Force -DisableNameChecking -Function * -Cmdlet @() -Variable @() -Alias @() @skipEditionArg
             $Script:M365DSCGraphShimLoaded = $true
         }
         else
