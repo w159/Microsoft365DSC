@@ -4,6 +4,9 @@
 
 * AADIdentityGovernanceProgram
   * Deprecated resource. It is superseded by the access review resources.
+* AADServicePrincipal
+  * Fixed an issue where attempting to resolve 3rd-party SPNs would fail.
+  * Fixed several issues when creating or updating an SPN.
 * AzureBillingAccountPolicy
   * Added `SubscriptionId` parameter to specify the Azure subscription
     that is used to connect to.
