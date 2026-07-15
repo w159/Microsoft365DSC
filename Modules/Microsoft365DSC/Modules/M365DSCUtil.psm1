@@ -943,6 +943,9 @@ Specifies if the report should only show properties drifts and not missing insta
 .Parameter KeepExport
 Specifies if the export created to compare with the blueprint should be kept after the report is generated. By default, the export will be removed after the report is generated.
 
+.Parameter Parallel
+Specifies that the export is executed in parallel.
+
 .Example
 Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html'
 
@@ -1046,7 +1049,11 @@ function Assert-M365DSCBlueprint
 
         [Parameter()]
         [System.String[]]
-        $ExcludedSubstitutionProperties
+        $ExcludedSubstitutionProperties,
+
+        [Parameter()]
+        [Switch]
+        $Parallel
     )
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -1136,6 +1143,7 @@ function Assert-M365DSCBlueprint
         Export-M365DSCConfiguration -Components $ResourcesInBluePrint `
             -Path $env:TEMP `
             -FileName $TempExportName `
+            -Parallel:$Parallel.IsPresent `
             -Credential $Credentials `
             -ApplicationId $ApplicationId `
             -ApplicationSecret $ApplicationSecret `

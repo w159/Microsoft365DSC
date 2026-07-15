@@ -125,6 +125,7 @@
 * M365DSCUtil
   * Added function `Get-TemporaryPath` taken from `M365DSCDocGenerator` and use
     its output to assign `$env:TEMP` variable
+  * Enabled parallel export on `Assert-M365DSCBlueprint`
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version `1.1.69`.
 * MISC
