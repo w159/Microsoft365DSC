@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * Updated the code to return a GUID for `IncludeApplications` and
+    `ExcludeApplications` if the input already contains that GUID.
+    FIXES [#7118](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7118)
 * AADIdentityGovernanceProgram
   * Deprecated resource. It is superseded by the access review resources.
 * AADServicePrincipal
