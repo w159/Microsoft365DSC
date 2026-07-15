@@ -7,6 +7,9 @@
 * AADServicePrincipal
   * Fixed an issue where attempting to resolve 3rd-party SPNs would fail.
   * Fixed several issues when creating or updating an SPN.
+* AADUser
+  * Deprecate property `PasswordNeverExpires`
+    FIXES [#7339](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7339)
 * AzureBillingAccountPolicy
   * Added `SubscriptionId` parameter to specify the Azure subscription
     that is used to connect to.

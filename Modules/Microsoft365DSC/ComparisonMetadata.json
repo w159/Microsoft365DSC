@@ -71,6 +71,10 @@
       "HasCustomComparison": true,
       "Description": "Uses PostProcessing scriptblock"
     },
+    "AADUser": {
+      "HasCustomComparison": true,
+      "Description": "Excludes properties: PasswordNeverExpires"
+    },
     "AzureBillingAccountPolicy": {
       "HasCustomComparison": true,
       "Description": "Excludes properties: SubscriptionId"
