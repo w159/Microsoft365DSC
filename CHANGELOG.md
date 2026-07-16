@@ -1,5 +1,19 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* O365OrgCustomizationSetting
+  * Removed unused backtick in hashtable.
+* O365OrgSettings
+  * Added missing workload connections.
+* O365SearchAndIntelligenceConfigurations
+  * Added missing workload connection.
+* M365DSCReverse
+  * Fixed an issue where parallel exports for EXO, O365 and SC could fail
+    if combined with resources that use Microsoft Graph.
+* DEPENDENCIES
+  * Updated `MSCloudLoginAssistant` to version 1.1.70.
+
 # 1.26.715.1
 
 * AADConditionalAccessPolicy

@@ -637,7 +637,7 @@ function Start-M365DSCConfigurationExtract
 
                 if ((($Components -and ($Components -contains $resourceName)) -or $AllComponents -or `
                         (-not $Components -and $null -eq $Workloads)) -and `
-                    ($ComponentsSpecified -or ($ComponentsToSkip -notcontains $resourceName)) -and `
+                    $ComponentsToSkip -notcontains $resourceName -and `
                         $resourcesNotSupported -notcontains $resourceName -and `
                         -not $resourceName.StartsWith('M365DSC'))
                 {
@@ -697,9 +697,6 @@ function Start-M365DSCConfigurationExtract
             Set-M365DSCAllResourcesDictionary -DscResourceDictionary $using:resourceDictionary
             $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
             $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceName).AuthMethod
-
-            Import-Module $resource.FullName -Force | Out-Null
-            $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
 
             $parameters = @{}
             switch ($mostSecureAuthMethod)
@@ -766,6 +763,26 @@ function Start-M365DSCConfigurationExtract
                 # Check if filters for the current resource were specified.
                 $resourceFilter = $null
                 $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
+
+                # Pre-connect to the workload if running in parallel mode, to avoid issues with Graph vs Exchange PowerShell handling
+                if ($using:Parallel)
+                {
+                    if ($resourceName -like "EXO*")
+                    {
+                        $null = New-M365DSCConnection -Workload ExchangeOnline -InboundParameters $parameters
+                    }
+                    elseif ($resourceName -like "SC*")
+                    {
+                        $null = New-M365DSCConnection -Workload SecurityCompliance -InboundParameters $parameters
+                    }
+                    elseif ($resourceName -like "O365*")
+                    {
+                        $null = New-M365DSCConnection -Workload ExchangeOnline -InboundParameters $parameters -ErrorAction SilentlyContinue
+                    }
+                }
+
+                Import-Module $resource.FullName -Force | Out-Null
+                $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
                 if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Contains($resourceName))
                 {
                     $resourceFilter = ($using:Filters).$resourceName
@@ -834,6 +851,14 @@ function Start-M365DSCConfigurationExtract
                 if ($requiredModules.Count -gt 0)
                 {
                     $arguments.Add('ModuleName', $requiredModules)
+                }
+
+                # Limit the throttle limit to 3 if any EXO, SC or O365 resources are being exported
+                if (($ResourcesToExport | Where-Object -Property Name -Like "EXO*") -or `
+                        ($ResourcesToExport | Where-Object -Property Name -Like "SC*") -or `
+                        ($ResourcesToExport | Where-Object -Property Name -Like "O365*"))
+                {
+                    $arguments.Add('ThrottleLimit', 2)
                 }
                 $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
