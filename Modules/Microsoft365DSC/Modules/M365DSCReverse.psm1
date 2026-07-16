@@ -764,23 +764,6 @@ function Start-M365DSCConfigurationExtract
                 $resourceFilter = $null
                 $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
 
-                # Pre-connect to the workload if running in parallel mode, to avoid issues with Graph vs Exchange PowerShell handling
-                if ($using:Parallel)
-                {
-                    if ($resourceName -like "EXO*")
-                    {
-                        $null = New-M365DSCConnection -Workload ExchangeOnline -InboundParameters $parameters
-                    }
-                    elseif ($resourceName -like "SC*")
-                    {
-                        $null = New-M365DSCConnection -Workload SecurityCompliance -InboundParameters $parameters
-                    }
-                    elseif ($resourceName -like "O365*")
-                    {
-                        $null = New-M365DSCConnection -Workload ExchangeOnline -InboundParameters $parameters -ErrorAction SilentlyContinue
-                    }
-                }
-
                 Import-Module $resource.FullName -Force | Out-Null
                 $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
                 if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Contains($resourceName))
@@ -835,7 +818,8 @@ function Start-M365DSCConfigurationExtract
             {
                 Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
                 $requiredModules = [System.Collections.Generic.List[System.String]]::new(25)
-                foreach ($resource in $($ResourcesToExport | Where-Object -Property Name -Like "$workload*"))
+                $currentWorkloadResources = $ResourcesToExport | Where-Object -Property Name -Like "$workload*"
+                foreach ($resource in $currentWorkloadResources)
                 {
                     foreach ($module in $resourceSettings[$resource.Name].requiredModules)
                     {
@@ -853,12 +837,10 @@ function Start-M365DSCConfigurationExtract
                     $arguments.Add('ModuleName', $requiredModules)
                 }
 
-                # Limit the throttle limit to 3 if any EXO, SC or O365 resources are being exported
-                if (($ResourcesToExport | Where-Object -Property Name -Like "EXO*") -or `
-                        ($ResourcesToExport | Where-Object -Property Name -Like "SC*") -or `
-                        ($ResourcesToExport | Where-Object -Property Name -Like "O365*"))
+                # Limit the throttle limit to 1 if any O365 resources are being exported
+                if ($workload -eq 'O365')
                 {
-                    $arguments.Add('ThrottleLimit', 2)
+                    $arguments.Add('ThrottleLimit', 1)
                 }
                 $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
