@@ -322,9 +322,14 @@ function Get-TargetResource
                 catch
                 {
                     Write-Verbose -Message "Couldn't find existing policy by ID {$Id}"
-                    $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$($DisplayName -replace "'", "''")'"
+                    ## ponytail: Retrieve all pages and filter client-side because this endpoint's
+                    ## server-side DisplayName filtering is unreliable across pages.
+                    ## Ceiling: O(n) scan over policies; upgrade path is primary ID lookups and
+                    ## using reliable server-side filtering when available.
+                    $Policy = Get-MgBetaIdentityConditionalAccessPolicy -All -ErrorAction Stop |
+                        Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
 
-                    if ($Policy.Length -gt 1)
+                    if (@($Policy).Count -gt 1)
                     {
                         throw "Duplicate CA Policies named $DisplayName exist in tenant"
                     }
@@ -333,10 +338,12 @@ function Get-TargetResource
             else
             {
                 Write-Verbose -Message 'Id was NOT specified'
-                ## Can retreive multiple CA Policies since displayname is not unique
-                $Policy = Get-MgBetaIdentityConditionalAccessPolicy -Filter "DisplayName eq '$($DisplayName -replace "'", "''")'"
+                ## Can retrieve multiple CA Policies since displayname is not unique.
+                ## Retrieve all pages and filter client-side to avoid paging misses.
+                $Policy = Get-MgBetaIdentityConditionalAccessPolicy -All -ErrorAction Stop |
+                    Where-Object -FilterScript { $_.DisplayName -eq $DisplayName }
 
-                if ($Policy.Length -gt 1)
+                if (@($Policy).Count -gt 1)
                 {
                     throw "Duplicate CA Policies named $DisplayName exist in tenant"
                 }

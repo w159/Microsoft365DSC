@@ -757,6 +757,123 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Tenant has a large number of Conditional Access Policies (paging)' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName = 'Allin'
+                    Ensure      = 'Present'
+                    Credential  = $Credscredential
+                    State       = 'enabled' # Drift
+                }
+
+                # Build the fully populated policy that Get-TargetResource must locate and process.
+                $existingPolicy = @{
+                    Id              = 'bcc0cf19-ee89-46f0-8e12-4b89123ee6f9'
+                    DisplayName     = 'Allin'
+                    State           = 'disabled'
+                    Conditions      = @{
+                        Applications     = @{
+                            IncludeApplications = @('All')
+                        }
+                        Users            = @{
+                            IncludeUsers = 'All'
+                        }
+                    }
+                    GrantControls   = $null
+                    SessionControls = $null
+                }
+
+                # Simulate a tenant with many policies where the target policy lives well beyond
+                # the first service-side page. Only a mock that returns every page (i.e. is called
+                # with -All) will surface it. A server-side DisplayName filter without -All would
+                # miss it, report Absent, and cause a duplicate to be created.
+                $manyPolicies = @()
+                for ($p = 0; $p -lt 500; $p++)
+                {
+                    $manyPolicies += @{
+                        Id          = "00000000-0000-0000-0000-$('{0:D12}' -f $p)"
+                        DisplayName = "Filler Policy $p"
+                        State       = 'disabled'
+                        Conditions  = @{}
+                    }
+                }
+                # Place the real policy near the end so it is only reachable when all pages are read.
+                $manyPolicies += $existingPolicy
+
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -eq $true } -MockWith {
+                    return $manyPolicies
+                }
+
+                # If the code ever falls back to a non-paged server-side filter, return nothing so
+                # the regression (Absent -> duplicate create) would surface as a failing assertion.
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -ne $true } -MockWith {
+                    return $null
+                }
+            }
+
+            It 'Should retrieve all policies using paging (-All)' {
+                $null = Get-TargetResource @testParams
+                Should -Invoke -CommandName Get-MgBetaIdentityConditionalAccessPolicy -Exactly 1 -ParameterFilter { $All -eq $true }
+            }
+
+            It 'Should find the existing policy and return Present even when it is beyond the first page' {
+                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+            }
+
+            It 'Should return false from the Test method due to drift' {
+                Test-TargetResource @testParams | Should -Be $false
+            }
+
+            It 'Should update the existing policy (PATCH) rather than create a duplicate (POST)' {
+                Set-TargetResource @testParams
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter { $Method -eq 'PATCH' }
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 0 -ParameterFilter { $Method -eq 'POST' }
+            }
+        }
+
+        Context -Name 'Multiple Conditional Access Policies share the same DisplayName across pages' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName = 'Allin'
+                    Ensure      = 'Present'
+                    Credential  = $Credscredential
+                    State       = 'enabled'
+                }
+
+                $duplicatePolicies = @()
+                for ($p = 0; $p -lt 300; $p++)
+                {
+                    $duplicatePolicies += @{
+                        Id          = "00000000-0000-0000-0000-$('{0:D12}' -f $p)"
+                        DisplayName = "Filler Policy $p"
+                        State       = 'disabled'
+                        Conditions  = @{}
+                    }
+                }
+                # Two policies with the same DisplayName on different pages.
+                $duplicatePolicies += @{
+                    Id          = 'aaaaaaaa-0000-0000-0000-000000000001'
+                    DisplayName = 'Allin'
+                    State       = 'disabled'
+                    Conditions  = @{}
+                }
+                $duplicatePolicies += @{
+                    Id          = 'bbbbbbbb-0000-0000-0000-000000000002'
+                    DisplayName = 'Allin'
+                    State       = 'disabled'
+                    Conditions  = @{}
+                }
+
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -eq $true } -MockWith {
+                    return $duplicatePolicies
+                }
+            }
+
+            It 'Should throw when duplicate policies with the same DisplayName exist in the tenant' {
+                { Get-TargetResource @testParams } | Should -Throw "*Duplicate CA Policies named Allin exist in tenant*"
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true
