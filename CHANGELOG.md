@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* AADConditionalAccessPolicy
+  * FIXES [#7350] Filter of CAPs by name with paging doesn't correctly filter, creating dupe CAPs
 * O365OrgCustomizationSetting
   * Removed unused backtick in hashtable.
 * O365OrgSettings
