@@ -1,10 +1,91 @@
 <#
+.SYNOPSIS
+    Orchestrates a reverse extraction of Microsoft 365 tenant configuration.
+
 .DESCRIPTION
-    This function orchestrate the export process between Export-M365DSCConfiguration
-    and the ReverseDSC module.
+    Coordinates the end-to-end reverse DSC export flow, including authentication validation, workload/resource selection, configuration data generation, and resource export execution.
+    This function is the bridge between export entry points and the ReverseDSC extraction pipeline.
+
+.PARAMETER Credential
+    Specifies the credential used for delegated authentication.
+
+.PARAMETER Components
+    Specifies resource component names to export.
+
+.PARAMETER ExcludeComponents
+    Specifies resource component names to exclude from export.
+
+.PARAMETER AllComponents
+    Indicates that all components should be considered for export.
+
+.PARAMETER Path
+    Specifies the destination path for generated files.
+
+.PARAMETER FileName
+    Specifies the output file name for the generated configuration.
+
+.PARAMETER ConfigurationName
+    Specifies the DSC configuration name to generate.
+
+.PARAMETER Workloads
+    Specifies workload names used to derive exportable components.
+
+.PARAMETER Mode
+    Specifies the export mode.
+
+.PARAMETER GenerateInfo
+    Indicates whether additional resource information should be generated.
+
+.PARAMETER Filters
+    Specifies resource-level filters used to limit exported instances.
+
+.PARAMETER ApplicationId
+    Specifies the application id used for app-based authentication.
+
+.PARAMETER ApplicationSecret
+    Specifies the application secret used for app-based authentication.
+
+.PARAMETER TenantId
+    Specifies the tenant id or tenant domain used for authentication.
+
+.PARAMETER CertificateThumbprint
+    Specifies the certificate thumbprint used for app-based authentication.
+
+.PARAMETER CertificatePath
+    Specifies the certificate file path used for app-based authentication.
+
+.PARAMETER CertificatePassword
+    Specifies the certificate password used to read the certificate file.
+
+.PARAMETER ManagedIdentity
+    Indicates that managed identity authentication should be used.
+
+.PARAMETER AccessTokens
+    Specifies one or more pre-acquired access tokens to use.
+
+.PARAMETER SubscriptionId
+    Specifies the Azure subscription id used by Azure-backed resources.
+
+.PARAMETER Validate
+    Indicates whether extracted configuration should be validated.
+
+.PARAMETER Parallel
+    Indicates whether resource extraction should run in parallel.
+
+.PARAMETER ResourceSettings
+    Specifies resource settings metadata used during extraction.
+
+.PARAMETER WithStatistics
+    Indicates whether extraction statistics should be collected and emitted.
+
+.PARAMETER IncludeDependencies
+    Indicates whether dependency relationships should be included in output.
 
 .FUNCTIONALITY
     Internal
+
+.OUTPUTS
+    System.Collections.Hashtable
 #>
 function Start-M365DSCConfigurationExtract
 {
