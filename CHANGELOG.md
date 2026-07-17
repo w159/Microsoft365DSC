@@ -3,7 +3,8 @@
 # UNRELEASED
 
 * AADConditionalAccessPolicy
-  * FIXES [#7350] Filter of CAPs by name with paging doesn't correctly filter, creating dupe CAPs
+  * Filter of CAPs by name with paging doesn't correctly filter, creating dupe CAPs, add more tests
+    FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
 * O365OrgCustomizationSetting
   * Removed unused backtick in hashtable.
 * O365OrgSettings
