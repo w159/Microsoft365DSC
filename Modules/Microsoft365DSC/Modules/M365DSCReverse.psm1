@@ -637,7 +637,7 @@ function Start-M365DSCConfigurationExtract
 
                 if ((($Components -and ($Components -contains $resourceName)) -or $AllComponents -or `
                         (-not $Components -and $null -eq $Workloads)) -and `
-                    ($ComponentsSpecified -or ($ComponentsToSkip -notcontains $resourceName)) -and `
+                    $ComponentsToSkip -notcontains $resourceName -and `
                         $resourcesNotSupported -notcontains $resourceName -and `
                         -not $resourceName.StartsWith('M365DSC'))
                 {
@@ -697,9 +697,6 @@ function Start-M365DSCConfigurationExtract
             Set-M365DSCAllResourcesDictionary -DscResourceDictionary $using:resourceDictionary
             $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
             $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceName).AuthMethod
-
-            Import-Module $resource.FullName -Force | Out-Null
-            $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
 
             $parameters = @{}
             switch ($mostSecureAuthMethod)
@@ -766,6 +763,9 @@ function Start-M365DSCConfigurationExtract
                 # Check if filters for the current resource were specified.
                 $resourceFilter = $null
                 $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
+
+                Import-Module $resource.FullName -Force | Out-Null
+                $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
                 if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Contains($resourceName))
                 {
                     $resourceFilter = ($using:Filters).$resourceName
@@ -818,7 +818,8 @@ function Start-M365DSCConfigurationExtract
             {
                 Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
                 $requiredModules = [System.Collections.Generic.List[System.String]]::new(25)
-                foreach ($resource in $($ResourcesToExport | Where-Object -Property Name -Like "$workload*"))
+                $currentWorkloadResources = $ResourcesToExport | Where-Object -Property Name -Like "$workload*"
+                foreach ($resource in $currentWorkloadResources)
                 {
                     foreach ($module in $resourceSettings[$resource.Name].requiredModules)
                     {
@@ -834,6 +835,12 @@ function Start-M365DSCConfigurationExtract
                 if ($requiredModules.Count -gt 0)
                 {
                     $arguments.Add('ModuleName', $requiredModules)
+                }
+
+                # Limit the throttle limit to 1 if any O365 resources are being exported
+                if ($workload -eq 'O365')
+                {
+                    $arguments.Add('ThrottleLimit', 1)
                 }
                 $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
