@@ -689,10 +689,12 @@ function Start-M365DSCConfigurationExtract
         [void]$synchronizedHashtable.TryAdd('SuccessfulResources', 0)
         [void]$synchronizedHashtable.TryAdd('FailedResources', 0)
         $resourceDictionary = Get-M365DSCAllResourcesDictionary
+        $M365DSCStringReplacementMap = Get-M365DSCStringReplacementMap
         $exportScriptBlock = {
             $Global:MaximumFunctionCount = 32768
             $Global:PartialExportFileName = $using:partialExportName
             $Global:M365DSCSkipDependenciesValidation = $true
+            $Global:M365DSCStringReplacementMap = $using:M365DSCStringReplacementMap
             $resource = $_
             Set-M365DSCAllResourcesDictionary -DscResourceDictionary $using:resourceDictionary
             $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''

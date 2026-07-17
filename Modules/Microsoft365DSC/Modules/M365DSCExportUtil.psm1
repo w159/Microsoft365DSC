@@ -806,6 +806,10 @@ function Get-M365DSCExportContentForResource
     }
 
     # Apply additional string to variable replacements from mapping
+    if ($Global:M365DSCStringReplacementMap)
+    {
+        Set-M365DSCStringReplacementMap -Map $Global:M365DSCStringReplacementMap
+    }
     if ($null -ne $Script:M365DSCStringReplacementMap -and $Script:M365DSCStringReplacementMap.Count -gt 0)
     {
         foreach ($entry in $Script:M365DSCStringReplacementMap.GetEnumerator())

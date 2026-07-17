@@ -8,9 +8,16 @@
   * Added missing workload connections.
 * O365SearchAndIntelligenceConfigurations
   * Added missing workload connection.
+* M365DSCExportUtil
+  * Since `M365DSCStringReplacementMap` is now being sent in parallel exports
+    as global variable we need to set it as script scope based to be able to
+    inspect it
 * M365DSCReverse
   * Fixed an issue where parallel exports for EXO, O365 and SC could fail
     if combined with resources that use Microsoft Graph.
+  * Fixed an issue where parallel exports were not being sent with the variable
+    `M365DSCStringReplacementMap` and therefore mappings were not working and
+    creating drifts
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.70.
 
