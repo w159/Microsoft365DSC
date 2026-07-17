@@ -13,6 +13,8 @@
     if combined with resources that use Microsoft Graph.
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.70.
+* MISC
+  * Updated function help descriptions and added / removed parameters.
 
 # 1.26.715.1
 
