@@ -270,15 +270,6 @@ function Start-M365DSCConfigurationExtract
                 -Mode $Mode
         }
 
-        if ($null -eq $Components -or $Components.Length -eq 0)
-        {
-            $ComponentsSpecified = $false
-        }
-        else
-        {
-            $ComponentsSpecified = $true
-        }
-
         $ComponentsToSkip = @()
         if ($Mode -eq 'Default' -and $null -eq $Components)
         {
@@ -292,13 +283,13 @@ function Start-M365DSCConfigurationExtract
 
         if ($null -ne $Components)
         {
-            [System.String[]]$allM365DscResources = Get-M365DSCAllResources
+            [System.String[]]$allM365DSCResources = Get-M365DSCAllResources
             $newComponents = @()
             foreach ($component in $Components)
             {
                 if ($component.Contains('*'))
                 {
-                    $matchingResources = $allM365DscResources -like $component
+                    $matchingResources = $allM365DSCResources -like $component
                     if ($matchingResources.Count -eq 0)
                     {
                         Write-Warning -Message "The component filter '$component' did not match any resources and will be ignored."
@@ -387,11 +378,14 @@ function Start-M365DSCConfigurationExtract
         # If some resources are not supported based on the Authentication parameters
         # received, write a warning.
         $Components = $Components | Select-Object -Unique
-        $allResourcesInModule = Get-M365DSCAllResources
+        if ($null -eq $allM365DSCResources)
+        {
+            $allM365DSCResources = Get-M365DSCAllResources
+        }
         if ($Components.Length -eq 0)
         {
             Write-Verbose -Message 'Retrieving all resources'
-            $selectedItems = Compare-Object -ReferenceObject $allResourcesInModule `
+            $selectedItems = Compare-Object -ReferenceObject $allM365DSCResources `
                 -DifferenceObject $ComponentsToSkip | Where-Object -Property SideIndicator -EQ '<='
             $selectedResources = @()
             foreach ($item in $selectedItems)
@@ -403,7 +397,7 @@ function Start-M365DSCConfigurationExtract
         {
             foreach ($component in $Components)
             {
-                if ($allResourcesInModule -notcontains $component)
+                if ($allM365DSCResources -notcontains $component)
                 {
                     Write-Warning -Message "The component '$component' is not a valid Microsoft365DSC resource and will be ignored."
                     $ComponentsToSkip += $component
@@ -418,9 +412,9 @@ function Start-M365DSCConfigurationExtract
 
         try
         {
-            if ($allSupportedResources.Length -eq 0)
+            if ($allSupportedResourcesWithMostSecureAuthMethod.Length -eq 0)
             {
-                $allSupportedResources = @()
+                $allSupportedResourcesWithMostSecureAuthMethod = @()
             }
             if ($selectedResources.Length -eq 0)
             {
