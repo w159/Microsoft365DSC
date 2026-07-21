@@ -20,6 +20,17 @@ foreach ($template in $jsonContent.templates.psobject.Properties)
 {
     $Script:RelationTemplates.templates[$template.Name] = $template.Value
 }
+$allResourcesArgumentCompleter = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1' -File | Foreach-Object {
+    $_.Name -replace 'MSFT_', '' -replace '.psm1', ''
+}
+Register-ArgumentCompleter -CommandName Export-M365DSCConfiguration -ParameterName Components -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $resources = $allResourcesArgumentCompleter -like "$wordToComplete*"
+    foreach ($resource in $resources)
+    {
+        [System.Management.Automation.CompletionResult]::new($resource, $resource, 'ParameterValue', $resource)
+    }
+}
 
 <#
 .SYNOPSIS
