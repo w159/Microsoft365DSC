@@ -9,6 +9,7 @@
 * O365SearchAndIntelligenceConfigurations
   * Added missing workload connection.
 * M365DSCExportUtil
+  * Added auto completion for `-Components` in `Export-M365DSCConfiguration`.
   * Since `M365DSCStringReplacementMap` is now being sent in parallel exports
     as global variable we need to set it as script scope based to be able to
     inspect it.
