@@ -111,8 +111,11 @@ function Get-PropertyReport
 
     foreach ($module in $workloads)
     {
-        Write-Verbose "Connecting to {$($Module.Name)}"
-        $null = New-M365DSCConnection -Workload ($Module.Name) -InboundParameters $PSBoundParameters
+        if ($module.Name -ne 'MicrosoftTeams')
+        {
+            Write-Verbose "Connecting to {$($Module.Name)}"
+            $null = New-M365DSCConnection -Workload ($Module.Name) -InboundParameters $PSBoundParameters
+        }
 
         Write-Verbose "Getting list of cmdlets of {$($Module.ModuleName)}..."
         $CurrentModuleName = $Module.ModuleName

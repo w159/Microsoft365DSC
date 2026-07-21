@@ -915,16 +915,12 @@ function Start-M365DSCConfigurationExtract
                 $arguments = @{
                     ScriptBlock = $exportScriptBlock
                 }
+                <# Removed due to collection enumeration error in parallel execution
                 if ($requiredModules.Count -gt 0)
                 {
                     $arguments.Add('ModuleName', $requiredModules)
                 }
-
-                # Limit the throttle limit to 1 if any O365 resources are being exported
-                if ($workload -eq 'O365')
-                {
-                    $arguments.Add('ThrottleLimit', 1)
-                }
+                #>
                 $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
             }
         }
