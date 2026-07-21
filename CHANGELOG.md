@@ -19,6 +19,8 @@
   * Fixed an issue where parallel exports were not being sent with the variable
     `M365DSCStringReplacementMap` and therefore mappings were not working and
     creating drifts.
+  * Reduced the number of calls to `Get-M365DSCAllResources` if `-Components`
+    was specified.
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.71.
 * MISC
