@@ -53,6 +53,8 @@
   * Deprecate property `Desks`
 * IntuneWifiConfigurationPolicyIOS
   * Added `wpa3Personal` to the `WifiSecurityType` property.
+* SCDLPComplianceRule
+  * Added support for the `EndpointDlpRestrictions` property.
 * SettingsCatalogHelper
   * Fixed an issue where complex administrative template names
     were not handled correctly.
