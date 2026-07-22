@@ -494,6 +494,58 @@ function ConvertTo-IntuneMobileAppAssignment
 
 <#
 .SYNOPSIS
+    Retrieves cached Intune configuration policies by templateId or filter.
+
+.DESCRIPTION
+    Fetches Intune configuration policies from the local cache if available, or queries Microsoft Graph using the provided templateId or filter.
+    This function is used to optimize retrieval of configuration policies during DSC operations.
+
+.PARAMETER TemplateId
+    Specifies the templateId of the configuration policy to retrieve.
+
+.PARAMETER Filter
+    Specifies an optional OData filter string to apply when querying configuration policies.
+
+.OUTPUTS
+    List of configuration policy objects from cache or Microsoft Graph.
+#>
+function Get-M365DSCExportCachedConfigurationPolicies
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TemplateId,
+
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Filter
+    )
+
+    # Fetch from cache if the filter is empty or matches the templateId filter
+    if (-not [System.String]::IsNullOrEmpty($Filter) -and $Filter -like 'templateReference/templateId eq ''*''')
+    {
+        $cacheValue = [Microsoft365DSC.Intune.ConfigurationPolicyCache]::GetByTemplateId($TemplateId)
+        if ($null -ne $cacheValue)
+        {
+            return $cacheValue
+        }
+    }
+
+    if (-not [System.String]::IsNullOrEmpty($Filter))
+    {
+        return Get-MgBetaDeviceManagementConfigurationPolicy -All `
+            -Filter $Filter `
+            -ErrorAction Stop
+    }
+
+    return Get-MgBetaDeviceManagementConfigurationPolicy -All `
+        -Filter "templateReference/TemplateId eq '$TemplateId'" `
+        -ErrorAction Stop
+}
+
+<#
+.SYNOPSIS
     Updates assignments on an Intune device configuration policy.
 
 .DESCRIPTION
@@ -1701,6 +1753,7 @@ Export-ModuleMember -Function @(
     'Find-GraphDataUsingComplexFunctions',
     'Get-ComplexFunctionsFromFilterQuery',
     'Get-IntuneSettingCatalogPolicySetting',
+    'Get-M365DSCExportCachedConfigurationPolicies',
     'Get-M365DSCIntuneDeviceConfigurationSettings',
     'Get-OmaSettingPlainTextValue',
     'Invoke-M365DSCIntuneMobileAppInitialUpload',

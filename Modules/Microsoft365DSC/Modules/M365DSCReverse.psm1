@@ -695,6 +695,17 @@ function Start-M365DSCConfigurationExtract
         $resourcesToExport = [System.Collections.Generic.List[Hashtable[]]]::new()
         $resourcesPath = [System.Collections.Generic.List[System.IO.FileInfo[]]]::new()
         $allResourcesPath = Get-M365DSCAllResourcesPath
+
+        $containsConfigurationPolicies = $false
+        $requestedConfigurationPolicyTemplateIds = @()
+        # TODO: Update to -AsHashtable once PowerShell 7 is enforced
+        $intuneTemplateRegistryObject = Get-Content -Path (Join-Path -Path $PSScriptRoot -ChildPath '../IntuneTemplateRegistry.json') -Raw | ConvertFrom-Json
+        $intuneTemplateRegistry = @{}
+        foreach ($property in $intuneTemplateRegistryObject.psobject.properties)
+        {
+            $intuneTemplateRegistry.Add($property.Name, $property.Value)
+        }
+
         foreach ($resourceModule in $Script:allM365DSCResources)
         {
             try
@@ -713,13 +724,19 @@ function Start-M365DSCConfigurationExtract
                     $resourcesToExport.Add($resourceInfo)
                     $resourcePath = $allResourcesPath | Where-Object -Property Name -EQ "MSFT_$resourceModule.psm1"
                     $resourcesPath.Add($resourcePath)
+
+                    if ($intuneTemplateRegistry.ContainsKey($resourceModule))
+                    {
+                        $requestedConfigurationPolicyTemplateIds += $intuneTemplateRegistry.$resourceModule
+                        $containsConfigurationPolicies = $true
+                    }
                 }
             }
             catch
             {
-                New-M365DSCLogEntry -Message $ResourceModule.Name `
+                New-M365DSCLogEntry -Message $resourceModule `
                     -Exception $_ `
-                    -Source "[M365DSCReverse]$($ResourceModule.Name)"
+                    -Source "[M365DSCReverse]$resourceModule"
             }
         }
         $resourcesPath = $resourcesPath | Sort-Object $_.Name
@@ -872,6 +889,39 @@ function Start-M365DSCConfigurationExtract
                     }
                 }
             }
+        }
+
+        if ($containsConfigurationPolicies)
+        {
+            $null = New-M365DSCConnection -Workload MicrosoftGraph -InboundParameters @{
+                Credential = $Credential
+                ApplicationId = $ApplicationId
+                ApplicationSecret = $ApplicationSecret
+                CertificateThumbprint = $CertificateThumbprint
+                CertificatePath = $CertificatePath
+                CertificatePassword = $CertificatePassword
+                TenantId = $TenantId
+                ManagedIdentity = $ManagedIdentity
+                AccessTokens = $AccessTokens
+            }
+            [array]$allRequestedConfigurationPolicies = Get-MgBetaDeviceManagementConfigurationPolicy -All | Where-Object { $_.templateReference.templateId -in $requestedConfigurationPolicyTemplateIds }
+            $batchRequests = @()
+            foreach ($policy in $allRequestedConfigurationPolicies)
+            {
+                $batchRequest = @{
+                    Id = $policy.id
+                    Method = 'GET'
+                    Url = "/deviceManagement/configurationPolicies/$($policy.id)/settings?`$expand=settingDefinitions&`$top=1000"
+                }
+                $batchRequests += $batchRequest
+            }
+            $batchResponses = Invoke-M365DSCGraphBatchRequest -Requests $batchRequests
+            foreach ($policySettings in $batchResponses)
+            {
+                $policy = $allRequestedConfigurationPolicies | Where-Object -Property Id -EQ $policySettings.id
+                $policy.settings = $policySettings.body.value
+            }
+            [Microsoft365DSC.Intune.ConfigurationPolicyCache]::Populate($allRequestedConfigurationPolicies, [System.Func[System.Object, System.String]]{ param($policy) $policy.templateReference.templateId })
         }
 
         if ($Parallel)
