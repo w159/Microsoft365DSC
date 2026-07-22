@@ -283,7 +283,9 @@ function Get-TargetResource
             $policy = $null
             if (-not [System.String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue `
+                    -ExpandProperty 'settings($expand=settingDefinitions)'
+                $settings = $policy.settings
             }
 
             if ($null -eq $policy)
@@ -297,7 +299,7 @@ function Get-TargetResource
                         -Filter "Name eq '$($DisplayName -replace "'", "''")' and templateReference/TemplateId eq '$templateReferenceId'" `
                         -ErrorAction SilentlyContinue
 
-                    if ($getValue.Length -gt 1)
+                    if ($policy.Length -gt 1)
                     {
                         throw "Duplicate Endpoint Protection Attack Surface Reduction Rules Policy named $DisplayName exist in tenant"
                     }
@@ -313,7 +315,7 @@ function Get-TargetResource
         else
         {
             $policy = $Script:exportedInstance
-            $settings = $getValue.settings
+            $settings = $policy.settings
         }
         $Identity = $policy.Id
         Write-Verbose -Message "Found Endpoint Protection Attack Surface Reduction Rules Policy with Id {$Identity} and Name {$DisplayName)}."

@@ -185,7 +185,9 @@ function Get-TargetResource
             #region resource generator code
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
-                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id -ErrorAction SilentlyContinue `
+                    -ExpandProperty 'settings($expand=settingDefinitions)'
+                $settings = $getValue.settings
             }
 
             if ($null -eq $getValue)
@@ -210,7 +212,6 @@ function Get-TargetResource
         else
         {
             $getValue = $Script:exportedInstance
-            $settings = $getValue.settings
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune Antivirus Policy Security Experience for Windows10 Config Mgr with Id {$Id} and DisplayName {$DisplayName} was found"
@@ -828,7 +829,6 @@ function Export-TargetResource
             $Filter = $baseFilter
         }
         [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
-            -Expand 'settings($expand=settingDefinitions)' `
             -Filter $Filter `
             -All `
             -ErrorAction Stop

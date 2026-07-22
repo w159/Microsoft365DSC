@@ -195,7 +195,9 @@ function Get-TargetResource
             $policy = $null
             if (-not [System.String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue `
+                    -ExpandProperty 'settings($expand=settingDefinitions)'
+                $settings = $policy.settings
             }
 
             if ($null -eq $policy)
@@ -220,12 +222,12 @@ function Get-TargetResource
         else
         {
             $policy = $Script:exportedInstance
-            $settings = $getValue.settings
+            $settings = $policy.settings
         }
 
         $Identity = $policy.Id
 
-        Write-Verbose -Message "Found Intune Attack Surface Reduction Rules Policy for Windows10 Config Manager with Id {$($Identity) and Name $($policy.Name)}"
+        Write-Verbose -Message "Found Intune Attack Surface Reduction Rules Policy for Windows10 Config Manager with Id {$($Identity)} and Name {$($policy.Name)}"
 
         # Retrieve policy specific settings
         if ($null -eq $settings)

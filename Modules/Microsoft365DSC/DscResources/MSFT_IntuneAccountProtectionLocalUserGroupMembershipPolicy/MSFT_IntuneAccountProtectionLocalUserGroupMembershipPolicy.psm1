@@ -101,7 +101,9 @@ function Get-TargetResource
             $policy = $null
             if (-not [String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue `
+                    -ExpandProperty 'settings($expand=settingDefinitions)'
+                $settings = $policy.settings
             }
 
             if ($null -eq $policy)
@@ -109,9 +111,12 @@ function Get-TargetResource
                 Write-Verbose -Message "No Account Protection Local User Group Membership Policy with identity {$Identity} was found"
                 if (-not [String]::IsNullOrEmpty($DisplayName))
                 {
-                    $policy = Get-MgBetaDeviceManagementConfigurationPolicy -All -Filter "Name eq '$($DisplayName -replace "'", "''")'" -ErrorAction SilentlyContinue
+                    $policy = Get-MgBetaDeviceManagementConfigurationPolicy `
+                        -All `
+                        -Filter "Name eq '$($DisplayName -replace "'", "''")'" `
+                        -ErrorAction SilentlyContinue
 
-                    if (([array]$devicePolicy).Count -gt 1)
+                    if (([array]$policy).Count -gt 1)
                     {
                         throw "A policy with a duplicated displayName {'$DisplayName'} was found - Ensure displayName is unique"
                     }
@@ -121,8 +126,6 @@ function Get-TargetResource
                         Write-Verbose -Message "No Account Protection Local User Group Membership Policy with displayName {$DisplayName} was found"
                         return $nullResult
                     }
-
-                    $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $policy.Id -ErrorAction SilentlyContinue
                 }
             }
         }

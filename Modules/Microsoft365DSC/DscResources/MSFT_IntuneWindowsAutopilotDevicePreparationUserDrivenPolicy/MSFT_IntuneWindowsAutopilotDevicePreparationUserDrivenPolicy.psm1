@@ -153,8 +153,10 @@ function Get-TargetResource
             if (-not [System.String]::IsNullOrEmpty($Id))
             {
                 $getValue = Invoke-M365DSCCommand -ScriptBlock {
-                    Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id  -ErrorAction Stop
+                    Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Id  -ErrorAction Stop `
+                        -ExpandProperty 'settings($expand=settingDefinitions)'
                 } -SuppressNotFoundError
+                $settings = $getValue.settings
             }
 
             if ($null -eq $getValue)

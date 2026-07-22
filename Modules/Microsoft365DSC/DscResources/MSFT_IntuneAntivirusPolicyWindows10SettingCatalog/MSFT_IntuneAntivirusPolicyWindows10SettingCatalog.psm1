@@ -469,7 +469,9 @@ function Get-TargetResource
             $policy = $null
             if (-not [System.String]::IsNullOrEmpty($Identity))
             {
-                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $Identity -ErrorAction SilentlyContinue `
+                    -ExpandProperty 'settings($expand=settingDefinitions)'
+                $settings = $policy.settings
             }
 
             if ($null -eq $policy)
@@ -502,7 +504,6 @@ function Get-TargetResource
         else
         {
             $policy = $Script:exportedInstance
-            $settings = $getValue.settings
         }
         $Identity = $policy.Id
         Write-Verbose -Message "An Intune Antivirus Policy for Windows10 Setting Catalog with Id {$Identity} and Name {$DisplayName} was found."
@@ -1674,7 +1675,6 @@ function Export-TargetResource
             $Filter = $baseFilter
         }
         [array]$policies = Get-MgBetaDeviceManagementConfigurationPolicy `
-            -Expand 'settings($expand=settingDefinitions)' `
             -Filter $Filter `
             -All `
             -ErrorAction Stop
