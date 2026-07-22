@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.722.1
 
 * O365OrgCustomizationSetting
   * Removed unused backtick in hashtable.
