@@ -28,6 +28,7 @@
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.71.
 * MISC
+  * Reduced time to export Intune policies by up to 50%.
   * Updated function help descriptions and added / removed parameters.
 
 # 1.26.715.1

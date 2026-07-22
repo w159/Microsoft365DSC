@@ -157,7 +157,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.DisplayName -ne $DisplayName)
+        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $DisplayName)
         {
             $null = New-M365DSCConnection -Workload 'MicrosoftGraph' `
                 -InboundParameters $PSBoundParameters `
@@ -207,6 +207,7 @@ function Get-TargetResource
         else
         {
             $policy = $Script:exportedInstance
+            $settings = $policy.settings
         }
 
         if ($null -eq $policy)
@@ -217,10 +218,13 @@ function Get-TargetResource
         $Identity = $policy.Id
         Write-Verbose "Found Account Protection LAPS Policy with Id {$Identity} and Name {$($policy.Name)}"
 
-        [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
-            -DeviceManagementConfigurationPolicyId $Identity `
-            -ExpandProperty 'settingDefinitions' `
-            -ErrorAction Stop
+        if ($null -eq $settings)
+        {
+            [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
+                -DeviceManagementConfigurationPolicyId $Identity `
+                -ExpandProperty 'settingDefinitions' `
+                -ErrorAction Stop
+        }
 
         $returnHashtable = @{}
         $returnHashtable.Add('Identity', $Identity)
@@ -755,10 +759,9 @@ function Export-TargetResource
         {
             $Filter = $baseFilter
         }
-        [array]$policies = Get-MgBetaDeviceManagementConfigurationPolicy `
-            -All `
-            -Filter $Filter `
-            -ErrorAction Stop
+        [array]$policies = Get-M365DSCExportCachedConfigurationPolicies `
+            -TemplateId $policyTemplateID `
+            -Filter $Filter
 
         if ($policies.Length -eq 0)
         {

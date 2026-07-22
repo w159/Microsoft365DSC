@@ -193,7 +193,7 @@ function Get-TargetResource
 
     try
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.DisplayName -ne $DisplayName)
+        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $DisplayName)
         {
 
             $null = New-M365DSCConnection -Workload 'MicrosoftGraph' `
@@ -244,16 +244,20 @@ function Get-TargetResource
         else
         {
             $getValue = $Script:exportedInstance
+            $settings = $getValue.settings
         }
         $Id = $getValue.Id
         Write-Verbose -Message "An Intune Security Baseline Microsoft Edge with Id {$Id} and Name {$DisplayName} was found"
 
         # Retrieve policy specific settings
-        [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
-            -DeviceManagementConfigurationPolicyId $Id `
-            -ExpandProperty 'settingDefinitions' `
-            -All `
-            -ErrorAction Stop
+        if ($null -eq $settings)
+        {
+            [array]$settings = Get-MgBetaDeviceManagementConfigurationPolicySetting `
+                -DeviceManagementConfigurationPolicyId $Id `
+                -ExpandProperty 'settingDefinitions' `
+                -All `
+                -ErrorAction Stop
+        }
 
         $policySettings = @{}
         $policySettings = Export-IntuneSettingCatalogPolicySettings -Settings $settings -ReturnHashtable $policySettings
@@ -879,10 +883,9 @@ function Export-TargetResource
         {
             $Filter = $baseFilter
         }
-        [array]$getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
-            -Filter $Filter `
-            -All `
-            -ErrorAction Stop
+        [array]$getValue = Get-M365DSCExportCachedConfigurationPolicies `
+            -TemplateId $policyTemplateID `
+            -Filter $Filter
         #endregion
 
         $i = 1

@@ -2317,7 +2317,7 @@ function Invoke-M365DSCGraphBatchRequest
 
     $batchResponses = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     $halfBatchSize = [Math]::Ceiling($BatchRequestSize / 2)
-    for ($i = 0; $i -lt $Requests.Count; $i += $BatchRequestSize)
+    :outer for ($i = 0; $i -lt $Requests.Count; $i += $BatchRequestSize)
     {
         $batchRequestSized = $Requests[$i..([Math]::Min($i + $BatchRequestSize - 1, $Requests.Count - 1))]
 
@@ -2331,14 +2331,33 @@ function Invoke-M365DSCGraphBatchRequest
             -Body ($request | ConvertTo-Json -Depth 10) `
             -ErrorAction SilentlyContinue
 
-        [array]$throttlingResponse = $apiResponse.responses | Where-Object -Property status -EQ 429
-        if ($throttlingResponse.Count -gt 0)
+        :inner foreach ($response in $apiResponse.responses)
         {
-            Write-Warning -Message "Throttling encountered, pausing and repeating request..."
-            Start-Sleep -Seconds $ThrottlingDelayInSeconds
-            $BatchRequestSize = [Math]::Max($halfBatchSize, [Math]::Floor($BatchRequestSize / 2))
-            $i = if ($i -ge $BatchRequestSize) { $i - $BatchRequestSize } else { 0 }
-            continue
+            switch ($response.status)
+            {
+                200 {
+                    if ($null -ne $response.body.'@odata.nextLink')
+                    {
+                        $value = [System.Collections.Generic.List[System.Object]]::new($response.body.value)
+                        $nextLink = $response.body.'@odata.nextLink'
+                        while ($nextLink)
+                        {
+                            Write-Verbose -Message "Fetching next page of results from $nextLink..."
+                            $nextPageResponse = Invoke-MgGraphRequest -Method GET -Uri $nextLink -ErrorAction SilentlyContinue
+                            $value.AddRange($nextPageResponse.value)
+                            $nextLink = $nextPageResponse.'@odata.nextLink'
+                        }
+                        $response.body.value = $value.ToArray()
+                    }
+                }
+                429 {
+                    Write-Warning -Message "Throttling encountered, pausing and repeating request..."
+                    Start-Sleep -Seconds $ThrottlingDelayInSeconds
+                    $BatchRequestSize = [Math]::Max($halfBatchSize, [Math]::Floor($BatchRequestSize / 2))
+                    $i = if ($i -ge $BatchRequestSize) { $i - $BatchRequestSize } else { 0 }
+                    continue outer
+                }
+            }
         }
 
         $batchResponses.AddRange([System.Collections.Hashtable[]]$apiResponse.responses)
