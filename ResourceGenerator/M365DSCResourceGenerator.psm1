@@ -98,7 +98,10 @@ function New-M365DSCResource
     if ($Workload -in $graphWorkloads)
     {
         Write-Verbose -Message "Import Intune Settings Catalog Helper module"
-        Import-Module -Name Microsoft365DSC -Force
+        if (-not (Get-Module -Name Microsoft365DSC))
+        {
+            Import-Module -Name Microsoft365DSC -Force
+        }
         Import-Module -Name ..\Modules\Microsoft365DSC\Modules\M365DSCIntuneSettingsCatalogUtil.psm1 -Force
         Remove-Module -Name M365DSCGraphShim -Force -ErrorAction SilentlyContinue
 
@@ -564,11 +567,14 @@ $($userDefinitionSettings.MOF -join "`r`n")
         {
             $settingsCatalogGetSettings = @"
 `r`n        # Retrieve policy specific settings
-        [array]`$settings = Get-$($CmdLetNoun)Setting ``
-            -DeviceManagementConfigurationPolicyId `$Id ``
-            -ExpandProperty 'settingDefinitions' ``
-            -All ``
-            -ErrorAction Stop
+        if (`$null -eq `$settings)
+        {
+            [array]`$settings = Get-$($CmdLetNoun)Setting ``
+                -DeviceManagementConfigurationPolicyId `$Id ``
+                -ExpandProperty 'settingDefinitions' ``
+                -All ``
+                -ErrorAction Stop
+        }
 
         `$policySettings = @{}
         `$policySettings = Export-IntuneSettingCatalogPolicySettings -Settings `$settings -ReturnHashtable `$policySettings$(if ($containsDeviceAndUserSettings) { ' -ContainsDeviceAndUserSettings' })`r`n
@@ -704,7 +710,7 @@ $($userDefinitionSettings.MOF -join "`r`n")
         if ($CmdLetNoun -like "*DeviceManagementConfigurationPolicy")
         {
             $exportGetCommand.AppendLine(@'
-        $policyTemplateID = "<TemplateReferenceId>"
+        $policyTemplateID = '<TemplateReferenceId>'
         $baseFilter = "templateReference/templateId eq '$policyTemplateID'"
         if (-not [System.String]::IsNullOrEmpty($Filter))
         {
@@ -873,7 +879,7 @@ $($userDefinitionSettings.MOF -join "`r`n")
             $AssignmentsGet += "        }`r`n"
             $AssignmentsGet += "        `$results.Add('Assignments', `$assignmentResult)`r`n"
 
-            $AssignmentsRemove += "        `$boundParameters.Remove(`"Assignments`") | Out-Null`r`n"
+            $AssignmentsRemove += "        `$boundParameters.Remove('Assignments') | Out-Null`r`n"
 
             $AssignmentsNew += ""
             $AssignmentsNew += "`r`n"
@@ -1968,9 +1974,12 @@ function Get-Microsoft365DSCModuleCimClass
         $ResourceName
     )
 
-    Import-Module -Name Microsoft365DSC -Force
+    if (-not (Get-Module -Name Microsoft365DSC))
+    {
+        Import-Module -Name Microsoft365DSC -Force
+    }
     $modulePath = Split-Path -Path (Get-Module -Name Microsoft365DSC).Path
-    $resourcesPath = "$modulePath\DSCResources\*\*.mof"
+    $resourcesPath = "$modulePath\DscResources\*\*.mof"
     $resources = (Get-ChildItem $resourcesPath).FullName
     $resources = $resources | Where-Object -FilterScript {$_ -notlike "*MSFT_$ResourceName.schema.mof"}
     $cimClasses = @()
