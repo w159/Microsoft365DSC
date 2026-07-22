@@ -1388,14 +1388,40 @@ function Get-M365DSCAllResources
     [CmdletBinding()]
     param ()
 
-    $allResources = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1' -File
-    $result = @()
-    foreach ($resource in $allResources)
+    if ($null -eq $Script:allResourcesPath)
     {
-        $result += $resource.Name -replace 'MSFT_', '' -replace '.psm1', ''
+        $Script:allResourcesPath = Get-M365DSCAllResourcesPath
     }
 
-    return $result
+    return $Script:allResourcesPath.Name -replace 'MSFT_', '' -replace '.psm1', ''
+}
+
+<#
+.SYNOPSIS
+    Returns the Microsoft365DSC DSC resource module files from the DscResources folder.
+
+.DESCRIPTION
+    Enumerates the Microsoft365DSC DscResources directory and returns the PowerShell module files for all DSC resources.
+
+.FUNCTIONALITY
+    Internal
+
+.OUTPUTS
+    System.IO.FileInfo[]
+
+.NOTES
+    This helper is used by Get-M365DSCAllResources to discover available resources.
+#>
+function Get-M365DSCAllResourcesPath
+{
+    [CmdletBinding()]
+    [OutputType([System.IO.FileInfo[]])]
+    [CmdletBinding()]
+    param ()
+
+    $Script:allResourcesPath = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1' -File
+
+    return $Script:allResourcesPath
 }
 
 <#
@@ -2771,6 +2797,7 @@ Export-ModuleMember -Function @(
     'Convert-M365DscHashtableToString',
     'Get-AllSPOPackages',
     'Get-M365DSCAllResources',
+    'Get-M365DSCAllResourcesPath',
     'Get-M365DSCAllResourcesDictionary',
     'Get-M365DSCArrayFromProperty',
     'Get-M365DSCAuthenticationMode',
