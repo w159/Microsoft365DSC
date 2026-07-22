@@ -23,6 +23,8 @@
     was specified.
   * Reduced the number of calls to `Get-M365DSCAllResources` by caching its
     results.
+* M365DSCUtil
+  * Added new helper function `Get-M365DSCAllResourcesPath`
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.71.
 * MISC

@@ -692,34 +692,27 @@ function Start-M365DSCConfigurationExtract
             -Value '0' `
             -Description 'Default Value Used to Ensure a Configuration Data File is Generated'
 
-        Write-Verbose -Message 'Retrieving resources path'
-        $dscResourcesPath = Join-Path -Path $PSScriptRoot `
-            -ChildPath '../DscResources/' `
-            -Resolve
-        Write-Verbose -Message 'Loop through all resources files.'
-        $allResoures = Get-ChildItem $dscResourcesPath -Recurse -File -Filter "MSFT_*.psm1"
-
-        $ResourcesToExport = @()
-        $resourcesPath = @()
-        foreach ($ResourceModule in $allResoures)
+        $resourcesToExport = [System.Collections.Generic.List[Hashtable[]]]::new()
+        $resourcesPath = [System.Collections.Generic.List[System.IO.FileInfo[]]]::new()
+        $allResourcesPath = Get-M365DSCAllResourcesPath
+        foreach ($resourceModule in $Script:allM365DSCResources)
         {
             try
             {
-                $resourceName = $ResourceModule.Name.Split('.')[0] -replace 'MSFT_', ''
-
-                if ((($Components -and ($Components -contains $resourceName)) -or $AllComponents -or `
+                if ((($Components -and ($Components -contains $resourceModule)) -or $AllComponents -or `
                         (-not $Components -and $null -eq $Workloads)) -and `
-                    $ComponentsToSkip -notcontains $resourceName -and `
-                        $resourcesNotSupported -notcontains $resourceName -and `
-                        -not $resourceName.StartsWith('M365DSC'))
+                    $ComponentsToSkip -notcontains $resourceModule -and `
+                        $resourcesNotSupported -notcontains $resourceModule -and `
+                        -not $resourceModule.StartsWith('M365DSC'))
                 {
-                    $authMethod = $allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $ResourceName
+                    $authMethod = $allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceModule
                     $resourceInfo = @{
-                        Name                 = $ResourceName
+                        Name                 = $resourceModule
                         AuthenticationMethod = $authMethod.AuthMethod
                     }
-                    $ResourcesToExport += $resourceInfo
-                    $resourcesPath += $ResourceModule
+                    $resourcesToExport.Add($resourceInfo)
+                    $resourcePath = $allResourcesPath | Where-Object -Property Name -EQ "MSFT_$resourceModule.psm1"
+                    $resourcesPath.Add($resourcePath)
                 }
             }
             catch
@@ -729,6 +722,7 @@ function Start-M365DSCConfigurationExtract
                     -Source "[M365DSCReverse]$($ResourceModule.Name)"
             }
         }
+        $resourcesPath = $resourcesPath | Sort-Object $_.Name
 
         # If the tenant id is not a GUID, retrieve it based on the organization name
         # Only implemented for public cloud tenants
@@ -754,7 +748,6 @@ function Start-M365DSCConfigurationExtract
 
         Confirm-M365DSCDependencies
         $partialExportName = $Global:PartialExportFileName
-        $resourcesPath = $resourcesPath | Sort-Object $_.Name
         $synchronizedHashtable = [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.Object]]::new()
         [void]$synchronizedHashtable.TryAdd('ResourceCounter', 1)
         [void]$synchronizedHashtable.TryAdd('ResourcesResult', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.String]]::new())
@@ -822,7 +815,7 @@ function Start-M365DSCConfigurationExtract
             if ($using:ComponentsToSkip -notcontains $resourceName)
             {
                 $counter = ($using:synchronizedHashtable).ResourceCounter++
-                Write-M365DSCHost -Message "[$counter/$($using:ResourcesToExport.Length)] Extracting [" -DeferWrite
+                Write-M365DSCHost -Message "[$counter/$($using:resourcesToExport.Count)] Extracting [" -DeferWrite
                 Write-M365DSCHost -Message $resourceName -ForegroundColor Green -DeferWrite
                 Write-M365DSCHost -Message '] using {' -DeferWrite
                 Write-M365DSCHost -Message $mostSecureAuthMethod -ForegroundColor Cyan -DeferWrite
@@ -836,7 +829,6 @@ function Start-M365DSCConfigurationExtract
 
                 # Check if filters for the current resource were specified.
                 $resourceFilter = $null
-                $resourceName = $resource.Name.Split('.')[0] -replace 'MSFT_', ''
 
                 Import-Module $resource.FullName -Force | Out-Null
                 $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
@@ -886,13 +878,13 @@ function Start-M365DSCConfigurationExtract
         {
             if ($Workloads.Count -eq 0)
             {
-                $Workloads = Get-M365DSCWorkloadForResource -ResourceName $ResourcesToExport.Name
+                $Workloads = Get-M365DSCWorkloadForResource -ResourceName $resourcesToExport.Name
             }
             foreach ($workload in $Workloads)
             {
                 Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
                 $requiredModules = [System.Collections.Generic.List[System.String]]::new(25)
-                $currentWorkloadResources = $ResourcesToExport | Where-Object -Property Name -Like "$workload*"
+                $currentWorkloadResources = $resourcesToExport | Where-Object -FilterScript { $_.Name -Like "$workload*" }
                 foreach ($resource in $currentWorkloadResources)
                 {
                     foreach ($module in $resourceSettings[$resource.Name].requiredModules)
@@ -912,7 +904,7 @@ function Start-M365DSCConfigurationExtract
                     $arguments.Add('ModuleName', $requiredModules)
                 }
                 #>
-                $resourcesPath | Where-Object -Property Name -Like "*MSFT_$workload*" | Invoke-Parallel @arguments -Verbose
+                $resourcesPath | Where-Object -FilterScript { $_.Name -Like "*MSFT_$workload*" } | Invoke-Parallel @arguments -Verbose
             }
         }
         else
