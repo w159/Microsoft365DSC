@@ -11,6 +11,8 @@
     delegated authentication requirements.
     FIXES [#5672](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5672)
 * MISC
+  * Updated documentation for the `Update-M365DSCAzureAdApplication` function.
+    FIXES [#5399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5399)
   * Updated required permissions and documentation for Azure resources.
     FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
 
