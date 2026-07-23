@@ -272,7 +272,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
-        Context -Name 'Rule already exists, and should with AdvancedRules containing condition ids' -Fixture {
+        Context -Name 'Rule already exists, and should with AdvancedRules containing trainable classifier ids' -Fixture {
             BeforeAll {
                 $desiredAdvancedRule = @'
 {
@@ -293,6 +293,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     "Name": "Healthcare",
                     "Id": "11111111-1111-1111-1111-111111111111",
                     "Classifiertype": "MLModel"
+                  },
+                  {
+                    "Name": "EU Debit Card Number",
+                    "Id": "0e9b3178-9678-47dd-a509-37222ca96b42",
+                    "Mincount": 1,
+                    "Maxcount": -1,
+                    "Confidencelevel": "Medium"
                   }
                 ]
               }
@@ -322,8 +329,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 "Sensitivetypes": [
                   {
                     "Name": "Healthcare",
-                    "Id": "22222222-2222-2222-2222-222222222222",
+                    "Id": null,
                     "Classifiertype": "MLModel"
+                  },
+                  {
+                    "Name": "EU Debit Card Number",
+                    "Id": null,
+                    "Mincount": 1,
+                    "Maxcount": -1,
+                    "Confidencelevel": "Medium"
                   }
                 ]
               }
@@ -364,11 +378,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
-            It 'Should ignore condition ids when testing AdvancedRules for drift' {
+            It 'Should ignore trainable classifier ids when testing AdvancedRules for drift' {
                 Test-TargetResource @testParams | Should -Be $true
-                $Script:AdvancedRulePassedToTest | Should -Not -Match '11111111-1111-1111-1111-111111111111'
                 $normalizedAdvancedRule = $Script:AdvancedRulePassedToTest | ConvertFrom-Json | ConvertFrom-Json
-                $normalizedAdvancedRule.Condition.SubConditions[0].Value[0].Groups[0].Sensitivetypes[0].Id | Should -Be $null
+                $sensitiveTypes = $normalizedAdvancedRule.Condition.SubConditions[0].Value[0].Groups[0].Sensitivetypes
+                ($sensitiveTypes | Where-Object -FilterScript { $_.Name -eq 'Healthcare' }).Id | Should -Be $null
+                ($sensitiveTypes | Where-Object -FilterScript { $_.Name -eq 'EU Debit Card Number' }).Id | Should -Be '0e9b3178-9678-47dd-a509-37222ca96b42'
             }
         }
 

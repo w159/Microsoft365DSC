@@ -102,7 +102,7 @@
   * Added `wpa3Personal` to the `WifiSecurityType` property.
 * SCDLPComplianceRule
   * Added support for the `EndpointDlpRestrictions` property.
-  * Fixed an issue where `AdvancedRule` condition ids could cause drift.
+  * Fixed an issue where trainable classifier ids in `AdvancedRule` could cause drift.
     FIXES [#7352](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7352)
 * SettingsCatalogHelper
   * Fixed an issue where complex administrative template names

@@ -1429,7 +1429,33 @@ function Test-TargetResource
 
     if ($null -ne $ValuesToCheck['AdvancedRule'])
     {
-        $ValuesToCheck['AdvancedRule'] = Format-AdvancedRuleWithoutConditionId -AdvancedRule $ValuesToCheck['AdvancedRule'] -IsDscEncoded
+        $advancedRuleObject = $ValuesToCheck['AdvancedRule'] | ConvertFrom-Json | ConvertFrom-Json
+        $conditions = @($advancedRuleObject.Condition)
+        while ($conditions.Count -gt 0)
+        {
+            $currentCondition = $conditions[0]
+            $conditions = @($conditions | Select-Object -Skip 1)
+
+            if ($null -ne $currentCondition.SubConditions)
+            {
+                $conditions += $currentCondition.SubConditions
+            }
+
+            if ($currentCondition.ConditionName -like '*ContentContainsSensitiveInformation*' -and `
+                $null -ne $currentCondition.Value.Groups.Sensitivetypes)
+            {
+                foreach ($sensitiveType in $currentCondition.Value.Groups.Sensitivetypes)
+                {
+                    if ($sensitiveType.Classifiertype -eq 'MLModel' -and $null -ne $sensitiveType.Id)
+                    {
+                        $sensitiveType.Id = $null
+                    }
+                }
+            }
+        }
+
+        $newAdvancedRule = $advancedRuleObject | ConvertTo-Json -Depth 32 | Format-Json
+        $ValuesToCheck['AdvancedRule'] = $newAdvancedRule | ConvertTo-Json -Compress
     }
 
     $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
