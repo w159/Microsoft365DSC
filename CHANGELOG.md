@@ -6,6 +6,13 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+* IntuneAppConfigurationPolicy
+  * Added information about no support for Settings catalog policy entries due to
+    delegated authentication requirements.
+    FIXES [#5672](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5672)
+* MISC
+  * Updated required permissions and documentation for Azure resources.
+    FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
 
 # 1.26.722.1
 
