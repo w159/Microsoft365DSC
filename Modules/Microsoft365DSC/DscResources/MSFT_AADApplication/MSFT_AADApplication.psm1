@@ -466,17 +466,17 @@ function Get-TargetResource
                     method = 'GET'
                     url    = "applications/$($AADApp.Id)/tokenLifetimePolicies"
                 }
-                @{
-                    id     = 'logo'
-                    method = 'GET'
-                    url    = "applications/$($AADApp.Id)/logo"
-                }
             )
             $batchResponses = Invoke-M365DSCGraphBatchRequest -Requests $batchRequests
 
             $oppInfo = ($batchResponses | Where-Object -FilterScript { $_.id -eq 'onPremisesPublishing' }).body.value
             $lifetimePolicy = ($batchResponses | Where-Object -FilterScript { $_.id -eq 'tokenLifetimePolicies' }).body.value | Select-Object -First 1
-            $logoResponse = ($batchResponses | Where-Object -FilterScript { $_.id -eq 'logo' }).body
+
+            if (-not [System.String]::IsNullOrEmpty($AADApp.Info.LogoUrl))
+            {
+                $logoResponse = Invoke-WebRequest -Uri $AADApp.Info.LogoUrl -Method Get -UseBasicParsing -ErrorAction SilentlyContinue
+                $logoResponse = [System.Convert]::ToBase64String($logoResponse.Content)
+            }
         }
         catch
         {
@@ -1263,9 +1263,7 @@ function Set-TargetResource
 
     if ($PSBoundParameters.ContainsKey('Logo'))
     {
-        Invoke-MgGraphRequest -Uri "/beta/applications/$($appEntity.Id)/logo" -Method PUT -Body @{
-            logo = $Logo
-        }
+        Invoke-MgGraphRequest -Uri "/beta/applications/$($currentAADApp.ObjectId)/logo" -Method PUT -Body ([System.Convert]::FromBase64String($Logo)) -ContentType 'image/*'
     }
 
     if ($needToUpdatePermissions -and $null -ne $Permissions)

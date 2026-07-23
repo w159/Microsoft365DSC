@@ -6,6 +6,9 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+* MISC
+  * Updated required permissions and documentation for Azure resources.
+    FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
 
 # 1.26.722.1
 
