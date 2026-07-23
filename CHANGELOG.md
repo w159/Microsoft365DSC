@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADApplication
+  * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
+    `ServiceManagementReference`.
+    FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+
 # 1.26.722.1
 
 * O365OrgCustomizationSetting
