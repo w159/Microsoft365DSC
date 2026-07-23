@@ -272,6 +272,106 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Rule already exists, and should with AdvancedRules containing condition ids' -Fixture {
+            BeforeAll {
+                $desiredAdvancedRule = @'
+{
+  "Version": "1.0",
+  "Condition": {
+    "Operator": "And",
+    "SubConditions": [
+      {
+        "ConditionName": "ContentContainsSensitiveInformation",
+        "Value": [
+          {
+            "Groups": [
+              {
+                "Name": "PHI SITs",
+                "Operator": "Or",
+                "Sensitivetypes": [
+                  {
+                    "Name": "Healthcare",
+                    "Id": "11111111-1111-1111-1111-111111111111",
+                    "Classifiertype": "MLModel"
+                  }
+                ]
+              }
+            ],
+            "Operator": "And"
+          }
+        ]
+      }
+    ]
+  }
+}
+'@
+                $currentAdvancedRule = @'
+{
+  "Version": "1.0",
+  "Condition": {
+    "Operator": "And",
+    "SubConditions": [
+      {
+        "ConditionName": "ContentContainsSensitiveInformation",
+        "Value": [
+          {
+            "Groups": [
+              {
+                "Name": "PHI SITs",
+                "Operator": "Or",
+                "Sensitivetypes": [
+                  {
+                    "Name": "Healthcare",
+                    "Id": "22222222-2222-2222-2222-222222222222",
+                    "Classifiertype": "MLModel"
+                  }
+                ]
+              }
+            ],
+            "Operator": "And"
+          }
+        ]
+      }
+    ]
+  }
+}
+'@
+                $testParams = @{
+                    Ensure       = 'Present'
+                    Policy       = 'MyParentPolicy'
+                    Comment      = 'New comment'
+                    AdvancedRule = $desiredAdvancedRule | ConvertTo-Json -Compress
+                    BlockAccess  = $False
+                    Name         = 'TestPolicy'
+                    Credential   = $Credential
+                }
+
+                $Script:AdvancedRulePassedToTest = $null
+                Mock -CommandName Get-DLPComplianceRule -MockWith {
+                    return @{
+                        Name             = 'TestPolicy'
+                        Comment          = 'New Comment'
+                        ParentPolicyName = 'MyParentPolicy'
+                        AdvancedRule     = $currentAdvancedRule
+                        BlockAccess      = $False
+                    }
+                }
+
+                Mock -CommandName Test-M365DSCParameterState -MockWith {
+                    param($CurrentValues, $Source, $DesiredValues, $ValuesToCheck)
+                    $Script:AdvancedRulePassedToTest = $DesiredValues.AdvancedRule
+                    return $true
+                }
+            }
+
+            It 'Should ignore condition ids when testing AdvancedRules for drift' {
+                Test-TargetResource @testParams | Should -Be $true
+                $Script:AdvancedRulePassedToTest | Should -Not -Match '11111111-1111-1111-1111-111111111111'
+                $normalizedAdvancedRule = $Script:AdvancedRulePassedToTest | ConvertFrom-Json | ConvertFrom-Json
+                $normalizedAdvancedRule.Condition.SubConditions[0].Value[0].Groups[0].Sensitivetypes[0].Id | Should -Be $null
+            }
+        }
+
         Context -Name "Rule doesn't already exist but should with EndpointDlpRestrictions" -Fixture {
             BeforeAll {
                 $testParams = @{

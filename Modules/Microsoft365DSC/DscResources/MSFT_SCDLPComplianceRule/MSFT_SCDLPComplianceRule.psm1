@@ -412,11 +412,7 @@ function Get-TargetResource
 
         if ($null -ne $PolicyRule.AdvancedRule -and $PolicyRule.AdvancedRule.Count -gt 0)
         {
-            $ruleobject = $PolicyRule.AdvancedRule | ConvertFrom-Json
-            $ruleObject.Condition = Remove-AdvancedRuleConditionId -Condition $ruleObject.Condition
-
-            $newAdvancedRule = $ruleobject | ConvertTo-Json -Depth 32 | Format-Json
-            $newAdvancedRule = $newAdvancedRule | ConvertTo-Json -Compress
+            $newAdvancedRule = Format-AdvancedRuleWithoutConditionId -AdvancedRule $PolicyRule.AdvancedRule
         }
         else
         {
@@ -1431,6 +1427,11 @@ function Test-TargetResource
         $ValuesToCheck['EndpointDlpRestrictions'] = Convert-SCDLPEndpointDlpRestrictions -EndpointDlpRestrictions $ValuesToCheck['EndpointDlpRestrictions']
     }
 
+    if ($null -ne $ValuesToCheck['AdvancedRule'])
+    {
+        $ValuesToCheck['AdvancedRule'] = Format-AdvancedRuleWithoutConditionId -AdvancedRule $ValuesToCheck['AdvancedRule'] -IsDscEncoded
+    }
+
     $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
         -Source $($MyInvocation.MyCommand.Source) `
         -DesiredValues $ValuesToCheck `
@@ -2118,6 +2119,29 @@ function Format-Json([Parameter(Mandatory, ValueFromPipeline)][String] $json)
         }
         $line
     }) -join "`n"
+}
+
+function Format-AdvancedRuleWithoutConditionId
+{
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AdvancedRule,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsDscEncoded
+    )
+
+    $ruleObject = $AdvancedRule | ConvertFrom-Json
+    if ($IsDscEncoded)
+    {
+        $ruleObject = $ruleObject | ConvertFrom-Json
+    }
+
+    $ruleObject.Condition = Remove-AdvancedRuleConditionId -Condition $ruleObject.Condition
+    $newAdvancedRule = $ruleObject | ConvertTo-Json -Depth 32 | Format-Json
+    return $newAdvancedRule | ConvertTo-Json -Compress
 }
 
 function Remove-AdvancedRuleConditionId
