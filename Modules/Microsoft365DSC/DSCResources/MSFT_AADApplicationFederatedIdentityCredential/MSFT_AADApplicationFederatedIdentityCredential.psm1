@@ -111,7 +111,7 @@ function Get-TargetResource
                     $application = Get-MgApplication `
                         -ApplicationId $ApplicationObjectId `
                         -Property @('id', 'displayName') `
-                        -ErrorAction SilentlyContinue
+                        -ErrorAction Stop
                 }
             }
             catch
@@ -126,7 +126,7 @@ function Get-TargetResource
                     [array]$application = Get-MgApplication `
                         -Filter "DisplayName eq '$($ApplicationDisplayName -replace "'", "''")'" `
                         -Property @('id', 'displayName') `
-                        -ErrorAction SilentlyContinue
+                        -ErrorAction Stop
                 }
                 catch
                 {
@@ -161,7 +161,7 @@ function Get-TargetResource
                     $federatedIdentityCredential = Get-MgApplicationFederatedIdentityCredential `
                         -ApplicationId $ApplicationObjectId `
                         -FederatedIdentityCredentialId $Id `
-                        -ErrorAction SilentlyContinue
+                        -ErrorAction Stop
                 }
             }
             catch
@@ -176,7 +176,7 @@ function Get-TargetResource
                     [array]$federatedIdentityCredential = Get-MgApplicationFederatedIdentityCredential `
                         -ApplicationId $ApplicationObjectId `
                         -Filter "name eq '$($Name -replace "'", "''")'" `
-                        -ErrorAction SilentlyContinue
+                        -ErrorAction Stop
                 }
                 catch
                 {
@@ -581,8 +581,9 @@ function Export-TargetResource
                     Id                    = $federatedIdentityCredential.Id
                     AccessTokens          = $AccessTokens
                 }
-                $Script:exportedInstance = $federatedIdentityCredential | Add-Member -MemberType NoteProperty -Name ApplicationObjectId -Value $application.Id -PassThru
-                $Script:exportedInstance = $Script:exportedInstance | Add-Member -MemberType NoteProperty -Name ApplicationDisplayName -Value $application.DisplayName -PassThru
+                $Script:exportedInstance = $federatedIdentityCredential
+                $Script:exportedInstance.Add('ApplicationObjectId', $application.Id)
+                $Script:exportedInstance.Add('ApplicationDisplayName', $application.DisplayName)
                 $results = Get-TargetResource @params
                 $results.Remove('ApplicationObjectId') | Out-Null
 
