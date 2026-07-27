@@ -6,6 +6,9 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+* AADEntitlementManagementAccessPackageCatalogResource
+  * Fixed an issue where a non-existing Service Principal or Group would
+    throw an error during the export instead of continuing.
 * IntuneAppConfigurationPolicy
   * Added information about no support for Settings catalog policy entries due to
     delegated authentication requirements.
