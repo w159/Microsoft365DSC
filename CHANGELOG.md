@@ -2,8 +2,29 @@
 
 # UNRELEASED
 
+* AADApplication
+  * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
+    `ServiceManagementReference`.
+    FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
 * AADApplicationFederatedIdentityCredential
   * Added resource to manage federated identity credentials for Azure AD applications.
+* AADEntitlementManagementAccessPackageCatalogResource
+  * Fixed an issue where a non-existing Service Principal or Group would
+    throw an error during the export instead of continuing.
+* IntuneAppConfigurationPolicy
+  * Added information about no support for Settings catalog policy entries due to
+    delegated authentication requirements.
+    FIXES [#5672](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5672)
+* M365DSCDocGenerator
+  * Fixed an issue where not all permissions were shown on the resource docs page.
+* MISC
+  * Updated documentation for the `Update-M365DSCAzureAdApplication` function.
+    FIXES [#5399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5399)
+  * Updated required permissions and documentation for Azure resources.
+    FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
+
+# 1.26.722.1
+
 * O365OrgCustomizationSetting
   * Removed unused backtick in hashtable.
 * O365OrgSettings
@@ -102,6 +123,8 @@
   * Fixed issue where function `Get-CompareParameters` was not being exported
 * IntuneWifiConfigurationPolicyIOS
   * Added `wpa3Personal` to the `WifiSecurityType` property.
+* SCDLPComplianceRule
+  * Added support for the `EndpointDlpRestrictions` property.
 * SettingsCatalogHelper
   * Fixed an issue where complex administrative template names
     were not handled correctly.
