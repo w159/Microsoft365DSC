@@ -2152,18 +2152,10 @@ function Format-AdvancedRuleWithoutConditionId
     param(
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AdvancedRule,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $IsDscEncoded
+        $AdvancedRule
     )
 
     $ruleObject = $AdvancedRule | ConvertFrom-Json
-    if ($IsDscEncoded)
-    {
-        $ruleObject = $ruleObject | ConvertFrom-Json
-    }
 
     $ruleObject.Condition = Remove-AdvancedRuleConditionId -Condition $ruleObject.Condition
     $newAdvancedRule = $ruleObject | ConvertTo-Json -Depth 32 | Format-Json
