@@ -9,6 +9,8 @@
 * AADEntitlementManagementAccessPackageCatalogResource
   * Fixed an issue where a non-existing Service Principal or Group would
     throw an error during the export instead of continuing.
+* EXOManagementRole
+  * Added retry and logging when `Get-ManagementRole` returns no results.
 * IntuneAppConfigurationPolicy
   * Added information about no support for Settings catalog policy entries due to
     delegated authentication requirements.
