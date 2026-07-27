@@ -187,6 +187,31 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Only some values are specified for an existing federated identity credential' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    ApplicationDisplayName = 'App1'
+                    Name                   = 'github-main'
+                    Description            = 'Updated GitHub Actions main branch'
+                    Ensure                 = 'Present'
+                    Credential             = $Credential
+                }
+
+                Mock -CommandName Update-MgApplicationFederatedIdentityCredential -MockWith {
+                    $BodyParameter.Keys | Should -Contain 'description'
+                    $BodyParameter.Keys | Should -Not -Contain 'name'
+                    $BodyParameter.Keys | Should -Not -Contain 'issuer'
+                    $BodyParameter.Keys | Should -Not -Contain 'subject'
+                    $BodyParameter.Keys | Should -Not -Contain 'audiences'
+                }
+            }
+
+            It 'Should only include specified properties in the update body' {
+                Set-TargetResource @testParams
+                Should -Invoke -CommandName 'Update-MgApplicationFederatedIdentityCredential' -Exactly 1
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true

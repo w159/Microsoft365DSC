@@ -359,6 +359,15 @@ function Set-TargetResource
     }
     elseif ($Ensure -eq 'Present' -and $currentFederatedIdentityCredential.Ensure -eq 'Present')
     {
+        $bodyParameter = @{}
+        foreach ($propertyName in @('Issuer', 'Subject', 'Audiences', 'Description'))
+        {
+            if ($PSBoundParameters.ContainsKey($propertyName))
+            {
+                $bodyParameter.Add($propertyName.Substring(0, 1).ToLower() + $propertyName.Substring(1), (Get-Variable -Name $propertyName -ValueOnly))
+            }
+        }
+
         Write-Verbose -Message "Updating federated identity credential {$Name}"
         Update-MgApplicationFederatedIdentityCredential `
             -ApplicationId $currentFederatedIdentityCredential.ApplicationObjectId `
