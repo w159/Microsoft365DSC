@@ -37,6 +37,9 @@
   * Added missing workload connections.
 * O365SearchAndIntelligenceConfigurations
   * Added missing workload connection.
+* SCDLPComplianceRule
+  * Fixed an issue where trainable classifier ids in `AdvancedRule` could cause drift.
+    FIXES [#7352](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7352)
 * M365DSCExportUtil
   * Added auto completion for `-Components` in `Export-M365DSCConfiguration`.
   * Since `M365DSCStringReplacementMap` is now being sent in parallel exports
