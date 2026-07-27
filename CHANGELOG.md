@@ -10,6 +10,12 @@
   * Added information about no support for Settings catalog policy entries due to
     delegated authentication requirements.
     FIXES [#5672](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5672)
+* IntuneDeviceManagementDeviceDiagnosticSettings
+  * Initial release.
+    FIXES [#4154](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4154)
+* IntuneWindowsDataProcessingSettings
+  * Initial release.
+    FIXES [#4154](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4154)
 * M365DSCDocGenerator
   * Fixed an issue where not all permissions were shown on the resource docs page.
 * MISC
