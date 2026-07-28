@@ -46,6 +46,7 @@
     FIXES [#5399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5399)
   * Updated required permissions and documentation for Azure resources.
     FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
+  * Added support to run Docker release images with older Microsoft365DSC versions
 * DEPENDENCIES
   * Updated `MSCloudLoginAssistant` to version 1.1.72.
     FIXES [#7371](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7371)

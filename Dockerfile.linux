@@ -1,8 +1,12 @@
 FROM mcr.microsoft.com/dotnet/runtime:10.0-resolute
 
+ARG M365DSC_VERSION
+ENV M365DSC_VERSION=${M365DSC_VERSION:-1.26.722.1}
+
 WORKDIR /DSC
 
 SHELL ["bash", "-c"]
+
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -51,8 +55,9 @@ RUN wget -q https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/p/powersh
 RUN mv /etc/opt/omi/conf/dsc/configuration/baseregistration /etc/opt/omi/conf/dsc/configuration/BaseRegistration && \
     mv /etc/opt/omi/conf/dsc/configuration/BaseRegistration/baseresource.schema.mof /etc/opt/omi/conf/dsc/configuration/BaseRegistration/BaseResource.schema.mof
 
+COPY ./Modules/Microsoft365DSC/Microsoft365DSC.psd1 /DSC/Microsoft365DSC.psd1
 COPY ./Utilities/Install-M365DSCAndDependencies.ps1 /DSC/Install-M365DSCAndDependencies.ps1
 
-RUN pwsh -Command /DSC/Install-M365DSCAndDependencies.ps1
+RUN pwsh -Command /DSC/Install-M365DSCAndDependencies.ps1 -M365DSCVersion $M365DSC_VERSION
 
 ENTRYPOINT ["pwsh", "-NoLogo"]

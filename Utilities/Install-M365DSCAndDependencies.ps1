@@ -1,12 +1,23 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [switch]
-    $IsSDK
+    [Switch]
+    $IsSDK,
+    
+    [Parameter()]
+    [System.String]
+    $M365DSCVersion
 )
 
 $isWindowsPlatform = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
     [System.Runtime.InteropServices.OSPlatform]::Windows)
+
+if ([String]::IsNullOrEmpty($M365DSCVersion) -or $M365DSCVersion -eq "%M365DSC_VERSION%")
+{
+    Write-Output "M365DSCVersion is empty, retrieving from manifest"
+    $M365DSCVersion = (Import-PowerShellDataFile -Path "/DSC/Microsoft365DSC.psd1").ModuleVersion
+}
+Remove-Item -Path "/DSC/Microsoft365DSC.psd1" -Force -ErrorAction SilentlyContinue
 
 try
 {
@@ -64,9 +75,11 @@ try
 
     if (-not $IsSDK.IsPresent)
     {
-        Write-Output "Installing Microsoft365DSC module"
+        $Message = "Installing Microsoft365DSC module ({0})" -f $M365DSCVersion
+        Write-Output $Message
         $Parameters = @{
             Name                = "Microsoft365DSC"
+            RequiredVersion     = $M365DSCVersion
             Repository          = "PSGallery"
             Scope               = "AllUsers"
             Force               = [Switch]$true
