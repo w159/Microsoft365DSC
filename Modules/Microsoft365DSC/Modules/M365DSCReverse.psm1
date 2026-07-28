@@ -145,6 +145,7 @@ function Start-M365DSCConfigurationExtract
         [System.String]
         $ApplicationId,
 
+        # TODO: Change to PSCredential during next breaking change
         [Parameter()]
         [System.String]
         $ApplicationSecret,
@@ -464,6 +465,7 @@ function Start-M365DSCConfigurationExtract
                 $AuthMethods -contains 'ApplicationWithSecret')
         {
             $AppSecretAsPSCredential = $null
+            # TODO: Remove during next breaking change, when ApplicationSecret is changed to PSCredential
             if (-not [System.String]::IsNullOrEmpty($ApplicationSecret))
             {
                 [SecureString]$secStringPassword = ConvertTo-SecureString $ApplicationSecret -AsPlainText -Force
@@ -801,6 +803,7 @@ function Start-M365DSCConfigurationExtract
                 }
                 'ApplicationSecret'
                 {
+                    # TODO: Update during next breaking change, when ApplicationSecret is changed to PSCredential
                     $applicationSecretValue = New-Object System.Management.Automation.PSCredential ('ApplicationSecret', (ConvertTo-SecureString $using:ApplicationSecret -AsPlainText -Force))
                     $parameters.Add('ApplicationSecret', $applicationSecretValue)
                 }
