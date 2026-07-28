@@ -204,6 +204,7 @@ function Export-M365DSCConfiguration
         [System.String]
         $TenantId,
 
+        # TODO: Change to PSCredential during next breaking change
         [Parameter(ParameterSetName = 'Export')]
         [System.String]
         $ApplicationSecret,
@@ -233,7 +234,6 @@ function Export-M365DSCConfiguration
         $AccessTokens,
 
         [Parameter(ParameterSetName = 'Export')]
-        [ValidateScript({ $Workloads -contains 'AZURE' -or ($Components -like "Azure*").Count -gt 0 })]
         [System.String]
         $SubscriptionId,
 
