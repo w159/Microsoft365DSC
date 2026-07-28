@@ -21,6 +21,8 @@
 * IntuneWindowsDataProcessingSettings
   * Initial release.
     FIXES [#4154](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4154)
+* M365DSCConnection
+  * Fixed an issue where `ApplicationSecret` was not converted to a secure string.
 * SentinelAlertRule
   * Added `SubscriptionId` parameter to `Export-TargetResource`.
   * Fixed an issue where non-Sentinel Log Analytics Workspaces were exported.

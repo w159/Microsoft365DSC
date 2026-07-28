@@ -1290,7 +1290,7 @@ function Assert-M365DSCBlueprint
 
         if ([String]::IsNullOrEmpty($ResourcesInBluePrint))
         {
-            if (![String]::IsNullOrEmpty($ExcludedResources))
+            if (-not [String]::IsNullOrEmpty($ExcludedResources))
             {
                 Write-Host 'All resources were excluded from BluePrint, aborting'
             }
@@ -1357,7 +1357,7 @@ function Assert-M365DSCBlueprint
 
         # Clean up the temporary files
         Remove-Item $LocalBluePrintPath -Force -ErrorAction SilentlyContinue
-        if (!$KeepExport)
+        if (-not $KeepExport)
         {
             Remove-Item $ExportPath -Force -ErrorAction SilentlyContinue
         }

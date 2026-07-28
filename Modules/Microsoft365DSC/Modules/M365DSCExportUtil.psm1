@@ -204,6 +204,7 @@ function Export-M365DSCConfiguration
         [System.String]
         $TenantId,
 
+        # TODO: Change to PSCredential during next breaking change
         [Parameter(ParameterSetName = 'Export')]
         [System.String]
         $ApplicationSecret,
