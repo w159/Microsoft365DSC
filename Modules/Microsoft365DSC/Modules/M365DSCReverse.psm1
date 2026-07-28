@@ -862,8 +862,9 @@ function Start-M365DSCConfigurationExtract
                     }
                 }
 
-                # Check for SubscriptionId if Azure resource
-                if ($resourceName -like "Azure*" -and -not [System.String]::IsNullOrEmpty($using:SubscriptionId))
+                # Check for Export-TargetResource parameters supports -SubscriptionId
+                $functionParameters = (Get-Command 'Export-TargetResource').Parameters
+                if ($functionParameters.Keys.Contains('SubscriptionId') -and -not [System.String]::IsNullOrEmpty($using:SubscriptionId))
                 {
                     $parameters.Add('SubscriptionId', $using:SubscriptionId)
                 }

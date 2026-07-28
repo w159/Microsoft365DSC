@@ -233,7 +233,6 @@ function Export-M365DSCConfiguration
         $AccessTokens,
 
         [Parameter(ParameterSetName = 'Export')]
-        [ValidateScript({ $Workloads -contains 'AZURE' -or ($Components -like "Azure*").Count -gt 0 })]
         [System.String]
         $SubscriptionId,
 
