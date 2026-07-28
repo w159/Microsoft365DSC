@@ -1025,7 +1025,7 @@ function Export-TargetResource
                 -TenantId $TenantId
 
             $j = 1
-            if ($rules.Length -eq 0 )
+            if ($rules.Length -eq 0)
             {
                 Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
             }
