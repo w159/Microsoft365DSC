@@ -6,6 +6,12 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+* AADConditionalAccessPolicy
+  * Added requirement to specify `ExcludeExternalTenantsMembershipKind` if
+    `ExcludeExternalTenantsMembers` is specified during apply.
+  * Assigned the value `All` as default for `ExcludeExternalTenantsMembershipKind`
+    during apply.
+    FIXES [#6163](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6163)
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * Fixed an issue where lookup by `DisplayName` returned all results.
     FIXES [#7374](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7374)
