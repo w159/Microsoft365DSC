@@ -6,6 +6,9 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
+* AADEntitlementManagementAccessPackageAssignmentPolicy
+  * Fixed an issue where lookup by `DisplayName` returned all results.
+    FIXES [#7374](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7374)
 * AADEntitlementManagementAccessPackageCatalogResource
   * Fixed an issue where a non-existing Service Principal or Group would
     throw an error during the export instead of continuing.
