@@ -21,13 +21,32 @@
 * IntuneWindowsDataProcessingSettings
   * Initial release.
     FIXES [#4154](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4154)
+* SentinelAlertRule
+  * Added `SubscriptionId` parameter to `Export-TargetResource`.
+  * Fixed an issue where non-Sentinel Log Analytics Workspaces were exported.
+* SentinelSetting
+  * Added `SubscriptionId` parameter to `Export-TargetResource`.
+  * Fixed an issue where non-Sentinel Log Analytics Workspaces were exported.
+* SentinelThreatIntelligenceIndicator
+  * Added `SubscriptionId` parameter to `Export-TargetResource`.
+  * Fixed an issue where non-Sentinel Log Analytics Workspaces were exported.
+* SentinelWatchlist
+  * Added `SubscriptionId` parameter to `Export-TargetResource`.
+  * Fixed an issue where non-Sentinel Log Analytics Workspaces were exported.
 * M365DSCDocGenerator
   * Fixed an issue where not all permissions were shown on the resource docs page.
+* M365DSCExportUtil
+  * Removed validation from `SubscriptionId` parameter.
+* M365DSCReverse
+  * Updated `SubscriptionId` handling to pass to all export functions that define it.
 * MISC
   * Updated documentation for the `Update-M365DSCAzureAdApplication` function.
     FIXES [#5399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5399)
   * Updated required permissions and documentation for Azure resources.
     FIXES [#6960](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6960)
+* DEPENDENCIES
+  * Updated `MSCloudLoginAssistant` to version 1.1.72.
+    FIXES [#7371](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7371)
 
 # 1.26.722.1
 
