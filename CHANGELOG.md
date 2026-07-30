@@ -50,6 +50,10 @@
   * Removed validation from `SubscriptionId` parameter.
 * M365DSCReverse
   * Updated `SubscriptionId` handling to pass to all export functions that define it.
+* M365DSCUtil
+  * Added the function `Update-M365DSCAuthenticationConfiguration` to update a
+    configuration to use a different authentication mode and save it to a new file.
+    FIXES [#3205](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/3205)
 * MISC
   * Updated documentation for the `Update-M365DSCAzureAdApplication` function.
     FIXES [#5399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5399)

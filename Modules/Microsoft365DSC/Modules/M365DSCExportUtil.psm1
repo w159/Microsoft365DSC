@@ -1050,6 +1050,7 @@ function Join-M365DSCConfiguration
 #>
 function Split-M365DSCConfiguration
 {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -1188,8 +1189,8 @@ function Update-M365DSCExportAuthenticationResults
     param
     (
         [Parameter(Mandatory = $true)]
-        [System.String]
         [ValidateSet('ServicePrincipalWithThumbprint', 'ServicePrincipalWithSecret', 'ServicePrincipalWithPath', 'CredentialsWithTenantId', 'CredentialsWithApplicationId', 'Credentials', 'ManagedIdentity', 'AccessTokens')]
+        [System.String]
         $ConnectionMode,
 
         [Parameter(Mandatory = $true)]
