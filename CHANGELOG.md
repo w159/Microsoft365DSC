@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.729.1
 
 * AADApplication
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
