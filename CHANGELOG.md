@@ -2,6 +2,13 @@
 
 # 1.26.729.2
 
+* AADEntitlementManagementAccessPackage
+  * Fixed a bug where a resource role scope whose `AccessPackageResourceOriginId`
+    is specified as the object GUID was removed and re-added on every Set,
+    eventually leaving the access package with no resource roles. The desired
+    OriginId is now resolved to the same value that Get-TargetResource returns
+    before comparison.
+    FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
 * M365DSCConnection
   * Fixed issue connecting to a workload using `New-M365DSCConnection`.
 
