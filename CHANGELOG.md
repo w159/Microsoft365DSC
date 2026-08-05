@@ -1,7 +1,9 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.805.1
 
+* AADApplicationFederatedIdentityCredential
+  * Initial release.
 * AADEntitlementManagementAccessPackage
   * Fixed an issue where a resource role scope whose `AccessPackageResourceOriginId`
     is specified as the object GUID was removed and re-added on every Set,
@@ -21,8 +23,6 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
-* AADApplicationFederatedIdentityCredential
-  * Added resource to manage federated identity credentials for Azure AD applications.
 * AADConditionalAccessPolicy
   * Added requirement to specify `ExcludeExternalTenantsMembershipKind` if
     `ExcludeExternalTenantsMembers` is specified during apply.
