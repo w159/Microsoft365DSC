@@ -9,6 +9,10 @@
     OriginId is now resolved to the same value that Get-TargetResource returns
     before comparison.
     FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
+* M365DSCConnection
+  * Fixed an issue with client secret authentication.
+* M365DSCReverse
+  * Fixed an issue where filtering was not applied correctly.
 
 # 1.26.729.2
 
