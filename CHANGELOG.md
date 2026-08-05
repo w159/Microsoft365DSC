@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* M365DSCConnection
+  * Fixed an issue with client secret authentication.
+* M365DSCReverse
+  * Fixed an issue where filtering was not applied correctly.
+
 # 1.26.729.2
 
 * M365DSCConnection
