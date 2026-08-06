@@ -9,6 +9,8 @@
     OriginId is now resolved to the same value that Get-TargetResource returns
     before comparison.
     FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
+* AADApplicationFederatedIdentityCredential
+  * Added resource to manage federated identity credentials for Azure AD applications.
 * M365DSCConnection
   * Fixed an issue with client secret authentication.
 * M365DSCReverse
@@ -25,8 +27,6 @@
   * Added new properties `DefaultRedirectUri`, `Info`, `Logo` and
     `ServiceManagementReference`.
     FIXES [#4321](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4321)
-* AADApplicationFederatedIdentityCredential
-  * Added resource to manage federated identity credentials for Azure AD applications.
 * AADConditionalAccessPolicy
   * Added requirement to specify `ExcludeExternalTenantsMembershipKind` if
     `ExcludeExternalTenantsMembers` is specified during apply.
