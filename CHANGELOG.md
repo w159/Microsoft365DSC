@@ -11,6 +11,10 @@
     FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
 * AADApplicationFederatedIdentityCredential
   * Added resource to manage federated identity credentials for Azure AD applications.
+* IntuneCloudProvisioningPolicyWindows365
+  * Added missing geographic location `australiaNewZealand`
+* IntuneDeviceFeaturesConfigurationPolicyIOS
+  * Demoted property `bookmarkFolder` from Required to Write.
 * M365DSCConnection
   * Fixed an issue with client secret authentication.
 * M365DSCReverse
