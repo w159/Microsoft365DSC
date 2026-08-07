@@ -23,7 +23,7 @@ class MSFT_airPrintDestination
 class MSFT_iosWebContentFilterBase
 {
     [Required, Description("url.")] String url;
-    [Required, Description("bookmarkFolder.")] String bookmarkFolder;
+    [Write, Description("bookmarkFolder.")] String bookmarkFolder;
     [Required, Description("displayName.")] String displayName;
 };
 
