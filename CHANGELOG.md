@@ -1,7 +1,9 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.805.1
 
+* AADApplicationFederatedIdentityCredential
+  * Initial release.
 * AADEntitlementManagementAccessPackage
   * Fixed an issue where a resource role scope whose `AccessPackageResourceOriginId`
     is specified as the object GUID was removed and re-added on every Set,
