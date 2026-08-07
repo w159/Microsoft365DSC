@@ -272,6 +272,223 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Rule already exists, and should with AdvancedRules containing trainable classifier ids' -Fixture {
+            BeforeAll {
+                $desiredAdvancedRule = @'
+{
+  "Version": "1.0",
+  "Condition": {
+    "Operator": "And",
+    "SubConditions": [
+      {
+        "ConditionName": "ContentContainsSensitiveInformation",
+        "Value": [
+          {
+            "Groups": [
+              {
+                "Name": "PHI SITs",
+                "Operator": "Or",
+                "Sensitivetypes": [
+                  {
+                    "Name": "Healthcare",
+                    "Id": "11111111-1111-1111-1111-111111111111",
+                    "Classifiertype": "MLModel"
+                  },
+                  {
+                    "Name": "EU Debit Card Number",
+                    "Id": "0e9b3178-9678-47dd-a509-37222ca96b42",
+                    "Mincount": 1,
+                    "Maxcount": -1,
+                    "Confidencelevel": "Medium"
+                  }
+                ]
+              }
+            ],
+            "Operator": "And"
+          }
+        ]
+      }
+    ]
+  }
+}
+'@
+                $currentAdvancedRule = @'
+{
+  "Version": "1.0",
+  "Condition": {
+    "Operator": "And",
+    "SubConditions": [
+      {
+        "ConditionName": "ContentContainsSensitiveInformation",
+        "Value": [
+          {
+            "Groups": [
+              {
+                "Name": "PHI SITs",
+                "Operator": "Or",
+                "Sensitivetypes": [
+                  {
+                    "Name": "Healthcare",
+                    "Id": null,
+                    "Classifiertype": "MLModel"
+                  },
+                  {
+                    "Name": "EU Debit Card Number",
+                    "Id": null,
+                    "Mincount": 1,
+                    "Maxcount": -1,
+                    "Confidencelevel": "Medium"
+                  }
+                ]
+              }
+            ],
+            "Operator": "And"
+          }
+        ]
+      }
+    ]
+  }
+}
+'@
+                $testParams = @{
+                    Ensure       = 'Present'
+                    Policy       = 'MyParentPolicy'
+                    Comment      = 'New comment'
+                    AdvancedRule = $desiredAdvancedRule | ConvertTo-Json -Compress
+                    BlockAccess  = $False
+                    Name         = 'TestPolicy'
+                    Credential   = $Credential
+                }
+
+                $Script:AdvancedRulePassedToTest = $null
+                Mock -CommandName Get-DLPComplianceRule -MockWith {
+                    return @{
+                        Name             = 'TestPolicy'
+                        Comment          = 'New Comment'
+                        ParentPolicyName = 'MyParentPolicy'
+                        AdvancedRule     = $currentAdvancedRule
+                        BlockAccess      = $False
+                    }
+                }
+
+                Mock -CommandName Test-M365DSCParameterState -MockWith {
+                    param($CurrentValues, $Source, $DesiredValues, $ValuesToCheck)
+                    $Script:AdvancedRulePassedToTest = $DesiredValues.AdvancedRule
+                    return $true
+                }
+            }
+
+            It 'Should ignore trainable classifier ids when testing AdvancedRules for drift' {
+                Test-TargetResource @testParams | Should -Be $true
+                $normalizedAdvancedRule = $Script:AdvancedRulePassedToTest | ConvertFrom-Json | ConvertFrom-Json
+                $sensitiveTypes = $normalizedAdvancedRule.Condition.SubConditions[0].Value[0].Groups[0].Sensitivetypes
+                ($sensitiveTypes | Where-Object -FilterScript { $_.Name -eq 'Healthcare' }).Id | Should -Be $null
+                ($sensitiveTypes | Where-Object -FilterScript { $_.Name -eq 'EU Debit Card Number' }).Id | Should -Be '0e9b3178-9678-47dd-a509-37222ca96b42'
+            }
+        }
+
+        Context -Name "Rule doesn't already exist but should with EndpointDlpRestrictions" -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Ensure                  = 'Present'
+                    Policy                  = 'MyParentPolicy'
+                    EndpointDlpRestrictions = [CimInstance[]]@(
+                        New-CimInstance -ClassName MSFT_SCDLPEndpointDlpRestriction -Property @{
+                            Setting = 'Print'
+                            Value   = 'Block'
+                        } -ClientOnly
+                        New-CimInstance -ClassName MSFT_SCDLPEndpointDlpRestriction -Property @{
+                            Setting = 'UnallowedApps'
+                            Value   = 'notepad'
+                            Value2  = 'Microsoft Notepad'
+                        } -ClientOnly
+                    )
+                    NotifyUser              = @('user@contoso.com')
+                    Name                    = 'TestPolicy'
+                    Credential              = $Credential
+                }
+
+                $Script:EndpointDlpRestrictionsPassedToNew = $null
+                Mock -CommandName Get-DLPComplianceRule -MockWith {
+                    return $null
+                }
+                Mock -CommandName New-DLPComplianceRule -MockWith {
+                    $Script:EndpointDlpRestrictionsPassedToNew = $EndpointDlpRestrictions
+                }
+            }
+
+            It 'Should return false from the Test method' {
+                Test-TargetResource @testParams | Should -Be $false
+            }
+
+            It 'Should pass EndpointDlpRestrictions as hashtables to the New method' {
+                Set-TargetResource @testParams
+                $Script:EndpointDlpRestrictionsPassedToNew[0].Setting | Should -Be 'Print'
+                $Script:EndpointDlpRestrictionsPassedToNew[0].Value | Should -Be 'Block'
+                $Script:EndpointDlpRestrictionsPassedToNew[1].Setting | Should -Be 'UnallowedApps'
+                $Script:EndpointDlpRestrictionsPassedToNew[1].Value | Should -Be 'notepad'
+                $Script:EndpointDlpRestrictionsPassedToNew[1].Value2 | Should -Be 'Microsoft Notepad'
+            }
+        }
+
+        Context -Name 'Rule already exists, and should with EndpointDlpRestrictions' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Ensure                  = 'Present'
+                    Policy                  = 'MyParentPolicy'
+                    EndpointDlpRestrictions = [CimInstance[]]@(
+                        New-CimInstance -ClassName MSFT_SCDLPEndpointDlpRestriction -Property @{
+                            Setting = 'Print'
+                            Value   = 'Block'
+                        } -ClientOnly
+                        New-CimInstance -ClassName MSFT_SCDLPEndpointDlpRestriction -Property @{
+                            Setting = 'UnallowedApps'
+                            Value   = 'notepad'
+                            Value2  = 'Microsoft Notepad'
+                        } -ClientOnly
+                    )
+                    NotifyUser              = @('user@contoso.com')
+                    Name                    = 'TestPolicy'
+                    Credential              = $Credential
+                }
+
+                $Script:EndpointDlpRestrictionsPassedToSet = $null
+                Mock -CommandName Get-DLPComplianceRule -MockWith {
+                    return @{
+                        Name                    = 'TestPolicy'
+                        ParentPolicyName        = 'MyParentPolicy'
+                        EndpointDlpRestrictions = @(
+                            @{Setting = 'Print'; Value = 'Block' },
+                            @{Setting = 'UnallowedApps'; Value = 'notepad'; Value2 = 'Microsoft Notepad' }
+                        )
+                        NotifyUser              = @('user@contoso.com')
+                    }
+                }
+                Mock -CommandName Set-DLPComplianceRule -MockWith {
+                    $Script:EndpointDlpRestrictionsPassedToSet = $EndpointDlpRestrictions
+                }
+            }
+
+            It 'Should return true from the Test method' {
+                Test-TargetResource @testParams | Should -Be $true
+            }
+
+            It 'Should pass EndpointDlpRestrictions as hashtables to the Set method' {
+                Set-TargetResource @testParams
+                $Script:EndpointDlpRestrictionsPassedToSet[0].Setting | Should -Be 'Print'
+                $Script:EndpointDlpRestrictionsPassedToSet[0].Value | Should -Be 'Block'
+                $Script:EndpointDlpRestrictionsPassedToSet[1].Setting | Should -Be 'UnallowedApps'
+                $Script:EndpointDlpRestrictionsPassedToSet[1].Value | Should -Be 'notepad'
+                $Script:EndpointDlpRestrictionsPassedToSet[1].Value2 | Should -Be 'Microsoft Notepad'
+            }
+
+            It 'Should return EndpointDlpRestrictions from the Get method' {
+                $result = Get-TargetResource @testParams
+                $result.EndpointDlpRestrictions[0].Setting | Should -Be 'Print'
+                $result.EndpointDlpRestrictions[1].Value2 | Should -Be 'Microsoft Notepad'
+            }
+        }
+
         Context -Name 'Rule should not exist' -Fixture {
             BeforeAll {
                 $testParams = @{
@@ -320,6 +537,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Name                                = 'TestPolicy'
                         ParentPolicyName                    = 'MyParentPolicy'
                         ContentContainsSensitiveInformation = @(@{maxconfidence = '100'; id = 'eefbb00e-8282-433c-8620-8f1da3bffdb2'; minconfidence = '75'; rulePackId = '00000000-0000-0000-0000-000000000000'; classifiertype = 'Content'; name = 'Argentina National Identity (DNI) Number'; mincount = '1'; maxcount = '9'; })
+                        EndpointDlpRestrictions             = @(
+                            @{Setting = 'Print'; Value = 'Block' },
+                            @{Setting = 'UnallowedApps'; Value = 'notepad'; Value2 = 'Microsoft Notepad' }
+                        )
                         Comment                             = ''
                         BlockAccess                         = $False
                     }
@@ -329,6 +550,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should Reverse Engineer resource from the Export method' {
                 $result = Export-TargetResource @testParams
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -Match 'EndpointDlpRestrictions'
+                $result | Should -Match 'SCDLPEndpointDlpRestriction'
             }
         }
     }

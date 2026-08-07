@@ -20,6 +20,17 @@ foreach ($template in $jsonContent.templates.psobject.Properties)
 {
     $Script:RelationTemplates.templates[$template.Name] = $template.Value
 }
+$allResourcesArgumentCompleter = Get-ChildItem -Path ($PSScriptRoot + '/../DscResources/') -Recurse -Filter '*.psm1' -File | Foreach-Object {
+    $_.Name -replace 'MSFT_', '' -replace '.psm1', ''
+}
+Register-ArgumentCompleter -CommandName Export-M365DSCConfiguration -ParameterName Components -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $resources = $allResourcesArgumentCompleter -like "$wordToComplete*"
+    foreach ($resource in $resources)
+    {
+        [System.Management.Automation.CompletionResult]::new($resource, $resource, 'ParameterValue', $resource)
+    }
+}
 
 <#
 .SYNOPSIS
@@ -193,6 +204,7 @@ function Export-M365DSCConfiguration
         [System.String]
         $TenantId,
 
+        # TODO: Change to PSCredential during next breaking change
         [Parameter(ParameterSetName = 'Export')]
         [System.String]
         $ApplicationSecret,
@@ -222,7 +234,6 @@ function Export-M365DSCConfiguration
         $AccessTokens,
 
         [Parameter(ParameterSetName = 'Export')]
-        [ValidateScript({ $Workloads -contains 'AZURE' -or ($Components -like "Azure*").Count -gt 0 })]
         [System.String]
         $SubscriptionId,
 
@@ -1039,6 +1050,7 @@ function Join-M365DSCConfiguration
 #>
 function Split-M365DSCConfiguration
 {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -1177,8 +1189,8 @@ function Update-M365DSCExportAuthenticationResults
     param
     (
         [Parameter(Mandatory = $true)]
-        [System.String]
         [ValidateSet('ServicePrincipalWithThumbprint', 'ServicePrincipalWithSecret', 'ServicePrincipalWithPath', 'CredentialsWithTenantId', 'CredentialsWithApplicationId', 'Credentials', 'ManagedIdentity', 'AccessTokens')]
+        [System.String]
         $ConnectionMode,
 
         [Parameter(Mandatory = $true)]

@@ -42,6 +42,10 @@ function Get-TargetResource
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EndpointDlpRestrictions,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
         $ExceptIfContentContainsSensitiveInformation,
 
         [Parameter()]
@@ -408,11 +412,7 @@ function Get-TargetResource
 
         if ($null -ne $PolicyRule.AdvancedRule -and $PolicyRule.AdvancedRule.Count -gt 0)
         {
-            $ruleobject = $PolicyRule.AdvancedRule | ConvertFrom-Json
-            $ruleObject.Condition = Remove-AdvancedRuleConditionId -Condition $ruleObject.Condition
-
-            $newAdvancedRule = $ruleobject | ConvertTo-Json -Depth 32 | Format-Json
-            $newAdvancedRule = $newAdvancedRule | ConvertTo-Json -Compress
+            $newAdvancedRule = Format-AdvancedRuleWithoutConditionId -AdvancedRule $PolicyRule.AdvancedRule
         }
         else
         {
@@ -439,6 +439,7 @@ function Get-TargetResource
             Comment                                      = $PolicyRule.Comment
             AdvancedRule                                 = $newAdvancedRule
             ContentContainsSensitiveInformation          = $PolicyRule.ContentContainsSensitiveInformation
+            EndpointDlpRestrictions                      = Convert-SCDLPEndpointDlpRestrictions -EndpointDlpRestrictions $PolicyRule.EndpointDlpRestrictions
             ExceptIfContentContainsSensitiveInformation  = $PolicyRule.ExceptIfContentContainsSensitiveInformation
             ContentPropertyContainsWords                 = $PolicyRule.ContentPropertyContainsWords
             Disabled                                     = $PolicyRule.Disabled
@@ -572,6 +573,10 @@ function Set-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $ContentContainsSensitiveInformation,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EndpointDlpRestrictions,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -927,6 +932,11 @@ function Set-TargetResource
             $CreationParams.Remove('AdvancedRule')
         }
 
+        if ($null -ne $CreationParams.EndpointDlpRestrictions)
+        {
+            $CreationParams.EndpointDlpRestrictions = Convert-SCDLPEndpointDlpRestrictions -EndpointDlpRestrictions $CreationParams.EndpointDlpRestrictions
+        }
+
         if ($null -ne $CreationParams.SetHeader)
         {
             $setHeaders = @{}
@@ -984,6 +994,11 @@ function Set-TargetResource
         if ($null -ne $UpdateParams.ContentContainsSensitiveInformation)
         {
             $UpdateParams.Remove('AdvancedRule')
+        }
+
+        if ($null -ne $UpdateParams.EndpointDlpRestrictions)
+        {
+            $UpdateParams.EndpointDlpRestrictions = Convert-SCDLPEndpointDlpRestrictions -EndpointDlpRestrictions $UpdateParams.EndpointDlpRestrictions
         }
 
         if ($null -ne $UpdateParams.SetHeader)
@@ -1051,6 +1066,10 @@ function Test-TargetResource
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
         $ContentContainsSensitiveInformation,
+
+        [Parameter()]
+        [Microsoft.Management.Infrastructure.CimInstance[]]
+        $EndpointDlpRestrictions,
 
         [Parameter()]
         [Microsoft.Management.Infrastructure.CimInstance[]]
@@ -1403,9 +1422,45 @@ function Test-TargetResource
     $ValuesToCheck.Remove('ContentContainsSensitiveInformation') | Out-Null
     $ValuesToCheck.Remove('ExceptIfContentContainsSensitiveInformation') | Out-Null
 
+    if ($null -ne $ValuesToCheck['EndpointDlpRestrictions'])
+    {
+        $ValuesToCheck['EndpointDlpRestrictions'] = Convert-SCDLPEndpointDlpRestrictions -EndpointDlpRestrictions $ValuesToCheck['EndpointDlpRestrictions']
+    }
+
+    if ($null -ne $ValuesToCheck['AdvancedRule'])
+    {
+        $advancedRuleObject = $ValuesToCheck['AdvancedRule'] | ConvertFrom-Json | ConvertFrom-Json
+        $conditions = @($advancedRuleObject.Condition)
+        while ($conditions.Count -gt 0)
+        {
+            $currentCondition = $conditions[0]
+            $conditions = @($conditions | Select-Object -Skip 1)
+
+            if ($null -ne $currentCondition.SubConditions)
+            {
+                $conditions += $currentCondition.SubConditions
+            }
+
+            if ($currentCondition.ConditionName -like '*ContentContainsSensitiveInformation*' -and `
+                $null -ne $currentCondition.Value.Groups.Sensitivetypes)
+            {
+                foreach ($sensitiveType in $currentCondition.Value.Groups.Sensitivetypes)
+                {
+                    if ($sensitiveType.Classifiertype -eq 'MLModel' -and $null -ne $sensitiveType.Id)
+                    {
+                        $sensitiveType.Id = $null
+                    }
+                }
+            }
+        }
+
+        $newAdvancedRule = $advancedRuleObject | ConvertTo-Json -Depth 32 | Format-Json
+        $ValuesToCheck['AdvancedRule'] = $newAdvancedRule | ConvertTo-Json -Compress
+    }
+
     $TestResult = Test-M365DSCParameterState -CurrentValues $CurrentValues `
         -Source $($MyInvocation.MyCommand.Source) `
-        -DesiredValues $PSBoundParameters `
+        -DesiredValues $ValuesToCheck `
         -ValuesToCheck $ValuesToCheck.Keys
 
     Write-Verbose -Message "Test-TargetResource returned $TestResult"
@@ -1621,12 +1676,28 @@ function Export-TargetResource
                 }
             }
 
+            if ($null -ne $Results.EndpointDlpRestrictions)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.EndpointDlpRestrictions `
+                    -CIMInstanceName 'SCDLPEndpointDlpRestriction' `
+                    -IsArray
+                if (-not [String]::IsNullOrEmpty($complexTypeStringResult))
+                {
+                    $Results.EndpointDlpRestrictions = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('EndpointDlpRestrictions') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $PSScriptRoot `
                 -Results $Results `
                 -Credential $Credential `
-                -NoEscape @('ContentContainsSensitiveInformation', 'ExceptIfContentContainsSensitiveInformation')
+                -NoEscape @('ContentContainsSensitiveInformation', 'EndpointDlpRestrictions', 'ExceptIfContentContainsSensitiveInformation')
 
             [void]$dscContent.Append($currentDSCBlock)
 
@@ -1648,6 +1719,46 @@ function Export-TargetResource
 
         throw
     }
+}
+
+function Convert-SCDLPEndpointDlpRestrictions
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param
+    (
+        [Parameter()]
+        [System.Object[]]
+        $EndpointDlpRestrictions
+    )
+
+    if ($null -eq $EndpointDlpRestrictions)
+    {
+        return $null
+    }
+
+    $returnValue = @()
+    foreach ($restriction in $EndpointDlpRestrictions)
+    {
+        $currentRestriction = @{}
+        foreach ($propertyName in @('Setting', 'Value', 'Value2'))
+        {
+            if ($restriction -is [System.Collections.IDictionary])
+            {
+                if ($restriction.Contains($propertyName) -and $null -ne $restriction[$propertyName])
+                {
+                    $currentRestriction[$propertyName] = $restriction[$propertyName]
+                }
+            }
+            elseif ($null -ne $restriction.$propertyName)
+            {
+                $currentRestriction[$propertyName] = $restriction.$propertyName
+            }
+        }
+        $returnValue += $currentRestriction
+    }
+
+    return $returnValue
 }
 
 function Get-SCDLPSensitiveInformation
@@ -2034,6 +2145,21 @@ function Format-Json([Parameter(Mandatory, ValueFromPipeline)][String] $json)
         }
         $line
     }) -join "`n"
+}
+
+function Format-AdvancedRuleWithoutConditionId
+{
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $AdvancedRule
+    )
+
+    $ruleObject = $AdvancedRule | ConvertFrom-Json
+
+    $ruleObject.Condition = Remove-AdvancedRuleConditionId -Condition $ruleObject.Condition
+    $newAdvancedRule = $ruleObject | ConvertTo-Json -Depth 32 | Format-Json
+    return $newAdvancedRule | ConvertTo-Json -Compress
 }
 
 function Remove-AdvancedRuleConditionId
