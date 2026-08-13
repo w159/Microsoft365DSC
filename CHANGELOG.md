@@ -1,5 +1,11 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* AADUser
+  * Add support for `CustomSecurityAttributes`
+    FIXES [#7399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7399)
+
 # 1.26.812.1
 
 * M365DSCTenantInfo
