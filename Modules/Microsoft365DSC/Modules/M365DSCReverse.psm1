@@ -907,9 +907,7 @@ function Start-M365DSCConfigurationExtract
                 ManagedIdentity = $ManagedIdentity
                 AccessTokens = $AccessTokens
             }
-            # @() is required: casting a pipeline that emitted nothing to [array] yields $null, not an
-            # empty array, which would then be passed to ConfigurationPolicyCache::Populate.
-            [array]$allRequestedConfigurationPolicies = @(Get-MgBetaDeviceManagementConfigurationPolicy -All | Where-Object { $_.templateReference.templateId -in $requestedConfigurationPolicyTemplateIds })
+            $allRequestedConfigurationPolicies = Get-M365DSCArrayFromProperty -PropertyValue (Get-MgBetaDeviceManagementConfigurationPolicy -All | Where-Object { $_.templateReference.templateId -in $requestedConfigurationPolicyTemplateIds })
             $batchRequests = @()
             foreach ($policy in $allRequestedConfigurationPolicies)
             {
