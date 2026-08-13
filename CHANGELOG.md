@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.812.1
 
 * M365DSCTenantInfo
   * Added support for Bleu and Delos sovereign cloud.
