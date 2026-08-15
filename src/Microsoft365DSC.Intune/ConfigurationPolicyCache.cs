@@ -20,9 +20,7 @@ namespace Microsoft365DSC.Intune
                 if (_isPopulated)
                     return;
 
-                // A tenant with no matching configuration policies yields a null collection from
-                // the caller, which is a populated-but-empty cache rather than an error.
-                if (allPolicies == null)
+                if (allPolicies is null)
                 {
                     _isPopulated = true;
                     return;
