@@ -5,9 +5,7 @@
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export
-    with `Object reference not set to an instance of an object`. Casting an empty
-    pipeline to `[array]` yields `$null`, which was passed to
-    `ConfigurationPolicyCache.Populate`.
+    with `Object reference not set to an instance of an object`.
     FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
 * M365DSCTenantInfo
   * Added support for Bleu and Delos sovereign cloud.
