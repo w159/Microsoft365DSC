@@ -38,7 +38,7 @@ class MSFT_MicrosoftGraphExcludeTarget
 class MSFT_MicrosoftGraphAuthenticationMethodsRegistrationCampaignIncludeTarget
 {
     [Key, Description("The object identifier of an Azure AD user or group.")] String Id;
-    [Required, Description("The authentication method that the user is prompted to register. The value must be microsoftAuthenticator.")] String TargetedAuthenticationMethod;
+    [Required, Description("The authentication method that the user is prompted to register. The value must be microsoftAuthenticator or fido2.")] String TargetedAuthenticationMethod;
     [Key, Description("The type of the authentication method target. Possible values are: user, group, unknownFutureValue."), ValueMap{"user","group","unknownFutureValue"}, Values{"user","group","unknownFutureValue"}] String TargetType;
 };
 
