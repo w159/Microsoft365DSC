@@ -5,6 +5,10 @@
 * AADAuthenticationMethodPolicy
   * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
     `TargetedAuthenticationMethod` can now contain `microsoftAuthenticator` *or* `fido2`.
+* M365DSCReverse
+  * Fixed an issue where exporting the Intune workload against a tenant with no
+    matching Settings Catalog configuration policies aborted the entire export.
+    FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
 
 # 1.26.812.1
 
