@@ -1,10 +1,10 @@
 # Change log for Microsoft365DSC
 
-# Unreleased
+# UNRELEASED
 
 * AADAuthenticationMethodPolicy
-  * Update schema to indicate additional support for Passkeys (FIDO2) as the target of a registrationcampaign
-    TargetedAuthenticationMethod can now contain 'microsoftAuthenticator' *or* 'fido2'
+  * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
+    `TargetedAuthenticationMethod` can now contain `microsoftAuthenticator` *or* `fido2`.
 
 # 1.26.812.1
 
