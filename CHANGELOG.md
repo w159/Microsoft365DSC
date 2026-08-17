@@ -2,15 +2,22 @@
 
 # UNRELEASED
 
+* AADAuthenticationMethodPolicy
+  * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
+    `TargetedAuthenticationMethod` can now contain `microsoftAuthenticator` *or* `fido2`.
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
-    matching Settings Catalog configuration policies aborted the entire export
-    with `Object reference not set to an instance of an object`.
+    matching Settings Catalog configuration policies aborted the entire export.
     FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
+
+# 1.26.812.1
+
 * M365DSCTenantInfo
   * Added support for Bleu and Delos sovereign cloud.
 * DEPENDENCIES
-  * Updated `MSCloudLoginAssistant` to version 1.2.1.
+  * Updated `DSCParser` to version 3.1.0.2.
+  * Updated `MSCloudLoginAssistant` to version 1.2.2.
+  * Updated `ReverseDSC` to version 2.0.0.35.
 
 # 1.26.805.1
 
