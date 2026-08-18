@@ -6,7 +6,7 @@
   * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
     `TargetedAuthenticationMethod` can now contain `microsoftAuthenticator` *or* `fido2`.
 * AADConditionalAccessPolicy
-  * Filter of CAPs by name with paging doesn't correctly filter, creating dupe CAPs, add more tests
+  * Added missing `-All` switch when fetching policies with a filter.
     FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
