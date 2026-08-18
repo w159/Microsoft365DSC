@@ -2,9 +2,30 @@
 
 # UNRELEASED
 
+* AADAuthenticationMethodPolicy
+  * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
+    `TargetedAuthenticationMethod` can now contain `microsoftAuthenticator` *or* `fido2`.
 * AADConditionalAccessPolicy
   * Filter of CAPs by name with paging doesn't correctly filter, creating dupe CAPs, add more tests
     FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
+* M365DSCReverse
+  * Fixed an issue where exporting the Intune workload against a tenant with no
+    matching Settings Catalog configuration policies aborted the entire export.
+    FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
+
+# 1.26.812.1
+
+* M365DSCTenantInfo
+  * Added support for Bleu and Delos sovereign cloud.
+* DEPENDENCIES
+  * Updated `DSCParser` to version 3.1.0.2.
+  * Updated `MSCloudLoginAssistant` to version 1.2.2.
+  * Updated `ReverseDSC` to version 2.0.0.35.
+
+# 1.26.805.1
+
+* AADApplicationFederatedIdentityCredential
+  * Initial release.
 * AADEntitlementManagementAccessPackage
   * Fixed an issue where a resource role scope whose `AccessPackageResourceOriginId`
     is specified as the object GUID was removed and re-added on every Set,
@@ -14,6 +35,10 @@
     FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
 * AADApplicationFederatedIdentityCredential
   * Added resource to manage federated identity credentials for Azure AD applications.
+* IntuneCloudProvisioningPolicyWindows365
+  * Added missing geographic location `australiaNewZealand`
+* IntuneDeviceFeaturesConfigurationPolicyIOS
+  * Demoted property `bookmarkFolder` from Required to Write.
 * M365DSCConnection
   * Fixed an issue with client secret authentication.
 * M365DSCReverse
