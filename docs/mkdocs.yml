@@ -1,5 +1,7 @@
 site_name: Microsoft365DSC - Your Cloud Configuration
 site_url: https://microsoft.github.io/Microsoft365DSC
+site_description: Manage and monitor your Microsoft 365 tenant configurations as code with Microsoft365DSC.
+site_author: Microsoft365DSC
 nav:
   - Home:
       - 'Introduction': 'index.md'
@@ -113,6 +115,12 @@ nav:
 plugins:
   - search
   - include_dir_to_nav
+  - rss:
+      match_path: 'blog/(?!index\.md).*'
+      use_git: false
+      date_from_meta:
+        as_creation: date
+      abstract_chars_count: 160
 theme:
   name: material
   custom_dir: docs/overrides
@@ -171,6 +179,8 @@ extra:
       link: 'https://www.youtube.com/channel/UCveScabVT6pxzqYgGRu17iw'
     - icon: fontawesome/solid/link
       link: 'https://www.powershellgallery.com/packages/Microsoft365DSC/'
+    - icon: fontawesome/solid/rss
+      link: 'https://microsoft.github.io/Microsoft365DSC/feed_rss_created.xml'
 extra_css:
   - stylesheets/extra.css
 repo_url: https://github.com/microsoft/Microsoft365DSC
