@@ -46,10 +46,8 @@ nav:
           - 'Dynamic Resource Generator (DRG)': 'user-guide/advanced/dynamic-resource-generator.md'
       - Cmdlets:
           - 'Assert-M365DSCBlueprint': 'user-guide/cmdlets/Assert-M365DSCBlueprint.md'
-          - 'Confirm-M365DSCModuleDependency': 'user-guide/cmdlets/Confirm-M365DSCModuleDependency.md'
           - 'Export-M365DSCConfiguration': 'user-guide/cmdlets/Export-M365DSCConfiguration.md'
           - 'Export-M365DSCDiagnosticData': 'user-guide/cmdlets/Export-M365DSCDiagnosticData.md'
-          - 'Compare-M365DSCConfigurations': 'user-guide/cmdlets/Compare-M365DSCConfigurations.md'
           - 'Get-M365DSCAllResources': 'user-guide/cmdlets/Get-M365DSCAllResources.md'
           - 'Get-M365DSCCompiledPermissionList': 'user-guide/cmdlets/Get-M365DSCCompiledPermissionList.md'
           - 'Get-M365DSCConfigurationConflict': 'user-guide/cmdlets/Get-M365DSCConfigurationConflict.md'
@@ -71,6 +69,7 @@ nav:
           - 'Test-M365DSCAgent': 'user-guide/cmdlets/Test-M365DSCAgent.md'
           - 'Test-M365DSCDependenciesForNewVersions': 'user-guide/cmdlets/Test-M365DSCDependenciesForNewVersions.md'
           - 'Test-M365DSCModuleValidity': 'user-guide/cmdlets/Test-M365DSCModuleValidity.md'
+          - 'Test-M365DSCParameterState': 'user-guide/cmdlets/Test-M365DSCParameterState.md'
           - 'Uninstall-M365DSCOutdatedDependencies': 'user-guide/cmdlets/Uninstall-M365DSCOutdatedDependencies.md'
           - 'Update-M365DSCAllowedGraphScopes': 'user-guide/cmdlets/Update-M365DSCAllowedGraphScopes.md'
           - 'Update-M365DSCAuthenticationConfiguration': 'user-guide/cmdlets/Update-M365DSCAuthenticationConfiguration.md'
@@ -180,7 +179,7 @@ extra:
     - icon: fontawesome/solid/link
       link: 'https://www.powershellgallery.com/packages/Microsoft365DSC/'
     - icon: fontawesome/solid/rss
-      link: 'https://microsoft.github.io/Microsoft365DSC/feed_rss_created.xml'
+      link: 'https://microsoftdsc.com/feed_rss_created.xml'
 extra_css:
   - stylesheets/extra.css
 repo_url: https://github.com/microsoft/Microsoft365DSC
