@@ -907,7 +907,7 @@ function Start-M365DSCConfigurationExtract
                 ManagedIdentity = $ManagedIdentity
                 AccessTokens = $AccessTokens
             }
-            [array]$allRequestedConfigurationPolicies = Get-MgBetaDeviceManagementConfigurationPolicy -All | Where-Object { $_.templateReference.templateId -in $requestedConfigurationPolicyTemplateIds }
+            $allRequestedConfigurationPolicies = Get-M365DSCArrayFromProperty -PropertyValue (Get-MgBetaDeviceManagementConfigurationPolicy -All | Where-Object { $_.templateReference.templateId -in $requestedConfigurationPolicyTemplateIds })
             $batchRequests = @()
             foreach ($policy in $allRequestedConfigurationPolicies)
             {
