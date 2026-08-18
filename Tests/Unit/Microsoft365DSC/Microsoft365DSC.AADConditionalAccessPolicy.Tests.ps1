@@ -784,9 +784,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 # Simulate a tenant with many policies where the target policy lives well beyond
-                # the first service-side page. Only a mock that returns every page (i.e. is called
-                # with -All) will surface it. A server-side DisplayName filter without -All would
-                # miss it, report Absent, and cause a duplicate to be created.
+                # the first service-side page. The resource must ask the service to do the
+                # filtering (-Filter) AND page through every result (-All); this mock behaves like
+                # Graph does, honouring the OData filter server-side rather than returning
+                # everything, so a regression back to an unfiltered scan is caught.
                 $manyPolicies = @()
                 for ($p = 0; $p -lt 500; $p++)
                 {
@@ -800,20 +801,34 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 # Place the real policy near the end so it is only reachable when all pages are read.
                 $manyPolicies += $existingPolicy
 
+                # Applies the OData "DisplayName eq '<name>'" filter the way the service would,
+                # including unescaping the doubled single quotes the resource emits.
                 Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -eq $true } -MockWith {
-                    return $manyPolicies
+                    if ([System.String]::IsNullOrEmpty($Filter))
+                    {
+                        return $manyPolicies
+                    }
+
+                    if ($Filter -notmatch "^DisplayName eq '(.*)'$")
+                    {
+                        throw "Unexpected filter passed to Get-MgBetaIdentityConditionalAccessPolicy: $Filter"
+                    }
+
+                    $wanted = $Matches[1] -replace "''", "'"
+                    return @($manyPolicies | Where-Object -FilterScript { $_.DisplayName -eq $wanted })
                 }
 
-                # If the code ever falls back to a non-paged server-side filter, return nothing so
-                # the regression (Absent -> duplicate create) would surface as a failing assertion.
+                # If the code ever falls back to a non-paged lookup, return nothing so the
+                # regression (Absent -> duplicate create) would surface as a failing assertion.
                 Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -ne $true } -MockWith {
                     return $null
                 }
             }
 
-            It 'Should retrieve all policies using paging (-All)' {
+            It 'Should retrieve the policy using server-side filtering and paging (-All -Filter)' {
                 $null = Get-TargetResource @testParams
-                Should -Invoke -CommandName Get-MgBetaIdentityConditionalAccessPolicy -Exactly 1 -ParameterFilter { $All -eq $true }
+                Should -Invoke -CommandName Get-MgBetaIdentityConditionalAccessPolicy -Exactly 1 `
+                    -ParameterFilter { $All -eq $true -and $Filter -eq "DisplayName eq 'Allin'" }
             }
 
             It 'Should find the existing policy and return Present even when it is beyond the first page' {
@@ -864,13 +879,86 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Conditions  = @{}
                 }
 
+                # Honour the OData filter server-side, as Graph does, so the throw below proves
+                # genuine duplicate detection rather than merely counting the whole tenant.
                 Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -eq $true } -MockWith {
-                    return $duplicatePolicies
+                    if ([System.String]::IsNullOrEmpty($Filter))
+                    {
+                        return $duplicatePolicies
+                    }
+
+                    if ($Filter -notmatch "^DisplayName eq '(.*)'$")
+                    {
+                        throw "Unexpected filter passed to Get-MgBetaIdentityConditionalAccessPolicy: $Filter"
+                    }
+
+                    $wanted = $Matches[1] -replace "''", "'"
+                    return @($duplicatePolicies | Where-Object -FilterScript { $_.DisplayName -eq $wanted })
                 }
             }
 
             It 'Should throw when duplicate policies with the same DisplayName exist in the tenant' {
                 { Get-TargetResource @testParams } | Should -Throw "*Duplicate CA Policies named Allin exist in tenant*"
+            }
+        }
+
+        Context -Name "DisplayName containing a single quote is escaped for the OData filter" -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName = "O'Brien's Policy"
+                    Ensure      = 'Present'
+                    Credential  = $Credscredential
+                    State       = 'disabled'
+                }
+
+                $quotedPolicy = @{
+                    Id              = 'cccccccc-0000-0000-0000-000000000003'
+                    DisplayName     = "O'Brien's Policy"
+                    State           = 'disabled'
+                    Conditions      = @{
+                        Applications = @{
+                            IncludeApplications = @('All')
+                        }
+                        Users        = @{
+                            IncludeUsers = 'All'
+                        }
+                    }
+                    GrantControls   = $null
+                    SessionControls = $null
+                }
+
+                # Reject a filter whose quotes are not doubled - an unescaped name would produce
+                # a malformed OData filter and a 400 from Graph at runtime.
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -ParameterFilter { $All -eq $true } -MockWith {
+                    if ($Filter -notmatch "^DisplayName eq '(.*)'$")
+                    {
+                        throw "Malformed OData filter: $Filter"
+                    }
+
+                    $inner = $Matches[1]
+                    if ($inner -match "(?<!')'(?!')")
+                    {
+                        throw "Unescaped single quote in OData filter: $Filter"
+                    }
+
+                    $wanted = $inner -replace "''", "'"
+                    if ($wanted -eq $quotedPolicy.DisplayName)
+                    {
+                        return @($quotedPolicy)
+                    }
+
+                    return @()
+                }
+            }
+
+            It 'Should escape the single quotes and locate the policy' {
+                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+            }
+
+            It 'Should send a correctly escaped OData filter' {
+                $null = Get-TargetResource @testParams
+                Should -Invoke -CommandName Get-MgBetaIdentityConditionalAccessPolicy -Exactly 1 `
+                    -ParameterFilter { $Filter -eq "DisplayName eq 'O''Brien''s Policy'" }
             }
         }
 
