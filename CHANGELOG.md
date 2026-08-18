@@ -15,6 +15,8 @@
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export.
     FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
+* MISC
+  * Updated import warning that **PowerShell 7.6** is going to be required starting October 2026.
 
 # 1.26.812.1
 
