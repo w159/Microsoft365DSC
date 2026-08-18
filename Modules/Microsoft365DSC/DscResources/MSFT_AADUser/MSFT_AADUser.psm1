@@ -1425,11 +1425,6 @@ function Get-CustomSecurityAttributes
     )
 
     $customSecurityAttributes = $User.customSecurityAttributes
-    # The Microsoft.Graph.Users SDK wraps the open type in an AdditionalProperties dictionary.
-    if ($null -ne $customSecurityAttributes.AdditionalProperties)
-    {
-        $customSecurityAttributes = $customSecurityAttributes.AdditionalProperties
-    }
     $newCustomSecurityAttributes = @()
 
     foreach ($key in $customSecurityAttributes.Keys)

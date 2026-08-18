@@ -59,6 +59,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             $Script:exportedInstances =$null
             $Script:ExportMode = $false
+
+            # Base user returned by Get-MgUser. Contexts clone this and modify only the
+            # values relevant to the scenario they exercise.
+            function Get-BaseMgUser
+            {
+                return @{
+                    Id                = '12345-12345-12345-12345-12345'
+                    UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName       = 'John Smith'
+                    GivenName         = 'John'
+                    Surname           = 'Smith'
+                    UsageLocation     = 'US'
+                    PasswordPolicies  = 'NONE'
+                    Ensure            = 'Present'
+                }
+            }
         }
 
         # Test contexts
@@ -456,25 +472,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
-                    return @{
-                        Id                = '12345-12345-12345-12345-12345'
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
-                        Ensure            = 'Present'
-                        customSecurityAttributes = @{
-                            Engineering = @{
-                                '@odata.type'           = '#Microsoft.DirectoryServices.CustomSecurityAttributeValue'
-                                'Project'               = @('Baker', 'Cascade')
-                                'Project@odata.type'    = '#Collection(String)'
-                                'Datacenter'            = 'Seattle'
-                                'Datacenter@odata.type' = '#String'
-                            }
+                    # Datacenter differs from the desired 'Portland' value, so the user drifts.
+                    $user = Get-BaseMgUser
+                    $user.customSecurityAttributes = @{
+                        Engineering = @{
+                            '@odata.type'           = '#Microsoft.DirectoryServices.CustomSecurityAttributeValue'
+                            'Project'               = @('Baker', 'Cascade')
+                            'Project@odata.type'    = '#Collection(String)'
+                            'Datacenter'            = 'Seattle'
+                            'Datacenter@odata.type' = '#String'
                         }
                     }
+                    return $user
                 }
 
                 Mock -CommandName Get-MSCloudLoginConnectionProfile -MockWith {
@@ -532,23 +541,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
-                    return @{
-                        Id                = '12345-12345-12345-12345-12345'
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
-                        Ensure            = 'Present'
-                        customSecurityAttributes = @{
-                            Engineering = @{
-                                '@odata.type'           = '#Microsoft.DirectoryServices.CustomSecurityAttributeValue'
-                                'Datacenter'            = 'Seattle'
-                                'Datacenter@odata.type' = '#String'
-                            }
+                    # Matches the desired state exactly, so no drift is reported.
+                    $user = Get-BaseMgUser
+                    $user.customSecurityAttributes = @{
+                        Engineering = @{
+                            '@odata.type'           = '#Microsoft.DirectoryServices.CustomSecurityAttributeValue'
+                            'Datacenter'            = 'Seattle'
+                            'Datacenter@odata.type' = '#String'
                         }
                     }
+                    return $user
                 }
             }
 

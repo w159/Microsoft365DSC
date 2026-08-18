@@ -33,17 +33,14 @@ Configuration Example
             Office             = "Ottawa - Queen"
             UsageLocation      = "US"
             CustomSecurityAttributes = @(
-                MSFT_AADUserAttributeSet
-                {
+                MSFT_AADUserAttributeSet{
                     AttributeSetName = 'Engineering'
                     AttributeValues  = @(
-                        MSFT_AADUserAttributeValue
-                        {
+                        MSFT_AADUserAttributeValue{
                             AttributeName    = 'Project'
                             StringArrayValue = @('Baker', 'Cascade')
                         }
-                        MSFT_AADUserAttributeValue
-                        {
+                        MSFT_AADUserAttributeValue{
                             AttributeName = 'Datacenter'
                             StringValue   = 'Seattle'
                         }

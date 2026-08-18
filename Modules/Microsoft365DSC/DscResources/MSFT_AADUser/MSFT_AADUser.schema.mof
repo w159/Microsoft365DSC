@@ -1,4 +1,4 @@
-[ClassVersion("1.0.0.1")]
+[ClassVersion("1.0.0.0")]
 class MSFT_AADUserAttributeValue
 {
     [Required, Description("Name of the Attribute")] String AttributeName;
@@ -9,7 +9,7 @@ class MSFT_AADUserAttributeValue
     [Write, Description("If the attribute has a boolean value")] Boolean BoolValue;
 };
 
-[ClassVersion("1.0.0.1")]
+[ClassVersion("1.0.0.0")]
 class MSFT_AADUserAttributeSet
 {
     [Required, Description("Attribute Set Name.")] String AttributeSetName;
