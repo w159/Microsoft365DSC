@@ -179,7 +179,7 @@ extra:
     - icon: fontawesome/solid/link
       link: 'https://www.powershellgallery.com/packages/Microsoft365DSC/'
     - icon: fontawesome/solid/rss
-      link: 'https://microsoftdsc.com/feed_rss_created.xml'
+      link: 'https://microsoft365dsc.com/feed_rss_created.xml'
 extra_css:
   - stylesheets/extra.css
 repo_url: https://github.com/microsoft/Microsoft365DSC
