@@ -11,6 +11,9 @@
 * AADConditionalAccessPolicy
   * Added missing `-All` switch when fetching policies with a filter.
     FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
+* AADUser
+  * Add support for `CustomSecurityAttributes`
+    FIXES [#7399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7399)
 * EXOIntraOrganizationConnector
   * Fixed an issue where `TargetSharingEpr` could fail with a null-reference exception.
     FIXES [#7413](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7413)
