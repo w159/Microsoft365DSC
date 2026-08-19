@@ -545,7 +545,6 @@ function Set-TargetResource
             $creationParams["BusinessPhones"] = $BusinessPhones
         }
 
-        # Custom Security Attributes
         if ($PSBoundParameters.ContainsKey('CustomSecurityAttributes') -and $CustomSecurityAttributes.Count -gt 0)
         {
             $customSecurityAttributesValue = Get-M365DSCAADUserCustomSecurityAttributesAsCmdletHashtable -CustomSecurityAttributes $CustomSecurityAttributes
@@ -1318,7 +1317,6 @@ function Get-M365DSCAADUserCustomSecurityAttributesAsCmdletHashtable
         $GetForDelete = $false
     )
 
-    # logic to update the custom security attributes to be cmdlet comsumable
     $updatedCustomSecurityAttributes = @{}
     foreach ($attributeSet in $CustomSecurityAttributes)
     {
@@ -1329,7 +1327,6 @@ function Get-M365DSCAADUserCustomSecurityAttributesAsCmdletHashtable
         foreach ($attribute in $attributeSet.AttributeValues)
         {
             $attributeKey = $attribute.AttributeName
-            # supply attributeName = $null in the body, if you want to delete this attribute
             if ($GetForDelete -eq $true)
             {
                 $valuesHashtable.Add($attributeKey, $null)
@@ -1370,7 +1367,6 @@ function Get-M365DSCAADUserCustomSecurityAttributesAsCmdletHashtable
     return $updatedCustomSecurityAttributes
 }
 
-# Function to create MSFT_AADUserAttributeValue
 function New-AttributeValue
 {
     param
@@ -1388,7 +1384,6 @@ function New-AttributeValue
         BoolValue        = $null
     }
 
-    # Handle different types of values
     if ($Value -is [string])
     {
         $attributeValue.StringValue = $Value
@@ -1436,24 +1431,18 @@ function Get-CustomSecurityAttributes
 
         foreach ($attribute in $customSecurityAttributes[$key].Keys)
         {
-            # Skip properties that end with '@odata.type'
             if ($attribute -like '*@odata.type')
             {
                 continue
             }
 
             $value = $customSecurityAttributes[$key][$attribute]
-            $attributeName = $attribute # Keep the attribute name as it is
-
-            # Create the attribute value and add it to the set
-            $attributeSet.AttributeValues += New-AttributeValue -AttributeName $attributeName -Value $value
+            $attributeSet.AttributeValues += New-AttributeValue -AttributeName $attribute -Value $value
         }
 
-        #Add the attribute set to the final structure
         $newCustomSecurityAttributes += $attributeSet
     }
 
-    # Display the new structure
     return [Array]$newCustomSecurityAttributes
 }
 
