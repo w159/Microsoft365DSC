@@ -12,7 +12,7 @@
   * Added missing `-All` switch when fetching policies with a filter.
     FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
   EXOOrganizationConfig
-  * Now Supports EwsAllowsAppIDs when EwsEnabled is set to $true
+  * Now Supports EwsAllowedAppIDs when EwsEnabled is set to $true
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export.
