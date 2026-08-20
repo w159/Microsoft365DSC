@@ -19,17 +19,25 @@
     FIXES [#7413](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7413)
 * EXOOrganizationConfig
   * Added support for `EwsAllowedAppIDs` when `EwsEnabled` is set to true.
+* EXOOwaMailboxPolicy
+  * Added new properties `AllowedOrganizationAccountDomains`, `AttachmentsOfflineEnabledWin`, 
+    `BizBarEnabled`, `BookingsMailboxDomain`, `DefaultClientLanguage`, `EmptyStateEnabled`, 
+	`HideClassicOutlookToggleOut`, `LinkedInEnabled`, `MonthlyUpdatesEnabled`, 
+	`OfflineEnabledWeb`, `OfflineEnabledWin`, `OneDriveAttachmentsEnabled`, `OutlookDataFile`, 
+	`OutlookNewslettersAccessLevel`, `OutlookNewslettersReactions`, `OutlookNewslettersShowMore`, 
+	`PersonalBookingsDisabled`, `SMimeSuppressNameChecksEnabled`, `SpellCheckerEnabled`, `TasksEnabled`.
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export.
     FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
+  * Fixed an issue where using multiple Filters passed through empty filters to
+    other exported resources.
 * SCDLPComplianceRule
   * Fixed an issue where testing a missing rule with an advanced rule containing
     ML model classifiers could fail before reporting drift.
     FIXES [#7403](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7403)
 * MISC
   * Updated import warning that **PowerShell 7.6** is going to be required starting October 2026.
-  * Fixed issue where using multiple Filters passes through empty filters to other exported resources
 
 # 1.26.812.1
 
