@@ -1,5 +1,5 @@
 site_name: Microsoft365DSC - Your Cloud Configuration
-site_url: https://microsoft.github.io/Microsoft365DSC
+site_url: https://microsoft365dsc.com/
 site_description: Manage and monitor your Microsoft 365 tenant configurations as code with Microsoft365DSC.
 site_author: Microsoft365DSC
 nav:
