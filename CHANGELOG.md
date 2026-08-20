@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.819.1
 
 * AADAuthenticationMethodPolicy
   * Added additional support for Passkeys (FIDO2) as the target of a registrationcampaign.
