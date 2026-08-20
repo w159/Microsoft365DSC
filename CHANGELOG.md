@@ -29,6 +29,7 @@
     FIXES [#7403](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7403)
 * MISC
   * Updated import warning that **PowerShell 7.6** is going to be required starting October 2026.
+  * Fixed issue where using multiple Filters passes through empty filters to other exported resources
 
 # 1.26.812.1
 
