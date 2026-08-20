@@ -17,6 +17,8 @@
 * EXOIntraOrganizationConnector
   * Fixed an issue where `TargetSharingEpr` could fail with a null-reference exception.
     FIXES [#7413](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7413)
+* EXOOrganizationConfig
+  * Added support for `EwsAllowedAppIDs` when `EwsEnabled` is set to true.
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export.
