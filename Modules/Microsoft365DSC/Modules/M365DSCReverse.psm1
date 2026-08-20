@@ -851,7 +851,7 @@ function Start-M365DSCConfigurationExtract
 
                 Import-Module $resource.FullName -Force | Out-Null
                 $filterExists = (Get-Command 'Export-TargetResource').Parameters.Keys.Contains('Filter')
-                if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Contains($resourceName))
+                if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Where({ $_ -eq $resourceName }))
                 {
                     $resourceFilter = ($using:Filters).$resourceName
                     if ($filterExists)

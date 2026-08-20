@@ -11,6 +11,14 @@
 * AADConditionalAccessPolicy
   * Added missing `-All` switch when fetching policies with a filter.
     FIXES [#7350](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7350)
+* AADUser
+  * Add support for `CustomSecurityAttributes`
+    FIXES [#7399](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7399)
+* EXOIntraOrganizationConnector
+  * Fixed an issue where `TargetSharingEpr` could fail with a null-reference exception.
+    FIXES [#7413](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7413)
+* EXOOrganizationConfig
+  * Added support for `EwsAllowedAppIDs` when `EwsEnabled` is set to true.
 * EXOOwaMailboxPolicy
   * Added new properties `AllowedOrganizationAccountDomains`, `AttachmentsOfflineEnabledWin`, 
     `BizBarEnabled`, `BookingsMailboxDomain`, `DefaultClientLanguage`, `EmptyStateEnabled`, 
@@ -22,6 +30,12 @@
   * Fixed an issue where exporting the Intune workload against a tenant with no
     matching Settings Catalog configuration policies aborted the entire export.
     FIXES [#7396](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7396)
+  * Fixed an issue where using multiple Filters passed through empty filters to
+    other exported resources.
+* SCDLPComplianceRule
+  * Fixed an issue where testing a missing rule with an advanced rule containing
+    ML model classifiers could fail before reporting drift.
+    FIXES [#7403](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7403)
 * MISC
   * Updated import warning that **PowerShell 7.6** is going to be required starting October 2026.
 
