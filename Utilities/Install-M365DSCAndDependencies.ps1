@@ -46,7 +46,7 @@ try
         Write-Output $Message
         $Parameters = @{
             Name                = "Microsoft365DSC"
-            RequiredVersion     = $M365DSCVersion
+            Version             = $M365DSCVersion
             Repository          = "PSGallery"
             Scope               = "AllUsers"
             SkipDependencyCheck = [Switch]$true
