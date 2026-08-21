@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* M365DSCReverse
+  * Fixed issue where variable `$organization` would be empty if connecting
+    using access tokens
 * MISC
   * Fixed build of Linux docker images by updating nano to latest version
   * Changed both Windows and Linux docker images to install some packages
