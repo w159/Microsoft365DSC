@@ -57,10 +57,9 @@ RUN mv /etc/opt/omi/conf/dsc/configuration/baseregistration /etc/opt/omi/conf/ds
 COPY ./Modules/Microsoft365DSC/Microsoft365DSC.psd1 /DSC/Microsoft365DSC.psd1
 COPY ./Utilities/Install-M365DSCAndDependencies.ps1 /DSC/Install-M365DSCAndDependencies.ps1
 
-RUN pwsh -Command $null = Install-PackageProvider -Name "NuGet" -Force
-RUN pwsh -Command $null = Install-Module -Name "Microsoft.PowerShell.PSResourceGet" -Repository "PSGallery" -Scope "AllUsers" -Force -SkipPublisherCheck
-RUN pwsh -Command $null = Install-PSResource -Name "Pester" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense
-RUN pwsh -Command $null = Install-PSResource -Name "M365DSC.PSDesiredStateConfiguration" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense
+RUN pwsh -Command '$null = Install-Module -Name "Microsoft.PowerShell.PSResourceGet" -Repository "PSGallery" -Scope "AllUsers" -Force -SkipPublisherCheck'
+RUN pwsh -Command '$null = Install-PSResource -Name "Pester" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'
+RUN pwsh -Command '$null = Install-PSResource -Name "M365DSC.PSDesiredStateConfiguration" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'
 
 RUN pwsh -Command /DSC/Install-M365DSCAndDependencies.ps1 -M365DSCVersion $M365DSC_VERSION
 
