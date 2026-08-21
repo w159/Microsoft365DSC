@@ -6,6 +6,8 @@
   * Fixed build of Linux docker images by updating nano to latest version
   * Changed both Windows and Linux docker images to install some packages
     directly in the dockerfiles, this way those installations get cached
+  * Fixed issue with Lnux docker dev image where the path for PowerShell has
+    changed
 
 # 1.26.819.1
 

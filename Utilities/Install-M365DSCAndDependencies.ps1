@@ -69,7 +69,7 @@ try
         }
         else
         {
-            $Parameters.Add("Path", "/usr/share/powershell/.store/powershell.linux.x64/7.6.2/powershell.linux.x64/7.6.2/tools/net10.0/any/Modules/Microsoft365DSC")
+            $Parameters.Add("Path", "/usr/share/powershell/.store/powershell.linux.x64/7.6.4/powershell.linux.x64/7.6.4/tools/net10.0/any/Modules/Microsoft365DSC")
             $Parameters.Add("Target", "/DSC/Modules/Microsoft365DSC")
         }
         $null = New-Item @Parameters
@@ -86,11 +86,11 @@ try
         {
             $ProgressPreference = 'SilentlyContinue'
             Write-Output "PowerShell 7 not found, installing it now"
-            Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.6.4/PowerShell-7.6.4-win-x64.zip" -OutFile "PowerShell-7.6.4-win-x64.zip"
-            Unblock-File "PowerShell-7.6.4-win-x64.zip"
+            Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/PowerShell-7.6.5-win-x64.zip" -OutFile "PowerShell-7.6.5-win-x64.zip"
+            Unblock-File "PowerShell-7.6.5-win-x64.zip"
             $null = New-Item -ItemType Directory -Path "C:\Program Files\PowerShell\7" -Force
-            Expand-Archive "PowerShell-7.6.4-win-x64.zip" -DestinationPath "C:\Program Files\PowerShell\7"
-            Remove-Item "PowerShell-7.6.4-win-x64.zip" -Force
+            Expand-Archive "PowerShell-7.6.5-win-x64.zip" -DestinationPath "C:\Program Files\PowerShell\7"
+            Remove-Item "PowerShell-7.6.5-win-x64.zip" -Force
             [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH + ";C:\Program Files\PowerShell\7", [System.EnvironmentVariableTarget]::Machine)
             $env:PATH += ";C:\Program Files\PowerShell\7"
         }
