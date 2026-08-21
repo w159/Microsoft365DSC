@@ -1,5 +1,12 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* MISC
+  * Fixed build of Linux docker images by updating nano to latest version
+  * Changed both Windows and Linux docker images to install some packages
+    directly in the dockerfiles, this way those installations get cached
+
 # 1.26.819.1
 
 * AADAuthenticationMethodPolicy
@@ -20,11 +27,11 @@
 * EXOOrganizationConfig
   * Added support for `EwsAllowedAppIDs` when `EwsEnabled` is set to true.
 * EXOOwaMailboxPolicy
-  * Added new properties `AllowedOrganizationAccountDomains`, `AttachmentsOfflineEnabledWin`, 
-    `BizBarEnabled`, `BookingsMailboxDomain`, `DefaultClientLanguage`, `EmptyStateEnabled`, 
-	`HideClassicOutlookToggleOut`, `LinkedInEnabled`, `MonthlyUpdatesEnabled`, 
-	`OfflineEnabledWeb`, `OfflineEnabledWin`, `OneDriveAttachmentsEnabled`, `OutlookDataFile`, 
-	`OutlookNewslettersAccessLevel`, `OutlookNewslettersReactions`, `OutlookNewslettersShowMore`, 
+  * Added new properties `AllowedOrganizationAccountDomains`, `AttachmentsOfflineEnabledWin`,
+    `BizBarEnabled`, `BookingsMailboxDomain`, `DefaultClientLanguage`, `EmptyStateEnabled`,
+	`HideClassicOutlookToggleOut`, `LinkedInEnabled`, `MonthlyUpdatesEnabled`,
+	`OfflineEnabledWeb`, `OfflineEnabledWin`, `OneDriveAttachmentsEnabled`, `OutlookDataFile`,
+	`OutlookNewslettersAccessLevel`, `OutlookNewslettersReactions`, `OutlookNewslettersShowMore`,
 	`PersonalBookingsDisabled`, `SMimeSuppressNameChecksEnabled`, `SpellCheckerEnabled`, `TasksEnabled`.
 * M365DSCReverse
   * Fixed an issue where exporting the Intune workload against a tenant with no

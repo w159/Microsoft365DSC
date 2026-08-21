@@ -7,6 +7,11 @@ SHELL ["cmd", "/S", "/C"]
 COPY . .
 COPY ./Modules/Microsoft365DSC/Microsoft365DSC.psd1 /DSC/Microsoft365DSC.psd1
 
+RUN powershell -Command $null = Install-PackageProvider -Name "NuGet" -Force
+RUN powershell -Command $null = Install-Module -Name "Microsoft.PowerShell.PSResourceGet" -Repository "PSGallery" -Scope "AllUsers" -Force -SkipPublisherCheck
+RUN powershell -Command $null = Install-PSResource -Name "Pester" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense
+RUN powershell -Command $null = Install-PSResource -Name "M365DSC.PSDesiredStateConfiguration" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense
+
 RUN powershell -Command .\Utilities\Install-M365DSCAndDependencies.ps1 -IsSDK
 
 ENTRYPOINT ["pwsh", "-NoLogo"]

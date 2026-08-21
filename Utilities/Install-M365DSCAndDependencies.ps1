@@ -3,7 +3,7 @@ param(
     [Parameter()]
     [Switch]
     $IsSDK,
-    
+
     [Parameter()]
     [System.String]
     $M365DSCVersion
@@ -40,38 +40,6 @@ try
     }
     Write-Output $message
 
-    $nugetProvider = Get-PackageProvider -Name "NuGet" -ErrorAction SilentlyContinue
-    if (-not $nugetProvider)
-    {
-        Write-Output "NuGet package provider not found. Installing..."
-        $null = Install-PackageProvider -Name "NuGet" -Force
-    }
-
-    Write-Output "Setting PSGallery InstallationPolicy to Trusted"
-    Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-
-    Write-Output "Installing PSResourceGet module"
-    $parameters = @{
-        Name                = "Microsoft.PowerShell.PSResourceGet"
-        Repository          = "PSGallery"
-        Scope               = "AllUsers"
-        Force               = [Switch]$true
-        SkipPublisherCheck  = [Switch]$true
-    }
-    Install-Module @parameters
-
-    Write-Output "Installing PSDesiredStateConfiguration module"
-    $Parameters = @{
-        Name                = "PSDesiredStateConfiguration"
-        Repository          = "PSGallery"
-        Scope               = "AllUsers"
-        SkipDependencyCheck = [Switch]$true
-        TrustRepository     = [Switch]$true
-        AcceptLicense       = [Switch]$true
-        Prerelease          = [Switch]$true
-    }
-    Install-PSResource @Parameters
-
     if (-not $IsSDK.IsPresent)
     {
         $Message = "Installing Microsoft365DSC module ({0})" -f $M365DSCVersion
@@ -81,10 +49,11 @@ try
             RequiredVersion     = $M365DSCVersion
             Repository          = "PSGallery"
             Scope               = "AllUsers"
-            Force               = [Switch]$true
-            SkipPublisherCheck  = [Switch]$true
+            SkipDependencyCheck = [Switch]$true
+            TrustRepository     = [Switch]$true
+            AcceptLicense       = [Switch]$true
         }
-        Install-Module @Parameters
+        Install-PSResource @Parameters
     }
     else
     {
@@ -105,18 +74,6 @@ try
         }
         $null = New-Item @Parameters
     }
-
-    Write-Output "Installing Pester module"
-    $Parameters = @{
-        Name                = "Pester"
-        Repository          = "PSGallery"
-        Scope               = "AllUsers"
-        SkipDependencyCheck = [Switch]$true
-        TrustRepository     = [Switch]$true
-        AcceptLicense       = [Switch]$true
-        Prerelease          = [Switch]$true
-    }
-    Install-PSResource @Parameters
 
     Write-Output "Installing Microsoft365DSC module dependencies"
     Update-M365DSCDependencies
