@@ -4,15 +4,19 @@
 
 * M365DSCReverse
   * Fixed issue where variable `$organization` would be empty if connecting
-    using access tokens
+    using access tokens.
+* DEPENDENCIES
+  * Updated `DSCParser` to version 3.1.0.3.
+  * Updated `MSCloudLoginAssistant` to version 1.2.4.
+  * Updated `ReverseDSC` to version 2.0.0.36.
 * MISC
-  * Fixed build of Linux docker images by updating nano to latest version
+  * Fixed build of Linux docker images by updating nano to latest version.
   * Changed both Windows and Linux docker images to install some packages
-    directly in the dockerfiles, this way those installations get cached
+    directly in the dockerfiles, this way those installations get cached.
   * Fixed issue with Linux docker dev image where the path for PowerShell has
-    changed
+    changed.
   * Updated PowerShell LTS version to be installed in Linux docker image to
-    `7.6.5`
+    `7.6.5`.
 
 # 1.26.819.1
 
