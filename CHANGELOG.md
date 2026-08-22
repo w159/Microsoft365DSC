@@ -2,6 +2,8 @@
 
 # UNRELEASED
 
+* SPOSite
+  * Fixed an issue where a site collection that could not be retrieved aborted the entire export.
 * M365DSCReverse
   * Fixed issue where variable `$organization` would be empty if connecting
     using access tokens.
