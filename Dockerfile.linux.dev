@@ -43,7 +43,6 @@ RUN mv /etc/opt/omi/conf/dsc/configuration/baseregistration /etc/opt/omi/conf/ds
     mv /etc/opt/omi/conf/dsc/configuration/BaseRegistration/baseresource.schema.mof /etc/opt/omi/conf/dsc/configuration/BaseRegistration/BaseResource.schema.mof
 
 COPY . .
-COPY ./Modules/Microsoft365DSC/Microsoft365DSC.psd1 /DSC/Microsoft365DSC.psd1
 
 RUN pwsh -Command '$null = Install-Module -Name "Microsoft.PowerShell.PSResourceGet" -Repository "PSGallery" -Scope "AllUsers" -Force -SkipPublisherCheck'
 RUN pwsh -Command '$null = Install-PSResource -Name "Pester" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'

@@ -17,6 +17,8 @@
     changed.
   * Updated PowerShell LTS version to be installed in Linux docker image to
     `7.6.5`.
+  * Simplified installation of `Microsoft365Dsc` by removing support to run
+    Docker release images with older versions.
 
 # 1.26.819.1
 

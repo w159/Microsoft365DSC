@@ -2,21 +2,11 @@
 param(
     [Parameter()]
     [Switch]
-    $IsSDK,
-
-    [Parameter()]
-    [System.String]
-    $M365DSCVersion
+    $IsSDK
 )
 
 $isWindowsPlatform = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
     [System.Runtime.InteropServices.OSPlatform]::Windows)
-
-if ([String]::IsNullOrEmpty($M365DSCVersion) -or $M365DSCVersion -eq "latest")
-{
-    $M365DSCVersion = (Import-PowerShellDataFile -Path "/DSC/Microsoft365DSC.psd1").ModuleVersion
-}
-Remove-Item -Path "/DSC/Microsoft365DSC.psd1" -Force -ErrorAction SilentlyContinue
 
 try
 {
@@ -40,22 +30,7 @@ try
     }
     Write-Output $message
 
-    if (-not $IsSDK.IsPresent)
-    {
-        $Message = "Installing Microsoft365DSC module ({0})" -f $M365DSCVersion
-        Write-Output $Message
-        $Parameters = @{
-            Name                = "Microsoft365DSC"
-            Version             = $M365DSCVersion
-            Repository          = "PSGallery"
-            Scope               = "AllUsers"
-            SkipDependencyCheck = [Switch]$true
-            TrustRepository     = [Switch]$true
-            AcceptLicense       = [Switch]$true
-        }
-        Install-PSResource @Parameters
-    }
-    else
+    if ($IsSDK.IsPresent)
     {
         Write-Output "Adding symbolic link from repository folder to module path"
         $Parameters = @{
@@ -69,7 +44,16 @@ try
         }
         else
         {
-            $Parameters.Add("Path", "/usr/share/powershell/.store/powershell.linux.x64/7.6.4/powershell.linux.x64/7.6.4/tools/net10.0/any/Modules/Microsoft365DSC")
+            $PSVersion = [System.String]$PSVersionTable.PSVersion
+            $SDK = dotnet --list-sdks
+            if ($LASTEXITCODE -ne 0)
+            {
+                throw "Could not get .NET SDK version"
+            }
+            $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
+            $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
+                -f $PSVersion, $PSVersion, $SDKVersion
+            $Parameters.Add("Path", $destinationPath)
             $Parameters.Add("Target", "/DSC/Modules/Microsoft365DSC")
         }
         $null = New-Item @Parameters
@@ -179,16 +163,7 @@ Import-Module PSDesiredStateConfiguration -Force
 
         if ($IsSDK.IsPresent)
         {
-            $PSVersion = [System.String]$PSVersionTable.PSVersion
-            $SDK = dotnet --list-sdks
-            if ($LASTEXITCODE -ne 0)
-            {
-                throw "Could not get .NET SDK version"
-            }
-            $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
             $moduleBasePath = "/DSC/Modules/Microsoft365DSC"
-            $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
-                -f $PSVersion, $PSVersion, $SDKVersion
 
             Write-Output "Generating SchemaDefinition.json"
             $M365DSCSchemaHandlerPath = Join-Path -Path $moduleBasePath -ChildPath "Modules/M365DSCSchemaHandler.psm1"
