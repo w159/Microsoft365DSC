@@ -1,5 +1,10 @@
 # Change log for Microsoft365DSC
 
+# UNRELEASED
+
+* SPOSite
+  * Fixed an issue where a site collection that could not be retrieved aborted the entire export.
+
 # 1.26.819.1
 
 * AADAuthenticationMethodPolicy
@@ -36,9 +41,6 @@
   * Fixed an issue where testing a missing rule with an advanced rule containing
     ML model classifiers could fail before reporting drift.
     FIXES [#7403](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7403)
-* SPOSite
-  * Fixed an issue where a single site collection that could not be retrieved aborted
-    the export of the whole resource, discarding the site collections already exported.
 * MISC
   * Updated import warning that **PowerShell 7.6** is going to be required starting October 2026.
 
