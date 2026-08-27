@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* EXOIntraOrganizationConnector
+  * Fixed an issue where `DiscoveryEndpoint` did not end with a trailing slash `/`.
+  * Fixed a regression regarding Url to String conversion.
+    FIXES [#7425](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7425)
 * SPOSite
   * Fixed an issue where a site collection that could not be retrieved aborted the entire export.
 * M365DSCReverse
