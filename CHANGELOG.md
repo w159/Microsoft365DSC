@@ -2,6 +2,10 @@
 
 # UNRELEASED
 
+* AADRoleAssignmentScheduleRequest
+  * Added `agentUser` to `PrincipalType` to support the new agent user capability in Entra.
+* AADRoleEligibilityScheduleRequest
+  * Added `agentUser` to `PrincipalType` to support the new agent user capability in Entra.
 * EXOIntraOrganizationConnector
   * Fixed an issue where `DiscoveryEndpoint` did not end with a trailing slash `/`.
   * Fixed a regression regarding Url to String conversion.
