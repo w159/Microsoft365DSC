@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.826.1
 
 * EXOIntraOrganizationConnector
   * Fixed an issue where `DiscoveryEndpoint` did not end with a trailing slash `/`.
