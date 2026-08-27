@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.826.1
 
 * AADRoleAssignmentScheduleRequest
   * Added `agentUser` to `PrincipalType` to support the new agent user capability in Entra.
