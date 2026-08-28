@@ -607,10 +607,9 @@ function Invoke-M365DSCGraphShimGetResource
     }
 
     $response = Invoke-M365DSCGraphShimRequest -Method GET -Uri $uri -Headers $requestHeaders -ErrorAction $ErrorActionPreference
-    <#
-        Cmdlet Get-MgBetaDeviceManagementGroupPolicyConfigurationDefinitionValuePresentationValue might return an object with 'value' but we
-        also need the values inside 'presentation' so in that case we must return the whole object inside $response instead of $return.value
-    #>
+
+    # Get-MgBetaDeviceManagementGroupPolicyConfigurationDefinitionValuePresentationValue might return an object with the 'value' property,
+    #  but we also need the values inside 'presentation'. Return the whole object inside $response instead of $response.value
     if ($null -ne $response -and $response -is [hashtable] -and $response.ContainsKey('value') -and -not $response.ContainsKey('presentation'))
     {
         return $response.value
