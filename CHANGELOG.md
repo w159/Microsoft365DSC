@@ -4,10 +4,10 @@
 
 * M365DSCGraphShim
   * Changed how an object is returned from Graph if both `value` and
-    `presentation` properties are present, this fixes an issue on resource
-    `IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10`
+    `presentation` properties are present. This fixes an issue with the resource
+    `IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10`.
 * MISC
-  * Fixed build of Windows docker image
+  * Fixed an issue when building the Windows docker image.
 
 # 1.26.826.1
 
