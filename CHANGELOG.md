@@ -2,6 +2,16 @@
 
 # UNRELEASED
 
+* IntuneDeviceConfigurationPlatformScriptMacOS
+  * Fixed an issue where the `scriptContent` property was incorrectly converted
+    to a binary array during Set.
+* IntuneDeviceConfigurationPlatformScriptWindows10
+  * Fixed an issue where the `scriptContent` property was incorrectly converted
+    to a binary array during Set.
+    FIXES [#7431](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7431)
+* IntuneDeviceRemediation
+  * Fixed an issue where the `DetectionScriptContent` and `RemediationScriptContent`
+    properties were incorrectly converted to a binary array during Set.
 * M365DSCGraphShim
   * Changed how an object is returned from Graph if both `value` and
     `presentation` properties are present. This fixes an issue with the resource
