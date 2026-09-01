@@ -2,6 +2,9 @@
 
 # UNRELEASED
 
+* AADApplicationFederatedIdentityCredential
+  * Fixed an issue where an incorrect count check resulted in a single object
+    being detected as multiple objects.
 * IntuneDeviceConfigurationPlatformScriptMacOS
   * Fixed an issue where the `scriptContent` property was incorrectly converted
     to a binary array during Set.
