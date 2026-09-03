@@ -1,6 +1,6 @@
 # Change log for Microsoft365DSC
 
-# UNRELEASED
+# 1.26.902.1
 
 * AADApplicationFederatedIdentityCredential
   * Fixed an issue where an incorrect count check resulted in a single object
