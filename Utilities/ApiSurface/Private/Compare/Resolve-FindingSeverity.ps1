@@ -162,6 +162,7 @@ function Resolve-FindingSeverity
         'VND-ENUM-MEMBER-ADDED' = @{ Severity = 'warning'; AutoFixable = $true }
         'VND-NEWER-VERSION'     = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-MISSING'      = @{ Severity = 'warning'; AutoFixable = $true }
+        'RES-PROP-BACKLOG'      = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-READONLY'     = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-ORPHANED'     = @{ Severity = 'breaking'; AutoFixable = $false }
         'RES-TYPE-MISMATCH'     = @{ Severity = 'breaking'; AutoFixable = $false }
@@ -193,8 +194,9 @@ function Resolve-FindingSeverity
     Applies a resource's excludedProperties list to a candidate finding.
 
 .DESCRIPTION
-    Any reason other than Deferred suppresses the finding. Deferred drops it to info, which
-    keeps a postponed property on the report.
+    Any reason other than Deferred suppresses the finding. Deferred drops it to info and takes
+    away auto-fixability, which keeps a postponed property on the report without offering it for
+    an unattended apply.
 
 .PARAMETER Exclusion
     Specifies the excludedProperties entries of the resource.
@@ -203,7 +205,7 @@ function Resolve-FindingSeverity
     Specifies the DSC property name the finding is about.
 
 .OUTPUTS
-    An ordered dictionary with Suppressed, Severity and Reason.
+    An ordered dictionary with Suppressed, Severity, AutoFixable and Reason.
 #>
 function Resolve-FindingExclusion
 {
@@ -222,9 +224,10 @@ function Resolve-FindingExclusion
     )
 
     $result = [ordered]@{
-        Suppressed = $false
-        Severity   = $null
-        Reason     = $null
+        Suppressed  = $false
+        Severity    = $null
+        AutoFixable = $null
+        Reason      = $null
     }
 
     foreach ($entry in @($Exclusion))
@@ -240,6 +243,7 @@ function Resolve-FindingExclusion
         if ($reason -eq 'Deferred')
         {
             $result.Severity = 'info'
+            $result.AutoFixable = $false
             return $result
         }
 

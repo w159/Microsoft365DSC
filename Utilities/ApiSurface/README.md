@@ -153,6 +153,17 @@ Only two shapes, and only when the finding carries `autoFixable: true`:
   declaration and the matching entry in the `Get()` result hashtable. A declaration without the
   hashtable entry exports as null forever, so the verification refuses it.
 
+Three things take auto-fixability away from a finding that would otherwise carry it.
+
+- **A `Deferred` entry in the resource's `excludedProperties`.** The finding stays on the report at
+  `info` and is listed under `Needs a decision`, never offered for a tick.
+- **A match below the entity.** `Resolve-PropertyName` accepts a suffix of a flattened path, so a
+  declared `State` can land on `reportSuspiciousActivitySettings.state`. That is a guess about
+  which container the resource flattened. The evidence carries `match.level` and `match.rule` so
+  the guess can be read.
+- **A read-only vendor property.** `match.isReadOnly` says so, and appending its enum members to a
+  `ValidateSet` would widen a property the service owns.
+
 Everything else needs `-AllowNonAutomatic` and produces a scaffold a human finishes:
 `RES-PROP-ORPHANED` marks the property deprecated and comments out its `Get()` entry rather than
 deleting it, and `RES-TYPE-MISMATCH` re-renders the declaration from the vendor model.
@@ -249,5 +260,7 @@ naming neither is refused.
 - **Do not build while a capture is connecting.** `Build-Microsoft365DSC.ps1` rewrites the class
   modules and the manifest, and a connect that imports Microsoft365DSC at that moment fails with
   `The given assembly name was invalid` and downgrades the run to offline.
-- **`api-drift.json` and `api-drift.md` are run outputs**, gitignored. In CI they survive only as
-  the `api-drift` artifact, which is where `firstSeen` is carried forward from.
+- **`api-drift.json` and `api-drift.md` are run outputs**, gitignored. Both are written on every
+  run, which is what keeps the Markdown from describing an older comparison than the JSON beside
+  it. In CI they survive only as the `api-drift` artifact, which is where `firstSeen` is carried
+  forward from.

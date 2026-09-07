@@ -65,6 +65,12 @@ function Format-DriftMarkdown
             continue
         }
 
+        if ($section.GroupByResource)
+        {
+            $lines.AddRange([System.String[]] @(Format-ResourceGroupedSection -Finding $matched))
+            continue
+        }
+
         foreach ($finding in $matched)
         {
             $lines.Add("- ``$($finding.id)``")
@@ -107,6 +113,64 @@ function Format-DriftMarkdown
     }
 
     return ($lines -join "`n").TrimEnd() + "`n"
+}
+
+<#
+.SYNOPSIS
+    Renders a section as one subheading per resource, largest first.
+
+.DESCRIPTION
+    A section holding hundreds of entries reads as a wall unless the resource that owns each one
+    is the heading above it.
+
+.PARAMETER Finding
+    Specifies the findings of one section.
+
+.OUTPUTS
+    The Markdown lines.
+#>
+function Format-ResourceGroupedSection
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
+        $Finding = @()
+    )
+
+    $lines = [System.Collections.Generic.List[System.String]]::new()
+
+    $byResource = @{}
+    foreach ($item in $Finding)
+    {
+        $name = [System.String] $item.resource
+        if (-not $byResource.ContainsKey($name))
+        {
+            $byResource[$name] = [System.Collections.Generic.List[System.Object]]::new()
+        }
+
+        $byResource[$name].Add($item)
+    }
+
+    $ordered = @(Get-M365DSCOrderedName -Value ([System.String[]] @($byResource.Keys)) |
+            Sort-Object -Property @{ Expression = { $byResource[$_].Count }; Descending = $true })
+
+    foreach ($name in $ordered)
+    {
+        $lines.Add("### $name  ($($byResource[$name].Count))")
+        $lines.Add('')
+        foreach ($item in $byResource[$name])
+        {
+            $lines.Add("- ``$($item.property)`` $(Get-FindingEvidenceLine -Finding $item)")
+        }
+
+        $lines.Add('')
+    }
+
+    return [System.String[]] $lines
 }
 
 <#
@@ -214,7 +278,8 @@ function Get-DriftSection
         [PSCustomObject]@{ Name = 'Shim'; Title = 'Graph shim, regenerate to fix'; Codes = @('SHIM-MISSING', 'SHIM-STALE') }
         [PSCustomObject]@{ Name = 'Decision'; Title = 'Needs a decision'; Codes = @('VND-CMDLET-REMOVED', 'VND-CMDLET-REROUTED', 'VND-PARAM-TYPECHANGED', 'RES-PROP-ORPHANED', 'RES-TYPE-MISMATCH') }
         [PSCustomObject]@{ Name = 'SettingsCatalog'; Title = 'Intune settings catalog, regenerate to fix'; Codes = @('CAT-SETTING-ADDED', 'CAT-SETTING-REMOVED', 'CAT-OPTION-ADDED', 'CAT-TEMPLATE-VERSION', 'CAT-TEMPLATE-NEW') }
-        [PSCustomObject]@{ Name = 'ReadOnly'; Title = 'Read-only, suggested for no implementation'; Codes = @('RES-PROP-READONLY') }
+        [PSCustomObject]@{ Name = 'ReadOnly'; Title = 'Read-only, suggested for no implementation'; Codes = @('RES-PROP-READONLY'); GroupByResource = $true }
+        [PSCustomObject]@{ Name = 'Backlog'; Title = 'Writable vendor properties no resource declares'; Codes = @('RES-PROP-BACKLOG'); GroupByResource = $true }
         [PSCustomObject]@{ Name = 'Coverage'; Title = 'Graph nouns with full CRUD and no resource'; Codes = @('COV-NO-RESOURCE') }
         [PSCustomObject]@{ Name = 'UnusedCmdlet'; Title = 'Cmdlets no resource calls any more'; Codes = @('COV-CMDLET-UNUSED') }
         [PSCustomObject]@{ Name = 'VendorChanges'; Title = $vendorTitle; Codes = @('VND-TYPE-PROP-ADDED', 'VND-PARAM-ADDED') }
@@ -290,6 +355,18 @@ function Get-FindingEvidenceLine
         {
             return "$source, declared $($Finding.from.typeConstraint), not offered by the vendor type"
         }
+        'RES-PROP-BACKLOG'
+        {
+            return "$source, $(Get-VendorShapeLine -To $Finding.to)"
+        }
+        'RES-PROP-READONLY'
+        {
+            return "$source, $(Get-VendorShapeLine -To $Finding.to)"
+        }
+        'RES-PROP-MISSING'
+        {
+            return "$source, $(Get-VendorShapeLine -To $Finding.to)"
+        }
         'VND-PARAM-TYPECHANGED'
         {
             return "$source, $($Finding.from.type) -> $($Finding.to.type)"
@@ -301,4 +378,51 @@ function Get-FindingEvidenceLine
     }
 
     return $source
+}
+
+<#
+.SYNOPSIS
+    Describes the vendor shape a property finding carries.
+
+.PARAMETER To
+    Specifies the To payload of the finding.
+
+.OUTPUTS
+    The description.
+#>
+function Get-VendorShapeLine
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter()]
+        [AllowNull()]
+        [System.Object]
+        $To
+    )
+
+    if ($null -eq $To)
+    {
+        return 'shape unknown'
+    }
+
+    $shape = [System.String] $To.vendorType
+    if ([System.Boolean] $To.isArray)
+    {
+        $shape = "collection of $shape"
+    }
+
+    if ([System.Boolean] $To.isComplex)
+    {
+        $shape = "$shape, complex"
+    }
+
+    $members = @($To.enum | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+    if ($members.Count -gt 0)
+    {
+        $shape = "$shape, member(s) $($members -join ', ')"
+    }
+
+    return $shape
 }

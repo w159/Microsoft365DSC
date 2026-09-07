@@ -18,6 +18,16 @@
       "name": "PackageFileType",
       "reason": "Deferred",
       "note": "The package file type. Used to differentiate between their types."
+    },
+    {
+      "name": "PrimaryBundleId",
+      "reason": "Accepted",
+      "note": "Taken from the first entry of IncludedApps when the app is created, which is why it carries no property of its own."
+    },
+    {
+      "name": "PrimaryBundleVersion",
+      "reason": "Accepted",
+      "note": "Taken from the first entry of IncludedApps when the app is created, which is why it carries no property of its own."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Bundle types Dmg and Pkg for macOS.",

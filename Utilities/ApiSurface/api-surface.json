@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "capturedAt": "2026-08-29T20:41:32Z",
+  "capturedAt": "2026-09-07T08:42:17Z",
   "capturedBy": "local",
   "completeness": {
     "tenantConnected": true,
@@ -24,8 +24,8 @@
       "Set-DefaultTenantMyAnalyticsFeatureConfig"
     ],
     "graphTypeCoverage": {
-      "requested": 210,
-      "captured": 210,
+      "requested": 234,
+      "captured": 234,
       "missing": []
     }
   },
@@ -87,14 +87,14 @@
       "latestPublished": null
     },
     "M365DSC.PSDesiredStateConfiguration": {
-      "pinned": "3.1.4",
+      "pinned": "3.1.7",
       "manifests": [
         "Manifest"
       ],
       "latestPublished": null
     },
     "M365DSC.mgx": {
-      "pinned": "2.1.0",
+      "pinned": "2.1.1",
       "manifests": [
         "Manifest"
       ],
@@ -8648,6 +8648,206 @@
         }
       }
     },
+    "beta:androidStoreApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appStoreUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "minimumSupportedOperatingSystem": {
+          "type": "androidMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "packageId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:androidWorkProfileCertificateProfileBase": {
       "kind": "EntityType",
       "baseType": "deviceConfiguration",
@@ -11101,6 +11301,42 @@
           "type": "keyValuePair",
           "isComplex": true,
           "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:appConfigurationSettingItem": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "appConfigKey": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "appConfigKeyType": {
+          "type": "mdmAppConfigKeyType",
+          "enum": [
+            "booleanType",
+            "integerType",
+            "realType",
+            "stringType",
+            "tokenType"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "appConfigKeyValue": {
+          "type": "Edm.String",
+          "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
           "isImmutable": false
@@ -17451,6 +17687,67 @@
         }
       }
     },
+    "beta:compliantNetworkNamedLocation": {
+      "kind": "EntityType",
+      "baseType": "namedLocation",
+      "isAbstract": false,
+      "properties": {
+        "compliantNetworkType": {
+          "type": "compliantNetworkType",
+          "enum": [
+            "allTenantCompliantNetworks",
+            "unknownFutureValue"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deletedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isTrusted": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "modifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:conditionalAccessApplications": {
       "kind": "ComplexType",
       "baseType": null,
@@ -19056,6 +19353,75 @@
         },
         "resource": {
           "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:countryNamedLocation": {
+      "kind": "EntityType",
+      "baseType": "namedLocation",
+      "isAbstract": false,
+      "properties": {
+        "countriesAndRegions": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "countryLookupMethod": {
+          "type": "countryLookupMethodType",
+          "enum": [
+            "authenticatorAppGps",
+            "clientIpAddress",
+            "unknownFutureValue"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deletedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "includeUnknownCountriesAndRegions": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "modifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -23859,6 +24225,352 @@
         },
         "version": {
           "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:deviceEnrollmentPlatformRestriction": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "blockedManufacturers": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "blockedSkus": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "osMaximumVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "osMinimumVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "personalDeviceEnrollmentBlocked": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "platformBlocked": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:deviceEnrollmentPlatformRestrictionConfiguration": {
+      "kind": "EntityType",
+      "baseType": "deviceEnrollmentConfiguration",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "enrollmentConfigurationAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deviceEnrollmentConfigurationType": {
+          "type": "deviceEnrollmentConfigurationType",
+          "enum": [
+            "defaultLimit",
+            "defaultPlatformRestrictions",
+            "defaultWindows10EnrollmentCompletionPageConfiguration",
+            "defaultWindowsHelloForBusiness",
+            "deviceComanagementAuthorityConfiguration",
+            "enrollmentNotificationsConfiguration",
+            "limit",
+            "platformRestrictions",
+            "singlePlatformRestriction",
+            "unknown",
+            "unknownFutureValue",
+            "windows10EnrollmentCompletionPageConfiguration",
+            "windowsHelloForBusiness",
+            "windowsRestore"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "platformRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "platformType": {
+          "type": "enrollmentRestrictionPlatformType",
+          "enum": [
+            "allPlatforms",
+            "android",
+            "androidForWork",
+            "ios",
+            "linux",
+            "mac",
+            "unknownFutureValue",
+            "windows",
+            "windowsPhone"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "priority": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "version": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:deviceEnrollmentPlatformRestrictionsConfiguration": {
+      "kind": "EntityType",
+      "baseType": "deviceEnrollmentConfiguration",
+      "isAbstract": false,
+      "properties": {
+        "androidForWorkRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "androidRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "enrollmentConfigurationAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deviceEnrollmentConfigurationType": {
+          "type": "deviceEnrollmentConfigurationType",
+          "enum": [
+            "defaultLimit",
+            "defaultPlatformRestrictions",
+            "defaultWindows10EnrollmentCompletionPageConfiguration",
+            "defaultWindowsHelloForBusiness",
+            "deviceComanagementAuthorityConfiguration",
+            "enrollmentNotificationsConfiguration",
+            "limit",
+            "platformRestrictions",
+            "singlePlatformRestriction",
+            "unknown",
+            "unknownFutureValue",
+            "windows10EnrollmentCompletionPageConfiguration",
+            "windowsHelloForBusiness",
+            "windowsRestore"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "iosRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "macOSRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "macRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "priority": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "tvosRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "version": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "visionOSRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "windowsHomeSkuRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "windowsMobileRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "windowsRestriction": {
+          "type": "deviceEnrollmentPlatformRestriction",
+          "isComplex": true,
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -33098,6 +33810,70 @@
         "targetObjects": {
           "type": "Edm.String",
           "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:externalAuthenticationMethodConfiguration": {
+      "kind": "EntityType",
+      "baseType": "authenticationMethodConfiguration",
+      "isAbstract": false,
+      "properties": {
+        "appId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "excludeTargets": {
+          "type": "excludeTarget",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "includeTargets": {
+          "type": "authenticationMethodTarget",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "openIdConnectSetting": {
+          "type": "openIdConnectSetting",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "state": {
+          "type": "authenticationMethodState",
+          "enum": [
+            "disabled",
+            "enabled"
+          ],
+          "isFlags": false,
+          "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
           "isImmutable": false
@@ -43290,6 +44066,124 @@
         }
       }
     },
+    "beta:iosMobileAppConfiguration": {
+      "kind": "EntityType",
+      "baseType": "managedDeviceMobileAppConfiguration",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "managedDeviceMobileAppConfigurationAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deviceStatusSummary": {
+          "type": "managedDeviceMobileAppConfigurationDeviceSummary",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deviceStatuses": {
+          "type": "managedDeviceMobileAppConfigurationDeviceStatus",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "encodedSettingXml": {
+          "type": "Edm.Binary",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "settings": {
+          "type": "appConfigurationSettingItem",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "targetedMobileApps": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "userStatusSummary": {
+          "type": "managedDeviceMobileAppConfigurationUserSummary",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "userStatuses": {
+          "type": "managedDeviceMobileAppConfigurationUserStatus",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "version": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:iosNetworkUsageRule": {
       "kind": "ComplexType",
       "baseType": null,
@@ -43455,6 +44349,228 @@
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:iosStoreApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appStoreUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "appleDeviceAppDeliveryProtocolType": {
+          "type": "appleDeviceDeliveryProtocol",
+          "enum": [
+            "declarativeDeviceManagement",
+            "default",
+            "mobileDeviceManagement",
+            "unknownFutureValue"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "applicableDeviceType": {
+          "type": "iosDeviceType",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "bundleId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "minimumSupportedOperatingSystem": {
+          "type": "iosMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
           "isImmutable": false
         }
       }
@@ -44436,6 +45552,226 @@
         }
       }
     },
+    "beta:iosiPadOSWebClip": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "fullScreenEnabled": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ignoreManifestScope": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "preComposedIconEnabled": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "targetApplicationBundleIdentifier": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "useManagedBrowser": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:ipApplicationSegment": {
       "kind": "EntityType",
       "baseType": "applicationSegment",
@@ -44515,6 +45851,63 @@
             "unknownFutureValue"
           ],
           "isFlags": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:ipNamedLocation": {
+      "kind": "EntityType",
+      "baseType": "namedLocation",
+      "isAbstract": false,
+      "properties": {
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "deletedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ipRanges": {
+          "type": "ipRange",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isTrusted": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "modifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -45368,6 +46761,20 @@
         }
       }
     },
+    "beta:macOSAppScript": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "scriptContent": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:macOSAppleEventReceiver": {
       "kind": "ComplexType",
       "baseType": null,
@@ -45702,6 +47109,250 @@
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:macOSDmgApp": {
+      "kind": "EntityType",
+      "baseType": "mobileLobApp",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "committedContentVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "contentVersions": {
+          "type": "mobileAppContent",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "fileName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ignoreVersionDetection": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "includedApps": {
+          "type": "macOSIncludedApp",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "minimumSupportedOperatingSystem": {
+          "type": "macOSMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "primaryBundleId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "primaryBundleVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "size": {
+          "type": "Edm.Int64",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
           "isImmutable": false
         }
       }
@@ -46291,6 +47942,27 @@
         }
       }
     },
+    "beta:macOSIncludedApp": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "bundleId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "bundleVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:macOSLobApp": {
       "kind": "EntityType",
       "baseType": "mobileLobApp",
@@ -46769,6 +48441,198 @@
         }
       }
     },
+    "beta:macOSMicrosoftEdgeApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "channel": {
+          "type": "microsoftEdgeChannel",
+          "enum": [
+            "beta",
+            "dev",
+            "stable",
+            "unknownFutureValue"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:macOSMinimumOperatingSystem": {
       "kind": "ComplexType",
       "baseType": null,
@@ -47034,6 +48898,266 @@
           "isArray": true,
           "isNavigation": false,
           "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:macOSPkgApp": {
+      "kind": "EntityType",
+      "baseType": "mobileLobApp",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "committedContentVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "contentVersions": {
+          "type": "mobileAppContent",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "fileName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ignoreVersionDetection": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "includedApps": {
+          "type": "macOSIncludedApp",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "minimumSupportedOperatingSystem": {
+          "type": "macOSMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "postInstallScript": {
+          "type": "macOSAppScript",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "preInstallScript": {
+          "type": "macOSAppScript",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "primaryBundleId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "primaryBundleVersion": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "size": {
+          "type": "Edm.Int64",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
           "isImmutable": false
         },
         "supersededAppCount": {
@@ -47438,6 +49562,205 @@
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:macOSWebClip": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "fullScreenEnabled": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "preComposedIconEnabled": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
           "isImmutable": false
         }
       }
@@ -47906,10 +50229,10 @@
         }
       }
     },
-    "beta:managedApp": {
+    "beta:managedAndroidStoreApp": {
       "kind": "EntityType",
-      "baseType": "mobileApp",
-      "isAbstract": true,
+      "baseType": "managedApp",
+      "isAbstract": false,
       "properties": {
         "appAvailability": {
           "type": "managedAppAvailability",
@@ -47921,6 +50244,13 @@
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": true,
+          "isImmutable": false
+        },
+        "appStoreUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
           "isImmutable": false
         },
         "assignments": {
@@ -48017,6 +50347,14 @@
           "isReadOnly": true,
           "isImmutable": false
         },
+        "minimumSupportedOperatingSystem": {
+          "type": "androidMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
         "notes": {
           "type": "Edm.String",
           "isArray": false,
@@ -48025,6 +50363,13 @@
           "isImmutable": false
         },
         "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "packageId": {
           "type": "Edm.String",
           "isArray": false,
           "isNavigation": false,
@@ -50200,6 +52545,233 @@
         },
         "releaseYear": {
           "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:managedIOSStoreApp": {
+      "kind": "EntityType",
+      "baseType": "managedApp",
+      "isAbstract": false,
+      "properties": {
+        "appAvailability": {
+          "type": "managedAppAvailability",
+          "enum": [
+            "global",
+            "lineOfBusiness"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "appStoreUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "applicableDeviceType": {
+          "type": "iosDeviceType",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "bundleId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "minimumSupportedOperatingSystem": {
+          "type": "iosMinimumOperatingSystem",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "version": {
+          "type": "Edm.String",
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -52497,213 +55069,6 @@
         }
       }
     },
-    "beta:mobileLobApp": {
-      "kind": "EntityType",
-      "baseType": "mobileApp",
-      "isAbstract": true,
-      "properties": {
-        "assignments": {
-          "type": "mobileAppAssignment",
-          "isComplex": true,
-          "isArray": true,
-          "isNavigation": true,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "categories": {
-          "type": "mobileAppCategory",
-          "isComplex": true,
-          "isArray": true,
-          "isNavigation": true,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "committedContentVersion": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "contentVersions": {
-          "type": "mobileAppContent",
-          "isComplex": true,
-          "isArray": true,
-          "isNavigation": true,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "createdDateTime": {
-          "type": "Edm.DateTimeOffset",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "dependentAppCount": {
-          "type": "Edm.Int32",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "description": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "developer": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "displayName": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "fileName": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "id": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "informationUrl": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "isAssigned": {
-          "type": "Edm.Boolean",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "isFeatured": {
-          "type": "Edm.Boolean",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "largeIcon": {
-          "type": "mimeContent",
-          "isComplex": true,
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "lastModifiedDateTime": {
-          "type": "Edm.DateTimeOffset",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "notes": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "owner": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "privacyInformationUrl": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "publisher": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "publishingState": {
-          "type": "mobileAppPublishingState",
-          "enum": [
-            "notPublished",
-            "processing",
-            "published"
-          ],
-          "isFlags": false,
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "relationships": {
-          "type": "mobileAppRelationship",
-          "isComplex": true,
-          "isArray": true,
-          "isNavigation": true,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "roleScopeTagIds": {
-          "type": "Edm.String",
-          "isArray": true,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "size": {
-          "type": "Edm.Int64",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "supersededAppCount": {
-          "type": "Edm.Int32",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "supersedingAppCount": {
-          "type": "Edm.Int32",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        },
-        "uploadState": {
-          "type": "Edm.Int32",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": true,
-          "isImmutable": false
-        }
-      }
-    },
     "beta:mobileThreatDefenseConnector": {
       "kind": "EntityType",
       "baseType": "entity",
@@ -53454,52 +55819,6 @@
         }
       }
     },
-    "beta:networkaccess.filteringRule": {
-      "kind": "EntityType",
-      "baseType": "networkaccess.policyRule",
-      "isAbstract": true,
-      "properties": {
-        "destinations": {
-          "type": "networkaccess.ruleDestination",
-          "isComplex": true,
-          "isArray": true,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "id": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "name": {
-          "type": "Edm.String",
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        },
-        "ruleType": {
-          "type": "networkaccess.networkDestinationType",
-          "enum": [
-            "fqdn",
-            "ipAddress",
-            "ipRange",
-            "ipSubnet",
-            "unknownFutureValue",
-            "url",
-            "webCategory"
-          ],
-          "isFlags": false,
-          "isArray": false,
-          "isNavigation": false,
-          "isReadOnly": false,
-          "isImmutable": false
-        }
-      }
-    },
     "beta:networkaccess.forwardingPolicy": {
       "kind": "EntityType",
       "baseType": "networkaccess.policy",
@@ -53664,6 +55983,52 @@
         },
         "version": {
           "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:networkaccess.fqdnFilteringRule": {
+      "kind": "EntityType",
+      "baseType": "networkaccess.filteringRule",
+      "isAbstract": false,
+      "properties": {
+        "destinations": {
+          "type": "networkaccess.ruleDestination",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "name": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ruleType": {
+          "type": "networkaccess.networkDestinationType",
+          "enum": [
+            "fqdn",
+            "ipAddress",
+            "ipRange",
+            "ipSubnet",
+            "unknownFutureValue",
+            "url",
+            "webCategory"
+          ],
+          "isFlags": false,
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -53920,6 +56285,52 @@
         },
         "zoneRedundancyPreSharedKey": {
           "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:networkaccess.webCategoryFilteringRule": {
+      "kind": "EntityType",
+      "baseType": "networkaccess.filteringRule",
+      "isAbstract": false,
+      "properties": {
+        "destinations": {
+          "type": "networkaccess.ruleDestination",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "name": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "ruleType": {
+          "type": "networkaccess.networkDestinationType",
+          "enum": [
+            "fqdn",
+            "ipAddress",
+            "ipRange",
+            "ipSubnet",
+            "unknownFutureValue",
+            "url",
+            "webCategory"
+          ],
+          "isFlags": false,
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
@@ -54475,6 +56886,246 @@
           "isImmutable": false
         },
         "value": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onAttributeCollectionStartCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onAttributeCollectionSubmitCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onOtpSendCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onPasswordSubmitCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
           "type": "Edm.String",
           "isArray": false,
           "isNavigation": false,
@@ -55240,6 +57891,148 @@
         }
       }
     },
+    "beta:onTokenIssuanceStartCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "claimsForTokenConfiguration": {
+          "type": "onTokenIssuanceStartReturnClaim",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onTokenIssuanceStartReturnClaim": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "claimIdInApiResponse": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:onVerifiedIdClaimValidationCustomExtension": {
+      "kind": "EntityType",
+      "baseType": "customAuthenticationExtension",
+      "isAbstract": false,
+      "properties": {
+        "authenticationConfiguration": {
+          "type": "customExtensionAuthenticationConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "behaviorOnError": {
+          "type": "customExtensionBehaviorOnError",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "clientConfiguration": {
+          "type": "customExtensionClientConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "endpointConfiguration": {
+          "type": "customExtensionEndpointConfiguration",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:onenote": {
       "kind": "EntityType",
       "baseType": "entity",
@@ -55344,6 +58137,27 @@
           "isImmutable": false
         },
         "tollNumber": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:openIdConnectSetting": {
+      "kind": "ComplexType",
+      "baseType": null,
+      "isAbstract": false,
+      "properties": {
+        "clientId": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "discoveryUrl": {
           "type": "Edm.String",
           "isArray": false,
           "isNavigation": false,
@@ -71434,6 +74248,198 @@
       "isAbstract": false,
       "properties": {}
     },
+    "beta:webApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "useManagedBrowser": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:webApplication": {
       "kind": "ComplexType",
       "baseType": null,
@@ -85065,6 +88071,205 @@
         }
       }
     },
+    "beta:windowsMicrosoftEdgeApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "channel": {
+          "type": "microsoftEdgeChannel",
+          "enum": [
+            "beta",
+            "dev",
+            "stable",
+            "unknownFutureValue"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayLanguageLocale": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        }
+      }
+    },
     "beta:windowsMinimumOperatingSystem": {
       "kind": "ComplexType",
       "baseType": null,
@@ -86772,6 +89977,191 @@
           "isArray": false,
           "isNavigation": false,
           "isReadOnly": false,
+          "isImmutable": false
+        }
+      }
+    },
+    "beta:windowsWebApp": {
+      "kind": "EntityType",
+      "baseType": "mobileApp",
+      "isAbstract": false,
+      "properties": {
+        "appUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "assignments": {
+          "type": "mobileAppAssignment",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "categories": {
+          "type": "mobileAppCategory",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "createdDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "dependentAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "description": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "developer": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "displayName": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "id": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "informationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "isAssigned": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "isFeatured": {
+          "type": "Edm.Boolean",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "largeIcon": {
+          "type": "mimeContent",
+          "isComplex": true,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "lastModifiedDateTime": {
+          "type": "Edm.DateTimeOffset",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "notes": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "owner": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "privacyInformationUrl": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publisher": {
+          "type": "Edm.String",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "publishingState": {
+          "type": "mobileAppPublishingState",
+          "enum": [
+            "notPublished",
+            "processing",
+            "published"
+          ],
+          "isFlags": false,
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "relationships": {
+          "type": "mobileAppRelationship",
+          "isComplex": true,
+          "isArray": true,
+          "isNavigation": true,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "roleScopeTagIds": {
+          "type": "Edm.String",
+          "isArray": true,
+          "isNavigation": false,
+          "isReadOnly": false,
+          "isImmutable": false
+        },
+        "supersededAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "supersedingAppCount": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
+          "isImmutable": false
+        },
+        "uploadState": {
+          "type": "Edm.Int32",
+          "isArray": false,
+          "isNavigation": false,
+          "isReadOnly": true,
           "isImmutable": false
         }
       }
@@ -105556,6 +108946,46 @@
         "Top": "System.Int32"
       }
     },
+    "Get-MgBetaDirectoryDeletedItemAsGroup": {
+      "workload": "MicrosoftGraph",
+      "module": "Microsoft.Graph.Beta.Identity.DirectoryManagement",
+      "moduleVersion": "2.35.1",
+      "apiVersion": "beta",
+      "variants": [
+        {
+          "method": "GET",
+          "uri": "/directory/deletedItems/group",
+          "apiVersion": "beta"
+        },
+        {
+          "method": "GET",
+          "uri": "/directory/deletedItems/{directoryObject-id}/group",
+          "apiVersion": "beta"
+        }
+      ],
+      "parameters": {
+        "All": "System.Management.Automation.SwitchParameter",
+        "Break": "System.Management.Automation.SwitchParameter",
+        "CountVariable": "System.String",
+        "DirectoryObjectId": "System.String",
+        "ExpandProperty": "System.String[]",
+        "Filter": "System.String",
+        "Headers": "System.Collections.IDictionary",
+        "HttpPipelineAppend": "System.Object[]",
+        "HttpPipelinePrepend": "System.Object[]",
+        "InputObject": "System.Object",
+        "PageSize": "System.Int32",
+        "Property": "System.String[]",
+        "Proxy": "System.Uri",
+        "ProxyCredential": "System.Management.Automation.PSCredential",
+        "ProxyUseDefaultCredentials": "System.Management.Automation.SwitchParameter",
+        "ResponseHeadersVariable": "System.String",
+        "Search": "System.String",
+        "Skip": "System.Int32",
+        "Sort": "System.String[]",
+        "Top": "System.Int32"
+      }
+    },
     "Get-MgBetaDirectoryObject": {
       "workload": "MicrosoftGraph",
       "module": "Microsoft.Graph.Beta.DirectoryObjects",
@@ -111641,7 +115071,7 @@
     "Invoke-MgxBatchRequest": {
       "workload": "Support",
       "module": "M365DSC.mgx",
-      "moduleVersion": "2.1.0",
+      "moduleVersion": "2.1.1",
       "apiVersion": null,
       "variants": [],
       "parameters": {
@@ -111913,6 +115343,7 @@
         "SharePointAdaptiveScopesException": "System.Object",
         "SharePointLocation": "System.Object",
         "SharePointLocationException": "System.Object",
+        "SpoDocLibraryDefaultLabelSnapshot": "System.Object",
         "UnifiedAuditLogEnabled": "System.Boolean"
       }
     },
@@ -111940,6 +115371,7 @@
         "DocumentIsUnsupported": "System.Boolean",
         "DocumentNameMatchesWords": "System.Object",
         "DocumentSizeOver": "System.Object",
+        "EffectiveParentFolder": "System.Object[]",
         "ExceptIfAccessScope": "System.Object",
         "ExceptIfAnyOfRecipientAddressContainsWords": "System.Object",
         "ExceptIfAnyOfRecipientAddressMatchesPatterns": "System.Object",
@@ -111951,6 +115383,7 @@
         "ExceptIfDocumentIsUnsupported": "System.Boolean",
         "ExceptIfDocumentNameMatchesWords": "System.Object",
         "ExceptIfDocumentSizeOver": "System.Object",
+        "ExceptIfEffectiveParentFolder": "System.Object[]",
         "ExceptIfFrom": "System.Object[]",
         "ExceptIfFromAddressContainsWords": "System.Object",
         "ExceptIfFromAddressMatchesPatterns": "System.Object",
@@ -113564,6 +116997,7 @@
         "DocumentNameMatchesPatterns": "System.Object",
         "DocumentNameMatchesWords": "System.Object",
         "DocumentSizeOver": "System.Object",
+        "EffectiveParentFolder": "System.Object[]",
         "EncryptRMSTemplate": "System.Object",
         "EnforcePortalAccess": "System.Boolean",
         "EvaluateRulePerComponent": "System.Boolean",
@@ -113589,6 +117023,7 @@
         "ExceptIfDocumentNameMatchesPatterns": "System.Object",
         "ExceptIfDocumentNameMatchesWords": "System.Object",
         "ExceptIfDocumentSizeOver": "System.Object",
+        "ExceptIfEffectiveParentFolder": "System.Object[]",
         "ExceptIfFrom": "System.Object[]",
         "ExceptIfFromAddressContainsWords": "System.Object",
         "ExceptIfFromAddressMatchesPatterns": "System.Object",
@@ -126074,6 +129509,7 @@
         "SharePointAdaptiveScopes": "System.Object",
         "SharePointAdaptiveScopesException": "System.Object",
         "SpoAipIntegrationEnabled": "System.Boolean",
+        "SpoDocLibraryDefaultLabelSnapshot": "System.Object",
         "StartSimulation": "System.Boolean"
       }
     },
@@ -126101,6 +129537,7 @@
         "DocumentIsUnsupported": "System.Boolean",
         "DocumentNameMatchesWords": "System.Object",
         "DocumentSizeOver": "System.Object",
+        "EffectiveParentFolder": "System.Object[]",
         "ExceptIfAccessScope": "System.Object",
         "ExceptIfAnyOfRecipientAddressContainsWords": "System.Object",
         "ExceptIfAnyOfRecipientAddressMatchesPatterns": "System.Object",
@@ -126112,6 +129549,7 @@
         "ExceptIfDocumentIsUnsupported": "System.Boolean",
         "ExceptIfDocumentNameMatchesWords": "System.Object",
         "ExceptIfDocumentSizeOver": "System.Object",
+        "ExceptIfEffectiveParentFolder": "System.Object[]",
         "ExceptIfFrom": "System.Object[]",
         "ExceptIfFromAddressContainsWords": "System.Object",
         "ExceptIfFromAddressMatchesPatterns": "System.Object",
@@ -128083,6 +131521,7 @@
         "DocumentNameMatchesPatterns": "System.Object",
         "DocumentNameMatchesWords": "System.Object",
         "DocumentSizeOver": "System.Object",
+        "EffectiveParentFolder": "System.Object[]",
         "EncryptRMSTemplate": "System.Object",
         "EnforcePortalAccess": "System.Boolean",
         "EvaluateRulePerComponent": "System.Boolean",
@@ -128108,6 +131547,7 @@
         "ExceptIfDocumentNameMatchesPatterns": "System.Object",
         "ExceptIfDocumentNameMatchesWords": "System.Object",
         "ExceptIfDocumentSizeOver": "System.Object",
+        "ExceptIfEffectiveParentFolder": "System.Object[]",
         "ExceptIfFrom": "System.Object[]",
         "ExceptIfFromAddressContainsWords": "System.Object",
         "ExceptIfFromAddressMatchesPatterns": "System.Object",
@@ -137188,6 +140628,16 @@
           "apiVersion": "beta"
         }
       ]
+    },
+    "Get-MgBetaDirectoryDeletedItemAsGroup": {
+      "reason": "Find-MgGraphCommand reports /directory/deletedItems/group, but the collection is only reachable through the OData cast segment /directory/deletedItems/microsoft.graph.group.",
+      "variants": [
+        {
+          "method": "GET",
+          "uri": "/directory/deletedItems/microsoft.graph.group",
+          "apiVersion": "beta"
+        }
+      ]
     }
   },
   "shim": {
@@ -139587,6 +143037,35 @@
       "apiVersion": "beta",
       "uri": "/directory/deletedItems/application",
       "itemUri": "/directory/deletedItems/{DirectoryObjectId}/application",
+      "parameters": [
+        "All",
+        "Break",
+        "CountVariable",
+        "DirectoryObjectId",
+        "ExpandProperty",
+        "Filter",
+        "Headers",
+        "HttpPipelineAppend",
+        "HttpPipelinePrepend",
+        "InputObject",
+        "PageSize",
+        "Property",
+        "Proxy",
+        "ProxyCredential",
+        "ProxyUseDefaultCredentials",
+        "ResponseHeadersVariable",
+        "Search",
+        "Skip",
+        "Sort",
+        "Top"
+      ]
+    },
+    "Get-MgBetaDirectoryDeletedItemAsGroup": {
+      "helper": "Invoke-M365DSCGraphShimGetResource",
+      "method": "GET",
+      "apiVersion": "beta",
+      "uri": "/directory/deletedItems/microsoft.graph.group",
+      "itemUri": null,
       "parameters": [
         "All",
         "Break",
@@ -154722,6 +158201,13 @@
         "displayVersion": "Version 1",
         "platforms": "windows10",
         "technologies": "mdm,microsoftSense",
+        "lifecycleState": "active"
+      },
+      "63404a39-a0ac-468c-84f8-6a6461ada7f3_1": {
+        "displayName": "Windows 365 for Agents Security Baseline",
+        "displayVersion": "Version 24H1",
+        "platforms": "windows10",
+        "technologies": "mdm",
         "lifecycleState": "active"
       },
       "66df8dce-0166-4b82-92f7-1f74e3ca17a3_1": {

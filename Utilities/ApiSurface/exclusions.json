@@ -19,6 +19,15 @@
       "reason": "The entity carries displayName, id, templateId and values. Its 3 resources project the names inside the values bag as properties, so every one of them reads as orphaned."
     }
   ],
+  "serviceManagedProperties": [
+    "committedContentVersion",
+    "contentVersions",
+    "createdDateTime",
+    "deletedDateTime",
+    "lastModifiedDateTime",
+    "modifiedDateTime",
+    "version"
+  ],
   "nonVendorProperties": [
     "AccessTokens",
     "ApplicationId",

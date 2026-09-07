@@ -491,6 +491,61 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             $finding | Should -HaveCount 1
             $finding[0].to.added | Should -Be @('disabled')
             $finding[0].autoFixable | Should -BeTrue
+            $finding[0].evidence.match.level | Should -Be 0
+            $finding[0].evidence.match.isReadOnly | Should -BeFalse
+        }
+
+        It 'refuses an unattended fix for a ValidateSet matched below the entity' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName = New-TestProperty
+                            reporting   = New-TestProperty -Type 'reportingSettings' -IsComplex $true
+                        }
+                    }
+                    'beta:reportingSettings' = [ordered]@{
+                        kind = 'ComplexType'; isAbstract = $false
+                        properties = [ordered]@{
+                            state = New-TestProperty -Type 'testState' -Enum @('default', 'disabled', 'enabled')
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                State       = @{ typeConstraint = 'String'; values = @('enabled', 'disabled') }
+            }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-ENUM-STALE' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].autoFixable | Should -BeFalse
+            $finding[0].evidence.source | Should -Be 'csdl:beta/testPolicy/reporting.state'
+            $finding[0].evidence.match.level | Should -Be 1
+        }
+
+        It 'refuses an unattended fix for a read-only vendor enum' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName = New-TestProperty
+                            state       = New-TestProperty -Type 'testState' -Enum @('disabled', 'enabled') -IsReadOnly $true
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                State       = @{ typeConstraint = 'String'; values = @('enabled') }
+            }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-ENUM-STALE' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].autoFixable | Should -BeFalse
+            $finding[0].evidence.match.isReadOnly | Should -BeTrue
         }
 
         It 'reports nothing for a resource on a non-comparable entity type' {
@@ -530,8 +585,8 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             }
             $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'Invented'; reason = 'NotConfigurable' }) }
 
-            (Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
-                Should -HaveCount 0
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.property -eq 'Invented' }) | Should -HaveCount 0
         }
 
         It 'keeps a Deferred exclusion visible at info' {
@@ -542,9 +597,78 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             }
             $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'Invented'; reason = 'Deferred' }) }
 
-            $findings = (Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings
+            $findings = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.property -eq 'Invented' })
             $findings | Should -HaveCount 1
             $findings[0].severity | Should -Be 'info'
+        }
+
+        It 'takes auto-fixability away from a Deferred exclusion' {
+            $snapshot = New-TestSnapshot -GraphType $script:policyType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                State       = @{ typeConstraint = 'String'; values = @('enabled') }
+            }
+            $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'State'; reason = 'Deferred' }) }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.code -eq 'RES-ENUM-STALE' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].severity | Should -Be 'info'
+            $finding[0].autoFixable | Should -BeFalse
+        }
+
+        It 'takes auto-fixability away from a Deferred missing property' {
+            $before = New-TestSnapshot -GraphType $script:policyType
+            $after = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName = New-TestProperty
+                            state       = New-TestProperty -Type 'testState' -Enum @('disabled', 'enabled')
+                            newFlag     = New-TestProperty -Type 'Edm.Boolean'
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                State       = @{ typeConstraint = 'String'; values = @('disabled', 'enabled') }
+            }
+            $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'NewFlag'; reason = 'Deferred' }) }
+
+            $finding = @((Invoke-TestCompare -Baseline $before -Current $after -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-MISSING' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].property | Should -Be 'NewFlag'
+            $finding[0].severity | Should -Be 'info'
+            $finding[0].autoFixable | Should -BeFalse
+        }
+
+        It 'classifies a service managed property that the CSDL leaves writable as read only' {
+            $before = New-TestSnapshot -GraphType $script:policyType
+            $after = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName             = New-TestProperty
+                            state                   = New-TestProperty -Type 'testState' -Enum @('disabled', 'enabled')
+                            committedContentVersion = New-TestProperty
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                State       = @{ typeConstraint = 'String'; values = @('disabled', 'enabled') }
+            }
+
+            $finding = @((Invoke-TestCompare -Baseline $before -Current $after -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-READONLY' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].property | Should -Be 'CommittedContentVersion'
+            $finding[0].autoFixable | Should -BeFalse
         }
 
         It 'drops an Accepted exclusion from the report' {
@@ -555,8 +679,41 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             }
             $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'Invented'; reason = 'Accepted' }) }
 
-            (Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
-                Should -HaveCount 0
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.property -eq 'Invented' }) | Should -HaveCount 0
+        }
+
+        It 'reports a property already in the baseline as backlog rather than as a gap' {
+            $snapshot = New-TestSnapshot -GraphType $script:policyType
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+
+            $result = Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword
+            $finding = @($result.Findings | Where-Object { $_.property -eq 'State' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].code | Should -Be 'RES-PROP-BACKLOG'
+            $finding[0].severity | Should -Be 'info'
+            $finding[0].autoFixable | Should -BeFalse
+            $result.Backlog | Should -Be 1
+        }
+
+        It 'keeps a read-only property on the read-only code even when the baseline already held it' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName     = New-TestProperty
+                            createdDateTime = New-TestProperty -Type 'Edm.DateTimeOffset' -IsReadOnly $true
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.property -eq 'CreatedDateTime' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].code | Should -Be 'RES-PROP-READONLY'
         }
     }
 

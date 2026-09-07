@@ -165,6 +165,7 @@ function Compare-ResourceSurface
                         -Declared $declared[$name] `
                         -Vendor $vendorProperty `
                         -TypeKey $gate.TypeKey `
+                        -MatchRule ([System.String] $match.Rule) `
                         -Exclusion $exclusions))
         }
 
@@ -185,23 +186,29 @@ function Compare-ResourceSurface
 
             $backlog++
 
-            if ($null -ne $baselineVendor -and $baselineVendor.Properties.Contains($vendorName))
-            {
-                continue
-            }
-
             $suppression = Resolve-FindingExclusion -Exclusion $exclusions -Property $dscName
             if ($suppression.Suppressed)
             {
                 continue
             }
 
-            $code = 'RES-PROP-MISSING'
-            $autoFixable = -not $vendorProperty.IsComplex
+            $seenBefore = $null -ne $baselineVendor -and $baselineVendor.Properties.Contains($vendorName)
+
+            $code = 'RES-PROP-BACKLOG'
+            $autoFixable = $false
             if ($vendorProperty.IsReadOnly -or $vendorProperty.Name -in $serviceManagedProperty)
             {
                 $code = 'RES-PROP-READONLY'
-                $autoFixable = $false
+            }
+            elseif (-not $seenBefore)
+            {
+                $code = 'RES-PROP-MISSING'
+                $autoFixable = -not $vendorProperty.IsComplex
+            }
+
+            if ($null -ne $suppression.AutoFixable)
+            {
+                $autoFixable = [System.Boolean] $suppression.AutoFixable
             }
 
             $findings.Add((New-M365DSCApiSurfaceFinding -Code $code `
@@ -266,6 +273,9 @@ function Compare-ResourceSurface
 .PARAMETER TypeKey
     Specifies the graphTypes key the resource was compared against.
 
+.PARAMETER MatchRule
+    Specifies the rule Resolve-PropertyName matched the name with.
+
 .PARAMETER Exclusion
     Specifies the resource's excludedProperties entries.
 
@@ -299,6 +309,11 @@ function Compare-DeclaredProperty
         $TypeKey,
 
         [Parameter()]
+        [AllowEmptyString()]
+        [System.String]
+        $MatchRule = 'Exact',
+
+        [Parameter()]
         [AllowNull()]
         [System.Object]
         $Exclusion
@@ -309,6 +324,24 @@ function Compare-DeclaredProperty
     if ($suppression.Suppressed)
     {
         return @()
+    }
+
+    $matchLevel = [System.Int32] $Vendor.Level
+    $autoFixable = $null
+    if ($matchLevel -gt 0 -or $Vendor.IsReadOnly)
+    {
+        $autoFixable = $false
+    }
+
+    if ($null -ne $suppression.AutoFixable)
+    {
+        $autoFixable = [System.Boolean] $suppression.AutoFixable
+    }
+
+    $match = [ordered]@{
+        rule       = $MatchRule
+        level      = $matchLevel
+        isReadOnly = [System.Boolean] $Vendor.IsReadOnly
     }
 
     $expected = @(ConvertTo-MofTypeConstraint -VendorType $Vendor.Type `
@@ -325,10 +358,14 @@ function Compare-DeclaredProperty
                     -Property $Name `
                     -Resource $Resource.Resource `
                     -Workload $Resource.Workload `
+                    -AutoFixable $autoFixable `
                     -Severity $suppression.Severity `
                     -From ([ordered]@{ typeConstraint = $actual }) `
                     -To ([ordered]@{ vendorType = $Vendor.Type; isArray = $Vendor.IsArray; expected = $expected }) `
-                    -Evidence ([ordered]@{ source = "csdl:$($TypeKey -replace ':', '/')/$($Vendor.Path)" })))
+                    -Evidence ([ordered]@{
+                        source = "csdl:$($TypeKey -replace ':', '/')/$($Vendor.Path)"
+                        match  = $match
+                    })))
     }
 
     $vendorMembers = @($Vendor.Enum | Where-Object -FilterScript { $null -ne $_ -and $_ -ne 'unknownFutureValue' })
@@ -348,10 +385,14 @@ function Compare-DeclaredProperty
                             -Property $Name `
                             -Resource $Resource.Resource `
                             -Workload $Resource.Workload `
+                            -AutoFixable $autoFixable `
                             -Severity $suppression.Severity `
                             -From ([ordered]@{ values = @($Declared.values) }) `
                             -To ([ordered]@{ values = $vendorMembers; added = $missingMembers }) `
-                            -Evidence ([ordered]@{ source = "csdl:$($TypeKey -replace ':', '/')/$($Vendor.Path)" })))
+                            -Evidence ([ordered]@{
+                                source = "csdl:$($TypeKey -replace ':', '/')/$($Vendor.Path)"
+                                match  = $match
+                            })))
             }
         }
     }
@@ -492,6 +533,8 @@ function Get-DefaultNonVendorProperty
 .DESCRIPTION
     The CSDL annotates most of these as read only, but not on every type. Without the list the
     same property is reported as read only on one entity and as an auto fixable gap on another.
+    The content version pair carries the same problem for a different reason. Both are writable
+    in the CSDL and both are owned by the app content upload sequence, never by a configuration.
 
 .OUTPUTS
     The property names, matched against the vendor name.
@@ -503,6 +546,7 @@ function Get-DefaultServiceManagedProperty
     param ()
 
     return [System.String[]] @(
-        'createdDateTime', 'deletedDateTime', 'lastModifiedDateTime', 'modifiedDateTime', 'version'
+        'committedContentVersion', 'contentVersions', 'createdDateTime', 'deletedDateTime',
+        'lastModifiedDateTime', 'modifiedDateTime', 'version'
     )
 }

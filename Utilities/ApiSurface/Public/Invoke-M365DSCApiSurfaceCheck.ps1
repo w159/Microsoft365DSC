@@ -17,7 +17,8 @@
     Specifies where api-drift.json is written.
 
 .PARAMETER MarkdownPath
-    Specifies where the Markdown report is written. Omitted means no Markdown is written.
+    Specifies where the Markdown report is written. Defaults to api-drift.md beside
+    api-drift.json.
 
 .PARAMETER IssueBodyPath
     Specifies where the tracking Issue body is written. Omitted means no body is written.
@@ -161,6 +162,7 @@ function Invoke-M365DSCApiSurfaceCheck
     $defaults = @{
         BaselinePath    = 'Utilities/ApiSurface/api-surface.json'
         DriftPath       = 'Utilities/ApiSurface/api-drift.json'
+        MarkdownPath    = 'Utilities/ApiSurface/api-drift.md'
         SchemaCachePath = 'Modules/Microsoft365DSC/DscSchemaCache.json'
         ExclusionPath   = 'Utilities/ApiSurface/exclusions.json'
     }

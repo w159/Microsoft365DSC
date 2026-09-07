@@ -5,9 +5,9 @@
 - [ ] `RES-ENUM-STALE:TestPolicy:State`
       csdl:beta/testPolicy/state, missing member(s): disabled, reportOnly
 - [ ] `RES-PROP-MISSING:TestGroup:NewName`
-      csdl:beta/testGroup/newName
+      csdl:beta/testGroup/newName, Edm.String
 - [ ] `RES-PROP-MISSING:TestPolicy:NewFlag`
-      csdl:beta/testPolicy/newFlag
+      csdl:beta/testPolicy/newFlag, Edm.Boolean
 - [ ] `VND-ENUM-MEMBER-ADDED:beta:testPolicy:state`
       csdl:beta/testPolicy/state, new member(s): reportOnly
 
@@ -32,7 +32,7 @@ None.
 ## Read-only, suggested for no implementation  (1)
 
 - `RES-PROP-READONLY:TestPolicy:CreatedDateTime`
-      csdl:beta/testPolicy/createdDateTime
+      csdl:beta/testPolicy/createdDateTime, Edm.DateTimeOffset
 
 ## Coverage gaps  (1)
 

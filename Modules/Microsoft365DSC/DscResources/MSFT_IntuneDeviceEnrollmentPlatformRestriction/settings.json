@@ -13,7 +13,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceEnrollmentConfigurationType",
+      "reason": "OwnedByOtherResource",
+      "note": "The vendor enum spans every deviceEnrollmentConfiguration subtype while this resource covers only deviceEnrollmentPlatformRestrictionConfiguration and deviceEnrollmentPlatformRestrictionsConfiguration. The other members belong to IntuneDeviceEnrollmentLimitRestriction, IntuneDeviceEnrollmentStatusPageWindows10, IntuneWindowsHelloForBusinessGlobalPolicy and IntuneWindowsBackupForOrganizationConfiguration. A wider ValidateSet would accept a value that no Set branch handles."
+    },
+    {
+      "name": "PlatformType",
+      "reason": "NotConfigurable",
+      "note": "Only the singular deviceEnrollmentPlatformRestrictionConfiguration subtype carries it. The resource derives it from whichever platform restriction property is populated and adds it to the request body itself."
+    },
+    {
+      "name": "PlatformRestriction",
+      "reason": "NotConfigurable",
+      "note": "The payload of the singular subtype. Get projects it onto the matching platform restriction property and Set renames the chosen one back, which already reaches all six deviceEnrollmentPlatformRestriction members."
+    }
+  ],
   "description": "This resource configures the Intune device platform enrollment restrictions.",
   "permissions": {
     "graph": {

@@ -15,7 +15,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "TargetType",
+      "reason": "Accepted",
+      "note": "Carries the odata subtype. This resource covers iosiPadOSWebClip, macOSWebClip, windowsWebApp and webApp."
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Web Link for the iOS, MacOS, Windows and general platform.",
   "permissions": {
     "graph": {

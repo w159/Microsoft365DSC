@@ -311,7 +311,7 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
             if ($this.DeviceEnrollmentConfigurationType -eq 'platformRestrictions' )
             {
                 $policyType = '#microsoft.graph.deviceEnrollmentPlatformRestrictionsConfiguration'
-                $boundParameters.Add('deviceEnrollmentConfigurationType ', 'limit')
+                $boundParameters.Add('deviceEnrollmentConfigurationType', 'limit')
             }
             $boundParameters.Add('@odata.type', $policyType)
 
