@@ -185,6 +185,7 @@
   * Added support for the `EapType` property.
   * Added support for the `TrustedServerCertificateNames` property.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile
+  * Added `wep` and `wpaPersonal` to property `WiFiSecurityType`.
   * Added support for the `PreSharedKey` property.
   * Added support for the `PreSharedKeyIsSet` property, which reports whether the
     service holds a key that it never returns on a read.
@@ -192,6 +193,8 @@
   * Added values `wep` and `wpaPersonal` to property `WiFiSecurityType`.
 * IntuneWifiConfigurationPolicyAndroidOpenSourceProject
   * Added support for the `ProxySetting` property.
+* IntuneWifiConfigurationPolicyMacOS
+  * Added `wpa3Personal` to property `WiFiSecurityType`.
 * IntuneWifiConfigurationPolicyWindows10
   * Added value `wpa3Personal` to property `WifiSecurityType`.
 * IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined
