@@ -12,9 +12,14 @@
   },
   "excludedProperties": [
     {
-      "name": "AcceptanceStatement",
-      "reason": "Deferred",
-      "note": "Set writes acceptanceStatement to the agreements endpoint even though no Graph CSDL version declares the property anywhere."
+      "name": "Acceptances",
+      "reason": "ReadOnly",
+      "note": "Per-user and per-device acceptance records stamped by the service"
+    },
+    {
+      "name": "Files",
+      "reason": "Accepted",
+      "note": "Built from FileData, FileName and Language. Only one localization is expressible."
     }
   ],
   "description": "This resource configures Azure AD Terms of Use Agreements in Entra ID.",

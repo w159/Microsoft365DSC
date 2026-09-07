@@ -12,9 +12,34 @@
   },
   "excludedProperties": [
     {
+      "name": "CertificateUploadFailureReason",
+      "reason": "ReadOnly",
+      "note": "Apple push service reports the upload failure"
+    },
+    {
+      "name": "CertificateUploadStatus",
+      "reason": "ReadOnly",
+      "note": "Apple push service reports the upload status"
+    },
+    {
       "name": "DataSharingConsetGranted",
       "reason": "Deferred",
-      "note": "The value lives on the separate dataSharingConsent."
+      "note": "The value lives on the separate dataSharingConsent"
+    },
+    {
+      "name": "ExpirationDateTime",
+      "reason": "ReadOnly",
+      "note": "Taken from the uploaded certificate itself"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "AppleIdentifier is the key and one certificate exists per tenant"
+    },
+    {
+      "name": "TopicIdentifier",
+      "reason": "ReadOnly",
+      "note": "Apple issues the APNs topic with the certificate"
     }
   ],
   "description": "Configures a resource for Apple MDM Push notification certificate used for device enrollment.",

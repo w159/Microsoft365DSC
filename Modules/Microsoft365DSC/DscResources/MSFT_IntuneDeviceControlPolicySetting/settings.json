@@ -13,17 +13,22 @@
   "excludedProperties": [
     {
       "name": "MatchType",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "A flattened value from the settingInstance property."
     },
     {
       "name": "PrinterPolicySettings",
-      "reason": "Deferred",
+      "reason": "Accepted",
+      "note": "A flattened value from the settingInstance property."
+    },
+    {
+      "name": "SettingDefinitionId",
+      "reason": "Accepted",
       "note": "A flattened value from the settingInstance property."
     },
     {
       "name": "StoragePolicySettings",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "A flattened value from the settingInstance property."
     }
   ],

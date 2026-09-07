@@ -12,9 +12,14 @@
   },
   "excludedProperties": [
     {
+      "name": "AuthenticationConfiguration",
+      "reason": "Accepted",
+      "note": "Flattened into Username, Password and Certificates"
+    },
+    {
       "name": "Certificates",
-      "reason": "Deferred",
-      "note": "The flattened authenticationConfiguration.certificateList property."
+      "reason": "Accepted",
+      "note": "The flattened authenticationConfiguration.certificateList property"
     }
   ],
   "description": "This resource configures an Azure AD Identity API Connector.",

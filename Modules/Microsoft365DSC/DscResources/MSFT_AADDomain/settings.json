@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsInitial",
+      "reason": "ReadOnly",
+      "note": "Stamped on the tenant onmicrosoft domain at tenant creation"
+    },
+    {
+      "name": "State",
+      "reason": "ReadOnly",
+      "note": "Verification progress, surfaced through AvailabilityStatus and IsVerified"
+    }
+  ],
   "description": "Configures custom domain names in Entra Id.",
   "roles": {
     "read": [],

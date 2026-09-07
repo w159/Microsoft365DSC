@@ -10,7 +10,18 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "ErrorCode",
+      "reason": "ReadOnly",
+      "note": "The service reports this error state. Cannot be configured through a configuration."
+    },
+    {
+      "name": "Status",
+      "reason": "ReadOnly",
+      "note": "The service computes validation and assignment status after deployment"
+    }
+  ],
   "description": "This resource configures an Intune Policy Sets.",
   "permissions": {
     "graph": {

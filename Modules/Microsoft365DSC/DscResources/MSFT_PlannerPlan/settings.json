@@ -12,9 +12,19 @@
   },
   "excludedProperties": [
     {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on title and owning group."
+    },
+    {
+      "name": "Owner",
+      "reason": "Accepted",
+      "note": "Declared as OwnerGroup and written into the vendor owner property"
+    },
+    {
       "name": "OwnerGroup",
       "reason": "Deferred",
-      "note": "OwnerGroup is the id or display name of the owning group."
+      "note": "Id or display name of the owning group"
     }
   ],
   "description": "",

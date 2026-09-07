@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Entra ID sets the id at creation. The resource keys on DisplayName and re-queries it"
+    }
+  ],
   "description": "This resource configures an Azure AD Home Realm Discovery Policy.",
   "permissions": {
     "graph": {

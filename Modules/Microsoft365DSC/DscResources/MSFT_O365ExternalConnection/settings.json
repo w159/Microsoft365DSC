@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Configuration",
+      "reason": "Accepted",
+      "note": "The container holds only authorizedAppIds, which the resource models as AuthorizedAppIds"
+    },
+    {
+      "name": "IngestedItemsCount",
+      "reason": "ReadOnly",
+      "note": "The service counts the items ingested into the connection"
+    }
+  ],
   "description": "Configures external connectors in Microsoft 365.",
   "roles": {},
   "permissions": {

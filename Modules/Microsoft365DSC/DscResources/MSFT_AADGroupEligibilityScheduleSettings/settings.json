@@ -13,43 +13,43 @@
   "excludedProperties": [
     {
       "name": "ApprovalRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyApprovalRule property."
+      "reason": "Accepted",
+      "note": "A flattened value from unifiedRoleManagementPolicyApprovalRule"
     },
     {
       "name": "AuthenticationContextRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyAuthenticationContextRule property."
+      "reason": "Accepted",
+      "note": "A flattened value from unifiedRoleManagementPolicyAuthenticationContextRule"
     },
     {
       "name": "EnablementRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "A flattened value from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "ExpirationRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "A flattened value from unifiedRoleManagementPolicyExpirationRule"
     },
     {
       "name": "GroupDisplayName",
-      "reason": "Deferred",
-      "note": "The display name of the group the policy applies to."
+      "reason": "Accepted",
+      "note": "The display name of the group the policy applies to"
     },
     {
       "name": "NotificationRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "A flattened value from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "PIMGroupRole",
-      "reason": "Deferred",
-      "note": "The group role the policy applies to."
+      "reason": "Accepted",
+      "note": "The group role the policy applies to"
     },
     {
       "name": "RuleType",
-      "reason": "Deferred",
-      "note": "The type of the policy rule. Used to differentiate between their types."
+      "reason": "Accepted",
+      "note": "The type of the policy rule, differentiating between rule types"
     }
   ],
   "description": "This resource configures an Azure AD Group Eligibility Schedule Settings.",

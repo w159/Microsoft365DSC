@@ -14,7 +14,7 @@
     {
       "name": "ForcePreSharedKeyUpdate",
       "reason": "NotConfigurable",
-      "note": "Forces the pre shared key to be sent again. Never returned by a read."
+      "note": "Forces the pre shared key to be sent again. Never read back."
     }
   ],
   "description": "This resource configures an Intune Wifi Configuration Policy for iOS with Basic Wi-Fi type.",

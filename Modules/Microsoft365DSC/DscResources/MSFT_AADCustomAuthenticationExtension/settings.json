@@ -21,22 +21,22 @@
     {
       "name": "AuthenticationConfigurationType",
       "reason": "Deferred",
-      "note": "The type of the authentication configuration. Used to differentiate between their types."
+      "note": "Differentiates the authentication configuration types"
     },
     {
       "name": "CustomAuthenticationExtensionType",
       "reason": "Deferred",
-      "note": "The type of the custom authentication extension. Used to differentiate between their types."
+      "note": "Differentiates the custom authentication extension types"
     },
     {
       "name": "AuthenticationConfiguration",
       "reason": "Accepted",
-      "note": "Flattened into AuthenticationConfigurationType and AuthenticationConfigurationResourceId."
+      "note": "Flattened into AuthenticationConfigurationType and AuthenticationConfigurationResourceId"
     },
     {
       "name": "ClientConfiguration",
       "reason": "Accepted",
-      "note": "Flattened into ClientConfigurationTimeoutInMilliseconds and ClientConfigurationMaximumRetries."
+      "note": "Flattened into ClientConfigurationTimeoutInMilliseconds and ClientConfigurationMaximumRetries"
     }
   ],
   "description": "Custom authentication extensions define interactions with external systems during a user authentication session. ",

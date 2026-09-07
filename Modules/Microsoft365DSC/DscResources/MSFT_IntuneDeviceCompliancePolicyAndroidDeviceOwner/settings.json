@@ -10,7 +10,33 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceSettingStateSummaries",
+      "reason": "ReadOnly",
+      "note": "Intune computes per-setting compliance counts from device check-ins"
+    },
+    {
+      "name": "DeviceStatuses",
+      "reason": "ReadOnly",
+      "note": "Intune generates per-device compliance rows from device reporting"
+    },
+    {
+      "name": "DeviceStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Intune calculates the compliant and non-compliant device counts"
+    },
+    {
+      "name": "UserStatuses",
+      "reason": "ReadOnly",
+      "note": "Intune generates per-user compliance rows from device reporting"
+    },
+    {
+      "name": "UserStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Intune calculates the per-user compliance counts"
+    }
+  ],
   "description": "This resource configures the settings of Android DeviceOwner device compliance policies in your cloud-based organization.",
   "permissions": {
     "graph": {

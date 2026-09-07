@@ -14,12 +14,12 @@
     {
       "name": "RootCertificateDisplayName",
       "reason": "Deferred",
-      "note": "The display name of the windows81TrustedRootCertificate this profile references."
+      "note": "Display name of the referenced windows81TrustedRootCertificate"
     },
     {
       "name": "RootCertificateId",
       "reason": "Deferred",
-      "note": "The identifier of the windows81TrustedRootCertificate this profile references."
+      "note": "Identifier of the referenced windows81TrustedRootCertificate"
     }
   ],
   "description": "This resource configures an Intune Device Configuration Scep Certificate Policy for Windows10.",

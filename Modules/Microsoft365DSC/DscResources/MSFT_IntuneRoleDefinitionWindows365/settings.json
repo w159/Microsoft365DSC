@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsPrivileged",
+      "reason": "ReadOnly",
+      "note": "The service derives this flag from the sensitive actions in RolePermissions"
+    },
+    {
+      "name": "ResourceScopes",
+      "reason": "Deprecated",
+      "note": "Marked DO NOT USE and accepts only the root scope, IntuneRoleAssignmentWindows365 models scope"
+    }
+  ],
   "description": "This resource configures an Intune Role Definition Windows365.",
   "permissions": {
     "graph": {

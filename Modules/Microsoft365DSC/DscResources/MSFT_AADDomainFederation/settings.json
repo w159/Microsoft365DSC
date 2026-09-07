@@ -14,7 +14,12 @@
     {
       "name": "DomainId",
       "reason": "Deferred",
-      "note": "The parent domain key from the federationConfiguration route."
+      "note": "Parent domain key from the federationConfiguration route"
+    },
+    {
+      "name": "SigningCertificateUpdateStatus",
+      "reason": "ReadOnly",
+      "note": "Rollover result, with the certificates in SigningCertificate and NextSigningCertificate"
     }
   ],
   "description": "Manages Azure Active Directory Domain Federation configurations including SAML/WS-Fed settings, signing certificates, and authentication protocols for federated domains.",

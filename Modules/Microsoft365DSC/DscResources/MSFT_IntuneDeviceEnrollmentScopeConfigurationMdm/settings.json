@@ -10,7 +10,28 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Description",
+      "reason": "ReadOnly",
+      "note": "Belongs to the registered MDM application"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "ReadOnly",
+      "note": "Names the registered MDM application"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "IsValid",
+      "reason": "ReadOnly",
+      "note": "Service-computed validity flag"
+    }
+  ],
   "description": "This resource configures an Intune Device Enrollment Scope Configuration Mdm.",
   "permissions": {
     "graph": {

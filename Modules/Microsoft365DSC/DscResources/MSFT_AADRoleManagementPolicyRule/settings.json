@@ -13,43 +13,48 @@
   "excludedProperties": [
     {
       "name": "ApprovalRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyApprovalRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyApprovalRule"
     },
     {
       "name": "AuthenticationContextRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyAuthenticationContextRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyAuthenticationContextRule"
     },
     {
       "name": "EnablementRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "ExpirationRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyExpirationRule"
     },
     {
       "name": "NotificationRule",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "PolicyId",
-      "reason": "Deferred",
-      "note": "The role management policy the rule belongs to."
+      "reason": "Accepted",
+      "note": "The role management policy the rule belongs to"
     },
     {
       "name": "RoleDisplayName",
-      "reason": "Deferred",
-      "note": "The display name of the role the policy applies to."
+      "reason": "Accepted",
+      "note": "Display name of the role the policy applies to"
     },
     {
       "name": "RuleType",
-      "reason": "Deferred",
-      "note": "The type of the policy rule. Used to differentiate between their types."
+      "reason": "Accepted",
+      "note": "Type of the policy rule, used to tell rule types apart"
+    },
+    {
+      "name": "Target",
+      "reason": "ReadOnly",
+      "note": "Derived from the rule identity with no configuration surface"
     }
   ],
   "description": "This resource configures an Azure AD Role Management Policy Rule.",

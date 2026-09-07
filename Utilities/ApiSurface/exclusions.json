@@ -22,9 +22,15 @@
   "serviceManagedProperties": [
     "committedContentVersion",
     "contentVersions",
+    "createdBy",
+    "createdByAppId",
     "createdDateTime",
+    "createdOnBehalfOf",
     "deletedDateTime",
+    "lastModifiedBy",
+    "lastModifiedByAppId",
     "lastModifiedDateTime",
+    "modifiedBy",
     "modifiedDateTime",
     "version"
   ],

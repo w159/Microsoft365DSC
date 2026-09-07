@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "SelfServiceEnabled",
+      "reason": "Deprecated",
+      "note": "Deprecated and returning no data since December 1, 2023"
+    }
+  ],
   "description": "This resource configures an Intune User Settings Policy for Windows365.",
   "permissions": {
     "graph": {

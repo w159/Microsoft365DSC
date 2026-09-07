@@ -13,218 +13,223 @@
   "excludedProperties": [
     {
       "name": "ActivateApprover",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyApprovalRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyApprovalRule"
     },
     {
       "name": "ActivationMaxDuration",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyExpirationRule"
     },
     {
       "name": "ActivationReqJustification",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "ActivationReqMFA",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "ActivationReqTicket",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "ActiveAlertNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveAlertNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveAlertNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveApproveNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveApproveNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveApproveNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveAssigneeNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveAssigneeNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ActiveAssigneeNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ApprovaltoActivate",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyApprovalRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyApprovalRule"
     },
     {
       "name": "AssignmentReqJustification",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "AssignmentReqMFA",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "AuthenticationContextId",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyAuthenticationContextRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyAuthenticationContextRule"
     },
     {
       "name": "AuthenticationContextName",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyAuthenticationContextRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyAuthenticationContextRule"
     },
     {
       "name": "AuthenticationContextRequired",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyAuthenticationContextRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyAuthenticationContextRule"
     },
     {
       "name": "DisplayName",
-      "reason": "Deferred",
-      "note": "The display name of the group the policy applies to."
+      "reason": "Accepted",
+      "note": "Display name of the group the policy applies to"
     },
     {
       "name": "EligibilityAssignmentReqJustification",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "EligibilityAssignmentReqMFA",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyEnablementRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyEnablementRule"
     },
     {
       "name": "EligibleAlertNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAlertNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAlertNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleApproveNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleApproveNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleApproveNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssigneeNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssigneeNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssigneeNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAlertNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAlertNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAlertNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAssigneeNotificationAdditionalRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAssigneeNotificationDefaultRecipient",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "EligibleAssignmentAssigneeNotificationOnlyCritical",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyNotificationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from unifiedRoleManagementPolicyNotificationRule"
     },
     {
       "name": "ExpireActiveAssignment",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from the unifiedRoleManagementPolicyExpirationRule property"
     },
     {
       "name": "ExpireEligibleAssignment",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from the unifiedRoleManagementPolicyExpirationRule property"
     },
     {
       "name": "PermanentActiveAssignmentisExpirationRequired",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from the unifiedRoleManagementPolicyExpirationRule property"
     },
     {
       "name": "PermanentEligibleAssignmentisExpirationRequired",
-      "reason": "Deferred",
-      "note": "A flattened value from the unifiedRoleManagementPolicyExpirationRule property."
+      "reason": "Accepted",
+      "note": "Flattened from the unifiedRoleManagementPolicyExpirationRule property"
     },
     {
       "name": "RoleDefinitionId",
-      "reason": "Deferred",
-      "note": "The role definition the policy applies to."
+      "reason": "Accepted",
+      "note": "Names the role definition the policy applies to"
+    },
+    {
+      "name": "Target",
+      "reason": "Accepted",
+      "note": "Set writes a stub and the service derives the target from the rule"
     }
   ],
   "description": "This resource configures an PIM Group.",

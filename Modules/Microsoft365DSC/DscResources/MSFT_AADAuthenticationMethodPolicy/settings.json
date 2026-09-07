@@ -10,7 +10,28 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Description",
+      "reason": "ReadOnly",
+      "note": "The service assigns a fixed description to the singleton policy"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "ReadOnly",
+      "note": "The service assigns the singleton policy name"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "PolicyVersion",
+      "reason": "ReadOnly",
+      "note": "The service stamps the policy version"
+    }
+  ],
   "description": "This resource configures an Azure AD Authentication Method Policy.",
   "roles": {
     "read": [

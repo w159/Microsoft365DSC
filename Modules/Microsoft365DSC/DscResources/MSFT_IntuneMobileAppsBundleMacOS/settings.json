@@ -22,12 +22,12 @@
     {
       "name": "PrimaryBundleId",
       "reason": "Accepted",
-      "note": "Taken from the first entry of IncludedApps when the app is created, which is why it carries no property of its own."
+      "note": "Derived from the first IncludedApps entry at create time"
     },
     {
       "name": "PrimaryBundleVersion",
       "reason": "Accepted",
-      "note": "Taken from the first entry of IncludedApps when the app is created, which is why it carries no property of its own."
+      "note": "Derived from the first IncludedApps entry at create time"
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Bundle types Dmg and Pkg for macOS.",

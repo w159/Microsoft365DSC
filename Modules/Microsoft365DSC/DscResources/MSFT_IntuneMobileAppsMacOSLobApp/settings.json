@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "FileName",
+      "reason": "Accepted",
+      "note": "Set writes DisplayName.pkg on create only and Get never exports it"
+    }
+  ],
   "description": "This resource configures an Intune mobile app.",
   "permissions": {
     "graph": {

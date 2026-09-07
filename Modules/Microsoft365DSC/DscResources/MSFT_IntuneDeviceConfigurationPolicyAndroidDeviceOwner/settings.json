@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsKioskModeExitCodeSet",
+      "reason": "ReadOnly",
+      "note": "Mirrors whether KioskModeExitCode is stored"
+    }
+  ],
   "description": "This resource configures an Intune Device Configuration Policy Android Device Owner.",
   "permissions": {
     "graph": {

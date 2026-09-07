@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DisplayName",
+      "reason": "Accepted",
+      "note": "The resource always names the single policy B2BManagementPolicy"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    }
+  ],
   "description": "This resource configures an Azure AD B2B Management Policy.",
   "permissions": {
     "graph": {

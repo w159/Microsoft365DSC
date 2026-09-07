@@ -13,18 +13,23 @@
   "excludedProperties": [
     {
       "name": "MembersDisplayNames",
-      "reason": "Deferred",
-      "note": "Used to resolve the member security groups ."
+      "reason": "Accepted",
+      "note": "Resolves the member security groups"
     },
     {
       "name": "ResourceScopesDisplayNames",
-      "reason": "Deferred",
-      "note": "Used to resolve the resource scope security groups."
+      "reason": "Accepted",
+      "note": "Resolves the resource scope security groups"
     },
     {
       "name": "RoleDefinitionDisplayName",
       "reason": "OwnedByOtherResource",
-      "note": "Used to resolve the role definition by display name."
+      "note": "Resolves the role definition by display name"
+    },
+    {
+      "name": "ScopeMembers",
+      "reason": "Deprecated",
+      "note": "Legacy spelling of resourceScopes, already configured through ResourceScopes"
     }
   ],
   "description": "This resource configures an Intune Role Assignment.",

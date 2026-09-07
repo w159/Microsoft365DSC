@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsSystemApp",
+      "reason": "Accepted",
+      "note": "Not used in this resource. Defaults to false."
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Managed Google Play Store App for Android.",
   "permissions": {
     "graph": {

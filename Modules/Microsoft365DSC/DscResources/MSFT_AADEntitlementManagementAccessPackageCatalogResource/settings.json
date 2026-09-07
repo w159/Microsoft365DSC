@@ -14,7 +14,7 @@
     {
       "name": "CatalogId",
       "reason": "Deferred",
-      "note": "The catalog id used to resolve the parent container the access package belongs to."
+      "note": "Resolves the parent catalog holding the access package"
     }
   ],
   "description": "This resource configures an Azure AD Entitlement Management Access Package Catalog Resource.",

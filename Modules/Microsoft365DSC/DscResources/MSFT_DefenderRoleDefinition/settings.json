@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsBuiltIn",
+      "reason": "ReadOnly",
+      "note": "Graph flags built-in role definitions and exposes the flag as read only"
+    },
+    {
+      "name": "IsPrivileged",
+      "reason": "ReadOnly",
+      "note": "Graph derives the privileged flag from the granted permissions"
+    }
+  ],
   "description": "Manages custom roles in Defender.",
   "roles": {
     "read": [],

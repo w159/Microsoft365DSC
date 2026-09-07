@@ -13,8 +13,18 @@
   "excludedProperties": [
     {
       "name": "PolicySettings",
-      "reason": "Deferred",
-      "note": "A flattened value from the settingInstance property."
+      "reason": "Accepted",
+      "note": "Flattened from the settingInstance property"
+    },
+    {
+      "name": "SettingDefinitionId",
+      "reason": "Accepted",
+      "note": "Set writes the fixed dynamic keywords addresses definition id on create and update."
+    },
+    {
+      "name": "SettingInstance",
+      "reason": "Accepted",
+      "note": "Set builds the envelope wholesale, taking three values from PolicySettings."
     }
   ],
   "description": "This resource configures an Intune Firewall Policy Setting.",

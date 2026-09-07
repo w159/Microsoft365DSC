@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Entra generates the GUID at create time and it routes only"
+    }
+  ],
   "description": "This resource configures an Azure AD Authentication Method Policy External.",
   "roles": {
     "read": [

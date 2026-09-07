@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Graph assigns it on create and the resource keys on DisplayName"
+    }
+  ],
   "description": "This resource configures the Intune device categories.",
   "permissions": {
     "graph": {

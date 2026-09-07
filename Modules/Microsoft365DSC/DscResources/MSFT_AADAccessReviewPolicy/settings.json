@@ -10,7 +10,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Description",
+      "reason": "ReadOnly",
+      "note": "Read only in Graph. PATCH accepts only isGroupOwnerManagementEnabled."
+    },
+    {
+      "name": "DisplayName",
+      "reason": "ReadOnly",
+      "note": "Read only in Graph. PATCH accepts only isGroupOwnerManagementEnabled."
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    }
+  ],
   "description": "Use this resource to monitor the access review policy object.",
   "roles": {
     "read": [],

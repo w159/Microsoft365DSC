@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "PolicyType",
+      "reason": "ReadOnly",
+      "note": "The service assigns it and policies created here are always custom"
+    },
+    {
+      "name": "RequirementsSatisfied",
+      "reason": "ReadOnly",
+      "note": "Derived from allowedCombinations, managed through AllowedCombinations"
+    }
+  ],
   "description": "This resource configures an Azure AD Authentication Strength Policy.",
   "roles": {
     "read": [],

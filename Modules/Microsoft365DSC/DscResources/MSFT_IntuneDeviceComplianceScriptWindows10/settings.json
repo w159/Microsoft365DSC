@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Platform",
+      "reason": "ReadOnly",
+      "note": "The platform is fixed to windows10."
+    }
+  ],
   "description": "This resource configures an Intune Device Compliance Script for Windows10.",
   "permissions": {
     "graph": {

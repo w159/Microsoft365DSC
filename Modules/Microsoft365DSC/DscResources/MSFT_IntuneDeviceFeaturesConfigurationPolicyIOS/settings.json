@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "SingleSignOnExtension",
+      "reason": "Deprecated",
+      "note": "Deprecated in favor of IOSSingleSignOnExtension."
+    }
+  ],
   "description": "This resource configures an Intune Device Features Configuration Policy for iOS Device.",
   "permissions": {
     "graph": {

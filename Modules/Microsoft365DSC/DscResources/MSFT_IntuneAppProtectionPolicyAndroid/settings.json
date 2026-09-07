@@ -10,7 +10,23 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeployedAppCount",
+      "reason": "ReadOnly",
+      "note": "Computed from the targeted apps, which Apps manages"
+    },
+    {
+      "name": "DeploymentSummary",
+      "reason": "ReadOnly",
+      "note": "Service maintained deployment report"
+    },
+    {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Derived from the assignments that Assignments manages"
+    }
+  ],
   "description": "This resource configures an Intune app protection policy for an Android Device.",
   "permissions": {
     "graph": {

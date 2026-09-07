@@ -12,9 +12,24 @@
   },
   "excludedProperties": [
     {
+      "name": "BackupReviewers",
+      "reason": "Deprecated",
+      "note": "Graph replaces it with fallbackReviewers, written through FallbackReviewers."
+    },
+    {
+      "name": "Scope",
+      "reason": "Accepted",
+      "note": "Declared as ScopeValue because Scope is a reserved MOF keyword."
+    },
+    {
       "name": "ScopeValue",
       "reason": "Deferred",
-      "note": "The Graph entity property is named scope, which cannot be a DSC property name because Scope is a reserved MOF keyword."
+      "note": "Renamed from the Graph property scope, a reserved MOF keyword."
+    },
+    {
+      "name": "Status",
+      "reason": "ReadOnly",
+      "note": "Graph computes it from the schedule and instance lifecycle as read only."
     }
   ],
   "description": "This resource configures an Azure AD Access Review Definition.",

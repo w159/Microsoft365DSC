@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "The service computes the flag from assignments, which Assignments manages"
+    }
+  ],
   "description": "This resource configures an Intune Windows Information Protection Policy for Windows10 Mdm Enrolled.",
   "permissions": {
     "graph": {

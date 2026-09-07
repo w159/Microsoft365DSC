@@ -10,7 +10,33 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceSettingStateSummaries",
+      "reason": "ReadOnly",
+      "note": "Per-setting compliance report the service computes from device counts"
+    },
+    {
+      "name": "DeviceStatuses",
+      "reason": "ReadOnly",
+      "note": "One entry per evaluated device, populated as devices check in"
+    },
+    {
+      "name": "DeviceStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Aggregate rollup of device compliance counts the service computes"
+    },
+    {
+      "name": "UserStatuses",
+      "reason": "ReadOnly",
+      "note": "One entry per evaluated user, populated from device check-ins"
+    },
+    {
+      "name": "UserStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Aggregate rollup of user compliance counts the service computes"
+    }
+  ],
   "description": "This resource configures the settings of MacOS compliance policies in your cloud-based organization.",
   "permissions": {
     "graph": {

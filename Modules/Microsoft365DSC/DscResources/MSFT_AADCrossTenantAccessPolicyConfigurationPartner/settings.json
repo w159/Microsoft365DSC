@@ -12,9 +12,14 @@
   },
   "excludedProperties": [
     {
+      "name": "IsInMultiTenantOrganization",
+      "reason": "ReadOnly",
+      "note": "The service derives this from partner multitenant-organization membership and accepts no value."
+    },
+    {
       "name": "PartnerTenantId",
       "reason": "Deferred",
-      "note": "Defined as tenantId on the entity. Renamed to avoid clashing with the authentication TenantId parameter."
+      "note": "Renamed from tenantId to avoid clashing with the authentication TenantId parameter"
     }
   ],
   "description": "This resource configures an Azure AD Authentication Method Policy Configuration Partner.",

@@ -10,7 +10,18 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "ProductCode",
+      "reason": "Accepted",
+      "note": "Set writes a fixed product code into the create body"
+    },
+    {
+      "name": "ProductVersion",
+      "reason": "Accepted",
+      "note": "Set writes a fixed product version into the create body"
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Lob App MSI for Windows10.",
   "permissions": {
     "graph": {

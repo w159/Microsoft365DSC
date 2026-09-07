@@ -13,8 +13,18 @@
   "excludedProperties": [
     {
       "name": "CertificateFile",
-      "reason": "Deferred",
-      "note": "A flattened value from the settingInstance property."
+      "reason": "Accepted",
+      "note": "Flattened from the settingInstance property"
+    },
+    {
+      "name": "SettingDefinitionId",
+      "reason": "Accepted",
+      "note": "The constant identifies this resource as the EPM certificate-file reusable setting."
+    },
+    {
+      "name": "SettingInstance",
+      "reason": "Accepted",
+      "note": "Set builds the envelope from fixed odata types, binding only CertificateFile."
     }
   ],
   "description": "This resource configures an Intune Endpoint Privilege Management Certificate Policy Setting.",

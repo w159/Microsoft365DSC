@@ -13,8 +13,18 @@
   "excludedProperties": [
     {
       "name": "DiscoveryScript",
-      "reason": "Deferred",
-      "note": "A flattened value from the settingInstance property."
+      "reason": "Accepted",
+      "note": "Flattened value from the settingInstance property"
+    },
+    {
+      "name": "SettingDefinitionId",
+      "reason": "Accepted",
+      "note": "Fixed setting definition id Set() writes into the create and update bodies"
+    },
+    {
+      "name": "SettingInstance",
+      "reason": "Accepted",
+      "note": "Set() builds the whole object and DiscoveryScript assigns the value"
     }
   ],
   "description": "This resource configures an Intune Device Compliance Script for Linux.",

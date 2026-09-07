@@ -10,7 +10,18 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "AccessPackageAssignmentPolicies",
+      "reason": "OwnedByOtherResource",
+      "note": "AADEntitlementManagementAccessPackageAssignmentPolicy owns these and links back through AccessPackageId"
+    },
+    {
+      "name": "AccessPackageCatalog",
+      "reason": "OwnedByOtherResource",
+      "note": "AADEntitlementManagementAccessPackageCatalog owns the catalog, associated here through CatalogId"
+    }
+  ],
   "description": "This resource configures an Azure AD Entitlement Management Access Package.",
   "roles": {
     "read": [

@@ -10,7 +10,23 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeployedAppCount",
+      "reason": "ReadOnly",
+      "note": "Intune counts the apps targeted through the Apps property"
+    },
+    {
+      "name": "DeploymentSummary",
+      "reason": "ReadOnly",
+      "note": "Intune reports the deployment rollup across users and apps"
+    },
+    {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Intune derives the flag from the Assignments property"
+    }
+  ],
   "description": "This resource configures an Intune App Protection Policy for Windows10.",
   "permissions": {
     "graph": {

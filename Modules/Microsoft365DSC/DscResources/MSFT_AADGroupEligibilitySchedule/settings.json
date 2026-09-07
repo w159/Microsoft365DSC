@@ -12,9 +12,29 @@
   },
   "excludedProperties": [
     {
+      "name": "CreatedUsing",
+      "reason": "ReadOnly",
+      "note": "Graph sets the id of the eligibility schedule request that produced the schedule"
+    },
+    {
+      "name": "Group",
+      "reason": "OwnedByOtherResource",
+      "note": "AADGroup owns the group. GroupId and GroupDisplayName reference it here"
+    },
+    {
+      "name": "PrincipalId",
+      "reason": "Accepted",
+      "note": "Set resolves Principal to a directory object id for the request bodies"
+    },
+    {
       "name": "PrincipalType",
       "reason": "Deferred",
-      "note": "The type of the Principal. Used to differentiate between their types."
+      "note": "The type of the Principal, differentiating between principal types"
+    },
+    {
+      "name": "Status",
+      "reason": "ReadOnly",
+      "note": "Graph derives lifecycle state from the schedule window and its requests."
     }
   ],
   "description": "This resource configures an Azure AD Group Eligibility Schedule.",

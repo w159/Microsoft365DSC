@@ -12,9 +12,14 @@
   },
   "excludedProperties": [
     {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "The class declares no Id property and hardcodes the fixed configuration GUID"
+    },
+    {
       "name": "OrganizationId",
       "reason": "Deferred",
-      "note": "This is the parent organization identifier used to identify the authentication configuration."
+      "note": "Parent organization identifier that identifies the authentication configuration"
     }
   ],
   "description": "This resource configures an Azure AD Organization Certificate Based Auth Configuration.",

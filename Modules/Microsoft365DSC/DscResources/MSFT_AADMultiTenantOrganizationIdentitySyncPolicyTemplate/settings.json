@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Id",
+      "reason": "Accepted",
+      "note": "Set supplies the service-assigned id. The resource keys on IsSingleInstance."
+    }
+  ],
   "description": "Defines an optional cross-tenant access policy template with user synchronization settings for multitenant organization tenants.",
   "roles": {
     "read": [],

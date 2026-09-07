@@ -10,7 +10,33 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceSettingStateSummaries",
+      "reason": "ReadOnly",
+      "note": "Intune aggregates per-setting compliance counts from device check-ins"
+    },
+    {
+      "name": "DeviceStatuses",
+      "reason": "ReadOnly",
+      "note": "Intune derives the per-device compliance report from check-ins and overwrites writes"
+    },
+    {
+      "name": "DeviceStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Intune computes the aggregate device compliance rollup for the policy"
+    },
+    {
+      "name": "UserStatuses",
+      "reason": "ReadOnly",
+      "note": "Per-user compliance report derived from enrolled devices, overwritten by the service"
+    },
+    {
+      "name": "UserStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Aggregate per-user compliance rollup Intune computes for the policy"
+    }
+  ],
   "description": "This resource configures the Intune compliance policies for iOs devices.",
   "permissions": {
     "graph": {

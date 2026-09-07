@@ -10,7 +10,18 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "VersionCode",
+      "reason": "Accepted",
+      "note": "Set writes a fixed placeholder matching the stub package manifest"
+    },
+    {
+      "name": "VersionName",
+      "reason": "Accepted",
+      "note": "Set writes a fixed placeholder matching the stub package manifest"
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Lob App for Android.",
   "permissions": {
     "graph": {

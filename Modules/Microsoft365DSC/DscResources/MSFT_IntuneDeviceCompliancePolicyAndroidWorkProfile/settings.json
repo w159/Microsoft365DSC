@@ -10,7 +10,33 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceSettingStateSummaries",
+      "reason": "ReadOnly",
+      "note": "Intune computes per-setting compliance rollups from device check-ins"
+    },
+    {
+      "name": "DeviceStatuses",
+      "reason": "ReadOnly",
+      "note": "Intune records one entry per device as devices report compliance"
+    },
+    {
+      "name": "DeviceStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Intune calculates the device compliance count rollup"
+    },
+    {
+      "name": "UserStatuses",
+      "reason": "ReadOnly",
+      "note": "Intune records one entry per user as devices report compliance"
+    },
+    {
+      "name": "UserStatusOverview",
+      "reason": "ReadOnly",
+      "note": "Intune calculates the user compliance count rollup"
+    }
+  ],
   "description": "This resource configures the settings of Android Work Profile device compliance policies in your cloud-based organization.",
   "permissions": {
     "graph": {

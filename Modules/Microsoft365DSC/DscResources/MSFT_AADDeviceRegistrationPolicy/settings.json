@@ -13,28 +13,53 @@
   "excludedProperties": [
     {
       "name": "AzureADAllowedToJoin",
-      "reason": "Deferred",
-      "note": "The flattened azureADJoin.allowedToJoin property."
+      "reason": "Accepted",
+      "note": "Flattened from azureADJoin.allowedToJoin"
     },
     {
       "name": "AzureADAllowedToJoinGroups",
-      "reason": "Deferred",
-      "note": "The flattened azureADJoin.allowedToJoin.groups property."
+      "reason": "Accepted",
+      "note": "Flattened from azureADJoin.allowedToJoin.groups"
     },
     {
       "name": "AzureADAllowedToJoinUsers",
-      "reason": "Deferred",
-      "note": "The flattened azureADJoin.allowedToJoin.users property."
+      "reason": "Accepted",
+      "note": "Flattened from azureADJoin.allowedToJoin.users"
+    },
+    {
+      "name": "AzureADJoin",
+      "reason": "Accepted",
+      "note": "Flattened onto the AzureADAllowedToJoin and AzureAdJoinLocalAdmins properties"
     },
     {
       "name": "AzureAdJoinLocalAdminsRegisteringGroups",
-      "reason": "Deferred",
-      "note": "The flattened azureADJoin.localAdmins.registeringUsers.groups property."
+      "reason": "Accepted",
+      "note": "Flattened form of azureADJoin.localAdmins.registeringUsers.groups"
     },
     {
       "name": "AzureAdJoinLocalAdminsRegisteringMode",
-      "reason": "Deferred",
-      "note": "The flattened azureADJoin.localAdmins.registeringUsers property."
+      "reason": "Accepted",
+      "note": "Flattened form of azureADJoin.localAdmins.registeringUsers"
+    },
+    {
+      "name": "Description",
+      "reason": "ReadOnly",
+      "note": "The service fixes this text and the update body rejects it"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "ReadOnly",
+      "note": "The service fixes this to Device Registration Policy"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "LocalAdminPassword",
+      "reason": "Accepted",
+      "note": "LocalAdminPasswordIsEnabled covers its only member, isEnabled"
     }
   ],
   "description": "Represents the policy scope that controls quota restrictions, additional authentication, and authorization policies to register device identities to your organization.",
