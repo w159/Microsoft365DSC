@@ -259,6 +259,7 @@ class AADAgreement : M365DSCResourceBase
                     }
                     fileName = $this.FileName
                     language = $this.Language
+                    isDefault = $true
                 }
             }
 

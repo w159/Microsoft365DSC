@@ -247,6 +247,12 @@ function Compare-ResourceSurface
             }
 
             $suppression = Resolve-FindingExclusion -Exclusion $exclusions -Property $dscName
+            if ($nested -and $null -eq $suppression.Reason -and -not $vendor.Properties.Contains($vendorProperty.Name))
+            {
+                $suppression = Resolve-FindingExclusion -Exclusion $exclusions `
+                    -Property (ConvertTo-DscPropertyName -Name $vendorProperty.Name)
+            }
+
             if ($suppression.Suppressed)
             {
                 continue

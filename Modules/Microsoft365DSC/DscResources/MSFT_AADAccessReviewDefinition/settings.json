@@ -13,7 +13,7 @@
   "excludedProperties": [
     {
       "name": "BackupReviewers",
-      "reason": "Deprecated",
+      "reason": "Accepted",
       "note": "Graph replaces it with fallbackReviewers, written through FallbackReviewers."
     },
     {
@@ -23,7 +23,7 @@
     },
     {
       "name": "ScopeValue",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Renamed from the Graph property scope, a reserved MOF keyword."
     },
     {

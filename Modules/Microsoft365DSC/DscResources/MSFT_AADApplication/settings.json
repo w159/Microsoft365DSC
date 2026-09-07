@@ -13,7 +13,7 @@
   "excludedProperties": [
     {
       "name": "ApplicationTemplateId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "The beta application CSDL omits it and only template instantiation uses it."
     },
     {
@@ -47,19 +47,9 @@
       "note": "ObjectId echoes the service-assigned application id."
     },
     {
-      "name": "Permissions",
-      "reason": "Deferred",
-      "note": "Permissions is the DSC shaped projection of requiredResourceAccess."
-    },
-    {
       "name": "ReplyURLs",
       "reason": "Accepted",
       "note": "The flattened web.redirectUris property"
-    },
-    {
-      "name": "RequiredResourceAccess",
-      "reason": "Accepted",
-      "note": "Declared as Permissions of type MSFT_AADApplicationPermission[]"
     }
   ],
   "description": "This resource configures an Azure Active Directory Application.",

@@ -736,6 +736,19 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             $finding[0].evidence.flattenedAs | Should -Be 'builtInControls'
         }
 
+        It 'suppresses a nested member excluded under its leaf name' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+            $excluded = @{ TestPolicy = @([PSCustomObject]@{ name = 'BuiltInControls'; reason = 'Accepted' }) }
+
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' }) | Should -HaveCount 0
+        }
+
         It 'treats a single matched member as a lookup rather than as flattening' {
             $snapshot = New-TestSnapshot -GraphType $script:containerType
             $keyword = New-TestKeyword -Property @{

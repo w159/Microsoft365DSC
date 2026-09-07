@@ -10,6 +10,8 @@
     Graph Schema definition for the resource.
   * Added support for the `TermsExpiration` property.
 * AADApplication
+  * [BREAKING CHANGE] Renamed property `Permissions` to `RequiredResourceAccess`
+    to match the name Microsoft Graph uses.
   * Updated `Owners` to use `DisplayName` for Service Principal objects.
 * AADAuthorizationPolicy
   * [BREAKING CHANGE] Moved all `DefaultUserRole*` properties to the new

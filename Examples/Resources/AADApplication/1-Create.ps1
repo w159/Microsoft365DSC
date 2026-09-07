@@ -98,7 +98,7 @@ Configuration Example
                     Value              = "Expenses.Read"
                 }
             )
-            Permissions                = @(
+            RequiredResourceAccess     = @(
                 MSFT_AADApplicationPermission
                 {
                     Name                = 'User.Read'

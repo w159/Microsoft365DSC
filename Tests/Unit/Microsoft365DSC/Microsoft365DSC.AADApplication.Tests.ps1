@@ -469,7 +469,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
-        Context -Name 'Assigning Permissions to a new Application' -Fixture {
+        Context -Name 'Assigning RequiredResourceAccess to a new Application' -Fixture {
             BeforeAll {
                 $testParams = @{
                     DisplayName               = 'App1'
@@ -480,7 +480,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
-                    Permissions               = @([MSFT_AADApplicationPermission] @{
+                    RequiredResourceAccess    = @([MSFT_AADApplicationPermission] @{
                             Name                = 'User.Read'
                             Type                = 'Delegated'
                             SourceAPI           = 'Microsoft Graph'

@@ -145,7 +145,7 @@ class AADApplication : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('API permissions for the Azure Active Directory Application.')]
-    [MSFT_AADApplicationPermission[]] $Permissions
+    [MSFT_AADApplicationPermission[]] $RequiredResourceAccess
 
     [DscProperty()]
     [System.ComponentModel.Description('Thumbprint of the Azure Active Directory application''s authentication certificate to use for authentication.')]
@@ -629,7 +629,7 @@ class AADApplication : M365DSCResourceBase
                 OptionalClaims             = $complexOptionalClaims
                 Owners                     = $OwnersValues
                 PasswordCredentials        = $complexPasswordCredentials
-                Permissions                = $permissionsObj
+                RequiredResourceAccess     = $permissionsObj
                 PublicClient               = $isPublicClient
                 PublicClientRedirectUris   = $PublicClientRedirectUrisValue
                 ReplyURLs                  = $AADApp.web.RedirectUris
@@ -682,13 +682,13 @@ class AADApplication : M365DSCResourceBase
         $this.AddTelemetry('Set')
         #endregion
 
-        # Ensure we throw an error if PublicClient is set to $true and we're trying to also configure either Permissions
+        # Ensure we throw an error if PublicClient is set to $true and we're trying to also configure either RequiredResourceAccess
         # or IdentifierUris
-        if ($this.PublicClient -and ($this.Permissions.Length -gt 0 -or $this.IdentifierUris.Length -gt 0))
+        if ($this.PublicClient -and ($this.RequiredResourceAccess.Length -gt 0 -or $this.IdentifierUris.Length -gt 0))
         {
-            $ErrorMessage = 'It is not possible to set Permissions or IdentifierUris when the PublicClient property is ' + `
+            $ErrorMessage = 'It is not possible to set RequiredResourceAccess or IdentifierUris when the PublicClient property is ' + `
                 "set to `$true. Application will not be created. To fix this, modify the configuration to set the " + `
-                "PublicClient property to `$false, or remove the Permissions and IdentifierUris properties from your configuration."
+                "PublicClient property to `$false, or remove the RequiredResourceAccess and IdentifierUris properties from your configuration."
             Add-M365DSCEvent -Message $ErrorMessage -EntryType 'Error' `
                 -EventID 1 -Source $($this.GetResourceName())
             throw $ErrorMessage
@@ -729,7 +729,7 @@ class AADApplication : M365DSCResourceBase
         $needToUpdateKeyCredentials = $false
         $currentParameters.Remove('AppId') | Out-Null
         $currentParameters.Remove('Logo') | Out-Null
-        $currentParameters.Remove('Permissions') | Out-Null
+        $currentParameters.Remove('RequiredResourceAccess') | Out-Null
         $currentParameters.Remove('AuthenticationBehaviors') | Out-Null
         $currentParameters.Remove('KeyCredentials') | Out-Null
         $currentParameters.Remove('PasswordCredentials') | Out-Null
@@ -1139,24 +1139,24 @@ class AADApplication : M365DSCResourceBase
             Invoke-M365DSCGraphRequest -Uri "/beta/applications/$($currentAADApp.ObjectId)/logo" -Method PUT -Body ([System.Convert]::FromBase64String($this.Logo)) -ContentType 'image/*'
         }
 
-        if ($needToUpdatePermissions -and $null -ne $this.Permissions)
+        if ($needToUpdatePermissions -and $null -ne $this.RequiredResourceAccess)
         {
             Write-Verbose -Message "Will update permissions for Azure AD Application {$($currentAADApp.DisplayName)}"
 
-            if ($this.Permissions.Length -eq 0)
+            if ($this.RequiredResourceAccess.Length -eq 0)
             {
                 Write-Verbose -Message 'Desired set of permissions is empty, removing all permissions on the app.'
                 $allRequiredAccess = @()
             }
             else
             {
-                $allSourceAPIs = $this.Permissions.SourceAPI | Select-Object -Unique
+                $allSourceAPIs = $this.RequiredResourceAccess.SourceAPI | Select-Object -Unique
                 $allRequiredAccess = @()
 
                 foreach ($sourceAPI in $allSourceAPIs)
                 {
                     Write-Verbose -Message "Adding permissions for API {$($sourceAPI)}"
-                    $permissionsForcurrentAPI = $this.Permissions | Where-Object -FilterScript { $_.SourceAPI -eq $sourceAPI }
+                    $permissionsForcurrentAPI = $this.RequiredResourceAccess | Where-Object -FilterScript { $_.SourceAPI -eq $sourceAPI }
                     $apiPrincipal = Get-MgServicePrincipal -Filter "DisplayName eq '$($sourceAPI -replace "'", "''")'"
                     $currentAPIAccess = @{
                         resourceAppId  = $apiPrincipal.AppId
@@ -1453,27 +1453,27 @@ class AADApplication : M365DSCResourceBase
                     $rawResults = $Results.Clone()
                     if ($Results.Ensure -eq 'Present')
                     {
-                        if ($Results.Permissions.Count -gt 0)
+                        if ($Results.RequiredResourceAccess.Count -gt 0)
                         {
                             $complexMapping = @(
                                 @{
-                                    Name            = 'Permissions'
+                                    Name            = 'RequiredResourceAccess'
                                     CimInstanceName = 'MSFT_AADApplicationPermission'
                                     IsRequired      = $False
                                 }
                             )
                             $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                                -ComplexObject $Results.Permissions `
+                                -ComplexObject $Results.RequiredResourceAccess `
                                 -CIMInstanceName 'MSFT_AADApplicationPermission' `
                                 -ComplexTypeMapping $complexMapping
 
                             if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                             {
-                                $Results.Permissions = $complexTypeStringResult
+                                $Results.RequiredResourceAccess = $complexTypeStringResult
                             }
                             else
                             {
-                                $Results.Remove('Permissions') | Out-Null
+                                $Results.Remove('RequiredResourceAccess') | Out-Null
                             }
                         }
 
@@ -1688,7 +1688,7 @@ class AADApplication : M365DSCResourceBase
                             -ModulePath $this.GetModulePath() `
                             -Results $Results `
                             -Credential $this.Credential `
-                            -NoEscape @('Api', 'Info', 'Permissions', 'OptionalClaims', 'OnPremisesPublishing', 'AuthenticationBehaviors', 'KeyCredentials', 'PasswordCredentials', 'AppRoles', 'Spa') `
+                            -NoEscape @('Api', 'Info', 'RequiredResourceAccess', 'OptionalClaims', 'OnPremisesPublishing', 'AuthenticationBehaviors', 'KeyCredentials', 'PasswordCredentials', 'AppRoles', 'Spa') `
                             -RawResults $rawResults
 
                         [void]$dscContent.Append($currentDSCBlock)
