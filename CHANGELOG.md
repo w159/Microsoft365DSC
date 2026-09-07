@@ -25,6 +25,12 @@
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
 * AADDeviceRegistrationPolicy
   * Added support for the `AzureADRegistration` property.
+* AADIdentityAPIConnector
+  * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
+    properties with the `AuthenticationConfiguration` complex property. Its `dataType`
+    member carries the odata subtype and `CertificateList` carries the certificates.
+  * Excluded `Password` and `Pkcs12Value` from the comparison, because Microsoft Graph
+    returns neither the password nor the certificate material on a read.
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
@@ -287,6 +293,10 @@
   * [BREAKING CHANGE] Changed type of `MeetingInvitePhoneNumbers` from ``String`` to ``String[]``.
 * TeamsCallQueue
   * Added GUID resolution to `AuthorizedUsers` and `Users`.
+* TeamsChannelTab
+  * [BREAKING CHANGE] Replaced the flattened `ContentUrl`, `EntityId`, `RemoveUrl` and
+    `WebSiteUrl` properties with the `Configuration` complex property, which carries the
+    same four members under the names Microsoft Graph uses.
 * TeamsGuestMessagingConfiguration
   * [BREAKING CHANGE] Removed deprecated property `UsersCanDeleteBotMessages`. It is available
     on the `TeamsMessagingPolicy` resource instead.

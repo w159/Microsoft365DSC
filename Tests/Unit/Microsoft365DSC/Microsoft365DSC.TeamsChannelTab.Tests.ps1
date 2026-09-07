@@ -56,10 +56,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     sortOrderIndex = '10100'
                     webUrl         = 'https://contoso.com'
                     configuration  = @{
-                        entityId   = $null
                         contentUrl = 'https://contoso.com'
-                        websiteUrl = 'https://contoso.com'
+                        entityId   = $null
                         removeUrl  = $null
+                        websiteUrl = 'https://contoso.com'
                     }
                     teamsApp       = @{
                         id = 'com.microsoft.teamspace.tab.web'
@@ -95,14 +95,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ApplicationId         = '12345'
                     CertificateThumbprint = 'ABCDEF1234567890'
                     ChannelName           = 'General'
-                    ContentUrl            = 'https://contoso.com'
+                    Configuration         = @{
+                        ContentUrl = 'https://contoso.com'
+                        WebsiteUrl = 'https://contoso.com'
+                    }
                     DisplayName           = 'TestTab'
                     Ensure                = 'Present'
                     SortOrderIndex        = '10100'
                     TeamName              = 'Contoso Team'
                     TeamsApp              = 'com.microsoft.teamspace.tab.web'
                     TenantId              = 'contoso.onmicrosoft.com'
-                    WebSiteUrl            = 'https://contoso.com'
                 }
 
                 Mock -CommandName Get-MgBetaTeamChannelTab -MockWith {
@@ -130,14 +132,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ApplicationId         = '12345'
                     CertificateThumbprint = 'ABCDEF1234567890'
                     ChannelName           = 'General'
-                    ContentUrl            = 'https://contoso.com'
+                    Configuration         = @{
+                        ContentUrl = 'https://contoso.com'
+                        WebsiteUrl = 'https://contoso.com'
+                    }
                     DisplayName           = 'TestTab'
                     Ensure                = 'Present'
                     SortOrderIndex        = '11100' # Drift
                     TeamName              = 'Contoso Team'
                     TeamsApp              = 'com.microsoft.teamspace.tab.web'
                     TenantId              = 'contoso.onmicrosoft.com'
-                    WebSiteUrl            = 'https://contoso.com'
                 }
             }
 
@@ -161,14 +165,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ApplicationId         = '12345'
                     CertificateThumbprint = 'ABCDEF1234567890'
                     ChannelName           = 'General'
-                    ContentUrl            = 'https://contoso.com'
+                    Configuration         = @{
+                        ContentUrl = 'https://contoso.com'
+                        WebsiteUrl = 'https://contoso.com'
+                    }
                     DisplayName           = 'TestTab'
                     Ensure                = 'Present'
                     SortOrderIndex        = '10100'
                     TeamName              = 'Contoso Team'
                     TeamsApp              = 'com.microsoft.teamspace.tab.web'
                     TenantId              = 'contoso.onmicrosoft.com'
-                    WebSiteUrl            = 'https://contoso.com'
                 }
             }
 
@@ -187,14 +193,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ApplicationId         = '12345'
                     CertificateThumbprint = 'ABCDEF1234567890'
                     ChannelName           = 'General'
-                    ContentUrl            = 'https://contoso.com'
+                    Configuration         = @{
+                        ContentUrl = 'https://contoso.com'
+                        WebsiteUrl = 'https://contoso.com'
+                    }
                     DisplayName           = 'TestTab'
                     Ensure                = 'Absent'
                     SortOrderIndex        = '10100'
                     TeamName              = 'Contoso Team'
                     TeamsApp              = 'com.microsoft.teamspace.tab.web'
                     TenantId              = 'contoso.onmicrosoft.com'
-                    WebSiteUrl            = 'https://contoso.com'
                 }
             }
 

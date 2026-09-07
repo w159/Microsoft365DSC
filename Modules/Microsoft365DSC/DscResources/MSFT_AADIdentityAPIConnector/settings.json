@@ -10,19 +10,7 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [
-    {
-      "name": "AuthenticationConfiguration",
-      "reason": "Accepted",
-      "note": "Flattened into Username, Password and Certificates"
-    },
-    {
-      "name": "Certificates",
-      "reason": "Accepted",
-      "note": "The flattened authenticationConfiguration.certificateList property",
-      "vendorPath": "authenticationConfiguration.pkcs12Value"
-    }
-  ],
+  "excludedProperties": [],
   "description": "This resource configures an Azure AD Identity API Connector.",
   "permissions": {
     "graph": {

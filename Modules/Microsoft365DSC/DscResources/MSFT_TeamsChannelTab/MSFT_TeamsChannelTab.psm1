@@ -33,20 +33,8 @@ class TeamsChannelTab : M365DSCResourceBase
     [System.Nullable[System.UInt32]] $SortOrderIndex
 
     [DscProperty()]
-    [System.ComponentModel.Description('Url of the website linked to the Channel Tab.')]
-    [System.String] $WebSiteUrl
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Url of the content linked to the Channel Tab.')]
-    [System.String] $ContentUrl
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Url of the location used to remove the app.')]
-    [System.String] $RemoveUrl
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Id of the Entity linked to the Channel Tab.')]
-    [System.String] $EntityId
+    [System.ComponentModel.Description('Container for custom settings applied to a tab.')]
+    [MSFT_MicrosoftGraphTeamsTabConfiguration] $Configuration
 
     [DscProperty()]
     [System.ComponentModel.Description('Present ensures the Tab exists, absent ensures it is removed.')]
@@ -187,16 +175,23 @@ class TeamsChannelTab : M365DSCResourceBase
                 $tabInstance = $this.ExportedInstance
             }
 
+            $complexConfiguration = [ordered]@{}
+            $complexConfiguration.Add('ContentUrl', $tabInstance.configuration.contentUrl)
+            $complexConfiguration.Add('EntityId', $tabInstance.configuration.entityId)
+            $complexConfiguration.Add('RemoveUrl', $tabInstance.configuration.removeUrl)
+            $complexConfiguration.Add('WebsiteUrl', $tabInstance.configuration.websiteUrl)
+            if ($complexConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexConfiguration = $null
+            }
+
             return $this.AsResult(@{
                 DisplayName           = $tabInstance.DisplayName
                 TeamName              = $this.TeamName
                 TeamId                = $teamInstance.Id
                 ChannelName           = $channelInstance.DisplayName
                 SortOrderIndex        = $tabInstance.SortOrderIndex
-                WebSiteUrl            = $tabInstance.configuration.websiteUrl
-                ContentUrl            = $tabInstance.configuration.contentUrl
-                RemoveUrl             = $tabInstance.configuration.removeUrl
-                EntityId              = $tabInstance.configuration.entityId
+                Configuration         = $complexConfiguration
                 TeamsApp              = $tabInstance.teamsApp.id
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -240,30 +235,19 @@ class TeamsChannelTab : M365DSCResourceBase
         $ChannelInstance = Get-MgBetaTeamChannel -TeamId $tab.TeamId `
             -Filter "DisplayName eq '$($this.ChannelName -replace "'", "''")'"
 
-        $configuration = @{}
-
-        if (-not [System.String]::IsNullOrEmpty($this.ContentUrl))
-        {
-            $configuration.Add('ContentUrl', $this.ContentUrl)
-        }
-        if (-not [System.String]::IsNullOrEmpty($this.EntityId))
-        {
-            $configuration.Add('EntityId', $this.EntityId)
-        }
-        if (-not [System.String]::IsNullOrEmpty($this.RemoveUrl))
-        {
-            $configuration.Add('RemoveUrl', $this.RemoveUrl)
-        }
-        if (-not [System.String]::IsNullOrEmpty($this.WebSiteUrl))
-        {
-            $configuration.Add('WebSiteUrl', $this.WebSiteUrl)
-        }
-        $CurrentParameters.Add('Configuration', $configuration)
-        $CurrentParameters.Remove('ContentUrl') | Out-Null
-        $CurrentParameters.Remove('EntityId') | Out-Null
-        $CurrentParameters.Remove('RemoveUrl') | Out-Null
-        $CurrentParameters.Remove('WebSiteUrl') | Out-Null
+        $CurrentParameters = Rename-M365DSCCimInstanceParameter -Properties $CurrentParameters
         $CurrentParameters.Remove('TeamsApp') | Out-Null
+
+        if ($null -ne $CurrentParameters.Configuration)
+        {
+            foreach ($key in @($CurrentParameters.Configuration.Keys))
+            {
+                if ([System.String]::IsNullOrEmpty($CurrentParameters.Configuration[$key]))
+                {
+                    $CurrentParameters.Configuration.Remove($key) | Out-Null
+                }
+            }
+        }
 
         if ($this.Ensure -eq 'Present' -and ($tab.Ensure -eq 'Present'))
         {
@@ -390,11 +374,27 @@ class TeamsChannelTab : M365DSCResourceBase
                         $rawResults = $Results.Clone()
                         if ($Results -is [System.Collections.Hashtable] -and $Results.Count -gt 3)
                         {
+                            if ($null -ne $Results.Configuration)
+                            {
+                                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                                    -ComplexObject $Results.Configuration `
+                                    -CIMInstanceName 'MicrosoftGraphTeamsTabConfiguration'
+                                if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                                {
+                                    $Results.Configuration = $complexTypeStringResult
+                                }
+                                else
+                                {
+                                    $Results.Remove('Configuration') | Out-Null
+                                }
+                            }
+
                             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                                 -ConnectionMode $ConnectionMode `
                                 -ModulePath $this.GetModulePath() `
                                 -Results $Results `
                                 -Credential $this.Credential `
+                                -NoEscape @('Configuration') `
                                 -RawResults $rawResults
 
                             [void]$dscContent.Append($currentDSCBlock)
@@ -440,4 +440,23 @@ class TeamsChannelTab : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphTeamsTabConfiguration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Url used for rendering tab contents in Teams.')]
+    [System.String] $ContentUrl
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Identifier for the entity hosted by the tab provider.')]
+    [System.String] $EntityId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Url called by Teams client when a Tab is removed using the Teams client.')]
+    [System.String] $RemoveUrl
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Url for showing tab contents outside of Teams.')]
+    [System.String] $WebsiteUrl
 }

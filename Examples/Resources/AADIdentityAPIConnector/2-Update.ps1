@@ -28,8 +28,11 @@ Configuration Example
         {
             DisplayName           = "NewTestConnector";
             Id                    = "RestApi_NewTestConnector";
-            Username              = "anexas 1"; # Updated Property
-            Password              = New-Object System.Management.Automation.PSCredential('api-user', (ConvertTo-SecureString "<api-password>" -AsPlainText -Force))
+            AuthenticationConfiguration = MSFT_MicrosoftGraphApiAuthenticationConfigurationBase{
+                dataType = '#microsoft.graph.basicAuthentication'
+                Username = "anexas"
+                Password = New-Object System.Management.Automation.PSCredential('api-user', (ConvertTo-SecureString "<api-password>" -AsPlainText -Force))
+            };
             TargetUrl             = "https://graph.microsoft.com";
             Ensure                = "Present"
             ApplicationId         = $ApplicationId

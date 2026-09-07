@@ -77,18 +77,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = 'FakeStringValue'
                     TargetUrl = 'FakeStringValue'
                     Id = 'FakeStringValue'
-                    Username = 'FakeStringValue'
-                    Password = $Credential
-                    Certificates = @(
-                         [MSFT_AADIdentityAPIConnectionCertificate] @{
-                             Thumbprint = 'FakeStringValue'
-                             Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             IsActive = $true
-                         }
-                    )
+                    AuthenticationConfiguration = @{
+                        dataType = '#microsoft.graph.basicAuthentication'
+                        Username = 'FakeStringValue'
+                        Password = $Credential
+                        CertificateList = @(
+                             [MSFT_AADIdentityAPIConnectionCertificate] @{
+                                 Thumbprint = 'FakeStringValue'
+                                 Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 IsActive = $true
+                             }
+                        )
+                    }
                     Credential = $Credential
                 }
 
@@ -114,18 +117,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = 'FakeStringValue'
                     TargetUrl = 'FakeStringValue'
                     Id = 'FakeStringValue'
-                    Username = 'FakeStringValue'
-                    Password = $Credential
-                    Certificates = @(
-                         [MSFT_AADIdentityAPIConnectionCertificate] @{
-                             Thumbprint = 'FakeStringValue'
-                             Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             IsActive = $true
-                         }
-                    )
+                    AuthenticationConfiguration = @{
+                        dataType = '#microsoft.graph.basicAuthentication'
+                        Username = 'FakeStringValue'
+                        Password = $Credential
+                        CertificateList = @(
+                             [MSFT_AADIdentityAPIConnectionCertificate] @{
+                                 Thumbprint = 'FakeStringValue'
+                                 Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 IsActive = $true
+                             }
+                        )
+                    }
                     Credential = $Credential
                     Ensure = 'Absent'
                 }
@@ -151,18 +157,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = 'FakeStringValue'
                     TargetUrl = 'FakeStringValue2' # Drift
                     Id = 'FakeStringValue'
-                    Username = 'FakeStringValue'
-                    Password = $Credential
-                    Certificates = @(
-                         [MSFT_AADIdentityAPIConnectionCertificate] @{
-                             Thumbprint = 'FakeStringValue'
-                             Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             IsActive = $true
-                         }
-                    )
+                    AuthenticationConfiguration = @{
+                        dataType = '#microsoft.graph.basicAuthentication'
+                        Username = 'FakeStringValue'
+                        Password = $Credential
+                        CertificateList = @(
+                             [MSFT_AADIdentityAPIConnectionCertificate] @{
+                                 Thumbprint = 'FakeStringValue'
+                                 Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 IsActive = $true
+                             }
+                        )
+                    }
                     Credential = $Credential
                 }
             }
@@ -188,16 +197,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = 'FakeStringValue'
                     TargetUrl = 'FakeStringValue'
                     Id = 'FakeStringValue'
-                    Certificates = @(
-                         [MSFT_AADIdentityAPIConnectionCertificate] @{
-                             Thumbprint = 'FakeStringValue'
-                             Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
-                                (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
-                             IsActive = $true
-                         }
-                    )
+                    AuthenticationConfiguration = @{
+                        dataType = '#microsoft.graph.pkcs12Certificate'
+                        CertificateList = @(
+                             [MSFT_AADIdentityAPIConnectionCertificate] @{
+                                 Thumbprint = 'FakeStringValue'
+                                 Pkcs12Value = New-Object -TypeName System.Management.Automation.PSCredential('Pkcs12Value',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 Password = New-Object -TypeName System.Management.Automation.PSCredential('Password',
+                                    (ConvertTo-SecureString -String "FakeStringValue" -AsPlainText -Force))
+                                 IsActive = $true
+                             }
+                        )
+                    }
                     Credential = $Credential
                     Ensure = 'Present'
                 }

@@ -27,12 +27,14 @@ Configuration Example
         TeamsChannelTab 'TeamsChannelTab-Example'
         {
             ChannelName           = "General"
-            ContentUrl            = "https://contoso.com"
+            Configuration         = MSFT_MicrosoftGraphTeamsTabConfiguration{
+                ContentUrl = "https://contoso.com"
+                WebsiteUrl = "https://contoso.com"
+            }
             DisplayName           = "Project Plan"
             SortOrderIndex        = "10100"
             TeamName              = "Contoso Team"
             TeamsApp              = "com.microsoft.teamspace.tab.web"
-            WebSiteUrl            = "https://contoso.com"
             Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId

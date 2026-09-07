@@ -18,16 +18,8 @@ class AADIdentityAPIConnector : M365DSCResourceBase
     [System.String] $Id
 
     [DscProperty()]
-    [System.ComponentModel.Description('The username of the password')]
-    [System.String] $Username
-
-    [DscProperty()]
-    [System.ComponentModel.Description('The password of certificate/basic auth')]
-    [System.Management.Automation.PSCredential] $Password
-
-    [DscProperty()]
-    [System.ComponentModel.Description('List of certificates to be used in the API connector')]
-    [MSFT_AADIdentityAPIConnectionCertificate[]] $Certificates
+    [System.ComponentModel.Description('The object which describes the authentication configuration details for calling the API.')]
+    [MSFT_MicrosoftGraphApiAuthenticationConfigurationBase] $AuthenticationConfiguration
 
     [DscProperty()]
     [System.ComponentModel.Description('Present ensures the policy exists, absent ensures it is removed.')]
@@ -131,7 +123,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             Write-Verbose -Message "An Azure AD Identity API Connector with Id {$($getValue.Id)} and DisplayName {$($this.DisplayName)} was found"
 
             #region resource generator code
-            $currentPassword = $this.Password
+            $currentPassword = $this.AuthenticationConfiguration.Password
             if ($null -ne $getValue.AuthenticationConfiguration.password)
             {
                 $securePassword = ConvertTo-SecureString $getValue.AuthenticationConfiguration.password -AsPlainText -Force
@@ -152,25 +144,32 @@ class AADIdentityAPIConnector : M365DSCResourceBase
                     $complexCertificates += $myCertificate
                 }
             }
+            $complexAuthenticationConfiguration = [ordered]@{}
+            $complexAuthenticationConfiguration.Add('dataType', $getValue.AuthenticationConfiguration.'@odata.type')
+            $complexAuthenticationConfiguration.Add('Username', $getValue.AuthenticationConfiguration.username)
+            $complexAuthenticationConfiguration.Add('Password', $currentPassword)
+            $complexAuthenticationConfiguration.Add('CertificateList', $complexCertificates)
+            if ($complexAuthenticationConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexAuthenticationConfiguration = $null
+            }
             #endregion
 
             $results = @{
                 #region resource generator code
-                DisplayName           = $getValue.DisplayName
-                TargetUrl             = $getValue.TargetUrl
-                Id                    = $getValue.Id
-                Username              = $getValue.AuthenticationConfiguration.username
-                Password              = $currentPassword
-                Certificates          = $complexCertificates
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                DisplayName                 = $getValue.DisplayName
+                TargetUrl                   = $getValue.TargetUrl
+                Id                          = $getValue.Id
+                AuthenticationConfiguration = $complexAuthenticationConfiguration
+                Ensure                      = 'Present'
+                Credential                  = $this.Credential
+                ApplicationId               = $this.ApplicationId
+                TenantId                    = $this.TenantId
+                ApplicationSecret           = $this.ApplicationSecret
+                CertificateThumbprint       = $this.CertificateThumbprint
+                CertificatePath             = $this.CertificatePath
+                CertificatePassword         = $this.CertificatePassword
+                ManagedIdentity             = $this.ManagedIdentity.IsPresent
                 #endregion
             }
 
@@ -202,9 +201,11 @@ class AADIdentityAPIConnector : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        # If the certificates array is not empty, then we need to create a new instance
+        $authentication = $this.AuthenticationConfiguration
+
+        # If the certificate list is not empty, then we need to create a new instance
         $needToUpdateCertificates = $false
-        if ($null -ne $this.Certificates -and $this.Certificates.Count -gt 0)
+        if ($null -ne $authentication.CertificateList -and $authentication.CertificateList.Count -gt 0)
         {
             $needToUpdateCertificates = $true
         }
@@ -219,15 +220,14 @@ class AADIdentityAPIConnector : M365DSCResourceBase
                 $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
                 $createParameters.Remove('Id') | Out-Null
 
-                $createParameters.Remove('Password') | Out-Null
-                $createParameters.Remove('Pkcs12Value') | Out-Null
+                $createParameters.Remove('AuthenticationConfiguration') | Out-Null
 
-                if ($null -ne $this.username)
+                if ($null -ne $authentication.Username)
                 {
                     $createParameters.Add('AuthenticationConfiguration', @{
                         '@odata.type' = 'microsoft.graph.basicAuthentication'
-                        'password'    = $this.Password.GetNetworkCredential().Password
-                        'username'    = $this.Username
+                        'password'    = $authentication.Password.GetNetworkCredential().Password
+                        'username'    = $authentication.Username
                     })
                 }
 
@@ -243,13 +243,12 @@ class AADIdentityAPIConnector : M365DSCResourceBase
 
                 $updateParameters.Remove('Id') | Out-Null
 
-                $updateParameters.Remove('Password') | Out-Null
-                $updateParameters.Remove('Pkcs12Value') | Out-Null
+                $updateParameters.Remove('AuthenticationConfiguration') | Out-Null
 
                 $updateParameters.Add('AuthenticationConfiguration', @{
                         '@odata.type' = 'microsoft.graph.basicAuthentication'
-                        'password'    = $this.Password.GetNetworkCredential().Password
-                        'username'    = $this.Username
+                        'password'    = $authentication.Password.GetNetworkCredential().Password
+                        'username'    = $authentication.Username
                     })
 
                 $UpdateParameters.Add('@odata.type', '#microsoft.graph.IdentityApiConnector')
@@ -279,13 +278,12 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
-            $createParameters.Remove('Password') | Out-Null
-            $createParameters.Remove('Pkcs12Value') | Out-Null
+            $createParameters.Remove('AuthenticationConfiguration') | Out-Null
 
             # Get the active and inactive certificates
             $activeCertificates = @()
             $inactiveCertificates = @()
-            foreach ($currentCertificate in $this.Certificates)
+            foreach ($currentCertificate in $authentication.CertificateList)
             {
                 $myCertificate = [ordered]@{}
                 $myCertificate.Add('Pkcs12Value', ($currentCertificate.Pkcs12Value).Password)
@@ -430,20 +428,25 @@ class AADIdentityAPIConnector : M365DSCResourceBase
 
                 $this.ExportedInstance = $config
                 $Results = $this.GetForExport($Params)
-                $Results.Password = "New-Object System.Management.Automation.PSCredential('Password', (ConvertTo-SecureString ('Please insert a valid Password') -AsPlainText -Force));"
-
-                if ($null -ne $Results.Certificates)
+                if ($null -ne $Results.AuthenticationConfiguration)
                 {
+                    $Results.AuthenticationConfiguration = [ordered]@{
+                        dataType        = $Results.AuthenticationConfiguration.dataType
+                        Username        = $Results.AuthenticationConfiguration.Username
+                        Password        = "New-Object System.Management.Automation.PSCredential('Password', (ConvertTo-SecureString ('Please insert a valid Password') -AsPlainText -Force));"
+                        CertificateList = $Results.AuthenticationConfiguration.CertificateList
+                    }
+
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                        -ComplexObject $Results.Certificates`
-                        -CIMInstanceName 'AADIdentityAPIConnectionCertificate'
+                        -ComplexObject $Results.AuthenticationConfiguration `
+                        -CIMInstanceName 'MicrosoftGraphApiAuthenticationConfigurationBase'
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
-                        $Results.Certificates = $complexTypeStringResult
+                        $Results.AuthenticationConfiguration = $complexTypeStringResult
                     }
                     else
                     {
-                        $Results.Remove('Certificates') | Out-Null
+                        $Results.Remove('AuthenticationConfiguration') | Out-Null
                     }
                 }
 
@@ -452,7 +455,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Certificates')
+                    -NoEscape @('AuthenticationConfiguration')
 
                 # Replace the main password variable.
                 $currentDSCBlock = $currentDSCBlock.Replace('"New-Object System.', 'New-Object System.').Replace(') -AsPlainText -Force));";', ') -AsPlainText -Force));')
@@ -481,7 +484,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
     [System.Collections.Hashtable] GetCompareParameters()
     {
         return @{
-            ExcludedProperties = @('Password')
+            ExcludedProperties = @('Password', 'Pkcs12Value')
         }
     }
 
@@ -501,6 +504,26 @@ class AADIdentityAPIConnector : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphApiAuthenticationConfigurationBase
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('The type of the authentication configuration.')]
+    [ValidateSet('#microsoft.graph.basicAuthentication', '#microsoft.graph.pkcs12Certificate')]
+    [System.String] $dataType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The username of the basic authentication configuration')]
+    [System.String] $Username
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The password of the basic authentication configuration')]
+    [System.Management.Automation.PSCredential] $Password
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The certificates uploaded to the API connector')]
+    [MSFT_AADIdentityAPIConnectionCertificate[]] $CertificateList
 }
 
 class MSFT_AADIdentityAPIConnectionCertificate
