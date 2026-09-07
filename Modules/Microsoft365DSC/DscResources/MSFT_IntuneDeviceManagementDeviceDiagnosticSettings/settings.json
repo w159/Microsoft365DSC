@@ -10,7 +10,78 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "AccountMoveCompletionDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps this timestamp when tenant data moves between scale units"
+    },
+    {
+      "name": "ConnectorStatus",
+      "reason": "ReadOnly",
+      "note": "The service reports the health and last event time of each connector"
+    },
+    {
+      "name": "DataProcessorServiceForWindowsFeaturesOnboarding",
+      "reason": "OwnedByOtherResource",
+      "note": "IntuneWindowsDataProcessingSettings owns this property and patches the same endpoint"
+    },
+    {
+      "name": "DeviceProtectionOverview",
+      "reason": "ReadOnly",
+      "note": "The service computes these device protection counts from reporting data"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "IntuneAccountId",
+      "reason": "ReadOnly",
+      "note": "The service assigns the Intune account identifier for the tenant"
+    },
+    {
+      "name": "ManagedDeviceCleanupSettings",
+      "reason": "Deprecated",
+      "note": "IntuneDeviceCleanupRuleV2 manages the managed device cleanup rules collection"
+    },
+    {
+      "name": "MaximumDepTokens",
+      "reason": "ReadOnly",
+      "note": "The service reports the maximum Apple DEP tokens the account allows."
+    },
+    {
+      "name": "SamsungEFotaFirmwareVersions",
+      "reason": "ReadOnly",
+      "note": "The service publishes the Samsung E-FOTA firmware versions available to the tenant."
+    },
+    {
+      "name": "Subscriptions",
+      "reason": "ReadOnly",
+      "note": "The service derives the Intune subscriptions from tenant licensing."
+    },
+    {
+      "name": "SubscriptionState",
+      "reason": "ReadOnly",
+      "note": "The service reports the state of the Intune subscription."
+    },
+    {
+      "name": "UserExperienceAnalyticsAnomalySeverityOverview",
+      "reason": "ReadOnly",
+      "note": "The service computes these anomaly counts from endpoint analytics data."
+    },
+    {
+      "name": "UserExperienceAnalyticsSettings",
+      "reason": "ReadOnly",
+      "note": "Reports Configuration Manager tenant attach, which the Configuration Manager console configures."
+    },
+    {
+      "name": "WindowsMalwareOverview",
+      "reason": "ReadOnly",
+      "note": "The service computes these malware counts and summaries from device reports."
+    }
+  ],
   "description": "This resource configures the device diagnostic settings at the tenant level.",
   "permissions": {
     "graph": {

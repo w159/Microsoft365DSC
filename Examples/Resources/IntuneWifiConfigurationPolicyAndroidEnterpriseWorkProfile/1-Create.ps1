@@ -42,6 +42,8 @@ Configuration Example
             ConnectAutomatically           = $False
             ConnectWhenNetworkNameIsHidden = $False
             NetworkName                    = 'f8b79489-84fc-4434-b964-2a18dfe08f88'
+            PreSharedKey                   = 'MyPreSharedKey123'
+            PreSharedKeyIsSet              = $True
             Ssid                           = 'MySSID'
             WiFiSecurityType               = 'open'
             Ensure                         = 'Present'

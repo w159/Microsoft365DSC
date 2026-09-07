@@ -14,17 +14,37 @@
     {
       "name": "ApplicationTemplateId",
       "reason": "Deferred",
-      "note": "The beta application CSDL omits applicationTemplateId although v1.0 carries it and the resource uses the value only when instantiating an app from a template."
+      "note": "The beta application CSDL omits it and only template instantiation uses it."
+    },
+    {
+      "name": "Certification",
+      "reason": "ReadOnly",
+      "note": "The app compliance program stamps these values."
+    },
+    {
+      "name": "DisabledByMicrosoftStatus",
+      "reason": "ReadOnly",
+      "note": "Microsoft sets this status when it disables a registration."
+    },
+    {
+      "name": "FederatedIdentityCredentials",
+      "reason": "OwnedByOtherResource",
+      "note": "AADApplicationFederatedIdentityCredential manages these credentials per application."
     },
     {
       "name": "Homepage",
-      "reason": "Deferred",
-      "note": "The flattened web.homePageUrl property."
+      "reason": "Accepted",
+      "note": "The flattened web.homePageUrl property"
+    },
+    {
+      "name": "Id",
+      "reason": "Accepted",
+      "note": "ObjectId carries the vendor id and comparison skips both."
     },
     {
       "name": "ObjectId",
       "reason": "NotConfigurable",
-      "note": "ObjectId echoes the service assigned application id."
+      "note": "ObjectId echoes the service-assigned application id."
     },
     {
       "name": "Permissions",
@@ -33,8 +53,13 @@
     },
     {
       "name": "ReplyURLs",
-      "reason": "Deferred",
-      "note": "The flattened web.redirectUris property."
+      "reason": "Accepted",
+      "note": "The flattened web.redirectUris property"
+    },
+    {
+      "name": "RequiredResourceAccess",
+      "reason": "Accepted",
+      "note": "Declared as Permissions of type MSFT_AADApplicationPermission[]"
     }
   ],
   "description": "This resource configures an Azure Active Directory Application.",

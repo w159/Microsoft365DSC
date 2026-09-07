@@ -10,7 +10,23 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Developer",
+      "reason": "Accepted",
+      "note": "Fixed to a predefined value."
+    },
+    {
+      "name": "Owner",
+      "reason": "Accepted",
+      "note": "Fixed to a predefined value."
+    },
+    {
+      "name": "Publisher",
+      "reason": "Accepted",
+      "note": "Fixed to a predefined value."
+    }
+  ],
   "description": "This resource configures an Intune mobile app.",
   "permissions": {
     "graph": {

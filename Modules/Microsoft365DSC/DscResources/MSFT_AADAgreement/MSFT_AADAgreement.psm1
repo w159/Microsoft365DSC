@@ -26,10 +26,6 @@ class AADAgreement : M365DSCResourceBase
     [System.String] $UserReacceptRequiredFrequency
 
     [DscProperty()]
-    [System.ComponentModel.Description('The acceptance statement included in the agreement.')]
-    [System.String] $AcceptanceStatement
-
-    [DscProperty()]
     [System.ComponentModel.Description('The content of the agreement file.')]
     [System.String] $FileData
 
@@ -40,6 +36,10 @@ class AADAgreement : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('The language of the agreement file.')]
     [System.String] $Language
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Expiration schedule and frequency of the agreement for all users.')]
+    [MSFT_TermsExpiration] $TermsExpiration
 
     [DscProperty()]
     [System.ComponentModel.Description('Specify if the agreement should exist or not.')]
@@ -145,6 +145,19 @@ class AADAgreement : M365DSCResourceBase
                 $fileContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($instance.File.Data))
             }
 
+            $complexTermsExpiration = $null
+            if ($null -ne $instance.TermsExpiration)
+            {
+                $complexTermsExpiration = @{
+                    Frequency = $instance.TermsExpiration.Frequency
+                }
+
+                if ($null -ne $instance.TermsExpiration.StartDateTime)
+                {
+                    $complexTermsExpiration.StartDateTime = $instance.TermsExpiration.StartDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ')
+                }
+            }
+
             # TODO: Recheck or possibly regenerate the resource entirely to include all supported properties with the correct structure
             $results = @{
                 DisplayName                       = $instance.DisplayName
@@ -152,10 +165,10 @@ class AADAgreement : M365DSCResourceBase
                 IsViewingBeforeAcceptanceRequired = $instance.IsViewingBeforeAcceptanceRequired
                 IsPerDeviceAcceptanceRequired     = $instance.IsPerDeviceAcceptanceRequired
                 UserReacceptRequiredFrequency     = $instance.UserReacceptRequiredFrequency
-                AcceptanceStatement               = $instance.AcceptanceStatement
                 FileData                          = $fileContent
                 FileName                          = $instance.File.Name
                 Language                          = $instance.File.Language
+                TermsExpiration                   = $complexTermsExpiration
                 Ensure                            = 'Present'
                 Credential                        = $this.Credential
                 ApplicationId                     = $this.ApplicationId
@@ -197,6 +210,15 @@ class AADAgreement : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
 
+        $termsExpirationValue = $null
+        if ($null -ne $this.TermsExpiration)
+        {
+            $termsExpirationValue = @{
+                frequency     = $this.TermsExpiration.Frequency
+                startDateTime = $this.TermsExpiration.StartDateTime
+            }
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             # Prepare the file content
@@ -215,7 +237,7 @@ class AADAgreement : M365DSCResourceBase
                 isViewingBeforeAcceptanceRequired = $this.IsViewingBeforeAcceptanceRequired
                 isPerDeviceAcceptanceRequired     = $this.IsPerDeviceAcceptanceRequired
                 userReacceptRequiredFrequency     = $this.UserReacceptRequiredFrequency
-                acceptanceStatement               = $this.AcceptanceStatement
+                termsExpiration                   = $termsExpirationValue
                 files                             = $fileContent
             }
 
@@ -245,7 +267,7 @@ class AADAgreement : M365DSCResourceBase
                 isViewingBeforeAcceptanceRequired = $this.IsViewingBeforeAcceptanceRequired
                 isPerDeviceAcceptanceRequired     = $this.IsPerDeviceAcceptanceRequired
                 userReacceptRequiredFrequency     = $this.UserReacceptRequiredFrequency
-                acceptanceStatement               = $this.AcceptanceStatement
+                termsExpiration                   = $termsExpirationValue
             }
 
             if ($null -ne $fileContent)
@@ -322,11 +344,28 @@ class AADAgreement : M365DSCResourceBase
                 $this.ExportedInstance = $config
                 $Results = $this.GetForExport($Params)
 
+                if ($null -ne $Results.TermsExpiration)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.TermsExpiration `
+                        -CIMInstanceName 'MSFT_TermsExpiration'
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.TermsExpiration = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('TermsExpiration') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
-                    -Credential $this.Credential
+                    -Credential $this.Credential `
+                    -NoEscape @('TermsExpiration')
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
                     -FileName $Global:PartialExportFileName
@@ -359,4 +398,15 @@ class AADAgreement : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_TermsExpiration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The frequency at which the agreement expires for all users after the first expiration set in StartDateTime. Must be in ISO 8601 duration format.')]
+    [System.String] $Frequency
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The date and time on which the agreement first expires for all users.')]
+    [System.String] $StartDateTime
 }

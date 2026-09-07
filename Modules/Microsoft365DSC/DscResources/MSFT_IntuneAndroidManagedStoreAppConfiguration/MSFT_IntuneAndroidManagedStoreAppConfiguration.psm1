@@ -18,6 +18,10 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('List of Scope Tags for this Entity instance. Inherited from managedDeviceMobileAppConfiguration')]
+    [System.String[]] $RoleScopeTagIds
+
+    [DscProperty()]
     [System.ComponentModel.Description('the associated app. Inherited from managedDeviceMobileAppConfiguration')]
     [System.String[]] $targetedMobileApps
 
@@ -180,6 +184,7 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
                 Id                    = $getValue.Id
                 Description           = $getValue.Description
                 DisplayName           = $getValue.DisplayName
+                RoleScopeTagIds       = ([Array]$getValue.RoleScopeTagIds)
                 targetedMobileApps    = $targetedMobileAppsValue
                 packageId             = $getValue.packageId
                 payloadJson           = $getValue.payloadJson

@@ -197,27 +197,21 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
         #endregion
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters.DetectionScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($BoundParameters.DetectionScriptContent))
-
-        # Convert all keys to camelCase
-        $scriptBody = @{}
-        foreach ($key in $BoundParameters.Keys)
-        {
-            $camelCaseKey = $key.Substring(0, 1).ToLower() + $key.Substring(1)
-            $scriptBody[$camelCaseKey] = $BoundParameters[$key]
-        }
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.DetectionScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.DetectionScriptContent))
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Compliance Script for Windows10 with DisplayName {$($this.DisplayName)}"
-            $scriptBody.Remove('Id') | Out-Null
-            Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/deviceComplianceScripts' -Body $($scriptBody | ConvertTo-Json)
+            $boundParameters.Remove('Id') | Out-Null
+            $boundParameters.Add('platform', 'windows10')
+            Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/deviceComplianceScripts' -Body $($boundParameters | ConvertTo-Json)
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Compliance Script for Windows10 with Id {$($currentInstance.Id)}"
-            Invoke-M365DSCGraphRequest -Method PATCH -Uri "/beta/deviceManagement/deviceComplianceScripts/$($currentInstance.Id)" -Body $($scriptBody | ConvertTo-Json)
+            Invoke-M365DSCGraphRequest -Method PATCH -Uri "/beta/deviceManagement/deviceComplianceScripts/$($currentInstance.Id)" -Body $($boundParameters | ConvertTo-Json)
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

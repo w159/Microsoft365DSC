@@ -12,19 +12,254 @@
   },
   "excludedProperties": [
     {
+      "name": "AcceptedSenders",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through AcceptMessagesOnlyFromSendersOrMembers"
+    },
+    {
+      "name": "AllowExternalSenders",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes the inverse through RequireSenderAuthenticationEnabled"
+    },
+    {
+      "name": "AppRoleAssignments",
+      "reason": "OwnedByOtherResource",
+      "note": "AADServicePrincipal creates these through AppRoleAssignedTo with principal type Group"
+    },
+    {
       "name": "AssignedToRole",
       "reason": "Deferred",
-      "note": "The resource creates and removes unifiedRoleAssignment objects for the group."
+      "note": "The resource creates and removes unifiedRoleAssignment objects for the group"
+    },
+    {
+      "name": "AutoSubscribeNewMembers",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings manages this flag under the same name"
+    },
+    {
+      "name": "Classification",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through Classification"
+    },
+    {
+      "name": "CloudLicensing",
+      "reason": "ReadOnly",
+      "note": "The service derives cloud licensing usage rights from assigned licenses"
+    },
+    {
+      "name": "Drive",
+      "reason": "ReadOnly",
+      "note": "The service provisions and maintains the default document library"
+    },
+    {
+      "name": "Drives",
+      "reason": "ReadOnly",
+      "note": "The service provisions and maintains the group document libraries"
+    },
+    {
+      "name": "Endpoints",
+      "reason": "ReadOnly",
+      "note": "The service publishes group endpoints and Graph returns them as read only"
+    },
+    {
+      "name": "ExpirationDateTime",
+      "reason": "ReadOnly",
+      "note": "The service computes it from the lifecycle policy and the last renewal"
     },
     {
       "name": "GroupAsMembers",
       "reason": "Deferred",
-      "note": "This property holds the group typed entries of the vendor members navigation collection."
+      "note": "Holds the group typed entries of the vendor members navigation collection"
+    },
+    {
+      "name": "GroupLifecyclePolicies",
+      "reason": "Accepted",
+      "note": "Modeled through GroupLifecyclePolicySelectedEnabled. The policy object belongs to AADGroupLifecyclePolicy"
     },
     {
       "name": "GroupLifecyclePolicySelectedEnabled",
       "reason": "Deferred",
-      "note": "This flag toggles the group membership in the selected scope group lifecycle policy, exposed through the groupLifecyclePolicies navigation."
+      "note": "Toggles group membership in the selected scope lifecycle policy"
+    },
+    {
+      "name": "HasMembersWithLicenseErrors",
+      "reason": "ReadOnly",
+      "note": "The service computes whether members have license errors"
+    },
+    {
+      "name": "HideFromAddressLists",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through HiddenFromAddressListsEnabled"
+    },
+    {
+      "name": "HideFromOutlookClients",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through HiddenFromExchangeClientsEnabled"
+    },
+    {
+      "name": "IsManagementRestricted",
+      "reason": "OwnedByOtherResource",
+      "note": "AADAdministrativeUnit controls it through IsMemberManagementRestricted and Members"
+    },
+    {
+      "name": "LicenseProcessingState",
+      "reason": "ReadOnly",
+      "note": "The service reports group based license assignment progress"
+    },
+    {
+      "name": "Mail",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through PrimarySmtpAddress and EmailAddresses"
+    },
+    {
+      "name": "MembershipRuleProcessingStatus",
+      "reason": "ReadOnly",
+      "note": "The service reports the last dynamic membership rule evaluation"
+    },
+    {
+      "name": "MembersWithLicenseErrors",
+      "reason": "ReadOnly",
+      "note": "The service computes members with license assignment errors"
+    },
+    {
+      "name": "OnPremisesDomainName",
+      "reason": "ReadOnly",
+      "note": "Synced from the on premises directory"
+    },
+    {
+      "name": "OnPremisesExtensionAttributes",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings manages the backing Exchange custom attributes 1-15"
+    },
+    {
+      "name": "OnPremisesLastSyncDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps the last on premises synchronization time"
+    },
+    {
+      "name": "OnPremisesNetBiosName",
+      "reason": "ReadOnly",
+      "note": "Synced from the on premises directory"
+    },
+    {
+      "name": "OnPremisesProvisioningErrors",
+      "reason": "ReadOnly",
+      "note": "The service reports errors from on premises provisioning"
+    },
+    {
+      "name": "OnPremisesSamAccountName",
+      "reason": "ReadOnly",
+      "note": "Synced from the on premises directory"
+    },
+    {
+      "name": "OnPremisesSecurityIdentifier",
+      "reason": "ReadOnly",
+      "note": "Synced from the on premises directory"
+    },
+    {
+      "name": "OnPremisesSyncEnabled",
+      "reason": "ReadOnly",
+      "note": "The service sets it for groups synced from on premises"
+    },
+    {
+      "name": "OrganizationId",
+      "reason": "ReadOnly",
+      "note": "The service stamps the owning tenant"
+    },
+    {
+      "name": "Planner",
+      "reason": "OwnedByOtherResource",
+      "note": "PlannerPlan creates plans for a group through OwnerGroup"
+    },
+    {
+      "name": "PreferredDataLocation",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through MailboxRegion"
+    },
+    {
+      "name": "PreferredLanguage",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes it through Language"
+    },
+    {
+      "name": "ProxyAddresses",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings manages them through EmailAddresses and PrimarySmtpAddress"
+    },
+    {
+      "name": "RejectedSenders",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings writes them through RejectMessagesFromSendersOrMembers"
+    },
+    {
+      "name": "RenewedDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps the last renewal time"
+    },
+    {
+      "name": "ResourceBehaviorOptions",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings manages the equivalent behaviors after group creation"
+    },
+    {
+      "name": "ResourceProvisioningOptions",
+      "reason": "OwnedByOtherResource",
+      "note": "TeamsTeam provisions the team and Graph reflects it here"
+    },
+    {
+      "name": "SecurityIdentifier",
+      "reason": "ReadOnly",
+      "note": "The service assigns it at group creation"
+    },
+    {
+      "name": "ServiceProvisioningErrors",
+      "reason": "ReadOnly",
+      "note": "The service reports errors raised while provisioning the group into dependent services"
+    },
+    {
+      "name": "Sites",
+      "reason": "ReadOnly",
+      "note": "The service provisions and maintains a group's linked SharePoint sites"
+    },
+    {
+      "name": "Team",
+      "reason": "OwnedByOtherResource",
+      "note": "TeamsTeam manages the team of a group through GroupID"
+    },
+    {
+      "name": "TransitiveMemberOf",
+      "reason": "ReadOnly",
+      "note": "The service computes transitive membership. MemberOf models the direct memberships"
+    },
+    {
+      "name": "TransitiveMembers",
+      "reason": "ReadOnly",
+      "note": "The service computes transitive membership. Members and GroupAsMembers model direct members"
+    },
+    {
+      "name": "UniqueName",
+      "reason": "ReadOnly",
+      "note": "Graph documents this alternate key as immutable after group creation"
+    },
+    {
+      "name": "UnseenConversationsCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from conversation read state"
+    },
+    {
+      "name": "UnseenCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from conversation read state"
+    },
+    {
+      "name": "UnseenMessagesCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from message read state"
+    },
+    {
+      "name": "WelcomeMessageEnabled",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings manages this flag under the same name for Microsoft 365 groups"
     }
   ],
   "description": "This resource configures an Azure Active Directory group.",

@@ -12,9 +12,59 @@
   },
   "excludedProperties": [
     {
+      "name": "Action",
+      "reason": "Accepted",
+      "note": "Set derives AdminAssign, AdminUpdate or AdminRemove from Ensure and current state"
+    },
+    {
+      "name": "ActivatedUsing",
+      "reason": "ReadOnly",
+      "note": "The service links it when an eligible assignment is activated"
+    },
+    {
+      "name": "ApprovalId",
+      "reason": "ReadOnly",
+      "note": "The service creates the approval object and stamps its identifier"
+    },
+    {
+      "name": "AppScope",
+      "reason": "ReadOnly",
+      "note": "Read-only expansion the service builds from appScopeId, which the resource declares"
+    },
+    {
+      "name": "CompletedDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps it when processing finishes"
+    },
+    {
+      "name": "DirectoryScope",
+      "reason": "ReadOnly",
+      "note": "Read-only expansion the service resolves from the key directoryScopeId"
+    },
+    {
+      "name": "PrincipalId",
+      "reason": "Accepted",
+      "note": "Set resolves the Principal key to this id"
+    },
+    {
       "name": "PrincipalType",
       "reason": "NotConfigurable",
-      "note": "PrincipalType does not exist on the entity. It is used to choose how the Principal name is resolved."
+      "note": "Absent from the entity and used only to resolve the Principal name"
+    },
+    {
+      "name": "RoleDefinitionId",
+      "reason": "Accepted",
+      "note": "Set resolves the RoleDefinition key display name to this id"
+    },
+    {
+      "name": "Status",
+      "reason": "ReadOnly",
+      "note": "The service computes it while processing the request"
+    },
+    {
+      "name": "TargetSchedule",
+      "reason": "ReadOnly",
+      "note": "The service creates the resulting assignment schedule and links it"
     }
   ],
   "description": "This resource configures an Azure Active Directory Privilege Identity Management assignment.",

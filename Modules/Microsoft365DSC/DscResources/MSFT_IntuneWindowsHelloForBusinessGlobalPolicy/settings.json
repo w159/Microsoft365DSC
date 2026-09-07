@@ -10,7 +10,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceEnrollmentConfigurationType",
+      "reason": "Accepted",
+      "note": "The odata subtype is fixed here and other members belong to sibling resources"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "Priority",
+      "reason": "ReadOnly",
+      "note": "Singleton configuration with no sibling to order against"
+    }
+  ],
   "description": "This resource configures an Intune Windows Hello For Business Global Policy.",
   "permissions": {
     "graph": {

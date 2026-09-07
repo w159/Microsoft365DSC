@@ -69,6 +69,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IosDeviceBlockedOnMissingPartnerData                = $False;
                     IosEnabled                                          = $False;
                     IosMobileApplicationManagementEnabled               = $False;
+                    MacDeviceBlockedOnMissingPartnerData                = $False;
+                    MacEnabled                                          = $False;
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
@@ -108,6 +110,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IosDeviceBlockedOnMissingPartnerData                = $False;
                     IosEnabled                                          = $False;
                     IosMobileApplicationManagementEnabled               = $False;
+                    MacDeviceBlockedOnMissingPartnerData                = $False;
+                    MacEnabled                                          = $False;
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
@@ -129,6 +133,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         IosDeviceBlockedOnMissingPartnerData                = $False;
                         IosEnabled                                          = $False;
                         IosMobileApplicationManagementEnabled               = $False;
+                        MacDeviceBlockedOnMissingPartnerData                = $False;
+                        MacEnabled                                          = $False;
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
@@ -163,6 +169,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IosDeviceBlockedOnMissingPartnerData                = $False;
                     IosEnabled                                          = $False;
                     IosMobileApplicationManagementEnabled               = $False;
+                    MacDeviceBlockedOnMissingPartnerData                = $False;
+                    MacEnabled                                          = $False;
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
@@ -184,6 +192,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         IosDeviceBlockedOnMissingPartnerData                = $False;
                         IosEnabled                                          = $False;
                         IosMobileApplicationManagementEnabled               = $False;
+                        MacDeviceBlockedOnMissingPartnerData                = $False;
+                        MacEnabled                                          = $False;
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
@@ -211,6 +221,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IosDeviceBlockedOnMissingPartnerData                = $False;
                     IosEnabled                                          = $False;
                     IosMobileApplicationManagementEnabled               = $False;
+                    MacDeviceBlockedOnMissingPartnerData                = $False;
+                    MacEnabled                                          = $False;
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "notSetUp"; #drift
                     PartnerUnresponsivenessThresholdInDays              = 1; #drift
@@ -232,6 +244,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         IosDeviceBlockedOnMissingPartnerData                = $False;
                         IosEnabled                                          = $False;
                         IosMobileApplicationManagementEnabled               = $False;
+                        MacDeviceBlockedOnMissingPartnerData                = $False;
+                        MacEnabled                                          = $False;
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
@@ -275,6 +289,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         IosDeviceBlockedOnMissingPartnerData                = $False;
                         IosEnabled                                          = $False;
                         IosMobileApplicationManagementEnabled               = $False;
+                        MacDeviceBlockedOnMissingPartnerData                = $False;
+                        MacEnabled                                          = $False;
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;

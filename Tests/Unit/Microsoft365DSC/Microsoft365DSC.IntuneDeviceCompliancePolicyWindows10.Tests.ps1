@@ -78,6 +78,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -136,6 +140,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -196,6 +204,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -252,6 +264,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -299,6 +315,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True

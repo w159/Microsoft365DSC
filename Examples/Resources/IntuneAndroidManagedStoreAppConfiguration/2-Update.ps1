@@ -26,6 +26,7 @@ Configuration Example
         IntuneAndroidManagedStoreAppConfiguration "IntuneAndroidManagedStoreAppConfiguration-Example"
         {
             Description           = "IntuneAndroidManagedStoreAppConfiguration Description";
+            RoleScopeTagIds       = @("0");
             DisplayName           = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
             Ensure                = "Present";
             appSupportsOemConfig  = $False;

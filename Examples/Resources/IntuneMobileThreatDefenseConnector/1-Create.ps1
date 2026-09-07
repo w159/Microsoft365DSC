@@ -37,6 +37,8 @@ Configuration Example
             IosEnabled                                          = $False;
             IosMobileApplicationManagementEnabled               = $False;
             LastHeartbeatDateTime                               = "1/1/0001 12:00:00 AM";
+            MacDeviceBlockedOnMissingPartnerData                = $False;
+            MacEnabled                                          = $False;
             MicrosoftDefenderForEndpointAttachEnabled           = $False;
             PartnerState                                        = "notSetUp";
             PartnerUnresponsivenessThresholdInDays              = 7;

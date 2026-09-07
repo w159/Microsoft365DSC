@@ -27,6 +27,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
                 @{ status = "Success" }
             }
+            Mock -CommandName Get-M365DSCGroupDisplayNameById -MockWith { return 'Test Target Group' }
             # Hide Write-M365DSCHost output during the tests
             Mock -CommandName Write-M365DSCHost -MockWith {}
 
@@ -43,6 +44,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     OwnerUserPrincipalName                          = "testuser@domain.com"
                     OwnerOrganizationName                           = "Test Organization"
                     EnrollmentTarget                                = "targetedAsEnrollmentRestrictions"
+                    TargetGroups                                     = @("Test Target Group")
                     DeviceOwnerManagementEnabled                    = $False
                     AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $False
                     Ensure                                          = 'Present'
@@ -81,6 +83,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             OwnerOrganizationName             = "Contoso"
                             LastModifiedDateTime              = "2024-10-28T01:24:39.1855089Z"
                             EnrollmentTarget                  = "targetedAsEnrollmentRestrictions"
+                            TargetGroupIds                    = @("11111111-1111-1111-1111-111111111111")
                             DeviceOwnerManagementEnabled      = $true
                             AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $false
                         }
@@ -130,6 +133,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                                          = "androidManagedStoreAccountEnterpriseSettings"
                     BindStatus                                   = "bound"
                     # OwnerUserPrincipalName                       = "existingUser@domain.com"
+                    TargetGroups                                  = @("Test Target Group")
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
@@ -139,6 +143,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id                                        = "androidManagedStoreAccountEnterpriseSettings"
                         BindStatus                                = "bound"
                         # OwnerUserPrincipalName                    = "existingUser@domain.com"
+                        TargetGroupIds                            = @("11111111-1111-1111-1111-111111111111")
                         Ensure                                    = 'Present'
                     }
                 }
@@ -155,6 +160,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Id                                          = "androidManagedStoreAccountEnterpriseSettings"
                     BindStatus                                   = "notBound"
+                    TargetGroups                                  = @("Test Target Group")
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
@@ -164,6 +170,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id                                        = "androidManagedStoreAccountEnterpriseSettings"
                         BindStatus                                = "bound"
                         OwnerUserPrincipalName                    = "existingUser@domain.com"
+                        TargetGroupIds                            = @("11111111-1111-1111-1111-111111111111")
                         Ensure                                    = 'Present'
                     }
                 }
@@ -191,6 +198,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id                                        = "androidManagedStoreAccountEnterpriseSettings"
                         BindStatus                                = "bound"
                         OwnerUserPrincipalName                    = "existingUser@domain.com"
+                        TargetGroupIds                            = @("11111111-1111-1111-1111-111111111111")
                     }
                 }
             }

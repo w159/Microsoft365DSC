@@ -43,6 +43,7 @@ Configuration Example
             NetworkName                    = 'Warehouse Scanner Wi-Fi - Building B' # Updated Property
             PreSharedKey                   = '<wifi-pre-shared-key>'
             PreSharedKeyIsSet              = $true
+            ProxySetting                   = 'none'
             RoleScopeTagIds                = @('0')
             Ssid                           = 'Contoso-Scanners'
             WiFiSecurityType               = 'wpaPersonal'

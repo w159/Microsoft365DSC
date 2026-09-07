@@ -10,7 +10,28 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Associations",
+      "reason": "OwnedByOtherResource",
+      "note": "AADRemoteNetwork writes the link and the abstract type carries no properties"
+    },
+    {
+      "name": "IsCustomProfile",
+      "reason": "ReadOnly",
+      "note": "Records how the profile was provisioned and the SDK offers no create path"
+    },
+    {
+      "name": "ServicePrincipal",
+      "reason": "ReadOnly",
+      "note": "Global Secure Access creates and links this service principal during provisioning"
+    },
+    {
+      "name": "TrafficForwardingType",
+      "reason": "ReadOnly",
+      "note": "Service fixes internet, m365 or private at provisioning with no create path"
+    }
+  ],
   "description": "This resource configures an Azure AD Network Access Forwarding Profile.",
   "permissions": {
     "graph": {

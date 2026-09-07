@@ -77,6 +77,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AppRoleAssignmentRequired = $false
                     ErrorUrl                  = ''
                     Homepage                  = 'https://app1.contoso.com'
+                    LoginUrl                  = 'https://app1.contoso.com/login'
                     LogoutUrl                 = 'https://app1.contoso.com/logout'
                     PublisherName             = 'Contoso'
                     ReplyURLs                 = 'https://app1.contoso.com'
@@ -135,6 +136,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AppRoleAssignmentRequired = $false
                     ErrorUrl                  = ''
                     Homepage                  = 'https://app1.contoso.com'
+                    LoginUrl                  = 'https://app1.contoso.com/login'
                     LogoutUrl                 = 'https://app1.contoso.com/logout'
                     PublisherName             = 'Contoso'
                     ReplyURLs                 = 'https://app1.contoso.com'
@@ -179,6 +181,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name AppRoleAssignmentRequired -Value $false
                     $AADSP | Add-Member -MemberType NoteProperty -Name ErrorUrl -Value ''
                     $AADSP | Add-Member -MemberType NoteProperty -Name Homepage -Value 'https://app1.contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name LoginUrl -Value 'https://app1.contoso.com/login'
                     $AADSP | Add-Member -MemberType NoteProperty -Name LogoutUrl -Value 'https://app1.contoso.com/logout'
                     $AADSP | Add-Member -MemberType NoteProperty -Name PublisherName -Value 'Contoso'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ReplyURLs -Value 'https://app1.contoso.com'
@@ -229,6 +232,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AppRoleAssignmentRequired = $false
                     ErrorUrl                  = ''
                     Homepage                  = 'https://app1.contoso.com'
+                    LoginUrl                  = 'https://app1.contoso.com/login'
                     LogoutUrl                 = 'https://app1.contoso.com/logout'
                     PublisherName             = 'Contoso'
                     ReplyURLs                 = 'https://app1.contoso.com'
@@ -274,6 +278,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name AppRoleAssignmentRequired -Value $false
                     $AADSP | Add-Member -MemberType NoteProperty -Name ErrorUrl -Value ''
                     $AADSP | Add-Member -MemberType NoteProperty -Name Homepage -Value 'https://app1.contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name LoginUrl -Value 'https://app1.contoso.com/login'
                     $AADSP | Add-Member -MemberType NoteProperty -Name LogoutUrl -Value 'https://app1.contoso.com/logout'
                     $AADSP | Add-Member -MemberType NoteProperty -Name PublisherName -Value 'Contoso'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ReplyURLs -Value 'https://app1.contoso.com'
@@ -320,6 +325,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AppRoleAssignmentRequired = $false
                     ErrorUrl                  = ''
                     Homepage                  = 'https://app1.contoso.com'
+                    LoginUrl                  = 'https://app1.contoso.com/login'
                     LogoutUrl                 = 'https://app1.contoso.com/logout'
                     PublisherName             = 'Contoso'
                     ReplyURLs                 = 'https://app1.contoso.com'
@@ -346,6 +352,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name AppRoleAssignmentRequired -Value $false
                     $AADSP | Add-Member -MemberType NoteProperty -Name ErrorUrl -Value ''
                     $AADSP | Add-Member -MemberType NoteProperty -Name Homepage -Value 'https://app1.contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name LoginUrl -Value 'https://app1.contoso.com/login'
                     $AADSP | Add-Member -MemberType NoteProperty -Name LogoutUrl -Value 'https://app1.contoso.com/logout'
                     $AADSP | Add-Member -MemberType NoteProperty -Name PublisherName -Value 'Contoso'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ReplyURLs -Value 'https://app1.contoso.com'
@@ -409,6 +416,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name AppRoleAssignmentRequired -Value $false
                     $AADSP | Add-Member -MemberType NoteProperty -Name ErrorUrl -Value ''
                     $AADSP | Add-Member -MemberType NoteProperty -Name Homepage -Value 'https://app1.contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name LoginUrl -Value 'https://app1.contoso.com/login'
                     $AADSP | Add-Member -MemberType NoteProperty -Name LogoutUrl -Value 'https://app1.contoso.com/logout'
                     $AADSP | Add-Member -MemberType NoteProperty -Name PublisherName -Value 'Contoso'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ReplyURLs -Value 'https://app1.contoso.com'

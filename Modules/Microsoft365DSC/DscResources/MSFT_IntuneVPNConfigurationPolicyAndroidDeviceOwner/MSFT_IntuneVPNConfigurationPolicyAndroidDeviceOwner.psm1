@@ -68,6 +68,10 @@ class IntuneVPNConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $alwaysOnLockdown
 
     [DscProperty()]
+    [System.ComponentModel.Description('List of app package IDs to exclude from the always-on VPN lockdown.')]
+    [System.String[]] $lockdownExclusionList
+
+    [DscProperty()]
     [System.ComponentModel.Description('Microsoft Tunnel site ID.')]
     [System.String] $microsoftTunnelSiteId
 
@@ -267,6 +271,7 @@ class IntuneVPNConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 targetedMobileApps    = $complexTargetedMobileApps
                 alwaysOn              = $getValue.alwaysOn
                 alwaysOnLockdown      = $getValue.alwaysOnLockdown
+                lockdownExclusionList = $getValue.lockdownExclusionList
                 microsoftTunnelSiteId = $getValue.microsoftTunnelSiteId
                 proxyExclusionList    = $getValue.proxyExclusionList
                 customData            = $complexCustomData

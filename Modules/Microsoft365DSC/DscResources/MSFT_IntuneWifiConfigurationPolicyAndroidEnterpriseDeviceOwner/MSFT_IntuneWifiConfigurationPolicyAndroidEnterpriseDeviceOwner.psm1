@@ -22,12 +22,22 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
     [System.String[]] $RoleScopeTagIds
 
     [DscProperty()]
+    [System.ComponentModel.Description('Authentication method the client needs to use when the EAP type is configured to PEAP or EAP-TTLS.')]
+    [ValidateSet('certificate', 'derivedCredential', 'usernameAndPassword')]
+    [System.String] $AuthenticationMethod
+
+    [DscProperty()]
     [System.ComponentModel.Description('If the network is in range, automatically connect.')]
     [System.Nullable[System.Boolean]] $ConnectAutomatically
 
     [DscProperty()]
     [System.ComponentModel.Description('Don''t show this Wi-Fi network on an end-user''s device in the list of available networks. The SSID will not be broadcasted.')]
     [System.Nullable[System.Boolean]] $ConnectWhenNetworkNameIsHidden
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Extensible Authentication Protocol (EAP) type set on the Wi-Fi endpoint.')]
+    [ValidateSet('eapTls', 'eapTtls', 'peap')]
+    [System.String] $EapType
 
     [DscProperty()]
     [System.ComponentModel.Description('Network name.')]
@@ -65,6 +75,10 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
     [DscProperty()]
     [System.ComponentModel.Description('Service Set Identifier. The name of the Wi-Fi connection.')]
     [System.String] $Ssid
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Trusted server certificate names.')]
+    [System.String[]] $TrustedServerCertificateNames
 
     [DscProperty()]
     [System.ComponentModel.Description('Type of Wi-Fi profile.')]
@@ -178,8 +192,10 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
                 Description                    = $getValue.Description
                 DisplayName                    = $getValue.DisplayName
                 RoleScopeTagIds                = $getValue.RoleScopeTagIds
+                AuthenticationMethod           = $getValue.authenticationMethod
                 ConnectAutomatically           = $getValue.connectAutomatically
                 ConnectWhenNetworkNameIsHidden = $getValue.connectWhenNetworkNameIsHidden
+                EapType                        = $getValue.eapType
                 NetworkName                    = $getValue.networkName
                 PreSharedKey                   = $getValue.preSharedKey
                 PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
@@ -189,6 +205,7 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
                 ProxyManualPort                = $getValue.proxyManualPort
                 ProxySettings                  = $getValue.proxySettings
                 Ssid                           = $getValue.ssid
+                TrustedServerCertificateNames  = $getValue.trustedServerCertificateNames
                 WiFiSecurityType               = $getValue.wiFiSecurityType
                 Ensure                         = 'Present'
                 Credential                     = $this.Credential

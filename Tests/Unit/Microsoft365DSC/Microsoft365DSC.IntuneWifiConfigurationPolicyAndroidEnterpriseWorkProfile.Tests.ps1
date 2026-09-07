@@ -54,6 +54,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return @{
                     '@odata.type'                  = '#microsoft.graph.androidWorkProfileWifiConfiguration'
                     NetworkName                    = 'FakeStringValue'
+                    PreSharedKey                   = 'FakeStringValue'
+                    PreSharedKeyIsSet              = $True
                     WiFiSecurityType               = 'open'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
@@ -82,6 +84,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                    = 'FakeStringValue'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
+                    PreSharedKey                   = 'FakeStringValue'
+                    PreSharedKeyIsSet              = $True
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
@@ -113,6 +117,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                    = 'FakeStringValue'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
+                    PreSharedKey                   = 'FakeStringValue'
+                    PreSharedKeyIsSet              = $True
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Absent'
@@ -143,6 +149,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                    = 'FakeStringValue'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
+                    PreSharedKey                   = 'FakeStringValue'
+                    PreSharedKeyIsSet              = $True
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
@@ -164,6 +172,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                    = 'FakeStringValue'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
+                    PreSharedKey                   = 'FakeStringValue'
+                    PreSharedKeyIsSet              = $True
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'

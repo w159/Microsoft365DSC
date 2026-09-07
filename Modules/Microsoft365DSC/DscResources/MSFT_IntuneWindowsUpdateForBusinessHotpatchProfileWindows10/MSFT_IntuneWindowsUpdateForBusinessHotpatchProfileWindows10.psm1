@@ -26,6 +26,10 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
     [System.String[]] $RoleScopeTagIds
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the approval settings for the Windows quality update policy.')]
+    [MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting[]] $ApprovalSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('Represents the assignment to the Intune policy.')]
     [MSFT_DeviceManagementConfigurationPolicyAssignments[]] $Assignments
 
@@ -142,11 +146,37 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
             $resolvedId = $getValue.id
             Write-Verbose -Message "An Intune Windows Update For Business Hotpatch Profile for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
+            #region resource generator code
+            $complexApprovalSettings = @()
+            foreach ($currentApprovalSettings in $getValue.approvalSettings)
+            {
+                $myApprovalSettings = @{}
+                if ($null -ne $currentApprovalSettings.approvalMethodType)
+                {
+                    $myApprovalSettings.Add('ApprovalMethodType', $currentApprovalSettings.approvalMethodType.ToString())
+                }
+                $myApprovalSettings.Add('DeferredDeploymentInDay', $currentApprovalSettings.deferredDeploymentInDay)
+                if ($null -ne $currentApprovalSettings.windowsQualityUpdateCadence)
+                {
+                    $myApprovalSettings.Add('WindowsQualityUpdateCadence', $currentApprovalSettings.windowsQualityUpdateCadence.ToString())
+                }
+                if ($null -ne $currentApprovalSettings.windowsQualityUpdateCategory)
+                {
+                    $myApprovalSettings.Add('WindowsQualityUpdateCategory', $currentApprovalSettings.windowsQualityUpdateCategory.ToString())
+                }
+                if ($myApprovalSettings.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexApprovalSettings += $myApprovalSettings
+                }
+            }
+            #endregion
+
             $results = @{
                 #region resource generator code
                 Description           = $getValue.description
                 DisplayName           = $getValue.displayName
                 RoleScopeTagIds       = $getValue.roleScopeTagIds
+                ApprovalSettings      = $complexApprovalSettings
                 HotpatchEnabled       = $getValue.hotpatchEnabled
                 Id                    = $getValue.id
                 Ensure                = 'Present'
@@ -328,6 +358,21 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
                 $Results = $this.GetForExport($Params)
                 $rawResults = $Results.Clone()
 
+                if ($null -ne $Results.ApprovalSettings)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.ApprovalSettings `
+                        -CIMInstanceName 'MicrosoftGraphWindowsQualityUpdateApprovalSetting'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.ApprovalSettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('ApprovalSettings') | Out-Null
+                    }
+                }
+
                 if ($Results.Assignments)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Assignments -CIMInstanceName DeviceManagementConfigurationPolicyAssignments
@@ -346,7 +391,7 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments') `
+                    -NoEscape @('Assignments', 'ApprovalSettings') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -381,6 +426,28 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The approval method of the Windows quality update policy. Possible values are: automatic, manual.')]
+    [ValidateSet('automatic', 'manual')]
+    [System.String] $ApprovalMethodType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The number of days to defer the deployment of the Windows quality update.')]
+    [System.Nullable[System.UInt32]] $DeferredDeploymentInDay
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The publishing cadence of the Windows quality update. Possible values are: monthly, outOfBand.')]
+    [ValidateSet('monthly', 'outOfBand')]
+    [System.String] $WindowsQualityUpdateCadence
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The category of the Windows quality update. Possible values are: all, nonSecurity, quickMachineRecovery, security.')]
+    [ValidateSet('all', 'nonSecurity', 'quickMachineRecovery', 'security')]
+    [System.String] $WindowsQualityUpdateCategory
 }
 
 class MSFT_DeviceManagementConfigurationPolicyAssignments

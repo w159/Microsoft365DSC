@@ -34,6 +34,14 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
     [System.String] $NetworkName
 
     [DscProperty()]
+    [System.ComponentModel.Description('Pre shared key.')]
+    [System.String] $PreSharedKey
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Pre shared key is set.')]
+    [System.Nullable[System.Boolean]] $PreSharedKeyIsSet
+
+    [DscProperty()]
     [System.ComponentModel.Description('SSID.')]
     [System.String] $Ssid
 
@@ -154,6 +162,8 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
                 ConnectAutomatically           = $getValue.connectAutomatically
                 ConnectWhenNetworkNameIsHidden = $getValue.connectWhenNetworkNameIsHidden
                 NetworkName                    = $getValue.networkName
+                PreSharedKey                   = $getValue.preSharedKey
+                PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
                 Ssid                           = $getValue.ssid
                 WiFiSecurityType               = $getValue.wiFiSecurityType
                 Ensure                         = 'Present'

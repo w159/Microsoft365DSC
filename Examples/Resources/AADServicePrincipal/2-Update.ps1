@@ -32,6 +32,7 @@ Configuration Example
             AccountEnabled            = $true
             AppRoleAssignmentRequired = $false
             Homepage                  = "https://$TenantId"
+            LoginUrl                  = "https://$TenantId/login"
             LogoutUrl                 = "https://$TenantId/logout"
             ReplyURLs                 = "https://$TenantId"
             ServicePrincipalType      = "Application"

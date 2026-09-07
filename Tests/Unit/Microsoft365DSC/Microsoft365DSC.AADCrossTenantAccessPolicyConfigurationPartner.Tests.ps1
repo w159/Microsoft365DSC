@@ -96,6 +96,26 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                         }
                     }
+                    TenantRestrictions = @{
+                        applications = @{
+                            accessType = 'blocked'
+                            targets    = @(
+                                @{
+                                    target     = 'AllApplications'
+                                    targetType = 'application'
+                                }
+                            )
+                        }
+                        usersAndGroups = @{
+                            accessType = 'blocked'
+                            targets    = @(
+                                @{
+                                    target     = 'AllUsers'
+                                    targetType = 'user'
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -174,6 +194,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
+                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllApplications'
+                                    TargetType = 'application'
+                                }))
+                        })
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
                     Credential               = $Credential;
                     Ensure                   = "Present";
                     PartnerTenantId          = "12345-12345-12345-12345-12345";
@@ -246,6 +282,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
+                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllApplications'
+                                    TargetType = 'application'
+                                }))
+                        })
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
                     Credential               = $Credential;
                     Ensure                   = "Present";
                     PartnerTenantId          = "12345-12345-12345-12345-12345";
@@ -304,6 +356,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                         UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllApplications'
+                                    TargetType = 'application'
+                                }))
+                        })
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
                                     Target     = 'AllUsers'
                                     TargetType = 'user'
@@ -372,6 +440,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                         UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllApplications'
+                                    TargetType = 'application'
+                                }))
+                        })
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
                                     Target     = 'AllUsers'
                                     TargetType = 'user'

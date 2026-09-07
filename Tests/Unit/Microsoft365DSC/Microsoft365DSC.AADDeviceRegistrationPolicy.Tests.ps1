@@ -100,6 +100,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureAdJoinLocalAdminsRegisteringGroups = @();
                     AzureAdJoinLocalAdminsRegisteringMode   = "Selected";
                     AzureAdJoinLocalAdminsRegisteringUsers  = @("john.smith@contoso.com");
+                    AzureADRegistration                     = ([MSFT_AzureADRegistrationPolicy] @{
+                        AllowedToRegister   = ([MSFT_DeviceRegistrationMembership] @{
+                            Groups    = @()
+                            Users     = @()
+                            odataType = "#microsoft.graph.allDeviceRegistrationMembership"
+                        })
+                        IsAdminConfigurable = $False
+                    });
                     IsSingleInstance                        = "Yes";
                     LocalAdminPasswordIsEnabled             = $False;
                     LocalAdminsEnableGlobalAdmins           = $True;
@@ -123,6 +131,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureAdJoinLocalAdminsRegisteringGroups = @();
                     AzureAdJoinLocalAdminsRegisteringMode   = "Selected";
                     AzureAdJoinLocalAdminsRegisteringUsers  = @("john.smith@contoso.com");
+                    AzureADRegistration                     = ([MSFT_AzureADRegistrationPolicy] @{
+                        AllowedToRegister   = ([MSFT_DeviceRegistrationMembership] @{
+                            Groups    = @()
+                            Users     = @()
+                            odataType = "#microsoft.graph.allDeviceRegistrationMembership"
+                        })
+                        IsAdminConfigurable = $False
+                    });
                     IsSingleInstance                        = "Yes";
                     LocalAdminPasswordIsEnabled             = $False;
                     LocalAdminsEnableGlobalAdmins           = $False; # drift

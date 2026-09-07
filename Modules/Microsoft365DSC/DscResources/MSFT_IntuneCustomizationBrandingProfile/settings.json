@@ -10,7 +10,28 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "CustomPrivacyMessage",
+      "reason": "Accepted",
+      "note": "CustomCanSeePrivacyMessage and CustomCantSeePrivacyMessage carry the privacy text"
+    },
+    {
+      "name": "IsDefaultProfile",
+      "reason": "ReadOnly",
+      "note": "Intune flags the tenant's single default customization policy"
+    },
+    {
+      "name": "IsFactoryResetDisabled",
+      "reason": "Accepted",
+      "note": "CompanyPortalBlockedActions writes the reset block per platform"
+    },
+    {
+      "name": "IsRemoveDeviceDisabled",
+      "reason": "Accepted",
+      "note": "CompanyPortalBlockedActions writes the remove block per platform"
+    }
+  ],
   "description": "This resource configures an Intune Customization Branding Profile.",
   "permissions": {
     "graph": {

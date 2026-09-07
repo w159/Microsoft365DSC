@@ -18,6 +18,10 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String[]] $RoleScopeTagIds
 
     [DscProperty()]
+    [System.ComponentModel.Description('Semicolon separated list of device manufacturers allowed, as a string, for the managed app to work.')]
+    [System.String] $AllowedAndroidDeviceManufacturers
+
+    [DscProperty()]
     [System.ComponentModel.Description('List of allowed Android device models.')]
     [System.String[]] $AllowedAndroidDeviceModels
 
@@ -68,6 +72,14 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Package ID of the messaging redirect app.')]
     [System.String] $MessagingRedirectAppPackageId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Versions less than the specified version will wipe the managed app and the associated company data.')]
+    [System.String] $MinimumWipeAppVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Versions less than the specified version will wipe the managed app and the associated company data.')]
+    [System.String] $MinimumWipeOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Minimum required patch version for wipe.')]
@@ -490,6 +502,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
             }
 
             return $this.AsResult(@{
+                AllowedAndroidDeviceManufacturers                  = $policy.AllowedAndroidDeviceManufacturers
                 AllowedAndroidDeviceModels                         = $policy.AllowedAndroidDeviceModels
                 AllowedDataIngestionLocations                      = [string[]]$policy.AllowedDataIngestionLocations
                 AllowedDataStorageLocations                        = [string[]]$policy.AllowedDataStorageLocations
@@ -545,6 +558,8 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 MinimumWarningAppVersion                           = $policy.MinimumWarningAppVersion
                 MinimumWarningOSVersion                            = $policy.MinimumWarningOSVersion
                 MinimumWarningPatchVersion                         = $policy.MinimumWarningPatchVersion
+                MinimumWipeAppVersion                              = $policy.MinimumWipeAppVersion
+                MinimumWipeOsVersion                               = $policy.MinimumWipeOsVersion
                 MinimumWipePatchVersion                            = $policy.MinimumWipePatchVersion
                 MobileThreatDefenseRemediationAction               = $policy.MobileThreatDefenseRemediationAction
                 NotificationRestriction                            = $policy.NotificationRestriction

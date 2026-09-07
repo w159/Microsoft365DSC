@@ -42,6 +42,11 @@ class IntuneWifiConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceBas
     [System.Nullable[System.Boolean]] $PreSharedKeyIsSet
 
     [DscProperty()]
+    [System.ComponentModel.Description('Define the proxy setting.')]
+    [ValidateSet('automatic', 'manual', 'none')]
+    [System.String] $ProxySetting
+
+    [DscProperty()]
     [System.ComponentModel.Description('Define the SSID.')]
     [System.String] $Ssid
 
@@ -164,6 +169,7 @@ class IntuneWifiConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceBas
                 NetworkName                    = $getValue.networkName
                 PreSharedKey                   = $getValue.preSharedKey
                 PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
+                ProxySetting                   = $getValue.proxySetting
                 Ssid                           = $getValue.ssid
                 WiFiSecurityType               = $getValue.wiFiSecurityType
                 Ensure                         = 'Present'

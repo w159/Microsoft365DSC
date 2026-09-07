@@ -46,6 +46,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [System.String] $Homepage
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the URL where the service provider redirects the user to Microsoft Entra ID to authenticate.')]
+    [System.String] $LoginUrl
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies the LogoutURL of the ServicePrincipal.')]
     [System.String] $LogoutUrl
 
@@ -147,7 +151,7 @@ class AADServicePrincipal : M365DSCResourceBase
 
     AADServicePrincipal() : base()
     {
-        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'ErrorUrl', 'Homepage', 'LogoutUrl', 'Notes', 'PreferredSingleSignOnMode', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'KeyCredentials', 'PasswordCredentials'
+        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'ErrorUrl', 'Homepage', 'LoginUrl', 'LogoutUrl', 'Notes', 'PreferredSingleSignOnMode', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'KeyCredentials', 'PasswordCredentials'
         $this.ResourceCache['NavigationsToExpand'] = 'AppRoleAssignedTo'
     }
 
@@ -464,6 +468,7 @@ class AADServicePrincipal : M365DSCResourceBase
                 DelegatedPermissionClassifications = [Array]$complexDelegatedPermissionClassifications
                 ErrorUrl                           = $AADServicePrincipal.ErrorUrl
                 Homepage                           = $AADServicePrincipal.Homepage
+                LoginUrl                           = $AADServicePrincipal.LoginUrl
                 LogoutUrl                          = $AADServicePrincipal.LogoutUrl
                 Notes                              = $AADServicePrincipal.Notes
                 Owners                             = $ownersValues

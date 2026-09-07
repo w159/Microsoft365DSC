@@ -53,6 +53,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description = "FakeStringValue"
                     HotpatchEnabled = $True
                     RoleScopeTagIds = @("0")
+                    ApprovalSettings = @(
+                        @{
+                            ApprovalMethodType = "automatic"
+                            DeferredDeploymentInDay = 2
+                            WindowsQualityUpdateCadence = "monthly"
+                            WindowsQualityUpdateCategory = "all"
+                        }
+                    )
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                 }
@@ -65,6 +73,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Description = "FakeStringValue"
                             HotpatchEnabled = $True
                             RoleScopeTagIds = @("0")
+                            ApprovalSettings = @(
+                                @{
+                                    ApprovalMethodType = "automatic"
+                                    DeferredDeploymentInDay = 2
+                                    WindowsQualityUpdateCadence = "monthly"
+                                    WindowsQualityUpdateCategory = "all"
+                                }
+                            )
                             DisplayName = "FakeStringValue"
                             Id = "FakeStringValue"
                         }
@@ -90,6 +106,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description = "FakeStringValue"
                     HotpatchEnabled = $True
                     RoleScopeTagIds = @("0")
+                    ApprovalSettings = @(
+                        ([MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting] @{
+                            ApprovalMethodType = "automatic"
+                            DeferredDeploymentInDay = 2
+                            WindowsQualityUpdateCadence = "monthly"
+                            WindowsQualityUpdateCategory = "all"
+                        })
+                    )
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = "Present"
@@ -122,6 +146,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description = "FakeStringValue"
                     HotpatchEnabled = $True
                     RoleScopeTagIds = @("0")
+                    ApprovalSettings = @(
+                        ([MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting] @{
+                            ApprovalMethodType = "automatic"
+                            DeferredDeploymentInDay = 2
+                            WindowsQualityUpdateCadence = "monthly"
+                            WindowsQualityUpdateCategory = "all"
+                        })
+                    )
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = "Absent"
@@ -149,6 +181,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description = "FakeStringValue"
                     HotpatchEnabled = $True
                     RoleScopeTagIds = @("0")
+                    ApprovalSettings = @(
+                        ([MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting] @{
+                            ApprovalMethodType = "automatic"
+                            DeferredDeploymentInDay = 2
+                            WindowsQualityUpdateCadence = "monthly"
+                            WindowsQualityUpdateCategory = "all"
+                        })
+                    )
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = "Present"
@@ -167,6 +207,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description = "FakeStringValue"
                     HotpatchEnabled = $False # Drift
                     RoleScopeTagIds = @("0")
+                    ApprovalSettings = @(
+                        ([MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting] @{
+                            ApprovalMethodType = "automatic"
+                            DeferredDeploymentInDay = 2
+                            WindowsQualityUpdateCadence = "monthly"
+                            WindowsQualityUpdateCategory = "all"
+                        })
+                    )
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = "Present"

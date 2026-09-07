@@ -12,19 +12,284 @@
   },
   "excludedProperties": [
     {
+      "name": "AgreementAcceptances",
+      "reason": "ReadOnly",
+      "note": "The service records terms of use acceptances"
+    },
+    {
+      "name": "AppRoleAssignments",
+      "reason": "OwnedByOtherResource",
+      "note": "AADServicePrincipal writes them through AppRoleAssignedTo"
+    },
+    {
+      "name": "AssignedLicenses",
+      "reason": "Accepted",
+      "note": "LicenseAssignment carries skuId through Set-MgUserLicense without disabledPlans"
+    },
+    {
+      "name": "AssignedPlans",
+      "reason": "ReadOnly",
+      "note": "Derived from the licenses on the user"
+    },
+    {
+      "name": "BusinessPhones",
+      "reason": "Accepted",
+      "note": "PhoneNumber writes the single supported business phone number"
+    },
+    {
+      "name": "CloudPCs",
+      "reason": "ReadOnly",
+      "note": "Windows 365 provisioning policies and licenses attach Cloud PCs to the user"
+    },
+    {
+      "name": "CreatedObjects",
+      "reason": "ReadOnly",
+      "note": "The directory records objects the user creates"
+    },
+    {
+      "name": "CreationType",
+      "reason": "ReadOnly",
+      "note": "The directory sets the creation type at account creation"
+    },
+    {
+      "name": "DeviceManagementTroubleshootingEvents",
+      "reason": "ReadOnly",
+      "note": "Intune emits these troubleshooting events for the user"
+    },
+    {
+      "name": "DirectReports",
+      "reason": "ReadOnly",
+      "note": "Computed from the manager relationship set on other users"
+    },
+    {
+      "name": "ExternalUserState",
+      "reason": "ReadOnly",
+      "note": "The invitation flow sets the guest redemption state"
+    },
+    {
+      "name": "ExternalUserStateChangeDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps it when the guest redemption state changes"
+    },
+    {
+      "name": "HireDate",
+      "reason": "Deprecated",
+      "note": "A SharePoint specific property replaced by employeeHireDate"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "The directory assigns the object id at user creation"
+    },
+    {
+      "name": "IdentityParentId",
+      "reason": "ReadOnly",
+      "note": "Set by the directory for agent users and null for regular accounts"
+    },
+    {
+      "name": "ImAddresses",
+      "reason": "ReadOnly",
+      "note": "Graph marks the instant messaging addresses read only"
+    },
+    {
+      "name": "Insights",
+      "reason": "ReadOnly",
+      "note": "The service computes item insights from user activity"
+    },
+    {
+      "name": "IsManagementRestricted",
+      "reason": "ReadOnly",
+      "note": "AADAdministrativeUnit controls the restricted management unit that sets this flag"
+    },
+    {
+      "name": "IsResourceAccount",
+      "reason": "Deprecated",
+      "note": "Reserved for future use and not to be used"
+    },
+    {
+      "name": "JoinedTeams",
+      "reason": "OwnedByOtherResource",
+      "note": "TeamsUser manages team membership for a user"
+    },
+    {
+      "name": "LastPasswordChangeDateTime",
+      "reason": "ReadOnly",
+      "note": "The directory stamps it when the user password changes"
+    },
+    {
+      "name": "LegalAgeGroupClassification",
+      "reason": "ReadOnly",
+      "note": "Calculated from the age group and minor consent values"
+    },
+    {
       "name": "LicenseAssignment",
       "reason": "Deferred",
-      "note": "The SKU part numbers from the licenseDetails batch request property."
+      "note": "Carries the SKU part numbers from the licenseDetails batch request"
+    },
+    {
+      "name": "LicenseAssignmentStates",
+      "reason": "ReadOnly",
+      "note": "The service reports each assignment state including group based assignments and errors"
+    },
+    {
+      "name": "LicenseDetails",
+      "reason": "ReadOnly",
+      "note": "Follows from the assigned licenses and fills LicenseAssignment"
+    },
+    {
+      "name": "MailboxSettings",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOMailboxSettings and EXOMailboxAutoReplyConfiguration manage them"
+    },
+    {
+      "name": "MailNickname",
+      "reason": "Accepted",
+      "note": "Derived from the local part of the user principal name at create time"
+    },
+    {
+      "name": "ManagedAppRegistrations",
+      "reason": "ReadOnly",
+      "note": "Intune creates them when a user runs a protected application"
+    },
+    {
+      "name": "ManagedDevices",
+      "reason": "ReadOnly",
+      "note": "Intune enrollment creates the managed devices for the user"
+    },
+    {
+      "name": "OnPremisesDistinguishedName",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization writes it from the on premises directory"
+    },
+    {
+      "name": "OnPremisesDomainName",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization writes this value from the on premises directory."
+    },
+    {
+      "name": "OnPremisesLastSyncDateTime",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization stamps this timestamp on each sync pass."
+    },
+    {
+      "name": "OnPremisesProvisioningErrors",
+      "reason": "ReadOnly",
+      "note": "The service reports synchronization errors here."
+    },
+    {
+      "name": "OnPremisesSamAccountName",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization writes this value from the on premises directory."
+    },
+    {
+      "name": "OnPremisesSecurityIdentifier",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization writes this value from the on premises directory."
+    },
+    {
+      "name": "OnPremisesSyncEnabled",
+      "reason": "ReadOnly",
+      "note": "The directory sets this flag from on premises sync state."
+    },
+    {
+      "name": "OnPremisesUserPrincipalName",
+      "reason": "ReadOnly",
+      "note": "Directory synchronization writes this value from the on premises directory."
+    },
+    {
+      "name": "OwnedDevices",
+      "reason": "ReadOnly",
+      "note": "Device registration creates the ownership relationship."
+    },
+    {
+      "name": "OwnedObjects",
+      "reason": "ReadOnly",
+      "note": "The directory derives this from ownership recorded on the target objects."
+    },
+    {
+      "name": "PasswordProfile",
+      "reason": "Accepted",
+      "note": "Declared as Password and sent to New-MgUser only on create."
+    },
+    {
+      "name": "People",
+      "reason": "ReadOnly",
+      "note": "The service computes the relevant people list."
     },
     {
       "name": "PhoneNumber",
       "reason": "Deferred",
-      "note": "The renamed businessPhones value, with the first entry as its value."
+      "note": "Renamed businessPhones, holding its first entry."
+    },
+    {
+      "name": "Photos",
+      "reason": "ReadOnly",
+      "note": "The service generates sized renditions from the uploaded picture."
+    },
+    {
+      "name": "PreferredName",
+      "reason": "Deprecated",
+      "note": "Microsoft documents this as not supported, and it always returns an empty string."
+    },
+    {
+      "name": "Presence",
+      "reason": "ReadOnly",
+      "note": "Teams reports availability and activity."
+    },
+    {
+      "name": "ProvisionedPlans",
+      "reason": "ReadOnly",
+      "note": "The service reports provisioning status following from assigned licenses."
+    },
+    {
+      "name": "RegisteredDevices",
+      "reason": "ReadOnly",
+      "note": "Device registration and join create these entries."
     },
     {
       "name": "Roles",
       "reason": "Deferred",
       "note": "The unifiedRoleAssignment objects for the user."
+    },
+    {
+      "name": "ScopedRoleMemberOf",
+      "reason": "OwnedByOtherResource",
+      "note": "AADAdministrativeUnit manages these through ScopedRoleMembers."
+    },
+    {
+      "name": "SecurityIdentifier",
+      "reason": "ReadOnly",
+      "note": "The directory issues this when it creates the user."
+    },
+    {
+      "name": "ServiceProvisioningErrors",
+      "reason": "ReadOnly",
+      "note": "Services report provisioning failures here."
+    },
+    {
+      "name": "ShowInAddressList",
+      "reason": "Deprecated",
+      "note": "Microsoft marks this do-not-use in Graph and directs admins to the admin center."
+    },
+    {
+      "name": "SignInActivity",
+      "reason": "ReadOnly",
+      "note": "The directory records last sign in timestamps from actual sign ins."
+    },
+    {
+      "name": "SignInSessionsValidFromDateTime",
+      "reason": "ReadOnly",
+      "note": "The directory stamps this when it revokes sign in sessions."
+    },
+    {
+      "name": "SponsorOf",
+      "reason": "ReadOnly",
+      "note": "The directory derives this from sponsors recorded on other users."
+    },
+    {
+      "name": "TransitiveMemberOf",
+      "reason": "ReadOnly",
+      "note": "Expanded from direct memberships, which MemberOf manages"
     }
   ],
   "description": "",

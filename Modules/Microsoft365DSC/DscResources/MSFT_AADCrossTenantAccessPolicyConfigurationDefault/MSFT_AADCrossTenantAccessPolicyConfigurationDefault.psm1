@@ -11,6 +11,10 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
     [System.String] $IsSingleInstance
 
     [DscProperty()]
+    [System.ComponentModel.Description('Determines the default configuration for automatically redeeming invitations for users from other organizations.')]
+    [MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings] $AutomaticUserConsentSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines your partner-specific configuration for users from other organizations accessing your resources via Azure AD B2B collaboration.')]
     [MSFT_AADCrossTenantAccessPolicyB2BSetting] $B2BCollaborationInbound
 
@@ -122,6 +126,15 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
             {
                 Write-Verbose -Message 'Could not find an Azure AD Cross Tenant Access Configuration Default'
                 return $this.AsResult($nullResult)
+            }
+
+            $AutomaticUserConsentSettingsValue = $null
+            if ($null -ne $getValue.AutomaticUserConsentSettings)
+            {
+                $AutomaticUserConsentSettingsValue = [ordered]@{
+                    InboundAllowed  = $getValue.AutomaticUserConsentSettings.InboundAllowed
+                    OutboundAllowed = $getValue.AutomaticUserConsentSettings.OutboundAllowed
+                }
             }
 
             $B2BCollaborationInboundValue = $null
@@ -380,6 +393,7 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
 
             $results = @{
                 IsSingleInstance                                  = 'Yes'
+                AutomaticUserConsentSettings                      = $AutomaticUserConsentSettingsValue
                 B2BCollaborationInbound                           = $B2BCollaborationInboundValue
                 B2BCollaborationOutbound                          = $B2BCollaborationOutboundValue
                 B2BDirectConnectInbound                           = $B2BDirectConnectInboundValue
@@ -431,6 +445,13 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
         $OperationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $OperationParams.Remove('IsSingleInstance') | Out-Null
 
+        if ($null -ne $OperationParams.AutomaticUserConsentSettings)
+        {
+            $OperationParams.AutomaticUserConsentSettings = $this.GetAutomaticUserConsentSettings($OperationParams.AutomaticUserConsentSettings)
+            $temp = $OperationParams.AutomaticUserConsentSettings
+            $OperationParams.Remove('AutomaticUserConsentSettings') | Out-Null
+            $OperationParams.Add('automaticUserConsentSettings', $temp)
+        }
         if ($null -ne $OperationParams.B2BCollaborationInbound)
         {
             $OperationParams.B2BCollaborationInbound = $this.GetB2BSetting($OperationParams.B2BCollaborationInbound)
@@ -541,6 +562,22 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
                 AccessTokens          = $this.AccessTokens
             }
             $Results = $this.GetForExport($Params)
+
+            if ($null -ne $Results.AutomaticUserConsentSettings)
+            {
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.AutomaticUserConsentSettings `
+                    -CIMInstanceName 'AADCrossTenantAccessPolicyAutomaticUserConsentSettings'
+
+                if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                {
+                    $Results.AutomaticUserConsentSettings = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('AutomaticUserConsentSettings') | Out-Null
+                }
+            }
 
             if ($null -ne $Results.B2BCollaborationInbound)
             {
@@ -774,7 +811,7 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
                 -ModulePath $this.GetModulePath() `
                 -Results $Results `
                 -Credential $this.Credential `
-                -NoEscape @('B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'InvitationRedemptionIdentityProviderConfiguration', 'TenantRestrictions')
+                -NoEscape @('AutomaticUserConsentSettings', 'B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'InvitationRedemptionIdentityProviderConfiguration', 'TenantRestrictions')
 
             # Fix OrganizationName variable in CIMInstance
             $currentDSCBlock = $currentDSCBlock.Replace('@$OrganizationName''', "@' + `$OrganizationName")
@@ -793,6 +830,16 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
 
             throw
         }
+    }
+
+    hidden [System.Collections.Hashtable] GetAutomaticUserConsentSettings([System.Object] $Setting)
+    {
+        $result = @{
+            inboundAllowed  = $Setting.InboundAllowed
+            outboundAllowed = $Setting.OutboundAllowed
+        }
+
+        return $result
     }
 
     hidden [System.Collections.Hashtable] GetB2BSetting([System.Object] $Setting)
@@ -952,6 +999,17 @@ class AADCrossTenantAccessPolicyConfigurationDefault : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether you want to automatically trust Inbound invitations.')]
+    [System.Nullable[System.Boolean]] $InboundAllowed
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether you want to automatically trust Outbound invitations.')]
+    [System.Nullable[System.Boolean]] $OutboundAllowed
 }
 
 class MSFT_AADCrossTenantAccessPolicyB2BSetting

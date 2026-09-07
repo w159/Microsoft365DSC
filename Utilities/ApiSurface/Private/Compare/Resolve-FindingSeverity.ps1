@@ -163,6 +163,7 @@ function Resolve-FindingSeverity
         'VND-NEWER-VERSION'     = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-MISSING'      = @{ Severity = 'warning'; AutoFixable = $true }
         'RES-PROP-BACKLOG'      = @{ Severity = 'info'; AutoFixable = $false }
+        'RES-PROP-NESTED'       = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-READONLY'     = @{ Severity = 'info'; AutoFixable = $false }
         'RES-PROP-ORPHANED'     = @{ Severity = 'breaking'; AutoFixable = $false }
         'RES-TYPE-MISMATCH'     = @{ Severity = 'breaking'; AutoFixable = $false }

@@ -10,7 +10,23 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "ApplicableArchitectures",
+      "reason": "Accepted",
+      "note": "AllowedArchitectures controls the architecture list. Value is always 'none'."
+    },
+    {
+      "name": "DetectionRules",
+      "reason": "Accepted",
+      "note": "Rules models detection and requirement rules in one collection keyed by RuleType"
+    },
+    {
+      "name": "RequirementRules",
+      "reason": "Accepted",
+      "note": "Rules models detection and requirement rules in one collection keyed by RuleType"
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Win32 App for Windows10.",
   "permissions": {
     "graph": {

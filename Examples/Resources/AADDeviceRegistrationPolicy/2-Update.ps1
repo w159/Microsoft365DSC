@@ -32,6 +32,14 @@ Configuration Example
             AzureAdJoinLocalAdminsRegisteringGroups = @();
             AzureAdJoinLocalAdminsRegisteringMode   = "Selected";
             AzureAdJoinLocalAdminsRegisteringUsers  = @("AllanD@M365x73318397.OnMicrosoft.com");
+            AzureADRegistration                     = MSFT_AzureADRegistrationPolicy{
+                AllowedToRegister   = MSFT_DeviceRegistrationMembership{
+                    Groups    = @()
+                    Users     = @()
+                    odataType = "#microsoft.graph.allDeviceRegistrationMembership"
+                }
+                IsAdminConfigurable = $False
+            };
             IsSingleInstance                        = "Yes";
             LocalAdminPasswordIsEnabled             = $False;
             LocalAdminsEnableGlobalAdmins           = $True;

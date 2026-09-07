@@ -26,7 +26,11 @@ Configuration Example
     {
         AADCrossTenantAccessPolicyConfigurationDefault "AADCrossTenantAccessPolicyConfigurationDefault-Example"
         {
-            B2BCollaborationInbound  = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            AutomaticUserConsentSettings = MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings {
+                InboundAllowed  = $True
+                OutboundAllowed = $True
+            }
+            B2BCollaborationInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -46,7 +50,7 @@ Configuration Example
                     )
                 }
             }
-            B2BCollaborationOutbound = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BCollaborationOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -66,7 +70,7 @@ Configuration Example
                     )
                 }
             }
-            B2BDirectConnectInbound  = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BDirectConnectInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -86,7 +90,7 @@ Configuration Example
                     )
                 }
             }
-            B2BDirectConnectOutbound = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BDirectConnectOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -106,16 +110,16 @@ Configuration Example
                     )
                 }
             }
-            Ensure                   = "Present";
-            InboundTrust             = MSFT_AADCrossTenantAccessPolicyInboundTrust {
+            Ensure                       = "Present";
+            InboundTrust                 = MSFT_AADCrossTenantAccessPolicyInboundTrust {
                 IsCompliantDeviceAccepted           = $False
                 IsHybridAzureADJoinedDeviceAccepted = $False
                 IsMfaAccepted                       = $False
             }
-            IsSingleInstance         = "Yes";
-            ApplicationId            = $ApplicationId
-            TenantId                 = $TenantId
-            CertificateThumbprint    = $CertificateThumbprint
+            IsSingleInstance             = "Yes";
+            ApplicationId                = $ApplicationId
+            TenantId                     = $TenantId
+            CertificateThumbprint        = $CertificateThumbprint
         }
     }
 }

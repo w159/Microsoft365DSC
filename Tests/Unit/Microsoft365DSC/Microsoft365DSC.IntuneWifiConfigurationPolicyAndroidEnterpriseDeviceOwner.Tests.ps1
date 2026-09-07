@@ -65,6 +65,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreSharedKeyIsSet              = $True
                     ProxyExclusionList             = 'FakeStringValue'
                     ProxyManualPort                = 25
+                    AuthenticationMethod           = 'certificate'
+                    EapType                        = 'eapTls'
+                    TrustedServerCertificateNames  = @('FakeStringValue')
                     Description          = 'FakeStringValue'
                     DisplayName          = 'FakeStringValue'
                     Id                   = 'FakeStringValue'
@@ -83,10 +86,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
+                    AuthenticationMethod           = 'certificate'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
                     Description                    = 'FakeStringValue'
                     DisplayName                    = 'FakeStringValue'
+                    EapType                        = 'eapTls'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
@@ -97,6 +102,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ProxyManualPort                = 25
                     ProxySettings                  = 'none'
                     Ssid                           = 'FakeStringValue'
+                    TrustedServerCertificateNames  = @('FakeStringValue')
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
                     Credential                     = $Credential
@@ -121,10 +127,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
+                    AuthenticationMethod           = 'certificate'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
                     Description                    = 'FakeStringValue'
                     DisplayName                    = 'FakeStringValue'
+                    EapType                        = 'eapTls'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
@@ -135,6 +143,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ProxyManualPort                = 25
                     ProxySettings                  = 'none'
                     Ssid                           = 'FakeStringValue'
+                    TrustedServerCertificateNames  = @('FakeStringValue')
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Absent'
                     Credential                     = $Credential
@@ -157,10 +166,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
+                    AuthenticationMethod           = 'certificate'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
                     Description                    = 'FakeStringValue'
                     DisplayName                    = 'FakeStringValue'
+                    EapType                        = 'eapTls'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
@@ -171,6 +182,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ProxyManualPort                = 25
                     ProxySettings                  = 'none'
                     Ssid                           = 'FakeStringValue'
+                    TrustedServerCertificateNames  = @('FakeStringValue')
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
                     Credential                     = $Credential
@@ -185,10 +197,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
+                    AuthenticationMethod           = 'certificate'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
                     Description                    = 'FakeStringValue'
                     DisplayName                    = 'FakeStringValue'
+                    EapType                        = 'eapTls'
                     Id                             = 'FakeStringValue'
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
@@ -199,6 +213,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ProxyManualPort                = 8443 # Updated property
                     ProxySettings                  = 'none'
                     Ssid                           = 'FakeStringValue'
+                    TrustedServerCertificateNames  = @('FakeStringValue')
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
                     Credential                     = $Credential

@@ -124,6 +124,26 @@ Configuration Example
                 IsHybridAzureADJoinedDeviceAccepted = $True
                 IsMfaAccepted                       = $True
             };
+            TenantRestrictions           = MSFT_AADCrossTenantAccessPolicyTenantRestrictions{
+                Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'blocked'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllApplications'
+                            TargetType = 'application'
+                        }
+                    )
+                }
+                UsersAndGroups = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'blocked'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllUsers'
+                            TargetType = 'user'
+                        }
+                    )
+                }
+            };
             Ensure                       = "Present";
             ApplicationId                = $ApplicationId
             TenantId                     = $TenantId

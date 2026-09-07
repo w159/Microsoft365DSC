@@ -46,6 +46,10 @@ class IntuneRoleAssignment : M365DSCResourceBase
     [System.String] $RoleDefinitionDisplayName
 
     [DscProperty()]
+    [System.ComponentModel.Description('List of Scope Tags for this Entity instance.')]
+    [System.String[]] $RoleScopeTagIds
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the Role exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -200,6 +204,7 @@ class IntuneRoleAssignment : M365DSCResourceBase
                 MembersDisplayNames        = $membersDisplayNamesValue
                 RoleDefinition             = $currentRoleDefinitionId
                 RoleDefinitionDisplayName  = $currentRoleDefinitionDisplayName
+                RoleScopeTagIds            = $getValue.RoleScopeTagIds
                 Ensure                     = 'Present'
                 Credential                 = $this.Credential
                 ApplicationId              = $this.ApplicationId
@@ -334,6 +339,11 @@ class IntuneRoleAssignment : M365DSCResourceBase
                 $createParameters['resourceScopes'] = $resourceScopesValue
             }
 
+            if ($null -ne $this.RoleScopeTagIds)
+            {
+                $createParameters['roleScopeTagIds'] = $this.RoleScopeTagIds
+            }
+
             $null = New-MgBetaDeviceManagementRoleAssignment -BodyParameter $createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
@@ -352,6 +362,11 @@ class IntuneRoleAssignment : M365DSCResourceBase
             if ($null -ne $resourceScopesValue)
             {
                 $updateParameters['resourceScopes'] = $resourceScopesValue
+            }
+
+            if ($null -ne $this.RoleScopeTagIds)
+            {
+                $updateParameters['roleScopeTagIds'] = $this.RoleScopeTagIds
             }
 
             $null = Update-MgBetaDeviceManagementRoleAssignment `

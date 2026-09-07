@@ -38,6 +38,10 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
     [MSFT_AADCrossTenantAccessPolicyInboundTrust] $InboundTrust
 
     [DscProperty()]
+    [System.ComponentModel.Description('Defines the partner-specific tenant restrictions configuration for users in your organization who access an external organization on your network or devices.')]
+    [MSFT_AADCrossTenantAccessPolicyTenantRestrictions] $TenantRestrictions
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specify if the policy should exist or not.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -179,6 +183,37 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                     $IdentitySynchronizationValue.Remove('UserSyncInbound') | Out-Null
                 }
             }
+            $TenantRestrictionsValue = $null
+            if ($null -ne $getValue.TenantRestrictions)
+            {
+                $TenantRestrictionsValue = [ordered]@{
+                    Applications   = [ordered]@{
+                        AccessType = $getValue.TenantRestrictions.Applications.AccessType
+                        Targets    = Get-M365DSCArrayFromProperty -PropertyValue ($getValue.TenantRestrictions.Applications.Targets | ForEach-Object {
+                                [ordered]@{
+                                    Target     = $_.Target
+                                    TargetType = $_.TargetType
+                                }
+                            }) -ElementType ([System.Object])
+                    }
+                    UsersAndGroups = [ordered]@{
+                        AccessType = $getValue.TenantRestrictions.UsersAndGroups.AccessType
+                        Targets    = Get-M365DSCArrayFromProperty -PropertyValue ($getValue.TenantRestrictions.UsersAndGroups.Targets | ForEach-Object {
+                                [ordered]@{
+                                    Target     = $_.Target
+                                    TargetType = $_.TargetType
+                                }
+                            }) -ElementType ([System.Object])
+                    }
+                }
+                if ($null -ne $getValue.TenantRestrictions.Devices.Mode -or $null -ne $getValue.TenantRestrictions.Devices.Rule)
+                {
+                    $TenantRestrictionsValue.Add('Devices', [ordered]@{
+                            Mode = $getValue.TenantRestrictions.Devices.Mode
+                            Rule = $getValue.TenantRestrictions.Devices.Rule
+                        })
+                }
+            }
             $results = @{
                 PartnerTenantId              = $getValue.TenantId
                 B2BCollaborationInbound      = $B2BCollaborationInboundValue
@@ -188,6 +223,7 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                 AutomaticUserConsentSettings = $AutomaticUserConsentSettingsValue
                 IdentitySynchronization      = $IdentitySynchronizationValue
                 InboundTrust                 = $InboundTrustValue
+                TenantRestrictions           = $TenantRestrictionsValue
                 Ensure                       = 'Present'
                 Credential                   = $this.Credential
                 ApplicationId                = $this.ApplicationId
@@ -259,6 +295,11 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
         if ($null -ne $OperationParams.InboundTrust)
         {
             $OperationParams.InboundTrust = $this.GetInboundTrust($OperationParams.InboundTrust)
+        }
+        if ($null -ne $OperationParams.TenantRestrictions)
+        {
+            $OperationParams.TenantRestrictions = $this.GetTenantRestrictions($OperationParams.TenantRestrictions)
+            $OperationParams.TenantRestrictions = $this.UpdateSettingUserIdFromUPN($OperationParams.TenantRestrictions)
         }
         if ($null -ne $OperationParams.IdentitySynchronization)
         {
@@ -606,12 +647,51 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                     }
                 }
 
+                if ($null -ne $Results.TenantRestrictions)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'Applications'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTargetConfiguration'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'UsersAndGroups'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTargetConfiguration'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Devices'
+                            CimInstanceName = 'AADDevicesFilter'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Targets'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTarget'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.TenantRestrictions `
+                        -CIMInstanceName 'AADCrossTenantAccessPolicyTenantRestrictions' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.TenantRestrictions = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('TenantRestrictions') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'AutomaticUserConsentSettings', 'IdentitySynchronization')
+                    -NoEscape @('B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'AutomaticUserConsentSettings', 'IdentitySynchronization', 'TenantRestrictions')
 
                 # Fix OrganizationName variable in CIMInstance
                 $currentDSCBlock = $currentDSCBlock.Replace('@$OrganizationName''', "@' + `$OrganizationName")
@@ -735,6 +815,21 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
         }
     }
 
+    hidden [System.Collections.Hashtable] GetTenantRestrictions([System.Object] $Setting)
+    {
+        $result = $this.GetB2BSetting($Setting)
+
+        if ($null -ne $Setting.Devices.Mode -or $null -ne $Setting.Devices.Rule)
+        {
+            $result.Add('Devices', @{
+                    Mode = $Setting.Devices.Mode
+                    Rule = $Setting.Devices.Rule
+                })
+        }
+
+        return $result
+    }
+
     hidden [System.Collections.Hashtable] UpdateSettingUserIdFromUPN([System.Collections.Hashtable] $Setting)
     {
         if ($null -ne $Setting.UsersAndGroups -and $null -ne $Setting.UsersAndGroups.Targets)
@@ -854,6 +949,21 @@ class MSFT_AADCrossTenantAccessPolicyInboundTrust
     [System.Nullable[System.Boolean]] $IsMfaAccepted
 }
 
+class MSFT_AADCrossTenantAccessPolicyTenantRestrictions
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The list of applications targeted with your cross-tenant access policy.')]
+    [MSFT_AADCrossTenantAccessPolicyTargetConfiguration] $Applications
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines the rule for filtering devices and whether devices satisfying the rule should be allowed or blocked. This property isn''t supported on the server side yet.')]
+    [MSFT_AADDevicesFilter] $Devices
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The list of users and groups targeted with your cross-tenant access policy.')]
+    [MSFT_AADCrossTenantAccessPolicyTargetConfiguration] $UsersAndGroups
+}
+
 class MSFT_AADCrossTenantAccessPolicyTargetConfiguration
 {
     [DscProperty()]
@@ -864,6 +974,18 @@ class MSFT_AADCrossTenantAccessPolicyTargetConfiguration
     [DscProperty()]
     [System.ComponentModel.Description('Specifies whether to target users, groups, or applications with this rule.')]
     [MSFT_AADCrossTenantAccessPolicyTarget[]] $Targets
+}
+
+class MSFT_AADDevicesFilter
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether devices that satisfy the rule should be allowed or blocked. The possible values are: allowed, blocked.')]
+    [ValidateSet('allowed', 'blocked')]
+    [System.String] $Mode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines the rule to filter the devices. For example, ''device.deviceAttribute2 -eq ''PrivilegedAccessWorkstation''.')]
+    [System.String] $Rule
 }
 
 class MSFT_AADCrossTenantGroupSyncInbound

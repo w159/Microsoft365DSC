@@ -49,8 +49,14 @@ Configuration Example
                     )
                 }
             )
+            OnPremisesExtensionAttributes = MSFT_AADUserOnPremisesExtensionAttributes{
+                ExtensionAttribute1 = "Head Office"
+                ExtensionAttribute2 = "Cost Center 4100"
+            }
             AccountEnabled        = $true
+            CompanyName           = "Contoso"
             Department            = "Human Resources"
+            EmployeeId            = "E1234567"
             JobTitle              = "Senior Program Manager"
             StreetAddress         = "100 Rue Principale"
             State                 = "Quebec"

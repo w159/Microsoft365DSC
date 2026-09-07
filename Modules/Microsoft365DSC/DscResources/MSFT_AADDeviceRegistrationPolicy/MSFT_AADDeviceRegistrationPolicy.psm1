@@ -32,6 +32,10 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
     [System.String[]] $AzureADAllowedToJoinGroups
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the authorization policy for controlling registration of new devices using Microsoft Entra registered.')]
+    [MSFT_AzureADRegistrationPolicy] $AzureADRegistration
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies the authentication policy for a user to complete registration using Microsoft Entra join or Microsoft Entra registered within your organization.')]
     [System.Nullable[System.Boolean]] $MultiFactorAuthConfiguration
 
@@ -200,6 +204,50 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
                 }
             }
 
+            $azureADRegistrationUsersValue = @()
+            $azureADRegistrationGroupsValue = @()
+            if ($getValue.AzureADRegistration.AllowedToRegister.'@odata.type' -eq '#microsoft.graph.enumeratedDeviceRegistrationMembership')
+            {
+                foreach ($userId in $getValue.AzureADRegistration.AllowedToRegister.users)
+                {
+                    try
+                    {
+                        $userInfo = Get-MgUser -UserId $userId -ErrorAction Stop
+                        $azureADRegistrationUsersValue += $userInfo.UserPrincipalName
+                    }
+                    catch
+                    {
+                        $message = "Could not find a user with id $($userId) specified in AllowedToRegister. Skipping user!"
+                        $this.LogError($_, $message)
+                        continue
+                    }
+                }
+
+                foreach ($groupId in $getValue.AzureADRegistration.AllowedToRegister.groups)
+                {
+                    try
+                    {
+                        $groupInfo = Get-MgGroup -GroupId $groupId -ErrorAction Stop
+                        $azureADRegistrationGroupsValue += $groupInfo.DisplayName
+                    }
+                    catch
+                    {
+                        $message = "Could not find a group with id $($groupId) specified in AllowedToRegister. Skipping group!"
+                        $this.LogError($_, $message)
+                        continue
+                    }
+                }
+            }
+
+            $azureADRegistrationValue = @{
+                AllowedToRegister   = @{
+                    Groups    = $azureADRegistrationGroupsValue
+                    Users     = $azureADRegistrationUsersValue
+                    odataType = $getValue.AzureADRegistration.AllowedToRegister.'@odata.type'
+                }
+                IsAdminConfigurable = [Boolean]$getValue.AzureADRegistration.IsAdminConfigurable
+            }
+
             $multiFactorAuthConfigurationValue = $false
             if ($getValue.MultiFactorAuthConfiguration -eq 'required')
             {
@@ -216,6 +264,7 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
                 AzureADAllowedToJoin                    = $azureADAllowedToJoinValue
                 AzureADAllowedToJoinGroups              = $azureADAllowedToJoinGroupsValue
                 AzureADAllowedToJoinUsers               = $azureADAllowedToJoinUsersValue
+                AzureADRegistration                     = $azureADRegistrationValue
                 UserDeviceQuota                         = $getValue.UserDeviceQuota
                 MultiFactorAuthConfiguration            = $multiFactorAuthConfigurationValue
                 LocalAdminsEnableGlobalAdmins           = $localAdminsEnableGlobalAdminsValue
@@ -301,6 +350,40 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
             }
         }
 
+        $azureADRegistrationIsAdminConfigurable = $false
+        $azureADRegistrationAllowedToRegisterType = '#microsoft.graph.allDeviceRegistrationMembership'
+        $azureADRegistrationAllowedToRegisterUsers = $null
+        $azureADRegistrationAllowedToRegisterGroups = $null
+        if ($null -ne $this.AzureADRegistration)
+        {
+            if ($null -ne $this.AzureADRegistration.IsAdminConfigurable)
+            {
+                $azureADRegistrationIsAdminConfigurable = $this.AzureADRegistration.IsAdminConfigurable
+            }
+
+            if (-not [System.String]::IsNullOrEmpty($this.AzureADRegistration.AllowedToRegister.odataType))
+            {
+                $azureADRegistrationAllowedToRegisterType = $this.AzureADRegistration.AllowedToRegister.odataType
+            }
+
+            if ($azureADRegistrationAllowedToRegisterType -eq '#microsoft.graph.enumeratedDeviceRegistrationMembership')
+            {
+                $azureADRegistrationAllowedToRegisterUsers = @()
+                foreach ($user in $this.AzureADRegistration.AllowedToRegister.Users)
+                {
+                    $userInfo = Get-MgUser -UserId $user
+                    $azureADRegistrationAllowedToRegisterUsers += $userInfo.Id
+                }
+
+                $azureADRegistrationAllowedToRegisterGroups = @()
+                foreach ($group in $this.AzureADRegistration.AllowedToRegister.Groups)
+                {
+                    $groupInfo = Get-MgGroup -Filter "DisplayName eq '$($group -replace "'", "''")'"
+                    $azureADRegistrationAllowedToRegisterGroups += $groupInfo.Id
+                }
+            }
+        }
+
         $localAdminAllowedMode = '#microsoft.graph.noDeviceRegistrationMembership'
         if ($this.AzureAdJoinLocalAdminsRegisteringMode -eq 'All')
         {
@@ -348,9 +431,11 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
                 isEnabled = $this.LocalAdminPasswordIsEnabled
             }
             azureADRegistration          = @{
-                isAdminConfigurable = $false
+                isAdminConfigurable = $azureADRegistrationIsAdminConfigurable
                 allowedToRegister   = @{
-                    '@odata.type' = '#microsoft.graph.allDeviceRegistrationMembership'
+                    '@odata.type' = $azureADRegistrationAllowedToRegisterType
+                    users         = $azureADRegistrationAllowedToRegisterUsers
+                    groups        = $azureADRegistrationAllowedToRegisterGroups
                 }
             }
         }
@@ -405,12 +490,42 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
             $Results = $this.GetForExport($Params)
             $rawResults = $Results.Clone()
 
+            if ($null -ne $Results.AzureADRegistration)
+            {
+                $complexMapping = @(
+                    @{
+                        Name            = 'AzureADRegistration'
+                        CimInstanceName = 'AzureADRegistrationPolicy'
+                        IsRequired      = $False
+                    }
+                    @{
+                        Name            = 'AllowedToRegister'
+                        CimInstanceName = 'DeviceRegistrationMembership'
+                        IsRequired      = $False
+                    }
+                )
+                $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                    -ComplexObject $Results.AzureADRegistration `
+                    -CIMInstanceName 'AzureADRegistrationPolicy' `
+                    -ComplexTypeMapping $complexMapping
+
+                if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                {
+                    $Results.AzureADRegistration = $complexTypeStringResult
+                }
+                else
+                {
+                    $Results.Remove('AzureADRegistration') | Out-Null
+                }
+            }
+
             $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                 -ConnectionMode $ConnectionMode `
                 -ModulePath $this.GetModulePath() `
                 -Results $Results `
                 -Credential $this.Credential `
-                -RawResults $rawResults
+                -RawResults $rawResults `
+                -NoEscape @('AzureADRegistration')
 
             [void]$dscContent.Append($currentDSCBlock)
             Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -451,4 +566,31 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_AzureADRegistrationPolicy
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines if Microsoft Entra registered is allowed.')]
+    [MSFT_DeviceRegistrationMembership] $AllowedToRegister
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines if administrators can modify this policy.')]
+    [System.Nullable[System.Boolean]] $IsAdminConfigurable
+}
+
+class MSFT_DeviceRegistrationMembership
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('List of groups that this policy applies to.')]
+    [System.String[]] $Groups
+
+    [DscProperty()]
+    [System.ComponentModel.Description('List of users that this policy applies to.')]
+    [System.String[]] $Users
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The type of the entity.')]
+    [ValidateSet('#microsoft.graph.allDeviceRegistrationMembership', '#microsoft.graph.enumeratedDeviceRegistrationMembership', '#microsoft.graph.noDeviceRegistrationMembership')]
+    [System.String] $odataType
 }

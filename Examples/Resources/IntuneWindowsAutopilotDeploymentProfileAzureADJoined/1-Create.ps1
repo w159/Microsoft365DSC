@@ -40,7 +40,7 @@ Configuration Example
             DeviceNameTemplate             = "CONTOSO-%RAND:6%";
             DeviceType                     = "windowsPc";
             DisplayName                    = "AAD";
-            EnableWhiteGlove               = $true;
+            PreprovisioningAllowed               = $true;
             EnrollmentStatusScreenSettings = MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1{
                 AllowDeviceUseBeforeProfileAndAppInstallComplete = $false
                 AllowDeviceUseOnInstallFailure                   = $true
@@ -51,15 +51,15 @@ Configuration Example
                 InstallProgressTimeoutInMinutes                  = 60
             };
             Ensure                         = "Present";
-            ExtractHardwareHash            = $true;
-            Language                       = "en-US";
+            HardwareHashExtractionEnabled  = $true;
+            Locale                         = "en-US";
             ManagementServiceAppId         = "<application-id>";
-            OutOfBoxExperienceSettings     = MSFT_MicrosoftGraphoutOfBoxExperienceSettings1{
+            OutOfBoxExperienceSetting     = MSFT_MicrosoftGraphoutOfBoxExperienceSetting{
                 DeviceUsageType           = "singleUser"
-                HideEULA                  = $false
-                HideEscapeLink            = $true
-                HidePrivacySettings       = $true
-                SkipKeyboardSelectionPage = $true
+                EulaHidden                  = $false
+                EscapeLinkHidden            = $true
+                PrivacySettingsHidden       = $true
+                KeyboardSelectionPageSkipped = $true
                 UserType                  = "administrator"
             };
             RoleScopeTagIds                = @("0");

@@ -28,6 +28,7 @@ Configuration Example
             DisplayName                                               = 'Android Work Profile - Device Restrictions - Standard'
             Description                                               = "Work profile restrictions for personally owned Android phones"
             RoleScopeTagIds                                           = @("0")
+            BlockUnifiedPasswordForWorkProfile                        = $true
             PasswordBlockFaceUnlock                                   = $true
             PasswordBlockFingerprintUnlock                            = $false
             PasswordBlockIrisUnlock                                   = $true

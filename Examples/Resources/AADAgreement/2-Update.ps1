@@ -29,10 +29,13 @@ Configuration Example
             IsViewingBeforeAcceptanceRequired = $true
             IsPerDeviceAcceptanceRequired     = $true
             UserReacceptRequiredFrequency     = "P30D"
-            AcceptanceStatement               = "I have read and accept the terms of use for this device"
             FileData                          = "TERMS OF USE FOR DEVICE ACCESS\n\nBy accepting these terms, you agree to comply with all company policies..."
             FileName                          = "device_terms.txt"
             Language                          = "en-US"
+            TermsExpiration                   = MSFT_TermsExpiration{
+                Frequency     = "P365D"
+                StartDateTime = "2026-01-01T00:00:00.0000000Z"
+            }
             Ensure                            = "Present"
             ApplicationId                     = $ApplicationId
             TenantId                          = $TenantId

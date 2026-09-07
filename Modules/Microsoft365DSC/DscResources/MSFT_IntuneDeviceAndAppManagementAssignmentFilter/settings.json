@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Payloads",
+      "reason": "OwnedByOtherResource",
+      "note": "The owning policy resource writes each member through its Assignments"
+    }
+  ],
   "description": "This resource represents the properties used of the Assignment Filter.",
   "permissions": {
     "graph": {

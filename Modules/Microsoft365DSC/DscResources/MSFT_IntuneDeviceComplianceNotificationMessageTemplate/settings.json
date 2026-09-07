@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DefaultLocale",
+      "reason": "Accepted",
+      "note": "LocalizedNotificationMessages carries Locale and IsDefault"
+    }
+  ],
   "description": "This resource configures an Intune Device Compliance Notification Message Template.",
   "permissions": {
     "graph": {

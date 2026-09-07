@@ -54,7 +54,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed         = $True
                     EnrollmentStatusScreenSettings = @{
                         HideInstallationProgress                         = $True
                         BlockDeviceSetupRetryByUser                      = $True
@@ -64,9 +64,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         CustomErrorMessage                               = 'FakeStringValue'
                         AllowDeviceUseOnInstallFailure                   = $True
                     }
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled  = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
                     OutOfBoxExperienceSetting     = @{
                         eulaHidden                   = $True
@@ -101,7 +101,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate                     = 'FakeStringValue'
                     DeviceType                             = 'windowsPc'
                     DisplayName                            = 'FakeStringValue'
-                    EnableWhiteGlove                       = $True
+                    PreprovisioningAllowed                       = $True
                     EnrollmentStatusScreenSettings         = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                         HideInstallationProgress                         = $True
                         BlockDeviceSetupRetryByUser                      = $True
@@ -111,18 +111,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         CustomErrorMessage                               = 'FakeStringValue'
                         AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash                    = $True
+                    HardwareHashExtractionEnabled                    = $True
                     HybridAzureADJoinSkipConnectivityCheck = $True
                     Id                                     = 'FakeStringValue'
-                    Language                               = 'FakeStringValue'
+                    Locale                               = 'FakeStringValue'
                     ManagementServiceAppId                 = 'FakeStringValue'
-                    OutOfBoxExperienceSettings             = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings] @{
-                        HideEULA                  = $True
-                        HideEscapeLink            = $True
-                        HidePrivacySettings       = $True
-                        DeviceUsageType           = 'singleUser'
-                        SkipKeyboardSelectionPage = $True
-                        UserType                  = 'administrator'
+                    OutOfBoxExperienceSetting              = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                        DeviceUsageType              = 'singleUser'
+                        EscapeLinkHidden             = $True
+                        EulaHidden                   = $True
+                        KeyboardSelectionPageSkipped = $True
+                        PrivacySettingsHidden        = $True
+                        UserType                     = 'administrator'
                     })
                     Ensure                                 = 'Present'
                     Credential                             = $Credential
@@ -151,7 +151,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate                     = 'FakeStringValue'
                     DeviceType                             = 'windowsPc'
                     DisplayName                            = 'FakeStringValue'
-                    EnableWhiteGlove                       = $True
+                    PreprovisioningAllowed                       = $True
                     EnrollmentStatusScreenSettings         = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                         HideInstallationProgress                         = $True
                         BlockDeviceSetupRetryByUser                      = $True
@@ -161,18 +161,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         CustomErrorMessage                               = 'FakeStringValue'
                         AllowDeviceUseOnInstallFailure                   = $True
                     })
-                    ExtractHardwareHash                    = $True
+                    HardwareHashExtractionEnabled                    = $True
                     HybridAzureADJoinSkipConnectivityCheck = $True
                     Id                                     = 'FakeStringValue'
-                    Language                               = 'FakeStringValue'
+                    Locale                               = 'FakeStringValue'
                     ManagementServiceAppId                 = 'FakeStringValue'
-                    OutOfBoxExperienceSettings             = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings] @{
-                        HideEULA                  = $True
-                        HideEscapeLink            = $True
-                        HidePrivacySettings       = $True
-                        DeviceUsageType           = 'singleUser'
-                        SkipKeyboardSelectionPage = $True
-                        UserType                  = 'administrator'
+                    OutOfBoxExperienceSetting              = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                        DeviceUsageType              = 'singleUser'
+                        EscapeLinkHidden             = $True
+                        EulaHidden                   = $True
+                        KeyboardSelectionPageSkipped = $True
+                        PrivacySettingsHidden        = $True
+                        UserType                     = 'administrator'
                     })
                     Ensure                                 = 'Absent'
                     Credential                             = $Credential
@@ -199,7 +199,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate                     = 'FakeStringValue'
                     DeviceType                             = 'windowsPc'
                     DisplayName                            = 'FakeStringValue'
-                    EnableWhiteGlove                       = $True
+                    PreprovisioningAllowed                       = $True
                     EnrollmentStatusScreenSettings         = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                         HideInstallationProgress                         = $True
                         BlockDeviceSetupRetryByUser                      = $True
@@ -209,18 +209,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         CustomErrorMessage                               = 'FakeStringValue'
                         AllowDeviceUseOnInstallFailure                   = $True
                     })
-                    ExtractHardwareHash                    = $True
+                    HardwareHashExtractionEnabled                    = $True
                     HybridAzureADJoinSkipConnectivityCheck = $True
                     Id                                     = 'FakeStringValue'
-                    Language                               = 'FakeStringValue'
+                    Locale                               = 'FakeStringValue'
                     ManagementServiceAppId                 = 'FakeStringValue'
-                    OutOfBoxExperienceSettings             = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings] @{
-                        HideEULA                  = $True
-                        HideEscapeLink            = $True
-                        HidePrivacySettings       = $True
-                        DeviceUsageType           = 'singleUser'
-                        SkipKeyboardSelectionPage = $True
-                        UserType                  = 'administrator'
+                    OutOfBoxExperienceSetting              = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                        DeviceUsageType              = 'singleUser'
+                        EscapeLinkHidden             = $True
+                        EulaHidden                   = $True
+                        KeyboardSelectionPageSkipped = $True
+                        PrivacySettingsHidden        = $True
+                        UserType                     = 'administrator'
                     })
                     Ensure                                 = 'Present'
                     Credential                             = $Credential
@@ -239,7 +239,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate                     = 'FakeStringValue'
                     DeviceType                             = 'windowsPc'
                     DisplayName                            = 'FakeStringValue'
-                    EnableWhiteGlove                       = $True
+                    PreprovisioningAllowed                       = $True
                     EnrollmentStatusScreenSettings         = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
@@ -249,19 +249,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             CustomErrorMessage                               = 'FakeStringValue'
                             AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash                    = $True
+                    HardwareHashExtractionEnabled                    = $True
                     HybridAzureADJoinSkipConnectivityCheck = $True
                     Id                                     = 'FakeStringValue'
-                    Language                               = 'FakeStringValue'
+                    Locale                               = 'FakeStringValue'
                     ManagementServiceAppId                 = 'FakeStringValue'
-                    OutOfBoxExperienceSettings             = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings] @{
-                            HideEULA                  = $True
-                            HideEscapeLink            = $True
-                            HidePrivacySettings       = $True
-                            DeviceUsageType           = 'singleUser'
-                            SkipKeyboardSelectionPage = $True
-                            UserType                  = 'administrator'
-                        })
+                    OutOfBoxExperienceSetting              = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                        DeviceUsageType              = 'singleUser'
+                        EscapeLinkHidden             = $True
+                        EulaHidden                   = $True
+                        KeyboardSelectionPageSkipped = $True
+                        PrivacySettingsHidden        = $True
+                        UserType                     = 'administrator'
+                    })
                     Ensure                                 = 'Present'
                     Credential                             = $Credential
                 }

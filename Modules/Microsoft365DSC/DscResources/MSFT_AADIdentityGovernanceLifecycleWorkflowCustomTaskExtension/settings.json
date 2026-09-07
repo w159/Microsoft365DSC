@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "AuthenticationConfiguration",
+      "reason": "Accepted",
+      "note": "Set writes a fixed PoP token literal and Get never reads it back"
+    },
+    {
+      "name": "ReplyMode",
+      "reason": "ReadOnly",
+      "note": "Service-derived from callbackConfiguration and not accepted in create or update"
+    }
+  ],
   "description": "Configures custom extensions for Lifecycle workflows in Entra id.",
   "roles": {
     "read": [],

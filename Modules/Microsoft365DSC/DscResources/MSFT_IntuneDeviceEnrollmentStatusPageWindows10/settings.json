@@ -12,9 +12,14 @@
   },
   "excludedProperties": [
     {
+      "name": "DeviceEnrollmentConfigurationType",
+      "reason": "Accepted",
+      "note": "The resource pins its own subtype through @odata.type"
+    },
+    {
       "name": "SelectedMobileAppNames",
       "reason": "Deferred",
-      "note": "The display name alternative to selectedMobileAppIds."
+      "note": "Display name alternative to SelectedMobileAppIds"
     }
   ],
   "description": "This resource configures an Intune Device Enrollment Status Page Configuration for Windows10.",

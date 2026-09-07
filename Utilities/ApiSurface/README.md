@@ -153,6 +153,44 @@ Only two shapes, and only when the finding carries `autoFixable: true`:
   declaration and the matching entry in the `Get()` result hashtable. A declaration without the
   hashtable entry exports as null forever, so the verification refuses it.
 
+## Properties below the entity
+
+A resource that flattens a complex type declares its members as scalars, so `GrantControlOperator`
+carries `grantControls.operator`. The comparison used to look at the entity level only, which left
+a member the vendor added inside such a container invisible to every resource level finding.
+
+`RES-PROP-NESTED` closes that. The walk descends into a container the resource has proven it
+flattens, meaning two of its members matched a declared property, and reports the unmatched
+siblings. Two matches rather than one is deliberate: a resource that resolves a related object by
+display name matches exactly one member of it and flattens nothing, and one match would then drag
+in every property of the related entity.
+
+The finding is never auto-fixable, because the name a resource would give a flattened member
+cannot be derived. It carries `info`, rising to `warning` when the baseline did not hold the
+property, and its id concatenates the whole path, so `sessionControls.signInFrequency.frequency`
+reads as `SessionControlsSignInFrequencyFrequency`. A complex member is a container rather than a
+setting and is not reported, nor is one the service owns.
+
+Two things keep work that is already done out of the section.
+
+- **A member another resource on the same vendor type declares.** Two resources over
+  `deviceManagement` each cover part of `settings`, and neither should read the other's half as a
+  gap. Every resource bound to a type contributes its declared names to one set the nested branch
+  consults.
+- **A `vendorPath` on an `excludedProperties` entry.** A resource that renames a flattened member
+  beyond what the name matcher can derive states the path on the entry, and the comparison then
+  treats it as matched. `AADConditionalAccessPolicy` needs it for the three flattened session and
+  application members it carries under unrelated names.
+
+```json
+{
+  "name": "SignInFrequencyInterval",
+  "reason": "Accepted",
+  "vendorPath": "sessionControls.signInFrequency.frequencyInterval",
+  "note": "Flattened from sessionControls.signInFrequency.frequencyInterval"
+}
+```
+
 Three things take auto-fixability away from a finding that would otherwise carry it.
 
 - **A `Deferred` entry in the resource's `excludedProperties`.** The finding stays on the report at

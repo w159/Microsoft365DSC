@@ -16,9 +16,14 @@
   },
   "excludedProperties": [
     {
+      "name": "CompliantNetworkType",
+      "reason": "ReadOnly",
+      "note": "Belongs to beta compliantNetworkNamedLocation and the service assigns it"
+    },
+    {
       "name": "OdataType",
       "reason": "Deferred",
-      "note": "The type of the named location. Used to differentiate between their types."
+      "note": "Differentiates between named location types"
     }
   ],
   "description": "This resource configures the Azure AD Named Location Policies in Azure Active Directory.",

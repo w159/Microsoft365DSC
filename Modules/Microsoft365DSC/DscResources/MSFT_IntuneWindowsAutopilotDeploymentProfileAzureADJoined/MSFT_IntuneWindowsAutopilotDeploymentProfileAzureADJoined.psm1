@@ -23,28 +23,28 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
     [System.String] $DisplayName
 
     [DscProperty()]
-    [System.ComponentModel.Description('Enable Autopilot White Glove for the profile.')]
-    [System.Nullable[System.Boolean]] $EnableWhiteGlove
+    [System.ComponentModel.Description('Whether the profile allows pre-provisioned deployment.')]
+    [System.Nullable[System.Boolean]] $PreprovisioningAllowed
 
     [DscProperty()]
     [System.ComponentModel.Description('Enrollment status screen setting')]
     [MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] $EnrollmentStatusScreenSettings
 
     [DscProperty()]
-    [System.ComponentModel.Description('HardwareHash Extraction for the profile')]
-    [System.Nullable[System.Boolean]] $ExtractHardwareHash
+    [System.ComponentModel.Description('Whether the profile extracts the hardware hash of the device.')]
+    [System.Nullable[System.Boolean]] $HardwareHashExtractionEnabled
 
     [DscProperty()]
-    [System.ComponentModel.Description('Language configured on the device')]
-    [System.String] $Language
+    [System.ComponentModel.Description('Locale configured on the device')]
+    [System.String] $Locale
 
     [DscProperty()]
     [System.ComponentModel.Description('AzureAD management app ID used during client device-based enrollment discovery')]
     [System.String] $ManagementServiceAppId
 
     [DscProperty()]
-    [System.ComponentModel.Description('Out of box experience setting')]
-    [MSFT_MicrosoftGraphoutOfBoxExperienceSettings1] $OutOfBoxExperienceSettings
+    [System.ComponentModel.Description('The Windows Autopilot Deployment Profile settings used by the device for the out of box experience.')]
+    [MSFT_MicrosoftGraphoutOfBoxExperienceSetting1] $OutOfBoxExperienceSetting
 
     [DscProperty()]
     [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
@@ -184,22 +184,22 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                 $complexEnrollmentStatusScreenSettings = $null
             }
 
-            $complexOutOfBoxExperienceSettings = [ordered]@{}
+            $complexOutOfBoxExperienceSetting = [ordered]@{}
             if ($null -ne $getValue.OutOfBoxExperienceSetting.deviceUsageType)
             {
-                $complexOutOfBoxExperienceSettings.Add('DeviceUsageType', $getValue.OutOfBoxExperienceSetting.deviceUsageType.ToString())
+                $complexOutOfBoxExperienceSetting.Add('DeviceUsageType', $getValue.OutOfBoxExperienceSetting.deviceUsageType.ToString())
             }
-            $complexOutOfBoxExperienceSettings.Add('HideEscapeLink', $getValue.OutOfBoxExperienceSetting.escapeLinkHidden)
-            $complexOutOfBoxExperienceSettings.Add('HideEULA', $getValue.OutOfBoxExperienceSetting.eulaHidden)
-            $complexOutOfBoxExperienceSettings.Add('HidePrivacySettings', $getValue.OutOfBoxExperienceSetting.privacySettingsHidden)
-            $complexOutOfBoxExperienceSettings.Add('SkipKeyboardSelectionPage', $getValue.OutOfBoxExperienceSetting.keyboardSelectionPageSkipped)
+            $complexOutOfBoxExperienceSetting.Add('EscapeLinkHidden', $getValue.OutOfBoxExperienceSetting.escapeLinkHidden)
+            $complexOutOfBoxExperienceSetting.Add('EulaHidden', $getValue.OutOfBoxExperienceSetting.eulaHidden)
+            $complexOutOfBoxExperienceSetting.Add('KeyboardSelectionPageSkipped', $getValue.OutOfBoxExperienceSetting.keyboardSelectionPageSkipped)
+            $complexOutOfBoxExperienceSetting.Add('PrivacySettingsHidden', $getValue.OutOfBoxExperienceSetting.privacySettingsHidden)
             if ($null -ne $getValue.OutOfBoxExperienceSetting.userType)
             {
-                $complexOutOfBoxExperienceSettings.Add('UserType', $getValue.OutOfBoxExperienceSetting.userType.ToString())
+                $complexOutOfBoxExperienceSetting.Add('UserType', $getValue.OutOfBoxExperienceSetting.userType.ToString())
             }
-            if ($complexOutOfBoxExperienceSettings.values.Where({ $null -ne $_ }).Count -eq 0)
+            if ($complexOutOfBoxExperienceSetting.values.Where({ $null -ne $_ }).Count -eq 0)
             {
-                $complexOutOfBoxExperienceSettings = $null
+                $complexOutOfBoxExperienceSetting = $null
             }
             #endregion
 
@@ -217,12 +217,12 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                 DeviceNameTemplate             = $getValue.DeviceNameTemplate
                 DeviceType                     = $enumDeviceType
                 DisplayName                    = $getValue.DisplayName
-                EnableWhiteGlove               = $getValue.EnableWhiteGlove
+                PreprovisioningAllowed         = $getValue.PreprovisioningAllowed
                 EnrollmentStatusScreenSettings = $complexEnrollmentStatusScreenSettings
-                ExtractHardwareHash            = $getValue.ExtractHardwareHash
-                Language                       = $getValue.Language
+                HardwareHashExtractionEnabled  = $getValue.HardwareHashExtractionEnabled
+                Locale                         = $getValue.Locale
                 ManagementServiceAppId         = $getValue.ManagementServiceAppId
-                OutOfBoxExperienceSettings     = $complexOutOfBoxExperienceSettings
+                OutOfBoxExperienceSetting      = $complexOutOfBoxExperienceSetting
                 Id                             = $getValue.Id
                 RoleScopeTagIds                = $getValue.RoleScopeTagIds
                 Ensure                         = 'Present'
@@ -275,23 +275,6 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $boundParameters.outOfBoxExperienceSetting = @{
-            deviceUsageType = $boundParameters.OutOfBoxExperienceSettings.DeviceUsageType
-            escapeLinkHidden = $boundParameters.OutOfBoxExperienceSettings.HideEscapeLink
-            eulaHidden = $boundParameters.OutOfBoxExperienceSettings.HideEULA
-            privacySettingsHidden = $boundParameters.OutOfBoxExperienceSettings.HidePrivacySettings
-            keyboardSelectionPageSkipped = $boundParameters.OutOfBoxExperienceSettings.SkipKeyboardSelectionPage
-            userType = $boundParameters.OutOfBoxExperienceSettings.UserType
-        }
-        $boundParameters.Remove('OutOfBoxExperienceSettings') | Out-Null
-
-        foreach ($key in $boundParameters.outOfBoxExperienceSetting.Keys.Clone())
-        {
-            if ($null -eq $boundParameters.outOfBoxExperienceSetting[$key])
-            {
-                $boundParameters.outOfBoxExperienceSetting.Remove($key) | Out-Null
-            }
-        }
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
@@ -475,18 +458,18 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                         $Results.Remove('EnrollmentStatusScreenSettings') | Out-Null
                     }
                 }
-                if ($null -ne $Results.OutOfBoxExperienceSettings)
+                if ($null -ne $Results.OutOfBoxExperienceSetting)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                        -ComplexObject $Results.OutOfBoxExperienceSettings `
-                        -CIMInstanceName 'MicrosoftGraphoutOfBoxExperienceSettings1'
+                        -ComplexObject $Results.OutOfBoxExperienceSetting `
+                        -CIMInstanceName 'MicrosoftGraphoutOfBoxExperienceSetting1'
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
-                        $Results.OutOfBoxExperienceSettings = $complexTypeStringResult
+                        $Results.OutOfBoxExperienceSetting = $complexTypeStringResult
                     }
                     else
                     {
-                        $Results.Remove('OutOfBoxExperienceSettings') | Out-Null
+                        $Results.Remove('OutOfBoxExperienceSetting') | Out-Null
                     }
                 }
                 if ($Results.Assignments)
@@ -506,7 +489,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('EnrollmentStatusScreenSettings', 'OutOfBoxExperienceSettings', 'Assignments') `
+                    -NoEscape @('EnrollmentStatusScreenSettings', 'OutOfBoxExperienceSetting', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -592,28 +575,28 @@ class MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1
     [System.Nullable[System.UInt32]] $InstallProgressTimeoutInMinutes
 }
 
-class MSFT_MicrosoftGraphoutOfBoxExperienceSettings1
+class MSFT_MicrosoftGraphoutOfBoxExperienceSetting1
 {
     [DscProperty()]
-    [System.ComponentModel.Description('AAD join authentication type. Possible values are: singleUser, shared.')]
-    [ValidateSet('singleUser', 'shared')]
+    [System.ComponentModel.Description('AAD join authentication type. Possible values are: shared, singleUser.')]
+    [ValidateSet('shared', 'singleUser')]
     [System.String] $DeviceUsageType
 
     [DscProperty()]
     [System.ComponentModel.Description('If set to true, then the user can''t start over with different account, on company sign-in')]
-    [System.Nullable[System.Boolean]] $HideEscapeLink
+    [System.Nullable[System.Boolean]] $EscapeLinkHidden
 
     [DscProperty()]
     [System.ComponentModel.Description('Show or hide EULA to user')]
-    [System.Nullable[System.Boolean]] $HideEULA
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Show or hide privacy settings to user')]
-    [System.Nullable[System.Boolean]] $HidePrivacySettings
+    [System.Nullable[System.Boolean]] $EulaHidden
 
     [DscProperty()]
     [System.ComponentModel.Description('If set, then skip the keyboard selection page if Language and Region are set')]
-    [System.Nullable[System.Boolean]] $SkipKeyboardSelectionPage
+    [System.Nullable[System.Boolean]] $KeyboardSelectionPageSkipped
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Show or hide privacy settings to user')]
+    [System.Nullable[System.Boolean]] $PrivacySettingsHidden
 
     [DscProperty()]
     [System.ComponentModel.Description('Type of user. Possible values are: administrator, standard.')]

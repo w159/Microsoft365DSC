@@ -83,6 +83,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfilePasswordSignInFailureCountBeforeFactoryReset   = 3
                     workProfilePasswordRequiredType                           = 'deviceDefault'
                     workProfileRequirePassword                                = $False
+                    blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
                 }
             }
@@ -138,6 +139,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfilePasswordSignInFailureCountBeforeFactoryReset   = 3
                     workProfilePasswordRequiredType                           = 'deviceDefault'
                     workProfileRequirePassword                                = $False
+                    blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential
@@ -200,6 +202,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfilePasswordSignInFailureCountBeforeFactoryReset   = 3
                     workProfilePasswordRequiredType                           = 'deviceDefault'
                     workProfileRequirePassword                                = $False
+                    blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential
@@ -258,6 +261,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfilePasswordSignInFailureCountBeforeFactoryReset   = 3
                     workProfilePasswordRequiredType                           = 'deviceDefault'
                     workProfileRequirePassword                                = $False
+                    blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential

@@ -24,7 +24,8 @@
     {
       "name": "AuthenticationContexts",
       "reason": "Accepted",
-      "note": "The flattened conditions.applications.includeAuthenticationContextClassReferences property"
+      "note": "The flattened conditions.applications.includeAuthenticationContextClassReferences property",
+      "vendorPath": "conditions.applications.includeAuthenticationContextClassReferences"
     },
     {
       "name": "AuthenticationStrength",
@@ -34,7 +35,8 @@
     {
       "name": "DisableResilienceDefaultsIsEnabled",
       "reason": "Accepted",
-      "note": "The flattened sessionControls.disableResilienceDefaults property"
+      "note": "The flattened sessionControls.disableResilienceDefaults property",
+      "vendorPath": "sessionControls.disableResilienceDefaults"
     },
     {
       "name": "ExcludeExternalTenantsMembers",
@@ -79,7 +81,8 @@
     {
       "name": "SignInFrequencyInterval",
       "reason": "Accepted",
-      "note": "Flattened from sessionControls.signInFrequency.frequencyInterval"
+      "note": "Flattened from sessionControls.signInFrequency.frequencyInterval",
+      "vendorPath": "sessionControls.signInFrequency.frequencyInterval"
     }
   ],
   "description": "This resource configures an Azure Active Directory Conditional Access Policy.",

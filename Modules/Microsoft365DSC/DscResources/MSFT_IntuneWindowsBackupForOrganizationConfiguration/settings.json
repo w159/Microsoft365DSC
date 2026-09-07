@@ -10,7 +10,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceEnrollmentConfigurationType",
+      "reason": "ReadOnly",
+      "note": "Derived from the entity subtype, which this resource pins to windowsRestore"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "Priority",
+      "reason": "ReadOnly",
+      "note": "Singleton configuration with no sibling to order against"
+    }
+  ],
   "description": "This resource configures an Intune Windows Backup For Organization Configuration.",
   "permissions": {
     "graph": {

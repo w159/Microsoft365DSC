@@ -61,6 +61,7 @@ Configuration Example
                     }
                 )
             }
+            DeviceLocationMode                                       = "disabled"
             DeviceOwnerLockScreenMessage                             = MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage{
                 defaultMessage    = "Property of Contoso Retail. If found, please return to any Contoso store."
                 localizedMessages = @(

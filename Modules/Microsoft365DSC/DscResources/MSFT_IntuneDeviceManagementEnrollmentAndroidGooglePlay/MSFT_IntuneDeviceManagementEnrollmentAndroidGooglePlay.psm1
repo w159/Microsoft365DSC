@@ -26,6 +26,10 @@ class IntuneDeviceManagementEnrollmentAndroidGooglePlay : M365DSCResourceBase
     [System.String] $EnrollmentTarget
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the display names of the groups that are targeted when the enrollment target is a targeted one.')]
+    [System.String[]] $TargetGroups
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies whether device owner management is enabled.')]
     [System.Nullable[System.Boolean]] $DeviceOwnerManagementEnabled
 
@@ -123,12 +127,23 @@ class IntuneDeviceManagementEnrollmentAndroidGooglePlay : M365DSCResourceBase
                 $specificSetting = $this.ExportedInstance
             }
 
+            $resolvedTargetGroups = @()
+            foreach ($targetGroupId in @($specificSetting.targetGroupIds))
+            {
+                $displayName = Get-M365DSCGroupDisplayNameById -GroupId $targetGroupId
+                if (-not [System.String]::IsNullOrEmpty($displayName))
+                {
+                    $resolvedTargetGroups += $displayName
+                }
+            }
+
             $result = @{
                 Id                                              = $specificSetting.id
                 BindStatus                                      = $specificSetting.bindStatus
                 OwnerUserPrincipalName                          = $specificSetting.ownerUserPrincipalName
                 OwnerOrganizationName                           = $specificSetting.ownerOrganizationName
                 EnrollmentTarget                                = $specificSetting.enrollmentTarget
+                TargetGroups                                    = $resolvedTargetGroups
                 DeviceOwnerManagementEnabled                    = $specificSetting.deviceOwnerManagementEnabled
                 AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $specificSetting.androidDeviceOwnerFullyManagedEnrollmentEnabled
                 Ensure                                          = 'Present'

@@ -10,7 +10,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "IsBuiltInRoleDefinition",
+      "reason": "Accepted",
+      "note": "Duplicate of isBuiltIn, declared as IsBuiltIn"
+    },
+    {
+      "name": "Permissions",
+      "reason": "Accepted",
+      "note": "Same content as rolePermissions, modelled through AllowedResourceActions and NotAllowedResourceActions"
+    },
+    {
+      "name": "RolePermissions",
+      "reason": "Accepted",
+      "note": "Set writes it from AllowedResourceActions and NotAllowedResourceActions"
+    }
+  ],
   "description": "This resource configures an Intune Role Definition.",
   "permissions": {
     "graph": {

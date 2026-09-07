@@ -52,11 +52,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsViewingBeforeAcceptanceRequired    = $true
                     IsPerDeviceAcceptanceRequired        = $false
                     UserReacceptRequiredFrequency        = 'P90D'
-                    AcceptanceStatement                  = 'I accept the terms'
                     File                                 = @{
                         Data     = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('Terms content'))
                         Name     = 'terms.txt'
                         Language = 'en-US'
+                    }
+                    TermsExpiration                      = @{
+                        Frequency     = 'P365D'
+                        StartDateTime = [System.DateTime]::new(2026, 1, 1, 0, 0, 0, [System.DateTimeKind]::Utc)
                     }
                 }
             }
@@ -85,10 +88,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsViewingBeforeAcceptanceRequired    = $true
                     IsPerDeviceAcceptanceRequired        = $false
                     UserReacceptRequiredFrequency        = 'P90D'
-                    AcceptanceStatement                  = 'I accept the terms'
                     FileData                             = 'Terms content'
                     FileName                             = 'terms.txt'
                     Language                             = 'en-US'
+                    TermsExpiration                      = @{
+                        Frequency     = 'P365D'
+                        StartDateTime = '2026-01-01T00:00:00Z'
+                    }
                     Ensure                               = 'Present'
                     Credential                           = $Credential
                 }
@@ -142,10 +148,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsViewingBeforeAcceptanceRequired    = $true
                     IsPerDeviceAcceptanceRequired        = $false
                     UserReacceptRequiredFrequency        = 'P90D'
-                    AcceptanceStatement                  = 'I accept the terms'
                     FileData                             = 'Terms content'
                     FileName                             = 'terms.txt'
                     Language                             = 'en-US'
+                    TermsExpiration                      = @{
+                        Frequency     = 'P365D'
+                        StartDateTime = '2026-01-01T00:00:00Z'
+                    }
                     Ensure                               = 'Present'
                     Credential                           = $Credential
                 }
@@ -163,10 +172,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsViewingBeforeAcceptanceRequired    = $false
                     IsPerDeviceAcceptanceRequired        = $true
                     UserReacceptRequiredFrequency        = 'P30D'
-                    AcceptanceStatement                  = 'I accept the updated terms' # Drift
                     FileData                             = 'Updated terms content'
                     FileName                             = 'updated_terms.txt'
                     Language                             = 'en-US'
+                    TermsExpiration                      = @{
+                        Frequency     = 'P365D'
+                        StartDateTime = '2026-01-01T00:00:00Z'
+                    }
                     Ensure                               = 'Present'
                     Credential                           = $Credential
                 }

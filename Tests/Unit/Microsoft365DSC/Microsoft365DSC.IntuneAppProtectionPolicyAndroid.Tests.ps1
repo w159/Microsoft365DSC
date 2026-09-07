@@ -31,6 +31,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     [string]$description
                 )
                 return @{
+                    AllowedAndroidDeviceManufacturers                 = 'Samsung;Google'
                     AllowedAndroidDeviceModels                        = @('Model1', 'Model2')
                     AllowedOutboundClipboardSharingExceptionLength    = 4
                     Alloweddataingestionlocations                     = @('OneDrive', 'SharePoint')
@@ -57,6 +58,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MaximumAllowedDeviceThreatLevel                   = 'medium'
                     MessagingRedirectAppDisplayName                   = 'MessageApp'
                     MessagingRedirectAppPackageId                     = 'com.example.messageapp'
+                    MinimumWipeAppVersion                             = '1.0'
+                    MinimumWipeOsVersion                              = '1.1'
                     MinimumWipePatchVersion                           = '2023-01-01'
                     MobileThreatDefenseRemediationAction              = 'block'
                     NotificationRestriction                           = 'block'
@@ -133,6 +136,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     [string]$description
                 )
                 return @{
+                    AllowedAndroidDeviceManufacturers                 = 'Samsung;Google'
                     AllowedAndroidDeviceModels                        = @('Model1', 'Model2')
                     AllowedOutboundClipboardSharingExceptionLength    = 4
                     Alloweddataingestionlocations                     = @('OneDrive', 'SharePoint')
@@ -169,6 +173,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MaximumAllowedDeviceThreatLevel                   = 'medium'
                     MessagingRedirectAppDisplayName                   = 'MessageApp'
                     MessagingRedirectAppPackageId                     = 'com.example.messageapp'
+                    MinimumWipeAppVersion                             = '1.0'
+                    MinimumWipeOsVersion                              = '1.1'
                     MinimumWipePatchVersion                           = '2023-01-01'
                     MobileThreatDefenseRemediationAction              = 'block'
                     NotificationRestriction                           = 'block'

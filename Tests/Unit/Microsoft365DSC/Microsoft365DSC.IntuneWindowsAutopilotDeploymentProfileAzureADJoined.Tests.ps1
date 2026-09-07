@@ -53,7 +53,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed         = $True
                     EnrollmentStatusScreenSettings = @{
                         HideInstallationProgress                         = $True
                         BlockDeviceSetupRetryByUser                      = $True
@@ -63,9 +63,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         CustomErrorMessage                               = 'FakeStringValue'
                         AllowDeviceUseOnInstallFailure                   = $True
                     }
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled  = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
                     OutOfBoxExperienceSetting     = @{
                         eulaHidden                   = $True
@@ -98,7 +98,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed               = $True
                     EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
@@ -108,16 +108,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             CustomErrorMessage                               = 'FakeStringValue'
                             AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled            = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
-                    OutOfBoxExperienceSettings     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings1] @{
-                            HideEULA                  = $True
-                            HideEscapeLink            = $True
-                            HidePrivacySettings       = $True
+                    OutOfBoxExperienceSetting     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                            EulaHidden                  = $True
+                            EscapeLinkHidden            = $True
+                            PrivacySettingsHidden       = $True
                             DeviceUsageType           = 'singleUser'
-                            SkipKeyboardSelectionPage = $True
+                            KeyboardSelectionPageSkipped = $True
                             UserType                  = 'administrator'
                         })
                     Ensure                         = 'Present'
@@ -147,7 +147,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed               = $True
                     EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
@@ -157,16 +157,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             CustomErrorMessage                               = 'FakeStringValue'
                             AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled            = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
-                    OutOfBoxExperienceSettings     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings1] @{
-                            HideEULA                  = $True
-                            HideEscapeLink            = $True
-                            HidePrivacySettings       = $True
+                    OutOfBoxExperienceSetting     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                            EulaHidden                  = $True
+                            EscapeLinkHidden            = $True
+                            PrivacySettingsHidden       = $True
                             DeviceUsageType           = 'singleUser'
-                            SkipKeyboardSelectionPage = $True
+                            KeyboardSelectionPageSkipped = $True
                             UserType                  = 'administrator'
                         })
                     Ensure                         = 'Absent'
@@ -194,7 +194,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed               = $True
                     EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
@@ -204,16 +204,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             CustomErrorMessage                               = 'FakeStringValue'
                             AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled            = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
-                    OutOfBoxExperienceSettings     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings1] @{
-                            HideEULA                  = $True
-                            HideEscapeLink            = $True
-                            HidePrivacySettings       = $True
+                    OutOfBoxExperienceSetting     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                            EulaHidden                  = $True
+                            EscapeLinkHidden            = $True
+                            PrivacySettingsHidden       = $True
                             DeviceUsageType           = 'singleUser'
-                            SkipKeyboardSelectionPage = $True
+                            KeyboardSelectionPageSkipped = $True
                             UserType                  = 'administrator'
                         })
                     Ensure                         = 'Present'
@@ -233,7 +233,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceNameTemplate             = 'FakeStringValue'
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
-                    EnableWhiteGlove               = $True
+                    PreprovisioningAllowed               = $True
                     EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
@@ -243,16 +243,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             CustomErrorMessage                               = 'FakeStringValue'
                             AllowDeviceUseOnInstallFailure                   = $True
                         })
-                    ExtractHardwareHash            = $True
+                    HardwareHashExtractionEnabled            = $True
                     Id                             = 'FakeStringValue'
-                    Language                       = 'FakeStringValue'
+                    Locale                       = 'FakeStringValue'
                     ManagementServiceAppId         = 'FakeStringValue'
-                    OutOfBoxExperienceSettings     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSettings1] @{
-                            HideEULA                  = $True
-                            HideEscapeLink            = $True
-                            HidePrivacySettings       = $True
+                    OutOfBoxExperienceSetting     = ([MSFT_MicrosoftGraphoutOfBoxExperienceSetting] @{
+                            EulaHidden                  = $True
+                            EscapeLinkHidden            = $True
+                            PrivacySettingsHidden       = $True
                             DeviceUsageType           = 'singleUser'
-                            SkipKeyboardSelectionPage = $True
+                            KeyboardSelectionPageSkipped = $True
                             UserType                  = 'administrator'
                         })
                     Ensure                         = 'Present'

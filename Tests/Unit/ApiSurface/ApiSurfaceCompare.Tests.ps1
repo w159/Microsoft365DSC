@@ -128,6 +128,27 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
                 -RunDate '2026-08-27'
         }
 
+        $script:containerType = [ordered]@{
+            'beta:testPolicy'    = [ordered]@{
+                kind       = 'EntityType'
+                baseType   = 'entity'
+                isAbstract = $false
+                properties = [ordered]@{
+                    displayName   = New-TestProperty
+                    grantControls = New-TestProperty -Type 'grantControls' -IsComplex $true
+                }
+            }
+            'beta:grantControls' = [ordered]@{
+                kind       = 'ComplexType'
+                isAbstract = $false
+                properties = [ordered]@{
+                    operator        = New-TestProperty
+                    termsOfUse      = New-TestProperty
+                    builtInControls = New-TestProperty
+                }
+            }
+        }
+
         $script:policyType = [ordered]@{
             'beta:testPolicy' = [ordered]@{
                 kind       = 'EntityType'
@@ -695,6 +716,170 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             $finding[0].severity | Should -Be 'info'
             $finding[0].autoFixable | Should -BeFalse
             $result.Backlog | Should -Be 1
+        }
+
+        It 'reports a sibling of a member the resource already flattened' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].property | Should -Be 'GrantControlsBuiltInControls'
+            $finding[0].autoFixable | Should -BeFalse
+            $finding[0].evidence.source | Should -Be 'csdl:beta/testPolicy/grantControls.builtInControls'
+            $finding[0].evidence.flattenedAs | Should -Be 'builtInControls'
+        }
+
+        It 'treats a single matched member as a lookup rather than as flattening' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+            }
+
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' }) | Should -HaveCount 0
+        }
+
+        It 'takes a vendorPath on an exclusion as proof the resource covers the member' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                Renamed     = @{ typeConstraint = 'String' }
+            }
+            $excluded = @{ TestPolicy = @([PSCustomObject]@{
+                        name       = 'Renamed'
+                        reason     = 'Accepted'
+                        vendorPath = 'grantControls.termsOfUse'
+                    }) }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -ExcludedProperty $excluded).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].property | Should -Be 'GrantControlsBuiltInControls'
+        }
+
+        It 'leaves a member another resource on the same type declares out of the report' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+            $keyword['SiblingPolicy'] = [PSCustomObject]@{
+                resourceName = 'SiblingPolicy'
+                properties   = [PSCustomObject][ordered]@{
+                    BuiltInControls = [PSCustomObject]@{ typeConstraint = 'StringArray'; values = @(); isKey = $false; name = 'BuiltInControls'; mandatory = $false }
+                }
+            }
+
+            $origin = @((New-TestOrigin), (New-TestOrigin -Resource 'SiblingPolicy'))
+
+            @((Invoke-TestCompare -Current $snapshot -Origin $origin -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' }) | Should -HaveCount 0
+        }
+
+        It 'stays silent inside a container the resource ignores' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' }) | Should -HaveCount 0
+        }
+
+        It 'leaves a read-only nested member out of the report' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName   = New-TestProperty
+                            grantControls = New-TestProperty -Type 'grantControls' -IsComplex $true
+                        }
+                    }
+                    'beta:grantControls' = [ordered]@{
+                        kind = 'ComplexType'; isAbstract = $false
+                        properties = [ordered]@{
+                            operator        = New-TestProperty
+                            termsOfUse      = New-TestProperty
+                            builtInControls = New-TestProperty -IsReadOnly $true
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' }) | Should -HaveCount 0
+        }
+
+        It 'raises a nested finding to warning when the baseline did not hold it' {
+            $before = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName   = New-TestProperty
+                            grantControls = New-TestProperty -Type 'grantControls' -IsComplex $true
+                        }
+                    }
+                    'beta:grantControls' = [ordered]@{
+                        kind = 'ComplexType'; isAbstract = $false
+                        properties = [ordered]@{ operator = New-TestProperty; termsOfUse = New-TestProperty }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+
+            $finding = @((Invoke-TestCompare -Baseline $before -Current (New-TestSnapshot -GraphType $script:containerType) -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.code -eq 'RES-PROP-NESTED' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].severity | Should -Be 'warning'
+            $finding[0].evidence.seenBefore | Should -BeFalse
+        }
+
+        It 'leaves the backlog count to the entity level' {
+            $snapshot = New-TestSnapshot -GraphType $script:containerType
+            $keyword = New-TestKeyword -Property @{
+                DisplayName = @{ typeConstraint = 'String' }
+                Operator    = @{ typeConstraint = 'String' }
+                TermsOfUse  = @{ typeConstraint = 'String' }
+            }
+
+            (Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Backlog | Should -Be 1
+        }
+
+        It 'classifies an author stamp the CSDL leaves writable as read only' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName    = New-TestProperty
+                            createdBy      = New-TestProperty -Type 'identitySet' -IsComplex $true
+                            lastModifiedBy = New-TestProperty -Type 'identitySet' -IsComplex $true
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword).Findings |
+                    Where-Object { $_.property -in @('CreatedBy', 'LastModifiedBy') })
+
+            $finding | Should -HaveCount 2
+            @($finding | Where-Object { $_.code -ne 'RES-PROP-READONLY' }) | Should -HaveCount 0
         }
 
         It 'keeps a read-only property on the read-only code even when the baseline already held it' {

@@ -27,6 +27,7 @@ Configuration Example
         IntuneAppProtectionPolicyAndroid 'IntuneAppProtectionPolicyAndroid-Example'
         {
             DisplayName                                        = 'Android App Protection - Corporate'
+            AllowedAndroidDeviceManufacturers                  = 'Samsung;Google;Motorola'
             AllowedAndroidDeviceModels                         = @('SM-G991B', 'SM-A546B', 'Pixel 8')
             Alloweddataingestionlocations                      = @('oneDriveForBusiness', 'sharePoint', 'camera', 'photoLibrary')
             AllowedDataStorageLocations                        = @('oneDriveForBusiness', 'sharePoint')
@@ -93,6 +94,8 @@ Configuration Example
             MinimumWarningAppVersion                           = '16.5'
             MinimumWarningOSVersion                            = '12.0'
             MinimumWarningPatchVersion                         = '2024-01-01'
+            MinimumWipeAppVersion                              = '15.0'
+            MinimumWipeOsVersion                               = '10.0'
             MinimumWipePatchVersion                            = '2022-01-01'
             MobileThreatDefenseRemediationAction               = 'block'
             NotificationRestriction                            = 'blockOrganizationalData'

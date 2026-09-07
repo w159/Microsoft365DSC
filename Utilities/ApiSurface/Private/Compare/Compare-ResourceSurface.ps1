@@ -78,12 +78,35 @@ function Compare-ResourceSurface
 
     $backlogTotal = 0
 
+    $gateByResource = @{}
+    $declaredByTypeKey = @{}
     foreach ($row in $Origin)
     {
-        $gate = Test-ResourceComparable -Origin $row `
+        $probe = Test-ResourceComparable -Origin $row `
             -GraphType $currentTypes `
             -SchemaKeyword $SchemaKeyword `
             -NonComparableEntityType $nonComparable
+
+        $gateByResource[$row.Resource] = $probe
+        if (-not $probe.Comparable)
+        {
+            continue
+        }
+
+        if (-not $declaredByTypeKey.ContainsKey($probe.TypeKey))
+        {
+            $declaredByTypeKey[$probe.TypeKey] = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+        }
+
+        foreach ($name in (Get-SurfaceMemberName -Container $SchemaKeyword[$row.Resource].properties))
+        {
+            $null = $declaredByTypeKey[$probe.TypeKey].Add($name)
+        }
+    }
+
+    foreach ($row in $Origin)
+    {
+        $gate = $gateByResource[$row.Resource]
 
         if (-not $gate.Comparable)
         {
@@ -169,22 +192,59 @@ function Compare-ResourceSurface
                         -Exclusion $exclusions))
         }
 
+        foreach ($path in (Get-DeclaredVendorPath -Exclusion $exclusions))
+        {
+            if ($vendor.Properties.Contains($path))
+            {
+                $null = $matchedVendorName.Add($path)
+            }
+        }
+
+        $flattenedContainer = Get-FlattenedContainer -MatchedPath $matchedVendorName
+        $siblingOwner = $declaredByTypeKey[$gate.TypeKey]
+
         $backlog = 0
         foreach ($vendorName in $vendor.Properties.Keys)
         {
             $vendorProperty = $vendor.Properties[$vendorName]
-            if ($vendorProperty.Level -ne 0 -or $matchedVendorName.Contains($vendorName))
+            if ($matchedVendorName.Contains($vendorName))
             {
                 continue
             }
 
-            $dscName = ConvertTo-DscPropertyName -Name $vendorName
+            $nested = $vendorProperty.Level -ne 0
+            if ($nested -and -not (Test-FlattenedSibling -Path $vendorName `
+                        -Container $flattenedContainer `
+                        -Vendor $vendorProperty `
+                        -ServiceManagedProperty $serviceManagedProperty))
+            {
+                continue
+            }
+
+            $dscName = if ($nested)
+            {
+                ConvertTo-FlattenedDscPropertyName -Path $vendorName
+            }
+            else
+            {
+                ConvertTo-DscPropertyName -Name $vendorName
+            }
+
             if ($declared.Contains($dscName) -or $dscName -in $nonVendorProperty)
             {
                 continue
             }
 
-            $backlog++
+            if ($nested -and $null -ne $siblingOwner -and
+                ($siblingOwner.Contains($dscName) -or $siblingOwner.Contains((ConvertTo-DscPropertyName -Name $vendorProperty.Name))))
+            {
+                continue
+            }
+
+            if (-not $nested)
+            {
+                $backlog++
+            }
 
             $suppression = Resolve-FindingExclusion -Exclusion $exclusions -Property $dscName
             if ($suppression.Suppressed)
@@ -196,7 +256,11 @@ function Compare-ResourceSurface
 
             $code = 'RES-PROP-BACKLOG'
             $autoFixable = $false
-            if ($vendorProperty.IsReadOnly -or $vendorProperty.Name -in $serviceManagedProperty)
+            if ($nested)
+            {
+                $code = 'RES-PROP-NESTED'
+            }
+            elseif ($vendorProperty.IsReadOnly -or $vendorProperty.Name -in $serviceManagedProperty)
             {
                 $code = 'RES-PROP-READONLY'
             }
@@ -204,6 +268,11 @@ function Compare-ResourceSurface
             {
                 $code = 'RES-PROP-MISSING'
                 $autoFixable = -not $vendorProperty.IsComplex
+            }
+
+            if ($code -eq 'RES-PROP-NESTED' -and -not $seenBefore -and [System.String]::IsNullOrEmpty($suppression.Severity))
+            {
+                $suppression.Severity = 'warning'
             }
 
             if ($null -ne $suppression.AutoFixable)
@@ -226,8 +295,10 @@ function Compare-ResourceSurface
                             enum       = @($vendorProperty.Enum)
                         }) `
                         -Evidence ([ordered]@{
-                            source    = "csdl:$($gate.TypeKey -replace ':', '/')/$vendorName"
-                            exclusion = $suppression.Reason
+                            source      = "csdl:$($gate.TypeKey -replace ':', '/')/$vendorName"
+                            exclusion   = $suppression.Reason
+                            flattenedAs = if ($nested) { $vendorProperty.Name } else { $null }
+                            seenBefore  = $seenBefore
                         })))
         }
 
@@ -249,6 +320,210 @@ function Compare-ResourceSurface
         Coverage = $coverage.ToArray()
         Backlog  = $backlogTotal
     }
+}
+
+<#
+.SYNOPSIS
+    Reads the vendor paths an excludedProperties entry states it already covers.
+
+.DESCRIPTION
+    A resource that renames a flattened member beyond what the name matcher can derive states the
+    path it covers on the entry itself. Without that the member reads as a gap on every run.
+
+.PARAMETER Exclusion
+    Specifies the excludedProperties entries of the resource.
+
+.OUTPUTS
+    The vendor paths.
+#>
+function Get-DeclaredVendorPath
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter()]
+        [AllowNull()]
+        [System.Object]
+        $Exclusion
+    )
+
+    $path = [System.Collections.Generic.List[System.String]]::new()
+
+    foreach ($entry in @($Exclusion))
+    {
+        if ($null -eq $entry)
+        {
+            continue
+        }
+
+        foreach ($value in @($entry.vendorPath))
+        {
+            if (-not [System.String]::IsNullOrWhiteSpace($value))
+            {
+                $path.Add([System.String] $value)
+            }
+        }
+    }
+
+    return [System.String[]] $path
+}
+
+<#
+.SYNOPSIS
+    Lists the vendor containers a resource has proven it flattens.
+
+.DESCRIPTION
+    A container counts as flattened once two of its members matched a declared property. Every
+    ancestor of a matched member counts toward its own tally, which is what lets a two level
+    container be reached. One match alone is not enough, because a resource that resolves a
+    related object by display name matches exactly one member of it and flattens nothing.
+
+.PARAMETER MatchedPath
+    Specifies the vendor paths the declared properties matched.
+
+.PARAMETER Minimum
+    Specifies how many matched members a container needs.
+
+.OUTPUTS
+    The container paths.
+#>
+function Get-FlattenedContainer
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Generic.HashSet[System.String]])]
+    param
+    (
+        [Parameter()]
+        [AllowNull()]
+        [System.Object]
+        $MatchedPath,
+
+        [Parameter()]
+        [System.Int32]
+        $Minimum = 2
+    )
+
+    $tally = @{}
+
+    foreach ($path in @($MatchedPath))
+    {
+        $current = [System.String] $path
+        $cut = $current.LastIndexOf('.')
+        while ($cut -gt 0)
+        {
+            $current = $current.Substring(0, $cut)
+            $tally[$current] = 1 + $tally[$current]
+            $cut = $current.LastIndexOf('.')
+        }
+    }
+
+    $container = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::Ordinal)
+    foreach ($name in $tally.Keys)
+    {
+        if ($tally[$name] -ge $Minimum)
+        {
+            $null = $container.Add($name)
+        }
+    }
+
+    return , $container
+}
+
+<#
+.SYNOPSIS
+    Decides whether a vendor property below the entity is worth reporting.
+
+.DESCRIPTION
+    Only a sibling of something the resource already flattened qualifies. A container the resource
+    ignores altogether stays silent, which keeps a navigation collection out of the report. A
+    complex member is a container rather than a setting, and a member the service owns is never
+    configured, so neither is reported.
+
+.PARAMETER Path
+    Specifies the full vendor path of the candidate.
+
+.PARAMETER Container
+    Specifies the containers the resource has proven it flattens.
+
+.PARAMETER Vendor
+    Specifies the candidate vendor property.
+
+.PARAMETER ServiceManagedProperty
+    Specifies the property names the service owns.
+
+.OUTPUTS
+    True when the candidate should be reported.
+#>
+function Test-FlattenedSibling
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path,
+
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [System.Collections.Generic.HashSet[System.String]]
+        $Container,
+
+        [Parameter(Mandatory = $true)]
+        [System.Collections.IDictionary]
+        $Vendor,
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $ServiceManagedProperty = @()
+    )
+
+    $cut = $Path.LastIndexOf('.')
+    if ($cut -lt 1 -or -not $Container.Contains($Path.Substring(0, $cut)))
+    {
+        return $false
+    }
+
+    if ([System.Boolean] $Vendor.IsComplex -or [System.Boolean] $Vendor.IsReadOnly)
+    {
+        return $false
+    }
+
+    return [System.String] $Vendor.Name -notin $ServiceManagedProperty
+}
+
+<#
+.SYNOPSIS
+    Names a vendor path the way a resource that flattens it would.
+
+.DESCRIPTION
+    Every segment is capitalized and joined, so sessionControls.signInFrequency.isEnabled reads as
+    SessionControlsSignInFrequencyIsEnabled. The full path keeps the name unique when a leaf
+    repeats under two containers.
+
+.PARAMETER Path
+    Specifies the vendor path.
+
+.OUTPUTS
+    The DSC style name.
+#>
+function ConvertTo-FlattenedDscPropertyName
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path
+    )
+
+    $segments = @($Path -split '\.' | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) } |
+            ForEach-Object -Process { ConvertTo-DscPropertyName -Name $_ })
+
+    return ($segments -join '')
 }
 
 <#
@@ -535,6 +810,8 @@ function Get-DefaultNonVendorProperty
     same property is reported as read only on one entity and as an auto fixable gap on another.
     The content version pair carries the same problem for a different reason. Both are writable
     in the CSDL and both are owned by the app content upload sequence, never by a configuration.
+    The author stamps behave the same way. Whichever entity carries one, the directory records
+    who acted and a configuration never supplies it.
 
 .OUTPUTS
     The property names, matched against the vendor name.
@@ -546,7 +823,8 @@ function Get-DefaultServiceManagedProperty
     param ()
 
     return [System.String[]] @(
-        'committedContentVersion', 'contentVersions', 'createdDateTime', 'deletedDateTime',
-        'lastModifiedDateTime', 'modifiedDateTime', 'version'
+        'committedContentVersion', 'contentVersions', 'createdBy', 'createdByAppId',
+        'createdDateTime', 'createdOnBehalfOf', 'deletedDateTime', 'lastModifiedBy',
+        'lastModifiedByAppId', 'lastModifiedDateTime', 'modifiedBy', 'modifiedDateTime', 'version'
     )
 }

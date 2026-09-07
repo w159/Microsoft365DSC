@@ -34,6 +34,7 @@ Configuration Example
             ScopeType                  = 'resourceScope'
             RoleDefinition             = '2d00d0fd-45e9-4166-904f-b76ac5eed2c7'
             RoleDefinitionDisplayName  = 'Help Desk Operator'
+            RoleScopeTagIds            = @('0')
             Ensure                     = 'Present'
             ApplicationId              = $ApplicationId;
             TenantId                   = $TenantId;

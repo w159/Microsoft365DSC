@@ -93,6 +93,11 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] $DetailedHelpText
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates the location setting configuration for fully managed devices (COBO) and corporate owned devices with a work profile (COPE).')]
+    [ValidateSet('disabled', 'notConfigured', 'unknownFutureValue')]
+    [System.String] $DeviceLocationMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('Represents the customized lock screen message provided to users when they attempt to modify managed settings on their device.')]
     [MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] $DeviceOwnerLockScreenMessage
 
@@ -861,6 +866,7 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 DataRoamingBlocked                                       = $getValue.dataRoamingBlocked
                 DateTimeConfigurationBlocked                             = $getValue.dateTimeConfigurationBlocked
                 DetailedHelpText                                         = $complexDetailedHelpText
+                DeviceLocationMode                                       = $getValue.deviceLocationMode
                 DeviceOwnerLockScreenMessage                             = $complexDeviceOwnerLockScreenMessage
                 EnrollmentProfile                                        = $getValue.enrollmentProfile
                 FactoryResetBlocked                                      = $getValue.factoryResetBlocked

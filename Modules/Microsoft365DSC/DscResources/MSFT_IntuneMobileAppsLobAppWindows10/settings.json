@@ -10,7 +10,38 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "ApplicableArchitectures",
+      "reason": "Accepted",
+      "note": "Derived from the FileName extension and written only on create"
+    },
+    {
+      "name": "ApplicableDeviceTypes",
+      "reason": "Accepted",
+      "note": "Derived from the FileName extension and written only on create"
+    },
+    {
+      "name": "IdentityName",
+      "reason": "Accepted",
+      "note": "Set writes a fixed placeholder on create and Get never reads it back"
+    },
+    {
+      "name": "IdentityPublisherHash",
+      "reason": "Accepted",
+      "note": "Set writes a fixed placeholder on create only"
+    },
+    {
+      "name": "IdentityVersion",
+      "reason": "Accepted",
+      "note": "Set writes a fixed placeholder on create only"
+    },
+    {
+      "name": "IsBundle",
+      "reason": "Accepted",
+      "note": "Derived from the FileName extension and written only on create"
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Lob App for Windows10.",
   "permissions": {
     "graph": {

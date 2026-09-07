@@ -64,6 +64,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     DisplayName                                 = 'Test Android Managed Store App Configuration Policy'
                     Description                                 = 'Test Android Managed Store App Configuration Policy Description'
+                    RoleScopeTagIds                             = @('0')
                     targetedMobileApps            = @("{FakeStringValue}")
                     permissionActions                      = @(
                         ([MSFT_androidPermissionAction] @{
@@ -104,6 +105,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     DisplayName                                 = 'Test Android Managed Store App Configuration Policy'
                     Description                                 = 'Test Android Managed Store App Configuration Policy Description'
+                    RoleScopeTagIds                             = @('0')
                     targetedMobileApps                          = @("{FakeStringValue}")
                     permissionActions                           = @(
                         ([MSFT_androidPermissionAction] @{
@@ -163,6 +165,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     DisplayName                                 = 'Test Android Managed Store App Configuration Policy'
                     Description                                 = 'Test Android Managed Store App Configuration Policy Description'
+                    RoleScopeTagIds                             = @('0')
                     targetedMobileApps                          = @("{FakeStringValue}")
                     permissionActions                           = @(
                         ([MSFT_androidPermissionAction] @{
@@ -183,6 +186,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         DisplayName                             = 'Test Android Managed Store App Configuration Policy'
                         Description                             = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds                         = @('0')
                         Id                                      = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
                         targetedMobileApps                      = @("{FakeStringValue}")
                         permissionActions = @(
@@ -211,6 +215,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     DisplayName                                 = 'Test Android Managed Store App Configuration Policy'
                     Description                                 = 'Test Android Managed Store App Configuration Policy Description'
+                    RoleScopeTagIds                             = @('0')
                     targetedMobileApps                          = @("{FakeStringValue}")
                     permissionActions                           = @(
                         ([MSFT_androidPermissionAction] @{
@@ -231,6 +236,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         DisplayName          = 'Test Android Managed Store App Configuration Policy'
                         Description          = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds      = @('0')
                         Id                   = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
                         permissionActions = @(
                            @{
@@ -275,6 +281,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         DisplayName                   = 'Test Android Managed Store App Configuration Policy'
                         Description                   = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds               = @('0')
                         Id                            = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
                         targetedMobileApps            = @("{FakeStringValue}")
                         permissionActions = @(

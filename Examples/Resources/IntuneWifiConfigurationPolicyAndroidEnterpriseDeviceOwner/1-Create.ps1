@@ -38,8 +38,10 @@ Configuration Example
                     groupDisplayName = 'Android Loaner Devices'
                 }
             )
+            AuthenticationMethod           = 'usernameAndPassword'
             ConnectAutomatically           = $false
             ConnectWhenNetworkNameIsHidden = $false
+            EapType                        = 'peap'
             NetworkName                    = 'Contoso Corporate Wi-Fi'
             PreSharedKey                   = '<wifi-pre-shared-key>'
             PreSharedKeyIsSet              = $true
@@ -49,6 +51,7 @@ Configuration Example
             ProxySettings                  = 'manual'
             RoleScopeTagIds                = @('0')
             Ssid                           = 'Contoso-Corp'
+            TrustedServerCertificateNames  = @('Contoso Root CA')
             WiFiSecurityType               = 'wpaPersonal'
             Ensure                         = 'Present'
             ApplicationId                  = $ApplicationId;

@@ -12,14 +12,49 @@
   },
   "excludedProperties": [
     {
+      "name": "ActiveChecklistItemCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from the checklist items on the task details"
+    },
+    {
+      "name": "AppliedCategories",
+      "reason": "Accepted",
+      "note": "Declared as Categories and mapped to category1 through category25 flags on set"
+    },
+    {
       "name": "Attachments",
       "reason": "Deferred",
-      "note": "Attachments maps to the references collection on the Graph entity."
+      "note": "Maps to the references collection on the Graph entity"
     },
     {
       "name": "Categories",
       "reason": "Deferred",
-      "note": "Categories maps to the appliedCategories property."
+      "note": "Maps to the appliedCategories property"
+    },
+    {
+      "name": "ChecklistItemCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from the checklist items on the task details"
+    },
+    {
+      "name": "CompletedBy",
+      "reason": "ReadOnly",
+      "note": "The service records the completing identity when percent complete reaches 100"
+    },
+    {
+      "name": "CompletedDateTime",
+      "reason": "ReadOnly",
+      "note": "The service stamps this when the task reaches one hundred percent complete"
+    },
+    {
+      "name": "HasDescription",
+      "reason": "ReadOnly",
+      "note": "The service derives this flag from the task details description"
+    },
+    {
+      "name": "ReferenceCount",
+      "reason": "ReadOnly",
+      "note": "The service computes this count from the references on the task details"
     }
   ],
   "description": "",

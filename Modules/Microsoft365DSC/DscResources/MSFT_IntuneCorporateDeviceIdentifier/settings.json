@@ -12,9 +12,44 @@
   },
   "excludedProperties": [
     {
+      "name": "Description",
+      "reason": "Accepted",
+      "note": "MSFT_IntuneDeviceIdentifier carries it inside the Devices array"
+    },
+    {
       "name": "Devices",
       "reason": "Deferred",
-      "note": "The imported device identities this resource writes through the import route."
+      "note": "Imported device identities written through the import route"
+    },
+    {
+      "name": "EnrollmentState",
+      "reason": "ReadOnly",
+      "note": "Intune recomputes the enrollment progress of the imported device"
+    },
+    {
+      "name": "Id",
+      "reason": "Accepted",
+      "note": "Set supplies the service-assigned id. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "ImportedDeviceIdentifier",
+      "reason": "Accepted",
+      "note": "Declared as the key of the MSFT_IntuneDeviceIdentifier members of Devices"
+    },
+    {
+      "name": "ImportedDeviceIdentityType",
+      "reason": "Accepted",
+      "note": "Declared on the MSFT_IntuneDeviceIdentifier members of Devices with the full enum"
+    },
+    {
+      "name": "LastContactedDateTime",
+      "reason": "ReadOnly",
+      "note": "Intune stamps the last service contact of an imported device"
+    },
+    {
+      "name": "Platform",
+      "reason": "Accepted",
+      "note": "Declared as Platform on the MSFT_IntuneDeviceIdentifier members of Devices"
     }
   ],
   "description": "This resource manages Intune corporate device identifiers for pre-registering devices as corporate-owned.",

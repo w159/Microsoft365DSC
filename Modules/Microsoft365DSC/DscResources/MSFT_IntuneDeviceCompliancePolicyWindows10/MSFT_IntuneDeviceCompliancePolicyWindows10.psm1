@@ -99,6 +99,22 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $CodeIntegrityEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('FirmwareProtectionEnabled of the Windows 10 device compliance policy.')]
+    [System.Nullable[System.Boolean]] $FirmwareProtectionEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('KernelDmaProtectionEnabled of the Windows 10 device compliance policy.')]
+    [System.Nullable[System.Boolean]] $KernelDmaProtectionEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('MemoryIntegrityEnabled of the Windows 10 device compliance policy.')]
+    [System.Nullable[System.Boolean]] $MemoryIntegrityEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('VirtualizationBasedSecurityEnabled of the Windows 10 device compliance policy.')]
+    [System.Nullable[System.Boolean]] $VirtualizationBasedSecurityEnabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('StorageRequireEncryption of the Windows 10 device compliance policy.')]
     [System.Nullable[System.Boolean]] $StorageRequireEncryption
 
@@ -337,6 +353,10 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 BitLockerEnabled                            = $devicePolicy.bitLockerEnabled
                 SecureBootEnabled                           = $devicePolicy.secureBootEnabled
                 CodeIntegrityEnabled                        = $devicePolicy.codeIntegrityEnabled
+                FirmwareProtectionEnabled                   = $devicePolicy.firmwareProtectionEnabled
+                KernelDmaProtectionEnabled                  = $devicePolicy.kernelDmaProtectionEnabled
+                MemoryIntegrityEnabled                      = $devicePolicy.memoryIntegrityEnabled
+                VirtualizationBasedSecurityEnabled          = $devicePolicy.virtualizationBasedSecurityEnabled
                 StorageRequireEncryption                    = $devicePolicy.storageRequireEncryption
                 ActiveFirewallRequired                      = $devicePolicy.activeFirewallRequired
                 DefenderEnabled                             = $devicePolicy.defenderEnabled

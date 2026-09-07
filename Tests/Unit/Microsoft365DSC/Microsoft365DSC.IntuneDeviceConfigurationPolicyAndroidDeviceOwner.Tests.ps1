@@ -94,6 +94,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
                         })
+                    DeviceLocationMode                                       = 'notConfigured'
                     DeviceOwnerLockScreenMessage                             = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -293,6 +294,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
                         })
+                    DeviceLocationMode                                       = 'notConfigured'
                     DeviceOwnerLockScreenMessage                             = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -464,6 +466,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         BluetoothBlockConfiguration                              = $True
+                        DeviceLocationMode                                       = 'notConfigured'
                         DeviceOwnerLockScreenMessage                             = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -675,6 +678,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
                         })
+                    DeviceLocationMode                                       = 'notConfigured'
                     DeviceOwnerLockScreenMessage                             = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -846,6 +850,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         BluetoothBlockConfiguration                              = $True
+                        DeviceLocationMode                                       = 'notConfigured'
                         DeviceOwnerLockScreenMessage                             = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -1047,6 +1052,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
                         })
+                    DeviceLocationMode                                       = 'notConfigured'
                     DeviceOwnerLockScreenMessage                             = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -1212,6 +1218,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         VpnAlwaysOnPackageIdentifier                             = 'FakeStringValue'
+                        DeviceLocationMode                                       = 'notConfigured'
                         DeviceOwnerLockScreenMessage                             = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -1360,6 +1367,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                         BluetoothBlockConfiguration                              = $True
+                        DeviceLocationMode                                       = 'notConfigured'
                         DeviceOwnerLockScreenMessage                             = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()

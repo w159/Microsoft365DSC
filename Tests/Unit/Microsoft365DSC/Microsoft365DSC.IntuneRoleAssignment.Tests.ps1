@@ -51,12 +51,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaDeviceManagementRoleAssignment -MockWith {
                 return @{
-                    Description = 'FakeStringValue'
-                    DisplayName = 'FakeStringValue'
-                    Id          = 'FakeStringValue'
-                    Members        = @('FakeStringValue')
-                    resourceScopes = @('FakeStringValue')
-                    ScopeType   = 'resourceScope'
+                    Description     = 'FakeStringValue'
+                    DisplayName     = 'FakeStringValue'
+                    Id              = 'FakeStringValue'
+                    Members         = @('FakeStringValue')
+                    resourceScopes  = @('FakeStringValue')
+                    ScopeType       = 'resourceScope'
+                    RoleScopeTagIds = @('0')
                 }
             }
             Mock -CommandName Get-MgDeviceManagementRoleDefinition -MockWith {
@@ -100,11 +101,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneRoleAssignment should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Description = 'FakeStringValue'
-                    DisplayName = 'FakeStringValue'
-                    Id          = 'FakeStringValue'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    Description     = 'FakeStringValue'
+                    DisplayName     = 'FakeStringValue'
+                    Id              = 'FakeStringValue'
+                    Ensure          = 'Present'
+                    RoleScopeTagIds = @('0')
+                    Credential      = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementRoleAssignment -MockWith {
@@ -134,6 +136,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MembersDisplayNames        = @('FakeStringValue')
                     ResourceScopesDisplayNames = @('FakeStringValue')
                     ScopeType                  = 'resourceScope'
+                    RoleScopeTagIds            = @('0')
                     Credential                 = $Credential
                 }
             }
@@ -162,6 +165,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MembersDisplayNames        = @('FakeStringValue')
                     ResourceScopesDisplayNames = @('FakeStringValue')
                     ScopeType                  = 'resourceScope'
+                    RoleScopeTagIds            = @('0')
                     Credential                 = $Credential
                 }
             }
@@ -183,6 +187,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MembersDisplayNames        = @('OtherMember') # Updated property
                     ResourceScopesDisplayNames = @('FakeStringValue')
                     ScopeType                  = 'resourceScope'
+                    RoleScopeTagIds            = @('0')
                     Credential                 = $Credential
                 }
             }

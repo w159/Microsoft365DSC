@@ -5,6 +5,10 @@
 * AADAccessReviewDefinition
   * [BREAKING CHANGE] Renamed property `SettingsValue` to `Settings` to match the
     name Microsoft Graph uses.
+* AADAgreement
+  * [BREAKING CHANGE] Removed property `AcceptanceStatement`. It was not part of the
+    Graph Schema definition for the resource.
+  * Added support for the `TermsExpiration` property.
 * AADApplication
   * Updated `Owners` to use `DisplayName` for Service Principal objects.
 * AADAuthorizationPolicy
@@ -12,9 +16,15 @@
     `DefaultUserRolePermissions` complex property type for separation.
 * AADConditionalAccessPolicy
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
+* AADCrossTenantAccessPolicyConfigurationDefault
+  * Added support for the `AutomaticUserConsentSettings` property.
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Added support for the `TenantRestrictions` property.
 * AADCustomAuthenticationExtension
   * [BREAKING CHANGE] Renamed the property `ClientConfigurationTimeoutMilliseconds` to
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
+* AADDeviceRegistrationPolicy
+  * Added support for the `AzureADRegistration` property.
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
@@ -40,12 +50,16 @@
   * Switched the resource to the Microsoft Graph beta endpoint, which is where
     the `ClaimsPolicy`, `ErrorUrl`, `PublisherName` and `SamlMetadataUrl`
     properties are defined.
+  * Added support for the `LoginUrl` property.
 * AADUser
   * [BREAKING CHANGE] Renamed properties `Fax` to `FaxNumber`, `FirstName` to
     `GivenName`, `LastName` to `Surname`, `Office` to `OfficeLocation` and `Title`
     to `JobTitle` to match the names Microsoft Graph uses.
   * [BREAKING CHANGE] Removed deprecated property `PasswordNeverExpires`.
     Please use `PasswordPolicies` instead with `DisablePasswordExpiration`.
+  * Added support for the `CompanyName` property.
+  * Added support for the `EmployeeId` property.
+  * Added support for the `OnPremisesExtensionAttributes` property.
   * Updated the password generation routine to work with PowerShell 7.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
@@ -65,6 +79,8 @@
   * [BREAKING CHANGE] Removed property `AppliationSecret`.
 * IntuneAlertRuleWindows365
   * Added value `unknown` to property `Severity`.
+* IntuneAndroidManagedStoreAppConfiguration
+  * Added support for the `RoleScopeTagIds` property.
 * IntuneAntivirusPolicySecurityExperienceWindows10ConfigMgr
   * Fixed an issue where the resource was missing from the Intune template
     registry, which left its policies out of the export cache.
@@ -77,6 +93,10 @@
 * IntuneApplicationControlPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDeviceConfigurationEndpointProtectionPolicyWindows10` instead.
+* IntuneAppProtectionPolicyAndroid
+  * Added support for the `AllowedAndroidDeviceManufacturers` property.
+  * Added support for the `MinimumWipeAppVersion` property.
+  * Added support for the `MinimumWipeOsVersion` property.
 * IntuneAppProtectionPolicyiOS
   * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
     Microsoft Graph uses.
@@ -105,15 +125,27 @@
   * [BREAKING CHANGE] Removed the properties `RestrictedApps` and
     `SecurityBlockDeviceAdministratorManagedDevices`, which the
     androidWorkProfileCompliancePolicy Graph type does not define.
+* IntuneDeviceCompliancePolicyWindows10
+  * Added support for the `FirmwareProtectionEnabled` property.
+  * Added support for the `KernelDmaProtectionEnabled` property.
+  * Added support for the `MemoryIntegrityEnabled` property.
+  * Added support for the `VirtualizationBasedSecurityEnabled` property.
 * IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2` instead.
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Added support for the `DeviceLocationMode` property.
+* IntuneDeviceConfigurationPolicyAndroidWorkProfile
+  * Added support for the `BlockUnifiedPasswordForWorkProfile` property.
 * IntuneDeviceConfigurationVpnPolicyWindows10
   * [BREAKING CHANGE] Renamed property `ServerCollection` to `Servers` to match the
     name Microsoft Graph uses.
 * IntuneDeviceEnrollmentPlatformRestriction
   * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
     Microsoft Graph uses.
+* IntuneDeviceManagementEnrollmentAndroidGooglePlay
+  * Added support for the `TargetGroups` property, which carries the display name of
+    each targeted group so a configuration moves between tenants.
 * IntuneDiskEncryptionMacOS
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
@@ -127,18 +159,58 @@
   * Added values `arm` and `neutral` to property `AllowedArchitectures`.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
+* IntuneMobileThreatDefenseConnector
+  * Added support for the `MacDeviceBlockedOnMissingPartnerData` property.
+  * Added support for the `MacEnabled` property.
+* IntuneRoleAssignment
+  * Added support for the `RoleScopeTagIds` property.
 * IntuneSecurityBaselineMicrosoftEdge
   * [BREAKING CHANGE] Removed deprecated properties `WebSQLAccess` and `EdgeEnhanceImagesEnabled`.
 * IntuneSettingCatalogCustomPolicyWindows10
   * Fixed an issue where some nested properties didn't have the correct type.
+* IntuneVPNConfigurationPolicyAndroidDeviceOwner
+  * Added support for the `LockdownExclusionList` property.
 * IntuneVPNConfigurationPolicyAndroidWork
   * Added value `paloAltoGlobalProtect` to property `connectionType`.
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
+* IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
+  * Added support for the `AuthenticationMethod` property.
+  * Added support for the `EapType` property.
+  * Added support for the `TrustedServerCertificateNames` property.
+* IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile
+  * Added support for the `PreSharedKey` property.
+  * Added support for the `PreSharedKeyIsSet` property, which reports whether the
+    service holds a key that it never returns on a read.
 * IntuneWifiConfigurationPolicyAndroidForWork
   * Added values `wep` and `wpaPersonal` to property `WiFiSecurityType`.
+* IntuneWifiConfigurationPolicyAndroidOpenSourceProject
+  * Added support for the `ProxySetting` property.
 * IntuneWifiConfigurationPolicyWindows10
   * Added value `wpa3Personal` to property `WifiSecurityType`.
+* IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined
+  * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
+    with the `OutOfBoxExperienceSetting` property.
+  * [BREAKING CHANGE] Replaced the deprecated `EnableWhiteGlove` property with the
+    `PreprovisioningAllowed` property.
+  * [BREAKING CHANGE] Replaced the deprecated `ExtractHardwareHash` property with the
+    `HardwareHashExtractionEnabled` property.
+  * [BREAKING CHANGE] Replaced the deprecated `Language` property with the `Locale`
+    property.
+* IntuneWindowsAutopilotDeploymentProfileAzureADJoined
+  * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
+    with the `OutOfBoxExperienceSetting` property. Its members now carry the names
+    Microsoft Graph uses, so `HideEscapeLink` becomes `EscapeLinkHidden`, `HideEULA`
+    becomes `EulaHidden`, `HidePrivacySettings` becomes `PrivacySettingsHidden` and
+    `SkipKeyboardSelectionPage` becomes `KeyboardSelectionPageSkipped`.
+  * [BREAKING CHANGE] Replaced the deprecated `EnableWhiteGlove` property with the
+    `PreprovisioningAllowed` property.
+  * [BREAKING CHANGE] Replaced the deprecated `ExtractHardwareHash` property with the
+    `HardwareHashExtractionEnabled` property.
+  * [BREAKING CHANGE] Replaced the deprecated `Language` property with the `Locale`
+    property.
+* IntuneWindowsUpdateForBusinessHotpatchProfileWindows10
+  * Added support for the `ApprovalSettings` property.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket

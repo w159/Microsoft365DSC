@@ -192,6 +192,10 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $WorkProfileRequirePassword
 
     [DscProperty()]
+    [System.ComponentModel.Description('Prevent the use of a unified password for the device and the work profile.')]
+    [System.Nullable[System.Boolean]] $BlockUnifiedPasswordForWorkProfile
+
+    [DscProperty()]
     [System.ComponentModel.Description('Require the Android Verify apps feature is turned on')]
     [System.Nullable[System.Boolean]] $SecurityRequireVerifyApps
 
@@ -343,6 +347,7 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
                 WorkProfilePasswordRequiredType                           = $policy.workProfilePasswordRequiredType
                 WorkProfileRequiredPasswordComplexity                     = $policy.workProfileRequiredPasswordComplexity
                 WorkProfileRequirePassword                                = $policy.workProfileRequirePassword
+                BlockUnifiedPasswordForWorkProfile                        = $policy.blockUnifiedPasswordForWorkProfile
                 SecurityRequireVerifyApps                                 = $policy.securityRequireVerifyApps
                 VpnAlwaysOnPackageIdentifier                              = $policy.vpnAlwaysOnPackageIdentifier
                 VpnEnableAlwaysOnLockdownMode                             = $policy.vpnEnableAlwaysOnLockdownMode

@@ -29,6 +29,14 @@ Configuration Example
             Description           = "Enables hotpatch quality updates so security fixes apply without a restart";
             HotpatchEnabled       = $False; # Updated Property
             RoleScopeTagIds       = @("0");
+            ApprovalSettings      = @(
+                MSFT_MicrosoftGraphWindowsQualityUpdateApprovalSetting{
+                    ApprovalMethodType           = "automatic"
+                    DeferredDeploymentInDay      = 2
+                    WindowsQualityUpdateCadence  = "monthly"
+                    WindowsQualityUpdateCategory = "all"
+                }
+            );
             Assignments           = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     dataType                                   = "#microsoft.graph.allDevicesAssignmentTarget"

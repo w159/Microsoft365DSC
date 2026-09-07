@@ -10,7 +10,28 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "EnableWhiteGlove",
+      "reason": "Deprecated",
+      "note": "Superseded by preprovisioningAllowed"
+    },
+    {
+      "name": "ExtractHardwareHash",
+      "reason": "Deprecated",
+      "note": "Superseded by hardwareHashExtractionEnabled"
+    },
+    {
+      "name": "Language",
+      "reason": "Deprecated",
+      "note": "Superseded by locale"
+    },
+    {
+      "name": "OutOfBoxExperienceSettings",
+      "reason": "Deprecated",
+      "note": "Superseded by outOfBoxExperienceSetting"
+    }
+  ],
   "description": "This resource configures an Intune Windows Autopilot Deployment Profile Azure AD Hybrid Joined.",
   "permissions": {
     "graph": {

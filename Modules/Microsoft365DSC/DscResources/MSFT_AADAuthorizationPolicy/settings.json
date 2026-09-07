@@ -14,7 +14,17 @@
     {
       "name": "GuestUserRole",
       "reason": "Deferred",
-      "note": "Friendly-name alias for the configurable guestUserRoleId that Set translates back to the role GUID and the real fix is a name mapping rather than a suppression."
+      "note": "Friendly-name alias for guestUserRoleId, needs a name mapping"
+    },
+    {
+      "name": "GuestUserRoleId",
+      "reason": "Accepted",
+      "note": "Declared under the friendly name GuestUserRole"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Service-assigned. The resource keys on IsSingleInstance."
     }
   ],
   "description": "This resource configures the Azure Active Directory Authorization Policy.",

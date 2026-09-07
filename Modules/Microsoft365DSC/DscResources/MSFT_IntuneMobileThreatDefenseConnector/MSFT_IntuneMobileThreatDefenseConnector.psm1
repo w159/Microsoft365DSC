@@ -50,6 +50,14 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
     [System.Nullable[System.DateTime]] $LastHeartbeatDateTime
 
     [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, indicates that Intune must receive data from the Mobile Threat Defense partner prior to marking a device compliant for Mac. When FALSE, indicates that Intune may make a device compliant without receiving data from the Mobile Threat Defense partner for Mac. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $MacDeviceBlockedOnMissingPartnerData
+
+    [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, indicates that data from the Mobile Threat Defense partner can be used during compliance evaluations for Mac. When FALSE, it indicates that data from the Mobile Threat Defense partner should not be used during compliance evaluations for Mac. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $MacEnabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates that configuration profile management via Microsoft Defender for Endpoint is enabled. When FALSE, inidicates that configuration profile management via Microsoft Defender for Endpoint is disabled. Default value is FALSE.')]
     [System.Nullable[System.Boolean]] $MicrosoftDefenderForEndpointAttachEnabled
 
@@ -194,6 +202,8 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 IosEnabled                                          = $instance.IosEnabled
                 IosMobileApplicationManagementEnabled               = $instance.IosMobileApplicationManagementEnabled
                 LastHeartbeatDateTime                               = $instance.LastHeartbeatDateTime
+                MacDeviceBlockedOnMissingPartnerData                = $instance.MacDeviceBlockedOnMissingPartnerData
+                MacEnabled                                          = $instance.MacEnabled
                 MicrosoftDefenderForEndpointAttachEnabled           = $instance.MicrosoftDefenderForEndpointAttachEnabled
                 PartnerState                                        = $instance.PartnerState.ToString()
                 PartnerUnresponsivenessThresholdInDays              = $instance.PartnerUnresponsivenessThresholdInDays
@@ -318,22 +328,6 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 $params = @{
                     Id                                                  = $config.Id
                     DisplayName                                         = $config.DisplayName
-                    AllowPartnerToCollectIosApplicationMetadata         = $config.AllowPartnerToCollectIosApplicationMetadata
-                    AllowPartnerToCollectIOSPersonalApplicationMetadata = $config.AllowPartnerToCollectIosPersonalApplicationMetadata
-                    AndroidDeviceBlockedOnMissingPartnerData            = $config.AndroidDeviceBlockedOnMissingPartnerData
-                    AndroidEnabled                                      = $config.AndroidEnabled
-                    AndroidMobileApplicationManagementEnabled           = $config.AndroidMobileApplicationManagementEnabled
-                    IosDeviceBlockedOnMissingPartnerData                = $config.IosDeviceBlockedOnMissingPartnerData
-                    IosEnabled                                          = $config.IosEnabled
-                    IosMobileApplicationManagementEnabled               = $config.IosMobileApplicationManagementEnabled
-                    LastHeartbeatDateTime                               = $config.LastHeartbeatDateTime
-                    MicrosoftDefenderForEndpointAttachEnabled           = $config.MicrosoftDefenderForEndpointAttachEnabled
-                    PartnerState                                        = $config.PartnerState.ToString()
-                    PartnerUnresponsivenessThresholdInDays              = $config.PartnerUnresponsivenessThresholdInDays
-                    PartnerUnsupportedOSVersionBlocked                  = $config.PartnerUnsupportedOSVersionBlocked
-                    WindowsDeviceBlockedOnMissingPartnerData            = $config.WindowsDeviceBlockedOnMissingPartnerData
-                    WindowsEnabled                                      = $config.WindowsEnabled
-                    Ensure                                              = 'Present'
                     Credential                                          = $this.Credential
                     ApplicationId                                       = $this.ApplicationId
                     TenantId                                            = $this.TenantId

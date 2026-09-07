@@ -65,14 +65,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             function Get-BaseMgUser
             {
                 return @{
-                    Id                = '12345-12345-12345-12345-12345'
-                    UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName       = 'John Smith'
-                    GivenName         = 'John'
-                    Surname           = 'Smith'
-                    UsageLocation     = 'US'
-                    PasswordPolicies  = 'NONE'
-                    Ensure            = 'Present'
+                    Id                            = '12345-12345-12345-12345-12345'
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    PasswordPolicies              = 'NONE'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    }
+                    Ensure                        = 'Present'
                 }
             }
         }
@@ -81,14 +87,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "When the user doesn't already exist" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName       = 'John Smith'
-                    GivenName         = 'John'
-                    Surname           = 'Smith'
-                    UsageLocation     = 'US'
-                    LicenseAssignment = @('ENTERPRISE_PREMIUM')
-                    Password          = $Credential
-                    Credential        = $Credential
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    LicenseAssignment             = @('ENTERPRISE_PREMIUM')
+                    Password                      = $Credential
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName New-MgUser -MockWith {
@@ -121,26 +133,38 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName       = 'John Smith'
-                    GivenName         = 'John'
-                    Surname           = 'Smith'
-                    UsageLocation     = 'US'
-                    LicenseAssignment = @('ENTERPRISE_PREMIUM')
-                    Password          = $Credential
-                    Ensure            = 'Present'
-                    Credential        = $Credential
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    LicenseAssignment             = @('ENTERPRISE_PREMIUM')
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
                     return @{
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
-                        Ensure            = 'Present'
+                        UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                        DisplayName                   = 'John Smith'
+                        GivenName                     = 'John'
+                        Surname                       = 'Smith'
+                        UsageLocation                 = 'US'
+                        PasswordPolicies              = 'NONE'
+                        CompanyName                   = 'Contoso'
+                        EmployeeId                    = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
+                        Ensure                        = 'Present'
                     }
                 }
 
@@ -178,26 +202,38 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists but has a different license assigned' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName    = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName          = 'John Smith'
-                    GivenName            = 'John'
-                    Surname              = 'Smith'
-                    UsageLocation        = 'US'
-                    LicenseAssignment    = @()
-                    Password             = $Credential
-                    Ensure               = 'Present'
-                    Credential           = $Credential
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    LicenseAssignment             = @()
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
                     return @{
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
-                        Ensure            = 'Present'
+                        UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                        DisplayName                   = 'John Smith'
+                        GivenName                     = 'John'
+                        Surname                       = 'Smith'
+                        UsageLocation                 = 'US'
+                        PasswordPolicies              = 'NONE'
+                        CompanyName                   = 'Contoso'
+                        EmployeeId                    = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
+                        Ensure                        = 'Present'
                     }
                 }
 
@@ -238,25 +274,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists but is not a member of a specified group' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName    = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName          = 'John Smith'
-                    GivenName            = 'John'
-                    Surname              = 'Smith'
-                    UsageLocation        = 'US'
-                    MemberOf             = 'TestGroup'
-                    Password             = $Credential
-                    Ensure               = 'Present'
-                    Credential           = $Credential
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    MemberOf                      = 'TestGroup'
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
                     return @{
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
+                        UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                        DisplayName                   = 'John Smith'
+                        GivenName                     = 'John'
+                        Surname                       = 'Smith'
+                        UsageLocation                 = 'US'
+                        PasswordPolicies              = 'NONE'
+                        CompanyName                   = 'Contoso'
+                        EmployeeId                    = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
                     }
                 }
 
@@ -299,25 +347,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists and is a member of a group and the property is not specified' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName    = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName          = 'John Smith'
-                    GivenName            = 'John'
-                    Surname              = 'Smith'
-                    UsageLocation        = 'US'
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
                     #MemberOf             = @('TestGroup')
-                    Password             = $Credential
-                    Ensure               = 'Present'
-                    Credential           = $Credential
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
                     return @{
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
+                        UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                        DisplayName                   = 'John Smith'
+                        GivenName                     = 'John'
+                        Surname                       = 'Smith'
+                        UsageLocation                 = 'US'
+                        PasswordPolicies              = 'NONE'
+                        CompanyName                   = 'Contoso'
+                        EmployeeId                    = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
                     }
                 }
 
@@ -366,25 +426,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists, is a member of a different group than specified' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName    = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName          = 'John Smith'
-                    GivenName            = 'John'
-                    Surname              = 'Smith'
-                    UsageLocation        = 'US'
-                    MemberOf             = 'TestGroup'
-                    Password             = $Credential
-                    Ensure               = 'Present'
-                    Credential           = $Credential
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    MemberOf                      = 'TestGroup'
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    Credential                    = $Credential
                 }
 
                 Mock -CommandName Get-MgUser -MockWith {
                     return @{
-                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
-                        DisplayName       = 'John Smith'
-                        GivenName         = 'John'
-                        Surname           = 'Smith'
-                        UsageLocation     = 'US'
-                        PasswordPolicies  = 'NONE'
+                        UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                        DisplayName                   = 'John Smith'
+                        GivenName                     = 'John'
+                        Surname                       = 'Smith'
+                        UsageLocation                 = 'US'
+                        PasswordPolicies              = 'NONE'
+                        CompanyName                   = 'Contoso'
+                        EmployeeId                    = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
                     }
                 }
 
@@ -446,15 +518,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists but has different custom security attributes' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName        = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName              = 'John Smith'
-                    GivenName                = 'John'
-                    Surname                  = 'Smith'
-                    UsageLocation            = 'US'
-                    Password                 = $Credential
-                    Ensure                   = 'Present'
-                    Credential               = $Credential
-                    CustomSecurityAttributes = @(
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    Credential                    = $Credential
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    CustomSecurityAttributes      = @(
                         ([MSFT_AADUserAttributeSet] @{
                             AttributeSetName = 'Engineering'
                             AttributeValues  = @(
@@ -516,15 +594,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the user already exists and has matching custom security attributes' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    UserPrincipalName        = 'JohnSmith@contoso.onmicrosoft.com'
-                    DisplayName              = 'John Smith'
-                    GivenName                = 'John'
-                    Surname                  = 'Smith'
-                    UsageLocation            = 'US'
-                    Password                 = $Credential
-                    Ensure                   = 'Present'
-                    Credential               = $Credential
-                    CustomSecurityAttributes = @(
+                    UserPrincipalName             = 'JohnSmith@contoso.onmicrosoft.com'
+                    DisplayName                   = 'John Smith'
+                    GivenName                     = 'John'
+                    Surname                       = 'Smith'
+                    UsageLocation                 = 'US'
+                    Password                      = $Credential
+                    Ensure                        = 'Present'
+                    Credential                    = $Credential
+                    CompanyName                   = 'Contoso'
+                    EmployeeId                    = 'E1234567'
+                    OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
+                        ExtensionAttribute1 = 'Head Office'
+                        ExtensionAttribute2 = 'Cost Center 4100'
+                    })
+                    CustomSecurityAttributes      = @(
                         ([MSFT_AADUserAttributeSet] @{
                             AttributeSetName = 'Engineering'
                             AttributeValues  = @(
@@ -577,6 +661,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         UsageLocation     = 'US'
                         PasswordPolicies  = 'NONE'
                         Ensure            = 'Present'
+                        CompanyName       = 'Contoso'
+                        EmployeeId        = 'E1234567'
+                        OnPremisesExtensionAttributes = @{
+                            ExtensionAttribute1 = 'Head Office'
+                            ExtensionAttribute2 = 'Cost Center 4100'
+                        }
                         customSecurityAttributes = @{
                             Engineering = @{
                                 '@odata.type'           = '#Microsoft.DirectoryServices.CustomSecurityAttributeValue'

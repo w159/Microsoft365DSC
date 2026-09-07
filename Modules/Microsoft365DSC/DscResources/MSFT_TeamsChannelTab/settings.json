@@ -14,17 +14,42 @@
     {
       "name": "ChannelName",
       "reason": "OwnedByOtherResource",
-      "note": "ChannelName is the display name of the parent channel. Used to locate the channel that holds the tab"
+      "note": "Display name of the parent channel that holds the tab"
+    },
+    {
+      "name": "Configuration",
+      "reason": "Accepted",
+      "note": "Flattened into ContentUrl, EntityId, RemoveUrl and WebSiteUrl and rebuilt on set"
+    },
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "The service assigns the tab id. The resource locates the tab by display name."
+    },
+    {
+      "name": "MessageId",
+      "reason": "ReadOnly",
+      "note": "The service assigns messageId and no request accepts it"
     },
     {
       "name": "TeamId",
       "reason": "OwnedByOtherResource",
-      "note": "TeamId is the team id of the parent team. Used to address the tab under that team"
+      "note": "Team id of the parent team that holds the tab"
     },
     {
       "name": "TeamName",
       "reason": "OwnedByOtherResource",
-      "note": "TeamName is the display name of the parent team. Used to locate the team that holds the tab"
+      "note": "Display name of the parent team that holds the tab"
+    },
+    {
+      "name": "TeamsAppId",
+      "reason": "Deprecated",
+      "note": "Deprecated in favor of expanding teamsApp, which the resource binds through teamsApp@odata.bind"
+    },
+    {
+      "name": "WebUrl",
+      "reason": "ReadOnly",
+      "note": "Teams generates this deep link as read only. WebSiteUrl is a different value."
     }
   ],
   "description": "",

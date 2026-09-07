@@ -44,7 +44,7 @@
     {
       "name": "SecondaryIdentityCertificateForClientAuthenticationDisplayName",
       "reason": "Deferred",
-      "note": "A display name lookup for the secondary client authentication certificate profile owned by IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 or IntuneDeviceConfigurationPkcsCertificatePolicyWindows10."
+      "note": "Display name lookup for a certificate profile owned by the SCEP and PKCS resources."
     },
     {
       "name": "SecondaryIdentityCertificateForClientAuthenticationId",

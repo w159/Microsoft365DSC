@@ -14,7 +14,17 @@
     {
       "name": "CrossTenantAccessPolicyConfigurationPartnerTenantId",
       "reason": "Deferred",
-      "note": "Defined as tenantId on the entity. Renamed to avoid clashing with the authentication TenantId parameter."
+      "note": "Renamed from tenantId to avoid clashing with the authentication TenantId parameter"
+    },
+    {
+      "name": "GroupSyncInbound",
+      "reason": "OwnedByOtherResource",
+      "note": "AADCrossTenantAccessPolicyConfigurationPartner writes it through its IdentitySynchronization property."
+    },
+    {
+      "name": "UserSyncInbound",
+      "reason": "Accepted",
+      "note": "Flattened onto IsSyncAllowed, which the resource reads and writes"
     }
   ],
   "description": "Create a cross-tenant user synchronization policy for a partner-specific configuration.",

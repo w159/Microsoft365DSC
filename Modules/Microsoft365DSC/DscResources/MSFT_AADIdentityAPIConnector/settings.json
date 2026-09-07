@@ -19,7 +19,8 @@
     {
       "name": "Certificates",
       "reason": "Accepted",
-      "note": "The flattened authenticationConfiguration.certificateList property"
+      "note": "The flattened authenticationConfiguration.certificateList property",
+      "vendorPath": "authenticationConfiguration.pkcs12Value"
     }
   ],
   "description": "This resource configures an Azure AD Identity API Connector.",

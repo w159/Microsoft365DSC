@@ -50,8 +50,16 @@ class AADUser : M365DSCResourceBase
     [System.String] $Country
 
     [DscProperty()]
+    [System.ComponentModel.Description('The company name which is associated with the user')]
+    [System.String] $CompanyName
+
+    [DscProperty()]
     [System.ComponentModel.Description('The Department name of the user')]
     [System.String] $Department
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The employee identifier assigned to the user by the organization')]
+    [System.String] $EmployeeId
 
     [DscProperty()]
     [System.ComponentModel.Description('The Fax Number of the user')]
@@ -111,6 +119,10 @@ class AADUser : M365DSCResourceBase
     [System.String] $UserType
 
     [DscProperty()]
+    [System.ComponentModel.Description('The on-premises extension attributes of the user. Can only be set for cloud-only users.')]
+    [MSFT_AADUserOnPremisesExtensionAttributes] $OnPremisesExtensionAttributes
+
+    [DscProperty()]
     [System.ComponentModel.Description('The list of custom security attributes attached to this user')]
     [MSFT_AADUserAttributeSet[]] $CustomSecurityAttributes
 
@@ -160,8 +172,8 @@ class AADUser : M365DSCResourceBase
 
     AADUser() : base()
     {
-        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'City', 'Country', 'Department', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
-        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; City = 'City'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
+        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'City', 'CompanyName', 'Country', 'Department', 'EmployeeId', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'OnPremisesExtensionAttributes', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
+        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; City = 'City'; CompanyName = 'CompanyName'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; EmployeeId = 'EmployeeId'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; OnPremisesExtensionAttributes = 'OnPremisesExtensionAttributes'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
     }
 
     [AADUser] Get()
@@ -296,41 +308,46 @@ class AADUser : M365DSCResourceBase
                 $complexCustomSecurityAttributes = @()
             }
 
+            $complexOnPremisesExtensionAttributes = $this.GetOnPremisesExtensionAttributes($user)
+
             $results = @{
-                UserPrincipalName        = $this.UserPrincipalName
-                AccountEnabled           = $user.AccountEnabled
-                DisplayName              = $user.DisplayName
-                GivenName                = $user.GivenName
-                Surname                  = $user.Surname
-                UsageLocation            = $user.UsageLocation
-                LicenseAssignment        = $currentLicenseAssignment
-                MemberOf                 = $currentMemberOf
-                Password                 = $this.Password
-                City                     = $user.City
-                Country                  = $user.Country
-                Department               = $user.Department
-                FaxNumber                = $user.FaxNumber
-                MobilePhone              = $user.MobilePhone
-                OfficeLocation           = $user.OfficeLocation
-                Mail                     = $user.Mail
-                OtherMails               = $user.OtherMails
-                PasswordPolicies         = $user.PasswordPolicies
-                PhoneNumber              = $user.BusinessPhones | Select-Object -First 1
-                PostalCode               = $user.PostalCode
-                PreferredLanguage        = $user.PreferredLanguage
-                State                    = $user.State
-                StreetAddress            = $user.StreetAddress
-                JobTitle                 = $user.JobTitle
-                UserType                 = $user.UserType
-                Roles                    = $rolesValue
-                CustomSecurityAttributes = $complexCustomSecurityAttributes
-                Credential               = $this.Credential
-                ApplicationId            = $this.ApplicationId
-                TenantId                 = $this.TenantId
-                ApplicationSecret        = $this.ApplicationSecret
-                CertificateThumbprint    = $this.CertificateThumbprint
-                Ensure                   = 'Present'
-                AccessTokens             = $this.AccessTokens
+                UserPrincipalName             = $this.UserPrincipalName
+                AccountEnabled                = $user.AccountEnabled
+                DisplayName                   = $user.DisplayName
+                GivenName                     = $user.GivenName
+                Surname                       = $user.Surname
+                UsageLocation                 = $user.UsageLocation
+                LicenseAssignment             = $currentLicenseAssignment
+                MemberOf                      = $currentMemberOf
+                Password                      = $this.Password
+                City                          = $user.City
+                CompanyName                   = $user.CompanyName
+                Country                       = $user.Country
+                Department                    = $user.Department
+                EmployeeId                    = $user.EmployeeId
+                FaxNumber                     = $user.FaxNumber
+                MobilePhone                   = $user.MobilePhone
+                OfficeLocation                = $user.OfficeLocation
+                Mail                          = $user.Mail
+                OtherMails                    = $user.OtherMails
+                OnPremisesExtensionAttributes = $complexOnPremisesExtensionAttributes
+                PasswordPolicies              = $user.PasswordPolicies
+                PhoneNumber                   = $user.BusinessPhones | Select-Object -First 1
+                PostalCode                    = $user.PostalCode
+                PreferredLanguage             = $user.PreferredLanguage
+                State                         = $user.State
+                StreetAddress                 = $user.StreetAddress
+                JobTitle                      = $user.JobTitle
+                UserType                      = $user.UserType
+                Roles                         = $rolesValue
+                CustomSecurityAttributes      = $complexCustomSecurityAttributes
+                Credential                    = $this.Credential
+                ApplicationId                 = $this.ApplicationId
+                TenantId                      = $this.TenantId
+                ApplicationSecret             = $this.ApplicationSecret
+                CertificateThumbprint         = $this.CertificateThumbprint
+                Ensure                        = 'Present'
+                AccessTokens                  = $this.AccessTokens
             }
             return $this.AsResult($results)
         }
@@ -908,12 +925,27 @@ class AADUser : M365DSCResourceBase
                             $Results.Remove('CustomSecurityAttributes') | Out-Null
                         }
 
+                        if ($null -ne $Results.OnPremisesExtensionAttributes)
+                        {
+                            $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                                -ComplexObject $Results.OnPremisesExtensionAttributes `
+                                -CIMInstanceName 'AADUserOnPremisesExtensionAttributes'
+                            if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                            {
+                                $Results.OnPremisesExtensionAttributes = $complexTypeStringResult
+                            }
+                            else
+                            {
+                                $Results.Remove('OnPremisesExtensionAttributes') | Out-Null
+                            }
+                        }
+
                         $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                             -ConnectionMode $ConnectionMode `
                             -ModulePath $this.GetModulePath() `
                             -Results $Results `
                             -Credential $this.Credential `
-                            -NoEscape @('Password', 'CustomSecurityAttributes') `
+                            -NoEscape @('Password', 'CustomSecurityAttributes', 'OnPremisesExtensionAttributes') `
                             -RawResults $rawResults
 
                         [void]$dscContent.Append($currentDSCBlock)
@@ -1062,6 +1094,33 @@ class AADUser : M365DSCResourceBase
         return [Array]$newCustomSecurityAttributes
     }
 
+    hidden [System.Collections.Hashtable] GetOnPremisesExtensionAttributes([System.Object] $User)
+    {
+        $currentExtensionAttributes = $User.OnPremisesExtensionAttributes
+        if ($null -eq $currentExtensionAttributes)
+        {
+            return $null
+        }
+
+        $newExtensionAttributes = @{}
+        for ($index = 1; $index -le 15; $index++)
+        {
+            $attributeName = "ExtensionAttribute$index"
+            $attributeValue = $currentExtensionAttributes.$attributeName
+            if (-not [System.String]::IsNullOrEmpty($attributeValue))
+            {
+                $newExtensionAttributes.Add($attributeName, $attributeValue)
+            }
+        }
+
+        if ($newExtensionAttributes.Count -eq 0)
+        {
+            return $null
+        }
+
+        return $newExtensionAttributes
+    }
+
     hidden [AADUser] AsResult([System.Object] $Values)
     {
         if ($Values -is [AADUser])
@@ -1116,4 +1175,67 @@ class MSFT_AADUserAttributeSet
     [DscProperty()]
     [System.ComponentModel.Description('List of attribute values.')]
     [MSFT_AADUserAttributeValue[]] $AttributeValues
+}
+
+class MSFT_AADUserOnPremisesExtensionAttributes
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('First customizable extension attribute.')]
+    [System.String] $ExtensionAttribute1
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Second customizable extension attribute.')]
+    [System.String] $ExtensionAttribute2
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Third customizable extension attribute.')]
+    [System.String] $ExtensionAttribute3
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Fourth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute4
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Fifth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute5
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Sixth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute6
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Seventh customizable extension attribute.')]
+    [System.String] $ExtensionAttribute7
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Eighth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute8
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Ninth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute9
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Tenth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute10
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Eleventh customizable extension attribute.')]
+    [System.String] $ExtensionAttribute11
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Twelfth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute12
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Thirteenth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute13
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Fourteenth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute14
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Fifteenth customizable extension attribute.')]
+    [System.String] $ExtensionAttribute15
 }

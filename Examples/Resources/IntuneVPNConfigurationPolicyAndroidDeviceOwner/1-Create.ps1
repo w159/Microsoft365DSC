@@ -47,6 +47,7 @@ Configuration Example
                     name  = 'ContosoVpnOptions'
                 }
             );
+            lockdownExclusionList = @("com.contoso.vpnbypass");
             microsoftTunnelSiteId = "12345678-1234-abcd-1234-12345678ABCD";
             proxyExclusionList    = @();
             proxyServer           = @(
