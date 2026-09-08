@@ -26,11 +26,12 @@ Configuration Example
     {
         AADOnPremisesPublishingProfilesSettings "AADOnPremisesPublishingProfilesSettings-Example"
         {
-            IsEnabled             = $False;
-            IsSingleInstance      = "Yes";
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            IsDefaultAccessEnabled = $True;
+            IsEnabled              = $False;
+            IsSingleInstance       = "Yes";
+            ApplicationId          = $ApplicationId;
+            TenantId               = $TenantId;
+            CertificateThumbprint  = $CertificateThumbprint;
         }
     }
 }

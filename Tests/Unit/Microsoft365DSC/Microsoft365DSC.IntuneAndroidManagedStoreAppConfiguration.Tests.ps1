@@ -74,6 +74,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     appSupportsOemConfig                        = $False
                     connectedAppsEnabled                        = $False
+                    credentialProviderRoleState                 = "allowed"
                     packageId                                   = "app:org.mozilla.firefox"
                     payloadJson                                 = ""
                     profileApplicability                        = "androidDeviceOwner"
@@ -115,6 +116,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     appSupportsOemConfig                        = $False
                     connectedAppsEnabled                        = $False
+                    credentialProviderRoleState                 = "allowed"
                     packageId                                   = "app:org.mozilla.firefox"
                     payloadJson                                 = ""
                     profileApplicability                        = "androidDeviceOwner"
@@ -124,23 +126,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceAppManagementMobileAppConfiguration -MockWith {
                     return @{
-                        DisplayName                      = 'Test Android Managed Store App Configuration Policy'
-                        Description                      = 'Different Value'
-                        Id                               = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
-                        targetedMobileApps               = @("{FakeStringValue}")
-                        permissionActions = @(
+                        DisplayName                 = 'Test Android Managed Store App Configuration Policy'
+                        Description                 = 'Different Value'
+                        Id                          = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
+                        targetedMobileApps          = @("{FakeStringValue}")
+                        permissionActions           = @(
                            @{
                                 permission      = "android.permission.READ_SMS"
                                 action          = "prompt"
 
                             }
                         )
-                        appSupportsOemConfig      = $False
-                        connectedAppsEnabled      = $False
-                        packageId                 = "app:org.mozilla.firefox"
-                        payloadJson               = ""
-                        profileApplicability      = "androidDeviceOwner"
-                        '@odata.type'             = '#microsoft.graph.androidManagedStoreAppConfiguration'
+                        appSupportsOemConfig        = $False
+                        connectedAppsEnabled        = $False
+                        credentialProviderRoleState = "notConfigured"
+                        packageId                   = "app:org.mozilla.firefox"
+                        payloadJson                 = ""
+                        profileApplicability        = "androidDeviceOwner"
+                        '@odata.type'               = '#microsoft.graph.androidManagedStoreAppConfiguration'
                     }
                 }
             }
@@ -175,6 +178,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     appSupportsOemConfig                        = $False
                     connectedAppsEnabled                        = $False
+                    credentialProviderRoleState                 = "allowed"
                     packageId                                   = "app:org.mozilla.firefox"
                     payloadJson                                 = ""
                     profileApplicability                        = "androidDeviceOwner"
@@ -184,23 +188,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceAppManagementMobileAppConfiguration -MockWith {
                     return @{
-                        DisplayName                             = 'Test Android Managed Store App Configuration Policy'
-                        Description                             = 'Test Android Managed Store App Configuration Policy Description'
-                        RoleScopeTagIds                         = @('0')
-                        Id                                      = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
-                        targetedMobileApps                      = @("{FakeStringValue}")
-                        permissionActions = @(
+                        DisplayName                 = 'Test Android Managed Store App Configuration Policy'
+                        Description                 = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds             = @('0')
+                        Id                          = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
+                        targetedMobileApps          = @("{FakeStringValue}")
+                        permissionActions           = @(
                            @{
                                 permission      = "android.permission.READ_SMS"
                                 action          = "prompt"
                             }
                         )
-                        appSupportsOemConfig      = $False
-                        connectedAppsEnabled      = $False
-                        packageId                 = "app:org.mozilla.firefox"
-                        payloadJson               = ""
-                        profileApplicability      = "androidDeviceOwner"
-                        '@odata.type'             = '#microsoft.graph.androidManagedStoreAppConfiguration'
+                        appSupportsOemConfig        = $False
+                        connectedAppsEnabled        = $False
+                        credentialProviderRoleState = "allowed"
+                        packageId                   = "app:org.mozilla.firefox"
+                        payloadJson                 = ""
+                        profileApplicability        = "androidDeviceOwner"
+                        '@odata.type'               = '#microsoft.graph.androidManagedStoreAppConfiguration'
                     }
                 }
             }
@@ -225,6 +230,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     appSupportsOemConfig                        = $False
                     connectedAppsEnabled                        = $False
+                    credentialProviderRoleState                 = "allowed"
                     packageId                                   = "app:org.mozilla.firefox"
                     payloadJson                                 = ""
                     profileApplicability                        = "androidDeviceOwner"
@@ -234,23 +240,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceAppManagementMobileAppConfiguration -MockWith {
                     return @{
-                        DisplayName          = 'Test Android Managed Store App Configuration Policy'
-                        Description          = 'Test Android Managed Store App Configuration Policy Description'
-                        RoleScopeTagIds      = @('0')
-                        Id                   = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
-                        permissionActions = @(
+                        DisplayName                 = 'Test Android Managed Store App Configuration Policy'
+                        Description                 = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds             = @('0')
+                        Id                          = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
+                        permissionActions           = @(
                            @{
                                 permission      = "android.permission.READ_SMS"
                                 action          = "prompt"
 
                             }
                         )
-                        appSupportsOemConfig      = $False
-                        connectedAppsEnabled      = $False
-                        packageId                 = "app:org.mozilla.firefox"
-                        payloadJson               = ""
-                        profileApplicability      = "androidDeviceOwner"
-                        '@odata.type'             = '#microsoft.graph.androidManagedStoreAppConfiguration'
+                        appSupportsOemConfig        = $False
+                        connectedAppsEnabled        = $False
+                        credentialProviderRoleState = "allowed"
+                        packageId                   = "app:org.mozilla.firefox"
+                        payloadJson                 = ""
+                        profileApplicability        = "androidDeviceOwner"
+                        '@odata.type'               = '#microsoft.graph.androidManagedStoreAppConfiguration'
                     }
                 }
             }
@@ -279,24 +286,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceAppManagementMobileAppConfiguration -MockWith {
                     return @{
-                        DisplayName                   = 'Test Android Managed Store App Configuration Policy'
-                        Description                   = 'Test Android Managed Store App Configuration Policy Description'
-                        RoleScopeTagIds               = @('0')
-                        Id                            = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
-                        targetedMobileApps            = @("{FakeStringValue}")
-                        permissionActions = @(
+                        DisplayName                 = 'Test Android Managed Store App Configuration Policy'
+                        Description                 = 'Test Android Managed Store App Configuration Policy Description'
+                        RoleScopeTagIds             = @('0')
+                        Id                          = 'e30954ac-a65e-4dcb-ab79-91d45f3c52b4'
+                        targetedMobileApps          = @("{FakeStringValue}")
+                        permissionActions           = @(
                            @{
                                 permission        = "android.permission.READ_SMS"
                                 action            = "prompt"
 
                             }
                         )
-                        appSupportsOemConfig      = $False
-                        connectedAppsEnabled      = $False
-                        packageId                 = "app:org.mozilla.firefox"
-                        payloadJson               = ""
-                        profileApplicability      = "androidDeviceOwner"
-                        '@odata.type'             = '#microsoft.graph.androidManagedStoreAppConfiguration'
+                        appSupportsOemConfig        = $False
+                        connectedAppsEnabled        = $False
+                        credentialProviderRoleState = "allowed"
+                        packageId                   = "app:org.mozilla.firefox"
+                        payloadJson                 = ""
+                        profileApplicability        = "androidDeviceOwner"
+                        '@odata.type'               = '#microsoft.graph.androidManagedStoreAppConfiguration'
                     }
                 }
             }

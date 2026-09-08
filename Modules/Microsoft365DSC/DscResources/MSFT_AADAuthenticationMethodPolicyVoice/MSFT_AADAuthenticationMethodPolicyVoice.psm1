@@ -6,6 +6,10 @@ using module ..\_Base\M365DSCResourceBase.psm1
 class AADAuthenticationMethodPolicyVoice : M365DSCResourceBase
 {
     [DscProperty()]
+    [System.ComponentModel.Description('The phone number used as the caller ID when voice call authentication is initiated.')]
+    [System.String] $CallerIdNumber
+
+    [DscProperty()]
     [System.ComponentModel.Description('true if users can register office phones, otherwise, false.')]
     [System.Nullable[System.Boolean]] $IsOfficePhoneAllowed
 
@@ -183,6 +187,7 @@ class AADAuthenticationMethodPolicyVoice : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
+                CallerIdNumber        = $getValue.callerIdNumber
                 IsOfficePhoneAllowed  = $getValue.isOfficePhoneAllowed
                 ExcludeTargets        = $complexExcludeTargets
                 IncludeTargets        = $complexIncludeTargets

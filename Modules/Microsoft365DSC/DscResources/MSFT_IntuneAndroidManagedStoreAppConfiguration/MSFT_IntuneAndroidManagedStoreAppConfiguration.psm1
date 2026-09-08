@@ -51,6 +51,11 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $connectedAppsEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether the app is allowed to act as a credential provider. Possible values are: notConfigured, allowed.')]
+    [ValidateSet('notConfigured', 'allowed')]
+    [System.String] $credentialProviderRoleState
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the policy exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -181,27 +186,28 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
-                Id                    = $getValue.Id
-                Description           = $getValue.Description
-                DisplayName           = $getValue.DisplayName
-                RoleScopeTagIds       = ([Array]$getValue.RoleScopeTagIds)
-                targetedMobileApps    = $targetedMobileAppsValue
-                packageId             = $getValue.packageId
-                payloadJson           = $getValue.payloadJson
-                appSupportsOemConfig  = $getValue.appSupportsOemConfig
-                profileApplicability  = $getValue.profileApplicability
-                connectedAppsEnabled  = $getValue.connectedAppsEnabled
-                permissionActions     = $complexPermissionActions
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
-                AccessTokens          = $this.AccessTokens
+                Id                          = $getValue.Id
+                Description                 = $getValue.Description
+                DisplayName                 = $getValue.DisplayName
+                RoleScopeTagIds             = ([Array]$getValue.RoleScopeTagIds)
+                targetedMobileApps          = $targetedMobileAppsValue
+                packageId                   = $getValue.packageId
+                payloadJson                 = $getValue.payloadJson
+                appSupportsOemConfig        = $getValue.appSupportsOemConfig
+                profileApplicability        = $getValue.profileApplicability
+                connectedAppsEnabled        = $getValue.connectedAppsEnabled
+                credentialProviderRoleState = $getValue.credentialProviderRoleState
+                permissionActions           = $complexPermissionActions
+                Ensure                      = 'Present'
+                Credential                  = $this.Credential
+                ApplicationId               = $this.ApplicationId
+                TenantId                    = $this.TenantId
+                ApplicationSecret           = $this.ApplicationSecret
+                CertificateThumbprint       = $this.CertificateThumbprint
+                CertificatePath             = $this.CertificatePath
+                CertificatePassword         = $this.CertificatePassword
+                ManagedIdentity             = $this.ManagedIdentity.IsPresent
+                AccessTokens                = $this.AccessTokens
             }
 
             $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppConfigurationAssignment -ManagedDeviceMobileAppConfigurationId $Results.Id

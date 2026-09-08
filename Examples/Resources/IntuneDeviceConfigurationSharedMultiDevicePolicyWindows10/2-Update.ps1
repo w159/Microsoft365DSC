@@ -26,14 +26,14 @@ Configuration Example
     {
         IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 'IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10-Example'
         {
-            AccountManagerPolicy         = MSFT_MicrosoftGraphsharedPCAccountManagerPolicy{
+            AccountManagerPolicy                       = MSFT_MicrosoftGraphsharedPCAccountManagerPolicy{
                 CacheAccountsAboveDiskFreePercentage  = 60 # Updated Property
                 AccountDeletionPolicy                 = 'diskSpaceThreshold'
                 RemoveAccountsBelowDiskFreePercentage = 20
             };
-            AllowedAccounts              = @("guest","domain");
-            AllowLocalStorage            = $True;
-            Assignments                  = @(
+            AllowedAccounts                            = @("guest","domain");
+            AllowLocalStorage                          = $True;
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
@@ -43,24 +43,35 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            DisableAccountManager        = $False;
-            DisableEduPolicies           = $False;
-            DisablePowerPolicies         = $False;
-            DisableSignInOnResume        = $False;
-            DisplayName                  = "Shared Multi device";
-            Enabled                      = $True;
-            Ensure                       = "Present";
-            FastFirstSignIn              = "notConfigured";
-            IdleTimeBeforeSleepInSeconds = 60;
-            LocalStorage                 = "enabled";
-            MaintenanceStartTime         = "00:03:00";
-            SetAccountManager            = "enabled";
-            SetEduPolicies               = "enabled";
-            SetPowerPolicies             = "enabled";
-            SignInOnResume               = "enabled";
-            ApplicationId                = $ApplicationId;
-            TenantId                     = $TenantId;
-            CertificateThumbprint        = $CertificateThumbprint;
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = 'Shared PC eligible editions'
+                OsEditionTypes = @('windows10Enterprise', 'windows10Education')
+                RuleType       = 'include'
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = 'Windows 10 22H2 or later'
+                MinOSVersion = '10.0.19045.0'
+                MaxOSVersion = '10.0.26100.9999'
+                RuleType     = 'include'
+            };
+            DisableAccountManager                      = $False;
+            DisableEduPolicies                         = $False;
+            DisablePowerPolicies                       = $False;
+            DisableSignInOnResume                      = $False;
+            DisplayName                                = "Shared Multi device";
+            Enabled                                    = $True;
+            Ensure                                     = "Present";
+            FastFirstSignIn                            = "notConfigured";
+            IdleTimeBeforeSleepInSeconds               = 60;
+            LocalStorage                               = "enabled";
+            MaintenanceStartTime                       = "00:03:00";
+            SetAccountManager                          = "enabled";
+            SetEduPolicies                             = "enabled";
+            SetPowerPolicies                           = "enabled";
+            SignInOnResume                             = "enabled";
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

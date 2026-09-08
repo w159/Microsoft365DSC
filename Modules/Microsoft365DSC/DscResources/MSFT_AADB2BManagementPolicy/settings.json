@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "The service owns this value on the server side."
+    },
+    {
       "name": "DisplayName",
       "reason": "Accepted",
       "note": "The resource always names the single policy B2BManagementPolicy"
@@ -20,6 +25,11 @@
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "IsOrganizationDefault",
+      "reason": "NotConfigurable",
+      "note": "The service owns this value on the server side."
     }
   ],
   "description": "This resource configures an Azure AD B2B Management Policy.",

@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Languages",
+      "reason": "ReadOnly",
+      "note": "Microsoft supplies the built-in language set and exposes a list operation only."
+    },
+    {
       "name": "UserFlowIdentityProviders",
       "reason": "Accepted",
       "note": "IdentityProviders is this navigation with the userFlow prefix dropped"

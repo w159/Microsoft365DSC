@@ -29,6 +29,7 @@ Configuration Example
             AccountId               = "8d2ac1fd-0ac9-4047-af2f-f1e6323c9a34e";
             ConfigureWifi           = $True;
             Description             = "This is my enrollment profile";
+            DeviceNameTemplate      = "Android-{{SERIAL}}";
             DisplayName             = "Corporate Android Enrollment";
             EnrollmentMode          = "corporateOwnedDedicatedDevice";
             EnrollmentTokenType     = "default";

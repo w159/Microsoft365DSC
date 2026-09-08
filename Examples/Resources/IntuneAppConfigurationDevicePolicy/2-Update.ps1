@@ -25,26 +25,27 @@ Configuration Example
     {
         IntuneAppConfigurationDevicePolicy "IntuneAppConfigurationDevicePolicy-Example"
         {
-            Assignments           = @();
-            Description           = "";
-            DisplayName           = "Outlook for Android - Managed Configuration";
-            Ensure                = "Present";
-            Id                    = "0000000-0000-0000-0000-000000000000";
-            ConnectedAppsEnabled  = $true;
-            PackageId             = "app:com.microsoft.office.outlook"
-            PayloadJson           = "Base64 encoded settings"
-            PermissionActions     = @(
+            Assignments                 = @();
+            Description                 = "";
+            DisplayName                 = "Outlook for Android - Managed Configuration";
+            Ensure                      = "Present";
+            Id                          = "0000000-0000-0000-0000-000000000000";
+            ConnectedAppsEnabled        = $true;
+            CredentialProviderRoleState = "allowed";
+            PackageId                   = "app:com.microsoft.office.outlook"
+            PayloadJson                 = "Base64 encoded settings"
+            PermissionActions           = @(
                 MSFT_MicrosoftGraphAndroidPermissionAction{
                     Action     = "prompt"
                     Permission = "android.permission.READ_CALENDAR"
                 }
             ) # Updated property
-            ProfileApplicability  = "default"
-            RoleScopeTagIds       = @("0");
-            TargetedMobileApps    = @("<mobile-app-id>");
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ProfileApplicability        = "default"
+            RoleScopeTagIds             = @("0");
+            TargetedMobileApps          = @("<mobile-app-id>");
+            ApplicationId               = $ApplicationId;
+            TenantId                    = $TenantId;
+            CertificateThumbprint       = $CertificateThumbprint;
         }
     }
 }

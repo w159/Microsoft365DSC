@@ -120,6 +120,14 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
     [System.ComponentModel.Description('Admin provided description of the Device Configuration.')]
     [System.String] $Description
 
+    [DscProperty()]
+    [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The OS version applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsVersion] $DeviceManagementApplicabilityRuleOsVersion
+
     [DscProperty(Key)]
     [System.ComponentModel.Description('Admin provided name of the device configuration.')]
     [System.String] $DisplayName
@@ -432,6 +440,25 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                     $complexServers += $myservers
                 }
             }
+
+            $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSEdition.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsEdition.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsEdition = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleOsVersion = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MaxOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MaxOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MinOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MinOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSVersion.Name)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSVersion.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsVersion.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsVersion = $null
+            }
             #endregion
 
             #region resource generator code
@@ -484,6 +511,8 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 CustomXml                                  = $getValue.customXml
                 Servers                                    = $complexServers
                 Description                                = $getValue.Description
+                DeviceManagementApplicabilityRuleOsEdition = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion = $complexDeviceManagementApplicabilityRuleOsVersion
                 DisplayName                                = $getValue.DisplayName
                 Id                                         = $getValue.Id
                 RoleScopeTagIds                            = $getValue.RoleScopeTagIds
@@ -808,6 +837,34 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                         $Results.Remove('Servers') | Out-Null
                     }
                 }
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleOsEdition)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsEdition'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsEdition = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsEdition') | Out-Null
+                    }
+                }
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleOsVersion)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsVersion `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsVersion'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsVersion = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsVersion') | Out-Null
+                    }
+                }
                 if ($Results.Assignments)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Assignments -CIMInstanceName DeviceManagementConfigurationPolicyAssignments
@@ -826,7 +883,8 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                     -Results $Results `
                     -Credential $this.Credential `
                     -NoEscape @('AssociatedApps', 'CryptographySuite', 'DnsRules', 'ProxyServer', 'Routes',
-                    'SingleSignOnEku', 'TrafficRules', 'Servers', 'Assignments') `
+                    'SingleSignOnEku', 'TrafficRules', 'Servers', 'DeviceManagementApplicabilityRuleOsEdition',
+                    'DeviceManagementApplicabilityRuleOsVersion', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -1055,6 +1113,42 @@ class MSFT_MicrosoftGraphvpnServer
     [DscProperty()]
     [System.ComponentModel.Description('Default server.')]
     [System.Nullable[System.Boolean]] $isDefaultServer
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsEdition
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule OS edition type')]
+    [System.String[]] $OsEditionTypes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsVersion
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Min OS version for Applicability Rule')]
+    [System.String] $MinOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Max OS version for Applicability Rule')]
+    [System.String] $MaxOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementConfigurationPolicyAssignments

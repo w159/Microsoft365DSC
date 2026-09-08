@@ -27,6 +27,7 @@ Configuration Example
         {
             DisplayName           = 'Contoso'
             Description           = 'Contoso Category'
+            RoleScopeTagIds       = @('0')
             Ensure                = 'Present'
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;

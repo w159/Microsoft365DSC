@@ -47,6 +47,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                    = 'Test Device Filter'
                     AssignmentFilterManagementType = 'devices'
                     Platform                       = 'windows10AndLater'
+                    RoleScopeTags                  = @('0')
                     Rule                           = "(device.manufacturer -ne `"bibi`")"
                 }
             }
@@ -67,6 +68,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure      = 'Present'
                     AssignmentFilterManagementType = 'devices'
                     Platform    = 'windows10AndLater'
+                    RoleScopeTags = @('0')
                     Rule        = "(device.manufacturer -ne `"bibi`")"
                     Credential  = $Credential
                 }
@@ -98,6 +100,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure      = 'Present'
                     AssignmentFilterManagementType = 'devices'
                     Platform    = 'windows10AndLater'
+                    RoleScopeTags = @('0', '1')
                     Rule        = "(device.manufacturer -ne `"test`")" # Updated property
                     Credential  = $Credential
                 }
@@ -125,6 +128,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure      = 'Present'
                     AssignmentFilterManagementType = 'devices'
                     Platform    = 'windows10AndLater'
+                    RoleScopeTags = @('0')
                     Rule        = "(device.manufacturer -ne `"bibi`")"
                     Credential  = $Credential
                 }
@@ -143,6 +147,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Ensure      = 'Absent'
                     AssignmentFilterManagementType = 'devices'
                     Platform    = 'windows10AndLater'
+                    RoleScopeTags = @('0')
                     Rule        = "(device.manufacturer -ne `"bibi`")"
                     Credential  = $Credential
                 }

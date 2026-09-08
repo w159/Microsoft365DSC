@@ -36,6 +36,17 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
+            DeviceManagementApplicabilityRuleOsEdition   = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Education editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Education")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion   = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
             DisplayName                                  = "identity protection";
             EnhancedAntiSpoofingForFacialFeaturesEnabled = $True;
             Ensure                                       = "Present";

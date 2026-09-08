@@ -54,6 +54,10 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
     [System.Nullable[System.UInt32]] $PasswordMinimumCharacterSetCount
 
     [DscProperty()]
+    [System.ComponentModel.Description('DeviceCompliancePolicyScript of the MacOS device compliance policy.')]
+    [MSFT_MicrosoftGraphDeviceCompliancePolicyScript] $DeviceCompliancePolicyScript
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies the non-compliance actions.')]
     [MSFT_ScheduledActionConfigurations[]] $ScheduledActionsForRule
 
@@ -221,6 +225,19 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
                 $devicePolicy = $this.ExportedInstance
             }
 
+            $complexDeviceCompliancePolicyScript = [ordered]@{}
+            if ($null -ne $devicePolicy.deviceCompliancePolicyScript)
+            {
+                Write-Verbose -Message "Resolving Device Compliance Policy Script with Id {$($devicePolicy.deviceCompliancePolicyScript.deviceComplianceScriptId)}"
+                $policyScript = Invoke-M365DSCGraphRequest -Uri "/beta/deviceManagement/deviceComplianceScripts/$($devicePolicy.deviceCompliancePolicyScript.deviceComplianceScriptId)" -Method GET
+                $complexDeviceCompliancePolicyScript.Add('DisplayName', $policyScript.displayName)
+                $complexDeviceCompliancePolicyScript.Add('RulesContent', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($devicePolicy.deviceCompliancePolicyScript.rulesContent)))
+            }
+            if ($complexDeviceCompliancePolicyScript.Keys.Count -eq 0)
+            {
+                $complexDeviceCompliancePolicyScript = $null
+            }
+
             $complexScheduledActionsForRule = @()
             foreach ($actionConfiguration in $devicePolicy.ScheduledActionsForRule.ScheduledActionConfigurations)
             {
@@ -268,6 +285,7 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
                 OsMinimumBuildVersion                         = $devicePolicy.osMinimumBuildVersion
                 OsMaximumBuildVersion                         = $devicePolicy.osMaximumBuildVersion
                 ScheduledActionsForRule                       = $complexScheduledActionsForRule
+                DeviceCompliancePolicyScript                  = $complexDeviceCompliancePolicyScript
                 SystemIntegrityProtectionEnabled              = $devicePolicy.systemIntegrityProtectionEnabled
                 DeviceThreatProtectionEnabled                 = $devicePolicy.deviceThreatProtectionEnabled
                 DeviceThreatProtectionRequiredSecurityLevel   = $devicePolicy.deviceThreatProtectionRequiredSecurityLevel
@@ -335,6 +353,29 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
 
         $currentDeviceMacOsPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($null -ne $boundParameters.DeviceCompliancePolicyScript)
+        {
+            $scriptName = $boundParameters.DeviceCompliancePolicyScript.DisplayName
+            $scriptRulesContent = $boundParameters.DeviceCompliancePolicyScript.RulesContent
+
+            [array]$complianceScript = (Invoke-M365DSCGraphRequest -Uri "/beta/deviceManagement/deviceComplianceScripts?`$filter=DisplayName eq '$($scriptName -replace "'", "''")' and platform eq 'macOS'" -Method GET).value
+            if ($complianceScript.Count -eq 0)
+            {
+                throw "The referenced Intune Device Compliance Script with DisplayName {$scriptName} was not found"
+            }
+            if ($complianceScript.Count -gt 1)
+            {
+                throw "A compliance script with a duplicated displayName {'$scriptName'} was found - Ensure displayName is unique"
+            }
+
+            $policyScript = @{
+                deviceComplianceScriptId = $complianceScript[0].id
+                rulesContent             = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($scriptRulesContent))
+            }
+            $boundParameters.Remove('DeviceCompliancePolicyScript') | Out-Null
+            $boundParameters.Add('DeviceCompliancePolicyScript', $policyScript)
+        }
 
         $notificationTemplates = Get-MgBetaDeviceManagementNotificationMessageTemplate -All | Where-Object -FilterScript {
             $_.Id -ne '8ca486fc-bee8-4ef2-983b-21e8908d11b8' # Exclude the second, unused default template
@@ -542,12 +583,27 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
                     }
                 }
 
+                if ($Results.DeviceCompliancePolicyScript)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceCompliancePolicyScript `
+                        -CIMInstanceName 'MicrosoftGraphDeviceCompliancePolicyScript'
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.DeviceCompliancePolicyScript = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceCompliancePolicyScript') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'ScheduledActionsForRule') `
+                    -NoEscape @('Assignments', 'ScheduledActionsForRule', 'DeviceCompliancePolicyScript') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -626,6 +682,17 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
     [DscProperty()]
     [System.ComponentModel.Description('The collection Id that is the target of the assignment.(ConfigMgr)')]
     [System.String] $collectionId
+}
+
+class MSFT_MicrosoftGraphDeviceCompliancePolicyScript
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Device compliance script name.')]
+    [System.String] $DisplayName
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Rules content of the custom settings.')]
+    [System.String] $RulesContent
 }
 
 class MSFT_ScheduledActionConfigurations

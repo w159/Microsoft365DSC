@@ -50,6 +50,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     advancedThreatProtectionOnboardingBlob = "FakeStringValue"
                     advancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
 
@@ -82,6 +93,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     EnableExpeditedTelemetryReporting = $True
                     Id = "FakeStringValue"
@@ -115,6 +137,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     EnableExpeditedTelemetryReporting = $True
                     Id = "FakeStringValue"
@@ -146,6 +179,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     EnableExpeditedTelemetryReporting = $True
                     Id = "FakeStringValue"
@@ -170,6 +214,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $False # Updated property
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "exclude" # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "exclude" # Updated property
+                    }
                     DisplayName = "FakeStringValue"
                     EnableExpeditedTelemetryReporting = $True
                     Id = "FakeStringValue"

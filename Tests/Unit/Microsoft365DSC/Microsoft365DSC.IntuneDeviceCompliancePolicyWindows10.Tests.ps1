@@ -96,6 +96,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     RoleScopeTagIds                             = '0'
                 }
             }
@@ -158,6 +165,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -222,6 +236,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '22.04' # Drift
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -282,6 +303,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -333,6 +361,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Absent'
                     Credential                                  = $Credential
                 }

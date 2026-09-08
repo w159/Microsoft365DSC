@@ -28,6 +28,10 @@ class IntuneDeviceAndAppManagementAssignmentFilter : M365DSCResourceBase
     [System.String] $Platform
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates role scope tags assigned for the assignment filter.')]
+    [System.String[]] $RoleScopeTags
+
+    [DscProperty()]
     [System.ComponentModel.Description('Rule definition of the Assignment Filter.')]
     [System.String] $Rule
 
@@ -140,6 +144,7 @@ class IntuneDeviceAndAppManagementAssignmentFilter : M365DSCResourceBase
             $returnHashtable.Add('Description', $assignmentFilter.Description)
             $returnHashtable.Add('AssignmentFilterManagementType', $assignmentFilter.AssignmentFilterManagementType.ToString())
             $returnHashtable.Add('Platform', $assignmentFilter.Platform.ToString())
+            $returnHashtable.Add('RoleScopeTags', $assignmentFilter.RoleScopeTags)
             $returnHashtable.Add('Rule', $assignmentFilter.Rule)
             $returnHashtable.Add('Ensure', 'Present')
             $returnHashtable.Add('Credential', $this.Credential)
@@ -187,6 +192,7 @@ class IntuneDeviceAndAppManagementAssignmentFilter : M365DSCResourceBase
                 -DisplayName $this.DisplayName `
                 -Description $this.Description `
                 -Platform $this.Platform `
+                -RoleScopeTags $this.RoleScopeTags `
                 -Rule $this.Rule `
                 -AssignmentFilterManagementType $this.AssignmentFilterManagementType | Out-Null
 
@@ -204,6 +210,7 @@ class IntuneDeviceAndAppManagementAssignmentFilter : M365DSCResourceBase
                 -DeviceAndAppManagementAssignmentFilterId $currentPolicy.Id `
                 -DisplayName $this.DisplayName `
                 -Description $this.Description `
+                -RoleScopeTags $this.RoleScopeTags `
                 -Rule $this.Rule `
                 -AssignmentFilterManagementType $this.AssignmentFilterManagementType | Out-Null
 

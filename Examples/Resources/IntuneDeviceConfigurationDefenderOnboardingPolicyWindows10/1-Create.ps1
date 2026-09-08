@@ -40,6 +40,17 @@ Configuration Example
                 }
             );
             Description                                        = "Onboards corporate Windows endpoints to Microsoft Defender for Endpoint";
+            DeviceManagementApplicabilityRuleOsEdition         = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Professional editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Professional")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion         = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
             DisplayName                                        = "MDE onboarding Legacy";
             EnableExpeditedTelemetryReporting                  = $true;
             Ensure                                             = "Present";

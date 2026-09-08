@@ -71,6 +71,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     packageId = "FakeStringValue"
                     connectedAppsEnabled = $True
+                    credentialProviderRoleState = "allowed"
                     createdDateTime = "2023-01-01T00:00:00.0000000+01:00"
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
@@ -96,6 +97,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     ConnectedAppsEnabled = $True
+                    CredentialProviderRoleState = "allowed"
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
@@ -134,6 +136,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     ConnectedAppsEnabled = $True
+                    CredentialProviderRoleState = "allowed"
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
@@ -170,6 +173,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     ConnectedAppsEnabled = $True
+                    CredentialProviderRoleState = "allowed"
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
@@ -199,6 +203,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     Assignments = @()
                     ConnectedAppsEnabled = $True
+                    CredentialProviderRoleState = "notConfigured" # Updated property
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"

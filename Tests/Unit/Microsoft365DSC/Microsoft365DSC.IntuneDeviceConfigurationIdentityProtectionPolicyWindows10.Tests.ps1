@@ -66,6 +66,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     pinMaximumLength                             = 25
                     enhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     pinUppercaseCharactersUsage                  = 'blocked'
+                    DeviceManagementApplicabilityRuleOsEdition   = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion   = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     Description          = 'FakeStringValue'
                     DisplayName          = 'FakeStringValue'
                     Id                   = 'FakeStringValue'
@@ -91,6 +102,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition   = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion   = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisplayName                                  = 'FakeStringValue'
                     EnhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     Id                                           = 'FakeStringValue'
@@ -131,6 +153,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition   = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion   = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisplayName                                  = 'FakeStringValue'
                     EnhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     Id                                           = 'FakeStringValue'
@@ -169,6 +202,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition   = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion   = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisplayName                                  = 'FakeStringValue'
                     EnhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     Id                                           = 'FakeStringValue'
@@ -200,6 +244,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition   = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Professional') # Updated property
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion   = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.22631.9999' # Updated property
+                        RuleType     = 'include'
+                    }
                     DisplayName                                  = 'FakeStringValue'
                     EnhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     Id                                           = 'FakeStringValue'

@@ -10,6 +10,10 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
     [MSFT_MicrosoftGraphx509CertificateAuthenticationModeConfiguration] $AuthenticationModeConfiguration
 
     [DscProperty()]
+    [System.ComponentModel.Description('Defines configuration to allow a group of users to use certificates from specific issuing certificate authorities to successfully authenticate.')]
+    [MSFT_MicrosoftGraphx509CertificateAuthorityScope[]] $CertificateAuthorityScopes
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines fields in the X.509 certificate that map to attributes of the Azure AD user object in order to bind the certificate to the user. The priority of the object determines the order in which the binding is carried out. The first binding that matches will be used and the rest ignored.')]
     [MSFT_MicrosoftGraphx509CertificateUserBinding[]] $CertificateUserBindings
 
@@ -20,6 +24,10 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Displayname of the groups of users that are included from a policy.')]
     [MSFT_AADAuthenticationMethodPolicyX509IncludeTarget[]] $IncludeTargets
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether issuer(CA) hints are sent back to the client side to filter the certificates shown in certificate picker.')]
+    [MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration] $IssuerHintsConfiguration
 
     [DscProperty()]
     [System.ComponentModel.Description('The state of the policy. Possible values are: enabled, disabled.')]
@@ -150,6 +158,48 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                 $complexAuthenticationModeConfiguration = $null
             }
 
+            $complexCertificateAuthorityScopes = @()
+            foreach ($currentCertificateAuthorityScopes in $getValue.certificateAuthorityScopes)
+            {
+                $myCertificateAuthorityScopes = [ordered]@{}
+                $complexScopeIncludeTargets = @()
+                foreach ($currentScopeIncludeTargets in $currentCertificateAuthorityScopes.includeTargets)
+                {
+                    $myScopeIncludeTargets = [ordered]@{}
+                    $myScopeIncludeTargetsName = $null
+                    if ($currentScopeIncludeTargets.targetType -eq 'Group')
+                    {
+                        $myScopeIncludeTargetsName = Get-M365DSCGroupDisplayNameById -GroupId $currentScopeIncludeTargets.id
+                    }
+                    elseif ($currentScopeIncludeTargets.targetType -eq 'User')
+                    {
+                        $myScopeIncludeTargetsName = Get-M365DSCUserPrincipalNameById -UserId $currentScopeIncludeTargets.id
+                    }
+                    if ($null -eq $myScopeIncludeTargetsName)
+                    {
+                        continue
+                    }
+                    $myScopeIncludeTargets.Add('Id', $myScopeIncludeTargetsName)
+
+                    if ($null -ne $currentScopeIncludeTargets.targetType)
+                    {
+                        $myScopeIncludeTargets.Add('TargetType', $currentScopeIncludeTargets.targetType.ToString())
+                    }
+
+                    if ($myScopeIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
+                    {
+                        $complexScopeIncludeTargets += $myScopeIncludeTargets
+                    }
+                }
+                $myCertificateAuthorityScopes.Add('IncludeTargets', $complexScopeIncludeTargets)
+                $myCertificateAuthorityScopes.Add('PublicKeyInfrastructureIdentifier', $currentCertificateAuthorityScopes.publicKeyInfrastructureIdentifier)
+                $myCertificateAuthorityScopes.Add('SubjectKeyIdentifier', $currentCertificateAuthorityScopes.subjectKeyIdentifier)
+                if ($myCertificateAuthorityScopes.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexCertificateAuthorityScopes += $myCertificateAuthorityScopes
+                }
+            }
+
             $complexCertificateUserBindings = @()
             foreach ($currentcertificateUserBindings in $getValue.certificateUserBindings)
             {
@@ -229,6 +279,16 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                 }
             }
             #region resource generator code
+            $complexIssuerHintsConfiguration = [ordered]@{}
+            if ($null -ne $getValue.issuerHintsConfiguration.state)
+            {
+                $complexIssuerHintsConfiguration.Add('State', $getValue.issuerHintsConfiguration.state.ToString())
+            }
+            if ($complexIssuerHintsConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexIssuerHintsConfiguration = $null
+            }
+
             $enumState = $null
             if ($null -ne $getValue.State)
             {
@@ -239,9 +299,11 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
             $results = @{
                 #region resource generator code
                 AuthenticationModeConfiguration = $complexAuthenticationModeConfiguration
+                CertificateAuthorityScopes      = $complexCertificateAuthorityScopes
                 CertificateUserBindings         = $complexCertificateUserBindings
                 ExcludeTargets                  = $complexExcludeTargets
                 IncludeTargets                  = $complexIncludeTargets
+                IssuerHintsConfiguration        = $complexIssuerHintsConfiguration
                 State                           = $enumState
                 Id                              = $getValue.Id
                 Ensure                          = 'Present'
@@ -297,6 +359,10 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
 
             Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.ExcludeTargets
             Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.IncludeTargets
+            foreach ($certificateAuthorityScope in $UpdateParameters.CertificateAuthorityScopes)
+            {
+                Update-M365DSCAuthenticationTargets -Targets $certificateAuthorityScope.IncludeTargets
+            }
 
             #region resource generator code
             $UpdateParameters.Add('@odata.type', '#microsoft.graph.x509CertificateAuthenticationMethodConfiguration')
@@ -407,6 +473,34 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                         $Results.Remove('AuthenticationModeConfiguration') | Out-Null
                     }
                 }
+                if ($null -ne $Results.CertificateAuthorityScopes)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'CertificateAuthorityScopes'
+                            CimInstanceName = 'MicrosoftGraphx509CertificateAuthorityScope'
+                            IsRequired      = $False
+                        }
+                        @{
+                            Name            = 'IncludeTargets'
+                            CimInstanceName = 'MicrosoftGraphIncludeTarget'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.CertificateAuthorityScopes `
+                        -CIMInstanceName 'MicrosoftGraphx509CertificateAuthorityScope' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.CertificateAuthorityScopes = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('CertificateAuthorityScopes') | Out-Null
+                    }
+                }
                 if ($null -ne $Results.CertificateUserBindings)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -451,12 +545,27 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                     }
                 }
 
+                if ($null -ne $Results.IssuerHintsConfiguration)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.IssuerHintsConfiguration `
+                        -CIMInstanceName 'MicrosoftGraphx509CertificateIssuerHintsConfiguration'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.IssuerHintsConfiguration = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('IssuerHintsConfiguration') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('AuthenticationModeConfiguration', 'CertificateUserBindings', 'ExcludeTargets', 'IncludeTargets')
+                    -NoEscape @('AuthenticationModeConfiguration', 'CertificateAuthorityScopes', 'CertificateUserBindings', 'ExcludeTargets', 'IncludeTargets', 'IssuerHintsConfiguration')
 
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -504,6 +613,21 @@ class MSFT_MicrosoftGraphx509CertificateAuthenticationModeConfiguration
     [System.String] $X509CertificateAuthenticationDefaultMode
 }
 
+class MSFT_MicrosoftGraphx509CertificateAuthorityScope
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('A collection of groups that are enabled to be in scope to use certificates issued by specific certificate authority.')]
+    [MSFT_MicrosoftGraphIncludeTarget[]] $IncludeTargets
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Public Key Infrastructure container object under which the certificate authorities are stored in the Entra PKI based trust store.')]
+    [System.String] $PublicKeyInfrastructureIdentifier
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Subject Key Identifier that identifies the certificate authority uniquely.')]
+    [System.String] $SubjectKeyIdentifier
+}
+
 class MSFT_MicrosoftGraphx509CertificateUserBinding
 {
     [DscProperty()]
@@ -544,6 +668,26 @@ class MSFT_AADAuthenticationMethodPolicyX509IncludeTarget
     [DscProperty(Key)]
     [System.ComponentModel.Description('The type of the authentication method target. Possible values are: group and unknownFutureValue.')]
     [ValidateSet('group', 'unknownFutureValue')]
+    [System.String] $TargetType
+}
+
+class MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The possible values are: disabled, enabled.')]
+    [ValidateSet('disabled', 'enabled')]
+    [System.String] $State
+}
+
+class MSFT_MicrosoftGraphIncludeTarget
+{
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('The ID of the entity targeted.')]
+    [System.String] $Id
+
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('The kind of entity targeted. The possible values are: user, group.')]
+    [ValidateSet('user', 'group')]
     [System.String] $TargetType
 }
 

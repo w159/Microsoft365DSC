@@ -172,6 +172,10 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
     [MSFT_MicrosoftGraphOperatingSystemVersionRange[]] $ValidOperatingSystemBuildRanges
 
     [DscProperty()]
+    [System.ComponentModel.Description('The WSL distributions and the operating system versions they are allowed to run.')]
+    [MSFT_MicrosoftGraphWslDistributionConfiguration[]] $WslDistributions
+
+    [DscProperty()]
     [System.ComponentModel.Description('Actions to take for noncompliant devices.')]
     [MSFT_MicrosoftGraphDeviceComplianceScheduledActionsForRuleConfiguration[]] $ScheduledActionsForRule
 
@@ -288,6 +292,28 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 }
             }
 
+            $complexWslDistributions = @()
+            foreach ($currentWslDistribution in $devicePolicy.wslDistributions)
+            {
+                $myWslDistribution = [ordered]@{}
+                if ($null -ne $currentWslDistribution.distribution)
+                {
+                    $myWslDistribution.Add('Distribution', $currentWslDistribution.distribution)
+                }
+                if ($null -ne $currentWslDistribution.minimumOSVersion)
+                {
+                    $myWslDistribution.Add('MinimumOSVersion', $currentWslDistribution.minimumOSVersion)
+                }
+                if ($null -ne $currentWslDistribution.maximumOSVersion)
+                {
+                    $myWslDistribution.Add('MaximumOSVersion', $currentWslDistribution.maximumOSVersion)
+                }
+                if ($myWslDistribution.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexWslDistributions += $myWslDistribution
+                }
+            }
+
             $complexDeviceCompliancePolicyScript = [ordered]@{}
             if ($null -ne $devicePolicy.deviceCompliancePolicyScript)
             {
@@ -372,6 +398,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 ScheduledActionsForRule                     = $complexScheduledActionsForRule
                 DeviceCompliancePolicyScript                = $complexDeviceCompliancePolicyScript
                 ValidOperatingSystemBuildRanges             = $complexValidOperatingSystemBuildRanges
+                WslDistributions                            = $complexWslDistributions
                 Ensure                                      = 'Present'
                 Credential                                  = $this.Credential
                 ApplicationId                               = $this.ApplicationId
@@ -627,6 +654,21 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                         $Results.Remove('ValidOperatingSystemBuildRanges') | Out-Null
                     }
                 }
+                if ($null -ne $Results.WslDistributions)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.WslDistributions `
+                        -CIMInstanceName 'MicrosoftGraphWslDistributionConfiguration' `
+                        -IsArray
+                    if (-not [string]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.WslDistributions = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('WslDistributions') | Out-Null
+                    }
+                }
                 if ($null -ne $Results.DeviceCompliancePolicyScript)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -684,7 +726,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('ValidOperatingSystemBuildRanges', 'DeviceCompliancePolicyScript', 'ScheduledActionsForRule', 'Assignments') `
+                    -NoEscape @('ValidOperatingSystemBuildRanges', 'WslDistributions', 'DeviceCompliancePolicyScript', 'ScheduledActionsForRule', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -789,6 +831,21 @@ class MSFT_MicrosoftGraphOperatingSystemVersionRange
     [DscProperty(Mandatory)]
     [System.ComponentModel.Description('The highest inclusive version that this range contains.')]
     [System.String] $HighestVersion
+}
+
+class MSFT_MicrosoftGraphWslDistributionConfiguration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Linux distribution like Debian, Fedora, Ubuntu etc.')]
+    [System.String] $Distribution
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Minimum supported operating system version of the Linux distribution.')]
+    [System.String] $MinimumOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Maximum supported operating system version of the Linux distribution.')]
+    [System.String] $MaximumOSVersion
 }
 
 class MSFT_MicrosoftGraphDeviceComplianceScheduledActionsForRuleConfiguration

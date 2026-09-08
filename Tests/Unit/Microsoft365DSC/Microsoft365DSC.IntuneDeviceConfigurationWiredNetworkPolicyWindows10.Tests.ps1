@@ -79,6 +79,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     authenticationMethod                    = 'certificate'
                     maximumAuthenticationFailures           = 25
                     Description          = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisplayName          = 'FakeStringValue'
                     Id                   = 'FakeStringValue'
                 }
@@ -130,6 +141,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AuthenticationType                                             = 'none'
                     CacheCredentials                                               = $True
                     Description                                                    = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition                     = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion                     = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisableUserPromptForServerValidation                           = $True
                     DisplayName                                                    = 'FakeStringValue'
                     EapolStartPeriodInSeconds                                      = 25
@@ -195,6 +217,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AuthenticationType                                    = 'none'
                     CacheCredentials                                      = $True
                     Description                                           = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisableUserPromptForServerValidation                  = $True
                     DisplayName                                           = 'FakeStringValue'
                     EapolStartPeriodInSeconds                             = 25
@@ -242,6 +275,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AuthenticationType                                    = 'none'
                     CacheCredentials                                      = $True
                     Description                                           = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     DisableUserPromptForServerValidation                  = $True
                     DisplayName                                           = 'FakeStringValue'
                     EapolStartPeriodInSeconds                             = 25
@@ -279,6 +323,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AuthenticationType                                    = 'none'
                     CacheCredentials                                      = $True
                     Description                                           = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Professional') # Updated property
+                        RuleType       = 'exclude' # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.22631.9999' # Updated property
+                        RuleType     = 'include'
+                    }
                     DisableUserPromptForServerValidation                  = $True
                     DisplayName                                           = 'FakeStringValue'
                     EapolStartPeriodInSeconds                             = 7 # Updated property

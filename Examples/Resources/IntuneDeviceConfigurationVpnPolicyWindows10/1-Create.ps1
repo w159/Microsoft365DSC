@@ -51,6 +51,17 @@ Configuration Example
             ConnectionType                             = "ciscoAnyConnect";
             CustomXml                                  = "<Config><Version>1</Version><DeviceSetup><ConnectionEntry><HostName>vpn.contoso.com</HostName></ConnectionEntry></DeviceSetup></Config>";
             Description                                = "Always-on connection to the corporate network for staff working remotely";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Professional editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Professional")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 11 22H2 or later"
+                MinOSVersion = "10.0.22621.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
             DisplayName                                = "VPN";
             DnsRules                                   = @(
                 MSFT_MicrosoftGraphvpnDnsRule{

@@ -61,6 +61,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     usernameAADSource = "userPrincipalName"
                     usernameSource = "userPrincipalName"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                 }
@@ -83,6 +94,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AccountName = "FakeStringValue"
                     CustomDomainName = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     DurationOfEmailToSync = "userDefined"
                     EmailAddressSource = "userPrincipalName"
@@ -122,6 +144,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AccountName = "FakeStringValue"
                     CustomDomainName = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     DurationOfEmailToSync = "userDefined"
                     EmailAddressSource = "userPrincipalName"
@@ -159,6 +192,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AccountName = "FakeStringValue"
                     CustomDomainName = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     DurationOfEmailToSync = "userDefined"
                     EmailAddressSource = "userPrincipalName"
@@ -189,6 +233,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AccountName = "FakeStringValue"
                     CustomDomainName = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Professional") # Updated property
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.22621.0" # Updated property
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     DurationOfEmailToSync = "userDefined"
                     EmailAddressSource = "userPrincipalName"

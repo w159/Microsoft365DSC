@@ -25,6 +25,11 @@
       "name": "Definition",
       "reason": "Accepted",
       "note": "Synthesized from / to AzurePortalTimeOut and DefaultTimeOut. Other applicationIds are not expressible."
+    },
+    {
+      "name": "IsOrganizationDefault",
+      "reason": "NotConfigurable",
+      "note": "The policy has no appliesTo collection and always scopes to the organization."
     }
   ],
   "description": "This resource configures an Azure AD Activity Based Timeout Policy.",

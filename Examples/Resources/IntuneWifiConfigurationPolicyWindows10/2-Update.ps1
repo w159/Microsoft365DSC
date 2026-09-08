@@ -31,6 +31,11 @@ Configuration Example
             ConnectAutomatically                       = $true;
             ConnectToPreferredNetwork                  = $false; # Updated Property
             ConnectWhenNetworkNameIsHidden             = $true;
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
             DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Professional editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Professional")

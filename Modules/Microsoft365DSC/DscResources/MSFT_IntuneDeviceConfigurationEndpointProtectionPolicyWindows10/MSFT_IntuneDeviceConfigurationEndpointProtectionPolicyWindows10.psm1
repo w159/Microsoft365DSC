@@ -549,6 +549,14 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
     [System.String] $DeviceGuardSecureBootWithDMA
 
     [DscProperty()]
+    [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The OS version applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsVersion] $DeviceManagementApplicabilityRuleOsVersion
+
+    [DscProperty()]
     [System.ComponentModel.Description('This policy is intended to provide additional security against external DMA capable devices. It allows for more control over the enumeration of external DMA capable devices incompatible with DMA Remapping/device memory isolation and sandboxing. This policy only takes effect when Kernel DMA Protection is supported and enabled by the system firmware. Kernel DMA Protection is a platform feature that cannot be controlled via policy or by end user. It has to be supported by the system at the time of manufacturing. To check if the system supports Kernel DMA Protection, please check the Kernel DMA Protection field in the Summary page of MSINFO32.exe. Possible values are: deviceDefault, blockAll, allowAll.')]
     [ValidateSet('deviceDefault', 'blockAll', 'allowAll')]
     [System.String] $DmaGuardDeviceEnumerationPolicy
@@ -1220,6 +1228,25 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             if ($complexDefenderDetectedMalwareActions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexDefenderDetectedMalwareActions = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSEdition.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsEdition.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsEdition = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleOsVersion = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MaxOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MaxOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MinOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MinOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSVersion.Name)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSVersion.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsVersion.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsVersion = $null
             }
 
             $complexFirewallProfileDomain = [ordered]@{}
@@ -2539,6 +2566,8 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DeviceGuardLaunchSystemGuard                                                 = $enumDeviceGuardLaunchSystemGuard
                 DeviceGuardLocalSystemAuthorityCredentialGuardSettings                       = $enumDeviceGuardLocalSystemAuthorityCredentialGuardSettings
                 DeviceGuardSecureBootWithDMA                                                 = $enumDeviceGuardSecureBootWithDMA
+                DeviceManagementApplicabilityRuleOsEdition                                   = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion                                   = $complexDeviceManagementApplicabilityRuleOsVersion
                 DmaGuardDeviceEnumerationPolicy                                              = $enumDmaGuardDeviceEnumerationPolicy
                 FirewallBlockStatefulFTP                                                     = $getValue.firewallBlockStatefulFTP
                 FirewallCertificateRevocationListCheckMethod                                 = $enumFirewallCertificateRevocationListCheckMethod
@@ -2927,6 +2956,34 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     else
                     {
                         $Results.Remove('DefenderDetectedMalwareActions') | Out-Null
+                    }
+                }
+                if ( $null -ne $Results.DeviceManagementApplicabilityRuleOsEdition)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsEdition'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsEdition = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsEdition') | Out-Null
+                    }
+                }
+                if ( $null -ne $Results.DeviceManagementApplicabilityRuleOsVersion)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsVersion `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsVersion'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsVersion = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsVersion') | Out-Null
                     }
                 }
                 if ( $null -ne $Results.FirewallProfileDomain)
@@ -3815,6 +3872,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     -Results $Results `
                     -Credential $this.Credential `
                     -NoEscape @('BitLockerFixedDrivePolicy', 'BitLockerRemovableDrivePolicy', 'BitLockerSystemDrivePolicy', 'DefenderDetectedMalwareActions',
+                    'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion',
                     'FirewallProfileDomain', 'FirewallProfilePrivate', 'FirewallProfilePublic', 'FirewallRules',
                     'UserRightsAccessCredentialManagerAsTrustedCaller', 'UserRightsActAsPartOfTheOperatingSystem', 'UserRightsAllowAccessFromNetwork',
                     'UserRightsBackupData', 'UserRightsBlockAccessFromNetwork', 'UserRightsChangeSystemTime', 'UserRightsCreateGlobalObjects',
@@ -3980,6 +4038,42 @@ class MSFT_MicrosoftGraphdefenderDetectedMalwareActions
     [System.ComponentModel.Description('Indicates a Defender action to take for severe severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block.')]
     [ValidateSet('deviceDefault', 'clean', 'quarantine', 'remove', 'allow', 'userDefined', 'block')]
     [System.String] $SevereSeverity
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsEdition
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule OS edition type')]
+    [System.String[]] $OsEditionTypes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsVersion
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Min OS version for Applicability Rule')]
+    [System.String] $MinOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Max OS version for Applicability Rule')]
+    [System.String] $MaxOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_MicrosoftGraphwindowsFirewallNetworkProfile

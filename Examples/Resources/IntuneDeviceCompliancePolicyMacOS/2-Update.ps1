@@ -44,6 +44,10 @@ Configuration Example
             FirewallEnabled                             = $False
             FirewallBlockAllIncoming                    = $False
             FirewallEnableStealthMode                   = $False
+            DeviceCompliancePolicyScript                = MSFT_MicrosoftGraphDeviceCompliancePolicyScript{
+                DisplayName  = 'macOS Intune Agent Version Check'
+                RulesContent = '{"Rules":[{"SettingName":"IntuneAgentVersion","Operator":"IsEquals","DataType":"String","Operand":"2.24","MoreInfoUrl":"https://contoso.com/compliance","RemediationStrings":[{"Language":"en_US","Title":"Intune Agent must be up to date","Description":"Update the Microsoft Intune Agent app."}]}]}'
+            };
             Ensure                                      = 'Present'
             ApplicationId                               = $ApplicationId;
             TenantId                                    = $TenantId;

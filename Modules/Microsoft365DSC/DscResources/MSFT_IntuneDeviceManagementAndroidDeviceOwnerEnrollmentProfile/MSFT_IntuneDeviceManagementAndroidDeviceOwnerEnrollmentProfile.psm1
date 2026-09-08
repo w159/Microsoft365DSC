@@ -65,6 +65,10 @@ class IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile : M365DSCResourc
     [System.Nullable[System.Boolean]] $IsTeamsDeviceProfile
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates the device name template used for the enrolled Android devices.')]
+    [System.String] $DeviceNameTemplate
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -179,6 +183,7 @@ class IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile : M365DSCResourc
                 AccountId               = $androidDeviceOwnerEnrollmentProfile.AccountId
                 ConfigureWifi           = $androidDeviceOwnerEnrollmentProfile.ConfigureWifi
                 Description             = $androidDeviceOwnerEnrollmentProfile.Description
+                DeviceNameTemplate      = $androidDeviceOwnerEnrollmentProfile.DeviceNameTemplate
                 EnrollmentMode          = $androidDeviceOwnerEnrollmentProfile.EnrollmentMode.ToString()
                 EnrollmentTokenType     = $androidDeviceOwnerEnrollmentProfile.EnrollmentTokenType.ToString()
                 IsTeamsDeviceProfile    = $androidDeviceOwnerEnrollmentProfile.IsTeamsDeviceProfile

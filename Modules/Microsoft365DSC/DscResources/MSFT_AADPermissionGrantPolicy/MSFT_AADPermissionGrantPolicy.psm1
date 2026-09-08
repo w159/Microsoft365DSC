@@ -26,6 +26,15 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
     [MSFT_AADPermissionGrantConditionSet[]] $Excludes
 
     [DscProperty()]
+    [System.ComponentModel.Description('Set to true to create all pre-approval policies in the tenant.')]
+    [System.Nullable[System.Boolean]] $IncludeAllPreApprovedApplications
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The scope of the resource to which the pre-approval policy applies.')]
+    [ValidateSet('chat', 'group', 'team', 'tenant')]
+    [System.String] $ResourceScopeType
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specify if the policy should exist.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -139,21 +148,23 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
             }
 
             $result = @{
-                Id                    = $getValue.Id
-                DisplayName           = $getValue.DisplayName
-                Description           = $getValue.Description
-                Includes              = [Array]$includesArray
-                Excludes              = [Array]$excludesArray
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
-                AccessTokens          = $this.AccessTokens
+                Id                                = $getValue.Id
+                DisplayName                       = $getValue.DisplayName
+                Description                       = $getValue.Description
+                Includes                          = [Array]$includesArray
+                Excludes                          = [Array]$excludesArray
+                IncludeAllPreApprovedApplications = $getValue.IncludeAllPreApprovedApplications
+                ResourceScopeType                 = $getValue.ResourceScopeType
+                Ensure                            = 'Present'
+                Credential                        = $this.Credential
+                ApplicationId                     = $this.ApplicationId
+                TenantId                          = $this.TenantId
+                ApplicationSecret                 = $this.ApplicationSecret
+                CertificateThumbprint             = $this.CertificateThumbprint
+                CertificatePath                   = $this.CertificatePath
+                CertificatePassword               = $this.CertificatePassword
+                ManagedIdentity                   = $this.ManagedIdentity.IsPresent
+                AccessTokens                      = $this.AccessTokens
             }
 
             return $this.AsResult($result)
@@ -203,6 +214,16 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
                     Description = $this.Description
                 }
 
+                if ($this.GetBoundParameters().ContainsKey('IncludeAllPreApprovedApplications'))
+                {
+                    $createParameters.Add('IncludeAllPreApprovedApplications', $this.IncludeAllPreApprovedApplications)
+                }
+
+                if ($this.GetBoundParameters().ContainsKey('ResourceScopeType'))
+                {
+                    $createParameters.Add('ResourceScopeType', $this.ResourceScopeType)
+                }
+
                 New-MgBetaPolicyPermissionGrantPolicy -BodyParameter $createParameters | Out-Null
 
                 # Add Includes
@@ -243,7 +264,17 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
                     $updateParameters.Add('Description', $this.Description)
                 }
 
-                if ($updateParameters.Count -gt 1)
+                if ($this.GetBoundParameters().ContainsKey('IncludeAllPreApprovedApplications') -and $this.IncludeAllPreApprovedApplications -ne $currentPolicy.IncludeAllPreApprovedApplications)
+                {
+                    $updateParameters.Add('IncludeAllPreApprovedApplications', $this.IncludeAllPreApprovedApplications)
+                }
+
+                if ($this.GetBoundParameters().ContainsKey('ResourceScopeType') -and $this.ResourceScopeType -ne $currentPolicy.ResourceScopeType)
+                {
+                    $updateParameters.Add('ResourceScopeType', $this.ResourceScopeType)
+                }
+
+                if ($updateParameters.Count -gt 0)
                 {
                     Update-MgBetaPolicyPermissionGrantPolicy -PermissionGrantPolicyId $this.Id -BodyParameter $updateParameters | Out-Null
                 }

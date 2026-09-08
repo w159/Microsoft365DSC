@@ -26,32 +26,43 @@ Configuration Example
     {
         IntuneDeviceConfigurationEmailProfilePolicyWindows10 'IntuneDeviceConfigurationEmailProfilePolicyWindows10-Example'
         {
-            AccountName           = "Contoso Mail";
-            Assignments           = @(
+            AccountName                                = "Contoso Mail";
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     dataType                                   = '#microsoft.graph.groupAssignmentTarget'
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     groupDisplayName                           = 'Corporate Mailbox Users'
                 }
             );
-            Description           = "Configures the built-in Windows mail app for Exchange Online";
-            DisplayName           = "Corporate Mail Profile";
-            DurationOfEmailToSync = "unlimited";
-            EmailAddressSource    = "primarySmtpAddress";
-            EmailSyncSchedule     = "fifteenMinutes";
-            Ensure                = "Present";
-            HostName              = "outlook.office365.com";
-            RequireSsl            = $true;
-            RoleScopeTagIds       = @("0");
-            SyncCalendar          = $true;
-            SyncContacts          = $true;
-            SyncTasks             = $true;
-            UserDomainNameSource  = "fullDomainName";
-            UsernameAADSource     = "userPrincipalName";
-            UsernameSource        = "userPrincipalName";
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            Description                                = "Configures the built-in Windows mail app for Exchange Online";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Professional editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Professional")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 through Windows 11 24H2"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
+            DisplayName                                = "Corporate Mail Profile";
+            DurationOfEmailToSync                      = "unlimited";
+            EmailAddressSource                         = "primarySmtpAddress";
+            EmailSyncSchedule                          = "fifteenMinutes";
+            Ensure                                     = "Present";
+            HostName                                   = "outlook.office365.com";
+            RequireSsl                                 = $true;
+            RoleScopeTagIds                            = @("0");
+            SyncCalendar                               = $true;
+            SyncContacts                               = $true;
+            SyncTasks                                  = $true;
+            UserDomainNameSource                       = "fullDomainName";
+            UsernameAADSource                          = "userPrincipalName";
+            UsernameSource                             = "userPrincipalName";
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

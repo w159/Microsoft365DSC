@@ -54,13 +54,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                 return @{
-                    '@odata.type'                           = '#microsoft.graph.windowsHealthMonitoringConfiguration'
-                    configDeviceHealthMonitoringCustomScope = 'FakeStringValue'
-                    allowDeviceHealthMonitoring             = 'notConfigured'
-                    configDeviceHealthMonitoringScope       = 'undefined'
-                    Description          = 'FakeStringValue'
-                    DisplayName          = 'FakeStringValue'
-                    Id                   = 'FakeStringValue'
+                    '@odata.type'                              = '#microsoft.graph.windowsHealthMonitoringConfiguration'
+                    configDeviceHealthMonitoringCustomScope    = 'FakeStringValue'
+                    allowDeviceHealthMonitoring                = 'notConfigured'
+                    configDeviceHealthMonitoringScope          = 'undefined'
+                    Description                                = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
+                    DisplayName                                = 'FakeStringValue'
+                    Id                                         = 'FakeStringValue'
                 }
             }
 
@@ -79,14 +90,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowDeviceHealthMonitoring             = 'notConfigured'
-                    ConfigDeviceHealthMonitoringCustomScope = 'FakeStringValue'
-                    ConfigDeviceHealthMonitoringScope       = 'undefined'
-                    Description                             = 'FakeStringValue'
-                    DisplayName                             = 'FakeStringValue'
-                    Id                                      = 'FakeStringValue'
-                    Ensure                                  = 'Present'
-                    Credential                              = $Credential
+                    AllowDeviceHealthMonitoring                = 'notConfigured'
+                    ConfigDeviceHealthMonitoringCustomScope    = 'FakeStringValue'
+                    ConfigDeviceHealthMonitoringScope          = 'undefined'
+                    Description                                = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
+                    DisplayName                                = 'FakeStringValue'
+                    Id                                         = 'FakeStringValue'
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
@@ -108,14 +130,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowDeviceHealthMonitoring             = 'notConfigured'
-                    ConfigDeviceHealthMonitoringCustomScope = 'FakeStringValue'
-                    ConfigDeviceHealthMonitoringScope       = 'undefined'
-                    Description                             = 'FakeStringValue'
-                    DisplayName                             = 'FakeStringValue'
-                    Id                                      = 'FakeStringValue'
-                    Ensure                                  = 'Absent'
-                    Credential                              = $Credential
+                    AllowDeviceHealthMonitoring                = 'notConfigured'
+                    ConfigDeviceHealthMonitoringCustomScope    = 'FakeStringValue'
+                    ConfigDeviceHealthMonitoringScope          = 'undefined'
+                    Description                                = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
+                    DisplayName                                = 'FakeStringValue'
+                    Id                                         = 'FakeStringValue'
+                    Ensure                                     = 'Absent'
+                    Credential                                 = $Credential
                 }
             }
 
@@ -135,14 +168,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowDeviceHealthMonitoring             = 'notConfigured'
-                    ConfigDeviceHealthMonitoringCustomScope = 'FakeStringValue'
-                    ConfigDeviceHealthMonitoringScope       = 'undefined'
-                    Description                             = 'FakeStringValue'
-                    DisplayName                             = 'FakeStringValue'
-                    Id                                      = 'FakeStringValue'
-                    Ensure                                  = 'Present'
-                    Credential                              = $Credential
+                    AllowDeviceHealthMonitoring                = 'notConfigured'
+                    ConfigDeviceHealthMonitoringCustomScope    = 'FakeStringValue'
+                    ConfigDeviceHealthMonitoringScope          = 'undefined'
+                    Description                                = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
+                    DisplayName                                = 'FakeStringValue'
+                    Id                                         = 'FakeStringValue'
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
             }
 
@@ -155,14 +199,25 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowDeviceHealthMonitoring             = 'enabled' # Updated property
-                    ConfigDeviceHealthMonitoringCustomScope = 'FakeStringValue'
-                    ConfigDeviceHealthMonitoringScope       = 'undefined'
-                    Description                             = 'FakeStringValue'
-                    DisplayName                             = 'FakeStringValue'
-                    Id                                      = 'FakeStringValue'
-                    Ensure                                  = 'Present'
-                    Credential                              = $Credential
+                    AllowDeviceHealthMonitoring                = 'enabled' # Updated property
+                    ConfigDeviceHealthMonitoringCustomScope    = 'FakeStringValue'
+                    ConfigDeviceHealthMonitoringScope          = 'undefined'
+                    Description                                = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Professional') # Updated property
+                        RuleType       = 'exclude' # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.22631.9999' # Updated property
+                        RuleType     = 'include'
+                    }
+                    DisplayName                                = 'FakeStringValue'
+                    Id                                         = 'FakeStringValue'
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
             }
 

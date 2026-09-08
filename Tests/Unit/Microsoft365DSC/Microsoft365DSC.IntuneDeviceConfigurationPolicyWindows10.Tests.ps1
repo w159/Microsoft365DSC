@@ -134,6 +134,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     deviceManagementBlockFactoryResetOnMobile             = $True
                     deviceManagementBlockManualUnenroll                   = $True
                     diagnosticsDataSubmissionMode                         = 'userDefined'
@@ -462,6 +473,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     deviceManagementBlockFactoryResetOnMobile             = $True
                     deviceManagementBlockManualUnenroll                   = $True
                     diagnosticsDataSubmissionMode                         = 'userDefined'
@@ -761,6 +783,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleOsEdition            = @{
+                            Name           = 'FakeStringValue'
+                            OsEditionTypes = @('windows10Enterprise')
+                            RuleType       = 'include'
+                        }
+                        deviceManagementApplicabilityRuleOsVersion            = @{
+                            Name         = 'FakeStringValue'
+                            MinOSVersion = '10.0.19045.0'
+                            MaxOSVersion = '10.0.26100.9999'
+                            RuleType     = 'include'
+                        }
                         storageRestrictAppDataToSystemVolume                  = $True
                         cellularBlockVpn                                      = $True
                         powerHybridSleepPluggedIn                             = 'notConfigured'
@@ -1099,6 +1132,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     deviceManagementBlockFactoryResetOnMobile             = $True
                     deviceManagementBlockManualUnenroll                   = $True
                     diagnosticsDataSubmissionMode                         = 'userDefined'
@@ -1398,6 +1442,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleOsEdition            = @{
+                            Name           = 'FakeStringValue'
+                            OsEditionTypes = @('windows10Enterprise')
+                            RuleType       = 'include'
+                        }
+                        deviceManagementApplicabilityRuleOsVersion            = @{
+                            Name         = 'FakeStringValue'
+                            MinOSVersion = '10.0.19045.0'
+                            MaxOSVersion = '10.0.26100.9999'
+                            RuleType     = 'include'
+                        }
                         storageRestrictAppDataToSystemVolume                  = $True
                         cellularBlockVpn                                      = $True
                         powerHybridSleepPluggedIn                             = 'notConfigured'
@@ -1729,6 +1784,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleOsEdition            = @{
+                        Name           = 'FakeStringValue'
+                        OsEditionTypes = @('windows10Enterprise')
+                        RuleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion            = @{
+                        Name         = 'FakeStringValue'
+                        MinOSVersion = '10.0.19045.0'
+                        MaxOSVersion = '10.0.26100.9999'
+                        RuleType     = 'include'
+                    }
                     deviceManagementBlockFactoryResetOnMobile             = $True
                     deviceManagementBlockManualUnenroll                   = $True
                     diagnosticsDataSubmissionMode                         = 'userDefined'
@@ -2017,6 +2083,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         defenderFilesAndFoldersToExclude                      = @('FakeStringValue')
                         edgeTelemetryForMicrosoft365Analytics                 = 'notConfigured'
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleOsEdition            = @{
+                            Name           = 'FakeStringValue'
+                            OsEditionTypes = @('windows10Professional')
+                            RuleType       = 'exclude'
+                        }
+                        deviceManagementApplicabilityRuleOsVersion            = @{
+                            Name         = 'FakeStringValue'
+                            MinOSVersion = '10.0.22621.0'
+                            MaxOSVersion = '10.0.22631.9999'
+                            RuleType     = 'exclude'
+                        }
                         defenderFileExtensionsToExclude                       = @('FakeStringValue')
                         systemTelemetryProxyServer                            = 'FakeStringValue'
                         startMenuMode                                         = 'userDefined'
@@ -2180,6 +2257,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleOsEdition            = @{
+                            Name           = 'FakeStringValue'
+                            OsEditionTypes = @('windows10Enterprise')
+                            RuleType       = 'include'
+                        }
+                        deviceManagementApplicabilityRuleOsVersion            = @{
+                            Name         = 'FakeStringValue'
+                            MinOSVersion = '10.0.19045.0'
+                            MaxOSVersion = '10.0.26100.9999'
+                            RuleType     = 'include'
+                        }
                         storageRestrictAppDataToSystemVolume                  = $True
                         cellularBlockVpn                                      = $True
                         powerHybridSleepPluggedIn                             = 'notConfigured'

@@ -18,6 +18,10 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
     [System.String] $AccessPackageId
 
     [DscProperty()]
+    [System.ComponentModel.Description('Represents the settings for email notifications for requests to an access package.')]
+    [MSFT_MicrosoftGraphaccessPackageNotificationSettings] $AccessPackageNotificationSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('Who must review, and how often, the assignments to the access package from this policy. This property is null if reviews are not required.')]
     [MSFT_MicrosoftGraphassignmentreviewsettings] $AccessReviewSettings
 
@@ -48,6 +52,10 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
     [DscProperty()]
     [System.ComponentModel.Description('Who can request this access package from this policy.')]
     [MSFT_MicrosoftGraphrequestorsettings] $RequestorSettings
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The settings for verifiable credentials that a requestor must present to be granted access from this policy.')]
+    [MSFT_MicrosoftGraphverifiableCredentialSettings] $VerifiableCredentialSettings
 
     [DscProperty()]
     [System.ComponentModel.Description('The collection of stages when to execute one or more custom access package workflow extensions.')]
@@ -308,6 +316,22 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
             }
             #endregion
 
+            #region Format AccessPackageNotificationSettings
+            $formattedAccessPackageNotificationSettings = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $getValue.AccessPackageNotificationSettings
+            if ($null -eq $formattedAccessPackageNotificationSettings -or $formattedAccessPackageNotificationSettings.Count -eq 0)
+            {
+                $formattedAccessPackageNotificationSettings = $null
+            }
+            #endregion
+
+            #region Format VerifiableCredentialSettings
+            $formattedVerifiableCredentialSettings = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $getValue.VerifiableCredentialSettings
+            if ($null -eq $formattedVerifiableCredentialSettings -or $formattedVerifiableCredentialSettings.Count -eq 0)
+            {
+                $formattedVerifiableCredentialSettings = $null
+            }
+            #endregion
+
             $AccessPackageIdValue = $getValue.AccessPackageId
             $isGUID = [System.Guid]::TryParse($AccessPackageIdValue, [ref][System.Guid]::Empty)
             if ($isGUID)
@@ -317,28 +341,30 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
             }
 
             $results = @{
-                Id                      = $getValue.Id
-                AccessPackageId         = $AccessPackageIdValue
-                AccessReviewSettings    = $formattedAccessReviewSettings
-                CanExtend               = $getValue.CanExtend
-                CustomExtensionHandlers = $formattedCustomExtensionHandlers
-                Description             = $getValue.Description
-                DisplayName             = $getValue.DisplayName
-                DurationInDays          = $getValue.DurationInDays
-                ExpirationDateTime      = $getValue.ExpirationDateTime
-                Questions               = $formattedQuestions
-                RequestApprovalSettings = $formattedRequestApprovalSettings
-                RequestorSettings       = $formattedRequestorSettings
-                Ensure                  = 'Present'
-                Credential              = $this.Credential
-                ApplicationId           = $this.ApplicationId
-                TenantId                = $this.TenantId
-                ApplicationSecret       = $this.ApplicationSecret
-                CertificateThumbprint   = $this.CertificateThumbprint
-                CertificatePath         = $this.CertificatePath
-                CertificatePassword     = $this.CertificatePassword
-                ManagedIdentity         = $this.ManagedIdentity.IsPresent
-                AccessTokens            = $this.AccessTokens
+                Id                                = $getValue.Id
+                AccessPackageId                   = $AccessPackageIdValue
+                AccessPackageNotificationSettings = $formattedAccessPackageNotificationSettings
+                AccessReviewSettings              = $formattedAccessReviewSettings
+                CanExtend                         = $getValue.CanExtend
+                CustomExtensionHandlers           = $formattedCustomExtensionHandlers
+                Description                       = $getValue.Description
+                DisplayName                       = $getValue.DisplayName
+                DurationInDays                    = $getValue.DurationInDays
+                ExpirationDateTime                = $getValue.ExpirationDateTime
+                Questions                         = $formattedQuestions
+                RequestApprovalSettings           = $formattedRequestApprovalSettings
+                RequestorSettings                 = $formattedRequestorSettings
+                VerifiableCredentialSettings      = $formattedVerifiableCredentialSettings
+                Ensure                            = 'Present'
+                Credential                        = $this.Credential
+                ApplicationId                     = $this.ApplicationId
+                TenantId                          = $this.TenantId
+                ApplicationSecret                 = $this.ApplicationSecret
+                CertificateThumbprint             = $this.CertificateThumbprint
+                CertificatePath                   = $this.CertificatePath
+                CertificatePassword               = $this.CertificatePassword
+                ManagedIdentity                   = $this.ManagedIdentity.IsPresent
+                AccessTokens                      = $this.AccessTokens
             }
 
             return $this.AsResult($results)
@@ -739,13 +765,51 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
                         $Results.Remove('CustomExtensionHandlers') | Out-Null
                     }
                 }
+                if ($null -ne $Results.AccessPackageNotificationSettings)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.AccessPackageNotificationSettings `
+                        -CIMInstanceName MicrosoftGraphaccessPackageNotificationSettings
+
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.AccessPackageNotificationSettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('AccessPackageNotificationSettings') | Out-Null
+                    }
+                }
+                if ($null -ne $Results.VerifiableCredentialSettings)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'CredentialTypes'
+                            CimInstanceName = 'MicrosoftGraphverifiableCredentialType'
+                            IsRequired      = $false
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.VerifiableCredentialSettings `
+                        -CIMInstanceName MicrosoftGraphverifiableCredentialSettings `
+                        -ComplexTypeMapping $complexMapping
+
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.VerifiableCredentialSettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('VerifiableCredentialSettings') | Out-Null
+                    }
+                }
 
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('AccessReviewSettings', 'Questions', 'RequestApprovalSettings', 'RequestorSettings', 'CustomExtensionHandlers') `
+                    -NoEscape @('AccessReviewSettings', 'Questions', 'RequestApprovalSettings', 'RequestorSettings', 'CustomExtensionHandlers', 'AccessPackageNotificationSettings', 'VerifiableCredentialSettings') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -1046,4 +1110,29 @@ class MSFT_MicrosoftGraphaccessPackageLocalizedText
     [DscProperty()]
     [System.ComponentModel.Description('The ISO code for the intended language. Required.')]
     [System.String] $LanguageCode
+}
+
+class MSFT_MicrosoftGraphaccessPackageNotificationSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates if notifications are disabled. Default value is false.')]
+    [System.Nullable[System.Boolean]] $IsAssignmentNotificationDisabled
+}
+
+class MSFT_MicrosoftGraphverifiableCredentialSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The verifiable credential types and their issuers that a requestor must present.')]
+    [MSFT_MicrosoftGraphverifiableCredentialType[]] $CredentialTypes
+}
+
+class MSFT_MicrosoftGraphverifiableCredentialType
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The name of the verifiable credential type.')]
+    [System.String] $CredentialType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The issuers of the verifiable credential type, identified by their decentralized identifiers.')]
+    [System.String[]] $Issuers
 }

@@ -201,6 +201,17 @@ Configuration Example
             DeviceGuardLaunchSystemGuard                                                 = "notConfigured";
             DeviceGuardLocalSystemAuthorityCredentialGuardSettings                       = "enableWithoutUEFILock";
             DeviceGuardSecureBootWithDMA                                                 = "notConfigured";
+            DeviceManagementApplicabilityRuleOsEdition                                   = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Education editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Education")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion                                   = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
             DisplayName                                                                  = "Endpoint Protection - Windows 10 Baseline";
             DmaGuardDeviceEnumerationPolicy                                              = "deviceDefault";
             Ensure                                                                       = "Present";

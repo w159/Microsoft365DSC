@@ -12,6 +12,16 @@
   },
   "excludedProperties": [
     {
+      "name": "AllowedPrincipalTypes",
+      "reason": "ReadOnly",
+      "note": "Reports which principal types the role definition accepts."
+    },
+    {
+      "name": "IsBuiltIn",
+      "reason": "ReadOnly",
+      "note": "Reports whether the role definition ships with the product."
+    },
+    {
       "name": "IsPrivileged",
       "reason": "ReadOnly",
       "note": "Entra derives it from the sensitive actions in RolePermissions"

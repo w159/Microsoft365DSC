@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "Absent from the documented update body and the resource property table."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."

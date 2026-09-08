@@ -25,10 +25,10 @@ Configuration Example
     {
         AADPermissionGrantPolicy 'AADPermissionGrantPolicy-Example'
         {
-            Id                    = "my-custom-consent-policy"
-            DisplayName           = "My Custom Consent Policy - Updated"
-            Description           = "Updated policy with new conditions"
-            Includes              = @(
+            Id                                = "my-custom-consent-policy"
+            DisplayName                       = "My Custom Consent Policy - Updated"
+            Description                       = "Updated policy with new conditions"
+            Includes                          = @(
                 MSFT_AADPermissionGrantConditionSet {
                     Id                                          = "include-low-risk-delegated"
                     PermissionType                              = "delegated"
@@ -41,7 +41,7 @@ Configuration Example
                     Permissions                                 = @("User.Read", "User.ReadBasic.All", "openid", "profile")
                 }
             )
-            Excludes              = @(
+            Excludes                          = @(
                 MSFT_AADPermissionGrantConditionSet {
                     Id                       = "exclude-high-risk-permissions"
                     PermissionType           = "delegated"
@@ -58,10 +58,12 @@ Configuration Example
                     Permissions          = @("all")
                 }
             )
-            Ensure                = "Present"
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            IncludeAllPreApprovedApplications = $true # Updated Property
+            ResourceScopeType                 = "tenant"
+            Ensure                            = "Present"
+            ApplicationId                     = $ApplicationId
+            TenantId                          = $TenantId
+            CertificateThumbprint             = $CertificateThumbprint
         }
     }
 }

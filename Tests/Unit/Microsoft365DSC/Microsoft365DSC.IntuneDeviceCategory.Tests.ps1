@@ -34,9 +34,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaDeviceManagementDeviceCategory -MockWith {
                 return @{
-                    DisplayName = 'Test Category'
-                    Description = 'Test Definition'
-                    Id          = '12345-12345-12345-12345-12345'
+                    DisplayName     = 'Test Category'
+                    Description     = 'Test Definition'
+                    RoleScopeTagIds = @('0')
+                    Id              = '12345-12345-12345-12345-12345'
                 }
             }
 
@@ -60,10 +61,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "When the category doesn't already exist" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    DisplayName = 'Test Category'
-                    Description = 'Test Definition'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    DisplayName     = 'Test Category'
+                    Description     = 'Test Definition'
+                    RoleScopeTagIds = @('0')
+                    Ensure          = 'Present'
+                    Credential      = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceCategory -MockWith {
@@ -88,10 +90,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the policy exists and it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    DisplayName = 'Test Category'
-                    Description = 'Test Definition'
-                    Ensure      = 'Absent'
-                    Credential  = $Credential
+                    DisplayName     = 'Test Category'
+                    Description     = 'Test Definition'
+                    RoleScopeTagIds = @('0')
+                    Ensure          = 'Absent'
+                    Credential      = $Credential
                 }
             }
 
@@ -112,10 +115,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the policy already exists and IS in the Desired State' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    DisplayName = 'Test Category'
-                    Description = 'Test Definition'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    DisplayName     = 'Test Category'
+                    Description     = 'Test Definition'
+                    RoleScopeTagIds = @('0')
+                    Ensure          = 'Present'
+                    Credential      = $Credential
                 }
             }
 
@@ -127,10 +131,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'When the policy already exists and is NOT in the Desired State' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    DisplayName = 'Test Category'
-                    Description = 'Different Value' # Updated property
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    DisplayName     = 'Test Category'
+                    Description     = 'Different Value' # Updated property
+                    RoleScopeTagIds = @('1') # Updated property
+                    Ensure          = 'Present'
+                    Credential      = $Credential
                 }
             }
 

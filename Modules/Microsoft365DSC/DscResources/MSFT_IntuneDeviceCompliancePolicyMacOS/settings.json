@@ -47,6 +47,9 @@
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
+          },
+          {
+            "name": "DeviceManagementScripts.Read.All"
           }
         ],
         "update": [
@@ -55,6 +58,9 @@
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementScripts.Read.All"
           }
         ]
       },
@@ -65,6 +71,9 @@
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
+          },
+          {
+            "name": "DeviceManagementScripts.Read.All"
           }
         ],
         "update": [
@@ -73,12 +82,16 @@
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementScripts.Read.All"
           }
         ]
       }
     }
   },
   "requiredModules": [
+    "Microsoft.Graph.Authentication",
     "Microsoft.Graph.Beta.DeviceManagement",
     "Microsoft.Graph.Groups"
   ],
@@ -88,6 +101,12 @@
   ],
   "mode": "Configuration",
   "commands": [
+    {
+      "module": "Microsoft.Graph.Authentication",
+      "cmdlets": [
+        "Invoke-MgGraphRequest"
+      ]
+    },
     {
       "module": "Microsoft.Graph.Beta.DeviceManagement",
       "cmdlets": [

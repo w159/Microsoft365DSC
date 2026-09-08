@@ -14,6 +14,10 @@ class IntuneDeviceCategory : M365DSCResourceBase
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('Optional role scope tags for the device category.')]
+    [System.String[]] $RoleScopeTagIds
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the category exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -102,6 +106,7 @@ class IntuneDeviceCategory : M365DSCResourceBase
             return $this.AsResult(@{
                 DisplayName           = $category.DisplayName
                 Description           = $category.Description
+                RoleScopeTagIds       = ([Array]$category.RoleScopeTagIds)
                 Ensure                = 'Present'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -144,15 +149,30 @@ class IntuneDeviceCategory : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentCategory.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Device Category {$($this.DisplayName)}"
-            New-MgBetaDeviceManagementDeviceCategory -DisplayName $this.DisplayName `
-                -Description $this.Description
+            $createParameters = @{
+                DisplayName = $this.DisplayName
+                Description = $this.Description
+            }
+            if ($null -ne $this.RoleScopeTagIds)
+            {
+                $createParameters.RoleScopeTagIds = $this.RoleScopeTagIds
+            }
+            New-MgBetaDeviceManagementDeviceCategory @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $currentCategory.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Device Category {$($this.DisplayName)}"
             $category = Get-MgBetaDeviceManagementDeviceCategory -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'"
-            Update-MgBetaDeviceManagementDeviceCategory -DeviceCategoryId $category.id `
-                -DisplayName $this.DisplayName -Description $this.Description
+            $updateParameters = @{
+                DeviceCategoryId = $category.id
+                DisplayName      = $this.DisplayName
+                Description      = $this.Description
+            }
+            if ($null -ne $this.RoleScopeTagIds)
+            {
+                $updateParameters.RoleScopeTagIds = $this.RoleScopeTagIds
+            }
+            Update-MgBetaDeviceManagementDeviceCategory @updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentCategory.Ensure -eq 'Present')
         {

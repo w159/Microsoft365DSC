@@ -25,15 +25,16 @@ Configuration Example
     {
         IntuneAndroidManagedStoreAppConfiguration "IntuneAndroidManagedStoreAppConfiguration-Example"
         {
-            Description           = "IntuneAndroidManagedStoreAppConfiguration Description";
-            RoleScopeTagIds       = @("0");
-            DisplayName           = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
-            Ensure                = "Present";
-            appSupportsOemConfig  = $False;
-            connectedAppsEnabled  = $True; # Updated Property
-            packageId             = "app:org.mozilla.firefox";
-            payloadJson           = "";
-            permissionActions     = @(
+            Description                 = "IntuneAndroidManagedStoreAppConfiguration Description";
+            RoleScopeTagIds             = @("0");
+            DisplayName                 = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
+            Ensure                      = "Present";
+            appSupportsOemConfig        = $False;
+            connectedAppsEnabled        = $True; # Updated Property
+            credentialProviderRoleState = "allowed";
+            packageId                   = "app:org.mozilla.firefox";
+            payloadJson                 = "";
+            permissionActions           = @(
                 MSFT_androidPermissionAction{
                     action     = 'prompt'
                     permission = 'android.permission.RECEIVE_SMS'
@@ -47,11 +48,11 @@ Configuration Example
                     permission = 'android.permission.RECEIVE_WAP_PUSH'
                 }
             );
-            profileApplicability  = "androidDeviceOwner";
-            targetedMobileApps    = @("30ab8f7a-14fb-4a05-befa-ea7f51141ad9");
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            profileApplicability        = "androidDeviceOwner";
+            targetedMobileApps          = @("30ab8f7a-14fb-4a05-befa-ea7f51141ad9");
+            ApplicationId               = $ApplicationId;
+            TenantId                    = $TenantId;
+            CertificateThumbprint       = $CertificateThumbprint;
         }
     }
 }

@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneDeviceConfigurationKioskPolicyWindows10 'IntuneDeviceConfigurationKioskPolicyWindows10-Example'
         {
-            Assignments                            = @(
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -36,18 +36,29 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            Description                            = "Locks shared reception PCs to the visitor sign-in portal in Microsoft Edge";
-            DisplayName                            = "Shared Reception Kiosk";
-            EdgeKioskEnablePublicBrowsing          = $False;
-            Ensure                                 = "Present";
-            KioskBrowserBlockedUrlExceptions       = @("https://visitors.contoso.com/*");
-            KioskBrowserBlockedURLs                = @("*");
-            KioskBrowserDefaultUrl                 = "https://visitors.contoso.com";
-            KioskBrowserEnableEndSessionButton     = $False;
-            KioskBrowserEnableHomeButton           = $True;
-            KioskBrowserEnableNavigationButtons    = $False;
-            KioskBrowserRestartOnIdleTimeInMinutes = 10;
-            KioskProfiles                          = @(
+            Description                                = "Locks shared reception PCs to the visitor sign-in portal in Microsoft Edge";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10EnterpriseN")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
+            DisplayName                                = "Shared Reception Kiosk";
+            EdgeKioskEnablePublicBrowsing              = $False;
+            Ensure                                     = "Present";
+            KioskBrowserBlockedUrlExceptions           = @("https://visitors.contoso.com/*");
+            KioskBrowserBlockedURLs                    = @("*");
+            KioskBrowserDefaultUrl                     = "https://visitors.contoso.com";
+            KioskBrowserEnableEndSessionButton         = $False;
+            KioskBrowserEnableHomeButton               = $True;
+            KioskBrowserEnableNavigationButtons        = $False;
+            KioskBrowserRestartOnIdleTimeInMinutes     = 10;
+            KioskProfiles                              = @(
                 MSFT_MicrosoftGraphwindowsKioskProfile{
                     UserAccountsConfiguration = @(
                         MSFT_MicrosoftGraphWindowsKioskUser{
@@ -72,17 +83,17 @@ Configuration Example
                     }
                 }
             );
-            RoleScopeTagIds                        = @("0");
-            WindowsKioskForceUpdateSchedule        = MSFT_MicrosoftGraphwindowsKioskForceUpdateSchedule{
+            RoleScopeTagIds                            = @("0");
+            WindowsKioskForceUpdateSchedule            = MSFT_MicrosoftGraphwindowsKioskForceUpdateSchedule{
                 RunImmediatelyIfAfterStartDateTime = $False
                 StartDateTime                      = '2023-04-15T23:00:00.0000000+00:00'
                 DayofMonth                         = 1
                 Recurrence                         = 'daily'
                 DayofWeek                          = 'sunday'
             };
-            ApplicationId                          = $ApplicationId;
-            TenantId                               = $TenantId;
-            CertificateThumbprint                  = $CertificateThumbprint;
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

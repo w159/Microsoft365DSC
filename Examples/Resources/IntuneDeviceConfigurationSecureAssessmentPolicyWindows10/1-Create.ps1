@@ -26,11 +26,11 @@ Configuration Example
     {
         IntuneDeviceConfigurationSecureAssessmentPolicyWindows10 'IntuneDeviceConfigurationSecureAssessmentPolicyWindows10-Example'
         {
-            AllowPrinting            = $True;
-            AllowScreenCapture       = $True;
-            AllowTextSuggestion      = $True;
-            AssessmentAppUserModelId = "";
-            Assignments              = @(
+            AllowPrinting                              = $True;
+            AllowScreenCapture                         = $True;
+            AllowTextSuggestion                        = $True;
+            AssessmentAppUserModelId                   = "";
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -40,15 +40,26 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            ConfigurationAccount     = "user@domain.com";
-            ConfigurationAccountType = "azureADAccount";
-            DisplayName              = "Secure Assessment";
-            Ensure                   = "Present";
-            LaunchUri                = "https://assessment.domain.com";
-            LocalGuestAccountName    = "";
-            ApplicationId            = $ApplicationId;
-            TenantId                 = $TenantId;
-            CertificateThumbprint    = $CertificateThumbprint;
+            ConfigurationAccount                       = "user@domain.com";
+            ConfigurationAccountType                   = "azureADAccount";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Education editions only"
+                OsEditionTypes = @("windows10Education", "windows10EducationN")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
+            DisplayName                                = "Secure Assessment";
+            Ensure                                     = "Present";
+            LaunchUri                                  = "https://assessment.domain.com";
+            LocalGuestAccountName                      = "";
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

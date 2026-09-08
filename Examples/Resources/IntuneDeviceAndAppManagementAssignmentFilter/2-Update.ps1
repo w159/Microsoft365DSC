@@ -29,6 +29,7 @@ Configuration Example
             Description                    = 'Targets company-owned Windows desktops and laptops'
             AssignmentFilterManagementType = 'devices'
             Platform                       = 'windows10AndLater'
+            RoleScopeTags                  = @("0")
             Rule                           = "(device.manufacturer -ne `"Apple`")" # Updated Property
             Ensure                         = 'Present'
             ApplicationId                  = $ApplicationId;

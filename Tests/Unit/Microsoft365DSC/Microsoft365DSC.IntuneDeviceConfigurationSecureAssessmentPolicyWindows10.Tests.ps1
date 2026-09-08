@@ -56,6 +56,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     configurationAccount = "FakeStringValue"
                     allowPrinting = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
 
@@ -82,6 +93,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     LaunchUri = "FakeStringValue"
@@ -116,6 +138,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     LaunchUri = "FakeStringValue"
@@ -148,6 +181,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     LaunchUri = "FakeStringValue"
@@ -173,6 +217,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "exclude" # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.22621.0" # Updated property
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     LaunchUri = "FakeStringValue"

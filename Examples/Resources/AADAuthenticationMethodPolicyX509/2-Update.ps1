@@ -30,6 +30,18 @@ Configuration Example
                 X509CertificateAuthenticationDefaultMode = 'x509CertificateSingleFactor'
                 Rules                                    = @()
             };
+            CertificateAuthorityScopes      = @(
+                MSFT_MicrosoftGraphx509CertificateAuthorityScope{
+                    IncludeTargets                    = @(
+                        MSFT_MicrosoftGraphIncludeTarget{
+                            Id         = 'Certificate Based Auth Pilot'
+                            TargetType = 'group'
+                        }
+                    )
+                    PublicKeyInfrastructureIdentifier = '9b1a4f2e-7c33-4d51-8a0e-1f6d2b5c7e40'
+                    SubjectKeyIdentifier              = 'a1b2c3d4e5f60718293a4b5c6d7e8f9012345678'
+                }
+            );
             CertificateUserBindings         = @(
                 MSFT_MicrosoftGraphx509CertificateUserBinding{
                     Priority             = 1
@@ -61,6 +73,9 @@ Configuration Example
                     TargetType = 'group'
                 }
             );
+            IssuerHintsConfiguration        = MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration{
+                State = 'enabled'
+            };
             State                           = "enabled";
             ApplicationId                   = $ApplicationId
             TenantId                        = $TenantId

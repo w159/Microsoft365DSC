@@ -45,6 +45,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
                     Description             = "Profile for enrolling Android devices"
+                    DeviceNameTemplate      = "Android-{{SERIAL}}"
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     TokenCreationDateTime   = "2024-12-31T23:59:59Z"
                     TokenValue              = "your-token-value"
@@ -70,6 +71,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
                     Description             = "Profile for enrolling Android devices"
+                    DeviceNameTemplate      = "Android-{{SERIAL}}"
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     WifiSsid                = "your-wifi-ssid"
@@ -102,6 +104,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
                     Description             = "Profile for enrolling Android devices"
+                    DeviceNameTemplate      = "Android-{{SERIAL}}"
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     WifiSsid                = "your-wifi-ssid"
@@ -130,6 +133,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
                     Description             = "Profile for enrolling Android devices"
+                    DeviceNameTemplate      = "Android-{{SERIAL}}"
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     WifiSsid                = "your-wifi-ssid"
@@ -151,6 +155,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                      = "164655f7-1232-4d56-ae8f-b095196a0309";
                     DisplayName             = "Android Owner Enrollment Profile"
                     Description             = "Profile for enrolling Android" # Drift
+                    DeviceNameTemplate      = "Android-{{SERIALLAST4DIGITS}}" # Drift
                     TokenExpirationDateTime = "2024-12-31T23:59:59Z"
                     EnrollmentMode          = "corporateOwnedWorkProfile"
                     WifiSsid                = "your-wifi-ssid"

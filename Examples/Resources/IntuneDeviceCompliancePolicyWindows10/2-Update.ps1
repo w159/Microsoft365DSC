@@ -63,6 +63,14 @@ Configuration Example
             TPMRequired                                 = $False
             deviceCompliancePolicyScript                = $null
             ValidOperatingSystemBuildRanges             = @()
+            WslDistributions                            = @(
+                MSFT_MicrosoftGraphWslDistributionConfiguration
+                {
+                    Distribution     = 'Ubuntu'
+                    MinimumOSVersion = '22.04' # Updated Property
+                    MaximumOSVersion = '24.04'
+                }
+            )
             ScheduledActionsForRule                     = @(
                 MSFT_MicrosoftGraphDeviceComplianceScheduledActionsForRuleConfiguration
                 {

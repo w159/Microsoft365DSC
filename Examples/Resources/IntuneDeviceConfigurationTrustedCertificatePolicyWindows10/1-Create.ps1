@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneDeviceConfigurationTrustedCertificatePolicyWindows10 'IntuneDeviceConfigurationTrustedCertificatePolicyWindows10-Example'
         {
-            Assignments            = @(
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     dataType                                   = "#microsoft.graph.allLicensedUsersAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
@@ -37,16 +37,27 @@ Configuration Example
                     groupDisplayName                           = "Exclude"
                 }
             );
-            CertFileName           = "RootCA.cer";
-            Description            = "Distributes the Contoso enterprise root certification authority to Windows devices";
-            DestinationStore       = "computerCertStoreRoot";
-            DisplayName            = "Contoso Root CA Trust";
-            Ensure                 = "Present";
-            RoleScopeTagIds        = @("0");
-            TrustedRootCertificate = "<base64-encoded-root-certificate>"
-            ApplicationId          = $ApplicationId;
-            TenantId               = $TenantId;
-            CertificateThumbprint  = $CertificateThumbprint;
+            CertFileName                               = "RootCA.cer";
+            Description                                = "Distributes the Contoso enterprise root certification authority to Windows devices";
+            DestinationStore                           = "computerCertStoreRoot";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Professional editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Professional")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
+            DisplayName                                = "Contoso Root CA Trust";
+            Ensure                                     = "Present";
+            RoleScopeTagIds                            = @("0");
+            TrustedRootCertificate                     = "<base64-encoded-root-certificate>"
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

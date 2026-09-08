@@ -27,6 +27,11 @@
       "note": "A flattened value from the settingInstance property."
     },
     {
+      "name": "SettingInstance",
+      "reason": "Accepted",
+      "note": "Configured through the MatchType, PrinterPolicySettings and StoragePolicySettings properties on the resource. Responsible for the device control setting payload."
+    },
+    {
       "name": "StoragePolicySettings",
       "reason": "Accepted",
       "note": "A flattened value from the settingInstance property."

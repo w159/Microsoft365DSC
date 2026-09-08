@@ -26,8 +26,11 @@ Configuration Example
     {
         AADEntitlementManagementAccessPackageAssignmentPolicy "AADEntitlementManagementAccessPackageAssignmentPolicy-Example"
         {
-            AccessPackageId         = "Finance Reporting Access";
-            AccessReviewSettings    = MSFT_MicrosoftGraphassignmentreviewsettings{
+            AccessPackageId                   = "Finance Reporting Access";
+            AccessPackageNotificationSettings = MSFT_MicrosoftGraphaccessPackageNotificationSettings{
+                IsAssignmentNotificationDisabled = $False
+            };
+            AccessReviewSettings              = MSFT_MicrosoftGraphassignmentreviewsettings{
                 IsEnabled                       = $True
                 StartDateTime                   = '12/17/2032 23:59:59'
                 IsAccessRecommendationEnabled   = $True
@@ -38,11 +41,11 @@ Configuration Example
                 Reviewers                       = @()
                 DurationInDays                  = 25
             };
-            CanExtend               = $False;
-            Description             = "Assignment Policy for access packages";
-            DisplayName             = "External tenant";
-            DurationInDays          = 180; # Updated Property
-            Questions               = @(
+            CanExtend                         = $False;
+            Description                       = "Assignment Policy for access packages";
+            DisplayName                       = "External tenant";
+            DurationInDays                    = 180; # Updated Property
+            Questions                         = @(
                 MSFT_MicrosoftGraphaccesspackagequestion{
                     odataType            = "#microsoft.graph.accessPackageTextInputQuestion"
                     IsRequired           = $true
@@ -60,20 +63,28 @@ Configuration Example
                     }
                 }
             );
-            RequestorSettings       = MSFT_MicrosoftGraphrequestorsettings{
+            RequestorSettings                 = MSFT_MicrosoftGraphrequestorsettings{
                 AcceptRequests = $false
                 ScopeType      = "NoSubjects"
             };
-            RequestApprovalSettings = MSFT_MicrosoftGraphapprovalsettings{
+            RequestApprovalSettings           = MSFT_MicrosoftGraphapprovalsettings{
                 ApprovalMode                     = 'NoApproval'
                 IsRequestorJustificationRequired = $False
                 IsApprovalRequired               = $False
                 IsApprovalRequiredForExtension   = $False
             };
-            Ensure                  = "Present"
-            ApplicationId           = $ApplicationId
-            TenantId                = $TenantId
-            CertificateThumbprint   = $CertificateThumbprint
+            VerifiableCredentialSettings      = MSFT_MicrosoftGraphverifiableCredentialSettings{
+                CredentialTypes = @(
+                    MSFT_MicrosoftGraphverifiableCredentialType{
+                        CredentialType = "VerifiedEmployee"
+                        Issuers        = @("did:web:contoso.com")
+                    }
+                )
+            };
+            Ensure                            = "Present"
+            ApplicationId                     = $ApplicationId
+            TenantId                          = $TenantId
+            CertificateThumbprint             = $CertificateThumbprint
         }
     }
 }

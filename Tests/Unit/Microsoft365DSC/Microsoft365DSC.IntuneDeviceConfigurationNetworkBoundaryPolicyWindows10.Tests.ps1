@@ -51,7 +51,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                 return @{
-                    windowsNetworkIsolationPolicy = @{
+                    windowsNetworkIsolationPolicy              = @{
                         EnterpriseProxyServers                 = @('FakeStringValue')
                         EnterpriseInternalProxyServers         = @('FakeStringValue')
                         EnterpriseIPRangesAreAuthoritative     = $True
@@ -72,10 +72,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         )
                         NeutralDomainResources                 = @('FakeStringValue')
                     }
-                    '@odata.type'        = '#microsoft.graph.windows10NetworkBoundaryConfiguration'
-                    description          = 'FakeStringValue'
-                    displayName          = 'FakeStringValue'
-                    id                   = 'FakeStringValue'
+                    '@odata.type'                              = '#microsoft.graph.windows10NetworkBoundaryConfiguration'
+                    description                                = 'FakeStringValue'
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name           = 'FakeStringValue'
+                        osEditionTypes = @('windows10Enterprise')
+                        ruleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name         = 'FakeStringValue'
+                        minOSVersion = '10.0.19045.0'
+                        maxOSVersion = '10.0.26100.9999'
+                        ruleType     = 'include'
+                    }
+                    displayName                                = 'FakeStringValue'
+                    id                                         = 'FakeStringValue'
                 }
             }
 
@@ -94,10 +105,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    description                   = 'FakeStringValue'
-                    displayName                   = 'FakeStringValue'
-                    id                            = 'FakeStringValue'
-                    windowsNetworkIsolationPolicy = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
+                    description                                = 'FakeStringValue'
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name           = 'FakeStringValue'
+                        osEditionTypes = @('windows10Enterprise')
+                        ruleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name         = 'FakeStringValue'
+                        minOSVersion = '10.0.19045.0'
+                        maxOSVersion = '10.0.26100.9999'
+                        ruleType     = 'include'
+                    }
+                    displayName                                = 'FakeStringValue'
+                    id                                         = 'FakeStringValue'
+                    windowsNetworkIsolationPolicy              = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
                             EnterpriseProxyServers                 = @('FakeStringValue')
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
@@ -118,8 +140,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                             NeutralDomainResources                 = @('FakeStringValue')
                         })
-                    Ensure                        = 'Present'
-                    Credential                    = $Credential
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
@@ -141,10 +163,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    description                   = 'FakeStringValue'
-                    displayName                   = 'FakeStringValue'
-                    id                            = 'FakeStringValue'
-                    windowsNetworkIsolationPolicy = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
+                    description                                = 'FakeStringValue'
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name           = 'FakeStringValue'
+                        osEditionTypes = @('windows10Enterprise')
+                        ruleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name         = 'FakeStringValue'
+                        minOSVersion = '10.0.19045.0'
+                        maxOSVersion = '10.0.26100.9999'
+                        ruleType     = 'include'
+                    }
+                    displayName                                = 'FakeStringValue'
+                    id                                         = 'FakeStringValue'
+                    windowsNetworkIsolationPolicy              = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
                             EnterpriseProxyServers                 = @('FakeStringValue')
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
@@ -165,8 +198,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                             NeutralDomainResources                 = @('FakeStringValue')
                         })
-                    Ensure                        = 'Absent'
-                    Credential                    = $Credential
+                    Ensure                                     = 'Absent'
+                    Credential                                 = $Credential
                 }
             }
 
@@ -186,10 +219,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    description                   = 'FakeStringValue'
-                    displayName                   = 'FakeStringValue'
-                    id                            = 'FakeStringValue'
-                    windowsNetworkIsolationPolicy = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
+                    description                                = 'FakeStringValue'
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name           = 'FakeStringValue'
+                        osEditionTypes = @('windows10Enterprise')
+                        ruleType       = 'include'
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name         = 'FakeStringValue'
+                        minOSVersion = '10.0.19045.0'
+                        maxOSVersion = '10.0.26100.9999'
+                        ruleType     = 'include'
+                    }
+                    displayName                                = 'FakeStringValue'
+                    id                                         = 'FakeStringValue'
+                    windowsNetworkIsolationPolicy              = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
                             EnterpriseProxyServers                 = @('FakeStringValue')
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
@@ -210,8 +254,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                             NeutralDomainResources                 = @('FakeStringValue')
                         })
-                    Ensure                        = 'Present'
-                    Credential                    = $Credential
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
             }
 
@@ -224,10 +268,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    description                   = 'FakeStringValue'
-                    displayName                   = 'FakeStringValue'
-                    id                            = 'FakeStringValue'
-                    windowsNetworkIsolationPolicy = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
+                    description                                = 'FakeStringValue'
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name           = 'FakeStringValue'
+                        osEditionTypes = @('windows10Enterprise')
+                        ruleType       = 'exclude' # Updated property
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name         = 'FakeStringValue'
+                        minOSVersion = '10.0.19045.0'
+                        maxOSVersion = '10.0.26100.9999'
+                        ruleType     = 'include'
+                    }
+                    displayName                                = 'FakeStringValue'
+                    id                                         = 'FakeStringValue'
+                    windowsNetworkIsolationPolicy              = ([MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy] @{
                             EnterpriseProxyServers                 = @('FakeStringValue')
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $False # Updated property
@@ -248,8 +303,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                             NeutralDomainResources                 = @('FakeStringValue')
                         })
-                    Ensure                        = 'Present'
-                    Credential                    = $Credential
+                    Ensure                                     = 'Present'
+                    Credential                                 = $Credential
                 }
             }
 

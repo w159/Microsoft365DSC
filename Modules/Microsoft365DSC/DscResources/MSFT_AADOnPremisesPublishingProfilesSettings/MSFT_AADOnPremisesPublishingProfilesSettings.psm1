@@ -11,6 +11,10 @@ class AADOnPremisesPublishingProfilesSettings : M365DSCResourceBase
     [System.String] $IsSingleInstance
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether default access for app proxy is enabled or disabled.')]
+    [System.Nullable[System.Boolean]] $IsDefaultAccessEnabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('Enables of disables private net work connectors in Entra Id.')]
     [System.Nullable[System.Boolean]] $IsEnabled
 
@@ -76,17 +80,18 @@ class AADOnPremisesPublishingProfilesSettings : M365DSCResourceBase
             $instance = Invoke-M365DSCGraphRequest -Uri $uri -Method Get
 
             $results = @{
-                IsSingleInstance      = 'Yes'
-                IsEnabled             = $instance.IsEnabled
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
-                AccessTokens          = $this.AccessTokens
+                IsSingleInstance       = 'Yes'
+                IsDefaultAccessEnabled = $instance.isDefaultAccessEnabled
+                IsEnabled              = $instance.IsEnabled
+                Credential             = $this.Credential
+                ApplicationId          = $this.ApplicationId
+                TenantId               = $this.TenantId
+                ApplicationSecret      = $this.ApplicationSecret
+                CertificateThumbprint  = $this.CertificateThumbprint
+                CertificatePath        = $this.CertificatePath
+                CertificatePassword    = $this.CertificatePassword
+                ManagedIdentity        = $this.ManagedIdentity.IsPresent
+                AccessTokens           = $this.AccessTokens
             }
             return $this.AsResult($results)
         }
@@ -117,9 +122,16 @@ class AADOnPremisesPublishingProfilesSettings : M365DSCResourceBase
         $this.AddTelemetry('Set')
         #endregion
 
-        Write-Verbose -Message "Updating the IsEnabled setting to {$($this.IsEnabled.ToString())}"
-        $settings = @{
-            isEnabled = $this.IsEnabled
+        $settings = @{}
+        if ($null -ne $this.IsEnabled)
+        {
+            Write-Verbose -Message "Updating the IsEnabled setting to {$($this.IsEnabled.ToString())}"
+            $settings.isEnabled = $this.IsEnabled
+        }
+        if ($null -ne $this.IsDefaultAccessEnabled)
+        {
+            Write-Verbose -Message "Updating the IsDefaultAccessEnabled setting to {$($this.IsDefaultAccessEnabled.ToString())}"
+            $settings.isDefaultAccessEnabled = $this.IsDefaultAccessEnabled
         }
         $body = ConvertTo-Json $settings
         $uri = "/beta/onPremisesPublishingProfiles('applicationProxy')"

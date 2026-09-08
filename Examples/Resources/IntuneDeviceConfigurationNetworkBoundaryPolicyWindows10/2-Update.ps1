@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 'IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10-Example'
         {
-            Assignments                   = @(
+            Assignments                                = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
@@ -36,11 +36,22 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            Description                   = "Marks the corporate network, cloud resources and proxies as enterprise boundaries for Windows Information Protection";
-            DisplayName                   = "Corporate Network Boundary";
-            Ensure                        = "Present";
-            RoleScopeTagIds               = @("0");
-            WindowsNetworkIsolationPolicy = MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy{
+            Description                                = "Marks the corporate network, cloud resources and proxies as enterprise boundaries for Windows Information Protection";
+            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = "Enterprise and Education editions only"
+                OsEditionTypes = @("windows10Enterprise", "windows10Education")
+                RuleType       = "include"
+            };
+            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = "Windows 10 22H2 or later"
+                MinOSVersion = "10.0.19045.0"
+                MaxOSVersion = "10.0.26100.9999"
+                RuleType     = "include"
+            };
+            DisplayName                                = "Corporate Network Boundary";
+            Ensure                                     = "Present";
+            RoleScopeTagIds                            = @("0");
+            WindowsNetworkIsolationPolicy              = MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy{
                 EnterpriseCloudResources               = @(
                     MSFT_MicrosoftGraphProxiedDomain1{
                         IpAddressOrFQDN = "contoso.sharepoint.com"
@@ -61,9 +72,9 @@ Configuration Example
                 )
                 NeutralDomainResources                 = @("sts.contoso.com", "login.microsoftonline.com")
             };
-            ApplicationId                 = $ApplicationId;
-            TenantId                      = $TenantId;
-            CertificateThumbprint         = $CertificateThumbprint;
+            ApplicationId                              = $ApplicationId;
+            TenantId                                   = $TenantId;
+            CertificateThumbprint                      = $CertificateThumbprint;
         }
     }
 }

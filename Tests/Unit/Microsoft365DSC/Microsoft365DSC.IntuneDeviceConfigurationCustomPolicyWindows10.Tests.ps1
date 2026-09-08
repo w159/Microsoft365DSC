@@ -61,6 +61,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         }
                     )
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "10.0.19045.0"
+                        maxOSVersion = "10.0.26100.9999"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
                 }
@@ -82,6 +93,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "10.0.19045.0"
+                        maxOSVersion = "10.0.26100.9999"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
                     omaSettings = @(
@@ -120,6 +142,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "10.0.19045.0"
+                        maxOSVersion = "10.0.26100.9999"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
                     omaSettings = @(
@@ -156,6 +189,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "10.0.19045.0"
+                        maxOSVersion = "10.0.26100.9999"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
                     omaSettings = @(
@@ -185,6 +229,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "exclude" # Updated property
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "10.0.19045.0"
+                        maxOSVersion = "10.0.26100.9999"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
                     omaSettings = @(

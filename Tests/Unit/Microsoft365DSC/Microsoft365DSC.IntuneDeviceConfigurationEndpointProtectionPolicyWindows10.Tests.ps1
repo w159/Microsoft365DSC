@@ -280,6 +280,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     localSecurityOptionsInformationShownOnLockScreen = "notConfigured"
                     defenderOfficeAppsLaunchChildProcessType = "userDefined"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "FakeStringValue"
+                        MaxOSVersion = "FakeStringValue"
+                        RuleType = "include"
+                    }
                     applicationGuardAllowPrintToPDF = $True
                     userRightsCreateToken = @{
                         State = "notConfigured"
@@ -861,6 +872,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "FakeStringValue"
+                        MaxOSVersion = "FakeStringValue"
+                        RuleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dmaGuardDeviceEnumerationPolicy = "deviceDefault"
                     firewallBlockStatefulFTP = $True
@@ -1507,6 +1529,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "FakeStringValue"
+                        MaxOSVersion = "FakeStringValue"
+                        RuleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dmaGuardDeviceEnumerationPolicy = "deviceDefault"
                     firewallBlockStatefulFTP = $True
@@ -2151,6 +2184,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "FakeStringValue"
+                        MaxOSVersion = "FakeStringValue"
+                        RuleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dmaGuardDeviceEnumerationPolicy = "deviceDefault"
                     firewallBlockStatefulFTP = $True
@@ -2787,6 +2831,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        Name = "DifferentValue"
+                        OsEditionTypes = @("windows10Education")
+                        RuleType = "exclude"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        Name = "DifferentValue"
+                        MinOSVersion = "DifferentValue"
+                        MaxOSVersion = "DifferentValue"
+                        RuleType = "exclude"
+                    })
                     displayName = "FakeStringValue"
                     dmaGuardDeviceEnumerationPolicy = "deviceDefault"
                     firewallBlockStatefulFTP = $True

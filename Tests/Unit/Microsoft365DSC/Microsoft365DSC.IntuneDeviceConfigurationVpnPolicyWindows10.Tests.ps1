@@ -150,6 +150,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     '@odata.type' = "#microsoft.graph.windows10VpnConfiguration"
                     enableSplitTunneling = $True
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    }
+                    deviceManagementApplicabilityRuleOsVersion = @{
+                        name = "FakeStringValue"
+                        minOSVersion = "FakeStringValue"
+                        maxOSVersion = "FakeStringValue"
+                        ruleType = "include"
+                    }
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
 
@@ -189,6 +200,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        name = "FakeStringValue"
+                        minOSVersion = "FakeStringValue"
+                        maxOSVersion = "FakeStringValue"
+                        ruleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dnsRules = @(
                         ([MSFT_MicrosoftGraphvpnDnsRule] @{
@@ -319,6 +341,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        name = "FakeStringValue"
+                        minOSVersion = "FakeStringValue"
+                        maxOSVersion = "FakeStringValue"
+                        ruleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dnsRules = @(
                         ([MSFT_MicrosoftGraphvpnDnsRule] @{
@@ -447,6 +480,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Enterprise")
+                        ruleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        name = "FakeStringValue"
+                        minOSVersion = "FakeStringValue"
+                        maxOSVersion = "FakeStringValue"
+                        ruleType = "include"
+                    })
                     displayName = "FakeStringValue"
                     dnsRules = @(
                         ([MSFT_MicrosoftGraphvpnDnsRule] @{
@@ -568,6 +612,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
+                        name = "FakeStringValue"
+                        osEditionTypes = @("windows10Professional") # Updated property
+                        ruleType = "include"
+                    })
+                    deviceManagementApplicabilityRuleOsVersion = ([MSFT_DeviceManagementApplicabilityRuleOsVersion] @{
+                        name = "FakeStringValue"
+                        minOSVersion = "FakeStringValue"
+                        maxOSVersion = "FakeStringValue"
+                        ruleType = "exclude" # Updated property
+                    })
                     displayName = "FakeStringValue"
                     dnsRules = @(
                         ([MSFT_MicrosoftGraphvpnDnsRule] @{

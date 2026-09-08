@@ -10,6 +10,11 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $ConnectedAppsEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates the state of the credential provider role for this Android app. Possible values are: notConfigured, allowed, unknownFutureValue.')]
+    [ValidateSet('notConfigured', 'allowed')]
+    [System.String] $CredentialProviderRoleState
+
+    [DscProperty()]
     [System.ComponentModel.Description('Android Enterprise app configuration package id.')]
     [System.String] $PackageId
 
@@ -198,6 +203,12 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
             #endregion
 
             #region resource generator code
+            $enumCredentialProviderRoleState = $null
+            if ($null -ne $getValue.credentialProviderRoleState)
+            {
+                $enumCredentialProviderRoleState = $getValue.credentialProviderRoleState.ToString()
+            }
+
             $enumProfileApplicability = $null
             if ($null -ne $getValue.profileApplicability)
             {
@@ -239,27 +250,28 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
-                ConnectedAppsEnabled  = $getValue.connectedAppsEnabled
-                PackageId             = $getValue.packageId
-                PayloadJson           = $payloadJsonValue
-                PermissionActions     = $complexPermissionActions
-                ProfileApplicability  = $enumProfileApplicability
-                EncodedSettingXml     = $getValue.encodedSettingXml
-                Settings              = $complexSettings
-                Description           = $getValue.Description
-                DisplayName           = $getValue.DisplayName
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
-                TargetedMobileApps    = $targetedApps
-                Id                    = $getValue.Id
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ConnectedAppsEnabled        = $getValue.connectedAppsEnabled
+                CredentialProviderRoleState = $enumCredentialProviderRoleState
+                PackageId                   = $getValue.packageId
+                PayloadJson                 = $payloadJsonValue
+                PermissionActions           = $complexPermissionActions
+                ProfileApplicability        = $enumProfileApplicability
+                EncodedSettingXml           = $getValue.encodedSettingXml
+                Settings                    = $complexSettings
+                Description                 = $getValue.Description
+                DisplayName                 = $getValue.DisplayName
+                RoleScopeTagIds             = $getValue.RoleScopeTagIds
+                TargetedMobileApps          = $targetedApps
+                Id                          = $getValue.Id
+                Ensure                      = 'Present'
+                Credential                  = $this.Credential
+                ApplicationId               = $this.ApplicationId
+                TenantId                    = $this.TenantId
+                ApplicationSecret           = $this.ApplicationSecret
+                CertificateThumbprint       = $this.CertificateThumbprint
+                CertificatePath             = $this.CertificatePath
+                CertificatePassword         = $this.CertificatePassword
+                ManagedIdentity             = $this.ManagedIdentity.IsPresent
                 #endregion
             }
             if ($platform -ne 'iOS')

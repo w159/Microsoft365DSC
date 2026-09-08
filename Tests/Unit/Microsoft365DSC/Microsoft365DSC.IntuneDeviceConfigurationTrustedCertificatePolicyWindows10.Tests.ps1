@@ -50,6 +50,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     certFileName = "FakeStringValue"
                     '@odata.type' = "#microsoft.graph.windows81TrustedRootCertificate"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
 
@@ -72,6 +83,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = "Present"
@@ -100,6 +122,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = 'Absent'
@@ -126,6 +159,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = 'Present'
@@ -144,6 +188,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "userCertStoreIntermediate" # Updated property
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Professional") # Updated property
+                        RuleType = "exclude" # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.22631.9999" # Updated property
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     Ensure = 'Present'

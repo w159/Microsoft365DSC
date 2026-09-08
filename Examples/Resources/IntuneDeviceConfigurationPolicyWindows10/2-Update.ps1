@@ -88,6 +88,17 @@ Configuration Example
             DefenderScheduleScanEnableLowCpuPriority             = $False;
             DefenderSystemScanSchedule                           = "userDefined";
             DeveloperUnlockSetting                               = "notConfigured";
+            DeviceManagementApplicabilityRuleOsEdition           = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+                Name           = 'Enterprise and Professional editions only'
+                OsEditionTypes = @('windows10Enterprise', 'windows10Professional')
+                RuleType       = 'include'
+            };
+            DeviceManagementApplicabilityRuleOsVersion           = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+                Name         = 'Windows 11 23H2 and later'
+                MinOSVersion = '10.0.22631.0'
+                MaxOSVersion = '10.0.26200.9999'
+                RuleType     = 'include'
+            };
             DeviceManagementBlockFactoryResetOnMobile            = $False;
             DeviceManagementBlockManualUnenroll                  = $False;
             DiagnosticsDataSubmissionMode                        = "userDefined";

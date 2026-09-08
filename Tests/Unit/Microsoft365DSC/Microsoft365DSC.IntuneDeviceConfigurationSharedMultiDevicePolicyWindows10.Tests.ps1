@@ -68,6 +68,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     idleTimeBeforeSleepInSeconds = 25
                     disablePowerPolicies = $True
                     enabled = $True
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     description = "FakeStringValue"
                     displayName = "FakeStringValue"
                     id = "FakeStringValue"
@@ -98,6 +109,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     allowedAccounts = "notConfigured"
                     allowLocalStorage = $True
                     description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     disableAccountManager = $True
                     disableEduPolicies = $True
                     disablePowerPolicies = $True
@@ -147,6 +169,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     allowedAccounts = "notConfigured"
                     allowLocalStorage = $True
                     description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     disableAccountManager = $True
                     disableEduPolicies = $True
                     disablePowerPolicies = $True
@@ -194,6 +227,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     allowedAccounts = "notConfigured"
                     allowLocalStorage = $True
                     description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     disableAccountManager = $True
                     disableEduPolicies = $True
                     disablePowerPolicies = $True
@@ -233,6 +277,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     allowedAccounts = "notConfigured"
                     allowLocalStorage = $True
                     description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.22621.0" # Updated property
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     disableAccountManager = $True
                     disableEduPolicies = $True
                     disablePowerPolicies = $True

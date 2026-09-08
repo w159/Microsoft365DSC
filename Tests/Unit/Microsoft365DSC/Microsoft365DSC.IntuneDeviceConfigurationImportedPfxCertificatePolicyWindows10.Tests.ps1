@@ -60,6 +60,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     certificateValidityPeriodValue = 25
                     renewalThresholdPercentage = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
 
@@ -84,6 +95,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertificateValidityPeriodScale = "days"
                     CertificateValidityPeriodValue = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     IntendedPurpose = "unassigned"
@@ -117,6 +139,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertificateValidityPeriodScale = "days"
                     CertificateValidityPeriodValue = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     IntendedPurpose = "unassigned"
@@ -148,6 +181,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertificateValidityPeriodScale = "days"
                     CertificateValidityPeriodValue = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "include"
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     IntendedPurpose = "unassigned"
@@ -172,6 +216,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertificateValidityPeriodScale = "days"
                     CertificateValidityPeriodValue = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleOsEdition = @{
+                        Name = "FakeStringValue"
+                        OsEditionTypes = @("windows10Enterprise")
+                        RuleType = "exclude" # Updated property
+                    }
+                    DeviceManagementApplicabilityRuleOsVersion = @{
+                        Name = "FakeStringValue"
+                        MinOSVersion = "10.0.19045.0"
+                        MaxOSVersion = "10.0.26100.9999"
+                        RuleType = "include"
+                    }
                     DisplayName = "FakeStringValue"
                     Id = "FakeStringValue"
                     IntendedPurpose = "unassigned"
