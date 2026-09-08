@@ -49,14 +49,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    IsEnabled             = $False;
-                    IsSingleInstance      = "Yes";
-                    Credential            = $Credential;
+                    IsDefaultAccessEnabled = $True;
+                    IsEnabled              = $False;
+                    IsSingleInstance       = "Yes";
+                    Credential             = $Credential;
                 }
 
                 Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
                     return @{
-                        isEnabled = $false
+                        isDefaultAccessEnabled = $true
+                        isEnabled              = $false
                     }
                 }
             }
@@ -69,14 +71,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    IsEnabled             = $True; #Drift
-                    IsSingleInstance      = "Yes";
-                    Credential            = $Credential;
+                    IsDefaultAccessEnabled = $False; #Drift
+                    IsEnabled              = $True; #Drift
+                    IsSingleInstance       = "Yes";
+                    Credential             = $Credential;
                 }
 
                 Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
                     return @{
-                        isEnabled = $false
+                        isDefaultAccessEnabled = $true
+                        isEnabled              = $false
                     }
                 }
             }

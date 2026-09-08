@@ -17,6 +17,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
       "name": "TargetType",
       "reason": "Accepted",
       "note": "Carries the odata subtype for iosiPadOSWebClip, macOSWebClip, windowsWebApp and webApp"

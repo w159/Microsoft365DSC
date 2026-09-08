@@ -74,6 +74,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     bundleId = "FakeStringValue"
                     fileName = "FakeStringValue.ipa"
                     versionNumber = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     buildNumber = "FakeStringValue"
                     committedContentVersion = "FakeStringValue"
                     applicableDeviceType = @{
@@ -129,6 +130,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     bundleId = "FakeStringValue"
                     fileName = "FakeStringValue.ipa"
                     versionNumber = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     buildNumber = "FakeStringValue"
                     committedContentVersion = "FakeStringValue"
                     applicableDeviceType = @{
@@ -213,6 +215,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
                     }))
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     buildNumber = "FakeStringValue"
                     bundleId = "FakeStringValue"
                     description = "FakeStringValue"
@@ -284,6 +287,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
                     }))
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     buildNumber = "FakeStringValue"
                     bundleId = "FakeStringValue"
                     description = "FakeStringValue"
@@ -354,6 +358,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
                     }))
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     buildNumber = "FakeStringValue"
                     bundleId = "FakeStringValue"
                     description = "FakeStringValue"
@@ -415,6 +420,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
                     }))
+                    appleDeviceAppDeliveryProtocolType = "default" # Drift
                     buildNumber = "FakeStringValue"
                     bundleId = "FakeStringValue"
                     description = "FakeStringValue"

@@ -10,6 +10,10 @@ class AADIdentityGovernanceLifecycleWorkflow : M365DSCResourceBase
     [System.String] $DisplayName
 
     [DscProperty()]
+    [System.ComponentModel.Description('The unique identifiers of the administrative units that the workflow is scoped to.')]
+    [System.String[]] $AdministrationScopeTargets
+
+    [DscProperty()]
     [System.ComponentModel.Description('Description of the Workflow')]
     [System.String] $Description
 
@@ -79,11 +83,9 @@ class AADIdentityGovernanceLifecycleWorkflow : M365DSCResourceBase
 
     [AADIdentityGovernanceLifecycleWorkflow] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
+        $administrationScopeTargetsResults = @()
         $executionConditionsResults = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $taskResults = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullResult = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -123,31 +125,37 @@ class AADIdentityGovernanceLifecycleWorkflow : M365DSCResourceBase
                 return $this.AsResult($nullResult)
             }
 
-            $instance = Get-MgBetaIdentityGovernanceLifecycleWorkflow -WorkflowId $instance.Id
+            $instance = Get-MgBetaIdentityGovernanceLifecycleWorkflow -WorkflowId $instance.Id -ExpandProperty 'administrationScopeTargets'
             if ($null -ne $instance)
             {
                 $executionConditionsResults = $this.GetWorkflowExecutionConditions($instance.Id)
                 $taskResults = $this.GetTasks($instance.Id)
+
+                if ($null -ne $instance.AdministrationScopeTargets)
+                {
+                    $administrationScopeTargetsResults = [Array]($instance.AdministrationScopeTargets.Id)
+                }
             }
 
             $results = @{
-                DisplayName           = $this.DisplayName
-                Description           = $instance.Description
-                Category              = $instance.Category
-                IsEnabled             = $instance.IsEnabled
-                IsSchedulingEnabled   = $instance.IsSchedulingEnabled
-                Tasks                 = [Array]$taskResults
-                ExecutionConditions   = $executionConditionsResults
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
-                AccessTokens          = $this.AccessTokens
+                DisplayName                = $this.DisplayName
+                AdministrationScopeTargets = [Array]$administrationScopeTargetsResults
+                Description                = $instance.Description
+                Category                   = $instance.Category
+                IsEnabled                  = $instance.IsEnabled
+                IsSchedulingEnabled        = $instance.IsSchedulingEnabled
+                Tasks                      = [Array]$taskResults
+                ExecutionConditions        = $executionConditionsResults
+                Ensure                     = 'Present'
+                Credential                 = $this.Credential
+                ApplicationId              = $this.ApplicationId
+                TenantId                   = $this.TenantId
+                ApplicationSecret          = $this.ApplicationSecret
+                CertificateThumbprint      = $this.CertificateThumbprint
+                CertificatePath            = $this.CertificatePath
+                CertificatePassword        = $this.CertificatePassword
+                ManagedIdentity            = $this.ManagedIdentity.IsPresent
+                AccessTokens               = $this.AccessTokens
             }
             return $this.AsResult($results)
         }
@@ -176,6 +184,22 @@ class AADIdentityGovernanceLifecycleWorkflow : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($null -ne $this.AdministrationScopeTargets)
+        {
+            [Array]$administrationScopeTargetsValue = @()
+
+            foreach ($administrationScopeTarget in $this.AdministrationScopeTargets)
+            {
+                $administrationScopeTargetsValue += @{
+                    '@odata.type' = '#microsoft.graph.administrativeUnit'
+                    id            = $administrationScopeTarget
+                }
+            }
+
+            $setParameters.Remove('AdministrationScopeTargets')
+            $setParameters.Add('AdministrationScopeTargets', [Array]$administrationScopeTargetsValue)
+        }
 
         if ($null -ne $this.ExecutionConditions)
         {

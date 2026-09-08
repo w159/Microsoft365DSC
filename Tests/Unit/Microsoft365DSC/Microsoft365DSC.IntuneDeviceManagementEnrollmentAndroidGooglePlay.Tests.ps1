@@ -47,6 +47,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TargetGroups                                     = @("Test Target Group")
                     DeviceOwnerManagementEnabled                    = $False
                     AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $False
+                    ManagedGooglePlayInitialScopeTagIds             = @("0")
                     Ensure                                          = 'Present'
                     Credential                                      = $Credential;
                 }
@@ -134,6 +135,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BindStatus                                   = "bound"
                     # OwnerUserPrincipalName                       = "existingUser@domain.com"
                     TargetGroups                                  = @("Test Target Group")
+                    ManagedGooglePlayInitialScopeTagIds          = @("0")
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
@@ -144,6 +146,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         BindStatus                                = "bound"
                         # OwnerUserPrincipalName                    = "existingUser@domain.com"
                         TargetGroupIds                            = @("11111111-1111-1111-1111-111111111111")
+                        ManagedGooglePlayInitialScopeTagIds       = @("0")
                         Ensure                                    = 'Present'
                     }
                 }
@@ -161,6 +164,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id                                          = "androidManagedStoreAccountEnterpriseSettings"
                     BindStatus                                   = "notBound"
                     TargetGroups                                  = @("Test Target Group")
+                    ManagedGooglePlayInitialScopeTagIds          = @("0")
                     Ensure                                       = 'Present'
                     Credential                                   = $Credential;
                 }
@@ -171,6 +175,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         BindStatus                                = "bound"
                         OwnerUserPrincipalName                    = "existingUser@domain.com"
                         TargetGroupIds                            = @("11111111-1111-1111-1111-111111111111")
+                        ManagedGooglePlayInitialScopeTagIds       = @("1")
                         Ensure                                    = 'Present'
                     }
                 }

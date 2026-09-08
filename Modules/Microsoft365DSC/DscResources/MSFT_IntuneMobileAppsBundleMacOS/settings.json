@@ -28,6 +28,11 @@
       "name": "PrimaryBundleVersion",
       "reason": "Accepted",
       "note": "Derived from the first IncludedApps entry at create time"
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Bundle types Dmg and Pkg for macOS.",

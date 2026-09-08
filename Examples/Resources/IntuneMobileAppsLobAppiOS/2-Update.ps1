@@ -26,11 +26,12 @@ Configuration Example
     {
         IntuneMobileAppsLobAppiOS "IntuneMobileAppsLobAppiOS-Example"
         {
-            ApplicableDeviceType            = MSFT_MicrosoftGraphIosDeviceType{
+            AppleDeviceAppDeliveryProtocolType = "mobileDeviceManagement";
+            ApplicableDeviceType               = MSFT_MicrosoftGraphIosDeviceType{
                 IPad          = $True
                 IPhoneAndIPod = $True
             };
-            Assignments                     = @(
+            Assignments                        = @(
                 MSFT_DeviceManagementLobAppiOSAssignment{
                     groupDisplayName                           = 'All devices'
                     deviceAndAppManagementAssignmentFilterType = 'none'
@@ -42,22 +43,22 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            BuildNumber                     = "1";
-            BundleId                        = "com.contoso.fieldservice";
-            Categories                      = @(
+            BuildNumber                        = "1";
+            BundleId                           = "com.contoso.fieldservice";
+            Categories                         = @(
                 MSFT_DeviceManagementMobileAppCategory{
                     Id          = "2185c6bf-1b3d-4daa-a0bc-79cb4fad9c87"
                     DisplayName = "App Category 1"
                 }
             );
-            Description                     = "Line-of-business iOS application";
-            Developer                       = "";
-            DisplayName                     = "Contoso Field Service";
-            Ensure                          = "Present";
-            FileName                        = "ContosoFieldService.ipa";
-            Id                              = "63271b78-0fa4-46b8-9ac0-d4b777555dde";
-            IsFeatured                      = $False;
-            MinimumSupportedOperatingSystem = MSFT_MicrosoftGraphIosMinimumOperatingSystem{
+            Description                        = "Line-of-business iOS application";
+            Developer                          = "";
+            DisplayName                        = "Contoso Field Service";
+            Ensure                             = "Present";
+            FileName                           = "ContosoFieldService.ipa";
+            Id                                 = "63271b78-0fa4-46b8-9ac0-d4b777555dde";
+            IsFeatured                         = $False;
+            MinimumSupportedOperatingSystem    = MSFT_MicrosoftGraphIosMinimumOperatingSystem{
                 V8_0  = $False
                 V9_0  = $False
                 V10_0 = $False
@@ -70,14 +71,14 @@ Configuration Example
                 V17_0 = $True # Updated Property
                 V18_0 = $False
             };
-            Notes                           = "";
-            Owner                           = "";
-            Publisher                       = "Contoso";
-            RoleScopeTagIds                 = @("0");
-            VersionNumber                   = "6.8.26";
-            ApplicationId                   = $ApplicationId;
-            TenantId                        = $TenantId;
-            CertificateThumbprint           = $CertificateThumbprint;
+            Notes                              = "";
+            Owner                              = "";
+            Publisher                          = "Contoso";
+            RoleScopeTagIds                    = @("0");
+            VersionNumber                      = "6.8.26";
+            ApplicationId                      = $ApplicationId;
+            TenantId                           = $TenantId;
+            CertificateThumbprint              = $CertificateThumbprint;
         }
     }
 }

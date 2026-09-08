@@ -45,8 +45,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaEntitlementManagementAccessPackageAssignmentPolicy -MockWith {
                 return @{
-                    AccessPackageId         = 'FakeStringValue'
-                    AccessReviewSettings    = @{
+                    AccessPackageId                   = 'FakeStringValue'
+                    AccessPackageNotificationSettings = @{
+                        isAssignmentNotificationDisabled = $True
+                    }
+                    AccessReviewSettings              = @{
                         isEnabled                       = $True
                         isAccessRecommendationEnabled   = $True
                         isAgenticExperienceEnabled      = $True
@@ -55,8 +58,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         reviewerType                    = 'FakeStringValue'
                         durationInDays                  = 25
                     }
-                    CanExtend               = $True
-                    CustomExtensionHandlers = @(
+                    CanExtend                         = $True
+                    CustomExtensionHandlers           = @(
                         @{
                             CustomExtension = @{
                                 AuthenticationConfiguration = @{
@@ -78,11 +81,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Id              = 'MyCustomExtensionHandlersId'
                         }
                     )
-                    Description             = 'FakeStringValue'
-                    DisplayName             = 'FakeStringValue'
-                    DurationInDays          = 25
-                    Id                      = 'FakeStringValue'
-                    Questions               = @(
+                    Description                       = 'FakeStringValue'
+                    DisplayName                       = 'FakeStringValue'
+                    DurationInDays                    = 25
+                    Id                                = 'FakeStringValue'
+                    Questions                         = @(
                         @{
                             isAnswerEditable     = $True
                             id                   = 'FakeStringValue'
@@ -92,15 +95,23 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             allowsMultipleSelection = $True
                         }
                     )
-                    RequestApprovalSettings = @{
+                    RequestApprovalSettings           = @{
                         approvalMode                     = 'NoApproval'
                         isRequestorJustificationRequired = $True
                         isApprovalRequiredForExtension   = $False
                         isApprovalRequired               = $False
                     }
-                    RequestorSettings       = @{
+                    RequestorSettings                 = @{
                         scopeType      = 'NoSubjects'
                         acceptRequests = $True
+                    }
+                    VerifiableCredentialSettings      = @{
+                        credentialTypes = @(
+                            @{
+                                credentialType = 'FakeStringValue'
+                                issuers        = @('FakeStringValue')
+                            }
+                        )
                     }
                 }
             }
@@ -124,8 +135,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The AADEntitlementManagementAccessPackageAssignmentPolicy should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessPackageId         = 'FakeStringValue'
-                    AccessReviewSettings    = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
+                    AccessPackageId                   = 'FakeStringValue'
+                    AccessPackageNotificationSettings = ([MSFT_MicrosoftGraphaccessPackageNotificationSettings] @{
+                            isAssignmentNotificationDisabled = $True
+                        })
+                    AccessReviewSettings              = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
                             isEnabled                       = $True
                             isAccessRecommendationEnabled   = $True
                             isAgenticExperienceEnabled      = $True
@@ -134,18 +148,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             reviewerType                    = 'FakeStringValue'
                             durationInDays                  = 25
                         })
-                    CanExtend               = $True
-                    CustomExtensionHandlers = @(
+                    CanExtend                         = $True
+                    CustomExtensionHandlers           = @(
                             ([MSFT_MicrosoftGraphcustomextensionhandler] @{
                             CustomExtensionId = 'MyCustomExtensionId'
                             Stage           = 'assignmentRequestCreated'
                         })
                     )
-                    Description             = 'FakeStringValue'
-                    DisplayName             = 'FakeStringValue'
-                    DurationInDays          = 25
-                    Id                      = 'FakeStringValue'
-                    Questions               = @(
+                    Description                       = 'FakeStringValue'
+                    DisplayName                       = 'FakeStringValue'
+                    DurationInDays                    = 25
+                    Id                                = 'FakeStringValue'
+                    Questions                         = @(
                             ([MSFT_MicrosoftGraphaccesspackagequestion] @{
                             allowsMultipleSelection = $True
                             isAnswerEditable        = $True
@@ -155,19 +169,27 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             SequencePosition        = 25
                         })
                     )
-                    RequestApprovalSettings = ([MSFT_MicrosoftGraphapprovalsettings] @{
+                    RequestApprovalSettings           = ([MSFT_MicrosoftGraphapprovalsettings] @{
                             approvalMode                     = 'NoApproval'
                             isRequestorJustificationRequired = $True
                             isApprovalRequiredForExtension   = $False
                             isApprovalRequired               = $False
                         })
-                    RequestorSettings       = ([MSFT_MicrosoftGraphrequestorsettings] @{
+                    RequestorSettings                 = ([MSFT_MicrosoftGraphrequestorsettings] @{
                             scopeType      = 'NoSubjects'
                             acceptRequests = $True
                         })
+                    VerifiableCredentialSettings      = ([MSFT_MicrosoftGraphverifiableCredentialSettings] @{
+                            credentialTypes = @(
+                                    ([MSFT_MicrosoftGraphverifiableCredentialType] @{
+                                    credentialType = 'FakeStringValue'
+                                    issuers        = @('FakeStringValue')
+                                })
+                            )
+                        })
 
-                    Ensure                  = 'Present'
-                    Credential              = $Credential
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
                 Mock -CommandName Get-MgBetaEntitlementManagementAccessPackageAssignmentPolicy -MockWith {
                     return $null
@@ -188,8 +210,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The AADEntitlementManagementAccessPackageAssignmentPolicy exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessPackageId         = 'FakeStringValue'
-                    AccessReviewSettings    = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
+                    AccessPackageId                   = 'FakeStringValue'
+                    AccessPackageNotificationSettings = ([MSFT_MicrosoftGraphaccessPackageNotificationSettings] @{
+                            isAssignmentNotificationDisabled = $True
+                        })
+                    AccessReviewSettings              = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
                             isEnabled                       = $True
                             isAccessRecommendationEnabled   = $True
                             isAgenticExperienceEnabled      = $True
@@ -198,18 +223,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             reviewerType                    = 'FakeStringValue'
                             durationInDays                  = 25
                         })
-                    CanExtend               = $True
-                    CustomExtensionHandlers = @(
+                    CanExtend                         = $True
+                    CustomExtensionHandlers           = @(
                             ([MSFT_MicrosoftGraphcustomextensionhandler] @{
                             CustomExtensionId = 'MyCustomExtensionId'
                             Stage           = 'assignmentRequestCreated'
                         })
                     )
-                    Description             = 'FakeStringValue'
-                    DisplayName             = 'FakeStringValue'
-                    DurationInDays          = 25
-                    Id                      = 'FakeStringValue'
-                    Questions               = @(
+                    Description                       = 'FakeStringValue'
+                    DisplayName                       = 'FakeStringValue'
+                    DurationInDays                    = 25
+                    Id                                = 'FakeStringValue'
+                    Questions                         = @(
                             ([MSFT_MicrosoftGraphaccesspackagequestion] @{
                             allowsMultipleSelection = $True
                             isAnswerEditable        = $True
@@ -219,19 +244,27 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             SequencePosition        = 25
                         })
                     )
-                    RequestApprovalSettings = ([MSFT_MicrosoftGraphapprovalsettings] @{
+                    RequestApprovalSettings           = ([MSFT_MicrosoftGraphapprovalsettings] @{
                             approvalMode                     = 'NoApproval'
                             isRequestorJustificationRequired = $True
                             isApprovalRequiredForExtension   = $False
                             isApprovalRequired               = $False
                         })
-                    RequestorSettings       = ([MSFT_MicrosoftGraphrequestorsettings] @{
+                    RequestorSettings                 = ([MSFT_MicrosoftGraphrequestorsettings] @{
                             scopeType      = 'NoSubjects'
                             acceptRequests = $True
                         })
+                    VerifiableCredentialSettings      = ([MSFT_MicrosoftGraphverifiableCredentialSettings] @{
+                            credentialTypes = @(
+                                    ([MSFT_MicrosoftGraphverifiableCredentialType] @{
+                                    credentialType = 'FakeStringValue'
+                                    issuers        = @('FakeStringValue')
+                                })
+                            )
+                        })
 
-                    Ensure                  = 'Absent'
-                    Credential              = $Credential
+                    Ensure                            = 'Absent'
+                    Credential                        = $Credential
                 }
             }
 
@@ -251,8 +284,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The AADEntitlementManagementAccessPackageAssignmentPolicy Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessPackageId         = 'FakeStringValue'
-                    AccessReviewSettings    = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
+                    AccessPackageId                   = 'FakeStringValue'
+                    AccessPackageNotificationSettings = ([MSFT_MicrosoftGraphaccessPackageNotificationSettings] @{
+                            isAssignmentNotificationDisabled = $True
+                        })
+                    AccessReviewSettings              = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
                             isEnabled                       = $True
                             isAccessRecommendationEnabled   = $True
                             isAgenticExperienceEnabled      = $True
@@ -261,18 +297,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             reviewerType                    = 'FakeStringValue'
                             durationInDays                  = 25
                         })
-                    CanExtend               = $True
-                    CustomExtensionHandlers = @(
+                    CanExtend                         = $True
+                    CustomExtensionHandlers           = @(
                             ([MSFT_MicrosoftGraphcustomextensionhandler] @{
                             CustomExtensionId = 'MyCustomExtensionId'
                             Stage           = 'assignmentRequestCreated'
                         })
                     )
-                    Description             = 'FakeStringValue'
-                    DisplayName             = 'FakeStringValue'
-                    DurationInDays          = 25
-                    Id                      = 'FakeStringValue'
-                    Questions               = @(
+                    Description                       = 'FakeStringValue'
+                    DisplayName                       = 'FakeStringValue'
+                    DurationInDays                    = 25
+                    Id                                = 'FakeStringValue'
+                    Questions                         = @(
                             ([MSFT_MicrosoftGraphaccesspackagequestion] @{
                             allowsMultipleSelection = $True
                             isAnswerEditable        = $True
@@ -282,19 +318,27 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             SequencePosition        = 25
                         })
                     )
-                    RequestApprovalSettings = ([MSFT_MicrosoftGraphapprovalsettings] @{
+                    RequestApprovalSettings           = ([MSFT_MicrosoftGraphapprovalsettings] @{
                             approvalMode                     = 'NoApproval'
                             isRequestorJustificationRequired = $True
                             isApprovalRequiredForExtension   = $False
                             isApprovalRequired               = $False
                         })
-                    RequestorSettings       = ([MSFT_MicrosoftGraphrequestorsettings] @{
+                    RequestorSettings                 = ([MSFT_MicrosoftGraphrequestorsettings] @{
                             scopeType      = 'NoSubjects'
                             acceptRequests = $True
                         })
+                    VerifiableCredentialSettings      = ([MSFT_MicrosoftGraphverifiableCredentialSettings] @{
+                            credentialTypes = @(
+                                    ([MSFT_MicrosoftGraphverifiableCredentialType] @{
+                                    credentialType = 'FakeStringValue'
+                                    issuers        = @('FakeStringValue')
+                                })
+                            )
+                        })
 
-                    Ensure                  = 'Present'
-                    Credential              = $Credential
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
             }
 
@@ -306,8 +350,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The AADEntitlementManagementAccessPackageAssignmentPolicy exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AccessPackageId         = 'FakeStringValue'
-                    AccessReviewSettings    = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
+                    AccessPackageId                   = 'FakeStringValue'
+                    AccessPackageNotificationSettings = ([MSFT_MicrosoftGraphaccessPackageNotificationSettings] @{
+                            isAssignmentNotificationDisabled = $False # Drift
+                        })
+                    AccessReviewSettings              = ([MSFT_MicrosoftGraphassignmentreviewsettings] @{
                             isEnabled                       = $True
                             isAccessRecommendationEnabled   = $True
                             isAgenticExperienceEnabled      = $True
@@ -316,18 +363,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             reviewerType                    = 'FakeStringValue'
                             durationInDays                  = 30 # Drift
                         })
-                    CanExtend               = $True
-                    CustomExtensionHandlers = @(
+                    CanExtend                         = $True
+                    CustomExtensionHandlers           = @(
                             ([MSFT_MicrosoftGraphcustomextensionhandler] @{
                             CustomExtensionId = 'MyCustomExtensionId'
                             Stage           = 'assignmentRequestCreated'
                         })
                     )
-                    Description             = 'FakeStringValue'
-                    DisplayName             = 'FakeStringValue'
-                    DurationInDays          = 25
-                    Id                      = 'FakeStringValue'
-                    Questions               = @(
+                    Description                       = 'FakeStringValue'
+                    DisplayName                       = 'FakeStringValue'
+                    DurationInDays                    = 25
+                    Id                                = 'FakeStringValue'
+                    Questions                         = @(
                             ([MSFT_MicrosoftGraphaccesspackagequestion] @{
                             allowsMultipleSelection = $True
                             isAnswerEditable        = $True
@@ -337,19 +384,27 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             SequencePosition        = 25
                         })
                     )
-                    RequestApprovalSettings = ([MSFT_MicrosoftGraphapprovalsettings] @{
+                    RequestApprovalSettings           = ([MSFT_MicrosoftGraphapprovalsettings] @{
                             approvalMode                     = 'NoApproval'
                             isRequestorJustificationRequired = $True
                             isApprovalRequiredForExtension   = $False
                             isApprovalRequired               = $False
                         })
-                    RequestorSettings       = ([MSFT_MicrosoftGraphrequestorsettings] @{
+                    RequestorSettings                 = ([MSFT_MicrosoftGraphrequestorsettings] @{
                             scopeType      = 'NoSubjects'
                             acceptRequests = $True
                         })
+                    VerifiableCredentialSettings      = ([MSFT_MicrosoftGraphverifiableCredentialSettings] @{
+                            credentialTypes = @(
+                                    ([MSFT_MicrosoftGraphverifiableCredentialType] @{
+                                    credentialType = 'DriftStringValue' # Drift
+                                    issuers        = @('FakeStringValue')
+                                })
+                            )
+                        })
 
-                    Ensure                  = 'Present'
-                    Credential              = $Credential
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
             }
 

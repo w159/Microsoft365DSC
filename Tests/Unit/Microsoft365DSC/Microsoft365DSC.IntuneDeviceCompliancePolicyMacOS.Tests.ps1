@@ -67,6 +67,35 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FirewallEnabled                             = $False
                     FirewallBlockAllIncoming                    = $False
                     FirewallEnableStealthMode                   = $False
+                    DeviceCompliancePolicyScript                = @{
+                        deviceComplianceScriptId = 'a1f3c0de-6b4a-4f2d-9c37-58e0d2b41f77'
+                        rulesContent             = 'eyJSdWxlcyI6W3siU2V0dGluZ05hbWUiOiJGaWxlVmF1bHRFbmFibGVkIiwiT3BlcmF0b3IiOiJJc0VxdWFscyIsIkRhdGFUeXBlIjoiQm9vbGVhbiIsIk9wZXJhbmQiOnRydWUsIk1vcmVJbmZvVXJsIjoiaHR0cHM6Ly9sZWFybi5taWNyb3NvZnQuY29tL2ludHVuZS9pbnR1bmUtc2VydmljZS9wcm90ZWN0L2NvbXBsaWFuY2UtY3VzdG9tLWpzb24iLCJSZW1lZGlhdGlvblN0cmluZ3MiOlt7Ikxhbmd1YWdlIjoiZW5fVVMiLCJUaXRsZSI6IkZpbGVWYXVsdCBtdXN0IGJlIHR1cm5lZCBvbi4iLCJEZXNjcmlwdGlvbiI6IlR1cm4gb24gRmlsZVZhdWx0IGRpc2sgZW5jcnlwdGlvbiBpbiBTeXN0ZW0gU2V0dGluZ3MsIHRoZW4gcmV0cnkuIn1dfV19'
+                    }
+                }
+            }
+
+            Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
+                if ($Uri -like '*$filter=*')
+                {
+                    return @{
+                        value = @(
+                            @{
+                                id          = 'a1f3c0de-6b4a-4f2d-9c37-58e0d2b41f77'
+                                displayName = 'macOS FileVault compliance'
+                                platform    = 'macOS'
+                                publisher   = 'Contoso'
+                                runAsAccount = 'system'
+                            }
+                        )
+                    }
+                }
+
+                return @{
+                    id          = 'a1f3c0de-6b4a-4f2d-9c37-58e0d2b41f77'
+                    displayName = 'macOS FileVault compliance'
+                    platform    = 'macOS'
+                    publisher   = 'Contoso'
+                    runAsAccount = 'system'
                 }
             }
 
@@ -106,6 +135,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FirewallEnabled                             = $False
                     FirewallBlockAllIncoming                    = $False
                     FirewallEnableStealthMode                   = $False
+                    DeviceCompliancePolicyScript                = ([MSFT_MicrosoftGraphDeviceCompliancePolicyScript] @{
+                        DisplayName  = 'macOS FileVault compliance'
+                        RulesContent = '{"Rules":[{"SettingName":"FileVaultEnabled","Operator":"IsEquals","DataType":"Boolean","Operand":true,"MoreInfoUrl":"https://learn.microsoft.com/intune/intune-service/protect/compliance-custom-json","RemediationStrings":[{"Language":"en_US","Title":"FileVault must be turned on.","Description":"Turn on FileVault disk encryption in System Settings, then retry."}]}]}'
+                    })
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -151,6 +184,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FirewallEnabled                             = $False
                     FirewallBlockAllIncoming                    = $False
                     FirewallEnableStealthMode                   = $False
+                    DeviceCompliancePolicyScript                = ([MSFT_MicrosoftGraphDeviceCompliancePolicyScript] @{
+                        DisplayName  = 'macOS FileVault compliance'
+                        RulesContent = '{"Rules":[{"SettingName":"FileVaultEnabled","Operator":"IsEquals","DataType":"Boolean","Operand":true,"MoreInfoUrl":"https://learn.microsoft.com/intune/intune-service/protect/compliance-custom-json","RemediationStrings":[{"Language":"en_US","Title":"FileVault must be turned on.","Description":"Turn on FileVault disk encryption in System Settings, then retry."}]}]}'
+                    })
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -192,6 +229,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FirewallEnabled                             = $False
                     FirewallBlockAllIncoming                    = $False
                     FirewallEnableStealthMode                   = $False
+                    DeviceCompliancePolicyScript                = ([MSFT_MicrosoftGraphDeviceCompliancePolicyScript] @{
+                        DisplayName  = 'macOS FileVault compliance'
+                        RulesContent = '{"Rules":[{"SettingName":"FileVaultEnabled","Operator":"IsEquals","DataType":"Boolean","Operand":true,"MoreInfoUrl":"https://learn.microsoft.com/intune/intune-service/protect/compliance-custom-json","RemediationStrings":[{"Language":"en_US","Title":"FileVault must be turned on.","Description":"Turn on FileVault disk encryption in System Settings, then retry."}]}]}'
+                    })
                     Assignments                                 = @()
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
@@ -225,6 +266,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FirewallEnabled                             = $False
                     FirewallBlockAllIncoming                    = $False
                     FirewallEnableStealthMode                   = $False
+                    DeviceCompliancePolicyScript                = ([MSFT_MicrosoftGraphDeviceCompliancePolicyScript] @{
+                        DisplayName  = 'macOS FileVault compliance'
+                        RulesContent = '{"Rules":[{"SettingName":"FileVaultEnabled","Operator":"IsEquals","DataType":"Boolean","Operand":true,"MoreInfoUrl":"https://learn.microsoft.com/intune/intune-service/protect/compliance-custom-json","RemediationStrings":[{"Language":"en_US","Title":"FileVault must be turned on.","Description":"Turn on FileVault disk encryption in System Settings, then retry."}]}]}'
+                    })
                     Ensure                                      = 'Absent'
                     Credential                                  = $Credential
                 }

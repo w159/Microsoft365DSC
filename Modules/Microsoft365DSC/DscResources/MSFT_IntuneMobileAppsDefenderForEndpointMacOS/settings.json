@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    }
+  ],
   "description": "This resource configures an Intune Mobile Apps Defender For Endpoint for macOS.",
   "permissions": {
     "graph": {

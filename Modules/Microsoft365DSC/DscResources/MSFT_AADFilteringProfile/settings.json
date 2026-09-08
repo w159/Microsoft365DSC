@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "ConditionalAccessPolicies",
+      "reason": "ReadOnly",
+      "note": "Back reference authored on the Conditional Access policy instead."
+    }
+  ],
   "description": "Configures filtering profiles in Entra Id.",
   "roles": {
     "read": [],

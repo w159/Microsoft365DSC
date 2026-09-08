@@ -10,7 +10,18 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeployableContentDisplayName",
+      "reason": "NotConfigurable",
+      "note": "The service sets this display value on the server side."
+    },
+    {
+      "name": "ReleaseDateDisplayName",
+      "reason": "NotConfigurable",
+      "note": "The service sets this display value on the server side."
+    }
+  ],
   "description": "This resource configures an Intune Windows Update For Business Quality Update Profile for Windows10.",
   "permissions": {
     "graph": {

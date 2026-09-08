@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
       "name": "VersionCode",
       "reason": "Accepted",
       "note": "Set writes a fixed placeholder matching the stub package manifest"

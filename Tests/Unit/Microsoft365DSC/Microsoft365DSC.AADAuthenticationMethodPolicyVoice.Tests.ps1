@@ -42,6 +42,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         }
                     )
                     '@odata.type' = "#microsoft.graph.voiceAuthenticationMethodConfiguration"
+                    callerIdNumber = "+14255551234"
                     isOfficePhoneAllowed = $True
                     ExcludeTargets = @(
                         @{
@@ -88,6 +89,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     )
                     Id = "Voice"
+                    CallerIdNumber = "+14255551234"
                     IsOfficePhoneAllowed = $True
                     State = "enabled"
                     Ensure = "Present"
@@ -126,6 +128,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     )
                     Id = "Voice"
+                    CallerIdNumber = "+14255551234"
                     IsOfficePhoneAllowed = $True
                     State = "enabled"
                     Ensure = 'Absent'
@@ -162,6 +165,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     )
                     Id = "Voice"
+                    CallerIdNumber = "+14255551234"
                     IsOfficePhoneAllowed = $True
                     State = "enabled"
                     Ensure = 'Present'
@@ -191,6 +195,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     )
                     Id = "Voice"
+                    CallerIdNumber = "+14255551234"
                     IsOfficePhoneAllowed = $false # Drift
                     State = "enabled"
                     Ensure = 'Present'

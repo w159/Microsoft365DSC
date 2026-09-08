@@ -42,6 +42,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         }
                     )
                     '@odata.type' = "#microsoft.graph.x509CertificateAuthenticationMethodConfiguration"
+                    certificateAuthorityScopes = @(
+                        @{
+                            includeTargets = @(
+                                @{
+                                    targetType = 'group'
+                                    id = '00000000-0000-0000-0000-000000000000'
+                                }
+                            )
+                            publicKeyInfrastructureIdentifier = "FakeStringValue"
+                            subjectKeyIdentifier = "FakeStringValue"
+                        }
+                    )
+                    issuerHintsConfiguration = @{
+                        state = "enabled"
+                    }
                     certificateUserBindings = @(
                         @{
                             x509CertificateField = "FakeStringValue"
@@ -101,6 +116,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             })
                         )
                     })
+                    CertificateAuthorityScopes = @(
+                        ([MSFT_MicrosoftGraphx509CertificateAuthorityScope] @{
+                            IncludeTargets = @(
+                                ([MSFT_MicrosoftGraphIncludeTarget] @{
+                                    TargetType = 'group'
+                                    Id = '00000000-0000-0000-0000-000000000000'
+                                })
+                            )
+                            PublicKeyInfrastructureIdentifier = "FakeStringValue"
+                            SubjectKeyIdentifier = "FakeStringValue"
+                        })
+                    )
                     certificateUserBindings = @(
                         ([MSFT_MicrosoftGraphx509CertificateUserBinding] @{
                             x509CertificateField = "FakeStringValue"
@@ -120,6 +147,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Id         = '00000000-0000-0000-0000-000000000000'
                         })
                     )
+                    IssuerHintsConfiguration = ([MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration] @{
+                        State = "enabled"
+                    })
                     Id = "X509Certificate"
                     State = "enabled"
                     Ensure = "Present"
@@ -155,6 +185,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             })
                         )
                     })
+                    CertificateAuthorityScopes = @(
+                        ([MSFT_MicrosoftGraphx509CertificateAuthorityScope] @{
+                            IncludeTargets = @(
+                                ([MSFT_MicrosoftGraphIncludeTarget] @{
+                                    TargetType = 'group'
+                                    Id = 'Fakegroup'
+                                })
+                            )
+                            PublicKeyInfrastructureIdentifier = "FakeStringValue"
+                            SubjectKeyIdentifier = "FakeStringValue"
+                        })
+                    )
                     certificateUserBindings = @(
                         ([MSFT_MicrosoftGraphx509CertificateUserBinding] @{
                             x509CertificateField = "FakeStringValue"
@@ -174,6 +216,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Id         = 'Fakegroup'
                         })
                     )
+                    IssuerHintsConfiguration = ([MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration] @{
+                        State = "enabled"
+                    })
                     Id = "X509Certificate"
                     State = "enabled"
                     Ensure = 'Absent'
@@ -207,6 +252,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             })
                         )
                     })
+                    CertificateAuthorityScopes = @(
+                        ([MSFT_MicrosoftGraphx509CertificateAuthorityScope] @{
+                            IncludeTargets = @(
+                                ([MSFT_MicrosoftGraphIncludeTarget] @{
+                                    TargetType = 'group'
+                                    Id = 'Fakegroup'
+                                })
+                            )
+                            PublicKeyInfrastructureIdentifier = "FakeStringValue"
+                            SubjectKeyIdentifier = "FakeStringValue"
+                        })
+                    )
                     certificateUserBindings = @(
                         ([MSFT_MicrosoftGraphx509CertificateUserBinding] @{
                             x509CertificateField = "FakeStringValue"
@@ -226,6 +283,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Id         = 'Fakegroup'
                         })
                     )
+                    IssuerHintsConfiguration = ([MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration] @{
+                        State = "enabled"
+                    })
                     Id = "X509Certificate"
                     State = "enabled"
                     Ensure = 'Present'
@@ -251,6 +311,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             })
                         )
                     })
+                    CertificateAuthorityScopes = @(
+                        ([MSFT_MicrosoftGraphx509CertificateAuthorityScope] @{
+                            IncludeTargets = @(
+                                ([MSFT_MicrosoftGraphIncludeTarget] @{
+                                    TargetType = 'group'
+                                    Id = 'Fakegroup'
+                                })
+                            )
+                            PublicKeyInfrastructureIdentifier = "FakeStringValue"
+                            SubjectKeyIdentifier = "FakeStringValue2" # Drift
+                        })
+                    )
                     certificateUserBindings = @(
                         ([MSFT_MicrosoftGraphx509CertificateUserBinding] @{
                             x509CertificateField = "FakeStringValue"
@@ -270,6 +342,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Id         = 'Fakegroup'
                         })
                     )
+                    IssuerHintsConfiguration = ([MSFT_MicrosoftGraphx509CertificateIssuerHintsConfiguration] @{
+                        State = "disabled" # Drift
+                    })
                     Id = "X509Certificate"
                     State = "enabled"
                     Ensure = 'Present'

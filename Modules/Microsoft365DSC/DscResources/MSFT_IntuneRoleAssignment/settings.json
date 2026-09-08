@@ -27,6 +27,11 @@
       "note": "Resolves the role definition by display name"
     },
     {
+      "name": "RoleScopeTags",
+      "reason": "Accepted",
+      "note": "Configured through the RoleScopeTagIds property on the resource. Most likely a duplicate relation."
+    },
+    {
       "name": "ScopeMembers",
       "reason": "Deprecated",
       "note": "Legacy spelling of resourceScopes, already configured through ResourceScopes"

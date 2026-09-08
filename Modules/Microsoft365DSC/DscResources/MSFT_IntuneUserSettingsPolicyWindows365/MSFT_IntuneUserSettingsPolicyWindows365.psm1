@@ -22,6 +22,11 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
     [MSFT_MicrosoftGraphcloudPcNotificationSetting] $NotificationSetting
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates the provisioning source of the Cloud PC prepared for an end user. The default value is image.')]
+    [ValidateSet('image', 'snapshot')]
+    [System.String] $ProvisioningSourceType
+
+    [DscProperty()]
     [System.ComponentModel.Description('Indicates whether an end user is allowed to reset their Cloud PC. When true, the user is allowed to reset their Cloud PC. When false, end-user initiated reset isn''t allowed. The default value is false.')]
     [System.Nullable[System.Boolean]] $ResetEnabled
 
@@ -209,6 +214,7 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
                 DisplayName                        = $getValue.DisplayName
                 LocalAdminEnabled                  = $getValue.LocalAdminEnabled
                 NotificationSetting                = $complexNotificationSetting
+                ProvisioningSourceType             = $getValue.ProvisioningSourceType
                 ResetEnabled                       = $getValue.ResetEnabled
                 RestorePointSetting                = $complexRestorePointSetting
                 Id                                 = $getValue.Id

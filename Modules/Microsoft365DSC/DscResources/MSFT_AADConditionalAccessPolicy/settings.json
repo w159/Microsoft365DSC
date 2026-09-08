@@ -33,6 +33,16 @@
       "note": "Navigation property grantControls.authenticationStrength"
     },
     {
+      "name": "Conditions",
+      "reason": "Accepted",
+      "note": "Configured through the flattened condition properties on the resource. Responsible for when the policy applies."
+    },
+    {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "Microsoft Graph documents the property as not used."
+    },
+    {
       "name": "DisableResilienceDefaultsIsEnabled",
       "reason": "Accepted",
       "note": "The flattened sessionControls.disableResilienceDefaults property",
@@ -77,6 +87,11 @@
       "name": "ProtocolFlows",
       "reason": "Accepted",
       "note": "The beta CSDL omits protocolFlows, yet live tenants read and write it."
+    },
+    {
+      "name": "SessionControls",
+      "reason": "Accepted",
+      "note": "Configured through the flattened session control properties on the resource. Responsible for the controls enforced after sign in."
     },
     {
       "name": "SignInFrequencyInterval",

@@ -10,7 +10,23 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DeviceManagementApplicabilityRuleDeviceMode",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
+      "name": "DeviceManagementApplicabilityRuleOsEdition",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
+      "name": "DeviceManagementApplicabilityRuleOsVersion",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    }
+  ],
   "description": "This resource configures an Android Work Intune Trusted Root Certificate Policy.",
   "permissions": {
     "graph": {

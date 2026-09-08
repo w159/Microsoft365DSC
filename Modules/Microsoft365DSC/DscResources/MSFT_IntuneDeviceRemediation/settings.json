@@ -10,7 +10,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "HighestAvailableVersion",
+      "reason": "ReadOnly",
+      "note": "Microsoft assigns the version for its own global scripts."
+    }
+  ],
   "description": "This resource configures an Intune Device Remediation.",
   "permissions": {
     "graph": {

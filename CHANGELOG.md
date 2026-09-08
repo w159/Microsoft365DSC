@@ -13,6 +13,11 @@
   * [BREAKING CHANGE] Renamed property `Permissions` to `RequiredResourceAccess`
     to match the name Microsoft Graph uses.
   * Updated `Owners` to use `DisplayName` for Service Principal objects.
+* AADAuthenticationMethodPolicyVoice
+  * Added support for the `CallerIdNumber` property.
+* AADAuthenticationMethodPolicyX509
+  * Added support for the `CertificateAuthorityScopes` and `IssuerHintsConfiguration`
+    properties.
 * AADAuthorizationPolicy
   * [BREAKING CHANGE] Moved all `DefaultUserRole*` properties to the new
     `DefaultUserRolePermissions` complex property type for separation.
@@ -36,12 +41,21 @@
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
+  * Added support for the `AccessPackageNotificationSettings` and
+    `VerifiableCredentialSettings` properties.
 * AADEntitlementManagementAccessPackageCatalogResource
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
+* AADIdentityGovernanceLifecycleWorkflow
+  * Added support for the `AdministrationScopeTargets` property.
 * AADIdentityGovernanceProgram
   * [BREAKING CHANGE] Removed resource. Please use the resources
     `AADAccessReview[Definition|Policy]` instead.
+* AADOnPremisesPublishingProfilesSettings
+  * Added support for the `IsDefaultAccessEnabled` property.
+* AADPermissionGrantPolicy
+  * Added support for the `IncludeAllPreApprovedApplications` and `ResourceScopeType`
+    properties.
 * AADPIMGroupSetting
   * Improved performance with batch requests.
 * AADRoleAssignmentScheduleRequest
@@ -89,12 +103,15 @@
   * Added value `unknown` to property `Severity`.
 * IntuneAndroidManagedStoreAppConfiguration
   * Added support for the `RoleScopeTagIds` property.
+  * Added support for the `credentialProviderRoleState` property.
 * IntuneAntivirusPolicySecurityExperienceWindows10ConfigMgr
   * Fixed an issue where the resource was missing from the Intune template
     registry, which left its policies out of the export cache.
 * IntuneAntivirusPolicyWindows10ConfigMgr
   * Fixed an issue where the resource was missing from the Intune template
     registry, which left its policies out of the export cache.
+* IntuneAppConfigurationDevicePolicy
+  * Added support for the `CredentialProviderRoleState` property.
 * IntuneAppControlForBusinessPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneAppControlForBusinessPolicyWindows10V2` instead.
@@ -127,38 +144,110 @@
   * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
     Microsoft Graph uses.
   * Added value `windowsMobileApplicationManagement` to property `Platform`.
+  * Added support for the `RoleScopeTags` property.
+* IntuneDeviceCategory
+  * Added support for the `RoleScopeTagIds` property.
 * IntuneDeviceCompliancePolicyAndroidDeviceOwner
   * Added values `customPassword` and `required` to property `PasswordRequiredType`.
 * IntuneDeviceCompliancePolicyAndroidWorkProfile
   * [BREAKING CHANGE] Removed the properties `RestrictedApps` and
     `SecurityBlockDeviceAdministratorManagedDevices`, which the
     androidWorkProfileCompliancePolicy Graph type does not define.
+* IntuneDeviceCompliancePolicyMacOS
+  * Added support for the `DeviceCompliancePolicyScript` property.
+  * Added the `DeviceManagementScripts.Read.All` permission and the
+    `Invoke-MgGraphRequest` command, both required to resolve the compliance script.
 * IntuneDeviceCompliancePolicyWindows10
   * Added support for the `FirmwareProtectionEnabled` property.
   * Added support for the `KernelDmaProtectionEnabled` property.
   * Added support for the `MemoryIntegrityEnabled` property.
   * Added support for the `VirtualizationBasedSecurityEnabled` property.
+  * Added support for the `WslDistributions` property.
+* IntuneDeviceConfigurationCustomPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
 * IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2` instead.
+* IntuneDeviceConfigurationDomainJoinPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationEmailProfilePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationEndpointProtectionPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationFirmwareInterfacePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationHealthMonitoringPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationKioskPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationPkcsCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
   * Added support for the `DeviceLocationMode` property.
 * IntuneDeviceConfigurationPolicyAndroidWorkProfile
   * Added support for the `BlockUnifiedPasswordForWorkProfile` property.
+* IntuneDeviceConfigurationPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationSCEPCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationSecureAssessmentPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationTrustedCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
 * IntuneDeviceConfigurationVpnPolicyWindows10
   * [BREAKING CHANGE] Renamed property `ServerCollection` to `Servers` to match the
     name Microsoft Graph uses.
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationWindowsTeamPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
+* IntuneDeviceConfigurationWiredNetworkPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
 * IntuneDeviceEnrollmentPlatformRestriction
   * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
     Microsoft Graph uses.
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+  * Added support for the `DeviceNameTemplate` property.
 * IntuneDeviceManagementEnrollmentAndroidGooglePlay
   * Added support for the `TargetGroups` property, which carries the display name of
     each targeted group so a configuration moves between tenants.
+  * Added support for the `ManagedGooglePlayInitialScopeTagIds` property.
 * IntuneDiskEncryptionMacOS
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
 * IntuneDeviceFeaturesConfigurationPolicyIOS
   * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneMobileAppsLobAppiOS
+  * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
 * IntuneMobileAppsLobAppWindows10
   * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementAppxMobileAppAssignment`.
 * IntuneMobileAppsSystemAppAndroid
@@ -176,6 +265,8 @@
   * [BREAKING CHANGE] Removed deprecated properties `WebSQLAccess` and `EdgeEnhanceImagesEnabled`.
 * IntuneSettingCatalogCustomPolicyWindows10
   * Fixed an issue where some nested properties didn't have the correct type.
+* IntuneUserSettingsPolicyWindows365
+  * Added support for the `ProvisioningSourceType` property.
 * IntuneVPNConfigurationPolicyAndroidDeviceOwner
   * Added support for the `LockdownExclusionList` property.
 * IntuneVPNConfigurationPolicyAndroidWork
@@ -199,6 +290,9 @@
   * Added `wpa3Personal` to property `WiFiSecurityType`.
 * IntuneWifiConfigurationPolicyWindows10
   * Added value `wpa3Personal` to property `WifiSecurityType`.
+  * Added support for the `DeviceManagementApplicabilityRuleDeviceMode` property.
+  * Fixed an issue where the `Name` member of the applicability rules was not returned,
+    which reported drift on every profile that named a rule.
 * IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined
   * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
     with the `OutOfBoxExperienceSetting` property.

@@ -121,6 +121,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationSetting = ([MSFT_MicrosoftGraphcloudPcNotificationSetting] @{
                         RestartPromptsDisabled = $True
                     })
+                    ProvisioningSourceType = "image"
                     ResetEnabled = $True
                     RestorePointSetting = ([MSFT_MicrosoftGraphcloudPcRestorePointSetting] @{
                         UserRestoreEnabled = $True
@@ -164,6 +165,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationSetting = ([MSFT_MicrosoftGraphcloudPcNotificationSetting] @{
                         RestartPromptsDisabled = $True
                     })
+                    ProvisioningSourceType = "image"
                     ResetEnabled = $True
                     RestorePointSetting = ([MSFT_MicrosoftGraphcloudPcRestorePointSetting] @{
                         UserRestoreEnabled = $True
@@ -206,6 +208,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationSetting = ([MSFT_MicrosoftGraphcloudPcNotificationSetting] @{
                         RestartPromptsDisabled = $True
                     })
+                    ProvisioningSourceType = "image"
                     ResetEnabled = $True
                     RestorePointSetting = ([MSFT_MicrosoftGraphcloudPcRestorePointSetting] @{
                         UserRestoreEnabled = $True
@@ -239,6 +242,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NotificationSetting = ([MSFT_MicrosoftGraphcloudPcNotificationSetting] @{
                         RestartPromptsDisabled = $True
                     })
+                    ProvisioningSourceType = "snapshot" # Drift
                     ResetEnabled = $True
                     RestorePointSetting = ([MSFT_MicrosoftGraphcloudPcRestorePointSetting] @{
                         UserRestoreEnabled = $True

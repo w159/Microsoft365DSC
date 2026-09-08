@@ -26,12 +26,13 @@ Configuration Example
     {
         AADIdentityGovernanceLifecycleWorkflow "AADIdentityGovernanceLifecycleWorkflow-Example"
         {
-            Category              = "joiner";
+            AdministrationScopeTargets = @('4f9dc456-0574-4122-9e55-8b4cc494b27d');
+            Category                   = "joiner";
             #updated description
-            Description           = "Updated description the onboard of prehire employee";
-            DisplayName           = "Onboard pre-hire employee updated version";
-            Ensure                = "Present";
-            ExecutionConditions   = MSFT_IdentityGovernanceWorkflowExecutionConditions {
+            Description                = "Updated description the onboard of prehire employee";
+            DisplayName                = "Onboard pre-hire employee updated version";
+            Ensure                     = "Present";
+            ExecutionConditions        = MSFT_IdentityGovernanceWorkflowExecutionConditions {
                 ScopeValue   = MSFT_IdentityGovernanceScope {
                     #updated rule
                     Rule      = '(not (country eq ''America''))'
@@ -44,9 +45,9 @@ Configuration Example
                 }
                 ODataType    = '#microsoft.graph.identityGovernance.triggerAndScopeBasedConditions'
             };
-            IsEnabled             = $True;
-            IsSchedulingEnabled   = $False;
-            Tasks                 = @(
+            IsEnabled                  = $True;
+            IsSchedulingEnabled        = $False;
+            Tasks                      = @(
                 MSFT_AADIdentityGovernanceTask {
                     DisplayName       = 'Add user to groups'
                     #updated description
@@ -64,9 +65,9 @@ Configuration Example
                     )
                 }
             );
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            ApplicationId              = $ApplicationId
+            TenantId                   = $TenantId
+            CertificateThumbprint      = $CertificateThumbprint
         }
     }
 }

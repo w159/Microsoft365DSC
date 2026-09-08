@@ -35,6 +35,16 @@
       "name": "MicrosoftManagedDesktop",
       "reason": "Accepted",
       "note": "Derived from the Autopatch configuration on create and update"
+    },
+    {
+      "name": "SnapshotResetMode",
+      "reason": "NotConfigurable",
+      "note": "The service accepts the value and ignores it on create and update."
+    },
+    {
+      "name": "UserSettingsPersistenceConfiguration",
+      "reason": "NotConfigurable",
+      "note": "The service accepts the value and ignores it on create and update."
     }
   ],
   "description": "This resource configures an Intune Cloud Provisioning Policy for Windows365.",

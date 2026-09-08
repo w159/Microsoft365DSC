@@ -44,7 +44,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('The Windows Autopilot Deployment Profile settings used by the device for the out of box experience.')]
-    [MSFT_MicrosoftGraphoutOfBoxExperienceSetting1] $OutOfBoxExperienceSetting
+    [MSFT_MicrosoftGraphoutOfBoxExperienceSetting] $OutOfBoxExperienceSetting
 
     [DscProperty()]
     [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
@@ -462,7 +462,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.OutOfBoxExperienceSetting `
-                        -CIMInstanceName 'MicrosoftGraphoutOfBoxExperienceSetting1'
+                        -CIMInstanceName 'MicrosoftGraphoutOfBoxExperienceSetting'
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.OutOfBoxExperienceSetting = $complexTypeStringResult
@@ -575,7 +575,7 @@ class MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1
     [System.Nullable[System.UInt32]] $InstallProgressTimeoutInMinutes
 }
 
-class MSFT_MicrosoftGraphoutOfBoxExperienceSetting1
+class MSFT_MicrosoftGraphoutOfBoxExperienceSetting
 {
     [DscProperty()]
     [System.ComponentModel.Description('AAD join authentication type. Possible values are: shared, singleUser.')]

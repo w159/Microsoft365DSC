@@ -15,6 +15,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
       "name": "TargetPlatform",
       "reason": "Deferred",
       "note": "The platform the app targets. Used to differentiate between their types."

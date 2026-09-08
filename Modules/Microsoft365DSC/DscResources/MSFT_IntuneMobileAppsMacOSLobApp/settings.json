@@ -15,6 +15,11 @@
       "name": "FileName",
       "reason": "Accepted",
       "note": "Set writes DisplayName.pkg on create only and Get never exports it"
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune mobile app.",

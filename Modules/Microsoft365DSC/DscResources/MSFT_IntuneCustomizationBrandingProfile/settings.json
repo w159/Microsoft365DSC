@@ -17,6 +17,11 @@
       "note": "CustomCanSeePrivacyMessage and CustomCantSeePrivacyMessage carry the privacy text"
     },
     {
+      "name": "DisableClientTelemetry",
+      "reason": "NotConfigurable",
+      "note": "The service computes it as false and the Intune console cannot change it."
+    },
+    {
       "name": "IsDefaultProfile",
       "reason": "ReadOnly",
       "note": "Intune flags the tenant's single default customization policy"

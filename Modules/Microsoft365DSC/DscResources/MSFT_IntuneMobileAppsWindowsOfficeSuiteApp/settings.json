@@ -25,6 +25,11 @@
       "name": "Publisher",
       "reason": "Accepted",
       "note": "Fixed to a predefined value."
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune mobile app.",

@@ -49,6 +49,7 @@ Configuration Example
             NotificationSetting                = MSFT_MicrosoftGraphcloudPcNotificationSetting{
                 RestartPromptsDisabled = $False
             };
+            ProvisioningSourceType             = "snapshot";
             ResetEnabled                       = $True;
             RestorePointSetting                = MSFT_MicrosoftGraphcloudPcRestorePointSetting{
                 FrequencyType      = "twelveHours"

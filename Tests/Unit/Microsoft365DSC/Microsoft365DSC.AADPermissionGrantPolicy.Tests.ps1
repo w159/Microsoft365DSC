@@ -134,11 +134,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The Policy should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Id          = 'test-policy'
-                    DisplayName = 'Test Permission Grant Policy'
-                    Description = 'Test policy description'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    Id                                = 'test-policy'
+                    DisplayName                       = 'Test Permission Grant Policy'
+                    Description                       = 'Test policy description'
+                    IncludeAllPreApprovedApplications = $false
+                    ResourceScopeType                 = 'tenant'
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaPolicyPermissionGrantPolicy -MockWith {
@@ -198,20 +200,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The Policy Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Id          = 'test-policy'
-                    DisplayName = 'Test Permission Grant Policy'
-                    Description = 'Test policy description'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    Id                                = 'test-policy'
+                    DisplayName                       = 'Test Permission Grant Policy'
+                    Description                       = 'Test policy description'
+                    IncludeAllPreApprovedApplications = $false
+                    ResourceScopeType                 = 'tenant'
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaPolicyPermissionGrantPolicy -MockWith {
                     return @{
-                        Id          = 'test-policy'
-                        DisplayName = 'Test Permission Grant Policy'
-                        Description = 'Test policy description'
-                        Includes    = @()
-                        Excludes    = @()
+                        Id                                = 'test-policy'
+                        DisplayName                       = 'Test Permission Grant Policy'
+                        Description                       = 'Test policy description'
+                        IncludeAllPreApprovedApplications = $false
+                        ResourceScopeType                 = 'tenant'
+                        Includes                          = @()
+                        Excludes                          = @()
                     }
                 }
             }
@@ -229,20 +235,24 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'Values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Id          = 'test-policy'
-                    DisplayName = 'Updated Permission Grant Policy'
-                    Description = 'Updated policy description'
-                    Ensure      = 'Present'
-                    Credential  = $Credential
+                    Id                                = 'test-policy'
+                    DisplayName                       = 'Updated Permission Grant Policy'
+                    Description                       = 'Updated policy description'
+                    IncludeAllPreApprovedApplications = $true
+                    ResourceScopeType                 = 'group'
+                    Ensure                            = 'Present'
+                    Credential                        = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaPolicyPermissionGrantPolicy -MockWith {
                     return @{
-                        Id          = 'test-policy'
-                        DisplayName = 'Test Permission Grant Policy'
-                        Description = 'Test policy description'
-                        Includes    = @()
-                        Excludes    = @()
+                        Id                                = 'test-policy'
+                        DisplayName                       = 'Test Permission Grant Policy'
+                        Description                       = 'Test policy description'
+                        IncludeAllPreApprovedApplications = $false
+                        ResourceScopeType                 = 'tenant'
+                        Includes                          = @()
+                        Excludes                          = @()
                     }
                 }
             }

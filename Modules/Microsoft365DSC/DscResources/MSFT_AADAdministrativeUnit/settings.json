@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "Extensions",
+      "reason": "NotConfigurable",
+      "note": "Open extensions carry application defined members with no fixed schema."
+    }
+  ],
   "description": "This resource configures an Azure Active Directory administrative unit.",
   "roles": {
     "read": [

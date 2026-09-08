@@ -49,12 +49,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaIdentityGovernanceLifecycleWorkflow -MockWith {
                 return @{
-                    Id                   = "random guid"
-                    Category             = "joiner";
-                    Description          = "Description the onboard of prehire employee";
-                    DisplayName          = "Onboard pre-hire employee updated version";
-                    IsEnabled            = $True;
-                    IsSchedulingEnabled  = $False;
+                    Id                         = "random guid"
+                    AdministrationScopeTargets = @(
+                        @{
+                            Id = "4f9dc456-0574-4122-9e55-8b4cc494b27d"
+                        }
+                    );
+                    Category                   = "joiner";
+                    Description                = "Description the onboard of prehire employee";
+                    DisplayName                = "Onboard pre-hire employee updated version";
+                    IsEnabled                  = $True;
+                    IsSchedulingEnabled        = $False;
                 }
             }
 
@@ -72,13 +77,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Category             = "joiner";
-                    Description          = "Description the onboard of prehire employee";
-                    DisplayName          = "Onboard pre-hire employee updated version";
-                    IsEnabled            = $True;
-                    IsSchedulingEnabled  = $False;
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    AdministrationScopeTargets = @("4f9dc456-0574-4122-9e55-8b4cc494b27d");
+                    Category                   = "joiner";
+                    Description                = "Description the onboard of prehire employee";
+                    DisplayName                = "Onboard pre-hire employee updated version";
+                    IsEnabled                  = $True;
+                    IsSchedulingEnabled        = $False;
+                    Ensure                     = 'Present'
+                    Credential                 = $Credential;
                 }
 
                 Mock -CommandName Get-MgBetaIdentityGovernanceLifecycleWorkflow -MockWith {
@@ -101,13 +107,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Category             = "joiner";
-                    Description          = "Description the onboard of prehire employee";
-                    DisplayName          = "Onboard pre-hire employee updated version";
-                    IsEnabled            = $True;
-                    IsSchedulingEnabled  = $False;
-                    Ensure              = 'Absent'
-                    Credential          = $Credential;
+                    AdministrationScopeTargets = @("4f9dc456-0574-4122-9e55-8b4cc494b27d");
+                    Category                   = "joiner";
+                    Description                = "Description the onboard of prehire employee";
+                    DisplayName                = "Onboard pre-hire employee updated version";
+                    IsEnabled                  = $True;
+                    IsSchedulingEnabled        = $False;
+                    Ensure                     = 'Absent'
+                    Credential                 = $Credential;
                 }
             }
             It 'Should return Values from the Get method' {
@@ -126,16 +133,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Category             = "joiner";
-                    Description          = "Description the onboard of prehire employee";
-                    DisplayName          = "Onboard pre-hire employee updated version";
-                    IsEnabled            = $True;
-                    IsSchedulingEnabled  = $False;
-                    Tasks                = $null
-                    ExecutionConditions  = ([MSFT_IdentityGovernanceWorkflowExecutionConditions] @{
+                    AdministrationScopeTargets = @("4f9dc456-0574-4122-9e55-8b4cc494b27d");
+                    Category                   = "joiner";
+                    Description                = "Description the onboard of prehire employee";
+                    DisplayName                = "Onboard pre-hire employee updated version";
+                    IsEnabled                  = $True;
+                    IsSchedulingEnabled        = $False;
+                    Tasks                      = $null
+                    ExecutionConditions        = ([MSFT_IdentityGovernanceWorkflowExecutionConditions] @{
                     })
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    Ensure                     = 'Present'
+                    Credential                 = $Credential;
                 }
             }
 
@@ -147,13 +155,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Category             = "joiner";
-                    Description          = "Drifted Description the onboard of prehire employee"; # Drift
-                    DisplayName          = "Onboard pre-hire employee updated version";
-                    IsEnabled            = $True;
-                    IsSchedulingEnabled  = $False;
-                    Ensure              = 'Present'
-                    Credential          = $Credential;
+                    AdministrationScopeTargets = @("8a0e2e6c-1e4f-4a26-9a71-6c1e5f2b3d47"); # Drift
+                    Category                   = "joiner";
+                    Description                = "Drifted Description the onboard of prehire employee"; # Drift
+                    DisplayName                = "Onboard pre-hire employee updated version";
+                    IsEnabled                  = $True;
+                    IsSchedulingEnabled        = $False;
+                    Ensure                     = 'Present'
+                    Credential                 = $Credential;
                 }
             }
 

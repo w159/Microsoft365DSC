@@ -42,6 +42,11 @@
       "note": "The service assigns the Intune account identifier for the tenant"
     },
     {
+      "name": "IntuneBrand",
+      "reason": "OwnedByOtherResource",
+      "note": "IntuneCustomizationBrandingProfile owns Company Portal branding"
+    },
+    {
       "name": "ManagedDeviceCleanupSettings",
       "reason": "Deprecated",
       "note": "IntuneDeviceCleanupRuleV2 manages the managed device cleanup rules collection"

@@ -38,6 +38,10 @@ class IntuneDeviceManagementEnrollmentAndroidGooglePlay : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $AndroidDeviceOwnerFullyManagedEnrollmentEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the initial scope tags applied to managed Google Play apps.')]
+    [System.String[]] $ManagedGooglePlayInitialScopeTagIds
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
     [ValidateSet('Absent', 'Present')]
     [System.String] $Ensure
@@ -146,6 +150,7 @@ class IntuneDeviceManagementEnrollmentAndroidGooglePlay : M365DSCResourceBase
                 TargetGroups                                    = $resolvedTargetGroups
                 DeviceOwnerManagementEnabled                    = $specificSetting.deviceOwnerManagementEnabled
                 AndroidDeviceOwnerFullyManagedEnrollmentEnabled = $specificSetting.androidDeviceOwnerFullyManagedEnrollmentEnabled
+                ManagedGooglePlayInitialScopeTagIds             = ([Array]$specificSetting.managedGooglePlayInitialScopeTagIds)
                 Ensure                                          = 'Present'
                 Credential                                      = $this.Credential
                 ApplicationId                                   = $this.ApplicationId

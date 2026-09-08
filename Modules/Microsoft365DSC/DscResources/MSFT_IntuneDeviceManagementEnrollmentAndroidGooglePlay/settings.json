@@ -30,6 +30,11 @@
       "name": "ManagedGooglePlayEnterpriseType",
       "reason": "ReadOnly",
       "note": "The Google binding flow fixes the enterprise type when it creates the account."
+    },
+    {
+      "name": "TargetGroupIds",
+      "reason": "Accepted",
+      "note": "Configured through the TargetGroups property on the resource, which carries the same groups by display name."
     }
   ],
   "description": "This resource configures Intune Android enrollment settings.",
