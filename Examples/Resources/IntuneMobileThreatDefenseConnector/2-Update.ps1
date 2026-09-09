@@ -27,7 +27,9 @@ Configuration Example
         IntuneMobileThreatDefenseConnector "IntuneMobileThreatDefenseConnector-Example"
         {
             AllowPartnerToCollectIosApplicationMetadata         = $False;
+            AllowPartnerToCollectIosCertificateMetadata         = $True;
             AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+            AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
             AndroidDeviceBlockedOnMissingPartnerData            = $False;
             AndroidEnabled                                      = $True; # Updated Property
             AndroidMobileApplicationManagementEnabled           = $False;
@@ -45,6 +47,7 @@ Configuration Example
             PartnerUnsupportedOSVersionBlocked                  = $False;
             WindowsDeviceBlockedOnMissingPartnerData            = $False;
             WindowsEnabled                                      = $False;
+            WindowsMobileApplicationManagementEnabled           = $True;
             Ensure                                              = "Present";
             ApplicationId                                       = $ApplicationId;
             TenantId                                            = $TenantId;

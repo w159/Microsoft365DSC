@@ -42,6 +42,15 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
     [System.Nullable[System.Boolean]] $PreSharedKeyIsSet
 
     [DscProperty()]
+    [System.ComponentModel.Description('URL of the proxy server automatic configuration script when automatic configuration is selected.')]
+    [System.String] $ProxyAutomaticConfigurationUrl
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Proxy Type for this Wi-Fi connection. Possible values are: none, manual, automatic.')]
+    [ValidateSet('none', 'manual', 'automatic')]
+    [System.String] $ProxySettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('SSID.')]
     [System.String] $Ssid
 
@@ -164,6 +173,8 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
                 NetworkName                    = $getValue.networkName
                 PreSharedKey                   = $getValue.preSharedKey
                 PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
+                ProxyAutomaticConfigurationUrl = $getValue.proxyAutomaticConfigurationUrl
+                ProxySettings                  = $getValue.proxySettings
                 Ssid                           = $getValue.ssid
                 WiFiSecurityType               = $getValue.wiFiSecurityType
                 Ensure                         = 'Present'
@@ -230,6 +241,10 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
             $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
             $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
             $CreateParameters.Remove('Id') | Out-Null
+            if ($CreateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            {
+                $CreateParameters['proxyAutomaticConfigurationUrl'] = $null
+            }
 
             #region resource generator code
             Write-Verbose -Message "Creating new Intune Wifi Configuration Policy Android Enterprise Work Profile with DisplayName {$($this.DisplayName)}"
@@ -254,6 +269,10 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
             $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
             $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
             $UpdateParameters.Remove('Id') | Out-Null
+            if ($UpdateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            {
+                $UpdateParameters['proxyAutomaticConfigurationUrl'] = $null
+            }
 
             #region resource generator code
             $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileWiFiConfiguration')

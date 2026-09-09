@@ -54,6 +54,18 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
     [System.String] $DeliveryOptimizationMode
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The OS version applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleOsVersion] $DeviceManagementApplicabilityRuleOsVersion
+
+    [DscProperty()]
     [System.ComponentModel.Description('When TRUE, excludes Windows update Drivers. When FALSE, does not exclude Windows update Drivers. Returned by default. Query parameters are not supported.')]
     [System.Nullable[System.Boolean]] $DriversExcluded
 
@@ -300,6 +312,34 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
             {
                 $complexInstallationSchedule = $null
             }
+
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
+            $complexDeviceManagementApplicabilityRuleOsEdition.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSEdition.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsEdition.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsEdition = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleOsVersion = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MaxOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MaxOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('MinOSVersion', $getValue.DeviceManagementApplicabilityRuleOSVersion.MinOSVersion)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSVersion.Name)
+            $complexDeviceManagementApplicabilityRuleOsVersion.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleOSVersion.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleOsVersion.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleOsVersion = $null
+            }
             #endregion
 
             #region resource generator code
@@ -398,54 +438,57 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
 
             $results = @{
                 #region resource generator code
-                AllowWindows11Upgrade                   = $getValue.allowWindows11Upgrade
-                AutomaticUpdateMode                     = $enumAutomaticUpdateMode
-                AutoRestartNotificationDismissal        = $enumAutoRestartNotificationDismissal
-                BusinessReadyUpdatesOnly                = $enumBusinessReadyUpdatesOnly
-                DeadlineForFeatureUpdatesInDays         = $getValue.deadlineForFeatureUpdatesInDays
-                DeadlineForQualityUpdatesInDays         = $getValue.deadlineForQualityUpdatesInDays
-                DeadlineGracePeriodInDays               = $getValue.deadlineGracePeriodInDays
-                DeliveryOptimizationMode                = $enumDeliveryOptimizationMode
-                DriversExcluded                         = $getValue.driversExcluded
-                EngagedRestartDeadlineInDays            = $getValue.engagedRestartDeadlineInDays
-                EngagedRestartSnoozeScheduleInDays      = $getValue.engagedRestartSnoozeScheduleInDays
-                EngagedRestartTransitionScheduleInDays  = $getValue.engagedRestartTransitionScheduleInDays
-                FeatureUpdatesDeferralPeriodInDays      = $getValue.featureUpdatesDeferralPeriodInDays
-                FeatureUpdatesPaused                    = $getValue.featureUpdatesPaused
-                FeatureUpdatesPauseExpiryDateTime       = $dateFeatureUpdatesPauseExpiryDateTime
-                FeatureUpdatesPauseStartDate            = $dateFeatureUpdatesPauseStartDate
-                FeatureUpdatesRollbackStartDateTime     = $dateFeatureUpdatesRollbackStartDateTime
-                FeatureUpdatesRollbackWindowInDays      = $getValue.featureUpdatesRollbackWindowInDays
-                InstallationSchedule                    = $complexInstallationSchedule
-                MicrosoftUpdateServiceAllowed           = $getValue.microsoftUpdateServiceAllowed
-                PostponeRebootUntilAfterDeadline        = $getValue.postponeRebootUntilAfterDeadline
-                PrereleaseFeatures                      = $enumPrereleaseFeatures
-                QualityUpdatesDeferralPeriodInDays      = $getValue.qualityUpdatesDeferralPeriodInDays
-                QualityUpdatesPaused                    = $getValue.qualityUpdatesPaused
-                QualityUpdatesPauseExpiryDateTime       = $dateQualityUpdatesPauseExpiryDateTime
-                QualityUpdatesPauseStartDate            = $dateQualityUpdatesPauseStartDate
-                QualityUpdatesRollbackStartDateTime     = $dateQualityUpdatesRollbackStartDateTime
-                ScheduleImminentRestartWarningInMinutes = $getValue.scheduleImminentRestartWarningInMinutes
-                ScheduleRestartWarningInHours           = $getValue.scheduleRestartWarningInHours
-                SkipChecksBeforeRestart                 = $getValue.skipChecksBeforeRestart
-                UpdateNotificationLevel                 = $enumUpdateNotificationLevel
-                UpdateWeeks                             = $enumUpdateWeeks
-                UserPauseAccess                         = $enumUserPauseAccess
-                UserWindowsUpdateScanAccess             = $enumUserWindowsUpdateScanAccess
-                Description                             = $getValue.Description
-                DisplayName                             = $getValue.DisplayName
-                Id                                      = $getValue.Id
-                RoleScopeTagIds                         = $getValue.RoleScopeTagIds
-                Ensure                                  = 'Present'
-                Credential                              = $this.Credential
-                ApplicationId                           = $this.ApplicationId
-                TenantId                                = $this.TenantId
-                ApplicationSecret                       = $this.ApplicationSecret
-                CertificateThumbprint                   = $this.CertificateThumbprint
-                CertificatePath                         = $this.CertificatePath
-                CertificatePassword                     = $this.CertificatePassword
-                ManagedIdentity                         = $this.ManagedIdentity.IsPresent
-                AccessTokens                            = $this.AccessTokens
+                AllowWindows11Upgrade                       = $getValue.allowWindows11Upgrade
+                AutomaticUpdateMode                         = $enumAutomaticUpdateMode
+                AutoRestartNotificationDismissal            = $enumAutoRestartNotificationDismissal
+                BusinessReadyUpdatesOnly                    = $enumBusinessReadyUpdatesOnly
+                DeadlineForFeatureUpdatesInDays             = $getValue.deadlineForFeatureUpdatesInDays
+                DeadlineForQualityUpdatesInDays             = $getValue.deadlineForQualityUpdatesInDays
+                DeadlineGracePeriodInDays                   = $getValue.deadlineGracePeriodInDays
+                DeliveryOptimizationMode                    = $enumDeliveryOptimizationMode
+                DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
+                DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
+                DriversExcluded                             = $getValue.driversExcluded
+                EngagedRestartDeadlineInDays                = $getValue.engagedRestartDeadlineInDays
+                EngagedRestartSnoozeScheduleInDays          = $getValue.engagedRestartSnoozeScheduleInDays
+                EngagedRestartTransitionScheduleInDays      = $getValue.engagedRestartTransitionScheduleInDays
+                FeatureUpdatesDeferralPeriodInDays          = $getValue.featureUpdatesDeferralPeriodInDays
+                FeatureUpdatesPaused                        = $getValue.featureUpdatesPaused
+                FeatureUpdatesPauseExpiryDateTime           = $dateFeatureUpdatesPauseExpiryDateTime
+                FeatureUpdatesPauseStartDate                = $dateFeatureUpdatesPauseStartDate
+                FeatureUpdatesRollbackStartDateTime         = $dateFeatureUpdatesRollbackStartDateTime
+                FeatureUpdatesRollbackWindowInDays          = $getValue.featureUpdatesRollbackWindowInDays
+                InstallationSchedule                        = $complexInstallationSchedule
+                MicrosoftUpdateServiceAllowed               = $getValue.microsoftUpdateServiceAllowed
+                PostponeRebootUntilAfterDeadline            = $getValue.postponeRebootUntilAfterDeadline
+                PrereleaseFeatures                          = $enumPrereleaseFeatures
+                QualityUpdatesDeferralPeriodInDays          = $getValue.qualityUpdatesDeferralPeriodInDays
+                QualityUpdatesPaused                        = $getValue.qualityUpdatesPaused
+                QualityUpdatesPauseExpiryDateTime           = $dateQualityUpdatesPauseExpiryDateTime
+                QualityUpdatesPauseStartDate                = $dateQualityUpdatesPauseStartDate
+                QualityUpdatesRollbackStartDateTime         = $dateQualityUpdatesRollbackStartDateTime
+                ScheduleImminentRestartWarningInMinutes     = $getValue.scheduleImminentRestartWarningInMinutes
+                ScheduleRestartWarningInHours               = $getValue.scheduleRestartWarningInHours
+                SkipChecksBeforeRestart                     = $getValue.skipChecksBeforeRestart
+                UpdateNotificationLevel                     = $enumUpdateNotificationLevel
+                UpdateWeeks                                 = $enumUpdateWeeks
+                UserPauseAccess                             = $enumUserPauseAccess
+                UserWindowsUpdateScanAccess                 = $enumUserWindowsUpdateScanAccess
+                Description                                 = $getValue.Description
+                DisplayName                                 = $getValue.DisplayName
+                Id                                          = $getValue.Id
+                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                Ensure                                      = 'Present'
+                Credential                                  = $this.Credential
+                ApplicationId                               = $this.ApplicationId
+                TenantId                                    = $this.TenantId
+                ApplicationSecret                           = $this.ApplicationSecret
+                CertificateThumbprint                       = $this.CertificateThumbprint
+                CertificatePath                             = $this.CertificatePath
+                CertificatePassword                         = $this.CertificatePassword
+                ManagedIdentity                             = $this.ManagedIdentity.IsPresent
+                AccessTokens                                = $this.AccessTokens
                 #endregion
             }
 
@@ -655,6 +698,51 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                     }
                 }
 
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleDeviceMode'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
+                    }
+                }
+
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleOsEdition)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsEdition'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsEdition = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsEdition') | Out-Null
+                    }
+                }
+
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleOsVersion)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleOsVersion `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleOsVersion'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleOsVersion = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleOsVersion') | Out-Null
+                    }
+                }
+
                 if ($Results.Assignments)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.Assignments -CIMInstanceName DeviceManagementConfigurationPolicyAssignments
@@ -672,7 +760,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('InstallationSchedule', 'Assignments') `
+                    -NoEscape @('InstallationSchedule', 'DeviceManagementApplicabilityRuleDeviceMode', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -718,6 +806,59 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
 
         return $result
     }
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsEdition
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule OS edition type')]
+    [System.String[]] $OsEditionTypes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
+}
+
+class MSFT_DeviceManagementApplicabilityRuleOsVersion
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Min OS version for Applicability Rule')]
+    [System.String] $MinOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Max OS version for Applicability Rule')]
+    [System.String] $MaxOSVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType

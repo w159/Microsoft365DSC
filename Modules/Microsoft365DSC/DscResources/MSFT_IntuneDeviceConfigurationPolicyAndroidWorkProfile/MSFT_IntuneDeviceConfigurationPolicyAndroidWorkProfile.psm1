@@ -216,6 +216,15 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $WorkProfileBlockPersonalAppInstallsFromUnknownSources
 
     [DscProperty()]
+    [System.ComponentModel.Description('Determine domains allow-list for accounts that can be added to work profile.')]
+    [System.String[]] $AllowedGoogleAccountDomains
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Control user''s ability to add accounts in work profile including Google accounts.')]
+    [ValidateSet('allowAllExceptGoogleAccounts', 'blockAll', 'allowAll')]
+    [System.String] $WorkProfileAccountUse
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the site collection exists, absent ensures it is removed')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -353,6 +362,8 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
                 VpnEnableAlwaysOnLockdownMode                             = $policy.vpnEnableAlwaysOnLockdownMode
                 WorkProfileAllowWidgets                                   = $policy.workProfileAllowWidgets
                 WorkProfileBlockPersonalAppInstallsFromUnknownSources     = $policy.workProfileBlockPersonalAppInstallsFromUnknownSources
+                AllowedGoogleAccountDomains                               = $policy.allowedGoogleAccountDomains
+                WorkProfileAccountUse                                     = $policy.workProfileAccountUse
                 Ensure                                                    = 'Present'
                 Credential                                                = $this.Credential
                 ApplicationId                                             = $this.ApplicationId

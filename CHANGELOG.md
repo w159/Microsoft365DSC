@@ -28,6 +28,10 @@
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
 * AADCrossTenantAccessPolicyConfigurationDefault
   * Added support for the `AutomaticUserConsentSettings` property.
+  * Added support for the `AppServiceConnectInbound`,
+    `BlockServiceProviderOutboundAccess` and `M365CollaborationOutbound` properties.
+  * Fixed an issue where the loop resolving user and group targets walked one entry past
+    the end of the collection.
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Added support for the `TenantRestrictions` property.
 * AADCustomAuthenticationExtension
@@ -222,6 +226,8 @@
   * Added support for the `DeviceLocationMode` property.
 * IntuneDeviceConfigurationPolicyAndroidWorkProfile
   * Added support for the `BlockUnifiedPasswordForWorkProfile` property.
+  * Added support for the `AllowedGoogleAccountDomains` and `WorkProfileAccountUse`
+    properties.
 * IntuneDeviceConfigurationPolicyMacOS
   * Added support for the `ActivationLockWhenSupervisedAllowed` property.
 * IntuneDeviceConfigurationPolicyWindows10
@@ -287,6 +293,9 @@
 * IntuneMobileThreatDefenseConnector
   * Added support for the `MacDeviceBlockedOnMissingPartnerData` and `MacEnabled`
     properties.
+  * Added support for the `AllowPartnerToCollectIosCertificateMetadata`,
+    `AllowPartnerToCollectIosPersonalCertificateMetadata` and
+    `WindowsMobileApplicationManagementEnabled` properties.
 * IntuneRoleAssignment
   * Added support for the `RoleScopeTagIds` property.
 * IntuneRoleDefinitionWindows365
@@ -301,6 +310,7 @@
   * Added support for the `LockdownExclusionList` property.
 * IntuneVPNConfigurationPolicyAndroidWork
   * Added value `paloAltoGlobalProtect` to property `connectionType`.
+  * Added support for the `fingerprint` property.
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
@@ -309,6 +319,8 @@
 * IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile
   * Added `wep` and `wpaPersonal` to property `WiFiSecurityType`.
   * Added support for the `PreSharedKey` and `PreSharedKeyIsSet` properties.
+  * Added support for the `ProxyAutomaticConfigurationUrl` and `ProxySettings`
+    properties.
 * IntuneWifiConfigurationPolicyAndroidForWork
   * Added values `wep` and `wpaPersonal` to property `WiFiSecurityType`.
 * IntuneWifiConfigurationPolicyAndroidOpenSourceProject
@@ -344,6 +356,10 @@
     property.
 * IntuneWindowsUpdateForBusinessHotpatchProfileWindows10
   * Added support for the `ApprovalSettings` property.
+* IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleDeviceMode`,
+    `DeviceManagementApplicabilityRuleOsEdition` and
+    `DeviceManagementApplicabilityRuleOsVersion` properties.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket

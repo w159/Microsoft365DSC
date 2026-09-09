@@ -28,6 +28,7 @@ Configuration Example
             DisplayName                                               = 'Android Work Profile - Device Restrictions - Standard'
             Description                                               = "Work profile restrictions for personally owned Android phones"
             RoleScopeTagIds                                           = @("0")
+            AllowedGoogleAccountDomains                               = @("contoso.com")
             BlockUnifiedPasswordForWorkProfile                        = $true
             PasswordBlockFaceUnlock                                   = $true
             PasswordBlockFingerprintUnlock                            = $false
@@ -43,6 +44,7 @@ Configuration Example
             SecurityRequireVerifyApps                                 = $true
             VpnAlwaysOnPackageIdentifier                              = "com.microsoft.scmx"
             VpnEnableAlwaysOnLockdownMode                             = $false
+            WorkProfileAccountUse                                     = "allowAllExceptGoogleAccounts"
             WorkProfileAllowAppInstallsFromUnknownSources             = $false
             WorkProfileAllowWidgets                                   = $true
             WorkProfileBlockAddingAccounts                            = $true

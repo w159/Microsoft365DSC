@@ -85,6 +85,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfileRequirePassword                                = $False
                     blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
+                    allowedGoogleAccountDomains                               = @('contoso.com')
+                    workProfileAccountUse                                     = 'allowAllExceptGoogleAccounts'
                 }
             }
 
@@ -141,6 +143,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfileRequirePassword                                = $False
                     blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
+                    allowedGoogleAccountDomains                               = @('contoso.com')
+                    workProfileAccountUse                                     = 'allowAllExceptGoogleAccounts'
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential
                 }
@@ -204,6 +208,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfileRequirePassword                                = $False
                     blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
+                    allowedGoogleAccountDomains                               = @('fabrikam.com') # Updated property
+                    workProfileAccountUse                                     = 'blockAll' # Updated property
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential
                 }
@@ -263,6 +269,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     workProfileRequirePassword                                = $False
                     blockUnifiedPasswordForWorkProfile                        = $False
                     securityRequireVerifyApps                                 = $False
+                    allowedGoogleAccountDomains                               = @('contoso.com')
+                    workProfileAccountUse                                     = 'allowAllExceptGoogleAccounts'
                     Ensure                                                    = 'Present'
                     Credential                                                = $Credential
                 }

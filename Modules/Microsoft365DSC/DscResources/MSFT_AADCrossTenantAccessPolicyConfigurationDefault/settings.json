@@ -15,6 +15,11 @@
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."
+    },
+    {
+      "name": "IsServiceDefault",
+      "reason": "ReadOnly",
+      "note": "Reports whether the configuration still matches the system default. Reset through the resetToSystemDefault action."
     }
   ],
   "description": "This resource configures an Azure AD Authentication Method Policy Configuration Default.",

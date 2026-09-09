@@ -15,6 +15,11 @@
       "name": "ExpirationDateTime",
       "reason": "ReadOnly",
       "note": "Derived from the supplied line of business app during upload."
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Lob App for iOS.",

@@ -18,8 +18,16 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $AllowPartnerToCollectIosApplicationMetadata
 
     [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, allows the Mobile Threat Defense partner to request a list of installed certificates on iOS/iPadOS devices from Intune to use for threat analysis. This list of installed certificates will be sent from enrolled iOS/iPadOS devices and will include unmanaged certificates (certificates not deployed through Intune). When FALSE, indicates that metadata about installed certificates will not be collected. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $AllowPartnerToCollectIosCertificateMetadata
+
+    [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates the Mobile Threat Defense partner may collect metadata about personally installed applications from Intune for IOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about personally installed applications from Intune for IOS devices. Default value is FALSE.')]
     [System.Nullable[System.Boolean]] $AllowPartnerToCollectIOSPersonalApplicationMetadata
+
+    [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, allows the Mobile Threat Defense partner to request a list of installed certificates on personally owned iOS/iPadOS devices from Intune to use for threat analysis. This list of installed certificates will be sent from enrolled personally owned iOS/iPadOS devices and will include unmanaged certificates (certificates not deployed through Intune). When FALSE, no metadata for installed certificates is sent for personally owned iOS/iPadOS devices. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $AllowPartnerToCollectIosPersonalCertificateMetadata
 
     [DscProperty()]
     [System.ComponentModel.Description('For Android, set whether Intune must receive data from the Mobile Threat Defense partner prior to marking a device compliant.')]
@@ -80,6 +88,10 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates that data from the Mobile Threat Defense partner can be used during compliance evaluations for Windows. When FALSE, it indicates that data from the Mobile Threat Defense partner should not be used during compliance evaluations for Windows. Default value is FALSE.')]
     [System.Nullable[System.Boolean]] $WindowsEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, indicates that data from the Mobile Threat Defense partner can be used during Mobile Application Management (MAM) evaluations for Windows devices. When FALSE, indicates that data from the Mobile Threat Defense partner should not be used during Mobile Application Management (MAM) evaluations for Windows devices. Only one partner per platform may be enabled for Mobile Application Management (MAM) evaluation. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $WindowsMobileApplicationManagementEnabled
 
     [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
@@ -194,7 +206,9 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 Id                                                  = $instance.Id
                 DisplayName                                         = $displayNameValue
                 AllowPartnerToCollectIosApplicationMetadata         = $instance.AllowPartnerToCollectIosApplicationMetadata
+                AllowPartnerToCollectIosCertificateMetadata         = $instance.AllowPartnerToCollectIosCertificateMetadata
                 AllowPartnerToCollectIOSPersonalApplicationMetadata = $instance.AllowPartnerToCollectIosPersonalApplicationMetadata
+                AllowPartnerToCollectIosPersonalCertificateMetadata = $instance.AllowPartnerToCollectIosPersonalCertificateMetadata
                 AndroidDeviceBlockedOnMissingPartnerData            = $instance.AndroidDeviceBlockedOnMissingPartnerData
                 AndroidEnabled                                      = $instance.AndroidEnabled
                 AndroidMobileApplicationManagementEnabled           = $instance.AndroidMobileApplicationManagementEnabled
@@ -210,6 +224,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 PartnerUnsupportedOSVersionBlocked                  = $instance.PartnerUnsupportedOSVersionBlocked
                 WindowsDeviceBlockedOnMissingPartnerData            = $instance.WindowsDeviceBlockedOnMissingPartnerData
                 WindowsEnabled                                      = $instance.WindowsEnabled
+                WindowsMobileApplicationManagementEnabled           = $instance.WindowsMobileApplicationManagementEnabled
                 Ensure                                              = 'Present'
                 Credential                                          = $this.Credential
                 ApplicationId                                       = $this.ApplicationId

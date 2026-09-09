@@ -25,6 +25,11 @@
       "name": "Priority",
       "reason": "ReadOnly",
       "note": "Singleton configuration with no sibling to order against"
+    },
+    {
+      "name": "RoleScopeTagIds",
+      "reason": "NotConfigurable",
+      "note": "The tenant wide default enrollment configuration carries no scope tags."
     }
   ],
   "description": "This resource configures an Intune Windows Hello For Business Global Policy.",

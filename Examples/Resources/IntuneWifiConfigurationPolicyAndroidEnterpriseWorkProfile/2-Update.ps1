@@ -44,6 +44,8 @@ Configuration Example
             NetworkName                    = 'f8b79489-84fc-4434-b964-2a18dfe08f88'
             PreSharedKey                   = 'MyPreSharedKey123'
             PreSharedKeyIsSet              = $True
+            ProxyAutomaticConfigurationUrl = 'http://proxy.contoso.com/proxy.pac'
+            ProxySettings                  = 'automatic'
             Ssid                           = 'MySSID'
             WiFiSecurityType               = 'open'
             Ensure                         = 'Present'

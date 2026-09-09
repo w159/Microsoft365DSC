@@ -26,11 +26,22 @@ Configuration Example
     {
         AADCrossTenantAccessPolicyConfigurationDefault "AADCrossTenantAccessPolicyConfigurationDefault-Example"
         {
-            AutomaticUserConsentSettings = MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings {
+            AppServiceConnectInbound           = MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting {
+                Applications = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'blocked'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllApplications'
+                            TargetType = 'application'
+                        }
+                    )
+                }
+            }
+            AutomaticUserConsentSettings       = MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings {
                 InboundAllowed  = $True
                 OutboundAllowed = $True
             }
-            B2BCollaborationInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BCollaborationInbound            = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -50,7 +61,7 @@ Configuration Example
                     )
                 }
             }
-            B2BCollaborationOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BCollaborationOutbound           = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -70,7 +81,7 @@ Configuration Example
                     )
                 }
             }
-            B2BDirectConnectInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BDirectConnectInbound            = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -90,7 +101,7 @@ Configuration Example
                     )
                 }
             }
-            B2BDirectConnectOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BDirectConnectOutbound           = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -110,16 +121,28 @@ Configuration Example
                     )
                 }
             }
-            Ensure                       = "Present";
-            InboundTrust                 = MSFT_AADCrossTenantAccessPolicyInboundTrust {
+            BlockServiceProviderOutboundAccess = $False;
+            Ensure                             = "Present";
+            InboundTrust                       = MSFT_AADCrossTenantAccessPolicyInboundTrust {
                 IsCompliantDeviceAccepted           = $False
                 IsHybridAzureADJoinedDeviceAccepted = $False
                 IsMfaAccepted                       = $False
             }
-            IsSingleInstance             = "Yes";
-            ApplicationId                = $ApplicationId
-            TenantId                     = $TenantId
-            CertificateThumbprint        = $CertificateThumbprint
+            IsSingleInstance                   = "Yes";
+            M365CollaborationOutbound          = MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting {
+                UsersAndGroups = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'allowed'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllUsers'
+                            TargetType = 'user'
+                        }
+                    )
+                }
+            }
+            ApplicationId                      = $ApplicationId
+            TenantId                           = $TenantId
+            CertificateThumbprint              = $CertificateThumbprint
         }
     }
 }

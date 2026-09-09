@@ -61,7 +61,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                    AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                     AndroidDeviceBlockedOnMissingPartnerData            = $False;
                     AndroidEnabled                                      = $False;
                     AndroidMobileApplicationManagementEnabled           = $False;
@@ -77,6 +79,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PartnerUnsupportedOSVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
+                    WindowsMobileApplicationManagementEnabled           = $False;
                     Ensure                                              = 'Present'
                     Credential                                          = $Credential;
                 }
@@ -102,7 +105,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                    AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                     AndroidDeviceBlockedOnMissingPartnerData            = $False;
                     AndroidEnabled                                      = $False;
                     AndroidMobileApplicationManagementEnabled           = $False;
@@ -118,6 +123,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PartnerUnsupportedOSVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
+                    WindowsMobileApplicationManagementEnabled           = $False;
                     Ensure              = 'Absent'
                     Credential          = $Credential;
                 }
@@ -125,7 +131,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
                         AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                        AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                         AndroidDeviceBlockedOnMissingPartnerData            = $False;
                         AndroidEnabled                                      = $False;
                         AndroidMobileApplicationManagementEnabled           = $False;
@@ -141,6 +149,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PartnerUnsupportedOSVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
+                        WindowsMobileApplicationManagementEnabled           = $False;
                     }
                 }
             }
@@ -161,7 +170,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                    AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                     AndroidDeviceBlockedOnMissingPartnerData            = $False;
                     AndroidEnabled                                      = $False;
                     AndroidMobileApplicationManagementEnabled           = $False;
@@ -177,6 +188,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PartnerUnsupportedOSVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
+                    WindowsMobileApplicationManagementEnabled           = $False;
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
@@ -184,7 +196,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
                         AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                        AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                         AndroidDeviceBlockedOnMissingPartnerData            = $False;
                         AndroidEnabled                                      = $False;
                         AndroidMobileApplicationManagementEnabled           = $False;
@@ -200,6 +214,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PartnerUnsupportedOSVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
+                        WindowsMobileApplicationManagementEnabled           = $False;
                     }
                 }
             }
@@ -213,7 +228,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIosCertificateMetadata         = $True; #drift
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                    AllowPartnerToCollectIosPersonalCertificateMetadata = $True; #drift
                     AndroidDeviceBlockedOnMissingPartnerData            = $False;
                     AndroidEnabled                                      = $False;
                     AndroidMobileApplicationManagementEnabled           = $False;
@@ -229,6 +246,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PartnerUnsupportedOSVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
+                    WindowsMobileApplicationManagementEnabled           = $True; #drift
                     Ensure              = 'Present'
                     Credential          = $Credential;
                 }
@@ -236,7 +254,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
                         AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                        AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                         AndroidDeviceBlockedOnMissingPartnerData            = $False;
                         AndroidEnabled                                      = $False;
                         AndroidMobileApplicationManagementEnabled           = $False;
@@ -252,6 +272,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PartnerUnsupportedOSVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
+                        WindowsMobileApplicationManagementEnabled           = $False;
                     }
                 }
             }
@@ -281,7 +302,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
                         AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+                        AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
                         AndroidDeviceBlockedOnMissingPartnerData            = $False;
                         AndroidEnabled                                      = $False;
                         AndroidMobileApplicationManagementEnabled           = $False;
@@ -297,6 +320,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PartnerUnsupportedOSVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
+                        WindowsMobileApplicationManagementEnabled           = $False;
                         LastHeartbeatDateTime                               = "1/1/0001 12:00:00 AM";
                     }
                 }

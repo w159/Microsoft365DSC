@@ -59,6 +59,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     WiFiSecurityType               = 'open'
                     ConnectAutomatically           = $True
                     ConnectWhenNetworkNameIsHidden = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxySettings                  = 'automatic'
                     Ssid                           = 'FakeStringValue'
                     Description          = 'FakeStringValue'
                     DisplayName          = 'FakeStringValue'
@@ -86,6 +88,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxySettings                  = 'automatic'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
@@ -119,6 +123,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxySettings                  = 'automatic'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Absent'
@@ -151,6 +157,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxySettings                  = 'automatic'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'
@@ -174,6 +182,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxySettings                  = 'none' # Updated property
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
                     Ensure                         = 'Present'

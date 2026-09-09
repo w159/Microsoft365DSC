@@ -39,6 +39,10 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
     [System.String] $realm
 
     [DscProperty()]
+    [System.ComponentModel.Description('Fingerprint is a string that will be used to verify the VPN server can be trusted, which is only applicable when connection type is Check Point Capsule VPN.')]
+    [System.String] $fingerprint
+
+    [DscProperty()]
     [System.ComponentModel.Description('VPN Server on the network. Make sure end users can access this network location.')]
     [MSFT_MicrosoftGraphvpnServer[]] $servers
 
@@ -260,6 +264,7 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
                 connectionName        = $getValue.connectionName
                 role                  = $getValue.role
                 realm                 = $getValue.realm
+                fingerprint           = $getValue.fingerprint
                 servers               = $complexServers
                 connectionType        = $getValue.connectionType
                 proxyServer           = $complexProxyServers
