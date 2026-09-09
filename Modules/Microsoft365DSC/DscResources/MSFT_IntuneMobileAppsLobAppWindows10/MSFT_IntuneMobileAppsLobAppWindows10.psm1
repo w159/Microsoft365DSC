@@ -62,6 +62,10 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
     [MSFT_DeviceManagementMobileAppCategory[]] $Categories
 
     [DscProperty()]
+    [System.ComponentModel.Description('The value for the minimum applicable Windows operating system.')]
+    [MSFT_MicrosoftGraphWindowsMinimumOperatingSystem] $MinimumSupportedOperatingSystem
+
+    [DscProperty()]
     [System.ComponentModel.Description('Represents the assignment to the Intune policy.')]
     [MSFT_DeviceManagementAppxMobileAppAssignment[]] $Assignments
 
@@ -204,6 +208,26 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
                 $myCategory.Add('DisplayName', $category.displayName)
                 $complexCategories += $myCategory
             }
+
+            $complexMinimumSupportedOperatingSystem = [ordered]@{}
+            $complexMinimumSupportedOperatingSystem.Add('V8_0', $getValue.minimumSupportedOperatingSystem.v8_0)
+            $complexMinimumSupportedOperatingSystem.Add('V8_1', $getValue.minimumSupportedOperatingSystem.v8_1)
+            $complexMinimumSupportedOperatingSystem.Add('V10_0', $getValue.minimumSupportedOperatingSystem.v10_0)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1607', $getValue.minimumSupportedOperatingSystem.v10_1607)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1703', $getValue.minimumSupportedOperatingSystem.v10_1703)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1709', $getValue.minimumSupportedOperatingSystem.v10_1709)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1803', $getValue.minimumSupportedOperatingSystem.v10_1803)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1809', $getValue.minimumSupportedOperatingSystem.v10_1809)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1903', $getValue.minimumSupportedOperatingSystem.v10_1903)
+            $complexMinimumSupportedOperatingSystem.Add('V10_1909', $getValue.minimumSupportedOperatingSystem.v10_1909)
+            $complexMinimumSupportedOperatingSystem.Add('V10_2004', $getValue.minimumSupportedOperatingSystem.v10_2004)
+            $complexMinimumSupportedOperatingSystem.Add('V10_2H20', $getValue.minimumSupportedOperatingSystem.v10_2H20)
+            $complexMinimumSupportedOperatingSystem.Add('V10_21H1', $getValue.minimumSupportedOperatingSystem.v10_21H1)
+            if ($complexMinimumSupportedOperatingSystem.Values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexMinimumSupportedOperatingSystem = $null
+            }
+
             $complexLargeIcon = $null
             if ($null -ne $getValue.LargeIcon.Value)
             {
@@ -215,29 +239,30 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
-                Categories            = $complexCategories
-                FileName              = $getValue.fileName
-                Description           = $getValue.Description
-                Developer             = $getValue.Developer
-                DisplayName           = $getValue.DisplayName
-                InformationUrl        = $getValue.InformationUrl
-                IsFeatured            = $getValue.IsFeatured
-                LargeIcon             = $complexLargeIcon
-                Notes                 = $getValue.Notes
-                Owner                 = $getValue.Owner
-                PrivacyInformationUrl = $getValue.PrivacyInformationUrl
-                Publisher             = $getValue.Publisher
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
-                Id                    = $getValue.Id
-                Ensure                = 'Present'
-                Credential            = $this.Credential
-                ApplicationId         = $this.ApplicationId
-                TenantId              = $this.TenantId
-                ApplicationSecret     = $this.ApplicationSecret
-                CertificateThumbprint = $this.CertificateThumbprint
-                CertificatePath       = $this.CertificatePath
-                CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                Categories                      = $complexCategories
+                MinimumSupportedOperatingSystem = $complexMinimumSupportedOperatingSystem
+                FileName                        = $getValue.fileName
+                Description                     = $getValue.Description
+                Developer                       = $getValue.Developer
+                DisplayName                     = $getValue.DisplayName
+                InformationUrl                  = $getValue.InformationUrl
+                IsFeatured                      = $getValue.IsFeatured
+                LargeIcon                       = $complexLargeIcon
+                Notes                           = $getValue.Notes
+                Owner                           = $getValue.Owner
+                PrivacyInformationUrl           = $getValue.PrivacyInformationUrl
+                Publisher                       = $getValue.Publisher
+                RoleScopeTagIds                 = $getValue.RoleScopeTagIds
+                Id                              = $getValue.Id
+                Ensure                          = 'Present'
+                Credential                      = $this.Credential
+                ApplicationId                   = $this.ApplicationId
+                TenantId                        = $this.TenantId
+                ApplicationSecret               = $this.ApplicationSecret
+                CertificateThumbprint           = $this.CertificateThumbprint
+                CertificatePath                 = $this.CertificatePath
+                CertificatePassword             = $this.CertificatePassword
+                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
                 #endregion
             }
 
@@ -300,7 +325,10 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
             $createParameters.Add('@odata.type', '#microsoft.graph.windowsUniversalAppX')
             $createParameters.Add('applicableArchitectures', $this.ResourceCache['FileTypeToPropertyMap'][$fileExtension].ApplicableArchitectures -join ',')
             $createParameters.Add('applicableDeviceTypes', $this.ResourceCache['FileTypeToPropertyMap'][$fileExtension].ApplicableDeviceTypes -join ',')
-            $createParameters.Add('minimumSupportedOperatingSystem', @{v10_0 = $true })
+            if (-not $createParameters.ContainsKey('minimumSupportedOperatingSystem'))
+            {
+                $createParameters.Add('minimumSupportedOperatingSystem', @{v10_0 = $true })
+            }
             $createParameters.Add('identityName', 'Sample')
             $createParameters.Add('identityPublisherHash', 'SamplePublisherHash')
             $createParameters.Add('identityVersion', '0.0.1')
@@ -465,6 +493,20 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
                         $Results.Remove('Categories') | Out-Null
                     }
                 }
+                if ($null -ne $Results.MinimumSupportedOperatingSystem)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.MinimumSupportedOperatingSystem `
+                        -CIMInstanceName 'MicrosoftGraphWindowsMinimumOperatingSystem'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.MinimumSupportedOperatingSystem = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('MinimumSupportedOperatingSystem') | Out-Null
+                    }
+                }
                 if ($null -ne $Results.LargeIcon)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -508,7 +550,7 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'Categories', 'LargeIcon') `
+                    -NoEscape @('Assignments', 'Categories', 'LargeIcon', 'MinimumSupportedOperatingSystem') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -554,6 +596,61 @@ class MSFT_DeviceManagementMimeContent
     [DscProperty()]
     [System.ComponentModel.Description('The Base64 encoded string content.')]
     [System.String] $Value
+}
+
+class MSFT_MicrosoftGraphWindowsMinimumOperatingSystem
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows version 10.0 or later.')]
+    [System.Nullable[System.Boolean]] $V10_0
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1607 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1607
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1703 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1703
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1709 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1709
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1803 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1803
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1809 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1809
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1903 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1903
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 1909 or later.')]
+    [System.Nullable[System.Boolean]] $V10_1909
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 2004 or later.')]
+    [System.Nullable[System.Boolean]] $V10_2004
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 21H1 or later.')]
+    [System.Nullable[System.Boolean]] $V10_21H1
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows 10 2H20 or later.')]
+    [System.Nullable[System.Boolean]] $V10_2H20
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows version 8.0 or later.')]
+    [System.Nullable[System.Boolean]] $V8_0
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Windows version 8.1 or later.')]
+    [System.Nullable[System.Boolean]] $V8_1
 }
 
 class MSFT_DeviceManagementMobileAppCategory

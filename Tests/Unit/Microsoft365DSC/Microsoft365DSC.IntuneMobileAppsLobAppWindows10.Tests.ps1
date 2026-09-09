@@ -203,6 +203,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
+                    MinimumSupportedOperatingSystem = ([MSFT_MicrosoftGraphWindowsMinimumOperatingSystem] @{
+                        V10_0 = $true
+                    })
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"
                     PrivacyInformationUrl = "FakeStringValue"
@@ -257,6 +260,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
+                    MinimumSupportedOperatingSystem = ([MSFT_MicrosoftGraphWindowsMinimumOperatingSystem] @{
+                        V10_0 = $true
+                    })
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"
                     PrivacyInformationUrl = "FakeStringValue"
@@ -310,6 +316,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
+                    MinimumSupportedOperatingSystem = ([MSFT_MicrosoftGraphWindowsMinimumOperatingSystem] @{
+                        V10_0 = $true
+                    })
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"
                     PrivacyInformationUrl = "FakeStringValue"
@@ -353,6 +362,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LargeIcon = ([MSFT_DeviceManagementMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
+                    })
+                    MinimumSupportedOperatingSystem = ([MSFT_MicrosoftGraphWindowsMinimumOperatingSystem] @{
+                        V10_0    = $false # Drift
+                        V10_1809 = $true
                     })
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"

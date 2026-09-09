@@ -23,6 +23,10 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $UseCompanyBranding
 
     [DscProperty()]
+    [System.ComponentModel.Description('The tenant-level quarantine configuration that automatically halts a workflow when its threshold conditions are met.')]
+    [MSFT_MicrosoftGraphquarantineConfiguration] $QuarantineConfiguration
+
+    [DscProperty()]
     [System.ComponentModel.Description('Credentials of the workload''s Admin')]
     [System.Management.Automation.PSCredential] $Credential
 
@@ -97,11 +101,39 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
                 return $this.AsResult($nullResult)
             }
 
+            $complexQuarantineConditions = @()
+            foreach ($currentQuarantineCondition in $instance.QuarantineConfiguration.Conditions)
+            {
+                $myQuarantineCondition = [ordered]@{}
+                $myQuarantineCondition.Add('Percentage', $currentQuarantineCondition.Percentage)
+                $myQuarantineCondition.Add('Threshold', $currentQuarantineCondition.Threshold)
+                if ($null -ne $currentQuarantineCondition.'@odata.type')
+                {
+                    $myQuarantineCondition.Add('odataType', $currentQuarantineCondition.'@odata.type'.ToString())
+                }
+                if ($myQuarantineCondition.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexQuarantineConditions += $myQuarantineCondition
+                }
+            }
+
+            $complexQuarantineConfiguration = [ordered]@{}
+            if ($complexQuarantineConditions.Count -gt 0)
+            {
+                $complexQuarantineConfiguration.Add('Conditions', [Array]$complexQuarantineConditions)
+            }
+            $complexQuarantineConfiguration.Add('MatchMode', $instance.QuarantineConfiguration.MatchMode)
+            if ($complexQuarantineConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexQuarantineConfiguration = $null
+            }
+
             $results = @{
                 IsSingleInstance                = 'Yes'
                 WorkflowScheduleIntervalInHours = $instance.WorkflowScheduleIntervalInHours
                 SenderDomain                    = $instance.EmailSettings.SenderDomain
                 UseCompanyBranding              = $instance.EmailSettings.UseCompanyBranding
+                QuarantineConfiguration         = $complexQuarantineConfiguration
                 Credential                      = $this.Credential
                 ApplicationId                   = $this.ApplicationId
                 TenantId                        = $this.TenantId
@@ -124,8 +156,6 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
-        $payload = $null
         if ($this.RequiresPowerShellCore())
         {
             $null = $this.InvokeInPowerShellCore('Set')
@@ -150,7 +180,44 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
                 useCompanyBranding = $this.UseCompanyBranding
             }
         }
-        Write-Verbose -Message "Updating the lifecycle workflow settings with payload: $payload"
+
+        if ($null -ne $this.QuarantineConfiguration)
+        {
+            [Array]$quarantineConditionsValue = @()
+            foreach ($quarantineCondition in $this.QuarantineConfiguration.Conditions)
+            {
+                $quarantineConditionValue = @{}
+                if (-not [System.String]::IsNullOrEmpty($quarantineCondition.odataType))
+                {
+                    $quarantineConditionValue.Add('@odata.type', $quarantineCondition.odataType)
+                }
+                if ($null -ne $quarantineCondition.Threshold)
+                {
+                    $quarantineConditionValue.Add('threshold', $quarantineCondition.Threshold)
+                }
+                if ($null -ne $quarantineCondition.Percentage)
+                {
+                    $quarantineConditionValue.Add('percentage', $quarantineCondition.Percentage)
+                }
+                $quarantineConditionsValue += $quarantineConditionValue
+            }
+
+            $quarantineConfigurationValue = @{}
+            if ($quarantineConditionsValue.Count -gt 0)
+            {
+                $quarantineConfigurationValue.Add('conditions', $quarantineConditionsValue)
+            }
+            if (-not [System.String]::IsNullOrEmpty($this.QuarantineConfiguration.MatchMode))
+            {
+                $quarantineConfigurationValue.Add('matchMode', $this.QuarantineConfiguration.MatchMode)
+            }
+            if ($quarantineConfigurationValue.Count -gt 0)
+            {
+                $updateSettings.Add('quarantineConfiguration', $quarantineConfigurationValue)
+            }
+        }
+
+        Write-Verbose -Message "Updating the lifecycle workflow settings with payload: $($updateSettings | ConvertTo-Json -Depth 10)"
         Update-MgBetaIdentityGovernanceLifecycleWorkflowSetting -BodyParameter $updateSettings
     }
 
@@ -214,11 +281,36 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
                 $this.ExportedInstance = $config
                 $Results = $this.GetForExport($Params)
 
+                if ($null -ne $Results.QuarantineConfiguration)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'Conditions'
+                            CimInstanceName = 'MicrosoftGraphquarantineCondition'
+                            IsRequired      = $false
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.QuarantineConfiguration `
+                        -CIMInstanceName MicrosoftGraphquarantineConfiguration `
+                        -ComplexTypeMapping $complexMapping
+
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.QuarantineConfiguration = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('QuarantineConfiguration') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
-                    -Credential $this.Credential
+                    -Credential $this.Credential `
+                    -NoEscape @('QuarantineConfiguration')
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
                     -FileName $Global:PartialExportFileName
@@ -263,4 +355,32 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphquarantineConfiguration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The set of threshold conditions evaluated for the workflow.')]
+    [MSFT_MicrosoftGraphquarantineCondition[]] $Conditions
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether any or all of the conditions must be met for the workflow to be quarantined.')]
+    [ValidateSet('any', 'all')]
+    [System.String] $MatchMode
+}
+
+class MSFT_MicrosoftGraphquarantineCondition
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The maximum number of users a workflow run can process before the workflow is quarantined.')]
+    [System.Nullable[System.Int64]] $Threshold
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The maximum percentage of in-scope users a workflow run can process before the workflow is quarantined.')]
+    [System.Nullable[System.Int32]] $Percentage
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The type of the entity.')]
+    [ValidateSet('#microsoft.graph.identityGovernance.countBasedQuarantineCondition', '#microsoft.graph.identityGovernance.percentageBasedQuarantineCondition')]
+    [System.String] $odataType
 }

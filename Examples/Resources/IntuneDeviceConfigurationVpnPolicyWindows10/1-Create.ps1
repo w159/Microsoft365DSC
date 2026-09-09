@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneDeviceConfigurationVpnPolicyWindows10 'IntuneDeviceConfigurationVpnPolicyWindows10-Example'
         {
-            Assignments                                = @(
+            Assignments                                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -36,7 +36,7 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            AssociatedApps                             = @(
+            AssociatedApps                              = @(
                 MSFT_MicrosoftGraphwindows10AssociatedApps{
                     AppType    = "desktop"
                     Identifier = "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
@@ -46,24 +46,29 @@ Configuration Example
                     Identifier = "Microsoft.CompanyPortal_8wekyb3d8bbwe"
                 }
             );
-            AuthenticationMethod                       = "usernameAndPassword";
-            ConnectionName                             = "Cisco VPN";
-            ConnectionType                             = "ciscoAnyConnect";
-            CustomXml                                  = "<Config><Version>1</Version><DeviceSetup><ConnectionEntry><HostName>vpn.contoso.com</HostName></ConnectionEntry></DeviceSetup></Config>";
-            Description                                = "Always-on connection to the corporate network for staff working remotely";
-            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+            AuthenticationMethod                        = "usernameAndPassword";
+            ConnectionName                              = "Cisco VPN";
+            ConnectionType                              = "ciscoAnyConnect";
+            CustomXml                                   = "<Config><Version>1</Version><DeviceSetup><ConnectionEntry><HostName>vpn.contoso.com</HostName></ConnectionEntry></DeviceSetup></Config>";
+            Description                                 = "Always-on connection to the corporate network for staff working remotely";
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
+            DeviceManagementApplicabilityRuleOsEdition  = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Professional editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Professional")
                 RuleType       = "include"
             };
-            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+            DeviceManagementApplicabilityRuleOsVersion  = MSFT_DeviceManagementApplicabilityRuleOsVersion{
                 Name         = "Windows 11 22H2 or later"
                 MinOSVersion = "10.0.22621.0"
                 MaxOSVersion = "10.0.26100.9999"
                 RuleType     = "include"
             };
-            DisplayName                                = "VPN";
-            DnsRules                                   = @(
+            DisplayName                                 = "VPN";
+            DnsRules                                    = @(
                 MSFT_MicrosoftGraphvpnDnsRule{
                     Servers     = @('10.0.1.10')
                     Name        = 'NRPT rule'
@@ -71,24 +76,24 @@ Configuration Example
                     AutoTrigger = $True
                 }
             );
-            DnsSuffixes                                = @("mydomain.com");
-            EnableAlwaysOn                             = $True;
-            EnableConditionalAccess                    = $True;
-            EnableDnsRegistration                      = $True;
-            EnableSingleSignOnWithAlternateCertificate = $False;
-            EnableSplitTunneling                       = $False;
-            Ensure                                     = "Present";
-            OnlyAssociatedAppsCanUseConnection         = $False;
-            ProfileTarget                              = "user";
-            ProxyServer                                = MSFT_MicrosoftGraphwindows10VpnProxyServer{
+            DnsSuffixes                                 = @("mydomain.com");
+            EnableAlwaysOn                              = $True;
+            EnableConditionalAccess                     = $True;
+            EnableDnsRegistration                       = $True;
+            EnableSingleSignOnWithAlternateCertificate  = $False;
+            EnableSplitTunneling                        = $False;
+            Ensure                                      = "Present";
+            OnlyAssociatedAppsCanUseConnection          = $False;
+            ProfileTarget                               = "user";
+            ProxyServer                                 = MSFT_MicrosoftGraphwindows10VpnProxyServer{
                 Port                             = 8081
                 BypassProxyServerForLocalAddress = $True
                 AutomaticConfigurationScriptUrl  = ''
                 Address                          = '10.0.10.100'
             };
-            RememberUserCredentials                    = $True;
-            RoleScopeTagIds                            = @("0");
-            Routes                                     = @(
+            RememberUserCredentials                     = $True;
+            RoleScopeTagIds                             = @("0");
+            Routes                                      = @(
                 MSFT_MicrosoftGraphvpnRoute{
                     DestinationPrefix = "10.20.0.0"
                     PrefixSize        = 16
@@ -98,19 +103,19 @@ Configuration Example
                     PrefixSize        = 12
                 }
             );
-            Servers                                    = @(
+            Servers                                     = @(
                 MSFT_MicrosoftGraphvpnServer{
                     IsDefaultServer = $True
                     Description     = 'gateway1'
                     Address         = '10.0.1.10'
                 }
             );
-            SingleSignOnEku                            = MSFT_MicrosoftGraphextendedKeyUsage{
+            SingleSignOnEku                             = MSFT_MicrosoftGraphextendedKeyUsage{
                 Name             = "Client Authentication"
                 ObjectIdentifier = "1.3.6.1.5.5.7.3.2"
             };
-            SingleSignOnIssuerHash                     = "<issuing-ca-certificate-hash>";
-            TrafficRules                               = @(
+            SingleSignOnIssuerHash                      = "<issuing-ca-certificate-hash>";
+            TrafficRules                                = @(
                 MSFT_MicrosoftGraphvpnTrafficRule{
                     Name                = 'VPN rule'
                     AppType             = 'none'
@@ -124,11 +129,11 @@ Configuration Example
                     VpnTrafficDirection = 'outbound'
                 }
             );
-            TrustedNetworkDomains                      = @("corp.contoso.com");
-            WindowsInformationProtectionDomain         = "contoso.com";
-            ApplicationId                              = $ApplicationId;
-            TenantId                                   = $TenantId;
-            CertificateThumbprint                      = $CertificateThumbprint;
+            TrustedNetworkDomains                       = @("corp.contoso.com");
+            WindowsInformationProtectionDomain          = "contoso.com";
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

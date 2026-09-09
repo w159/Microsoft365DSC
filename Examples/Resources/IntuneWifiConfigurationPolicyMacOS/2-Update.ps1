@@ -26,9 +26,9 @@ Configuration Example
     {
         IntuneWifiConfigurationPolicyMacOS 'IntuneWifiConfigurationPolicyMacOS-Example'
         {
-            DisplayName                    = 'macos wifi'
-            Description                    = 'Corporate Wi-Fi for managed Mac devices'
-            Assignments                    = @(
+            DisplayName                          = 'macos wifi'
+            Description                          = 'Corporate Wi-Fi for managed Mac devices'
+            Assignments                          = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
@@ -38,22 +38,23 @@ Configuration Example
                     groupDisplayName = 'Mac Developer Workstations'
                 }
             )
-            ConnectAutomatically           = $true
-            ConnectWhenNetworkNameIsHidden = $false # Updated Property
-            DeploymentChannel              = 'deviceChannel'
-            ForcePreSharedKeyUpdate        = $false
-            NetworkName                    = 'Design Studio Wi-Fi'
-            PreSharedKey                   = '<wifi-pre-shared-key>'
-            ProxyManualAddress             = 'proxy.contoso.com'
-            ProxyManualPort                = 8080
-            ProxySettings                  = 'manual'
-            RoleScopeTagIds                = @('0')
-            Ssid                           = 'Contoso-Mac'
-            WiFiSecurityType               = 'wpaPersonal'
-            Ensure                         = 'Present'
-            ApplicationId                  = $ApplicationId;
-            TenantId                       = $TenantId;
-            CertificateThumbprint          = $CertificateThumbprint;
+            ConnectAutomatically                 = $true
+            ConnectWhenNetworkNameIsHidden       = $false # Updated Property
+            DeploymentChannel                    = 'deviceChannel'
+            ForcePreSharedKeyUpdate              = $false
+            NetworkName                          = 'Design Studio Wi-Fi'
+            PreSharedKey                         = '<wifi-pre-shared-key>'
+            ProxyManualAddress                   = 'proxy.contoso.com'
+            ProxyManualPort                      = 8080
+            ProxySettings                        = 'manual'
+            RoleScopeTagIds                      = @('0')
+            Ssid                                 = 'Contoso-Mac'
+            WifiRequirePhysicalMacAddressEnabled = $true
+            WiFiSecurityType                     = 'wpaPersonal'
+            Ensure                               = 'Present'
+            ApplicationId                        = $ApplicationId;
+            TenantId                             = $TenantId;
+            CertificateThumbprint                = $CertificateThumbprint;
         }
     }
 }

@@ -62,6 +62,11 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
     [System.String[]] $ExemptedUniversalLinks
 
     [DscProperty()]
+    [System.ComponentModel.Description('Configuration state (blocked or not blocked) for Apple Intelligence Genmoji setting.')]
+    [ValidateSet('notBlocked', 'blocked')]
+    [System.String] $GenmojiConfigurationState
+
+    [DscProperty()]
     [System.ComponentModel.Description('A grace period before blocking app access during off clock hours. Must be an ISO8601 timespan format.')]
     [System.String] $GracePeriodToBlockAppsDuringOffClockHours
 
@@ -114,8 +119,18 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
     [System.String] $ProtectedMessagingRedirectAppType
 
     [DscProperty()]
+    [System.ComponentModel.Description('Configuration state (blocked or not blocked) for Apple Intelligence screen capture setting.')]
+    [ValidateSet('notBlocked', 'blocked')]
+    [System.String] $ScreenCaptureConfigurationState
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines if third party keyboards are allowed while accessing a managed app.')]
     [System.Nullable[System.Boolean]] $ThirdPartyKeyboardsBlocked
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Configuration state (blocked or not blocked) for Apple Intelligence writing tools setting.')]
+    [ValidateSet('notBlocked', 'blocked')]
+    [System.String] $WritingToolsConfigurationState
 
     [DscProperty()]
     [System.ComponentModel.Description('The period after which access is checked when the device is not connected to the internet. Must be an ISO8601 timespan format.')]
@@ -497,6 +512,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 CustomDialerAppProtocol                        = $policy.customDialerAppProtocol
                 DialerRestrictionLevel                         = $policy.dialerRestrictionLevel
                 ExemptedUniversalLinks                         = $exemptedUniversalLinksValue
+                GenmojiConfigurationState                      = $policy.genmojiConfigurationState
                 GracePeriodToBlockAppsDuringOffClockHours      = $gracePeriodToBlockAppsDuringOffClockHoursString
                 ManagedUniversalLinks                          = $managedUniversalLinksValue
                 MaximumAllowedDeviceThreatLevel                = $policy.maximumAllowedDeviceThreatLevel
@@ -509,7 +525,9 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 MobileThreatDefenseRemediationAction           = $policy.mobileThreatDefenseRemediationAction
                 PreviousPinBlockCount                          = $policy.previousPinBlockCount
                 ProtectedMessagingRedirectAppType              = $policy.protectedMessagingRedirectAppType
+                ScreenCaptureConfigurationState                = $policy.screenCaptureConfigurationState
                 thirdPartyKeyboardsBlocked                     = $policy.thirdPartyKeyboardsBlocked
+                WritingToolsConfigurationState                 = $policy.writingToolsConfigurationState
                 PeriodOfflineBeforeAccessCheck                 = $policy.PeriodOfflineBeforeAccessCheck
                 PeriodOnlineBeforeAccessCheck                  = $policy.PeriodOnlineBeforeAccessCheck
                 AllowedInboundDataTransferSources              = $policy.AllowedInboundDataTransferSources

@@ -280,6 +280,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     localSecurityOptionsInformationShownOnLockScreen = "notConfigured"
                     defenderOfficeAppsLaunchChildProcessType = "userDefined"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     deviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -872,6 +877,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -1529,6 +1539,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -2184,6 +2199,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -2831,6 +2851,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     deviceGuardLaunchSystemGuard = "notConfigured"
                     deviceGuardLocalSystemAuthorityCredentialGuardSettings = "notConfigured"
                     deviceGuardSecureBootWithDMA = "notConfigured"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        Name = "DifferentValue"
+                        DeviceMode = "sModeConfiguration"
+                        RuleType = "exclude"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         Name = "DifferentValue"
                         OsEditionTypes = @("windows10Education")

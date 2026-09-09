@@ -27,6 +27,7 @@ Configuration Example
         IntuneDeviceConfigurationPolicyMacOS 'IntuneDeviceConfigurationPolicyMacOS-Example'
         {
             DisplayName                                     = 'MacOS device restriction'
+            ActivationLockWhenSupervisedAllowed             = $True
             AddingGameCenterFriendsBlocked                  = $True
             AirDropBlocked                                  = $False
             AppleWatchBlockAutoUnlock                       = $False

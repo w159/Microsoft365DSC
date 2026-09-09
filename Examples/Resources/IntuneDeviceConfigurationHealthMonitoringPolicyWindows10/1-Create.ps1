@@ -26,8 +26,8 @@ Configuration Example
     {
         IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 'IntuneDeviceConfigurationHealthMonitoringPolicyWindows10-Example'
         {
-            AllowDeviceHealthMonitoring                = "enabled";
-            Assignments                                = @(
+            AllowDeviceHealthMonitoring                 = "enabled";
+            Assignments                                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -37,26 +37,31 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            ConfigDeviceHealthMonitoringCustomScope    = "healthMonitoring,privilegeManagement";
-            ConfigDeviceHealthMonitoringScope          = @("bootPerformance","windowsUpdates");
-            Description                                = "Collects boot performance and Windows Update health data from managed laptops";
-            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+            ConfigDeviceHealthMonitoringCustomScope     = "healthMonitoring,privilegeManagement";
+            ConfigDeviceHealthMonitoringScope           = @("bootPerformance","windowsUpdates");
+            Description                                 = "Collects boot performance and Windows Update health data from managed laptops";
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
+            DeviceManagementApplicabilityRuleOsEdition  = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10EnterpriseN")
                 RuleType       = "include"
             };
-            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+            DeviceManagementApplicabilityRuleOsVersion  = MSFT_DeviceManagementApplicabilityRuleOsVersion{
                 Name         = "Windows 10 22H2 or later"
                 MinOSVersion = "10.0.19045.0"
                 MaxOSVersion = "10.0.26200.9999"
                 RuleType     = "include"
             };
-            DisplayName                                = "Health Monitoring Configuration";
-            Ensure                                     = "Present";
-            RoleScopeTagIds                            = @("0");
-            ApplicationId                              = $ApplicationId;
-            TenantId                                   = $TenantId;
-            CertificateThumbprint                      = $CertificateThumbprint;
+            DisplayName                                 = "Health Monitoring Configuration";
+            Ensure                                      = "Present";
+            RoleScopeTagIds                             = @("0");
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

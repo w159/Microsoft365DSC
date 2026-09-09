@@ -39,6 +39,7 @@ Configuration Example
                 AllowedToCreateSecurityGroups = $true
                 AllowedToReadOtherUsers       = $true
             }
+            EnabledPreviewFeatures                            = @('assignGroupsToRoles')
             GuestUserRole                                     = 'Guest'
             PermissionGrantPolicyIdsAssignedToDefaultUserRole = @()
             Ensure                                            = 'Present'

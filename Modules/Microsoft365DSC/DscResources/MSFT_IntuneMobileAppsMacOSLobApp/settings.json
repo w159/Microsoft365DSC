@@ -17,6 +17,16 @@
       "note": "Set writes DisplayName.pkg on create only and Get never exports it"
     },
     {
+      "name": "Md5Hash",
+      "reason": "NotConfigurable",
+      "note": "The App Wrapping Tool derives the hash from the package content."
+    },
+    {
+      "name": "Md5HashChunkSize",
+      "reason": "NotConfigurable",
+      "note": "Framing size for the content derived hash, written by the App Wrapping Tool."
+    },
+    {
       "name": "Relationships",
       "reason": "NotConfigurable",
       "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."

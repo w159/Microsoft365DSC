@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AllowedPrincipalTypes",
+      "reason": "ReadOnly",
+      "note": "Reports which principal types the role definition accepts."
+    },
+    {
       "name": "IsBuiltIn",
       "reason": "ReadOnly",
       "note": "Graph flags built-in role definitions and exposes the flag as read only"
@@ -20,6 +25,11 @@
       "name": "IsPrivileged",
       "reason": "ReadOnly",
       "note": "Graph derives the privileged flag from the granted permissions"
+    },
+    {
+      "name": "ResourceScopes",
+      "reason": "Deprecated",
+      "note": "Graph marks it for deprecation. Scope attaches to the role assignment instead."
     }
   ],
   "description": "Manages custom roles in Defender.",

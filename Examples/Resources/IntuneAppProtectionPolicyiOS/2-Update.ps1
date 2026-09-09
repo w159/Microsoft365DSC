@@ -71,6 +71,7 @@ Configuration Example
             FaceIdBlocked                                  = $false
             FilterOpenInToOnlyManagedApps                  = $true
             FingerprintBlocked                             = $false
+            GenmojiConfigurationState                      = 'blocked'
             GracePeriodToBlockAppsDuringOffClockHours      = 'PT1H'
             ManagedBrowser                                 = 'notConfigured'
             ManagedBrowserToOpenLinksRequired              = $true
@@ -108,9 +109,11 @@ Configuration Example
             ProtectInboundDataFromUnknownSources           = $false
             RoleScopeTagIds                                = @('0')
             SaveAsBlocked                                  = $true
+            ScreenCaptureConfigurationState                = 'blocked'
             SimplePinBlocked                               = $true
             TargetedAppManagementLevels                    = @('unspecified')
             ThirdPartyKeyboardsBlocked                     = $true
+            WritingToolsConfigurationState                 = 'notBlocked'
             Ensure                                         = 'Present'
             ApplicationId                                  = $ApplicationId;
             TenantId                                       = $TenantId;

@@ -12,9 +12,24 @@
   },
   "excludedProperties": [
     {
+      "name": "DefaultInteractiveAuthenticationMethod",
+      "reason": "Deferred",
+      "note": "Present in the beta metadata only, with no description annotation and no documentation."
+    },
+    {
       "name": "DomainId",
       "reason": "Deferred",
       "note": "Parent domain key from the federationConfiguration route"
+    },
+    {
+      "name": "OpenIdConnectDiscoveryEndpoint",
+      "reason": "Deferred",
+      "note": "Present in the beta metadata only, with no description annotation and no documentation."
+    },
+    {
+      "name": "PasswordChangeUri",
+      "reason": "Deferred",
+      "note": "Present in the beta metadata only, with no description annotation and no documentation."
     },
     {
       "name": "SigningCertificateUpdateStatus",

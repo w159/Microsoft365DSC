@@ -53,6 +53,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AllowedToCreateSecurityGroups          = $true
                     AllowedToReadOtherUsers                = $true
                     }
+                    EnabledPreviewFeatures                              = [string[]]@('assignGroupsToRoles')
                     GuestUserRoleId                                     = '10dae51f-b6af-4016-8d66-8c2a99b929b3' # Guest
                 }
                 return $AADAuthPol
@@ -91,6 +92,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AllowedToCreateSecurityGroups = $true
                         AllowedToReadOtherUsers       = $true
                     }
+                    EnabledPreviewFeatures                            = [string[]]@('assignGroupsToRoles')
                     PermissionGrantPolicyIdsAssignedToDefaultUserRole = [string[]]@()
                     GuestUserRole                                     = 'Guest'
                     Ensure                                            = 'Present'
@@ -124,6 +126,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AllowedToCreateSecurityGroups = $true
                         AllowedToReadOtherUsers       = $true
                     }
+                    EnabledPreviewFeatures                            = [string[]]@() # Drift
                     PermissionGrantPolicyIdsAssignedToDefaultUserRole = [string[]]@()
                     GuestUserRole                                     = 'RestrictedGuest' # Drift
                     Ensure                                            = 'Present'

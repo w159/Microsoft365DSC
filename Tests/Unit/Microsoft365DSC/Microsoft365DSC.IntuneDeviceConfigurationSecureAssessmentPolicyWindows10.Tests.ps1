@@ -56,6 +56,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     configurationAccount = "FakeStringValue"
                     allowPrinting = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Education")
@@ -93,6 +98,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Education")
@@ -138,6 +148,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Education")
@@ -181,6 +196,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Education")
@@ -217,6 +237,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConfigurationAccount = "FakeStringValue"
                     ConfigurationAccountType = "azureADAccount"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "sModeConfiguration" # Updated property
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Education")

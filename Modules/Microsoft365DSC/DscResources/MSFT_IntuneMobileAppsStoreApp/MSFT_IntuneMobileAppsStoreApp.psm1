@@ -14,6 +14,11 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
     [System.String] $DisplayName
 
     [DscProperty()]
+    [System.ComponentModel.Description('The protocol used to deliver the app to the apple device(s). When the property is set to Declarative Device Management (DDM) protocol ''declarativeDeviceManagement'' then it can no longer be modified or updated to ''mobileDeviceManagement'' or ''default''. The default value is ''default'', which indicates the Apple MDM protocol. Possible values are: default, mobileDeviceManagement, declarativeDeviceManagement. Only applicable for the ''iOS'' TargetPlatform.')]
+    [ValidateSet('default', 'mobileDeviceManagement', 'declarativeDeviceManagement')]
+    [System.String] $AppleDeviceAppDeliveryProtocolType
+
+    [DscProperty()]
     [System.ComponentModel.Description('The architecture for which this app can run on. Only applicable for the ''iOS'' TargetPlatform.')]
     [MSFT_MicrosoftGraphiosDeviceType] $ApplicableDeviceType
 
@@ -249,37 +254,43 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
                 $complexLargeIcon.Add('Type', $getValue.LargeIcon.Type)
                 $complexLargeIcon.Add('Value', $getValue.LargeIcon.Value)
             }
+            $enumAppleDeviceAppDeliveryProtocolType = $null
+            if ($null -ne $getValue.appleDeviceAppDeliveryProtocolType)
+            {
+                $enumAppleDeviceAppDeliveryProtocolType = $getValue.appleDeviceAppDeliveryProtocolType.ToString()
+            }
             #endregion
 
             $results = @{
                 #region resource generator code
-                ApplicableDeviceType            = $complexApplicableDeviceType
-                AppStoreUrl                     = $getValue.appStoreUrl
-                BundleId                        = $getValue.bundleId
-                Categories                      = $complexCategories
-                MinimumSupportedOperatingSystem = $complexMinimumSupportedOperatingSystem
-                Description                     = $getValue.Description
-                Developer                       = $getValue.Developer
-                DisplayName                     = $getValue.DisplayName
-                InformationUrl                  = $getValue.InformationUrl
-                IsFeatured                      = $getValue.IsFeatured
-                LargeIcon                       = $complexLargeIcon
-                Notes                           = $getValue.Notes
-                Owner                           = $getValue.Owner
-                PrivacyInformationUrl           = $getValue.PrivacyInformationUrl
-                Publisher                       = $getValue.Publisher
-                RoleScopeTagIds                 = $getValue.RoleScopeTagIds
-                TargetPlatform                  = $getValue.'@odata.type'.Replace('#microsoft.graph.', '').Replace('StoreApp', '')
-                Id                              = $getValue.Id
-                Ensure                          = 'Present'
-                Credential                      = $this.Credential
-                ApplicationId                   = $this.ApplicationId
-                TenantId                        = $this.TenantId
-                ApplicationSecret               = $this.ApplicationSecret
-                CertificateThumbprint           = $this.CertificateThumbprint
-                CertificatePath                 = $this.CertificatePath
-                CertificatePassword             = $this.CertificatePassword
-                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                AppleDeviceAppDeliveryProtocolType = $enumAppleDeviceAppDeliveryProtocolType
+                ApplicableDeviceType               = $complexApplicableDeviceType
+                AppStoreUrl                        = $getValue.appStoreUrl
+                BundleId                           = $getValue.bundleId
+                Categories                         = $complexCategories
+                MinimumSupportedOperatingSystem    = $complexMinimumSupportedOperatingSystem
+                Description                        = $getValue.Description
+                Developer                          = $getValue.Developer
+                DisplayName                        = $getValue.DisplayName
+                InformationUrl                     = $getValue.InformationUrl
+                IsFeatured                         = $getValue.IsFeatured
+                LargeIcon                          = $complexLargeIcon
+                Notes                              = $getValue.Notes
+                Owner                              = $getValue.Owner
+                PrivacyInformationUrl              = $getValue.PrivacyInformationUrl
+                Publisher                          = $getValue.Publisher
+                RoleScopeTagIds                    = $getValue.RoleScopeTagIds
+                TargetPlatform                     = $getValue.'@odata.type'.Replace('#microsoft.graph.', '').Replace('StoreApp', '')
+                Id                                 = $getValue.Id
+                Ensure                             = 'Present'
+                Credential                         = $this.Credential
+                ApplicationId                      = $this.ApplicationId
+                TenantId                           = $this.TenantId
+                ApplicationSecret                  = $this.ApplicationSecret
+                CertificateThumbprint              = $this.CertificateThumbprint
+                CertificatePath                    = $this.CertificatePath
+                CertificatePassword                = $this.CertificatePassword
+                ManagedIdentity                    = $this.ManagedIdentity.IsPresent
                 #endregion
             }
             $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppAssignment -MobileAppId $resolvedId
@@ -621,6 +632,11 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
         if ($boundParameters.ContainsKey('BundleId') -and $boundParameters.TargetPlatform -ne 'iOS')
         {
             throw 'BundleId is only applicable for iOS Store Apps.'
+        }
+
+        if ($boundParameters.ContainsKey('AppleDeviceAppDeliveryProtocolType') -and $boundParameters.TargetPlatform -ne 'iOS')
+        {
+            throw 'AppleDeviceAppDeliveryProtocolType is only applicable for iOS Store Apps.'
         }
 
         if ($boundParameters.ContainsKey('MinimumSupportedOperatingSystem'))

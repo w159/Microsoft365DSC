@@ -27,6 +27,11 @@
       "note": "Service-assigned. The resource keys on IsSingleInstance."
     },
     {
+      "name": "PolicyMigrationState",
+      "reason": "Deprecated",
+      "note": "Administrators change the migration state in the Entra admin center."
+    },
+    {
       "name": "PolicyVersion",
       "reason": "ReadOnly",
       "note": "The service stamps the policy version"

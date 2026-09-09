@@ -74,6 +74,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     bluetooth = "notConfigured"
                     cameras = "notConfigured"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -111,6 +116,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Cameras = "notConfigured"
                     ChangeUefiSettingsPermission = "notConfiguredOnly"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -169,6 +179,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Cameras = "notConfigured"
                     ChangeUefiSettingsPermission = "notConfiguredOnly"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -225,6 +240,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Cameras = "notConfigured"
                     ChangeUefiSettingsPermission = "notConfiguredOnly"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -274,6 +294,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Cameras = "notConfigured"
                     ChangeUefiSettingsPermission = "notConfiguredOnly"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "sModeConfiguration" # Updated property
+                        RuleType = "exclude" # Updated property
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Professional") # Updated property

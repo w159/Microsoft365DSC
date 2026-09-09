@@ -22,6 +22,10 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
     [System.String[]] $RoleScopeTagIds
 
     [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, activation lock is allowed when the device is in supervised mode. When FALSE, activation lock is not allowed.')]
+    [System.Nullable[System.Boolean]] $ActivationLockWhenSupervisedAllowed
+
+    [DscProperty()]
     [System.ComponentModel.Description('Configures users from adding friends to Game Center. Available for devices running macOS versions 10.13 and later.')]
     [System.Nullable[System.Boolean]] $AddingGameCenterFriendsBlocked
 
@@ -376,6 +380,7 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
                 Description                                     = $getValue.Description
                 DisplayName                                     = $getValue.DisplayName
                 RoleScopeTagIds                                 = $getValue.RoleScopeTagIds
+                ActivationLockWhenSupervisedAllowed             = $getValue.activationLockWhenSupervisedAllowed
                 AddingGameCenterFriendsBlocked                  = $getValue.addingGameCenterFriendsBlocked
                 AirDropBlocked                                  = $getValue.airDropBlocked
                 AppleWatchBlockAutoUnlock                       = $getValue.appleWatchBlockAutoUnlock

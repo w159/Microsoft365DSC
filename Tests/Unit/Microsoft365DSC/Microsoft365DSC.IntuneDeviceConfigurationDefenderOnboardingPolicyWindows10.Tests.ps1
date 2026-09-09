@@ -50,6 +50,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     advancedThreatProtectionOnboardingBlob = "FakeStringValue"
                     advancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -93,6 +98,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -137,6 +147,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -179,6 +194,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -214,6 +234,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AdvancedThreatProtectionOnboardingFilename = "FakeStringValue"
                     AllowSampleSharing = $False # Updated property
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "exclude" # Updated property
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")

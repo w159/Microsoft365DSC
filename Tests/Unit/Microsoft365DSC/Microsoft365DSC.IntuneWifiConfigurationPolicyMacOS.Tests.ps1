@@ -52,20 +52,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                 return @{
-                    ProxyManualPort                = 25
-                    '@odata.type'                  = '#microsoft.graph.macosWifiConfiguration'
-                    NetworkName                    = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    ConnectAutomatically           = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    ConnectWhenNetworkNameIsHidden = $True
-                    ProxySettings                  = 'automatic'
-                    Ssid                           = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    Description          = 'FakeStringValue'
-                    DisplayName          = 'FakeStringValue'
-                    Id                   = 'FakeStringValue'
+                    ProxyManualPort                      = 25
+                    '@odata.type'                        = '#microsoft.graph.macosWifiConfiguration'
+                    NetworkName                          = 'FakeStringValue'
+                    WifiRequirePhysicalMacAddressEnabled = $True
+                    WiFiSecurityType                     = 'open'
+                    ConnectAutomatically                 = $True
+                    ProxyAutomaticConfigurationUrl       = 'FakeStringValue'
+                    PreSharedKey                         = 'FakeStringValue'
+                    ConnectWhenNetworkNameIsHidden       = $True
+                    ProxySettings                        = 'automatic'
+                    Ssid                                 = 'FakeStringValue'
+                    ProxyManualAddress                   = 'FakeStringValue'
+                    Description                          = 'FakeStringValue'
+                    DisplayName                          = 'FakeStringValue'
+                    Id                                   = 'FakeStringValue'
                 }
             }
 
@@ -80,21 +81,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyMacOS should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'automatic'
-                    Ssid                           = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    ConnectAutomatically                 = $True
+                    ConnectWhenNetworkNameIsHidden       = $True
+                    Description                          = 'FakeStringValue'
+                    DisplayName                          = 'FakeStringValue'
+                    Id                                   = 'FakeStringValue'
+                    NetworkName                          = 'FakeStringValue'
+                    PreSharedKey                         = 'FakeStringValue'
+                    ProxyAutomaticConfigurationUrl       = 'FakeStringValue'
+                    ProxyManualAddress                   = 'FakeStringValue'
+                    ProxyManualPort                      = 25
+                    ProxySettings                        = 'automatic'
+                    Ssid                                 = 'FakeStringValue'
+                    WifiRequirePhysicalMacAddressEnabled = $True
+                    WiFiSecurityType                     = 'open'
+                    Ensure                               = 'Present'
+                    Credential                           = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
@@ -116,21 +118,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyMacOS exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'automatic'
-                    Ssid                           = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Absent'
-                    Credential                     = $Credential
+                    ConnectAutomatically                 = $True
+                    ConnectWhenNetworkNameIsHidden       = $True
+                    Description                          = 'FakeStringValue'
+                    DisplayName                          = 'FakeStringValue'
+                    Id                                   = 'FakeStringValue'
+                    NetworkName                          = 'FakeStringValue'
+                    PreSharedKey                         = 'FakeStringValue'
+                    ProxyAutomaticConfigurationUrl       = 'FakeStringValue'
+                    ProxyManualAddress                   = 'FakeStringValue'
+                    ProxyManualPort                      = 25
+                    ProxySettings                        = 'automatic'
+                    Ssid                                 = 'FakeStringValue'
+                    WifiRequirePhysicalMacAddressEnabled = $True
+                    WiFiSecurityType                     = 'open'
+                    Ensure                               = 'Absent'
+                    Credential                           = $Credential
                 }
             }
 
@@ -150,21 +153,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyMacOS Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'automatic'
-                    Ssid                           = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    ConnectAutomatically                 = $True
+                    ConnectWhenNetworkNameIsHidden       = $True
+                    Description                          = 'FakeStringValue'
+                    DisplayName                          = 'FakeStringValue'
+                    Id                                   = 'FakeStringValue'
+                    NetworkName                          = 'FakeStringValue'
+                    PreSharedKey                         = 'FakeStringValue'
+                    ProxyAutomaticConfigurationUrl       = 'FakeStringValue'
+                    ProxyManualAddress                   = 'FakeStringValue'
+                    ProxyManualPort                      = 25
+                    ProxySettings                        = 'automatic'
+                    Ssid                                 = 'FakeStringValue'
+                    WifiRequirePhysicalMacAddressEnabled = $True
+                    WiFiSecurityType                     = 'open'
+                    Ensure                               = 'Present'
+                    Credential                           = $Credential
                 }
             }
 
@@ -176,21 +180,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyMacOS exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 8443 # Updated property
-                    ProxySettings                  = 'automatic'
-                    Ssid                           = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    ConnectAutomatically                 = $True
+                    ConnectWhenNetworkNameIsHidden       = $True
+                    Description                          = 'FakeStringValue'
+                    DisplayName                          = 'FakeStringValue'
+                    Id                                   = 'FakeStringValue'
+                    NetworkName                          = 'FakeStringValue'
+                    PreSharedKey                         = 'FakeStringValue'
+                    ProxyAutomaticConfigurationUrl       = 'FakeStringValue'
+                    ProxyManualAddress                   = 'FakeStringValue'
+                    ProxyManualPort                      = 8443 # Updated property
+                    ProxySettings                        = 'automatic'
+                    Ssid                                 = 'FakeStringValue'
+                    WifiRequirePhysicalMacAddressEnabled = $False # Updated property
+                    WiFiSecurityType                     = 'open'
+                    Ensure                               = 'Present'
+                    Credential                           = $Credential
                 }
             }
 

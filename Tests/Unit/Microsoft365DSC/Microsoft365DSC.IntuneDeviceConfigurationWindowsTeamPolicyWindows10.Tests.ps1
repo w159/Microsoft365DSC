@@ -72,6 +72,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     azureOperationalInsightsWorkspaceId = "FakeStringValue"
                     connectAppBlockAutoLaunch = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -108,6 +113,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureOperationalInsightsWorkspaceKey = "FakeStringValue"
                     ConnectAppBlockAutoLaunch = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -165,6 +175,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureOperationalInsightsWorkspaceKey = "FakeStringValue"
                     ConnectAppBlockAutoLaunch = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -220,6 +235,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureOperationalInsightsWorkspaceKey = "FakeStringValue"
                     ConnectAppBlockAutoLaunch = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -267,6 +287,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AzureOperationalInsightsWorkspaceKey = "FakeStringValue"
                     ConnectAppBlockAutoLaunch = $True
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "sModeConfiguration" # Updated property
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Professional") # Updated property

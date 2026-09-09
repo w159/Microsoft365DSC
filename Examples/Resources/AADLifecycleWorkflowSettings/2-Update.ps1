@@ -27,6 +27,19 @@ Configuration Example
         AADLifecycleWorkflowSettings "AADLifecycleWorkflowSettings-Example"
         {
             IsSingleInstance                = "Yes";
+            QuarantineConfiguration         = MSFT_MicrosoftGraphquarantineConfiguration{
+                MatchMode  = "any"
+                Conditions = @(
+                    MSFT_MicrosoftGraphquarantineCondition{
+                        odataType = "#microsoft.graph.identityGovernance.countBasedQuarantineCondition"
+                        Threshold = 500
+                    }
+                    MSFT_MicrosoftGraphquarantineCondition{
+                        odataType  = "#microsoft.graph.identityGovernance.percentageBasedQuarantineCondition"
+                        Percentage = 25
+                    }
+                )
+            };
             SenderDomain                    = "microsoft.com";
             UseCompanyBranding              = $True;
             WorkflowScheduleIntervalInHours = 10;

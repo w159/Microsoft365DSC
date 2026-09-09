@@ -131,6 +131,10 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('The OS edition applicability for this Policy. ')]
     [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
 
@@ -302,6 +306,15 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 $secondaryRootCertificateForClientValidation = $this.GetDeviceConfigurationPolicyCertificate($getValue.Id, 'secondaryRootCertificateForClientValidation')
             }
 
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
+            }
+
             $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
@@ -353,6 +366,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 SecondaryRootCertificateForClientValidationId                  = $secondaryRootCertificateForClientValidation.Id
                 SecondaryRootCertificateForClientValidationDisplayName         = $secondaryRootCertificateForClientValidation.DisplayName
                 Description                                                    = $getValue.Description
+                DeviceManagementApplicabilityRuleDeviceMode                    = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition                     = $complexDeviceManagementApplicabilityRuleOsEdition
                 DeviceManagementApplicabilityRuleOsVersion                     = $complexDeviceManagementApplicabilityRuleOsVersion
                 DisplayName                                                    = $getValue.DisplayName
@@ -702,6 +716,19 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 $Results = $this.GetForExport($Params)
                 $rawResults = $Results.Clone()
 
+                if ($Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode -CIMInstanceName DeviceManagementApplicabilityRuleDeviceMode
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
+                    }
+                }
+
                 if ($Results.DeviceManagementApplicabilityRuleOsEdition)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition -CIMInstanceName DeviceManagementApplicabilityRuleOsEdition
@@ -745,7 +772,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
+                    -NoEscape @('Assignments', 'DeviceManagementApplicabilityRuleDeviceMode', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -912,6 +939,23 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementApplicabilityRuleOsEdition

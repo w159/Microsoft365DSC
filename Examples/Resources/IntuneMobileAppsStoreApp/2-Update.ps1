@@ -26,20 +26,21 @@ Configuration Example
     {
         IntuneMobileAppsStoreApp "IntuneMobileAppsStoreApp-Example"
         {
-            TargetPlatform                  = "iOS"
-            ApplicableDeviceType            = MSFT_MicrosoftGraphiosDeviceType{
+            TargetPlatform                     = "iOS"
+            AppleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
+            ApplicableDeviceType               = MSFT_MicrosoftGraphiosDeviceType{
                 iPad          = $True
                 iPhoneAndIPod = $True
             }
-            AppStoreUrl                     = "https://itunes.apple.com/us/app/store-app/id1087422156?mt=8"
-            BundleId                        = "com.contoso.storeapp"
-            Description                     = "Store App Description";
-            Developer                       = "Contoso";
-            DisplayName                     = "Store App";
-            Ensure                          = "Present";
-            InformationUrl                  = "";
-            IsFeatured                      = $True; # Updated Property
-            MinimumSupportedOperatingSystem = MSFT_MicrosoftGraphMinimumOperatingSystem{
+            AppStoreUrl                        = "https://itunes.apple.com/us/app/store-app/id1087422156?mt=8"
+            BundleId                           = "com.contoso.storeapp"
+            Description                        = "Store App Description";
+            Developer                          = "Contoso";
+            DisplayName                        = "Store App";
+            Ensure                             = "Present";
+            InformationUrl                     = "";
+            IsFeatured                         = $True; # Updated Property
+            MinimumSupportedOperatingSystem    = MSFT_MicrosoftGraphMinimumOperatingSystem{
                 V4_0   = $False
                 V4_0_3 = $False
                 V4_1   = $False
@@ -61,11 +62,11 @@ Configuration Example
                 V14_0  = $False
                 V15_0  = $False
             };
-            Notes                           = "";
-            Owner                           = "";
-            PrivacyInformationUrl           = "";
-            Publisher                       = "Contoso";
-            Assignments                     = @(
+            Notes                              = "";
+            Owner                              = "";
+            PrivacyInformationUrl              = "";
+            Publisher                          = "Contoso";
+            Assignments                        = @(
                 MSFT_DeviceManagementStoreMobileAppAssignment {
                     groupDisplayName                           = 'All devices'
                     deviceAndAppManagementAssignmentFilterType = 'none'
@@ -83,15 +84,15 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            Categories                      = @(
+            Categories                         = @(
                 MSFT_DeviceManagementMobileAppCategory{
                     Id          = "2185c6bf-1b3d-4daa-a0bc-79cb4fad9c87"
                     DisplayName = "App Category 1"
                 }
             );
-            ApplicationId                   = $ApplicationId;
-            TenantId                        = $TenantId;
-            CertificateThumbprint           = $CertificateThumbprint;
+            ApplicationId                      = $ApplicationId;
+            TenantId                           = $TenantId;
+            CertificateThumbprint              = $CertificateThumbprint;
         }
     }
 }

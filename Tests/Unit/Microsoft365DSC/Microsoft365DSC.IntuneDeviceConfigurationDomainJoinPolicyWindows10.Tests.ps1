@@ -53,6 +53,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     '@odata.type' = "#microsoft.graph.windowsDomainJoinConfiguration"
                     organizationalUnit = "FakeStringValue"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -92,6 +97,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ComputerNameStaticPrefix = "FakeStringValue"
                     ComputerNameSuffixRandomCharCount = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -133,6 +143,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ComputerNameStaticPrefix = "FakeStringValue"
                     ComputerNameSuffixRandomCharCount = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -172,6 +187,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ComputerNameStaticPrefix = "FakeStringValue"
                     ComputerNameSuffixRandomCharCount = 25
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -203,6 +223,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ComputerNameStaticPrefix = "FakeStringValue"
                     ComputerNameSuffixRandomCharCount = 7 # Updated property
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "sModeConfiguration" # Updated property
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Professional") # Updated property

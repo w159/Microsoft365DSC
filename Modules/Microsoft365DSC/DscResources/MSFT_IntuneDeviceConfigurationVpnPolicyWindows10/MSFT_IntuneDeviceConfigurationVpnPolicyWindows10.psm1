@@ -121,6 +121,10 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
     [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
 
@@ -441,6 +445,15 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 }
             }
 
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
+            }
+
             $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
@@ -483,49 +496,50 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
-                AssociatedApps                             = $complexAssociatedApps
-                AuthenticationMethod                       = $enumAuthenticationMethod
-                ConnectionType                             = $enumConnectionType
-                CryptographySuite                          = $complexCryptographySuite
-                DnsRules                                   = $complexDnsRules
-                DnsSuffixes                                = $getValue.dnsSuffixes
-                EapXml                                     = $getValue.eapXml
-                EnableAlwaysOn                             = $getValue.enableAlwaysOn
-                EnableConditionalAccess                    = $getValue.enableConditionalAccess
-                EnableDeviceTunnel                         = $getValue.enableDeviceTunnel
-                EnableDnsRegistration                      = $getValue.enableDnsRegistration
-                EnableSingleSignOnWithAlternateCertificate = $getValue.enableSingleSignOnWithAlternateCertificate
-                EnableSplitTunneling                       = $getValue.enableSplitTunneling
-                MicrosoftTunnelSiteId                      = $getValue.microsoftTunnelSiteId
-                OnlyAssociatedAppsCanUseConnection         = $getValue.onlyAssociatedAppsCanUseConnection
-                ProfileTarget                              = $enumProfileTarget
-                ProxyServer                                = $complexProxyServer
-                RememberUserCredentials                    = $getValue.rememberUserCredentials
-                Routes                                     = $complexRoutes
-                SingleSignOnEku                            = $complexSingleSignOnEku
-                SingleSignOnIssuerHash                     = $getValue.singleSignOnIssuerHash
-                TrafficRules                               = $complexTrafficRules
-                TrustedNetworkDomains                      = $getValue.trustedNetworkDomains
-                WindowsInformationProtectionDomain         = $getValue.windowsInformationProtectionDomain
-                ConnectionName                             = $getValue.connectionName
-                CustomXml                                  = $getValue.customXml
-                Servers                                    = $complexServers
-                Description                                = $getValue.Description
-                DeviceManagementApplicabilityRuleOsEdition = $complexDeviceManagementApplicabilityRuleOsEdition
-                DeviceManagementApplicabilityRuleOsVersion = $complexDeviceManagementApplicabilityRuleOsVersion
-                DisplayName                                = $getValue.DisplayName
-                Id                                         = $getValue.Id
-                RoleScopeTagIds                            = $getValue.RoleScopeTagIds
-                Ensure                                     = 'Present'
-                Credential                                 = $this.Credential
-                ApplicationId                              = $this.ApplicationId
-                TenantId                                   = $this.TenantId
-                ApplicationSecret                          = $this.ApplicationSecret
-                CertificateThumbprint                      = $this.CertificateThumbprint
-                CertificatePath                            = $this.CertificatePath
-                CertificatePassword                        = $this.CertificatePassword
-                ManagedIdentity                            = $this.ManagedIdentity.IsPresent
-                AccessTokens                               = $this.AccessTokens
+                AssociatedApps                              = $complexAssociatedApps
+                AuthenticationMethod                        = $enumAuthenticationMethod
+                ConnectionType                              = $enumConnectionType
+                CryptographySuite                           = $complexCryptographySuite
+                DnsRules                                    = $complexDnsRules
+                DnsSuffixes                                 = $getValue.dnsSuffixes
+                EapXml                                      = $getValue.eapXml
+                EnableAlwaysOn                              = $getValue.enableAlwaysOn
+                EnableConditionalAccess                     = $getValue.enableConditionalAccess
+                EnableDeviceTunnel                          = $getValue.enableDeviceTunnel
+                EnableDnsRegistration                       = $getValue.enableDnsRegistration
+                EnableSingleSignOnWithAlternateCertificate  = $getValue.enableSingleSignOnWithAlternateCertificate
+                EnableSplitTunneling                        = $getValue.enableSplitTunneling
+                MicrosoftTunnelSiteId                       = $getValue.microsoftTunnelSiteId
+                OnlyAssociatedAppsCanUseConnection          = $getValue.onlyAssociatedAppsCanUseConnection
+                ProfileTarget                               = $enumProfileTarget
+                ProxyServer                                 = $complexProxyServer
+                RememberUserCredentials                     = $getValue.rememberUserCredentials
+                Routes                                      = $complexRoutes
+                SingleSignOnEku                             = $complexSingleSignOnEku
+                SingleSignOnIssuerHash                      = $getValue.singleSignOnIssuerHash
+                TrafficRules                                = $complexTrafficRules
+                TrustedNetworkDomains                       = $getValue.trustedNetworkDomains
+                WindowsInformationProtectionDomain          = $getValue.windowsInformationProtectionDomain
+                ConnectionName                              = $getValue.connectionName
+                CustomXml                                   = $getValue.customXml
+                Servers                                     = $complexServers
+                Description                                 = $getValue.Description
+                DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
+                DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
+                DisplayName                                 = $getValue.DisplayName
+                Id                                          = $getValue.Id
+                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                Ensure                                      = 'Present'
+                Credential                                  = $this.Credential
+                ApplicationId                               = $this.ApplicationId
+                TenantId                                    = $this.TenantId
+                ApplicationSecret                           = $this.ApplicationSecret
+                CertificateThumbprint                       = $this.CertificateThumbprint
+                CertificatePath                             = $this.CertificatePath
+                CertificatePassword                         = $this.CertificatePassword
+                ManagedIdentity                             = $this.ManagedIdentity.IsPresent
+                AccessTokens                                = $this.AccessTokens
                 #endregion
             }
 
@@ -837,6 +851,20 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                         $Results.Remove('Servers') | Out-Null
                     }
                 }
+                if ($null -ne $Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleDeviceMode'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
+                    }
+                }
                 if ($null -ne $Results.DeviceManagementApplicabilityRuleOsEdition)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -883,7 +911,8 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                     -Results $Results `
                     -Credential $this.Credential `
                     -NoEscape @('AssociatedApps', 'CryptographySuite', 'DnsRules', 'ProxyServer', 'Routes',
-                    'SingleSignOnEku', 'TrafficRules', 'Servers', 'DeviceManagementApplicabilityRuleOsEdition',
+                    'SingleSignOnEku', 'TrafficRules', 'Servers', 'DeviceManagementApplicabilityRuleDeviceMode',
+                    'DeviceManagementApplicabilityRuleOsEdition',
                     'DeviceManagementApplicabilityRuleOsVersion', 'Assignments') `
                     -RawResults $rawResults
 
@@ -1113,6 +1142,23 @@ class MSFT_MicrosoftGraphvpnServer
     [DscProperty()]
     [System.ComponentModel.Description('Default server.')]
     [System.Nullable[System.Boolean]] $isDefaultServer
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementApplicabilityRuleOsEdition

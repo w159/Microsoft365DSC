@@ -93,6 +93,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             AllowedResourceActions = @("FakeStringValue")
                         })
                     )
+                    TemplateId = "FakeStringValue"
                     Ensure = "Present"
                     Credential = $Credential;
                 }
@@ -125,6 +126,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             AllowedResourceActions = @("FakeStringValue")
                         })
                     )
+                    TemplateId = "FakeStringValue"
                     Ensure = "Absent"
                     Credential = $Credential;
                 }
@@ -156,6 +158,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             AllowedResourceActions = @("FakeStringValue")
                         })
                     )
+                    TemplateId = "FakeStringValue"
                     Ensure = "Present"
                     Credential = $Credential;
                 }
@@ -178,6 +181,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             AllowedResourceActions = @("FakeStringValue2") # Drift
                         })
                     )
+                    TemplateId = "FakeStringValue2"
                     Ensure = "Present"
                     Credential = $Credential;
                 }

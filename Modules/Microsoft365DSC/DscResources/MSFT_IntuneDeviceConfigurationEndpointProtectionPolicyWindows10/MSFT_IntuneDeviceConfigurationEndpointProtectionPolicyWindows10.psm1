@@ -549,6 +549,10 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
     [System.String] $DeviceGuardSecureBootWithDMA
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
     [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
 
@@ -1228,6 +1232,15 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             if ($complexDefenderDetectedMalwareActions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexDefenderDetectedMalwareActions = $null
+            }
+
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
             }
 
             $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
@@ -2566,6 +2579,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DeviceGuardLaunchSystemGuard                                                 = $enumDeviceGuardLaunchSystemGuard
                 DeviceGuardLocalSystemAuthorityCredentialGuardSettings                       = $enumDeviceGuardLocalSystemAuthorityCredentialGuardSettings
                 DeviceGuardSecureBootWithDMA                                                 = $enumDeviceGuardSecureBootWithDMA
+                DeviceManagementApplicabilityRuleDeviceMode                                  = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition                                   = $complexDeviceManagementApplicabilityRuleOsEdition
                 DeviceManagementApplicabilityRuleOsVersion                                   = $complexDeviceManagementApplicabilityRuleOsVersion
                 DmaGuardDeviceEnumerationPolicy                                              = $enumDmaGuardDeviceEnumerationPolicy
@@ -2956,6 +2970,20 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     else
                     {
                         $Results.Remove('DefenderDetectedMalwareActions') | Out-Null
+                    }
+                }
+                if ( $null -ne $Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode `
+                        -CIMInstanceName 'DeviceManagementApplicabilityRuleDeviceMode'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
                     }
                 }
                 if ( $null -ne $Results.DeviceManagementApplicabilityRuleOsEdition)
@@ -3872,7 +3900,8 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     -Results $Results `
                     -Credential $this.Credential `
                     -NoEscape @('BitLockerFixedDrivePolicy', 'BitLockerRemovableDrivePolicy', 'BitLockerSystemDrivePolicy', 'DefenderDetectedMalwareActions',
-                    'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion',
+                    'DeviceManagementApplicabilityRuleDeviceMode', 'DeviceManagementApplicabilityRuleOsEdition',
+                    'DeviceManagementApplicabilityRuleOsVersion',
                     'FirewallProfileDomain', 'FirewallProfilePrivate', 'FirewallProfilePublic', 'FirewallRules',
                     'UserRightsAccessCredentialManagerAsTrustedCaller', 'UserRightsActAsPartOfTheOperatingSystem', 'UserRightsAllowAccessFromNetwork',
                     'UserRightsBackupData', 'UserRightsBlockAccessFromNetwork', 'UserRightsChangeSystemTime', 'UserRightsCreateGlobalObjects',
@@ -4038,6 +4067,23 @@ class MSFT_MicrosoftGraphdefenderDetectedMalwareActions
     [System.ComponentModel.Description('Indicates a Defender action to take for severe severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block.')]
     [ValidateSet('deviceDefault', 'clean', 'quarantine', 'remove', 'allow', 'userDefined', 'block')]
     [System.String] $SevereSeverity
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementApplicabilityRuleOsEdition

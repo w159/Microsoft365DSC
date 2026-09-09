@@ -22,6 +22,11 @@
       "note": "Derived from the FileName extension and written only on create"
     },
     {
+      "name": "CommittedContainedApps",
+      "reason": "ReadOnly",
+      "note": "Populated from the supplied package file when the content is committed."
+    },
+    {
       "name": "IdentityName",
       "reason": "Accepted",
       "note": "Set writes a fixed placeholder on create and Get never reads it back"
@@ -40,6 +45,11 @@
       "name": "IsBundle",
       "reason": "Accepted",
       "note": "Derived from the FileName extension and written only on create"
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Lob App for Windows10.",

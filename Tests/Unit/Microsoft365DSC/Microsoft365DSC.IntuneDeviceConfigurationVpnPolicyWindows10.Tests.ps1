@@ -150,6 +150,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     '@odata.type' = "#microsoft.graph.windows10VpnConfiguration"
                     enableSplitTunneling = $True
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleDeviceMode = @{
+                        name = "FakeStringValue"
+                        deviceMode = "standardConfiguration"
+                        ruleType = "include"
+                    }
                     deviceManagementApplicabilityRuleOsEdition = @{
                         name = "FakeStringValue"
                         osEditionTypes = @("windows10Enterprise")
@@ -200,6 +205,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        name = "FakeStringValue"
+                        deviceMode = "standardConfiguration"
+                        ruleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         name = "FakeStringValue"
                         osEditionTypes = @("windows10Enterprise")
@@ -341,6 +351,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        name = "FakeStringValue"
+                        deviceMode = "standardConfiguration"
+                        ruleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         name = "FakeStringValue"
                         osEditionTypes = @("windows10Enterprise")
@@ -480,6 +495,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        name = "FakeStringValue"
+                        deviceMode = "standardConfiguration"
+                        ruleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         name = "FakeStringValue"
                         osEditionTypes = @("windows10Enterprise")
@@ -612,6 +632,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         authenticationTransformConstants = "md5_96"
                     })
                     description = "FakeStringValue"
+                    deviceManagementApplicabilityRuleDeviceMode = ([MSFT_DeviceManagementApplicabilityRuleDeviceMode] @{
+                        name = "FakeStringValue"
+                        deviceMode = "sModeConfiguration" # Updated property
+                        ruleType = "include"
+                    })
                     deviceManagementApplicabilityRuleOsEdition = ([MSFT_DeviceManagementApplicabilityRuleOsEdition] @{
                         name = "FakeStringValue"
                         osEditionTypes = @("windows10Professional") # Updated property

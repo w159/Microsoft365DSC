@@ -85,6 +85,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ICloudDesktopAndDocumentsBlocked                = $True
                     UpdateDelayPolicy                               = 'delayMajorOsUpdateVisibility'
                     PasswordPreviousPasswordBlockCount              = 25
+                    ActivationLockWhenSupervisedAllowed             = $True
                     AddingGameCenterFriendsBlocked                  = $True
                     PasswordMinimumLength                           = 25
                     EraseContentAndSettingsBlocked                  = $True
@@ -161,6 +162,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ICloudDesktopAndDocumentsBlocked                = $True
                     UpdateDelayPolicy                               = 'delayMajorOsUpdateVisibility'
                     PasswordPreviousPasswordBlockCount              = 25
+                    ActivationLockWhenSupervisedAllowed             = $True
                     AddingGameCenterFriendsBlocked                  = $True
                     Id                                              = 'FakeStringValue'
                     PasswordMinimumLength                           = 25
@@ -242,6 +244,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ICloudDesktopAndDocumentsBlocked                = $True
                     UpdateDelayPolicy                               = 'delayMajorOsUpdateVisibility'
                     PasswordPreviousPasswordBlockCount              = 25
+                    ActivationLockWhenSupervisedAllowed             = $True
                     AddingGameCenterFriendsBlocked                  = $True
                     Id                                              = 'FakeStringValue'
                     PasswordMinimumLength                           = 25
@@ -323,6 +326,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ICloudDesktopAndDocumentsBlocked                = $True
                     UpdateDelayPolicy                               = 'delayMajorOsUpdateVisibility'
                     PasswordPreviousPasswordBlockCount              = 25
+                    ActivationLockWhenSupervisedAllowed             = $True
                     AddingGameCenterFriendsBlocked                  = $True
                     Id                                              = 'FakeStringValue'
                     PasswordMinimumLength                           = 25
@@ -398,6 +402,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ICloudDesktopAndDocumentsBlocked                = $True
                     UpdateDelayPolicy                               = 'delayMajorOsUpdateVisibility'
                     PasswordPreviousPasswordBlockCount              = 25
+                    ActivationLockWhenSupervisedAllowed             = $False # Updated property
                     AddingGameCenterFriendsBlocked                  = $True
                     Id                                              = 'FakeStringValue'
                     PasswordMinimumLength                           = 25

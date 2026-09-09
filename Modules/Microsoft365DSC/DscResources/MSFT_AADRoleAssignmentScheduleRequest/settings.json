@@ -37,9 +37,19 @@
       "note": "The service stamps it when processing finishes"
     },
     {
+      "name": "CustomData",
+      "reason": "NotConfigurable",
+      "note": "Microsoft Graph documents the property as not used."
+    },
+    {
       "name": "DirectoryScope",
       "reason": "ReadOnly",
       "note": "Read-only expansion the service resolves from the key directoryScopeId"
+    },
+    {
+      "name": "IsValidationOnly",
+      "reason": "NotConfigurable",
+      "note": "Turns the request into a dry run that changes nothing."
     },
     {
       "name": "PrincipalId",
@@ -65,6 +75,11 @@
       "name": "TargetSchedule",
       "reason": "ReadOnly",
       "note": "The service creates the resulting assignment schedule and links it"
+    },
+    {
+      "name": "TargetScheduleId",
+      "reason": "Accepted",
+      "note": "Configured through the Id property on the resource. Responsible for identifying the assignment schedule."
     }
   ],
   "description": "This resource configures an Azure Active Directory Privilege Identity Management assignment.",

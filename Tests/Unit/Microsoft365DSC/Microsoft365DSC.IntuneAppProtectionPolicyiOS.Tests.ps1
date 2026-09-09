@@ -80,6 +80,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableProtectionOfManagedOutboundOpenInData   = $False;
                     ExemptedUniversalLinks                         = @("http://facetime.apple.com","http://maps.apple.com","https://facetime.apple.com","https://maps.apple.com");
                     FilterOpenInToOnlyManagedApps                  = $False;
+                    GenmojiConfigurationState                      = "blocked";
                     ManagedUniversalLinks                          = @("http://*.appsplatform.us/*","http://*.onedrive.com/*","http://*.powerapps.cn/*");
                     MaximumAllowedDeviceThreatLevel                = "low";
                     MaximumRequiredOsVersion                       = "1";
@@ -91,7 +92,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
+                    WritingToolsConfigurationState                 = "blocked";
                     AllowedDataStorageLocations                    = @('sharePoint')
                     AllowedInboundDataTransferSources              = 'managedApps'
                     AllowedOutboundClipboardSharingLevel           = 'managedAppsWithPasteIn'
@@ -238,6 +241,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableProtectionOfManagedOutboundOpenInData   = $False;
                     ExemptedUniversalLinks                         = @("http://facetime.apple.com","http://maps.apple.com","https://facetime.apple.com","https://maps.apple.com");
                     FilterOpenInToOnlyManagedApps                  = $False;
+                    GenmojiConfigurationState                      = "blocked";
                     ManagedUniversalLinks                          = @("http://*.appsplatform.us/*","http://*.onedrive.com/*","http://*.powerapps.cn/*");
                     MaximumAllowedDeviceThreatLevel                = "low";
                     MaximumRequiredOsVersion                       = "1";
@@ -249,7 +253,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
+                    WritingToolsConfigurationState                 = "blocked";
                     AllowedDataStorageLocations                    = @('sharePoint')
                     AllowedInboundDataTransferSources              = 'managedApps'
                     AllowedOutboundClipboardSharingLevel           = 'managedAppsWithPasteIn'
@@ -336,6 +342,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableProtectionOfManagedOutboundOpenInData   = $False;
                     ExemptedUniversalLinks                         = @("http://facetime.apple.com","http://maps.apple.com","https://facetime.apple.com","https://maps.apple.com");
                     FilterOpenInToOnlyManagedApps                  = $False;
+                    GenmojiConfigurationState                      = "notBlocked"; #Drift
                     ManagedUniversalLinks                          = @("http://*.appsplatform.us/*","http://*.onedrive.com/*","http://*.powerapps.cn/*");
                     MaximumAllowedDeviceThreatLevel                = "low";
                     MaximumRequiredOsVersion                       = "1";
@@ -347,7 +354,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    ScreenCaptureConfigurationState                = "notBlocked"; #Drift
                     ThirdPartyKeyboardsBlocked                     = $True;
+                    WritingToolsConfigurationState                 = "notBlocked"; #Drift
                     AllowedDataStorageLocations                    = @('sharePoint')
                     AllowedInboundDataTransferSources              = 'managedApps'
                     AllowedOutboundClipboardSharingLevel           = 'managedAppsWithPasteIn'
@@ -431,6 +440,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableProtectionOfManagedOutboundOpenInData   = $False;
                     ExemptedUniversalLinks                         = @("http://facetime.apple.com","http://maps.apple.com","https://facetime.apple.com","https://maps.apple.com");
                     FilterOpenInToOnlyManagedApps                  = $False;
+                    GenmojiConfigurationState                      = "blocked";
                     ManagedUniversalLinks                          = @("http://*.appsplatform.us/*","http://*.onedrive.com/*","http://*.powerapps.cn/*");
                     MaximumAllowedDeviceThreatLevel                = "low";
                     MaximumRequiredOsVersion                       = "1";
@@ -442,7 +452,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
+                    WritingToolsConfigurationState                 = "blocked";
                     AllowedDataStorageLocations                    = @('sharePoint')
                     AllowedInboundDataTransferSources              = 'managedApps'
                     AllowedOutboundClipboardSharingLevel           = 'managedAppsWithPasteIn'
@@ -505,6 +517,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisableProtectionOfManagedOutboundOpenInData   = $False;
                     ExemptedUniversalLinks                         = @("http://facetime.apple.com","http://maps.apple.com","https://facetime.apple.com","https://maps.apple.com");
                     FilterOpenInToOnlyManagedApps                  = $False;
+                    GenmojiConfigurationState                      = "blocked";
                     ManagedUniversalLinks                          = @("http://*.appsplatform.us/*","http://*.onedrive.com/*","http://*.powerapps.cn/*");
                     MaximumAllowedDeviceThreatLevel                = "low";
                     MaximumRequiredOsVersion                       = "1";
@@ -516,7 +529,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
+                    WritingToolsConfigurationState                 = "blocked";
                     AllowedDataStorageLocations                    = @('sharePoint')
                     AllowedInboundDataTransferSources              = 'managedApps'
                     AllowedOutboundClipboardSharingLevel           = 'managedAppsWithPasteIn'

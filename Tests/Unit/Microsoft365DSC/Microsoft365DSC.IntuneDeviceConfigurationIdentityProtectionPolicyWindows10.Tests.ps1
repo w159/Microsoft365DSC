@@ -66,6 +66,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     pinMaximumLength                             = 25
                     enhancedAntiSpoofingForFacialFeaturesEnabled = $True
                     pinUppercaseCharactersUsage                  = 'blocked'
+                    DeviceManagementApplicabilityRuleDeviceMode  = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'standardConfiguration'
+                        RuleType   = 'include'
+                    }
                     DeviceManagementApplicabilityRuleOsEdition   = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -102,6 +107,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleDeviceMode  = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'standardConfiguration'
+                        RuleType   = 'include'
+                    }
                     DeviceManagementApplicabilityRuleOsEdition   = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -153,6 +163,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleDeviceMode  = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'standardConfiguration'
+                        RuleType   = 'include'
+                    }
                     DeviceManagementApplicabilityRuleOsEdition   = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -202,6 +217,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleDeviceMode  = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'standardConfiguration'
+                        RuleType   = 'include'
+                    }
                     DeviceManagementApplicabilityRuleOsEdition   = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -244,6 +264,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     Description                                  = 'FakeStringValue'
+                    DeviceManagementApplicabilityRuleDeviceMode  = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'sModeConfiguration' # Updated property
+                        RuleType   = 'include'
+                    }
                     DeviceManagementApplicabilityRuleOsEdition   = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Professional') # Updated property

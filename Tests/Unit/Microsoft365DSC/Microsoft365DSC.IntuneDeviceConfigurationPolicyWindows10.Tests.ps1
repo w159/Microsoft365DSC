@@ -134,6 +134,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleDeviceMode           = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'sModeConfiguration'
+                        RuleType   = 'include'
+                    }
                     deviceManagementApplicabilityRuleOsEdition            = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -473,6 +478,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleDeviceMode           = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'sModeConfiguration'
+                        RuleType   = 'include'
+                    }
                     deviceManagementApplicabilityRuleOsEdition            = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -783,6 +793,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleDeviceMode           = @{
+                            Name       = 'FakeStringValue'
+                            DeviceMode = 'sModeConfiguration'
+                            RuleType   = 'include'
+                        }
                         deviceManagementApplicabilityRuleOsEdition            = @{
                             Name           = 'FakeStringValue'
                             OsEditionTypes = @('windows10Enterprise')
@@ -1132,6 +1147,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleDeviceMode           = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'sModeConfiguration'
+                        RuleType   = 'include'
+                    }
                     deviceManagementApplicabilityRuleOsEdition            = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -1442,6 +1462,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleDeviceMode           = @{
+                            Name       = 'FakeStringValue'
+                            DeviceMode = 'sModeConfiguration'
+                            RuleType   = 'include'
+                        }
                         deviceManagementApplicabilityRuleOsEdition            = @{
                             Name           = 'FakeStringValue'
                             OsEditionTypes = @('windows10Enterprise')
@@ -1784,6 +1809,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     defenderSystemScanSchedule                            = 'userDefined'
                     description                                           = 'FakeStringValue'
                     developerUnlockSetting                                = 'notConfigured'
+                    deviceManagementApplicabilityRuleDeviceMode           = @{
+                        Name       = 'FakeStringValue'
+                        DeviceMode = 'sModeConfiguration'
+                        RuleType   = 'include'
+                    }
                     deviceManagementApplicabilityRuleOsEdition            = @{
                         Name           = 'FakeStringValue'
                         OsEditionTypes = @('windows10Enterprise')
@@ -2083,6 +2113,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         defenderFilesAndFoldersToExclude                      = @('FakeStringValue')
                         edgeTelemetryForMicrosoft365Analytics                 = 'notConfigured'
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleDeviceMode           = @{
+                            Name       = 'FakeStringValue'
+                            DeviceMode = 'standardConfiguration'
+                            RuleType   = 'exclude'
+                        }
                         deviceManagementApplicabilityRuleOsEdition            = @{
                             Name           = 'FakeStringValue'
                             OsEditionTypes = @('windows10Professional')
@@ -2257,6 +2292,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         edgeBlockFullScreenMode                               = $True
                         lockScreenTimeoutInSeconds                            = 25
                         developerUnlockSetting                                = 'notConfigured'
+                        deviceManagementApplicabilityRuleDeviceMode           = @{
+                            Name       = 'FakeStringValue'
+                            DeviceMode = 'sModeConfiguration'
+                            RuleType   = 'include'
+                        }
                         deviceManagementApplicabilityRuleOsEdition            = @{
                             Name           = 'FakeStringValue'
                             OsEditionTypes = @('windows10Enterprise')

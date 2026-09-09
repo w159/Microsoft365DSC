@@ -26,28 +26,33 @@ Configuration Example
     {
         IntuneDeviceConfigurationCustomPolicyWindows10 'IntuneDeviceConfigurationCustomPolicyWindows10-Example'
         {
-            Assignments                                = @(
+            Assignments                                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     dataType                                   = '#microsoft.graph.groupAssignmentTarget'
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     groupDisplayName                           = 'Corporate Windows Devices'
                 }
             );
-            Description                                = "Hardens Bluetooth and trusts the internal certificate authority through OMA-URI settings";
-            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+            Description                                 = "Hardens Bluetooth and trusts the internal certificate authority through OMA-URI settings";
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
+            DeviceManagementApplicabilityRuleOsEdition  = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Professional editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Professional")
                 RuleType       = "include"
             };
-            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+            DeviceManagementApplicabilityRuleOsVersion  = MSFT_DeviceManagementApplicabilityRuleOsVersion{
                 Name         = "Windows 10 22H2 through Windows 11 24H2"
                 MinOSVersion = "10.0.19045.0"
                 MaxOSVersion = "10.0.26100.9999"
                 RuleType     = "include"
             };
-            DisplayName                                = "Windows OMA-URI Baseline";
-            Ensure                                     = "Present";
-            OmaSettings                                = @(
+            DisplayName                                 = "Windows OMA-URI Baseline";
+            Ensure                                      = "Present";
+            OmaSettings                                 = @(
                 MSFT_MicrosoftGraphomaSetting{
                     Description = 'Limits Bluetooth to the audio and human interface services'
                     DisplayName = 'Bluetooth services allowed list'
@@ -77,10 +82,10 @@ Configuration Example
                     odataType   = '#microsoft.graph.omaSettingBase64'
                 }
             );
-            RoleScopeTagIds                            = @("0");
-            ApplicationId                              = $ApplicationId;
-            TenantId                                   = $TenantId;
-            CertificateThumbprint                      = $CertificateThumbprint;
+            RoleScopeTagIds                             = @("0");
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

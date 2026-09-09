@@ -68,6 +68,10 @@ class IntuneWifiConfigurationPolicyMacOS : M365DSCResourceBase
     [System.String] $Ssid
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether devices connecting with this Wi-Fi profile must use their physical MAC address instead of a randomized MAC address.')]
+    [System.Nullable[System.Boolean]] $WifiRequirePhysicalMacAddressEnabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('Wi-Fi security')]
     [ValidateSet('open', 'wpaPersonal', 'wpaEnterprise', 'wep', 'wpa2Personal', 'wpa2Enterprise', 'wpa3Personal')]
     [System.String] $WiFiSecurityType
@@ -175,31 +179,32 @@ class IntuneWifiConfigurationPolicyMacOS : M365DSCResourceBase
             Write-Verbose -Message "Found an Intune Wifi Configuration Policy for MacOS with Id {$($resolvedId)}"
             $results = @{
                 #region resource generator code
-                Id                             = $getValue.Id
-                Description                    = $getValue.Description
-                DisplayName                    = $getValue.DisplayName
-                ConnectAutomatically           = $getValue.connectAutomatically
-                ConnectWhenNetworkNameIsHidden = $getValue.connectWhenNetworkNameIsHidden
-                DeploymentChannel              = $getValue.deploymentChannel
-                NetworkName                    = $getValue.networkName
-                PreSharedKey                   = $getValue.preSharedKey
-                ProxyAutomaticConfigurationUrl = $getValue.proxyAutomaticConfigurationUrl
-                ProxyManualAddress             = $getValue.proxyManualAddress
-                ProxyManualPort                = $getValue.proxyManualPort
-                ProxySettings                  = $getValue.proxySettings
-                RoleScopeTagIds                = $getValue.RoleScopeTagIds
-                Ssid                           = $getValue.ssid
-                WiFiSecurityType               = $getValue.wiFiSecurityType
-                Ensure                         = 'Present'
-                Credential                     = $this.Credential
-                ApplicationId                  = $this.ApplicationId
-                TenantId                       = $this.TenantId
-                ApplicationSecret              = $this.ApplicationSecret
-                CertificateThumbprint          = $this.CertificateThumbprint
-                CertificatePath                = $this.CertificatePath
-                CertificatePassword            = $this.CertificatePassword
-                ManagedIdentity                = $this.ManagedIdentity.IsPresent
-                AccessTokens                   = $this.AccessTokens
+                Id                                   = $getValue.Id
+                Description                          = $getValue.Description
+                DisplayName                          = $getValue.DisplayName
+                ConnectAutomatically                 = $getValue.connectAutomatically
+                ConnectWhenNetworkNameIsHidden       = $getValue.connectWhenNetworkNameIsHidden
+                DeploymentChannel                    = $getValue.deploymentChannel
+                NetworkName                          = $getValue.networkName
+                PreSharedKey                         = $getValue.preSharedKey
+                ProxyAutomaticConfigurationUrl       = $getValue.proxyAutomaticConfigurationUrl
+                ProxyManualAddress                   = $getValue.proxyManualAddress
+                ProxyManualPort                      = $getValue.proxyManualPort
+                ProxySettings                        = $getValue.proxySettings
+                RoleScopeTagIds                      = $getValue.RoleScopeTagIds
+                Ssid                                 = $getValue.ssid
+                WifiRequirePhysicalMacAddressEnabled = $getValue.wifiRequirePhysicalMacAddressEnabled
+                WiFiSecurityType                     = $getValue.wiFiSecurityType
+                Ensure                               = 'Present'
+                Credential                           = $this.Credential
+                ApplicationId                        = $this.ApplicationId
+                TenantId                             = $this.TenantId
+                ApplicationSecret                    = $this.ApplicationSecret
+                CertificateThumbprint                = $this.CertificateThumbprint
+                CertificatePath                      = $this.CertificatePath
+                CertificatePassword                  = $this.CertificatePassword
+                ManagedIdentity                      = $this.ManagedIdentity.IsPresent
+                AccessTokens                         = $this.AccessTokens
             }
 
             $assignmentsValues = Get-M365DSCIntuneExpandedAssignments -Instance $getValue

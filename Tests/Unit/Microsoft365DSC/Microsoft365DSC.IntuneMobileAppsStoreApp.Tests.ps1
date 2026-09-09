@@ -68,6 +68,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         v14_0 = $True
                     }
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     '@odata.type' = "#microsoft.graph.iosStoreApp"
                     applicableDeviceType = @{
                         iPad = $True
@@ -112,6 +113,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         v14_0 = $True
                     }
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     '@odata.type' = "#microsoft.graph.iosStoreApp"
                     applicableDeviceType = @{
                         iPad = $True
@@ -167,6 +169,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     })
                     appStoreUrl = "FakeStringValue"
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     Categories = @(([MSFT_DeviceManagementMobileAppCategory] @{
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
@@ -229,6 +232,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     })
                     appStoreUrl = "FakeStringValue"
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     Categories = @(([MSFT_DeviceManagementMobileAppCategory] @{
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
@@ -290,6 +294,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     })
                     appStoreUrl = "FakeStringValue"
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "mobileDeviceManagement"
                     Categories = @(([MSFT_DeviceManagementMobileAppCategory] @{
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"
@@ -342,6 +347,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     })
                     appStoreUrl = "FakeStringValue"
                     bundleId = "FakeStringValue"
+                    appleDeviceAppDeliveryProtocolType = "default" # Drift
                     Categories = @(([MSFT_DeviceManagementMobileAppCategory] @{
                         Id = "FakeStringValue"
                         DisplayName = "FakeStringValue"

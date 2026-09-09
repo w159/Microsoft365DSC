@@ -26,35 +26,40 @@ Configuration Example
     {
         IntuneDeviceConfigurationDomainJoinPolicyWindows10 'IntuneDeviceConfigurationDomainJoinPolicyWindows10-Example'
         {
-            ActiveDirectoryDomainName                  = "corp.contoso.com";
-            Assignments                                = @(
+            ActiveDirectoryDomainName                   = "corp.contoso.com";
+            Assignments                                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     dataType                                   = '#microsoft.graph.groupAssignmentTarget'
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     groupDisplayName                           = 'Autopilot Hybrid Join Devices'
                 }
             );
-            ComputerNameStaticPrefix                   = "WKS";
-            ComputerNameSuffixRandomCharCount          = 11;
-            Description                                = "Joins newly provisioned workstations to the corporate Active Directory domain";
-            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+            ComputerNameStaticPrefix                    = "WKS";
+            ComputerNameSuffixRandomCharCount           = 11;
+            Description                                 = "Joins newly provisioned workstations to the corporate Active Directory domain";
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
+            DeviceManagementApplicabilityRuleOsEdition  = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Professional editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Professional")
                 RuleType       = "include"
             };
-            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+            DeviceManagementApplicabilityRuleOsVersion  = MSFT_DeviceManagementApplicabilityRuleOsVersion{
                 Name         = "Windows 10 22H2 or later"
                 MinOSVersion = "10.0.19045.0"
                 MaxOSVersion = "10.0.26100.9999"
                 RuleType     = "include"
             };
-            DisplayName                                = "Domain Join";
-            Ensure                                     = "Present";
-            OrganizationalUnit                         = "OU=Workstations,OU=Contoso,DC=corp,DC=contoso,DC=com";
-            RoleScopeTagIds                            = @("0");
-            ApplicationId                              = $ApplicationId;
-            TenantId                                   = $TenantId;
-            CertificateThumbprint                      = $CertificateThumbprint;
+            DisplayName                                 = "Domain Join";
+            Ensure                                      = "Present";
+            OrganizationalUnit                          = "OU=Workstations,OU=Contoso,DC=corp,DC=contoso,DC=com";
+            RoleScopeTagIds                             = @("0");
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 'IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10-Example'
         {
-            Assignments                                = @(
+            Assignments                                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -36,29 +36,34 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
-            CertificateValidityPeriodScale             = "years";
-            CertificateValidityPeriodValue             = 1;
-            DeviceManagementApplicabilityRuleOsEdition = MSFT_DeviceManagementApplicabilityRuleOsEdition{
+            CertificateValidityPeriodScale              = "years";
+            CertificateValidityPeriodValue              = 1;
+            DeviceManagementApplicabilityRuleDeviceMode = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
+            DeviceManagementApplicabilityRuleOsEdition  = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Professional editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Professional")
                 RuleType       = "include"
             };
-            DeviceManagementApplicabilityRuleOsVersion = MSFT_DeviceManagementApplicabilityRuleOsVersion{
+            DeviceManagementApplicabilityRuleOsVersion  = MSFT_DeviceManagementApplicabilityRuleOsVersion{
                 Name         = "Windows 10 22H2 or later"
                 MinOSVersion = "10.0.19045.0"
                 MaxOSVersion = "10.0.26100.9999"
                 RuleType     = "include"
             };
-            DisplayName                                = "PKCS Imported";
-            Ensure                                     = "Present";
-            IntendedPurpose                            = "unassigned";
-            KeyStorageProvider                         = "useSoftwareKsp";
-            RenewalThresholdPercentage                 = 60; # Updated Property
-            SubjectAlternativeNameType                 = "emailAddress";
-            SubjectNameFormat                          = "commonName";
-            ApplicationId                              = $ApplicationId;
-            TenantId                                   = $TenantId;
-            CertificateThumbprint                      = $CertificateThumbprint;
+            DisplayName                                 = "PKCS Imported";
+            Ensure                                      = "Present";
+            IntendedPurpose                             = "unassigned";
+            KeyStorageProvider                          = "useSoftwareKsp";
+            RenewalThresholdPercentage                  = 60; # Updated Property
+            SubjectAlternativeNameType                  = "emailAddress";
+            SubjectNameFormat                           = "commonName";
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

@@ -44,6 +44,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         SenderDomain                    = 'contoso.com'
                         UseCompanyBranding              = $True;
                     }
+                    QuarantineConfiguration = @{
+                        conditions = @(
+                            @{
+                                '@odata.type' = '#microsoft.graph.identityGovernance.countBasedQuarantineCondition'
+                                threshold     = 500
+                            }
+                        )
+                        matchMode  = 'any'
+                    }
                     WorkflowScheduleIntervalInHours = 10;
 
                 }
@@ -61,6 +70,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     IsSingleInstance                = "Yes";
+                    QuarantineConfiguration         = ([MSFT_MicrosoftGraphquarantineConfiguration] @{
+                            MatchMode  = 'any'
+                            Conditions = @(
+                                    ([MSFT_MicrosoftGraphquarantineCondition] @{
+                                    odataType = '#microsoft.graph.identityGovernance.countBasedQuarantineCondition'
+                                    Threshold = 500
+                                })
+                            )
+                        })
                     SenderDomain                    = "contoso.com";
                     UseCompanyBranding              = $True;
                     WorkflowScheduleIntervalInHours = 10;
@@ -77,6 +95,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     IsSingleInstance                = "Yes";
+                    QuarantineConfiguration         = ([MSFT_MicrosoftGraphquarantineConfiguration] @{
+                            MatchMode  = 'all' # Drift
+                            Conditions = @(
+                                    ([MSFT_MicrosoftGraphquarantineCondition] @{
+                                    odataType = '#microsoft.graph.identityGovernance.countBasedQuarantineCondition'
+                                    Threshold = 500
+                                })
+                            )
+                        })
                     SenderDomain                    = "contoso.com";
                     UseCompanyBranding              = $True;
                     WorkflowScheduleIntervalInHours = 11; # Drift

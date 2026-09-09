@@ -17,6 +17,11 @@
       "note": "The service stamps this timestamp when tenant data moves between scale units"
     },
     {
+      "name": "AdminConsent",
+      "reason": "Accepted",
+      "note": "The resource targets the device diagnostics section of the portal only."
+    },
+    {
       "name": "ConnectorStatus",
       "reason": "ReadOnly",
       "note": "The service reports the health and last event time of each connector"

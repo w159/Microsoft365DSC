@@ -36,6 +36,11 @@ Configuration Example
                     groupDisplayName = 'Policy Exclusions'
                 }
             );
+            DeviceManagementApplicabilityRuleDeviceMode  = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = "Standard configuration devices only"
+                DeviceMode = "standardConfiguration"
+                RuleType   = "include"
+            };
             DeviceManagementApplicabilityRuleOsEdition   = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = "Enterprise and Education editions only"
                 OsEditionTypes = @("windows10Enterprise", "windows10Education")

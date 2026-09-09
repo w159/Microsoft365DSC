@@ -22,6 +22,10 @@ class IntuneRoleDefinitionWindows365 : M365DSCResourceBase
     [MSFT_MicrosoftGraphunifiedRolePermission[]] $RolePermissions
 
     [DscProperty()]
+    [System.ComponentModel.Description('Custom template identifier that can be set when isBuiltIn is false. Read-only when isBuiltIn is true.')]
+    [System.String] $TemplateId
+
+    [DscProperty()]
     [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
     [System.String] $Id
 
@@ -151,6 +155,7 @@ class IntuneRoleDefinitionWindows365 : M365DSCResourceBase
                 DisplayName           = $getValue.DisplayName
                 IsBuiltIn             = $getValue.IsBuiltIn
                 RolePermissions       = $complexRolePermissions
+                TemplateId            = $getValue.TemplateId
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
@@ -336,6 +341,13 @@ class IntuneRoleDefinitionWindows365 : M365DSCResourceBase
             $this.LogError($_, 'Error during Export:')
 
             throw
+        }
+    }
+
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            ExcludedProperties = @('TemplateId')
         }
     }
 

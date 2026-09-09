@@ -43,6 +43,10 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('The OS edition applicability for this Policy.')]
     [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
 
@@ -202,6 +206,15 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
             }
             #endregion
 
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
+            }
+
             $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
@@ -223,29 +236,30 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
 
             $results = @{
                 #region resource generator code
-                IntendedPurpose                            = $enumIntendedPurpose
-                CertificateValidityPeriodScale             = $enumCertificateValidityPeriodScale
-                CertificateValidityPeriodValue             = $getValue.certificateValidityPeriodValue
-                KeyStorageProvider                         = $enumKeyStorageProvider
-                RenewalThresholdPercentage                 = $getValue.renewalThresholdPercentage
-                SubjectAlternativeNameType                 = $enumSubjectAlternativeNameType
-                SubjectNameFormat                          = $enumSubjectNameFormat
-                Description                                = $getValue.Description
-                DeviceManagementApplicabilityRuleOsEdition = $complexDeviceManagementApplicabilityRuleOsEdition
-                DeviceManagementApplicabilityRuleOsVersion = $complexDeviceManagementApplicabilityRuleOsVersion
-                DisplayName                                = $getValue.DisplayName
-                Id                                         = $getValue.Id
-                RoleScopeTagIds                            = $getValue.RoleScopeTagIds
-                Ensure                                     = 'Present'
-                Credential                                 = $this.Credential
-                ApplicationId                              = $this.ApplicationId
-                TenantId                                   = $this.TenantId
-                ApplicationSecret                          = $this.ApplicationSecret
-                CertificateThumbprint                      = $this.CertificateThumbprint
-                CertificatePath                            = $this.CertificatePath
-                CertificatePassword                        = $this.CertificatePassword
-                ManagedIdentity                            = $this.ManagedIdentity.IsPresent
-                AccessTokens                               = $this.AccessTokens
+                IntendedPurpose                             = $enumIntendedPurpose
+                CertificateValidityPeriodScale              = $enumCertificateValidityPeriodScale
+                CertificateValidityPeriodValue              = $getValue.certificateValidityPeriodValue
+                KeyStorageProvider                          = $enumKeyStorageProvider
+                RenewalThresholdPercentage                  = $getValue.renewalThresholdPercentage
+                SubjectAlternativeNameType                  = $enumSubjectAlternativeNameType
+                SubjectNameFormat                           = $enumSubjectNameFormat
+                Description                                 = $getValue.Description
+                DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
+                DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
+                DisplayName                                 = $getValue.DisplayName
+                Id                                          = $getValue.Id
+                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                Ensure                                      = 'Present'
+                Credential                                  = $this.Credential
+                ApplicationId                               = $this.ApplicationId
+                TenantId                                    = $this.TenantId
+                ApplicationSecret                           = $this.ApplicationSecret
+                CertificateThumbprint                       = $this.CertificateThumbprint
+                CertificatePath                             = $this.CertificatePath
+                CertificatePassword                         = $this.CertificatePassword
+                ManagedIdentity                             = $this.ManagedIdentity.IsPresent
+                AccessTokens                                = $this.AccessTokens
                 #endregion
             }
 
@@ -414,6 +428,19 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
                 $Results = $this.GetForExport($Params)
                 $rawResults = $Results.Clone()
 
+                if ($Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode -CIMInstanceName DeviceManagementApplicabilityRuleDeviceMode
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
+                    }
+                }
+
                 if ($Results.DeviceManagementApplicabilityRuleOsEdition)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition -CIMInstanceName DeviceManagementApplicabilityRuleOsEdition
@@ -457,7 +484,7 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
+                    -NoEscape @('Assignments', 'DeviceManagementApplicabilityRuleDeviceMode', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -503,6 +530,23 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
 
         return $result
     }
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementApplicabilityRuleOsEdition

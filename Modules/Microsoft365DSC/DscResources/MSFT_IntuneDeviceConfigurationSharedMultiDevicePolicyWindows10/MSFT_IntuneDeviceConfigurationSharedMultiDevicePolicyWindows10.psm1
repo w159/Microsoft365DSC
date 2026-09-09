@@ -89,6 +89,10 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
     [System.String] $Description
 
     [DscProperty()]
+    [System.ComponentModel.Description('The device mode applicability rule for this Policy.')]
+    [MSFT_DeviceManagementApplicabilityRuleDeviceMode] $DeviceManagementApplicabilityRuleDeviceMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('The OS edition applicability for this Policy. ')]
     [MSFT_DeviceManagementApplicabilityRuleOsEdition] $DeviceManagementApplicabilityRuleOsEdition
 
@@ -287,6 +291,15 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
             }
             #endregion
 
+            $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
+            $complexDeviceManagementApplicabilityRuleDeviceMode.Add('RuleType', $getValue.DeviceManagementApplicabilityRuleDeviceMode.RuleType)
+            if ($complexDeviceManagementApplicabilityRuleDeviceMode.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexDeviceManagementApplicabilityRuleDeviceMode = $null
+            }
+
             $complexDeviceManagementApplicabilityRuleOsEdition = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('Name', $getValue.DeviceManagementApplicabilityRuleOSEdition.Name)
             $complexDeviceManagementApplicabilityRuleOsEdition.Add('OsEditionTypes', [string[]]$getValue.DeviceManagementApplicabilityRuleOSEdition.OsEditionTypes)
@@ -308,40 +321,41 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
 
             $results = @{
                 #region resource generator code
-                AccountManagerPolicy                       = $complexAccountManagerPolicy
-                AllowedAccounts                            = $enumAllowedAccounts
-                AllowLocalStorage                          = $getValue.allowLocalStorage
-                DisableAccountManager                      = $getValue.disableAccountManager
-                DisableEduPolicies                         = $getValue.disableEduPolicies
-                DisablePowerPolicies                       = $getValue.disablePowerPolicies
-                DisableSignInOnResume                      = $getValue.disableSignInOnResume
-                Enabled                                    = $getValue.enabled
-                FastFirstSignIn                            = $enumFastFirstSignIn
-                IdleTimeBeforeSleepInSeconds               = $getValue.idleTimeBeforeSleepInSeconds
-                KioskAppDisplayName                        = $getValue.kioskAppDisplayName
-                KioskAppUserModelId                        = $getValue.kioskAppUserModelId
-                LocalStorage                               = $enumLocalStorage
-                MaintenanceStartTime                       = $timeMaintenanceStartTime
-                SetAccountManager                          = $enumSetAccountManager
-                SetEduPolicies                             = $enumSetEduPolicies
-                SetPowerPolicies                           = $enumSetPowerPolicies
-                SignInOnResume                             = $enumSignInOnResume
-                Description                                = $getValue.Description
-                DeviceManagementApplicabilityRuleOsEdition = $complexDeviceManagementApplicabilityRuleOsEdition
-                DeviceManagementApplicabilityRuleOsVersion = $complexDeviceManagementApplicabilityRuleOsVersion
-                DisplayName                                = $getValue.DisplayName
-                Id                                         = $getValue.Id
-                RoleScopeTagIds                            = $getValue.RoleScopeTagIds
-                Ensure                                     = 'Present'
-                Credential                                 = $this.Credential
-                ApplicationId                              = $this.ApplicationId
-                TenantId                                   = $this.TenantId
-                ApplicationSecret                          = $this.ApplicationSecret
-                CertificateThumbprint                      = $this.CertificateThumbprint
-                CertificatePath                            = $this.CertificatePath
-                CertificatePassword                        = $this.CertificatePassword
-                ManagedIdentity                            = $this.ManagedIdentity.IsPresent
-                AccessTokens                               = $this.AccessTokens
+                AccountManagerPolicy                        = $complexAccountManagerPolicy
+                AllowedAccounts                             = $enumAllowedAccounts
+                AllowLocalStorage                           = $getValue.allowLocalStorage
+                DisableAccountManager                       = $getValue.disableAccountManager
+                DisableEduPolicies                          = $getValue.disableEduPolicies
+                DisablePowerPolicies                        = $getValue.disablePowerPolicies
+                DisableSignInOnResume                       = $getValue.disableSignInOnResume
+                Enabled                                     = $getValue.enabled
+                FastFirstSignIn                             = $enumFastFirstSignIn
+                IdleTimeBeforeSleepInSeconds                = $getValue.idleTimeBeforeSleepInSeconds
+                KioskAppDisplayName                         = $getValue.kioskAppDisplayName
+                KioskAppUserModelId                         = $getValue.kioskAppUserModelId
+                LocalStorage                                = $enumLocalStorage
+                MaintenanceStartTime                        = $timeMaintenanceStartTime
+                SetAccountManager                           = $enumSetAccountManager
+                SetEduPolicies                              = $enumSetEduPolicies
+                SetPowerPolicies                            = $enumSetPowerPolicies
+                SignInOnResume                              = $enumSignInOnResume
+                Description                                 = $getValue.Description
+                DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
+                DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition
+                DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
+                DisplayName                                 = $getValue.DisplayName
+                Id                                          = $getValue.Id
+                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                Ensure                                      = 'Present'
+                Credential                                  = $this.Credential
+                ApplicationId                               = $this.ApplicationId
+                TenantId                                    = $this.TenantId
+                ApplicationSecret                           = $this.ApplicationSecret
+                CertificateThumbprint                       = $this.CertificateThumbprint
+                CertificatePath                             = $this.CertificatePath
+                CertificatePassword                         = $this.CertificatePassword
+                ManagedIdentity                             = $this.ManagedIdentity.IsPresent
+                AccessTokens                                = $this.AccessTokens
                 #endregion
             }
 
@@ -533,6 +547,18 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
                         $Results.Remove('AccountManagerPolicy') | Out-Null
                     }
                 }
+                if ($Results.DeviceManagementApplicabilityRuleDeviceMode)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleDeviceMode -CIMInstanceName DeviceManagementApplicabilityRuleDeviceMode
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.DeviceManagementApplicabilityRuleDeviceMode = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('DeviceManagementApplicabilityRuleDeviceMode') | Out-Null
+                    }
+                }
                 if ($Results.DeviceManagementApplicabilityRuleOsEdition)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.DeviceManagementApplicabilityRuleOsEdition -CIMInstanceName DeviceManagementApplicabilityRuleOsEdition
@@ -574,7 +600,7 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('AccountManagerPolicy', 'Assignments', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
+                    -NoEscape @('AccountManagerPolicy', 'Assignments', 'DeviceManagementApplicabilityRuleDeviceMode', 'DeviceManagementApplicabilityRuleOsEdition', 'DeviceManagementApplicabilityRuleOsVersion') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -640,6 +666,23 @@ class MSFT_MicrosoftGraphsharedPCAccountManagerPolicy
     [DscProperty()]
     [System.ComponentModel.Description('Sets the percentage of disk space remaining on a PC before cached accounts will be deleted to free disk space. Accounts that have been inactive the longest will be deleted first. Only applies when AccountDeletionPolicy is DiskSpaceThresholdOrInactiveThreshold. Valid values 0 to 100')]
     [System.Nullable[System.UInt32]] $RemoveAccountsBelowDiskFreePercentage
+}
+
+class MSFT_DeviceManagementApplicabilityRuleDeviceMode
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('Name for object')]
+    [System.String] $Name
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability rule for device mode')]
+    [ValidateSet('standardConfiguration', 'sModeConfiguration')]
+    [System.String] $DeviceMode
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Applicability Rule type')]
+    [ValidateSet('include', 'exclude')]
+    [System.String] $RuleType
 }
 
 class MSFT_DeviceManagementApplicabilityRuleOsEdition

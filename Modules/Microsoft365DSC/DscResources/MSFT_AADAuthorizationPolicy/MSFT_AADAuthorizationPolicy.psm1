@@ -48,6 +48,10 @@ class AADAuthorizationPolicy : M365DSCResourceBase
     [MSFT_DefaultUserRolePermissions] $DefaultUserRolePermissions
 
     [DscProperty()]
+    [System.ComponentModel.Description('List of features enabled for private preview on the tenant.')]
+    [System.String[]] $EnabledPreviewFeatures
+
+    [DscProperty()]
     [System.ComponentModel.Description('The role that should be granted to guest users. Refer to List unifiedRoleDefinitions to find the list of available role templates. Only supported roles today are User, Guest User, and Restricted Guest User (2af84b1e-32c8-42b7-82bc-daa82404023b).')]
     [ValidateSet('Guest', 'RestrictedGuest', 'User')]
     [System.String] $GuestUserRole
@@ -140,6 +144,7 @@ class AADAuthorizationPolicy : M365DSCResourceBase
                 AllowUserConsentForRiskyApps                            = $Policy.AllowUserConsentForRiskyApps
                 BlockMsolPowerShell                                     = $Policy.BlockMsolPowerShell
                 DefaultUserRolePermissions                              = $complexDefaultUserRolePermissions
+                EnabledPreviewFeatures                                  = $Policy.EnabledPreviewFeatures
                 PermissionGrantPolicyIdsAssignedToDefaultUserRole       = $Policy.PermissionGrantPolicyIdsAssignedToDefaultUserRole
                 GuestUserRole                                           = $this.GetGuestUserRoleNameFromId($Policy.GuestUserRoleId)
                 Ensure                                                  = 'Present'
@@ -192,10 +197,11 @@ class AADAuthorizationPolicy : M365DSCResourceBase
             $desiredParam = $desiredParameters.$param
             $currentParam = $currentPolicy.$param
 
-            if (($desiredParam -is [System.Array] -and (Compare-Object -ReferenceObject $desiredParam -DifferenceObject $currentParam)) -or
-                ($desiredParam -isnot [System.Array] -and $desiredParam -ne $currentParam) -or
-                ($null -eq $desiredParam -and $null -ne $currentParam) -or
-                ($null -ne $desiredParam -and $null -eq $currentParam))
+            # The null checks come first so that Compare-Object never receives a null operand.
+            if (($null -eq $desiredParam -and $null -ne $currentParam) -or
+                ($null -ne $desiredParam -and $null -eq $currentParam) -or
+                ($desiredParam -is [System.Array] -and (Compare-Object -ReferenceObject $desiredParam -DifferenceObject $currentParam)) -or
+                ($desiredParam -isnot [System.Array] -and $desiredParam -ne $currentParam))
             {
                 if ($param -eq 'GuestUserRole')
                 {

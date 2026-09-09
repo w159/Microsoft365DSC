@@ -20,6 +20,11 @@
       "name": "ProductVersion",
       "reason": "Accepted",
       "note": "Set writes a fixed product version into the create body"
+    },
+    {
+      "name": "Relationships",
+      "reason": "NotConfigurable",
+      "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Lob App MSI for Windows10.",

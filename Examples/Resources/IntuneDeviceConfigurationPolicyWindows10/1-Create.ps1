@@ -88,6 +88,11 @@ Configuration Example
             DefenderScheduleScanEnableLowCpuPriority             = $False;
             DefenderSystemScanSchedule                           = "userDefined";
             DeveloperUnlockSetting                               = "notConfigured";
+            DeviceManagementApplicabilityRuleDeviceMode          = MSFT_DeviceManagementApplicabilityRuleDeviceMode{
+                Name       = 'S mode devices only'
+                DeviceMode = 'sModeConfiguration'
+                RuleType   = 'include'
+            };
             DeviceManagementApplicabilityRuleOsEdition           = MSFT_DeviceManagementApplicabilityRuleOsEdition{
                 Name           = 'Enterprise and Professional editions only'
                 OsEditionTypes = @('windows10Enterprise', 'windows10Professional')

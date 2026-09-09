@@ -50,6 +50,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     certFileName = "FakeStringValue"
                     '@odata.type' = "#microsoft.graph.windows81TrustedRootCertificate"
                     Description = "FakeStringValue"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -83,6 +88,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -122,6 +132,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -159,6 +174,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "computerCertStoreRoot"
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "include"
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Enterprise")
@@ -188,6 +208,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CertFileName = "FakeStringValue"
                     Description = "FakeStringValue"
                     DestinationStore = "userCertStoreIntermediate" # Updated property
+                    DeviceManagementApplicabilityRuleDeviceMode = @{
+                        Name = "FakeStringValue"
+                        DeviceMode = "standardConfiguration"
+                        RuleType = "exclude" # Updated property
+                    }
                     DeviceManagementApplicabilityRuleOsEdition = @{
                         Name = "FakeStringValue"
                         OsEditionTypes = @("windows10Professional") # Updated property
