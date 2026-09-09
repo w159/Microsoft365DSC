@@ -30,6 +30,17 @@ Configuration Example
             Description                                              = "Kiosk baseline for shared Android tablets in retail stores"
             RoleScopeTagIds                                          = @("0")
             AccountsBlockModification                                = $true
+            AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting{
+                    appScopes = @("certificateInstall")
+                    appDetail = MSFT_MicrosoftGraphapplistitem{
+                        appId       = "com.contoso.certmanager"
+                        name        = "Contoso Certificate Manager"
+                        publisher   = "Contoso Ltd"
+                        appStoreUrl = "https://play.google.com/store/apps/details?id=com.contoso.certmanager"
+                    }
+                }
+            )
             AppsAllowInstallFromUnknownSources                       = $false
             AppsAutoUpdatePolicy                                     = "wiFiOnly"
             AppsDefaultPermissionPolicy                              = "prompt"
@@ -167,6 +178,8 @@ Configuration Example
             KioskModeWallpaperUrl                                    = "https://cdn.contoso.com/branding/kiosk-wallpaper.png"
             KioskModeWiFiConfigurationEnabled                        = $true
             KioskModeWifiAllowedSsids                                = @("Contoso-Retail", "Contoso-BackOffice")
+            LocateDeviceLostModeEnabled                              = $true
+            LocateDeviceUserlessDisabled                             = $false
             MicrophoneForceMute                                      = $true
             MicrosoftLauncherConfigurationEnabled                    = $true
             MicrosoftLauncherCustomWallpaperAllowUserModification    = $false
@@ -211,6 +224,7 @@ Configuration Example
             SecurityCommonCriteriaModeEnabled                        = $false
             SecurityDeveloperSettingsEnabled                         = $false
             SecurityRequireVerifyApps                                = $true
+            ShareDeviceLocationDisabled                              = $true
             ShortHelpText                                            = MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage{
                 defaultMessage    = "Managed by Contoso IT."
                 localizedMessages = @(

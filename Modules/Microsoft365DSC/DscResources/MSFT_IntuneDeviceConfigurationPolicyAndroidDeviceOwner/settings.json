@@ -12,6 +12,21 @@
   },
   "excludedProperties": [
     {
+      "name": "DeviceManagementApplicabilityRuleDeviceMode",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
+      "name": "DeviceManagementApplicabilityRuleOsEdition",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
+      "name": "DeviceManagementApplicabilityRuleOsVersion",
+      "reason": "NotConfigurable",
+      "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
       "name": "IsKioskModeExitCodeSet",
       "reason": "ReadOnly",
       "note": "Mirrors whether KioskModeExitCode is stored"

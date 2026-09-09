@@ -26,6 +26,10 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $AccountsBlockModification
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies the list of managed apps with app details and its associated delegated scope(s). This collection can contain a maximum of 500 elements.')]
+    [MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting[]] $AndroidDeviceOwnerDelegatedScopeAppSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('When allowed, users can enable the ''unknown sources'' setting to install apps from sources other than the Google Play Store.')]
     [System.Nullable[System.Boolean]] $AppsAllowInstallFromUnknownSources
 
@@ -307,6 +311,14 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $KioskModeWiFiConfigurationEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether or not LocateDevice for devices with lost mode (COBO, COPE) is enabled.')]
+    [System.Nullable[System.Boolean]] $LocateDeviceLostModeEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether or not LocateDevice for userless (COSU) devices is disabled.')]
+    [System.Nullable[System.Boolean]] $LocateDeviceUserlessDisabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('Block unmuting the microphone and adjusting the microphone volume.')]
     [System.Nullable[System.Boolean]] $MicrophoneForceMute
 
@@ -460,6 +472,10 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Enable Google Play Protect to scan apps before and after they''re installed. If it detects a threat, it might warn the user to remove the app from the device. Required by default.')]
     [System.Nullable[System.Boolean]] $SecurityRequireVerifyApps
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether or not location sharing is disabled for fully managed devices (COBO), and corporate owned devices with a work profile (COPE).')]
+    [System.Nullable[System.Boolean]] $ShareDeviceLocationDisabled
 
     [DscProperty()]
     [System.ComponentModel.Description('Represents the customized short help text provided to users when they attempt to modify managed settings on their device.')]
@@ -686,6 +702,34 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
 
             Write-Verbose -Message "Found something with id {$($this.id)}"
 
+            $complexAndroidDeviceOwnerDelegatedScopeAppSettings = @()
+            $currentValueArray = $getValue.androidDeviceOwnerDelegatedScopeAppSettings
+            if ($null -ne $currentValueArray -and $currentValueArray.Count -gt 0)
+            {
+                foreach ($currentValue in $currentValueArray)
+                {
+                    $complexAppDetail = [ordered]@{}
+                    $currentChildValue = $currentValue.appDetail
+                    if ($null -ne $currentChildValue)
+                    {
+                        $complexAppDetail.Add('appId', $currentChildValue.appId)
+                        $complexAppDetail.Add('publisher', $currentChildValue.publisher)
+                        $complexAppDetail.Add('appStoreUrl', $currentChildValue.appStoreUrl)
+                        $complexAppDetail.Add('name', $currentChildValue.name)
+                        $complexAppDetail.Add('odataType', $currentChildValue.'@odata.type')
+                    }
+                    if ($complexAppDetail.Values.Where({ $null -ne $_ }).Count -eq 0)
+                    {
+                        $complexAppDetail = $null
+                    }
+
+                    $currentHash = [ordered]@{}
+                    $currentHash.Add('appDetail', $complexAppDetail)
+                    $currentHash.Add('appScopes', $currentValue.appScopes)
+                    $complexAndroidDeviceOwnerDelegatedScopeAppSettings += $currentHash
+                }
+            }
+
             $complexAzureAdSharedDeviceDataClearApps = @()
             $currentValueArray = $getValue.azureAdSharedDeviceDataClearApps
             if ($null -ne $currentValueArray -and $currentValueArray.Count -gt 0)
@@ -844,12 +888,10 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 #region resource generator code
                 Id                                                       = $getValue.Id
                 Description                                              = $getValue.Description
-                #DeviceManagementApplicabilityRuleDeviceMode              = $getValue.DeviceManagementApplicabilityRuleDeviceMode
-                #DeviceManagementApplicabilityRuleOsEdition               = $getValue.DeviceManagementApplicabilityRuleOsEdition
-                #DeviceManagementApplicabilityRuleOsVersion               = $getValue.DeviceManagementApplicabilityRuleOsVersion
                 DisplayName                                              = $getValue.DisplayName
                 RoleScopeTagIds                                          = $getValue.RoleScopeTagIds
                 AccountsBlockModification                                = $getValue.accountsBlockModification
+                AndroidDeviceOwnerDelegatedScopeAppSettings              = $complexAndroidDeviceOwnerDelegatedScopeAppSettings
                 AppsAllowInstallFromUnknownSources                       = $getValue.appsAllowInstallFromUnknownSources
                 AppsAutoUpdatePolicy                                     = $getValue.appsAutoUpdatePolicy
                 AppsDefaultPermissionPolicy                              = $getValue.appsDefaultPermissionPolicy
@@ -917,6 +959,8 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 KioskModeWallpaperUrl                                    = $getValue.kioskModeWallpaperUrl
                 KioskModeWifiAllowedSsids                                = $getValue.kioskModeWifiAllowedSsids
                 KioskModeWiFiConfigurationEnabled                        = $getValue.kioskModeWiFiConfigurationEnabled
+                LocateDeviceLostModeEnabled                              = $getValue.locateDeviceLostModeEnabled
+                LocateDeviceUserlessDisabled                             = $getValue.locateDeviceUserlessDisabled
                 MicrophoneForceMute                                      = $getValue.microphoneForceMute
                 MicrosoftLauncherConfigurationEnabled                    = $getValue.microsoftLauncherConfigurationEnabled
                 MicrosoftLauncherCustomWallpaperAllowUserModification    = $getValue.microsoftLauncherCustomWallpaperAllowUserModification
@@ -954,6 +998,7 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 SecurityCommonCriteriaModeEnabled                        = $getValue.securityCommonCriteriaModeEnabled
                 SecurityDeveloperSettingsEnabled                         = $getValue.securityDeveloperSettingsEnabled
                 SecurityRequireVerifyApps                                = $getValue.securityRequireVerifyApps
+                ShareDeviceLocationDisabled                              = $getValue.shareDeviceLocationDisabled
                 ShortHelpText                                            = $complexShortHelpText
                 StatusBarBlocked                                         = $getValue.statusBarBlocked
                 StayOnModes                                              = $getValue.stayOnModes
@@ -1204,6 +1249,33 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 $Results = $this.GetForExport($Params)
                 $rawResults = $Results.Clone()
 
+                if ($Results.AndroidDeviceOwnerDelegatedScopeAppSettings)
+                {
+                    $complexTypeMapping = @(
+                        @{
+                            Name            = 'androidDeviceOwnerDelegatedScopeAppSettings'
+                            CimInstanceName = 'MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting'
+                        }
+                        @{
+                            Name            = 'appDetail'
+                            CimInstanceName = 'MicrosoftGraphapplistitem'
+                            isRequired      = $true
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.AndroidDeviceOwnerDelegatedScopeAppSettings `
+                        -CIMInstanceName MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting `
+                        -ComplexTypeMapping $complexTypeMapping
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.AndroidDeviceOwnerDelegatedScopeAppSettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('AndroidDeviceOwnerDelegatedScopeAppSettings') | Out-Null
+                    }
+                }
+
                 if ($Results.AzureAdSharedDeviceDataClearApps)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.AzureAdSharedDeviceDataClearApps -CIMInstanceName MicrosoftGraphapplistitem
@@ -1425,9 +1497,9 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('AzureAdSharedDeviceDataClearApps', 'DetailedHelpText', 'DeviceOwnerLockScreenMessage', 'GlobalProxy',
-                    'KioskModeAppPositions', 'KioskModeApps', 'KioskModeManagedFolders', 'PersonalProfilePersonalApplications',
-                    'ShortHelpText', 'SystemUpdateFreezePeriods', 'Assignments') `
+                    -NoEscape @('AndroidDeviceOwnerDelegatedScopeAppSettings', 'AzureAdSharedDeviceDataClearApps', 'DetailedHelpText',
+                    'DeviceOwnerLockScreenMessage', 'GlobalProxy', 'KioskModeAppPositions', 'KioskModeApps', 'KioskModeManagedFolders',
+                    'PersonalProfilePersonalApplications', 'ShortHelpText', 'SystemUpdateFreezePeriods', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -1473,6 +1545,18 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Information about the app.')]
+    [MSFT_MicrosoftGraphapplistitem] $appDetail
+
+    [DscProperty()]
+    [System.ComponentModel.Description('List of scopes an app has been assigned.')]
+    [ValidateSet('unspecified', 'certificateInstall', 'captureNetworkActivityLog', 'captureSecurityLog')]
+    [System.String[]] $appScopes
 }
 
 class MSFT_MicrosoftGraphapplistitem

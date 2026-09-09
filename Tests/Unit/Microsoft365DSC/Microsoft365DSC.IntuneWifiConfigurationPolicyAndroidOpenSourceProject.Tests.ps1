@@ -60,6 +60,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ConnectWhenNetworkNameIsHidden = $True
                     Ssid                           = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxyExclusionList             = @('FakeStringValue')
+                    ProxyManualAddress             = 'FakeStringValue'
+                    ProxyManualPort                = 25
                     ProxySetting                   = 'none'
                     Description          = 'FakeStringValue'
                     DisplayName          = 'FakeStringValue'
@@ -86,6 +90,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxyExclusionList             = @('FakeStringValue')
+                    ProxyManualAddress             = 'FakeStringValue'
+                    ProxyManualPort                = 25
                     ProxySetting                   = 'none'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
@@ -120,6 +128,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxyExclusionList             = @('FakeStringValue')
+                    ProxyManualAddress             = 'FakeStringValue'
+                    ProxyManualPort                = 25
                     ProxySetting                   = 'none'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
@@ -152,6 +164,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
+                    ProxyExclusionList             = @('FakeStringValue')
+                    ProxyManualAddress             = 'FakeStringValue'
+                    ProxyManualPort                = 25
                     ProxySetting                   = 'none'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'
@@ -176,6 +192,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NetworkName                    = 'FakeStringValue'
                     PreSharedKey                   = 'FakeStringValue'
                     PreSharedKeyIsSet              = $True
+                    ProxyAutomaticConfigurationUrl = 'FakeStringValue2'
+                    ProxyExclusionList             = @('FakeStringValue2')
+                    ProxyManualAddress             = 'FakeStringValue2'
+                    ProxyManualPort                = 8443
                     ProxySetting                   = 'none'
                     Ssid                           = 'FakeStringValue'
                     WiFiSecurityType               = 'open'

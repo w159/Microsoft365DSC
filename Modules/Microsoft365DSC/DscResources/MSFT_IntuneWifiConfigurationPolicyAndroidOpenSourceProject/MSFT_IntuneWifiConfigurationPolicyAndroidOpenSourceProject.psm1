@@ -42,6 +42,22 @@ class IntuneWifiConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceBas
     [System.Nullable[System.Boolean]] $PreSharedKeyIsSet
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specify the proxy server configuration script URL.')]
+    [System.String] $ProxyAutomaticConfigurationUrl
+
+    [DscProperty()]
+    [System.ComponentModel.Description('List of hosts to exclude using the proxy on connections for. These hosts can use wildcards such as *.example.com.')]
+    [System.String[]] $ProxyExclusionList
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specify the proxy server IP address. Both IPv4 and IPv6 addresses are supported. For example: 192.168.1.1.')]
+    [System.String] $ProxyManualAddress
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specify the proxy server port.')]
+    [System.Nullable[System.Int32]] $ProxyManualPort
+
+    [DscProperty()]
     [System.ComponentModel.Description('Define the proxy setting.')]
     [ValidateSet('automatic', 'manual', 'none')]
     [System.String] $ProxySetting
@@ -169,6 +185,10 @@ class IntuneWifiConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceBas
                 NetworkName                    = $getValue.networkName
                 PreSharedKey                   = $getValue.preSharedKey
                 PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
+                ProxyAutomaticConfigurationUrl = $getValue.proxyAutomaticConfigurationUrl
+                ProxyExclusionList             = [System.String[]]$getValue.proxyExclusionList
+                ProxyManualAddress             = $getValue.proxyManualAddress
+                ProxyManualPort                = $getValue.proxyManualPort
                 ProxySetting                   = $getValue.proxySetting
                 Ssid                           = $getValue.ssid
                 WiFiSecurityType               = $getValue.wiFiSecurityType

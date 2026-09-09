@@ -40,8 +40,27 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
     [System.String] $EapType
 
     [DscProperty()]
+    [System.ComponentModel.Description('Non-EAP Method for Authentication (Inner Identity) when EAP Type is EAP-TTLS and Authenticationmethod is Username and Password.')]
+    [ValidateSet('challengeHandshakeAuthenticationProtocol', 'microsoftChap', 'microsoftChapVersionTwo', 'unencryptedPassword')]
+    [System.String] $InnerAuthenticationProtocolForEapTtls
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Non-EAP Method for Authentication (Inner Identity) when EAP Type is PEAP and Authenticationmethod is Username and Password.')]
+    [ValidateSet('microsoftChapVersionTwo', 'none')]
+    [System.String] $InnerAuthenticationProtocolForPeap
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The MAC address randomization mode for Android device Wi-Fi configuration.')]
+    [ValidateSet('automatic', 'hardware')]
+    [System.String] $MacAddressRandomizationMode
+
+    [DscProperty()]
     [System.ComponentModel.Description('Network name.')]
     [System.String] $NetworkName
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Enable identity privacy (Outer Identity) when EAP Type is configured to EAP-TTLS or PEAP. The String provided here is used to mask the username of individual users when they attempt to connect to Wi-Fi network.')]
+    [System.String] $OuterIdentityPrivacyTemporaryValue
 
     [DscProperty()]
     [System.ComponentModel.Description('Pre shared key.')]
@@ -188,35 +207,39 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
             Write-Verbose -Message "Found something with id {$($resolvedId)}"
             $results = @{
                 #region resource generator code
-                Id                             = $getValue.Id
-                Description                    = $getValue.Description
-                DisplayName                    = $getValue.DisplayName
-                RoleScopeTagIds                = $getValue.RoleScopeTagIds
-                AuthenticationMethod           = $getValue.authenticationMethod
-                ConnectAutomatically           = $getValue.connectAutomatically
-                ConnectWhenNetworkNameIsHidden = $getValue.connectWhenNetworkNameIsHidden
-                EapType                        = $getValue.eapType
-                NetworkName                    = $getValue.networkName
-                PreSharedKey                   = $getValue.preSharedKey
-                PreSharedKeyIsSet              = $getValue.preSharedKeyIsSet
-                ProxyAutomaticConfigurationUrl = $getValue.proxyAutomaticConfigurationUrl
-                ProxyExclusionList             = $getValue.proxyExclusionList
-                ProxyManualAddress             = $getValue.proxyManualAddress
-                ProxyManualPort                = $getValue.proxyManualPort
-                ProxySettings                  = $getValue.proxySettings
-                Ssid                           = $getValue.ssid
-                TrustedServerCertificateNames  = $getValue.trustedServerCertificateNames
-                WiFiSecurityType               = $getValue.wiFiSecurityType
-                Ensure                         = 'Present'
-                Credential                     = $this.Credential
-                ApplicationId                  = $this.ApplicationId
-                TenantId                       = $this.TenantId
-                ApplicationSecret              = $this.ApplicationSecret
-                CertificateThumbprint          = $this.CertificateThumbprint
-                CertificatePath                = $this.CertificatePath
-                CertificatePassword            = $this.CertificatePassword
-                ManagedIdentity                = $this.ManagedIdentity.IsPresent
-                AccessTokens                   = $this.AccessTokens
+                Id                                    = $getValue.Id
+                Description                           = $getValue.Description
+                DisplayName                           = $getValue.DisplayName
+                RoleScopeTagIds                       = $getValue.RoleScopeTagIds
+                AuthenticationMethod                  = $getValue.authenticationMethod
+                ConnectAutomatically                  = $getValue.connectAutomatically
+                ConnectWhenNetworkNameIsHidden        = $getValue.connectWhenNetworkNameIsHidden
+                EapType                               = $getValue.eapType
+                InnerAuthenticationProtocolForEapTtls = $getValue.innerAuthenticationProtocolForEapTtls
+                InnerAuthenticationProtocolForPeap    = $getValue.innerAuthenticationProtocolForPeap
+                MacAddressRandomizationMode           = $getValue.macAddressRandomizationMode
+                NetworkName                           = $getValue.networkName
+                OuterIdentityPrivacyTemporaryValue    = $getValue.outerIdentityPrivacyTemporaryValue
+                PreSharedKey                          = $getValue.preSharedKey
+                PreSharedKeyIsSet                     = $getValue.preSharedKeyIsSet
+                ProxyAutomaticConfigurationUrl        = $getValue.proxyAutomaticConfigurationUrl
+                ProxyExclusionList                    = $getValue.proxyExclusionList
+                ProxyManualAddress                    = $getValue.proxyManualAddress
+                ProxyManualPort                       = $getValue.proxyManualPort
+                ProxySettings                         = $getValue.proxySettings
+                Ssid                                  = $getValue.ssid
+                TrustedServerCertificateNames         = $getValue.trustedServerCertificateNames
+                WiFiSecurityType                      = $getValue.wiFiSecurityType
+                Ensure                                = 'Present'
+                Credential                            = $this.Credential
+                ApplicationId                         = $this.ApplicationId
+                TenantId                              = $this.TenantId
+                ApplicationSecret                     = $this.ApplicationSecret
+                CertificateThumbprint                 = $this.CertificateThumbprint
+                CertificatePath                       = $this.CertificatePath
+                CertificatePassword                   = $this.CertificatePassword
+                ManagedIdentity                       = $this.ManagedIdentity.IsPresent
+                AccessTokens                          = $this.AccessTokens
             }
 
             $assignmentsValues = Get-M365DSCIntuneExpandedAssignments -Instance $getValue

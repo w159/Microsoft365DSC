@@ -26,9 +26,9 @@ Configuration Example
     {
         IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner 'IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner-Example'
         {
-            DisplayName                    = 'Wifi - androidForWork'
-            Description                    = 'Corporate Wi-Fi for company-owned Android devices'
-            Assignments                    = @(
+            DisplayName                        = 'Wifi - androidForWork'
+            Description                        = 'Corporate Wi-Fi for company-owned Android devices'
+            Assignments                        = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
                     dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -38,25 +38,28 @@ Configuration Example
                     groupDisplayName = 'Android Loaner Devices'
                 }
             )
-            AuthenticationMethod           = 'usernameAndPassword'
-            ConnectAutomatically           = $true # Updated Property
-            ConnectWhenNetworkNameIsHidden = $false
-            EapType                        = 'peap'
-            NetworkName                    = 'Contoso Corporate Wi-Fi'
-            PreSharedKey                   = '<wifi-pre-shared-key>'
-            PreSharedKeyIsSet              = $true
-            ProxyExclusionList             = 'intranet.contoso.com,*.contoso.local'
-            ProxyManualAddress             = 'proxy.contoso.com'
-            ProxyManualPort                = 8080
-            ProxySettings                  = 'manual'
-            RoleScopeTagIds                = @('0')
-            Ssid                           = 'Contoso-Corp'
-            TrustedServerCertificateNames  = @('Contoso Root CA')
-            WiFiSecurityType               = 'wpaPersonal'
-            Ensure                         = 'Present'
-            ApplicationId                  = $ApplicationId;
-            TenantId                       = $TenantId;
-            CertificateThumbprint          = $CertificateThumbprint;
+            AuthenticationMethod               = 'usernameAndPassword'
+            ConnectAutomatically               = $true # Updated Property
+            ConnectWhenNetworkNameIsHidden     = $false
+            EapType                            = 'peap'
+            InnerAuthenticationProtocolForPeap = 'microsoftChapVersionTwo'
+            MacAddressRandomizationMode        = 'automatic'
+            NetworkName                        = 'Contoso Corporate Wi-Fi'
+            OuterIdentityPrivacyTemporaryValue = 'anonymous'
+            PreSharedKey                       = '<wifi-pre-shared-key>'
+            PreSharedKeyIsSet                  = $true
+            ProxyExclusionList                 = 'intranet.contoso.com,*.contoso.local'
+            ProxyManualAddress                 = 'proxy.contoso.com'
+            ProxyManualPort                    = 8080
+            ProxySettings                      = 'manual'
+            RoleScopeTagIds                    = @('0')
+            Ssid                               = 'Contoso-Corp'
+            TrustedServerCertificateNames      = @('Contoso Root CA')
+            WiFiSecurityType                   = 'wpaPersonal'
+            Ensure                             = 'Present'
+            ApplicationId                      = $ApplicationId;
+            TenantId                           = $TenantId;
+            CertificateThumbprint              = $CertificateThumbprint;
         }
     }
 }

@@ -52,25 +52,29 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                 return @{
-                    NetworkName                    = 'FakeStringValue'
-                    '@odata.type'                  = '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration'
-                    PreSharedKey                   = 'FakeStringValue'
-                    WiFiSecurityType               = 'open'
-                    ConnectAutomatically           = $True
-                    Ssid                           = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxySettings                  = 'none'
-                    ConnectWhenNetworkNameIsHidden = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    PreSharedKeyIsSet              = $True
-                    ProxyExclusionList             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    AuthenticationMethod           = 'certificate'
-                    EapType                        = 'eapTls'
-                    TrustedServerCertificateNames  = @('FakeStringValue')
-                    Description          = 'FakeStringValue'
-                    DisplayName          = 'FakeStringValue'
-                    Id                   = 'FakeStringValue'
+                    NetworkName                           = 'FakeStringValue'
+                    '@odata.type'                         = '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration'
+                    PreSharedKey                          = 'FakeStringValue'
+                    WiFiSecurityType                      = 'open'
+                    ConnectAutomatically                  = $True
+                    Ssid                                  = 'FakeStringValue'
+                    ProxyManualAddress                    = 'FakeStringValue'
+                    ProxySettings                         = 'none'
+                    ConnectWhenNetworkNameIsHidden        = $True
+                    ProxyAutomaticConfigurationUrl        = 'FakeStringValue'
+                    PreSharedKeyIsSet                     = $True
+                    ProxyExclusionList                    = 'FakeStringValue'
+                    ProxyManualPort                       = 25
+                    AuthenticationMethod                  = 'certificate'
+                    EapType                               = 'eapTls'
+                    InnerAuthenticationProtocolForEapTtls = 'microsoftChapVersionTwo'
+                    InnerAuthenticationProtocolForPeap    = 'microsoftChapVersionTwo'
+                    MacAddressRandomizationMode           = 'automatic'
+                    OuterIdentityPrivacyTemporaryValue    = 'FakeStringValue'
+                    TrustedServerCertificateNames         = @('FakeStringValue')
+                    Description                           = 'FakeStringValue'
+                    DisplayName                           = 'FakeStringValue'
+                    Id                                    = 'FakeStringValue'
 
                 }
             }
@@ -86,26 +90,30 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AuthenticationMethod           = 'certificate'
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    EapType                        = 'eapTls'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    PreSharedKeyIsSet              = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyExclusionList             = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'none'
-                    Ssid                           = 'FakeStringValue'
-                    TrustedServerCertificateNames  = @('FakeStringValue')
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    AuthenticationMethod                  = 'certificate'
+                    ConnectAutomatically                  = $True
+                    ConnectWhenNetworkNameIsHidden        = $True
+                    Description                           = 'FakeStringValue'
+                    DisplayName                           = 'FakeStringValue'
+                    EapType                               = 'eapTls'
+                    Id                                    = 'FakeStringValue'
+                    InnerAuthenticationProtocolForEapTtls = 'microsoftChapVersionTwo'
+                    InnerAuthenticationProtocolForPeap    = 'microsoftChapVersionTwo'
+                    MacAddressRandomizationMode           = 'automatic'
+                    NetworkName                           = 'FakeStringValue'
+                    OuterIdentityPrivacyTemporaryValue    = 'FakeStringValue'
+                    PreSharedKey                          = 'FakeStringValue'
+                    PreSharedKeyIsSet                     = $True
+                    ProxyAutomaticConfigurationUrl        = 'FakeStringValue'
+                    ProxyExclusionList                    = 'FakeStringValue'
+                    ProxyManualAddress                    = 'FakeStringValue'
+                    ProxyManualPort                       = 25
+                    ProxySettings                         = 'none'
+                    Ssid                                  = 'FakeStringValue'
+                    TrustedServerCertificateNames         = @('FakeStringValue')
+                    WiFiSecurityType                      = 'open'
+                    Ensure                                = 'Present'
+                    Credential                            = $Credential
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
@@ -127,26 +135,30 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner exists but it SHOULD NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AuthenticationMethod           = 'certificate'
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    EapType                        = 'eapTls'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    PreSharedKeyIsSet              = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyExclusionList             = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'none'
-                    Ssid                           = 'FakeStringValue'
-                    TrustedServerCertificateNames  = @('FakeStringValue')
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Absent'
-                    Credential                     = $Credential
+                    AuthenticationMethod                  = 'certificate'
+                    ConnectAutomatically                  = $True
+                    ConnectWhenNetworkNameIsHidden        = $True
+                    Description                           = 'FakeStringValue'
+                    DisplayName                           = 'FakeStringValue'
+                    EapType                               = 'eapTls'
+                    Id                                    = 'FakeStringValue'
+                    InnerAuthenticationProtocolForEapTtls = 'microsoftChapVersionTwo'
+                    InnerAuthenticationProtocolForPeap    = 'microsoftChapVersionTwo'
+                    MacAddressRandomizationMode           = 'automatic'
+                    NetworkName                           = 'FakeStringValue'
+                    OuterIdentityPrivacyTemporaryValue    = 'FakeStringValue'
+                    PreSharedKey                          = 'FakeStringValue'
+                    PreSharedKeyIsSet                     = $True
+                    ProxyAutomaticConfigurationUrl        = 'FakeStringValue'
+                    ProxyExclusionList                    = 'FakeStringValue'
+                    ProxyManualAddress                    = 'FakeStringValue'
+                    ProxyManualPort                       = 25
+                    ProxySettings                         = 'none'
+                    Ssid                                  = 'FakeStringValue'
+                    TrustedServerCertificateNames         = @('FakeStringValue')
+                    WiFiSecurityType                      = 'open'
+                    Ensure                                = 'Absent'
+                    Credential                            = $Credential
                 }
             }
 
@@ -166,26 +178,30 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner Exists and Values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AuthenticationMethod           = 'certificate'
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    EapType                        = 'eapTls'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    PreSharedKeyIsSet              = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyExclusionList             = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 25
-                    ProxySettings                  = 'none'
-                    Ssid                           = 'FakeStringValue'
-                    TrustedServerCertificateNames  = @('FakeStringValue')
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    AuthenticationMethod                  = 'certificate'
+                    ConnectAutomatically                  = $True
+                    ConnectWhenNetworkNameIsHidden        = $True
+                    Description                           = 'FakeStringValue'
+                    DisplayName                           = 'FakeStringValue'
+                    EapType                               = 'eapTls'
+                    Id                                    = 'FakeStringValue'
+                    InnerAuthenticationProtocolForEapTtls = 'microsoftChapVersionTwo'
+                    InnerAuthenticationProtocolForPeap    = 'microsoftChapVersionTwo'
+                    MacAddressRandomizationMode           = 'automatic'
+                    NetworkName                           = 'FakeStringValue'
+                    OuterIdentityPrivacyTemporaryValue    = 'FakeStringValue'
+                    PreSharedKey                          = 'FakeStringValue'
+                    PreSharedKeyIsSet                     = $True
+                    ProxyAutomaticConfigurationUrl        = 'FakeStringValue'
+                    ProxyExclusionList                    = 'FakeStringValue'
+                    ProxyManualAddress                    = 'FakeStringValue'
+                    ProxyManualPort                       = 25
+                    ProxySettings                         = 'none'
+                    Ssid                                  = 'FakeStringValue'
+                    TrustedServerCertificateNames         = @('FakeStringValue')
+                    WiFiSecurityType                      = 'open'
+                    Ensure                                = 'Present'
+                    Credential                            = $Credential
                 }
             }
 
@@ -197,26 +213,30 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AuthenticationMethod           = 'certificate'
-                    ConnectAutomatically           = $True
-                    ConnectWhenNetworkNameIsHidden = $True
-                    Description                    = 'FakeStringValue'
-                    DisplayName                    = 'FakeStringValue'
-                    EapType                        = 'eapTls'
-                    Id                             = 'FakeStringValue'
-                    NetworkName                    = 'FakeStringValue'
-                    PreSharedKey                   = 'FakeStringValue'
-                    PreSharedKeyIsSet              = $True
-                    ProxyAutomaticConfigurationUrl = 'FakeStringValue'
-                    ProxyExclusionList             = 'FakeStringValue'
-                    ProxyManualAddress             = 'FakeStringValue'
-                    ProxyManualPort                = 8443 # Updated property
-                    ProxySettings                  = 'none'
-                    Ssid                           = 'FakeStringValue'
-                    TrustedServerCertificateNames  = @('FakeStringValue')
-                    WiFiSecurityType               = 'open'
-                    Ensure                         = 'Present'
-                    Credential                     = $Credential
+                    AuthenticationMethod                  = 'certificate'
+                    ConnectAutomatically                  = $True
+                    ConnectWhenNetworkNameIsHidden        = $True
+                    Description                           = 'FakeStringValue'
+                    DisplayName                           = 'FakeStringValue'
+                    EapType                               = 'eapTls'
+                    Id                                    = 'FakeStringValue'
+                    InnerAuthenticationProtocolForEapTtls = 'microsoftChap'
+                    InnerAuthenticationProtocolForPeap    = 'none'
+                    MacAddressRandomizationMode           = 'hardware'
+                    NetworkName                           = 'FakeStringValue'
+                    OuterIdentityPrivacyTemporaryValue    = 'FakeStringValue2'
+                    PreSharedKey                          = 'FakeStringValue'
+                    PreSharedKeyIsSet                     = $True
+                    ProxyAutomaticConfigurationUrl        = 'FakeStringValue'
+                    ProxyExclusionList                    = 'FakeStringValue'
+                    ProxyManualAddress                    = 'FakeStringValue'
+                    ProxyManualPort                       = 8443 # Updated property
+                    ProxySettings                         = 'none'
+                    Ssid                                  = 'FakeStringValue'
+                    TrustedServerCertificateNames         = @('FakeStringValue')
+                    WiFiSecurityType                      = 'open'
+                    Ensure                                = 'Present'
+                    Credential                            = $Credential
                 }
             }
 

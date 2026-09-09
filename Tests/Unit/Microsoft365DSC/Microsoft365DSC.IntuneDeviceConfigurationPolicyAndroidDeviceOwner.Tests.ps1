@@ -66,6 +66,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AccountsBlockModification                                = $True
+                    AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting] @{
+                            appScopes = @('certificateInstall')
+                            appDetail = ([MSFT_MicrosoftGraphapplistitem] @{
+                                appId       = 'FakeStringValue'
+                                publisher   = 'FakeStringValue'
+                                appStoreUrl = 'FakeStringValue'
+                                name        = 'FakeStringValue'
+                                odataType   = '#microsoft.graph.appleAppListItem'
+                            })
+                        })
+                    )
                     AppsAllowInstallFromUnknownSources                       = $True
                     AppsAutoUpdatePolicy                                     = 'notConfigured'
                     AppsDefaultPermissionPolicy                              = 'deviceDefault'
@@ -159,6 +171,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeVirtualHomeButtonType                           = 'notConfigured'
                     KioskModeWallpaperUrl                                    = 'FakeStringValue'
                     KioskModeWiFiConfigurationEnabled                        = $True
+                    LocateDeviceLostModeEnabled                              = $True
+                    LocateDeviceUserlessDisabled                             = $True
                     MicrophoneForceMute                                      = $True
                     MicrosoftLauncherConfigurationEnabled                    = $True
                     MicrosoftLauncherCustomWallpaperAllowUserModification    = $True
@@ -203,6 +217,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityCommonCriteriaModeEnabled                        = $True
                     SecurityDeveloperSettingsEnabled                         = $True
                     SecurityRequireVerifyApps                                = $True
+                    ShareDeviceLocationDisabled                              = $True
                     ShortHelpText                                            = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -266,6 +281,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AccountsBlockModification                                = $True
+                    AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting] @{
+                            appScopes = @('certificateInstall')
+                            appDetail = ([MSFT_MicrosoftGraphapplistitem] @{
+                                appId       = 'FakeStringValue'
+                                publisher   = 'FakeStringValue'
+                                appStoreUrl = 'FakeStringValue'
+                                name        = 'FakeStringValue'
+                                odataType   = '#microsoft.graph.appleAppListItem'
+                            })
+                        })
+                    )
                     AppsAllowInstallFromUnknownSources                       = $True
                     AppsAutoUpdatePolicy                                     = 'notConfigured'
                     AppsDefaultPermissionPolicy                              = 'deviceDefault'
@@ -359,6 +386,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeVirtualHomeButtonType                           = 'notConfigured'
                     KioskModeWallpaperUrl                                    = 'FakeStringValue'
                     KioskModeWiFiConfigurationEnabled                        = $True
+                    LocateDeviceLostModeEnabled                              = $True
+                    LocateDeviceUserlessDisabled                             = $True
                     MicrophoneForceMute                                      = $True
                     MicrosoftLauncherConfigurationEnabled                    = $True
                     MicrosoftLauncherCustomWallpaperAllowUserModification    = $True
@@ -403,6 +432,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityCommonCriteriaModeEnabled                        = $True
                     SecurityDeveloperSettingsEnabled                         = $True
                     SecurityRequireVerifyApps                                = $True
+                    ShareDeviceLocationDisabled                              = $True
                     ShortHelpText                                            = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -449,6 +479,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                     return @{
+                        AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            @{
+                                appScopes = @('certificateInstall')
+                                appDetail = @{
+                                    name          = 'FakeStringValue'
+                                    appId         = 'FakeStringValue'
+                                    appStoreUrl   = 'FakeStringValue'
+                                    '@odata.type' = '#microsoft.graph.appleAppListItem'
+                                    publisher     = 'FakeStringValue'
+                                }
+                            }
+                        )
+                        LocateDeviceLostModeEnabled                              = $True
+                        LocateDeviceUserlessDisabled                             = $True
+                        ShareDeviceLocationDisabled                              = $True
                         VolumeBlockAdjustment                                    = $True
                         ScreenCaptureBlocked                                     = $True
                         KioskModeMediaVolumeConfigurationEnabled                 = $True
@@ -650,6 +695,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AccountsBlockModification                                = $True
+                    AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting] @{
+                            appScopes = @('certificateInstall')
+                            appDetail = ([MSFT_MicrosoftGraphapplistitem] @{
+                                appId       = 'FakeStringValue'
+                                publisher   = 'FakeStringValue'
+                                appStoreUrl = 'FakeStringValue'
+                                name        = 'FakeStringValue'
+                                odataType   = '#microsoft.graph.appleAppListItem'
+                            })
+                        })
+                    )
                     AppsAllowInstallFromUnknownSources                       = $True
                     AppsAutoUpdatePolicy                                     = 'notConfigured'
                     AppsDefaultPermissionPolicy                              = 'deviceDefault'
@@ -743,6 +800,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeVirtualHomeButtonType                           = 'notConfigured'
                     KioskModeWallpaperUrl                                    = 'FakeStringValue'
                     KioskModeWiFiConfigurationEnabled                        = $True
+                    LocateDeviceLostModeEnabled                              = $True
+                    LocateDeviceUserlessDisabled                             = $True
                     MicrophoneForceMute                                      = $True
                     MicrosoftLauncherConfigurationEnabled                    = $True
                     MicrosoftLauncherCustomWallpaperAllowUserModification    = $True
@@ -787,6 +846,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityCommonCriteriaModeEnabled                        = $True
                     SecurityDeveloperSettingsEnabled                         = $True
                     SecurityRequireVerifyApps                                = $True
+                    ShareDeviceLocationDisabled                              = $True
                     ShortHelpText                                            = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -833,6 +893,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                     return @{
+                        AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            @{
+                                appScopes = @('certificateInstall')
+                                appDetail = @{
+                                    name          = 'FakeStringValue'
+                                    appId         = 'FakeStringValue'
+                                    appStoreUrl   = 'FakeStringValue'
+                                    '@odata.type' = '#microsoft.graph.appleAppListItem'
+                                    publisher     = 'FakeStringValue'
+                                }
+                            }
+                        )
+                        LocateDeviceLostModeEnabled                              = $True
+                        LocateDeviceUserlessDisabled                             = $True
+                        ShareDeviceLocationDisabled                              = $True
                         VolumeBlockAdjustment                                    = $True
                         ScreenCaptureBlocked                                     = $True
                         KioskModeMediaVolumeConfigurationEnabled                 = $True
@@ -1024,6 +1099,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     AccountsBlockModification                                = $True
+                    AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerdelegatedscopeappsetting] @{
+                            appScopes = @('certificateInstall')
+                            appDetail = ([MSFT_MicrosoftGraphapplistitem] @{
+                                appId       = 'FakeStringValue'
+                                publisher   = 'FakeStringValue'
+                                appStoreUrl = 'FakeStringValue'
+                                name        = 'FakeStringValue'
+                                odataType   = '#microsoft.graph.appleAppListItem'
+                            })
+                        })
+                    )
                     AppsAllowInstallFromUnknownSources                       = $True
                     AppsAutoUpdatePolicy                                     = 'notConfigured'
                     AppsDefaultPermissionPolicy                              = 'deviceDefault'
@@ -1117,6 +1204,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeVirtualHomeButtonType                           = 'notConfigured'
                     KioskModeWallpaperUrl                                    = 'FakeStringValue'
                     KioskModeWiFiConfigurationEnabled                        = $True
+                    LocateDeviceLostModeEnabled                              = $True
+                    LocateDeviceUserlessDisabled                             = $True
                     MicrophoneForceMute                                      = $True
                     MicrosoftLauncherConfigurationEnabled                    = $True
                     MicrosoftLauncherCustomWallpaperAllowUserModification    = $True
@@ -1161,6 +1250,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityCommonCriteriaModeEnabled                        = $True
                     SecurityDeveloperSettingsEnabled                         = $True
                     SecurityRequireVerifyApps                                = $True
+                    ShareDeviceLocationDisabled                              = $True
                     ShortHelpText                                            = ([MSFT_MicrosoftGraphandroiddeviceowneruserfacingmessage] @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -1207,6 +1297,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                     return @{
+                        AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            @{
+                                appScopes = @('captureSecurityLog')
+                                appDetail = @{
+                                    name          = 'FakeStringValue'
+                                    appId         = 'FakeStringValue'
+                                    appStoreUrl   = 'FakeStringValue'
+                                    '@odata.type' = '#microsoft.graph.appleAppListItem'
+                                    publisher     = 'FakeStringValue'
+                                }
+                            }
+                        )
                         WorkProfilePasswordMinimumUpperCaseCharacters            = 7
                         WorkProfilePasswordRequireUnlock                         = 'deviceDefault'
                         SystemUpdateFreezePeriods                                = @(
@@ -1350,6 +1452,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
                     return @{
+                        AndroidDeviceOwnerDelegatedScopeAppSettings              = @(
+                            @{
+                                appScopes = @('certificateInstall')
+                                appDetail = @{
+                                    name          = 'FakeStringValue'
+                                    appId         = 'FakeStringValue'
+                                    appStoreUrl   = 'FakeStringValue'
+                                    '@odata.type' = '#microsoft.graph.appleAppListItem'
+                                    publisher     = 'FakeStringValue'
+                                }
+                            }
+                        )
+                        LocateDeviceLostModeEnabled                              = $True
+                        LocateDeviceUserlessDisabled                             = $True
+                        ShareDeviceLocationDisabled                              = $True
                         VolumeBlockAdjustment                                    = $True
                         ScreenCaptureBlocked                                     = $True
                         KioskModeMediaVolumeConfigurationEnabled                 = $True

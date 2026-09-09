@@ -27,9 +27,9 @@
 * AADConditionalAccessPolicy
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
 * AADCrossTenantAccessPolicyConfigurationDefault
-  * Added support for the `AutomaticUserConsentSettings` property.
-  * Added support for the `AppServiceConnectInbound`,
-    `BlockServiceProviderOutboundAccess` and `M365CollaborationOutbound` properties.
+  * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
+    `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
+    `M365CollaborationInbound` properties.
   * Fixed an issue where the loop resolving user and group targets walked one entry past
     the end of the collection.
 * AADCrossTenantAccessPolicyConfigurationPartner
@@ -223,11 +223,13 @@
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
-  * Added support for the `DeviceLocationMode` property.
-* IntuneDeviceConfigurationPolicyAndroidWorkProfile
-  * Added support for the `BlockUnifiedPasswordForWorkProfile` property.
-  * Added support for the `AllowedGoogleAccountDomains` and `WorkProfileAccountUse`
+  * Added support for the `AndroidDeviceOwnerDelegatedScopeAppSettings`,
+    `DeviceLocationMode`, `LocateDeviceLostModeEnabled`,
+    `LocateDeviceUserlessDisabled` and `ShareDeviceLocationDisabled`
     properties.
+* IntuneDeviceConfigurationPolicyAndroidWorkProfile
+  * Added support for the `BlockUnifiedPasswordForWorkProfile`,
+    `AllowedGoogleAccountDomains` and `WorkProfileAccountUse` properties.
 * IntuneDeviceConfigurationPolicyMacOS
   * Added support for the `ActivationLockWhenSupervisedAllowed` property.
 * IntuneDeviceConfigurationPolicyWindows10
@@ -286,14 +288,15 @@
   * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
 * IntuneMobileAppsSystemAppAndroid
   * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementSystemMobileAppAssignment`.
+  * Added support for the `Description`, `Developer`, `InformationUrl`, `IsFeatured`,
+    `LargeIcon`, `Notes`, `Owner` and `PrivacyInformationUrl` properties.
 * IntuneMobileAppsWin32AppWindows10
   * Added values `arm` and `neutral` to property `AllowedArchitectures`.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
 * IntuneMobileThreatDefenseConnector
-  * Added support for the `MacDeviceBlockedOnMissingPartnerData` and `MacEnabled`
-    properties.
-  * Added support for the `AllowPartnerToCollectIosCertificateMetadata`,
+  * Added support for the `MacDeviceBlockedOnMissingPartnerData`, `MacEnabled`,
+    `AllowPartnerToCollectIosCertificateMetadata`,
     `AllowPartnerToCollectIosPersonalCertificateMetadata` and
     `WindowsMobileApplicationManagementEnabled` properties.
 * IntuneRoleAssignment
@@ -314,17 +317,19 @@
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
-  * Added support for the `AuthenticationMethod`, `EapType` and
-    `TrustedServerCertificateNames` properties.
+  * Added support for the `AuthenticationMethod`, `EapType`,
+    `TrustedServerCertificateNames`, `InnerAuthenticationProtocolForEapTtls`,
+    `InnerAuthenticationProtocolForPeap`, `MacAddressRandomizationMode` and
+    `OuterIdentityPrivacyTemporaryValue` properties.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile
   * Added `wep` and `wpaPersonal` to property `WiFiSecurityType`.
-  * Added support for the `PreSharedKey` and `PreSharedKeyIsSet` properties.
-  * Added support for the `ProxyAutomaticConfigurationUrl` and `ProxySettings`
-    properties.
+  * Added support for the `PreSharedKey`, `PreSharedKeyIsSet`,
+    `ProxyAutomaticConfigurationUrl` and `ProxySettings` properties.
 * IntuneWifiConfigurationPolicyAndroidForWork
   * Added values `wep` and `wpaPersonal` to property `WiFiSecurityType`.
 * IntuneWifiConfigurationPolicyAndroidOpenSourceProject
-  * Added support for the `ProxySetting` property.
+  * Added support for the `ProxySetting`, `ProxyAutomaticConfigurationUrl`,
+    `ProxyExclusionList`, `ProxyManualAddress` and `ProxyManualPort` properties.
 * IntuneWifiConfigurationPolicyMacOS
   * Added `wpa3Personal` to property `WiFiSecurityType`.
   * Added support for the `WifiRequirePhysicalMacAddressEnabled` property.

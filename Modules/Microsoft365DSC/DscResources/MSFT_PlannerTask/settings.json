@@ -22,9 +22,24 @@
       "note": "Declared as Categories and mapped to category1 through category25 flags on set"
     },
     {
+      "name": "AssignedToTaskBoardFormat",
+      "reason": "ReadOnly",
+      "note": "Renders the task in the board view grouped by assignee. Graph marks it read only."
+    },
+    {
+      "name": "AssigneePriority",
+      "reason": "NotConfigurable",
+      "note": "Order hint that Planner recalculates server side."
+    },
+    {
       "name": "Attachments",
       "reason": "Deferred",
       "note": "Maps to the references collection on the Graph entity"
+    },
+    {
+      "name": "BucketTaskBoardFormat",
+      "reason": "ReadOnly",
+      "note": "Renders the task in the board view grouped by bucket. Graph marks it read only."
     },
     {
       "name": "Categories",
@@ -47,9 +62,24 @@
       "note": "The service stamps this when the task reaches one hundred percent complete"
     },
     {
+      "name": "Details",
+      "reason": "Accepted",
+      "note": "Configured through the Description, Checklist and Attachments properties on the resource. Responsible for the extended task content."
+    },
+    {
       "name": "HasDescription",
       "reason": "ReadOnly",
       "note": "The service derives this flag from the task details description"
+    },
+    {
+      "name": "OrderHint",
+      "reason": "NotConfigurable",
+      "note": "Order hint that Planner recalculates server side."
+    },
+    {
+      "name": "ProgressTaskBoardFormat",
+      "reason": "ReadOnly",
+      "note": "Renders the task in the board view grouped by progress. Graph marks it read only."
     },
     {
       "name": "ReferenceCount",

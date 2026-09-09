@@ -68,6 +68,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     isFeatured = $True
                     LargeIcon = @{
                         Type = "FakeStringValue"
+                        Value = "VGVzdA=="
                     }
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"
@@ -110,6 +111,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     isFeatured = $True
                     LargeIcon = @{
                         Type = "FakeStringValue"
+                        Value = "VGVzdA=="
                     }
                     Notes = "FakeStringValue"
                     Owner = "FakeStringValue"
@@ -145,6 +147,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     AppIdentifier = "FakeStringValue"
                     Publisher = "FakeStringValue"
+                    Description = "FakeStringValue"
+                    Developer = "FakeStringValue"
+                    InformationUrl = "FakeStringValue"
+                    IsFeatured = $True
+                    LargeIcon = ([MSFT_DeviceManagementMimeContent] @{
+                        Type = "FakeStringValue"
+                        Value = "VGVzdA=="
+                    })
+                    Notes = "FakeStringValue"
+                    Owner = "FakeStringValue"
+                    PrivacyInformationUrl = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
                     Ensure = "Present"
                     Credential = $Credential;
@@ -173,6 +186,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     AppIdentifier = "FakeStringValue"
                     Publisher = "FakeStringValue"
+                    Description = "FakeStringValue"
+                    Developer = "FakeStringValue"
+                    InformationUrl = "FakeStringValue"
+                    IsFeatured = $True
+                    LargeIcon = ([MSFT_DeviceManagementMimeContent] @{
+                        Type = "FakeStringValue"
+                        Value = "VGVzdA=="
+                    })
+                    Notes = "FakeStringValue"
+                    Owner = "FakeStringValue"
+                    PrivacyInformationUrl = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
                     Ensure = "Absent"
                     Credential = $Credential;
@@ -200,6 +224,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     AppIdentifier = "FakeStringValue"
                     Publisher = "FakeStringValue"
+                    Description = "FakeStringValue"
+                    Developer = "FakeStringValue"
+                    InformationUrl = "FakeStringValue"
+                    IsFeatured = $True
+                    LargeIcon = ([MSFT_DeviceManagementMimeContent] @{
+                        Type = "FakeStringValue"
+                        Value = "VGVzdA=="
+                    })
+                    Notes = "FakeStringValue"
+                    Owner = "FakeStringValue"
+                    PrivacyInformationUrl = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
                     Ensure = "Present"
                     Credential = $Credential;
@@ -218,6 +253,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     AppIdentifier = "FakeStringValue"
                     Publisher = "FakeStringValue_New" # Drift
+                    Description = "FakeStringValue"
+                    Developer = "FakeStringValue"
+                    InformationUrl = "FakeStringValue"
+                    IsFeatured = $True
+                    LargeIcon = ([MSFT_DeviceManagementMimeContent] @{
+                        Type = "FakeStringValue"
+                        Value = "VGVzdA=="
+                    })
+                    Notes = "FakeStringValue"
+                    Owner = "FakeStringValue"
+                    PrivacyInformationUrl = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
                     Ensure = "Present"
                     Credential = $Credential;

@@ -43,7 +43,10 @@ Configuration Example
             NetworkName                    = 'Warehouse Scanner Wi-Fi'
             PreSharedKey                   = '<wifi-pre-shared-key>'
             PreSharedKeyIsSet              = $true
-            ProxySetting                   = 'none'
+            ProxyExclusionList             = @('intranet.contoso.com', '*.contoso.local')
+            ProxyManualAddress             = 'proxy.contoso.com'
+            ProxyManualPort                = 8080
+            ProxySetting                   = 'manual'
             RoleScopeTagIds                = @('0')
             Ssid                           = 'Contoso-Scanners'
             WiFiSecurityType               = 'wpaPersonal'

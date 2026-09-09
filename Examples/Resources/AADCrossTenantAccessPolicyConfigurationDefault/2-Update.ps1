@@ -129,6 +129,17 @@ Configuration Example
                 IsMfaAccepted                       = $False
             }
             IsSingleInstance                   = "Yes";
+            M365CollaborationInbound           = MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting {
+                Users = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'allowed'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllUsers'
+                            TargetType = 'user'
+                        }
+                    )
+                }
+            }
             M365CollaborationOutbound          = MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting {
                 UsersAndGroups = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'

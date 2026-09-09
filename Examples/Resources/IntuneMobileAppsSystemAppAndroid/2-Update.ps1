@@ -30,6 +30,17 @@ Configuration Example
             Ensure                = "Present";
             AppIdentifier         = "com.microsoft.office";
             Publisher             = "Company"; # Updated Property
+            Description           = "Microsoft Office system app preinstalled on corporate-owned Android devices";
+            Developer             = "Microsoft Corporation";
+            InformationUrl        = "https://intranet.contoso.com/apps/office-android";
+            IsFeatured            = $true;
+            LargeIcon             = MSFT_DeviceManagementMimeContent{
+                Type  = "image/png"
+                Value = "<base64-encoded-app-icon>"
+            };
+            Notes                 = "Reviewed annually by the mobility team";
+            Owner                 = "Endpoint Management Team";
+            PrivacyInformationUrl = "https://www.contoso.com/privacy";
             RoleScopeTagIds       = @("0")
             Assignments           = @(
                 MSFT_DeviceManagementSystemMobileAppAssignment {

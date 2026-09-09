@@ -108,6 +108,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         }
                     }
                     BlockServiceProviderOutboundAccess = $false
+                    M365CollaborationInbound           = @{
+                        users = @{
+                            accessType = 'allowed'
+                            targets    = @(
+                                @{
+                                    target     = 'AllUsers'
+                                    targetType = 'user'
+                                }
+                            )
+                        }
+                    }
                     M365CollaborationOutbound          = @{
                         usersAndGroups = @{
                             accessType = 'allowed'
@@ -214,6 +225,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     })
                     BlockServiceProviderOutboundAccess = $false
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
                     M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
                         UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
@@ -301,6 +321,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         })
                     })
                     BlockServiceProviderOutboundAccess = $true #Drift
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked' #Drift
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
                     M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
                         UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked' #Drift
