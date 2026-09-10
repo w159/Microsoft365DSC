@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AllowedIosDeviceModels",
+      "reason": "Accepted",
+      "note": "Graph carries the models as one semicolon delimited string instead of a String array."
+    },
+    {
       "name": "DeployedAppCount",
       "reason": "ReadOnly",
       "note": "Computed from the apps the policy targets"

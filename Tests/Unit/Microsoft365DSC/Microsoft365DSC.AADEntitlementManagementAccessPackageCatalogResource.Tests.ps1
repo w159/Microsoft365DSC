@@ -170,6 +170,38 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
+            It 'Should return the catalog display name from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Get().ToHashtable()).CatalogId | Should -Be 'MyCatalog'
+            }
+
+            It 'Should return true from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
+        Context -Name 'The AADEntitlementManagementAccessPackageCatalogResource is referenced by catalog id and Values are already in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AddedBy             = 'myAdmin'
+                    AddedOn             = '25/10/2022 18:47:28'
+                    CatalogId           = 'f34c2d92-9e9d-4703-ba9b-955b6ac8dcb3'
+                    Description         = 'https://001q1.sharepoint.com/'
+                    DisplayName         = 'Communication site'
+                    Ensure              = 'Present'
+                    Id                  = '6a636d76-5025-44d4-9a80-78618f00c16d'
+                    IsPendingOnboarding = $false
+                    ManagedIdentity     = $false
+                    OriginId            = 'https://001q1.sharepoint.com/'
+                    OriginSystem        = 'SharePointOnline'
+                    ResourceType        = 'SharePoint Online Site'
+                    Url                 = 'https://001q1.sharepoint.com/'
+                    Credential          = $Credential
+                }
+            }
+
+            It 'Should return the catalog id from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Get().ToHashtable()).CatalogId | Should -Be 'f34c2d92-9e9d-4703-ba9b-955b6ac8dcb3'
+            }
 
             It 'Should return true from the Test method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Test() | Should -Be $true

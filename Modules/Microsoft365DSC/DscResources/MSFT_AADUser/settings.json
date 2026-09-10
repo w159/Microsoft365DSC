@@ -123,8 +123,8 @@
     },
     {
       "name": "LicenseAssignment",
-      "reason": "Deferred",
-      "note": "Carries the SKU part numbers from the licenseDetails batch request"
+      "reason": "Accepted",
+      "note": "SKU part numbers from the licenseDetails batch request."
     },
     {
       "name": "LicenseAssignmentStates",

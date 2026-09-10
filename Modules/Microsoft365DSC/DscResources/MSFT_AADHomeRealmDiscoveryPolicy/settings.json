@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Definition",
+      "reason": "Deferred",
+      "note": "Modelled as a complex type. DomainHintPolicy is dropped on write."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Entra ID sets the id at creation. The resource keys on DisplayName and re-queries it"

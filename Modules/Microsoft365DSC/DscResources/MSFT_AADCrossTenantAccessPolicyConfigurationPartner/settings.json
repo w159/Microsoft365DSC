@@ -17,12 +17,22 @@
       "note": "The service derives this from partner multitenant-organization membership and accepts no value."
     },
     {
-      "name": "PartnerTenantId",
+      "name": "M365Capabilities",
       "reason": "Deferred",
-      "note": "Renamed from tenantId to avoid clashing with the authentication TenantId parameter"
+      "note": "Written through its own endpoints, and abstract per subtype."
+    },
+    {
+      "name": "PartnerTenantId",
+      "reason": "Accepted",
+      "note": "Renamed from tenantId to avoid the authentication TenantId."
+    },
+    {
+      "name": "ServiceProviderConstraints",
+      "reason": "Deferred",
+      "note": "Absent from the property table and the JSON representation, and undocumented in the metadata."
     }
   ],
-  "description": "This resource configures an Azure AD Authentication Method Policy Configuration Partner.",
+  "description": "This resource configures an Azure AD Cross Tenant Access Policy Configuration Partner.",
   "roles": {
     "read": [
       "Global Reader"

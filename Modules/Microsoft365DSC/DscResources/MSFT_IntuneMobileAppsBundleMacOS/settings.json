@@ -26,8 +26,8 @@
     },
     {
       "name": "PackageFileType",
-      "reason": "Deferred",
-      "note": "The package file type. Used to differentiate between their types."
+      "reason": "Accepted",
+      "note": "Selects the Dmg or Pkg app type."
     },
     {
       "name": "PrimaryBundleId",

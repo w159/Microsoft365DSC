@@ -106,6 +106,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     StartDateTime   = '2020-06-09'
                     DueDateTime     = '2020-06-10'
                     Assignments     = @('john.smith@contoso.com')
+                    Description     = 'Contoso Task Description'
+                    Attachments     = [MSFT_PlannerTaskAttachment[]]@(
+                        [MSFT_PlannerTaskAttachment] @{
+                            Uri   = 'https://contoso.com/doc.docx'
+                            Alias = 'Contoso Document'
+                            Type  = 'Word'
+                        }
+                    )
                     Ensure          = 'Present'
                     Credential      = $Credential
                 }
@@ -115,7 +123,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgPlannerTaskDetail -MockWith {
-                    return $null
+                    return @{
+                        '@odata.etag' = 'W/"NewTaskDetails"'
+                    }
+                }
+
+                Mock -CommandName New-MgPlannerTask -MockWith {
+                    return @{
+                        Id = 'NewTask12345'
+                    }
+                }
+
+                Mock -CommandName Update-MgPlannerTaskDetail -MockWith {
                 }
             }
 
@@ -129,6 +148,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should create the Task in the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'PlannerTask' -Property $testParams).Set()
+
+                Should -Invoke -CommandName New-MgPlannerTask -Exactly 1 -ParameterFilter {
+                    -not $BodyParameter.ContainsKey('Details') -and -not $BodyParameter.ContainsKey('Ensure')
+                }
+            }
+
+            It 'Should write the attachments to the details of the new Task in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'PlannerTask' -Property $testParams).Set()
+
+                Should -Invoke -CommandName Update-MgPlannerTaskDetail -Exactly 1 -ParameterFilter {
+                    $PlannerTaskId -eq 'NewTask12345' -and
+                    $Headers.'If-Match' -eq 'W/"NewTaskDetails"' -and
+                    $BodyParameter.references.Keys -contains 'https://contoso.com/doc.docx' -and
+                    $BodyParameter.references.'https://contoso.com/doc.docx'.alias -eq 'Contoso Document' -and
+                    $BodyParameter.description -eq 'Contoso Task Description'
+                }
             }
         }
 
@@ -187,6 +222,43 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return true from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'PlannerTask' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
+        Context -Name 'Task exists on a plan that defines a custom category label' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    PlanId          = '1234567890'
+                    Title           = 'Contoso Task'
+                    Id              = '12345'
+                    Priority        = 5
+                    PreviewType     = 'automatic'
+                    Assignments     = @('john.smith@contoso.com')
+                    PercentComplete = 75
+                    Categories      = @('Urgent')
+                    StartDateTime   = '2020-06-09'
+                    DueDateTime     = '2020-06-10'
+                    BucketId        = 'Bucket12345'
+                    Ensure          = 'Present'
+                    Credential      = $Credential
+                }
+
+                Mock -CommandName Get-MgPlannerPlanDetail -MockWith {
+                    return @{
+                        Id                   = '1234567890'
+                        CategoryDescriptions = @{
+                            Category1 = 'Urgent'
+                        }
+                    }
+                }
+            }
+
+            It 'Should return the plan label from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'PlannerTask' -Property $testParams).Get().ToHashtable()).Categories | Should -Be 'Urgent'
+            }
+
+            It 'Should return true from the Test method' {
                 (New-M365DSCResourceInstance -ResourceName 'PlannerTask' -Property $testParams).Test() | Should -Be $true
             }
         }
@@ -358,6 +430,77 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should Reverse Engineer resource from the Export method' {
                 $result = Invoke-M365DSCResourceMethod -ResourceName 'PlannerTask' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context -Name 'ReverseDSC Tests across plans with different category labels' -Fixture {
+            BeforeAll {
+                $Global:CurrentModeIsExport = $true
+                $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
+                $testParams = @{
+                    Credential = $Credential
+                }
+
+                Mock -CommandName Get-MgGroup -MockWith {
+                    return @(
+                        @{
+                            DisplayName = 'Contoso Group'
+                            Id          = '12345-12345-12345-12345-12345'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgGroupPlannerPlan -MockWith {
+                    return @(
+                        @{
+                            Title = 'Contoso Plan One'
+                            Id    = 'PlanOne'
+                        },
+                        @{
+                            Title = 'Contoso Plan Two'
+                            Id    = 'PlanTwo'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgGroupPlannerPlanTask -MockWith {
+                    return @(
+                        @{
+                            Id     = "Task$PlannerPlanId"
+                            PlanId = $PlannerPlanId
+                            Title  = "Contoso Task on $PlannerPlanId"
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgPlannerTask -MockWith {
+                    return @{
+                        Id                = $PlannerTaskId
+                        Title             = 'Contoso Task'
+                        AppliedCategories = @{
+                            Category1 = $true
+                        }
+                    }
+                }
+
+                Mock -CommandName Get-MgPlannerPlanDetail -MockWith {
+                    $labelsByPlan = @{
+                        PlanOne = 'Urgent'
+                        PlanTwo = 'Blocked'
+                    }
+                    return @{
+                        Id                   = $PlannerPlanId
+                        CategoryDescriptions = @{
+                            Category1 = $labelsByPlan.$PlannerPlanId
+                        }
+                    }
+                }
+            }
+
+            It 'Should export the category label of the plan that owns each task' {
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'PlannerTask' -MethodName 'Export' -Parameters $testParams
+                $result | Should -Match 'Urgent'
+                $result | Should -Match 'Blocked'
             }
         }
     }

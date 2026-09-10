@@ -128,8 +128,8 @@
     },
     {
       "name": "ManagedBy",
-      "reason": "Deferred",
-      "note": "A custom property holding the group owners"
+      "reason": "Accepted",
+      "note": "Group owners, carried by user principal name."
     },
     {
       "name": "MemberOf",

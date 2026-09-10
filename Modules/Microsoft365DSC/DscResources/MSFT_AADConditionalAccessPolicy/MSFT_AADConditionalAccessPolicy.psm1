@@ -178,8 +178,8 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
     [System.Nullable[System.UInt32]] $SignInFrequencyValue
 
     [DscProperty()]
-    [System.ComponentModel.Description('Display name of the terms of use to assign.')]
-    [System.String] $TermsOfUse
+    [System.ComponentModel.Description('Display names of the terms of use to assign.')]
+    [System.String[]] $TermsOfUse
 
     [DscProperty()]
     [System.ComponentModel.Description('Custom Controls assigned to the grant property of this policy.')]
@@ -603,13 +603,21 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
                 [Array]$excludeGuestOrExternalUserTypesValue = ($Policy.Conditions.Users.ExcludeGuestsOrExternalUsers.GuestOrExternalUserTypes).Split(',')
             }
 
-            $termOfUseName = $null
+            $termsOfUseNames = @()
             if ($Policy.GrantControls.TermsOfUse)
             {
-                $termofUse = Get-MgBetaAgreement | Where-Object -FilterScript { $_.Id -eq $Policy.GrantControls.TermsOfUse }
-                if ($termOfUse)
+                $agreements = Get-MgBetaAgreement
+                foreach ($termsOfUseId in $Policy.GrantControls.TermsOfUse)
                 {
-                    $termOfUseName = $termOfUse.DisplayName
+                    $agreement = $agreements | Where-Object -FilterScript { $_.Id -eq $termsOfUseId }
+                    if ($null -eq $agreement)
+                    {
+                        Write-Warning -Message "Couldn't find Terms of Use '$termsOfUseId', that is defined in policy '$PolicyDisplayName'. Skipping terms of use."
+                    }
+                    else
+                    {
+                        $termsOfUseNames += $agreement.DisplayName
+                    }
                 }
             }
 
@@ -791,7 +799,7 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
                 #no translation needed, return empty string array if undefined
                 ServicePrincipalRiskLevels               = Get-M365DSCArrayFromProperty -PropertyValue $Policy.Conditions.ServicePrincipalRiskLevels -ElementType ([System.String])
                 #Standard part
-                TermsOfUse                               = $termOfUseName
+                TermsOfUse                               = [System.String[]]$termsOfUseNames
                 InsiderRiskLevels                        = $InsiderRiskLevelsValue
                 Ensure                                   = 'Present'
                 Credential                               = $this.Credential
@@ -1541,9 +1549,25 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
 
                 if ($currentParameters.ContainsKey('TermsOfUse'))
                 {
-                    Write-Verbose -Message "Getting Terms of Use {$($this.TermsOfUse)}"
-                    $TermsOfUseObj = Get-MgBetaAgreement | Where-Object -FilterScript { $_.DisplayName -eq $this.TermsOfUse }
-                    $GrantControls.Add('termsOfUse', @($TermsOfUseObj.Id))
+                    Write-Verbose -Message "Getting Terms of Use {$($this.TermsOfUse -join ', ')}"
+                    $agreements = Get-MgBetaAgreement
+                    $termsOfUseIds = @()
+                    foreach ($termsOfUseName in $this.TermsOfUse)
+                    {
+                        $termsOfUseObj = $agreements | Where-Object -FilterScript { $_.DisplayName -eq $termsOfUseName }
+                        if ($null -eq $termsOfUseObj)
+                        {
+                            Write-Warning -Message "Terms of Use '$termsOfUseName' not found for Conditional Access Policy '$($this.DisplayName)'."
+                        }
+                        else
+                        {
+                            $termsOfUseIds += $termsOfUseObj.Id
+                        }
+                    }
+                    if ($termsOfUseIds.Count -gt 0)
+                    {
+                        $GrantControls.Add('termsOfUse', $termsOfUseIds)
+                    }
                 }
 
                 #no translation or conversion needed

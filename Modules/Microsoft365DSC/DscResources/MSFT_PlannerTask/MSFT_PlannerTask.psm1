@@ -182,9 +182,15 @@ class PlannerTask : M365DSCResourceBase
             $categoriesValue = @()
             if ($null -ne $taskResponse.appliedCategories)
             {
+                $categoryLabelsKey = "AppliedCategories_$($this.PlanId)"
+                if (-not $this.ResourceCache.ContainsKey($categoryLabelsKey))
+                {
+                    $this.ResourceCache[$categoryLabelsKey] = (Get-MgPlannerPlanDetail -PlannerPlanId $this.PlanId).CategoryDescriptions
+                }
+
                 foreach ($category in $taskResponse.appliedCategories.Keys)
                 {
-                    $categoryValue = $this.ResourceCache['AppliedCategories'].$category
+                    $categoryValue = $this.ResourceCache[$categoryLabelsKey].$category
                     if ([String]::IsNullOrEmpty($categoryValue))
                     {
                         $categoryValue = $this.GetTaskColorNameByCategory($category)
@@ -404,8 +410,20 @@ class PlannerTask : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentValues.Ensure -eq 'Absent')
         {
             $setParams.Remove('Id') | Out-Null
+            $details = $setParams.Details
+            $setParams.Remove('Details') | Out-Null
+            $setParams.Remove('Ensure') | Out-Null
             Write-Verbose -Message "Planner Task {$($this.Title)} doesn't already exist. Creating it with`r`n:$(Convert-M365DscHashtableToString -Hashtable $setParams)"
             $newTask = New-MgPlannerTask -BodyParameter $setParams
+
+            $newTaskDetails = Get-MgPlannerTaskDetail -PlannerTaskId $newTask.Id
+            $Headers = @{}
+            $Headers.Add('If-Match', $newTaskDetails.'@odata.etag')
+            $details.Remove('id') | Out-Null
+            Write-Verbose -Message "Updating Task's details with:`r`n$(ConvertTo-Json $details)"
+            Update-MgPlannerTaskDetail -PlannerTaskId $newTask.Id `
+                -Headers $Headers `
+                -BodyParameter $details
         }
         elseif ($this.Ensure -eq 'Present' -and $currentValues.Ensure -eq 'Present')
         {
@@ -499,7 +517,6 @@ class PlannerTask : M365DSCResourceBase
                         Write-M365DSCHost -Message "        |---[$j/$($plans.Length)] $($plan.Title)"
 
                         [Array]$tasks = Get-MgGroupPlannerPlanTask -GroupId $group.Id -PlannerPlanId $plan.Id -ErrorAction 'SilentlyContinue'
-                        $this.ResourceCache['AppliedCategories'] = (Get-MgPlannerPlanDetail -PlannerPlanId $plan.Id).CategoryDescriptions
 
                         $k = 1
                         foreach ($task in $tasks)

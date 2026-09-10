@@ -33,8 +33,8 @@
     },
     {
       "name": "Attachments",
-      "reason": "Deferred",
-      "note": "Maps to the references collection on the Graph entity"
+      "reason": "Accepted",
+      "note": "Maps to the references collection on the task details."
     },
     {
       "name": "BucketTaskBoardFormat",
@@ -43,8 +43,8 @@
     },
     {
       "name": "Categories",
-      "reason": "Deferred",
-      "note": "Maps to the appliedCategories property"
+      "reason": "Accepted",
+      "note": "Maps to appliedCategories, carrying the plan labels."
     },
     {
       "name": "ChecklistItemCount",

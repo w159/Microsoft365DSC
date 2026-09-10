@@ -27,9 +27,9 @@
       "note": "Apple push service reports the upload status"
     },
     {
-      "name": "DataSharingConsetGranted",
-      "reason": "Deferred",
-      "note": "The value lives on the separate dataSharingConsent"
+      "name": "DataSharingConsentGranted",
+      "reason": "Accepted",
+      "note": "The consent lives on the separate dataSharingConsent action."
     },
     {
       "name": "ExpirationDateTime",

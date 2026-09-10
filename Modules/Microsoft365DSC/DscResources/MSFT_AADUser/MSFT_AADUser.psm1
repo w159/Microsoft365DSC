@@ -427,13 +427,10 @@ class AADUser : M365DSCResourceBase
 
                     foreach ($currentLicense in $user.LicenseAssignment)
                     {
-                        if ($this.LicenseAssignment -and -not $this.LicenseAssignment.Contains($currentLicense))
+                        if ($null -ne $this.LicenseAssignment -and -not $this.LicenseAssignment.Contains($currentLicense))
                         {
                             Write-Verbose -Message "Removing {$currentLicense} from user {$($this.UserPrincipalName)}"
-                            $license = @{
-                                skuId = ($SubscribedSku | Where-Object -Property SkuPartNumber -Value $currentLicense -EQ).SkuID
-                            }
-                            $licenses.removeLicenses += $license
+                            $licenses.removeLicenses += ($SubscribedSku | Where-Object -Property SkuPartNumber -Value $currentLicense -EQ).SkuID
                         }
                     }
                 }

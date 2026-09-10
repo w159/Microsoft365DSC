@@ -256,6 +256,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         SkuID         = '12345-12345-12345-12345-12345'
                     }
                 }
+
+                Mock -CommandName Set-MgUserLicense -MockWith {
+                }
             }
 
             It 'Should return present from the Get method' {
@@ -264,6 +267,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should remove the License Assignment in the Set Method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADUser' -Property $testParams).Set()
+                Should -Invoke -CommandName Set-MgUserLicense -Exactly 1 -ParameterFilter {
+                    $AddLicenses.Count -eq 0 -and $RemoveLicenses.Count -eq 1 -and $RemoveLicenses[0] -eq '12345-12345-12345-12345-12345'
+                }
             }
 
             It 'Should return false from the Test method' {

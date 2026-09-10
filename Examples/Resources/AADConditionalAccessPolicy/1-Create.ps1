@@ -68,6 +68,7 @@ Configuration Example
             SignInFrequencyType                      = "hours";
             SignInFrequencyValue                     = 1;
             State                                    = "disabled";
+            TermsOfUse                               = @("Contractor Data Handling Agreement", "Employee Acceptable Use Policy");
             ApplicationId                            = $ApplicationId
             TenantId                                 = $TenantId
             CertificateThumbprint                    = $CertificateThumbprint

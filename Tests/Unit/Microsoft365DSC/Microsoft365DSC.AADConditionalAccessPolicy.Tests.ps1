@@ -74,6 +74,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "Phishing-resistant MFA"
                 }
             }
+            Mock -CommandName Get-MgBetaAgreement -MockWith {
+                return @(
+                    @{
+                        Id          = '4a2f1c8b-1b59-4f0e-9d21-2f8e5c3d7a10'
+                        DisplayName = 'Contractor Data Handling Agreement'
+                    },
+                    @{
+                        Id          = 'b7c3e5d9-6f42-4a1b-8c07-19d4e2f6a5b3'
+                        DisplayName = 'Employee Acceptable Use Policy'
+                    }
+                )
+            }
             Mock -CommandName Get-MgServicePrincipal -ParameterFilter { $Filter -eq "AppId eq '00000012-0000-0000-c000-000000000000'" } -MockWith {
                 return @{
                     Id          = '00000012-0000-0000-c000-000000000000'
@@ -755,6 +767,157 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Set()
                 Should -Invoke -CommandName Get-MgDirectoryCustomSecurityAttributeDefinition -Exactly 1
                 Should -Invoke -CommandName Update-MgBetaIdentityConditionalAccessPolicy -Exactly 1
+            }
+        }
+
+        Context -Name 'Policy requires two terms of use' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName          = 'Allin'
+                    Ensure               = 'Present'
+                    Credential           = $Credscredential
+                    State                = 'disabled'
+                    IncludeApplications  = @('All')
+                    IncludeUsers         = 'All'
+                    GrantControlOperator = 'AND'
+                    BuiltInControls      = @('Mfa')
+                    TermsOfUse           = @('Contractor Data Handling Agreement', 'Employee Acceptable Use Policy')
+                }
+
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -MockWith {
+                    return @{
+                        Id              = 'bcc0cf19-ee89-46f0-8e12-4b89123ee6f9'
+                        DisplayName     = 'Allin'
+                        State           = 'disabled'
+                        Conditions      = @{
+                            Applications = @{
+                                IncludeApplications = @('All')
+                            }
+                            Users        = @{
+                                IncludeUsers = 'All'
+                            }
+                        }
+                        GrantControls   = @{
+                            Operator        = 'AND'
+                            BuiltInControls = @('Mfa')
+                            TermsOfUse      = @('4a2f1c8b-1b59-4f0e-9d21-2f8e5c3d7a10', 'b7c3e5d9-6f42-4a1b-8c07-19d4e2f6a5b3')
+                        }
+                        SessionControls = $null
+                    }
+                }
+            }
+
+            It 'Should resolve every terms of use id from the Get method' {
+                $result = (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Get().ToHashtable()
+                $result.TermsOfUse | Should -Be @('Contractor Data Handling Agreement', 'Employee Acceptable Use Policy')
+            }
+
+            It 'Should return true from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Test() | Should -Be $true
+            }
+
+            It 'Should send every terms of use id from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaIdentityConditionalAccessPolicy -Exactly 1 -ParameterFilter {
+                    $BodyParameter.grantControls.termsOfUse.Count -eq 2 -and
+                    $BodyParameter.grantControls.termsOfUse[0] -eq '4a2f1c8b-1b59-4f0e-9d21-2f8e5c3d7a10' -and
+                    $BodyParameter.grantControls.termsOfUse[1] -eq 'b7c3e5d9-6f42-4a1b-8c07-19d4e2f6a5b3'
+                }
+            }
+        }
+
+        Context -Name 'Policy requires no terms of use' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName          = 'Allin'
+                    Ensure               = 'Present'
+                    Credential           = $Credscredential
+                    State                = 'disabled'
+                    IncludeApplications  = @('All')
+                    IncludeUsers         = 'All'
+                    GrantControlOperator = 'AND'
+                    BuiltInControls      = @('Mfa')
+                }
+
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -MockWith {
+                    return @{
+                        Id              = 'bcc0cf19-ee89-46f0-8e12-4b89123ee6f9'
+                        DisplayName     = 'Allin'
+                        State           = 'disabled'
+                        Conditions      = @{
+                            Applications = @{
+                                IncludeApplications = @('All')
+                            }
+                            Users        = @{
+                                IncludeUsers = 'All'
+                            }
+                        }
+                        GrantControls   = @{
+                            Operator        = 'AND'
+                            BuiltInControls = @('Mfa')
+                        }
+                        SessionControls = $null
+                    }
+                }
+            }
+
+            It 'Should return an empty terms of use collection from the Get method' {
+                $result = (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Get().ToHashtable()
+                $result.TermsOfUse -is [System.String[]] | Should -BeTrue
+                $result.TermsOfUse | Should -BeNullOrEmpty
+                Should -Invoke -CommandName Get-MgBetaAgreement -Exactly 0
+            }
+
+            It 'Should return true from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
+        Context -Name 'Terms of use that the tenant does not hold' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName          = 'Allin'
+                    Ensure               = 'Present'
+                    Credential           = $Credscredential
+                    State                = 'disabled'
+                    IncludeApplications  = @('All')
+                    IncludeUsers         = 'All'
+                    GrantControlOperator = 'AND'
+                    BuiltInControls      = @('Mfa')
+                    TermsOfUse           = @('Vendor Confidentiality Agreement')
+                }
+
+                Mock -CommandName Get-MgBetaIdentityConditionalAccessPolicy -MockWith {
+                    return @{
+                        Id              = 'bcc0cf19-ee89-46f0-8e12-4b89123ee6f9'
+                        DisplayName     = 'Allin'
+                        State           = 'disabled'
+                        Conditions      = @{
+                            Applications = @{
+                                IncludeApplications = @('All')
+                            }
+                            Users        = @{
+                                IncludeUsers = 'All'
+                            }
+                        }
+                        GrantControls   = @{
+                            Operator        = 'AND'
+                            BuiltInControls = @('Mfa')
+                        }
+                        SessionControls = $null
+                    }
+                }
+            }
+
+            It 'Should return false from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Test() | Should -Be $false
+            }
+
+            It 'Should omit the terms of use grant control from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaIdentityConditionalAccessPolicy -Exactly 1 -ParameterFilter {
+                    -not $BodyParameter.grantControls.ContainsKey('termsOfUse')
+                }
             }
         }
 

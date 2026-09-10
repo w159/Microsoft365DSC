@@ -12,7 +12,7 @@ class AADEntitlementManagementAccessPackageCatalogResource : M365DSCResourceBase
     [System.String] $Id
 
     [DscProperty()]
-    [System.ComponentModel.Description('The unique ID of the access package catalog.')]
+    [System.ComponentModel.Description('The unique ID or the display name of the access package catalog.')]
     [System.String] $CatalogId
 
     [DscProperty()]
@@ -130,11 +130,6 @@ class AADEntitlementManagementAccessPackageCatalogResource : M365DSCResourceBase
                     $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -Filter "DisplayName eq '$($this.catalogId -replace "'", "''")'"
                     $resolvedCatalogId = $catalogInstance.Id
                     $CatalogIdValue = $catalogInstance.DisplayName
-                }
-                else
-                {
-                    $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -AccessPackageCatalogId $this.CatalogId -ErrorAction SilentlyContinue
-                    $catalogIdValue = $catalogInstance.DisplayName
                 }
 
                 $getValue = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResource `

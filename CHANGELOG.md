@@ -27,7 +27,11 @@
   * Fixed an issue where a comparison threw when the tenant returned no value for a
     collection property.
 * AADConditionalAccessPolicy
+  * [BREAKING CHANGE] Changed `TermsOfUse` to a collection, so a policy that requires
+    more than one agreement carries all of them.
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
+  * An agreement that cannot be found in the tenant is now reported with a warning and
+    left out of the policy.
 * AADCrossTenantAccessPolicyConfigurationDefault
   * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
@@ -64,6 +68,8 @@
 * AADEntitlementManagementAccessPackageCatalogResource
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
+  * Fixed an issue where naming the catalog by its identifier reported drift on every
+    run and never converged.
 * AADIdentityGovernanceLifecycleWorkflow
   * Added support for the `AdministrationScopeTargets` property.
 * AADIdentityGovernanceProgram
@@ -109,6 +115,8 @@
   * Added support for the `CompanyName`, `EmployeeId` and
     `OnPremisesExtensionAttributes` properties.
   * Updated the password generation routine to work with PowerShell 7.
+  * Fixed an issue where licenses were never removed from a user, including when
+    `LicenseAssignment` was emptied to strip every license.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.
@@ -141,6 +149,12 @@
 * IntuneAppControlForBusinessPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneAppControlForBusinessPolicyWindows10V2` instead.
+* IntuneAppleMDMPushNotificationCertificate
+  * [BREAKING CHANGE] Renamed the property `DataSharingConsetGranted` to
+    `DataSharingConsentGranted` to correct the spelling.
+  * Fixed an issue where `DataSharingConsentGranted` was ignored, granting the consent on
+    create whatever the configuration asked and never granting it on an existing
+    certificate.
 * IntuneApplicationControlPolicyWindows10
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDeviceConfigurationEndpointProtectionPolicyWindows10` instead.
@@ -426,6 +440,10 @@
     `Bucket` to `BucketId`, `Notes` to `Description` and `TaskId` to `Id` to
     match the names Microsoft Graph uses.
   * Added support for the `PreviewType` property.
+  * Fixed an issue where the attachments, checklist items, description and preview type
+    were dropped when a task was created rather than updated.
+  * Fixed an issue where a task on a plan with custom category labels always reported
+    drift, because the labels were read back as color names.
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
 * SPOAccessControlSettings

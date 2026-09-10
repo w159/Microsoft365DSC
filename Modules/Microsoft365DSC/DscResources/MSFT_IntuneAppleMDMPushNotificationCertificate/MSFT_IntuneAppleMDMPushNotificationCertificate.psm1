@@ -12,8 +12,8 @@ class IntuneAppleMDMPushNotificationCertificate : M365DSCResourceBase
     [System.String] $Certificate
 
     [DscProperty()]
-    [System.ComponentModel.Description('The boolean indicating DataSharing Conset agreement granted or not between Intune and Apple.')]
-    [System.Nullable[System.Boolean]] $DataSharingConsetGranted
+    [System.ComponentModel.Description('Indicates whether the data sharing consent between Intune and Apple is granted.')]
+    [System.Nullable[System.Boolean]] $DataSharingConsentGranted
 
     [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
@@ -86,6 +86,10 @@ class IntuneAppleMDMPushNotificationCertificate : M365DSCResourceBase
                 if ($null -eq $instance)
                 {
                     Write-Verbose -Message "No Intune Apple MDM Push Notification Certificate with Id {$($this.AppleIdentifier)}."
+
+                    $absentConsentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
+                    $nullResult.DataSharingConsentGranted = $absentConsentInstance.Granted
+
                     return $this.AsResult($nullResult)
                 }
             }
@@ -119,7 +123,7 @@ class IntuneAppleMDMPushNotificationCertificate : M365DSCResourceBase
 
             # Get the value of Data sharing consent between Intune and Apple. The id is hardcoded to "appleMDMPushCertificate".
             $consentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
-            $results.Add('DataSharingConsetGranted', $consentInstance.Granted)
+            $results.Add('DataSharingConsentGranted', $consentInstance.Granted)
 
             return $this.AsResult($results)
         }
@@ -147,24 +151,29 @@ class IntuneAppleMDMPushNotificationCertificate : M365DSCResourceBase
 
         $SetParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $SetParameters = Rename-M365DSCCimInstanceParameter -Properties $SetParameters
-        $SetParameters.Remove('DataSharingConsetGranted') | Out-Null
+        $SetParameters.Remove('DataSharingConsentGranted') | Out-Null
+
+        # Apple refuses the certificate until the data sharing consent is granted, and Intune offers no way to revoke it afterwards.
+        if ($this.Ensure -eq 'Present')
+        {
+            $consentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
+            $grantConsent = $this.DataSharingConsentGranted -eq $true -or
+                ($null -eq $this.DataSharingConsentGranted -and $currentInstance.Ensure -eq 'Absent')
+
+            if ($grantConsent -and $consentInstance.Granted -ne $true)
+            {
+                Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing' -Headers @{ 'Content-Type' = 'application/json' }
+            }
+            elseif ($this.DataSharingConsentGranted -eq $false -and $consentInstance.Granted -eq $true)
+            {
+                Write-M365DSCHost -Message 'The data sharing consent between Intune and Apple is already granted and cannot be revoked.'
+            }
+        }
 
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Apple Push Notification Certificate with Apple ID: '$($this.AppleIdentifier)'."
-
-            # Post data sharing consent as granted between Intune and Apple. NOTE: It's a one-way operation. Once agreed, it can't be revoked.
-            # so first check if it is $false, then make a post call to agree to the consent, this set the DataSharingConsetGranted to $true.
-            $consentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
-            if ($consentInstance.Granted -eq $False)
-            {
-                Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing' -Headers @{ 'Content-Type' = 'application/json' }
-            }
-            else
-            {
-                Write-M365DSCHost -Message "Data sharing consent is already granted, so it can't be revoked."
-            }
 
             # There is only PATCH request hence using Update cmdlet to post the certificate
             Update-MgBetaDeviceManagementApplePushNotificationCertificate -BodyParameter $SetParameters
@@ -244,7 +253,7 @@ class IntuneAppleMDMPushNotificationCertificate : M365DSCResourceBase
 
                 # Get the value of Data sharing consent between Intune and Apple. The id is hardcoded to "appleMDMPushCertificate".
                 $consentInstance = Get-MgBetaDeviceManagementDataSharingConsent -DataSharingConsentId 'appleMDMPushCertificate'
-                $Params.Add('DataSharingConsetGranted', $consentInstance.Granted)
+                $Params.Add('DataSharingConsentGranted', $consentInstance.Granted)
 
                 $this.ExportedInstance = $config
                 $Results = $this.GetForExport($Params)

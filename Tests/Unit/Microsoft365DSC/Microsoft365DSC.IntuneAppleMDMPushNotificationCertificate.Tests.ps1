@@ -60,6 +60,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Update-MgBetaDeviceManagementApplePushNotificationCertificate -MockWith {
             }
 
+            Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
+            }
+
             $Script:exportedInstance = $null
             $Script:ExportMode = $false
         }
@@ -71,7 +74,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AppleIdentifier         = "Apple ID";
                     Certificate             = "Test cert";
-                    DataSharingConsetGranted = $True;
+                    DataSharingConsentGranted = $True;
                     Ensure                  = 'Present';
                     Credential              = $Credential;
                 }
@@ -81,7 +84,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 Mock -CommandName Get-MgBetaDeviceManagementDataSharingConsent -MockWith {
-                    return $null
+                    return @{
+                        DataSharingConsentId = "appleMDMPushCertificate"
+                        Granted              = $false;
+                    }
                 }
             }
 
@@ -95,6 +101,78 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-MgBetaDeviceManagementApplePushNotificationCertificate -Exactly 1
             }
+            It '1.4 Should return the live data sharing consent value from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Get().ToHashtable()).DataSharingConsentGranted | Should -Be $false
+            }
+            It '1.5 Should grant the data sharing consent from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and $Uri -eq '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing'
+                }
+            }
+        }
+
+        Context -Name '1b. The instance should exist and the data sharing consent should NOT be granted' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AppleIdentifier          = "Apple ID";
+                    Certificate              = "Test cert";
+                    DataSharingConsentGranted = $false;
+                    Ensure                   = 'Present';
+                    Credential               = $Credential;
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementApplePushNotificationCertificate -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDataSharingConsent -MockWith {
+                    return @{
+                        DataSharingConsentId = "appleMDMPushCertificate"
+                        Granted              = $false;
+                    }
+                }
+            }
+
+            It '1b.1 Should create a new instance from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaDeviceManagementApplePushNotificationCertificate -Exactly 1
+            }
+            It '1b.2 Should not grant the data sharing consent from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 0 -ParameterFilter {
+                    $Uri -eq '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing'
+                }
+            }
+        }
+
+        Context -Name '1c. The instance should exist and the data sharing consent is not declared' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AppleIdentifier = "Apple ID";
+                    Certificate     = "Test cert";
+                    Ensure          = 'Present';
+                    Credential      = $Credential;
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementApplePushNotificationCertificate -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDataSharingConsent -MockWith {
+                    return @{
+                        DataSharingConsentId = "appleMDMPushCertificate"
+                        Granted              = $false;
+                    }
+                }
+            }
+
+            It '1c.1 Should grant the data sharing consent from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and $Uri -eq '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing'
+                }
+            }
         }
 
         Context -Name '2. The instance exists but it SHOULD NOT' -Fixture {
@@ -102,7 +180,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AppleIdentifier             = "Apple ID";
                     Certificate                 = "Test cert";
-                    DataSharingConsetGranted    = $True;
+                    DataSharingConsentGranted    = $True;
                     Ensure          = 'Absent'
                     Credential      = $Credential
                 }
@@ -125,7 +203,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AppleIdentifier             = "Apple ID";
                     Certificate                 = "Test cert";
-                    DataSharingConsetGranted    = $True;
+                    DataSharingConsentGranted    = $True;
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -141,7 +219,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $testParams = @{
                     AppleIdentifier          = "Apple ID";
                     Certificate              = "Patched cert"; # Updated property
-                    DataSharingConsetGranted = $True;
+                    DataSharingConsentGranted = $True;
                     Ensure                   = 'Present'
                     Credential               = $Credential
                 }
@@ -158,6 +236,61 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It '4.3 Should call the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-MgBetaDeviceManagementApplePushNotificationCertificate -Exactly 1
+            }
+        }
+
+        Context -Name '4b. The instance exists and the data sharing consent is NOT granted yet' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AppleIdentifier          = "Apple ID";
+                    Certificate              = "Test cert";
+                    DataSharingConsentGranted = $True;
+                    Ensure                   = 'Present'
+                    Credential               = $Credential
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDataSharingConsent -MockWith {
+                    return @{
+                        DataSharingConsentId = "appleMDMPushCertificate"
+                        Granted              = $false;
+                    }
+                }
+            }
+
+            It '4b.1 Should return false from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Test() | Should -Be $false
+            }
+
+            It '4b.2 Should grant the data sharing consent from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and $Uri -eq '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing'
+                }
+            }
+        }
+
+        Context -Name '4c. The instance exists and the data sharing consent is not declared' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AppleIdentifier = "Apple ID";
+                    Certificate     = "Patched cert";
+                    Ensure          = 'Present'
+                    Credential      = $Credential
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDataSharingConsent -MockWith {
+                    return @{
+                        DataSharingConsentId = "appleMDMPushCertificate"
+                        Granted              = $false;
+                    }
+                }
+            }
+
+            It '4c.1 Should not grant the data sharing consent from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppleMDMPushNotificationCertificate' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 0 -ParameterFilter {
+                    $Uri -eq '/beta/deviceManagement/dataSharingConsents/appleMDMPushCertificate/consentToDataSharing'
+                }
             }
         }
 

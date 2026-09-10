@@ -26,13 +26,13 @@ Configuration Example
     {
         IntuneAppleMDMPushNotificationCertificate "IntuneAppleMDMPushNotificationCertificate-Example"
         {
-            AppleIdentifier          = "mdm@contoso.com";
-            Certificate              = "<apple-push-certificate>"
-            DataSharingConsetGranted = $true;
-            Ensure                   = "Present";
-            ApplicationId            = $ApplicationId;
-            TenantId                 = $TenantId;
-            CertificateThumbprint    = $CertificateThumbprint;
+            AppleIdentifier           = "mdm@contoso.com";
+            Certificate               = "<apple-push-certificate>"
+            DataSharingConsentGranted = $true;
+            Ensure                    = "Present";
+            ApplicationId             = $ApplicationId;
+            TenantId                  = $TenantId;
+            CertificateThumbprint     = $CertificateThumbprint;
         }
     }
 }
