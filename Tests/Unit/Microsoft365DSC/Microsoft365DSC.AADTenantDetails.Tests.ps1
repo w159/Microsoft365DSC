@@ -37,9 +37,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaOrganization -MockWith {
                 return @{
+                    BusinessPhones                       = '+1 425 555 0100'
+                    City                                 = 'Redmond'
                     MarketingNotificationEmails          = 'exapmle@contoso.com'
+                    PostalCode                           = '98052'
+                    PreferredLanguage                    = 'en'
+                    PrivacyProfile                       = @{
+                        ContactEmail = 'privacy@contoso.com'
+                        StatementUrl = 'https://www.contoso.com/privacy'
+                    }
                     SecurityComplianceNotificationMails  = 'exapmle@contoso.com'
                     SecurityComplianceNotificationPhones = '+1123456789'
+                    State                                = 'WA'
+                    Street                               = '1 Contoso Plaza'
                     TechnicalNotificationMails           = 'exapmle@contoso.com'
                 }
             }
@@ -63,15 +73,31 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityComplianceNotificationPhones = '+1123456789'
                     SecurityComplianceNotificationMails  = 'exapmle@contoso.com'
                     MarketingNotificationEmails          = 'exapmle@contoso.com'
+                    BusinessPhones                       = '+1 425 555 0100'
+                    City                                 = 'Redmond'
+                    PostalCode                           = '98052'
+                    PreferredLanguage                    = 'en'
+                    PrivacyProfile                       = ([MSFT_privacyProfile] @{
+                        ContactEmail = 'privacy@contoso.com'
+                        StatementUrl = 'https://www.contoso.com/privacy'
+                    })
+                    State                                = 'WA'
+                    Street                               = '1 Contoso Plaza'
                     Credential                           = $Credential
                     IsSingleInstance                     = 'Yes'
                 }
 
                 Mock -CommandName Get-MgBetaOrganization -MockWith {
                     return @{
+                        BusinessPhones                       = ''
+                        City                                 = ''
                         MarketingNotificationEmails          = ''
+                        PostalCode                           = ''
+                        PreferredLanguage                    = ''
                         SecurityComplianceNotificationMails  = ''
                         SecurityComplianceNotificationPhones = ''
+                        State                                = ''
+                        Street                               = ''
                         TechnicalNotificationMails           = ''
                     }
                 }
@@ -88,6 +114,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TechnicalNotificationMails           = ''
                     SecurityComplianceNotificationPhones = ''
                     SecurityComplianceNotificationMails  = ''
+                    BusinessPhones                       = ''
+                    City                                 = ''
+                    PostalCode                           = ''
+                    PreferredLanguage                    = ''
+                    State                                = ''
+                    Street                               = ''
                     Credential                           = $Credential
                     IsSingleInstance                     = 'Yes'
                 }
@@ -104,6 +136,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityComplianceNotificationPhones = '+1123456789'
                     SecurityComplianceNotificationMails  = 'exapmle@contoso.com'
                     MarketingNotificationEmails          = 'exapmle@contoso.com'
+                    BusinessPhones                       = '+1 425 555 0100'
+                    City                                 = 'Redmond'
+                    PostalCode                           = '98052'
+                    PreferredLanguage                    = 'en'
+                    PrivacyProfile                       = ([MSFT_privacyProfile] @{
+                        ContactEmail = 'privacy@contoso.com'
+                        StatementUrl = 'https://www.contoso.com/privacy'
+                    })
+                    State                                = 'WA'
+                    Street                               = '1 Contoso Plaza'
                     Credential                           = $Credential
                     IsSingleInstance                     = 'Yes'
                 }
@@ -126,6 +168,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     SecurityComplianceNotificationPhones = '+1123456789'
                     SecurityComplianceNotificationMails  = 'exapmle@contoso.com'
                     MarketingNotificationEmails          = 'NOTexapmle@contoso.com' #Drift
+                    BusinessPhones                       = '+1 425 555 0199' #Drift
+                    City                                 = 'Bellevue' #Drift
+                    PostalCode                           = '98004' #Drift
+                    PreferredLanguage                    = 'fr' #Drift
+                    PrivacyProfile                       = ([MSFT_privacyProfile] @{
+                        ContactEmail = 'legal@contoso.com'
+                        StatementUrl = 'https://www.contoso.com/legal/privacy'
+                    }) #Drift
+                    State                                = 'OR' #Drift
+                    Street                               = '2 Contoso Plaza' #Drift
                     Credential                           = $Credential
                     IsSingleInstance                     = 'Yes'
                 }

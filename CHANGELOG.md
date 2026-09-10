@@ -33,7 +33,9 @@
   * Fixed an issue where the loop resolving user and group targets walked one entry past
     the end of the collection.
 * AADCrossTenantAccessPolicyConfigurationPartner
-  * Added support for the `TenantRestrictions` property.
+  * Added support for the `AppServiceConnectInbound`,
+    `BlockServiceProviderOutboundAccess`, `M365CollaborationInbound`, `TenantRestrictions`
+    and `M365CollaborationOutbound` properties.
 * AADCustomAuthenticationExtension
   * [BREAKING CHANGE] Renamed the property `ClientConfigurationTimeoutMilliseconds` to
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
@@ -82,6 +84,9 @@
     the `ClaimsPolicy`, `ErrorUrl`, `PublisherName` and `SamlMetadataUrl`
     properties are defined.
   * Added support for the `LoginUrl` property.
+* AADTenantDetails
+  * Added support for the `BusinessPhones`, `City`, `PostalCode`, `PreferredLanguage`,
+    `PrivacyProfile`, `State` and `Street` properties.
 * AADUser
   * [BREAKING CHANGE] Renamed properties `Fax` to `FaxNumber`, `FirstName` to
     `GivenName`, `LastName` to `Surname`, `Office` to `OfficeLocation` and `Title`
@@ -224,12 +229,13 @@
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
 * IntuneDeviceConfigurationPolicyAndroidDeviceOwner
   * Added support for the `AndroidDeviceOwnerDelegatedScopeAppSettings`,
-    `DeviceLocationMode`, `LocateDeviceLostModeEnabled`,
-    `LocateDeviceUserlessDisabled` and `ShareDeviceLocationDisabled`
-    properties.
+    `DeviceLocationMode`, `KioskModeManagedHomeScreenAppSettings`,
+    `LocateDeviceLostModeEnabled`, `LocateDeviceUserlessDisabled` and
+    `ShareDeviceLocationDisabled` properties.
 * IntuneDeviceConfigurationPolicyAndroidWorkProfile
-  * Added support for the `BlockUnifiedPasswordForWorkProfile`,
-    `AllowedGoogleAccountDomains` and `WorkProfileAccountUse` properties.
+  * Added support for the `AllowedGoogleAccountDomains`,
+    `BlockUnifiedPasswordForWorkProfile` and `WorkProfileAccountUse`
+    properties.
 * IntuneDeviceConfigurationPolicyMacOS
   * Added support for the `ActivationLockWhenSupervisedAllowed` property.
 * IntuneDeviceConfigurationPolicyWindows10
@@ -284,6 +290,9 @@
 * IntuneMobileAppsLobAppWindows10
   * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementAppxMobileAppAssignment`.
   * Added support for the `MinimumSupportedOperatingSystem` property.
+* IntuneMobileAppsManagedGooglePlayApp
+  * Added support for the `Description`, `Developer`, `InformationUrl`, `IsFeatured`,
+    `LargeIcon`, `Notes`, `Owner`, `PrivacyInformationUrl` and `Publisher` properties.
 * IntuneMobileAppsStoreApp
   * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
 * IntuneMobileAppsSystemAppAndroid
@@ -373,6 +382,7 @@
   * [BREAKING CHANGE] Renamed the properties `AssignedUsers` to `Assignments`,
     `Bucket` to `BucketId`, `Notes` to `Description` and `TaskId` to `Id` to
     match the names Microsoft Graph uses.
+  * Added support for the `PreviewType` property.
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
 * SPOAccessControlSettings

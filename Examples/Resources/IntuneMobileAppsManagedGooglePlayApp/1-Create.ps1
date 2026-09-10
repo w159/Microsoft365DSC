@@ -28,6 +28,18 @@ Configuration Example
         {
             DisplayName           = "Office";
             PackageId             = "com.microsoft.office";
+            Publisher             = "Microsoft";
+            Description           = "Managed Google Play release of Microsoft Office for corporate-owned Android devices";
+            Developer             = "Microsoft Corporation";
+            InformationUrl        = "https://intranet.contoso.com/apps/office-android";
+            IsFeatured            = $true;
+            LargeIcon             = MSFT_DeviceManagementMimeContent{
+                Type  = "image/png"
+                Value = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+            };
+            Notes                 = "Reviewed annually by the mobility team";
+            Owner                 = "Endpoint Management Team";
+            PrivacyInformationUrl = "https://www.contoso.com/privacy";
             RoleScopeTagIds       = @("0");
             Ensure                = "Present";
             Assignments           = @(

@@ -78,7 +78,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgPlannerTaskDetail -MockWith {
                 return @{
-                    CheckList = @()
+                    CheckList   = @()
+                    PreviewType = 'automatic'
                 }
             }
 
@@ -99,6 +100,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PlanId          = '1234567890'
                     Title           = 'Contoso Task'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     BucketId        = '1234'
                     PercentComplete = 75
                     StartDateTime   = '2020-06-09'
@@ -137,6 +139,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id              = '12345'
                     Title           = 'Contoso Task'
                     Priority        = 4
+                    PreviewType     = 'checklist'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')
@@ -167,6 +170,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Title           = 'Contoso Task'
                     Id              = '12345'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')
@@ -194,6 +198,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Title           = 'Contoso Task'
                     Id              = '12345'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')
@@ -221,6 +226,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Title           = 'Contoso Task'
                     BucketId        = 'Bucket12345'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')
@@ -256,6 +262,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Title           = 'Contoso Task'
                     BucketId        = 'TestBucket'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')
@@ -282,6 +289,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id              = '12345'
                     Title           = 'Contoso Task'
                     Priority        = 5
+                    PreviewType     = 'automatic'
                     Assignments     = @('john.smith@contoso.com')
                     PercentComplete = 75
                     Categories      = @('Pink')

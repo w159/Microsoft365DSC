@@ -26,12 +26,23 @@ Configuration Example
     {
         AADCrossTenantAccessPolicyConfigurationPartner "AADCrossTenantAccessPolicyConfigurationPartner-Example"
         {
-            PartnerTenantId              = "e7a80bcf-696e-40ca-8775-a7f85fbb3ebc"; # fabrikam.onmicrosoft.com
-            AutomaticUserConsentSettings = MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings {
+            PartnerTenantId                    = "e7a80bcf-696e-40ca-8775-a7f85fbb3ebc"; # fabrikam.onmicrosoft.com
+            AppServiceConnectInbound           = MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting{
+                Applications = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'allowed'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'Office365'
+                            TargetType = 'application'
+                        }
+                    )
+                }
+            };
+            AutomaticUserConsentSettings       = MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings {
                 InboundAllowed  = $False # Updated Property
                 OutboundAllowed = $True
             };
-            B2BCollaborationOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting {
+            B2BCollaborationOutbound           = MSFT_AADCrossTenantAccessPolicyB2BSetting {
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -51,7 +62,7 @@ Configuration Example
                     )
                 }
             };
-            B2BCollaborationInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting{
+            B2BCollaborationInbound            = MSFT_AADCrossTenantAccessPolicyB2BSetting{
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'allowed'
                     Targets    = @(
@@ -71,7 +82,7 @@ Configuration Example
                     )
                 }
             };
-            B2BDirectConnectInbound      = MSFT_AADCrossTenantAccessPolicyB2BSetting{
+            B2BDirectConnectInbound            = MSFT_AADCrossTenantAccessPolicyB2BSetting{
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -91,7 +102,7 @@ Configuration Example
                     )
                 }
             };
-            B2BDirectConnectOutbound     = MSFT_AADCrossTenantAccessPolicyB2BSetting{
+            B2BDirectConnectOutbound           = MSFT_AADCrossTenantAccessPolicyB2BSetting{
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -111,7 +122,8 @@ Configuration Example
                     )
                 }
             };
-            IdentitySynchronization      = MSFT_AADCrossTenantIdentitySyncPolicyPartnerInbound{
+            BlockServiceProviderOutboundAccess = $True;
+            IdentitySynchronization            = MSFT_AADCrossTenantIdentitySyncPolicyPartnerInbound{
                 GroupSyncInbound = MSFT_AADCrossTenantGroupSyncInbound{
                     IsSyncAllowed = $False
                 }
@@ -119,12 +131,34 @@ Configuration Example
                     IsSyncAllowed = $False
                 }
             };
-            InboundTrust                 = MSFT_AADCrossTenantAccessPolicyInboundTrust{
+            InboundTrust                       = MSFT_AADCrossTenantAccessPolicyInboundTrust{
                 IsCompliantDeviceAccepted           = $True
                 IsHybridAzureADJoinedDeviceAccepted = $True
                 IsMfaAccepted                       = $True
             };
-            TenantRestrictions           = MSFT_AADCrossTenantAccessPolicyTenantRestrictions{
+            M365CollaborationInbound           = MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting{
+                Users = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'allowed'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllUsers'
+                            TargetType = 'user'
+                        }
+                    )
+                }
+            };
+            M365CollaborationOutbound          = MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting{
+                UsersAndGroups = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
+                    AccessType = 'allowed'
+                    Targets    = @(
+                        MSFT_AADCrossTenantAccessPolicyTarget{
+                            Target     = 'AllUsers'
+                            TargetType = 'user'
+                        }
+                    )
+                }
+            };
+            TenantRestrictions                 = MSFT_AADCrossTenantAccessPolicyTenantRestrictions{
                 Applications   = MSFT_AADCrossTenantAccessPolicyTargetConfiguration{
                     AccessType = 'blocked'
                     Targets    = @(
@@ -144,10 +178,10 @@ Configuration Example
                     )
                 }
             };
-            Ensure                       = "Present";
-            ApplicationId                = $ApplicationId
-            TenantId                     = $TenantId
-            CertificateThumbprint        = $CertificateThumbprint
+            Ensure                             = "Present";
+            ApplicationId                      = $ApplicationId
+            TenantId                           = $TenantId
+            CertificateThumbprint              = $CertificateThumbprint
         }
     }
 }

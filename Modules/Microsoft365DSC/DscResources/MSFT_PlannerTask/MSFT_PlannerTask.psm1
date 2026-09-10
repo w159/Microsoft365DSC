@@ -64,6 +64,11 @@ class PlannerTask : M365DSCResourceBase
     [System.String] $ConversationThreadId
 
     [DscProperty()]
+    [System.ComponentModel.Description('This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist, description, reference.')]
+    [ValidateSet('automatic', 'noPreview', 'checklist', 'description', 'reference')]
+    [System.String] $PreviewType
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the Plan exists, absent ensures it is removed')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -243,6 +248,7 @@ class PlannerTask : M365DSCResourceBase
                     StartDateTime         = $StartDateTimeValue
                     DueDateTime           = $DueDateTimeValue
                     Description           = $NotesValue
+                    PreviewType           = $taskDetailsResponse.PreviewType
                     Ensure                = 'Present'
                     Credential            = $this.Credential
                     ApplicationId         = $this.ApplicationId
@@ -339,6 +345,15 @@ class PlannerTask : M365DSCResourceBase
         }
         $DetailsValue.references = $attachmentsValues
         $setParams.Remove('Attachments') | Out-Null
+        #endregion
+
+        #region PreviewType
+        # The plannerTask body does not accept previewType, only the details entity does.
+        if (-not [System.String]::IsNullOrEmpty($this.PreviewType))
+        {
+            $DetailsValue.Add('previewType', $this.PreviewType)
+        }
+        $setParams.Remove('PreviewType') | Out-Null
         #endregion
 
         $setParams.Remove('Description') | Out-Null

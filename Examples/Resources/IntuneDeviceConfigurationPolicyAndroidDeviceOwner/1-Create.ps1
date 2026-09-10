@@ -153,6 +153,20 @@ Configuration Example
                     )
                 }
             )
+            KioskModeManagedHomeScreenAppSettings                    = @(
+                MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp{
+                    package                   = "com.microsoft.emmx"
+                    className                 = "com.microsoft.emmx.Main"
+                    offlineAppAccessEnabled   = $true
+                    preSignInAppAccessEnabled = $false
+                }
+                MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp{
+                    package                   = "com.microsoft.teams"
+                    className                 = "com.microsoft.teams.Main"
+                    offlineAppAccessEnabled   = $false
+                    preSignInAppAccessEnabled = $true
+                }
+            )
             KioskModeManagedHomeScreenAutoSignout                    = $true
             KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = 60
             KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = 30

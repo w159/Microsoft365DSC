@@ -147,6 +147,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeIconSize                                        = 'notConfigured'
                     KioskModeLockHomeScreen                                  = $True
                     KioskModeManagedFolders                                  = @()
+                    KioskModeManagedHomeScreenAppSettings                    = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp] @{
+                            className                 = 'FakeStringValue'
+                            offlineAppAccessEnabled   = $True
+                            package                   = 'FakeStringValue'
+                            preSignInAppAccessEnabled = $True
+                        })
+                    )
                     KioskModeManagedHomeScreenAutoSignout                    = $True
                     KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = 25
                     KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = 25
@@ -362,6 +370,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeIconSize                                        = 'notConfigured'
                     KioskModeLockHomeScreen                                  = $True
                     KioskModeManagedFolders                                  = @()
+                    KioskModeManagedHomeScreenAppSettings                    = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp] @{
+                            className                 = 'FakeStringValue'
+                            offlineAppAccessEnabled   = $True
+                            package                   = 'FakeStringValue'
+                            preSignInAppAccessEnabled = $True
+                        })
+                    )
                     KioskModeManagedHomeScreenAutoSignout                    = $True
                     KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = 25
                     KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = 25
@@ -624,6 +640,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         WorkProfilePasswordMinimumNonLetterCharacters            = 25
                         WorkProfilePasswordSignInFailureCountBeforeFactoryReset  = 25
                         KioskModeManagedFolders                                  = @()
+                        KioskModeManagedHomeScreenAppSettings                    = @(
+                            @{
+                                className                 = 'FakeStringValue'
+                                offlineAppAccessEnabled   = $True
+                                package                   = 'FakeStringValue'
+                                preSignInAppAccessEnabled = $True
+                            }
+                        )
                         ShortHelpText                                            = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -776,6 +800,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeIconSize                                        = 'notConfigured'
                     KioskModeLockHomeScreen                                  = $True
                     KioskModeManagedFolders                                  = @()
+                    KioskModeManagedHomeScreenAppSettings                    = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp] @{
+                            className                 = 'FakeStringValue'
+                            offlineAppAccessEnabled   = $True
+                            package                   = 'FakeStringValue'
+                            preSignInAppAccessEnabled = $True
+                        })
+                    )
                     KioskModeManagedHomeScreenAutoSignout                    = $True
                     KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = 25
                     KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = 25
@@ -1038,6 +1070,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         WorkProfilePasswordMinimumNonLetterCharacters            = 25
                         WorkProfilePasswordSignInFailureCountBeforeFactoryReset  = 25
                         KioskModeManagedFolders                                  = @()
+                        KioskModeManagedHomeScreenAppSettings                    = @(
+                            @{
+                                className                 = 'FakeStringValue'
+                                offlineAppAccessEnabled   = $True
+                                package                   = 'FakeStringValue'
+                                preSignInAppAccessEnabled = $True
+                            }
+                        )
                         ShortHelpText                                            = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()
@@ -1180,6 +1220,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     KioskModeIconSize                                        = 'notConfigured'
                     KioskModeLockHomeScreen                                  = $True
                     KioskModeManagedFolders                                  = @()
+                    KioskModeManagedHomeScreenAppSettings                    = @(
+                            ([MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp] @{
+                            className                 = 'FakeStringValue'
+                            offlineAppAccessEnabled   = $True
+                            package                   = 'FakeStringValue'
+                            preSignInAppAccessEnabled = $True
+                        })
+                    )
                     KioskModeManagedHomeScreenAutoSignout                    = $True
                     KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = 25
                     KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = 25
@@ -1404,6 +1452,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         PasswordExpirationDays                                   = 7
                         WorkProfilePasswordMinimumNonLetterCharacters            = 7
                         KioskModeManagedFolders                                  = @()
+                        KioskModeManagedHomeScreenAppSettings                    = @(
+                            @{
+                                className                 = 'FakeStringValue'
+                                offlineAppAccessEnabled   = $False
+                                package                   = 'FakeStringValue'
+                                preSignInAppAccessEnabled = $True
+                            }
+                        )
                         KioskModeIconSize                                        = 'notConfigured'
                         AppsAutoUpdatePolicy                                     = 'notConfigured'
                         MicrosoftLauncherDockPresenceConfiguration               = 'notConfigured'
@@ -1597,6 +1653,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         WorkProfilePasswordMinimumNonLetterCharacters            = 25
                         WorkProfilePasswordSignInFailureCountBeforeFactoryReset  = 25
                         KioskModeManagedFolders                                  = @()
+                        KioskModeManagedHomeScreenAppSettings                    = @(
+                            @{
+                                className                 = 'FakeStringValue'
+                                offlineAppAccessEnabled   = $True
+                                package                   = 'FakeStringValue'
+                                preSignInAppAccessEnabled = $True
+                            }
+                        )
                         ShortHelpText                                            = @{
                             defaultMessage    = 'FakeStringValue'
                             localizedMessages = @()

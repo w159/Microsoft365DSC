@@ -14,7 +14,7 @@ class AADTokenIssuancePolicy : M365DSCResourceBase
     [System.String] $Id
 
     [DscProperty()]
-    [System.ComponentModel.Description('The token-issuance policy can only be applied to service principals and can''t be set globally for the organization.')]
+    [System.ComponentModel.Description('Ignore this property. The token-issuance policy can only be applied to service principals and can''t be set globally for the organization.')]
     [System.Nullable[System.Boolean]] $IsOrganizationDefault
 
     [DscProperty()]
@@ -180,6 +180,10 @@ class AADTokenIssuancePolicy : M365DSCResourceBase
         # UPDATE
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
+            # The service accepts IsOrganizationDefault on create but answers an update with
+            # Directory_ObjectNotFound, so the value is only ever sent on the create above.
+            $setParameters.Remove('IsOrganizationDefault') | Out-Null
+
             Write-Verbose -Message "Updating token issuance policy {$($this.DisplayName)} with:`r`n$(ConvertTo-Json $SetParameters -Depth 10)"
             $setParameters.Remove('Id') | Out-Null
             Update-MgBetaPolicyTokenIssuancePolicy -TokenIssuancePolicyId $currentInstance.Id -BodyParameter $SetParameters
@@ -195,6 +199,13 @@ class AADTokenIssuancePolicy : M365DSCResourceBase
     [bool] Test()
     {
         return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            ExcludedProperties = @('IsOrganizationDefault')
+        }
     }
 
     [string] Export()

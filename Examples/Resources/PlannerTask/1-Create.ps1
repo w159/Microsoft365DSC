@@ -51,6 +51,7 @@ Configuration Example
             DueDateTime           = "2026-01-30T17:00:00.0000000Z"
             PercentComplete       = 75
             Priority              = 7
+            PreviewType           = "checklist"
             Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId

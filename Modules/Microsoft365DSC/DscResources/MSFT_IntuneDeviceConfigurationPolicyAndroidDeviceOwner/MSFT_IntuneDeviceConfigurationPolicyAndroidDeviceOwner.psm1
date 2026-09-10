@@ -207,6 +207,10 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
     [MSFT_MicrosoftGraphandroiddeviceownerkioskmodemanagedfolder[]] $KioskModeManagedFolders
 
     [DscProperty()]
+    [System.ComponentModel.Description('Indicates the list of managed applications and associated settings, which will be applied when android device is run on kiosk mode with Managed Home Screen. This collection can contain a maximum of 500 elements.')]
+    [MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp[]] $KioskModeManagedHomeScreenAppSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('Whether or not to automatically sign-out of MHS and Shared device mode applications after inactive for Managed Home Screen.')]
     [System.Nullable[System.Boolean]] $KioskModeManagedHomeScreenAutoSignout
 
@@ -828,6 +832,21 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 }
             }
 
+            $complexKioskModeManagedHomeScreenAppSettings = @()
+            $currentValueArray = $getValue.kioskModeManagedHomeScreenAppSettings
+            if ($null -ne $currentValueArray -and $currentValueArray.Count -gt 0)
+            {
+                foreach ($currentValue in $currentValueArray)
+                {
+                    $currentHash = [ordered]@{}
+                    $currentHash.Add('ClassName', $currentValue.className)
+                    $currentHash.Add('OfflineAppAccessEnabled', $currentValue.offlineAppAccessEnabled)
+                    $currentHash.Add('Package', $currentValue.package)
+                    $currentHash.Add('PreSignInAppAccessEnabled', $currentValue.preSignInAppAccessEnabled)
+                    $complexKioskModeManagedHomeScreenAppSettings += $currentHash
+                }
+            }
+
             $complexPersonalProfilePersonalApplications = @()
             $currentValueArray = $getValue.personalProfilePersonalApplications
             if ($null -ne $currentValueArray -and $currentValueArray.Count -gt 0)
@@ -934,6 +953,7 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 KioskModeIconSize                                        = $getValue.kioskModeIconSize
                 KioskModeLockHomeScreen                                  = $getValue.kioskModeLockHomeScreen
                 KioskModeManagedFolders                                  = $getValue.kioskModeManagedFolders
+                KioskModeManagedHomeScreenAppSettings                    = $complexKioskModeManagedHomeScreenAppSettings
                 KioskModeManagedHomeScreenAutoSignout                    = $getValue.kioskModeManagedHomeScreenAutoSignout
                 KioskModeManagedHomeScreenInactiveSignOutDelayInSeconds  = $getValue.kioskModeManagedHomeScreenInactiveSignOutDelayInSeconds
                 KioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds = $getValue.kioskModeManagedHomeScreenInactiveSignOutNoticeInSeconds
@@ -1425,6 +1445,19 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                     }
                 }
 
+                if ($Results.KioskModeManagedHomeScreenAppSettings)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.KioskModeManagedHomeScreenAppSettings -CIMInstanceName MicrosoftGraphandroiddeviceownerkioskmodeapp
+                    if ($complexTypeStringResult)
+                    {
+                        $Results.KioskModeManagedHomeScreenAppSettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('KioskModeManagedHomeScreenAppSettings') | Out-Null
+                    }
+                }
+
                 if ($Results.PersonalProfilePersonalApplications)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString -ComplexObject $Results.PersonalProfilePersonalApplications -CIMInstanceName MicrosoftGraphapplistitem
@@ -1499,7 +1532,8 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                     -Credential $this.Credential `
                     -NoEscape @('AndroidDeviceOwnerDelegatedScopeAppSettings', 'AzureAdSharedDeviceDataClearApps', 'DetailedHelpText',
                     'DeviceOwnerLockScreenMessage', 'GlobalProxy', 'KioskModeAppPositions', 'KioskModeApps', 'KioskModeManagedFolders',
-                    'PersonalProfilePersonalApplications', 'ShortHelpText', 'SystemUpdateFreezePeriods', 'Assignments') `
+                    'KioskModeManagedHomeScreenAppSettings', 'PersonalProfilePersonalApplications', 'ShortHelpText',
+                    'SystemUpdateFreezePeriods', 'Assignments') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -1642,6 +1676,25 @@ class MSFT_MicrosoftGraphandroiddeviceownerkioskmodemanagedfolder
     [DscProperty()]
     [System.ComponentModel.Description('Item to be arranged.')]
     [MSFT_MicrosoftGraphandroiddeviceownerkioskmodefolderitem[]] $items
+}
+
+class MSFT_MicrosoftGraphandroiddeviceownerkioskmodeapp
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Class name of application')]
+    [System.String] $className
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether the application can be used when sign in fails due to network issues in Managed Home Screen. When TRUE, indicates the application can be used when sign in fails due to network issues in Managed Home Screen. When FALSE, indicates the application cannot be used when sign in fails due to network issues in Managed Home Screen. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $offlineAppAccessEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Package name of application')]
+    [System.String] $package
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether the application can be used prior to signing in to the Managed Home Screen. When TRUE, indicates the app can be used prior to sign in for Managed Home Screen. When FALSE, indicates the app cannot be used prior to sign in for Managed Home Screen. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $preSignInAppAccessEnabled
 }
 
 class MSFT_MicrosoftGraphandroiddeviceownersystemupdatefreezeperiod

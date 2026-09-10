@@ -14,6 +14,42 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
     [System.String] $PackageId
 
     [DscProperty()]
+    [System.ComponentModel.Description('The publisher of the app.')]
+    [System.String] $Publisher
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The description of the app.')]
+    [System.String] $Description
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The developer of the app.')]
+    [System.String] $Developer
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The more information Url.')]
+    [System.String] $InformationUrl
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The value indicating whether the app is marked as featured by the admin.')]
+    [System.Nullable[System.Boolean]] $IsFeatured
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The large icon, to be displayed in the app details and used for upload of the icon.')]
+    [MSFT_DeviceManagementMimeContent] $LargeIcon
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Notes for the app.')]
+    [System.String] $Notes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The owner of the app.')]
+    [System.String] $Owner
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The privacy statement Url.')]
+    [System.String] $PrivacyInformationUrl
+
+    [DscProperty()]
     [System.ComponentModel.Description('List of scope tag ids for this mobile app.')]
     [System.String[]] $RoleScopeTagIds
 
@@ -134,10 +170,29 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Mobile Apps Managed Google Play App with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
+            #region resource generator code
+            $complexLargeIcon = $null
+            if ($null -ne $getValue.LargeIcon.Value)
+            {
+                $complexLargeIcon = [ordered]@{}
+                $complexLargeIcon.Add('Type', $getValue.LargeIcon.Type)
+                $complexLargeIcon.Add('Value', $getValue.LargeIcon.Value)
+            }
+            #endregion
+
             $results = @{
                 #region resource generator code
                 DisplayName           = $getValue.DisplayName
                 PackageId             = $getValue.packageId
+                Publisher             = $getValue.Publisher
+                Description           = $getValue.Description
+                Developer             = $getValue.Developer
+                InformationUrl        = $getValue.InformationUrl
+                IsFeatured            = $getValue.IsFeatured
+                LargeIcon             = $complexLargeIcon
+                Notes                 = $getValue.Notes
+                Owner                 = $getValue.Owner
+                PrivacyInformationUrl = $getValue.PrivacyInformationUrl
                 RoleScopeTagIds       = $getValue.RoleScopeTagIds
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
@@ -194,12 +249,29 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating an Intune Mobile Apps Managed Google Play App with DisplayName {$($this.DisplayName)}"
 
+            $boundParameters.Remove('Assignments') | Out-Null
+
+            $createParameters = ([Hashtable]$boundParameters).Clone()
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('DisplayName') | Out-Null
+            $createParameters.Remove('PackageId') | Out-Null
+
             #region resource generator code
             Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp -ProductIds @("app:$($this.PackageId)")
             $policy = Get-MgBetaDeviceAppManagementMobileApp -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')" -ErrorAction Stop
 
             if ($policy.Id)
             {
+                # The store sync seeds the app, so any metadata the configuration carries has to be written afterwards.
+                if ($createParameters.Count -gt 0)
+                {
+                    $createParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreApp')
+                    Update-MgBetaDeviceAppManagementMobileApp `
+                        -MobileAppId $policy.Id `
+                        -BodyParameter $createParameters
+                }
+
                 $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
                 Update-DeviceAppManagementPolicyAssignment `
                     -AppManagementPolicyId $policy.Id `
@@ -218,7 +290,7 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
             $updateParameters.Remove('DisplayName') | Out-Null
             $updateParameters.Remove('PackageId') | Out-Null
 
-            $updateParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreApp')
             Update-MgBetaDeviceAppManagementMobileApp `
                 -MobileAppId $currentInstance.Id `
                 -BodyParameter $updateParameters
@@ -318,6 +390,21 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
                 $Results = $this.GetForExport($Params)
                 $rawResults = $Results.Clone()
 
+                if ($null -ne $Results.LargeIcon)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.LargeIcon `
+                        -CIMInstanceName 'DeviceManagementMimeContent'
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.LargeIcon = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('LargeIcon') | Out-Null
+                    }
+                }
+
                 if ($Results.Assignments)
                 {
                     $complexMapping = @(
@@ -346,7 +433,7 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments') `
+                    -NoEscape @('Assignments', 'LargeIcon') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -388,6 +475,17 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_DeviceManagementMimeContent
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the type of content mime.')]
+    [System.String] $Type
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The Base64 encoded string content.')]
+    [System.String] $Value
 }
 
 class MSFT_DeviceManagementMobileAppAssignment

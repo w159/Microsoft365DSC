@@ -1384,7 +1384,7 @@ class MSFT_AADDevicesFilter
 class MSFT_AADCrossTenantAccessPolicyTarget
 {
     [DscProperty(Mandatory)]
-    [System.ComponentModel.Description('The unique identifier of the user, group, or application; one of the following keywords: AllUsers, AllApplications; or for targets that are applications, you may use the reserved values AllMicrosoftApps and Office365.')]
+    [System.ComponentModel.Description('Defines the target for cross-tenant access policy settings and can have one of the following values: The unique identifier of the user, group, or application, AllUsers, AllApplications - Refers to any Microsoft cloud application, Office365 - Includes the applications mentioned as part of the Office 365 suite.')]
     [System.String] $Target
 
     [DscProperty(Mandatory)]

@@ -10,6 +10,10 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
     [System.String] $PartnerTenantId
 
     [DscProperty()]
+    [System.ComponentModel.Description('Defines your partner-specific configuration for inbound app service connect settings that control which applications can connect across tenant boundaries with the partner organization.')]
+    [MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting] $AppServiceConnectInbound
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines your partner-specific configuration for users from other organizations accessing your resources via Azure AD B2B collaboration.')]
     [MSFT_AADCrossTenantAccessPolicyB2BSetting] $B2BCollaborationInbound
 
@@ -26,6 +30,10 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
     [MSFT_AADCrossTenantAccessPolicyB2BSetting] $B2BDirectConnectOutbound
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether users can use granular delegated admin privileges (GDAP) to sign-in and access resources in other organizations. Default value is false.')]
+    [System.Nullable[System.Boolean]] $BlockServiceProviderOutboundAccess
+
+    [DscProperty()]
     [System.ComponentModel.Description('Determines the partner-specific configuration for accepting trust claims from other tenant invitations.')]
     [MSFT_AADCrossTenantAccessPolicyAutomaticUserConsentSettings] $AutomaticUserConsentSettings
 
@@ -36,6 +44,14 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Determines the partner-specific configuration for trusting other Conditional Access claims from external Azure AD organizations.')]
     [MSFT_AADCrossTenantAccessPolicyInboundTrust] $InboundTrust
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines your partner-specific configuration for inbound Microsoft 365 collaboration settings that determine which users from the partner organization can collaborate with your organization using Microsoft 365 apps.')]
+    [MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] $M365CollaborationInbound
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines your partner-specific configuration for outbound Microsoft 365 collaboration settings that determine which users in your organization can collaborate with the partner organization using Microsoft 365 apps.')]
+    [MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] $M365CollaborationOutbound
 
     [DscProperty()]
     [System.ComponentModel.Description('Defines the partner-specific tenant restrictions configuration for users in your organization who access an external organization on your network or devices.')]
@@ -139,6 +155,81 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                 $getValue = $this.ExportedInstance
             }
 
+            $AppServiceConnectInboundValue = $null
+            if ($null -ne $getValue.AppServiceConnectInbound.Applications.AccessType -or `
+                $null -ne $getValue.AppServiceConnectInbound.Applications.Targets)
+            {
+                $AppServiceConnectInboundValue = [ordered]@{
+                    Applications = [ordered]@{
+                        AccessType = $getValue.AppServiceConnectInbound.Applications.AccessType
+                        Targets    = Get-M365DSCArrayFromProperty -PropertyValue ($getValue.AppServiceConnectInbound.Applications.Targets | ForEach-Object {
+                                [ordered]@{
+                                    Target     = $_.target
+                                    TargetType = $_.targetType
+                                }
+                            }) -ElementType ([System.Object])
+                    }
+                }
+            }
+            $M365CollaborationInboundValue = $null
+            if ($null -ne $getValue.M365CollaborationInbound.Users.AccessType -or `
+                $null -ne $getValue.M365CollaborationInbound.Users.Targets)
+            {
+                $M365CollaborationInboundValue = [ordered]@{
+                    Users = [ordered]@{
+                        AccessType = $getValue.M365CollaborationInbound.Users.AccessType
+                        Targets    = Get-M365DSCArrayFromProperty -PropertyValue ($getValue.M365CollaborationInbound.Users.Targets | ForEach-Object {
+                                [ordered]@{
+                                    Target     = $_.target
+                                    TargetType = $_.targetType
+                                }
+                            }) -ElementType ([System.Object])
+                    }
+                }
+            }
+            $M365CollaborationOutboundValue = $null
+            if ($null -ne $getValue.M365CollaborationOutbound.UsersAndGroups.AccessType -or `
+                $null -ne $getValue.M365CollaborationOutbound.UsersAndGroups.Targets)
+            {
+                $M365CollaborationOutboundValue = [ordered]@{
+                    UsersAndGroups = [ordered]@{
+                        AccessType = $getValue.M365CollaborationOutbound.UsersAndGroups.AccessType
+                        Targets    = Get-M365DSCArrayFromProperty -PropertyValue ($getValue.M365CollaborationOutbound.UsersAndGroups.Targets | ForEach-Object {
+                                [ordered]@{
+                                    Target     = $_.target
+                                    TargetType = $_.targetType
+                                }
+                            }) -ElementType ([System.Object])
+                    }
+                }
+
+                # The outbound targets are local principals, so report them the way the configuration declares them.
+                $M365CollaborationOutboundValue.UsersAndGroups.Targets = Get-M365DSCArrayFromProperty -PropertyValue (
+                    $M365CollaborationOutboundValue.UsersAndGroups.Targets | ForEach-Object {
+                        $targetValue = $_.Target
+                        if ($_.TargetType -eq 'user' -and $_.Target -ne 'AllUsers')
+                        {
+                            $user = Get-MgUser -UserId $_.Target -ErrorAction SilentlyContinue
+                            if ($null -ne $user)
+                            {
+                                $targetValue = $user.UserPrincipalName
+                            }
+                        }
+                        elseif ($_.TargetType -eq 'group')
+                        {
+                            $group = Get-MgGroup -GroupId $_.Target -ErrorAction SilentlyContinue
+                            if ($null -ne $group)
+                            {
+                                $targetValue = $group.DisplayName
+                            }
+                        }
+                        [ordered]@{
+                            Target     = $targetValue
+                            TargetType = $_.TargetType
+                        }
+                    }) -ElementType ([System.Object])
+            }
+
             $B2BCollaborationInboundValue = $null
             if ($null -ne $getValue.B2BCollaborationInbound -and $this.TestB2BIsDefault($getValue.B2BCollaborationInbound) -eq $false)
             {
@@ -215,25 +306,29 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                 }
             }
             $results = @{
-                PartnerTenantId              = $getValue.TenantId
-                B2BCollaborationInbound      = $B2BCollaborationInboundValue
-                B2BCollaborationOutbound     = $B2BCollaborationOutboundValue
-                B2BDirectConnectInbound      = $B2BDirectConnectInboundValue
-                B2BDirectConnectOutbound     = $B2BDirectConnectOutboundValue
-                AutomaticUserConsentSettings = $AutomaticUserConsentSettingsValue
-                IdentitySynchronization      = $IdentitySynchronizationValue
-                InboundTrust                 = $InboundTrustValue
-                TenantRestrictions           = $TenantRestrictionsValue
-                Ensure                       = 'Present'
-                Credential                   = $this.Credential
-                ApplicationId                = $this.ApplicationId
-                TenantId                     = $this.TenantId
-                ApplicationSecret            = $this.ApplicationSecret
-                CertificateThumbprint        = $this.CertificateThumbprint
-                CertificatePath              = $this.CertificatePath
-                CertificatePassword          = $this.CertificatePassword
-                ManagedIdentity              = $this.ManagedIdentity.IsPresent
-                AccessTokens                 = $this.AccessTokens
+                PartnerTenantId                    = $getValue.TenantId
+                AppServiceConnectInbound           = $AppServiceConnectInboundValue
+                B2BCollaborationInbound            = $B2BCollaborationInboundValue
+                B2BCollaborationOutbound           = $B2BCollaborationOutboundValue
+                B2BDirectConnectInbound            = $B2BDirectConnectInboundValue
+                B2BDirectConnectOutbound           = $B2BDirectConnectOutboundValue
+                BlockServiceProviderOutboundAccess = $getValue.BlockServiceProviderOutboundAccess
+                AutomaticUserConsentSettings       = $AutomaticUserConsentSettingsValue
+                IdentitySynchronization            = $IdentitySynchronizationValue
+                InboundTrust                       = $InboundTrustValue
+                M365CollaborationInbound           = $M365CollaborationInboundValue
+                M365CollaborationOutbound          = $M365CollaborationOutboundValue
+                TenantRestrictions                 = $TenantRestrictionsValue
+                Ensure                             = 'Present'
+                Credential                         = $this.Credential
+                ApplicationId                      = $this.ApplicationId
+                TenantId                           = $this.TenantId
+                ApplicationSecret                  = $this.ApplicationSecret
+                CertificateThumbprint              = $this.CertificateThumbprint
+                CertificatePath                    = $this.CertificatePath
+                CertificatePassword                = $this.CertificatePassword
+                ManagedIdentity                    = $this.ManagedIdentity.IsPresent
+                AccessTokens                       = $this.AccessTokens
             }
 
             return $this.AsResult($results)
@@ -268,6 +363,10 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $OperationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($null -ne $OperationParams.AppServiceConnectInbound)
+        {
+            $OperationParams.AppServiceConnectInbound = $this.GetAppServiceConnectSetting($OperationParams.AppServiceConnectInbound)
+        }
         if ($null -ne $OperationParams.B2BCollaborationInbound)
         {
             $OperationParams.B2BCollaborationInbound = $this.GetB2BSetting($OperationParams.B2BCollaborationInbound)
@@ -295,6 +394,15 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
         if ($null -ne $OperationParams.InboundTrust)
         {
             $OperationParams.InboundTrust = $this.GetInboundTrust($OperationParams.InboundTrust)
+        }
+        if ($null -ne $OperationParams.M365CollaborationInbound)
+        {
+            $OperationParams.M365CollaborationInbound = $this.GetM365CollaborationInboundSetting($OperationParams.M365CollaborationInbound)
+        }
+        if ($null -ne $OperationParams.M365CollaborationOutbound)
+        {
+            $OperationParams.M365CollaborationOutbound = $this.GetM365CollaborationOutboundSetting($OperationParams.M365CollaborationOutbound)
+            $OperationParams.M365CollaborationOutbound = $this.UpdateSettingUserIdFromUPN($OperationParams.M365CollaborationOutbound)
         }
         if ($null -ne $OperationParams.TenantRestrictions)
         {
@@ -424,6 +532,40 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
 
                 $this.ExportedInstance = $entry
                 $Results = $this.GetForExport($Params)
+
+                if ($null -ne $Results.AppServiceConnectInbound)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'AppServiceConnectInbound'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyAppServiceConnectSetting'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Applications'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTargetConfiguration'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Targets'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTarget'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.AppServiceConnectInbound `
+                        -CIMInstanceName 'AADCrossTenantAccessPolicyAppServiceConnectSetting' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.AppServiceConnectInbound = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('AppServiceConnectInbound') | Out-Null
+                    }
+                }
 
                 if ($null -ne $Results.B2BCollaborationInbound)
                 {
@@ -647,6 +789,74 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                     }
                 }
 
+                if ($null -ne $Results.M365CollaborationInbound)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'M365CollaborationInbound'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyM365CollaborationInboundSetting'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Users'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTargetConfiguration'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Targets'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTarget'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.M365CollaborationInbound `
+                        -CIMInstanceName 'AADCrossTenantAccessPolicyM365CollaborationInboundSetting' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.M365CollaborationInbound = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('M365CollaborationInbound') | Out-Null
+                    }
+                }
+
+                if ($null -ne $Results.M365CollaborationOutbound)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'M365CollaborationOutbound'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyM365CollaborationOutboundSetting'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'UsersAndGroups'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTargetConfiguration'
+                            IsRequired      = $False
+                        },
+                        @{
+                            Name            = 'Targets'
+                            CimInstanceName = 'AADCrossTenantAccessPolicyTarget'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.M365CollaborationOutbound `
+                        -CIMInstanceName 'AADCrossTenantAccessPolicyM365CollaborationOutboundSetting' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.M365CollaborationOutbound = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('M365CollaborationOutbound') | Out-Null
+                    }
+                }
+
                 if ($null -ne $Results.TenantRestrictions)
                 {
                     $complexMapping = @(
@@ -691,7 +901,7 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'AutomaticUserConsentSettings', 'IdentitySynchronization', 'TenantRestrictions')
+                    -NoEscape @('AppServiceConnectInbound', 'B2BCollaborationInbound', 'B2BCollaborationOutbound', 'B2BDirectConnectInbound', 'B2BDirectConnectOutbound', 'InboundTrust', 'AutomaticUserConsentSettings', 'IdentitySynchronization', 'M365CollaborationInbound', 'M365CollaborationOutbound', 'TenantRestrictions')
 
                 # Fix OrganizationName variable in CIMInstance
                 $currentDSCBlock = $currentDSCBlock.Replace('@$OrganizationName''', "@' + `$OrganizationName")
@@ -803,6 +1013,47 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
         return $results
     }
 
+    hidden [System.Collections.Hashtable] GetAppServiceConnectSetting([System.Object] $Setting)
+    {
+        $body = $this.GetB2BSetting($Setting)
+        $body.Remove('usersAndGroups')
+
+        return $body
+    }
+
+    hidden [System.Collections.Hashtable] GetM365CollaborationInboundSetting([System.Object] $Setting)
+    {
+        # Targets are external principals that do not exist in the local tenant.
+        $users = @{
+            accessType = $Setting.Users.AccessType
+        }
+
+        if ($null -ne $Setting.Users.Targets)
+        {
+            $targets = @()
+            foreach ($currentTarget in $Setting.Users.Targets)
+            {
+                $targets += @{
+                    target     = $currentTarget.Target
+                    targetType = $currentTarget.TargetType
+                }
+            }
+            $users.Add('targets', $targets)
+        }
+
+        return @{
+            users = $users
+        }
+    }
+
+    hidden [System.Collections.Hashtable] GetM365CollaborationOutboundSetting([System.Object] $Setting)
+    {
+        $body = $this.GetB2BSetting($Setting)
+        $body.Remove('applications')
+
+        return $body
+    }
+
     hidden [System.Collections.Hashtable] GetIdentitySynchronization([System.Object] $Setting)
     {
         return @{
@@ -901,6 +1152,13 @@ class AADCrossTenantAccessPolicyConfigurationPartner : M365DSCResourceBase
     }
 }
 
+class MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines the target applications that are allowed for inbound app service connect across tenant boundaries.')]
+    [MSFT_AADCrossTenantAccessPolicyTargetConfiguration] $Applications
+}
+
 class MSFT_AADCrossTenantAccessPolicyB2BSetting
 {
     [DscProperty()]
@@ -947,6 +1205,20 @@ class MSFT_AADCrossTenantAccessPolicyInboundTrust
     [DscProperty()]
     [System.ComponentModel.Description('Specifies whether MFA from external Azure AD organizations is trusted.')]
     [System.Nullable[System.Boolean]] $IsMfaAccepted
+}
+
+class MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines the target users from other organizations who are allowed inbound Microsoft 365 collaboration with your organization.')]
+    [MSFT_AADCrossTenantAccessPolicyTargetConfiguration] $Users
+}
+
+class MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines the target users and groups in your organization who are allowed outbound Microsoft 365 collaboration with external organizations.')]
+    [MSFT_AADCrossTenantAccessPolicyTargetConfiguration] $UsersAndGroups
 }
 
 class MSFT_AADCrossTenantAccessPolicyTenantRestrictions
@@ -1005,7 +1277,7 @@ class MSFT_AADCrossTenantUserSyncInbound
 class MSFT_AADCrossTenantAccessPolicyTarget
 {
     [DscProperty(Mandatory)]
-    [System.ComponentModel.Description('The unique identifier of the user, group, or application; one of the following keywords: AllUsers and AllApplications; or for targets that are applications, you may use reserved values.')]
+    [System.ComponentModel.Description('Defines the target for cross-tenant access policy settings and can have one of the following values: The unique identifier of the user, group, or application, AllUsers, AllApplications - Refers to any Microsoft cloud application, Office365 - Includes the applications mentioned as part of the Office 365 suite.')]
     [System.String] $Target
 
     [DscProperty(Mandatory)]

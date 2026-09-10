@@ -35,8 +35,42 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
             Mock -CommandName Get-MgBetaPolicyCrossTenantAccessPolicyPartner -MockWith {
                 return @{
-                    TenantId = "12345-12345-12345-12345-12345"
-                    B2BCollaborationInbound = @{
+                    TenantId                           = "12345-12345-12345-12345-12345"
+                    appServiceConnectInbound           = @{
+                        applications = @{
+                            accessType = 'allowed'
+                            targets    = @(
+                                @{
+                                    target     = 'Office365'
+                                    targetType = 'application'
+                                }
+                            )
+                        }
+                    }
+                    blockServiceProviderOutboundAccess = $true
+                    m365CollaborationInbound           = @{
+                        users = @{
+                            accessType = 'allowed'
+                            targets    = @(
+                                @{
+                                    target     = 'AllUsers'
+                                    targetType = 'user'
+                                }
+                            )
+                        }
+                    }
+                    m365CollaborationOutbound          = @{
+                        usersAndGroups = @{
+                            accessType = 'allowed'
+                            targets    = @(
+                                @{
+                                    target     = 'AllUsers'
+                                    targetType = 'user'
+                                }
+                            )
+                        }
+                    }
+                    B2BCollaborationInbound            = @{
                         applications = @{
                             accessType = 'allowed'
                             targets    = @(
@@ -56,7 +90,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                         }
                     }
-                    B2BCollaborationOutbound = @{
+                    B2BCollaborationOutbound           = @{
                         Applications = @{
                             accessType = 'allowed'
                             targets    = @(
@@ -76,7 +110,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                         }
                     }
-                    B2BDirectConnectInbound  = @{
+                    B2BDirectConnectInbound            = @{
                         applications = @{
                             accessType = 'blocked'
                             targets    = @(
@@ -96,7 +130,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             )
                         }
                     }
-                    TenantRestrictions = @{
+                    TenantRestrictions                 = @{
                         applications = @{
                             accessType = 'blocked'
                             targets    = @(
@@ -146,7 +180,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist and it doesn't" -Fixture {
             BeforeAll {
                 $testParams = @{
-                B2BCollaborationOutbound = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationOutbound           = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -162,7 +196,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BDirectConnectInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BDirectConnectInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -178,7 +212,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BCollaborationInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -194,7 +228,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                    TenantRestrictions                 = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -210,9 +244,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    Credential               = $Credential;
-                    Ensure                   = "Present";
-                    PartnerTenantId          = "12345-12345-12345-12345-12345";
+                    AppServiceConnectInbound           = ([MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'Office365'
+                                    TargetType = 'application'
+                                }))
+                        })
+                    })
+                    BlockServiceProviderOutboundAccess = $true;
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    Credential                         = $Credential;
+                    Ensure                             = "Present";
+                    PartnerTenantId                    = "12345-12345-12345-12345-12345";
                 }
 
                 Mock -CommandName Get-MgBetaPolicyCrossTenantAccessPolicyPartner -MockWith {
@@ -234,7 +296,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The policy is already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                B2BCollaborationOutbound = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationOutbound           = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -250,7 +312,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BDirectConnectInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BDirectConnectInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -266,7 +328,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BCollaborationInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -282,7 +344,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                    TenantRestrictions                 = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -298,9 +360,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    Credential               = $Credential;
-                    Ensure                   = "Present";
-                    PartnerTenantId          = "12345-12345-12345-12345-12345";
+                    AppServiceConnectInbound           = ([MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'Office365'
+                                    TargetType = 'application'
+                                }))
+                        })
+                    })
+                    BlockServiceProviderOutboundAccess = $true;
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    Credential                         = $Credential;
+                    Ensure                             = "Present";
+                    PartnerTenantId                    = "12345-12345-12345-12345-12345";
                 }
             }
             It 'Should return Values from the Get method' {
@@ -314,7 +404,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The policy is NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                B2BCollaborationOutbound = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationOutbound           = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -330,7 +420,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BDirectConnectInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BDirectConnectInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -346,7 +436,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BCollaborationInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -362,7 +452,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                    TenantRestrictions                 = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -378,9 +468,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    Credential               = $Credential;
-                    Ensure                   = "Present";
-                    PartnerTenantId          = "12345-12345-12345-12345-12345";
+                    AppServiceConnectInbound           = ([MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'Office365'
+                                    TargetType = 'application'
+                                }))
+                        })
+                    })
+                    BlockServiceProviderOutboundAccess = $false;
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'blocked'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    Credential                         = $Credential;
+                    Ensure                             = "Present";
+                    PartnerTenantId                    = "12345-12345-12345-12345-12345";
                 }
             }
             It 'Should return Values from the Get method' {
@@ -398,7 +516,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                B2BCollaborationOutbound = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationOutbound           = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -414,7 +532,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BDirectConnectInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BDirectConnectInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -430,7 +548,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    B2BCollaborationInbound  = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
+                    B2BCollaborationInbound            = ([MSFT_AADCrossTenantAccessPolicyB2BSetting] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'allowed'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -446,7 +564,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    TenantRestrictions       = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
+                    TenantRestrictions                 = ([MSFT_AADCrossTenantAccessPolicyTenantRestrictions] @{
                         Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
                             AccessType = 'blocked'
                             Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
@@ -462,9 +580,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                                 }))
                         })
                     })
-                    Credential               = $Credential;
-                    Ensure                   = "Absent";
-                    PartnerTenantId          = "12345-12345-12345-12345-12345";
+                    AppServiceConnectInbound           = ([MSFT_AADCrossTenantAccessPolicyAppServiceConnectSetting] @{
+                        Applications = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'Office365'
+                                    TargetType = 'application'
+                                }))
+                        })
+                    })
+                    BlockServiceProviderOutboundAccess = $true;
+                    M365CollaborationInbound           = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationInboundSetting] @{
+                        Users = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    M365CollaborationOutbound          = ([MSFT_AADCrossTenantAccessPolicyM365CollaborationOutboundSetting] @{
+                        UsersAndGroups = ([MSFT_AADCrossTenantAccessPolicyTargetConfiguration] @{
+                            AccessType = 'allowed'
+                            Targets    = @(([MSFT_AADCrossTenantAccessPolicyTarget] @{
+                                    Target     = 'AllUsers'
+                                    TargetType = 'user'
+                                }))
+                        })
+                    })
+                    Credential                         = $Credential;
+                    Ensure                             = "Absent";
+                    PartnerTenantId                    = "12345-12345-12345-12345-12345";
                 }
             }
             It 'Should return Values from the Get method' {

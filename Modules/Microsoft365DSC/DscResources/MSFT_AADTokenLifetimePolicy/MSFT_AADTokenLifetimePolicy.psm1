@@ -6,7 +6,7 @@ using module ..\_Base\M365DSCResourceBase.psm1
 class AADTokenLifetimePolicy : M365DSCResourceBase
 {
     [DscProperty(Key)]
-    [System.ComponentModel.Description('DisplayName of the Policy')]
+    [System.ComponentModel.Description('Display name for this policy. Required.')]
     [System.String] $DisplayName
 
     [DscProperty()]
@@ -14,15 +14,15 @@ class AADTokenLifetimePolicy : M365DSCResourceBase
     [System.String] $Id
 
     [DscProperty()]
-    [System.ComponentModel.Description('Description of the Policy.')]
+    [System.ComponentModel.Description('Description for this policy. Required.')]
     [System.String] $Description
 
     [DscProperty()]
-    [System.ComponentModel.Description('Definition of the Policy.')]
+    [System.ComponentModel.Description('A string collection containing a JSON string that defines the rules and settings for a policy. The syntax for the definition differs for each derived policy type. Required.')]
     [System.String[]] $Definition
 
     [DscProperty()]
-    [System.ComponentModel.Description('IsOrganizationDefault of the Policy.')]
+    [System.ComponentModel.Description('If set to true, activates this policy. There can be many policies for the same policy type, but only one can be activated as the organization default. Optional, default value is false.')]
     [System.Nullable[System.Boolean]] $IsOrganizationDefault
 
     [DscProperty()]

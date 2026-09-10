@@ -129,10 +129,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    Definition            = @("{`"TokenResponseSigningPolicy`":`"ResponseOnly`",`"SamlTokenVersion`":`"1.1`",`"SigningAlgorithm`":`"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256`",`"Version`":`"1`",`"EmitSAMLNameFormat`":`"true`"}"); # Drift
+                    Definition            = @("{`"TokenResponseSigningPolicy`":`"TokenOnly`",`"SamlTokenVersion`":`"1.1`",`"SigningAlgorithm`":`"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256`",`"Version`":`"1`",`"EmitSAMLNameFormat`":`"true`"}"); # Drift
                     DisplayName           = "DemoPolicy";
                     Ensure                = "Present";
-                    IsOrganizationDefault = $True; # Drift
+                    IsOrganizationDefault = $True;
                     Credential            = $Credential;
                 }
             }
