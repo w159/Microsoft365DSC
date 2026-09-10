@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -59,7 +57,6 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
 
     [PPPowerAppPolicyUrlPatterns] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullResult = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -76,12 +73,9 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
             {
                 $null = $this.Connect('PowerPlatformREST')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -150,9 +144,7 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $body = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $PolicyNameValue = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -164,12 +156,9 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
 
         $null = $this.Connect('PowerPlatformREST')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $uri = 'https://' + (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').BapEndpoint + `
             '/providers/Microsoft.BusinessAppPlatform/scopes/admin/apiPolicies?api-version=2016-11-01'
@@ -226,7 +215,6 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
 
     [string] Export()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $k = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -237,12 +225,9 @@ class PPPowerAppPolicyUrlPatterns : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

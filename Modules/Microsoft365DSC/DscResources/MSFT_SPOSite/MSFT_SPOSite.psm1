@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -259,12 +257,9 @@ class SPOSite : M365DSCResourceBase
             {
                 $null = $this.Connect('PnP')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -398,7 +393,6 @@ class SPOSite : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $deny = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -408,12 +402,9 @@ class SPOSite : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration for site collection $($this.Url)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $CurrentValues = $this.Get().ToHashtable()
 

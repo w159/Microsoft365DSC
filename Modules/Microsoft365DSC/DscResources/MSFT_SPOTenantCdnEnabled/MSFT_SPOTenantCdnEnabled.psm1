@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -75,9 +73,7 @@ class SPOTenantCdnEnabled : M365DSCResourceBase
                 # Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
             }
 
             $cdnEnabled = Get-PnPTenantCdnEnabled -CdnType $this.CdnType `
@@ -117,12 +113,9 @@ class SPOTenantCdnEnabled : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting configuration of SPO Cdn enabled'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $null = $this.Get().ToHashtable()
         $currentParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()

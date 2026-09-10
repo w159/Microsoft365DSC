@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -231,7 +229,6 @@ class SCAutoSensitivityLabelRule : M365DSCResourceBase
 
     [SCAutoSensitivityLabelRule] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $HeaderMatchesPatternsValue = $null
         $anyOfRecipientAddressContainsWordsValue = $null
         $anyOfRecipientAddressMatchesPatternsValue = $null
@@ -252,9 +249,7 @@ class SCAutoSensitivityLabelRule : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -396,7 +391,6 @@ class SCAutoSensitivityLabelRule : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $HeaderMatchesPatternsValue = $null
         if ($this.RequiresPowerShellCore())
         {

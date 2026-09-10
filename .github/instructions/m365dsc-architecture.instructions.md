@@ -26,8 +26,6 @@ Run the build after changing anything under `DscResources/`, before importing th
 ## Class Pattern
 
 ```powershell
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]

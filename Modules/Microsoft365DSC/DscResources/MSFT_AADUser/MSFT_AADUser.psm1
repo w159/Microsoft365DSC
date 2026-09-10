@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -193,12 +191,9 @@ class AADUser : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = @{
                     UserPrincipalName     = $null
@@ -361,9 +356,7 @@ class AADUser : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $licenses = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $licenseDifferences = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -373,12 +366,9 @@ class AADUser : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of Office 365 User $($this.UserPrincipalName)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $user = $this.Get().ToHashtable()
         if ($user.Ensure -eq 'Present' -and $this.Ensure -eq 'Absent')
@@ -662,12 +652,9 @@ class AADUser : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {
@@ -990,8 +977,7 @@ class AADUser : M365DSCResourceBase
                 }
 
                 $odataKey = $attributeKey + '@odata.type'
-                # Declared up front: assigned conditionally below, which class methods reject.
-                $attributeValue = $null
+                        $attributeValue = $null
 
                 if ($null -ne $attribute.StringArrayValue)
                 {

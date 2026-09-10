@@ -25,8 +25,6 @@ The folder and module files need to be named based on the following pattern:
 The class inside the file carries the same name without the **MSFT_** prefix, and derives from **M365DSCResourceBase**:
 
 ```powershell
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]

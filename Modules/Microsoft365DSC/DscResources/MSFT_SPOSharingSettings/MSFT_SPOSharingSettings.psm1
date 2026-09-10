@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -252,11 +250,8 @@ class SPOSharingSettings : M365DSCResourceBase
 
     [SPOSharingSettings] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $blockDomains = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $SPOSharingSettings = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $allowDomains = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -273,12 +268,9 @@ class SPOSharingSettings : M365DSCResourceBase
             {
                 $null = $this.Connect('PnP')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
             }
 
             if ($null -eq $this.ResourceCache['SPOSharingSettings'])
@@ -431,11 +423,8 @@ class SPOSharingSettings : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $SignInAccelerationDomain = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $allowed = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $blocked = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -445,12 +434,9 @@ class SPOSharingSettings : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting configuration for SPO Sharing settings'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $null = $this.Connect('PnP')
 

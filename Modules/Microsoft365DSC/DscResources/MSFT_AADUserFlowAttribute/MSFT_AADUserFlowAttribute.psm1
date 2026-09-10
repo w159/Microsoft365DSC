@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -67,9 +65,7 @@ class AADUserFlowAttribute : M365DSCResourceBase
 
     [AADUserFlowAttribute] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $UserFlowAttribute = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullReturn = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -88,12 +84,9 @@ class AADUserFlowAttribute : M365DSCResourceBase
 
                 Write-Verbose -Message 'Getting configuration of user flow attribute'
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -144,7 +137,6 @@ class AADUserFlowAttribute : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $DisplayNameName = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -154,12 +146,9 @@ class AADUserFlowAttribute : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of user flow attribute: $($this.DisplayName)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentUserFlowAttribute = $this.Get().ToHashtable()
 
@@ -211,12 +200,9 @@ class AADUserFlowAttribute : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
         try
         {
             [array] $exportedInstances = Get-MgBetaIdentityUserFlowAttribute -Filter "userFlowAttributeType ne 'builtIn'" -Sort DisplayName -ErrorAction Stop

@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -78,12 +76,9 @@ class SCRecordReviewNotificationTemplateConfig : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $instance = Get-RecordReviewNotificationTemplateConfig -ErrorAction Stop
             }
@@ -134,12 +129,9 @@ class SCRecordReviewNotificationTemplateConfig : M365DSCResourceBase
 
         $null = $this.Connect('SecurityComplianceCenter')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         Write-Verbose -Message 'Updating the Records Management Disposition settings for Purview'
         $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -161,12 +153,9 @@ class SCRecordReviewNotificationTemplateConfig : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('SecurityComplianceCenter')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

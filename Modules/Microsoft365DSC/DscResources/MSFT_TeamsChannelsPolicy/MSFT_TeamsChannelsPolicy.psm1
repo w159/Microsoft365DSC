@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -79,9 +77,7 @@ class TeamsChannelsPolicy : M365DSCResourceBase
 
     [TeamsChannelsPolicy] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         ${$Identity} = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullReturn = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -98,12 +94,9 @@ class TeamsChannelsPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftTeams')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -161,12 +154,9 @@ class TeamsChannelsPolicy : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting Teams Channel Policy'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $CurrentValues = $this.Get().ToHashtable()
 
@@ -205,12 +195,9 @@ class TeamsChannelsPolicy : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftTeams')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

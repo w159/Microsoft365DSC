@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -90,12 +88,9 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -237,12 +232,9 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
 
         Write-Verbose -Message "Setting configuration of the Intune Account Protection Local User Group Membership Policy with Id {$($this.Identity)} and DisplayName {$($this.DisplayName)}"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -369,12 +361,9 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         $dscContent = [System.Text.StringBuilder]::new()
         $i = 1

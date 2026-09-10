@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -730,12 +728,9 @@ class EXOTransportRule : M365DSCResourceBase
             {
                 $null = $this.Connect('ExchangeOnline')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $TransportRule = Get-TransportRule -Identity $this.Name -ErrorAction SilentlyContinue
                 if ($null -eq $TransportRule)
@@ -965,12 +960,9 @@ class EXOTransportRule : M365DSCResourceBase
 
         $currentTransportRuleConfig = $this.Get().ToHashtable()
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $newTransportRuleParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $newTransportRuleParams.Remove('MakeDefault') | Out-Null
@@ -1130,12 +1122,9 @@ class EXOTransportRule : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('ExchangeOnline')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

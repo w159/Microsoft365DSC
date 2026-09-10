@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -835,11 +833,8 @@ class SCInsiderRiskPolicy : M365DSCResourceBase
 
     [SCInsiderRiskPolicy] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $EmailSignatureExclusionSettingsEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $UserAnalyticsSettingsEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $IRASettingsEnabledValue = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -856,12 +851,9 @@ class SCInsiderRiskPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -1262,7 +1254,6 @@ class SCInsiderRiskPolicy : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $sessionRecordingValues = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -1272,12 +1263,9 @@ class SCInsiderRiskPolicy : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of SCInsiderRiskPolicy for $($this.Name)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentInstance = $this.Get().ToHashtable()
         $indicatorsProperties = @(

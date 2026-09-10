@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -95,9 +93,7 @@ class M365DSCGraphAPIRuleEvaluation : M365DSCResourceBase
 
     [bool] Test()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $validInstances = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $invalidInstances = $null
         if ($this.RequiresPowerShellCore())
         {

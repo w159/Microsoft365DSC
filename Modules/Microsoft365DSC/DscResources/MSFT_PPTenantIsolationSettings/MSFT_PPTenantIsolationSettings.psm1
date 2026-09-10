@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -69,7 +67,6 @@ class PPTenantIsolationSettings : M365DSCResourceBase
 
     [PPTenantIsolationSettings] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $RequestBody = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -184,12 +181,9 @@ class PPTenantIsolationSettings : M365DSCResourceBase
             throw $message
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $null = $this.Connect('PowerPlatformREST')
 
@@ -405,12 +399,9 @@ class PPTenantIsolationSettings : M365DSCResourceBase
             return [string] $this.InvokeInPowerShellCore('Export')
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

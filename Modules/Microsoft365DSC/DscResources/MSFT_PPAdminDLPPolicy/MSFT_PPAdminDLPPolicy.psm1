@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -63,7 +61,6 @@ class PPAdminDLPPolicy : M365DSCResourceBase
 
     [PPAdminDLPPolicy] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullResult = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -80,12 +77,9 @@ class PPAdminDLPPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('PowerPlatformREST')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -140,13 +134,9 @@ class PPAdminDLPPolicy : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $type = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $hbiApis = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $newPolicy = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $lbiDescription = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -156,12 +146,9 @@ class PPAdminDLPPolicy : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of the Power Platform Admin DLP Policy with DisplayName {$($this.DisplayName)}"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentInstance = $this.Get().ToHashtable()
         $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -295,12 +282,9 @@ class PPAdminDLPPolicy : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('PowerPlatformREST')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

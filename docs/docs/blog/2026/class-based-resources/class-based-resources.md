@@ -339,8 +339,6 @@ The subtleties the AST approach caught earned it. My favorite: `Get-TargetResour
 One small quality-of-life decision I want to highlight for contributors. Every resource source file opens with:
 
 ```powershell
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 ```
 

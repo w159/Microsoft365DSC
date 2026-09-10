@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -83,9 +81,7 @@ class SCComplianceSearchAction : M365DSCResourceBase
 
     [SCComplianceSearchAction] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $IncludeCreds = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $ActionName = $null
         $enableDedupeValue = $null
         if ($this.RequiresPowerShellCore())
@@ -103,12 +99,9 @@ class SCComplianceSearchAction : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -226,7 +219,6 @@ class SCComplianceSearchAction : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $status = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -236,12 +228,9 @@ class SCComplianceSearchAction : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of SCComplianceSearchAction for $($this.SearchName) - $($this.Action)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $CurrentAction = $this.Get().ToHashtable()
 
@@ -345,12 +334,9 @@ class SCComplianceSearchAction : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('SecurityComplianceCenter')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

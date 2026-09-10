@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -78,7 +76,6 @@ class TeamsAIPolicy : M365DSCResourceBase
 
     [TeamsAIPolicy] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullResult = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -95,12 +92,9 @@ class TeamsAIPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftTeams')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -155,12 +149,9 @@ class TeamsAIPolicy : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration for Teams AI Policy $($this.Identity)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentInstance = $this.Get().ToHashtable()
 
@@ -197,12 +188,9 @@ class TeamsAIPolicy : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftTeams')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -192,12 +190,9 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullResult = $this.GetBoundParameters()
                 $nullResult.Ensure = 'Absent'
@@ -334,12 +329,9 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
 
         $null = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentDeviceAndroidPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -444,7 +436,6 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
 
     [string] Export()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $complexFunctions = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -453,12 +444,9 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

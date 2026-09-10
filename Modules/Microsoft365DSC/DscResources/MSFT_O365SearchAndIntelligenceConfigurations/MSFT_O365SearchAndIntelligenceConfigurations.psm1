@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -64,9 +62,7 @@ class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
 
     [O365SearchAndIntelligenceConfigurations] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $PersonInsights = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $PersonInsightsDisabledForGroupValue = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -165,12 +161,9 @@ class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting the O365 Search and Intelligence Configurations'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $ConnectionMode = $this.Connect('ExchangeOnline')
         $ConnectionMode = $this.Connect('MicrosoftGraph')
@@ -248,12 +241,9 @@ class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

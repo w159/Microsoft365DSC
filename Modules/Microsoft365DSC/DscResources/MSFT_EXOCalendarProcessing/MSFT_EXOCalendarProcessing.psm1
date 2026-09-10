@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -203,7 +201,6 @@ class EXOCalendarProcessing : M365DSCResourceBase
 
     [EXOCalendarProcessing] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $OrgWideAccount = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -368,12 +365,9 @@ class EXOCalendarProcessing : M365DSCResourceBase
             return
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentValues = $this.Get().ToHashtable()
 
@@ -422,12 +416,9 @@ class EXOCalendarProcessing : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('ExchangeOnline')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

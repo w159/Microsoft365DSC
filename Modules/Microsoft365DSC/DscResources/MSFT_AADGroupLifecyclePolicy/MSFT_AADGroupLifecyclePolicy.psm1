@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -66,7 +64,6 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
 
     [AADGroupLifecyclePolicy] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $Policy = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -143,12 +140,9 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting configuration of Azure AD Groups Lifecycle Policy'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $null = $this.Connect('MicrosoftGraph')
 
@@ -207,12 +201,9 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

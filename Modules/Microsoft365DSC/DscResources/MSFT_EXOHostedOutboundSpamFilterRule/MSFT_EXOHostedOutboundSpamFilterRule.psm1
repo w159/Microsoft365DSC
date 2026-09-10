@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -102,12 +100,9 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
             if (-not $this.ExportedInstance -or $this.ExportedInstance.Identity -ne $this.Identity)
             {
                 $null = $this.Connect('ExchangeOnline')
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -179,12 +174,9 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of HostedOutboundSpamFilterRule for $($this.Identity)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $CurrentValues = $this.Get().ToHashtable()
         $BoundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
@@ -250,12 +242,9 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
             return [string] $this.InvokeInPowerShellCore('Export')
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         $ConnectionMode = $this.Connect('ExchangeOnline')
 

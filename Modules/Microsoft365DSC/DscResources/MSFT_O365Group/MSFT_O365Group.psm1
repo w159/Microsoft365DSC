@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -71,9 +69,7 @@ class O365Group : M365DSCResourceBase
 
     [O365Group] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $nullReturn = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $newMemberList = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -90,12 +86,9 @@ class O365Group : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -198,12 +191,9 @@ class O365Group : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of Office 365 Group $($this.DisplayName)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentGroup = $this.Get().ToHashtable()
 
@@ -397,12 +387,9 @@ class O365Group : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -156,9 +154,7 @@ class SCAutoSensitivityLabelPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = @{
                     Ensure = 'Absent'

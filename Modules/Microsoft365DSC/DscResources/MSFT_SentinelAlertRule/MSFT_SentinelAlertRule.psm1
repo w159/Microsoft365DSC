@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -163,11 +161,8 @@ class SentinelAlertRule : M365DSCResourceBase
 
     [SentinelAlertRule] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $IncidentConfigurationValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $instance = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $AlertDetailsOverrideValue = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -348,7 +343,6 @@ class SentinelAlertRule : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $AlertSeverity = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -358,12 +352,9 @@ class SentinelAlertRule : M365DSCResourceBase
 
         Write-Verbose -Message "Setting Sentinel Alert Rule configuration for $($this.DisplayName)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentInstance = $this.Get().ToHashtable()
 
@@ -595,12 +586,9 @@ class SentinelAlertRule : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('Azure')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -71,12 +69,9 @@ class SPOTenantCdnPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('PNP')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
             }
 
             $Policies = Get-PnPTenantCdnPolicies -CdnType $this.CDNType -ErrorAction Stop
@@ -127,12 +122,9 @@ class SPOTenantCdnPolicy : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration for SPOTenantCdnPolicy {$($this.CDNType)}"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $curPolicies = $this.Get().ToHashtable()
 

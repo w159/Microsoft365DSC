@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -61,11 +59,8 @@ class SPOOrgAssetsLibrary : M365DSCResourceBase
 
     [SPOOrgAssetsLibrary] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $cdn = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $orgAsset = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $orgthumbnailUrl = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -92,12 +87,9 @@ class SPOOrgAssetsLibrary : M365DSCResourceBase
 
             if (-not $this.ExportedInstance -or $orgLibraryUrl -ne $this.LibraryUrl)
             {
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -183,12 +175,9 @@ class SPOOrgAssetsLibrary : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting configuration of SharePoint Org Site Assets'
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentOrgSiteAsset = $this.Get().ToHashtable()
         $currentParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -256,7 +245,6 @@ class SPOOrgAssetsLibrary : M365DSCResourceBase
 
     [string] Export()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $tenantName = $null
         if ($this.RequiresPowerShellCore())
         {

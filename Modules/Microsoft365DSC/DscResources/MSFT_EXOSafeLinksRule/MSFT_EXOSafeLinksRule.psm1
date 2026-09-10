@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -103,12 +101,9 @@ class EXOSafeLinksRule : M365DSCResourceBase
             {
                 $null = $this.Connect('ExchangeOnline')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -177,12 +172,9 @@ class EXOSafeLinksRule : M365DSCResourceBase
         }
 
         Write-Verbose -Message "Setting configuration of SafeLinksRule for $($this.Identity)"
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $null = $this.Connect('ExchangeOnline')
 
@@ -244,12 +236,9 @@ class EXOSafeLinksRule : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('ExchangeOnline')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         $dscContent = [System.Text.StringBuilder]::new()
 

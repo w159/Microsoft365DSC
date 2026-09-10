@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -311,43 +309,24 @@ class SCSensitivityLabel : M365DSCResourceBase
 
     [SCSensitivityLabel] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $localeSettingsValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupBlockAccess = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $EncryptionRightsDefinitionsValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupAllowFullAccess = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $contentExpiredOnDateValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $advancedSettingsValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $footerEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $offlineAccessDaysValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $encryptionEncryptOnlyValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $protectionTypeValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $headerEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupAllowLimitedAccess = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $encryptionEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $watermarkEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $encryptionDoNotForwardValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupAccessToGuestUsersValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupEnabledValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $encryptionPromptUserValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $siteAndGroupAllowEmailFromGuestUsers = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -364,12 +343,9 @@ class SCSensitivityLabel : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -764,7 +740,6 @@ class SCSensitivityLabel : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $desiredAutoLabelingSettings = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -774,12 +749,9 @@ class SCSensitivityLabel : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of Sensitivity label for $($this.Name)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $label = $this.Get().ToHashtable()
 
@@ -1078,12 +1050,9 @@ class SCSensitivityLabel : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('SecurityComplianceCenter')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

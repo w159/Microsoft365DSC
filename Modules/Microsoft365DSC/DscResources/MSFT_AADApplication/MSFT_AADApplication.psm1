@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -177,9 +175,7 @@ class AADApplication : M365DSCResourceBase
 
     [AADApplication] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $logoResponse = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $lifetimePolicy = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -196,12 +192,9 @@ class AADApplication : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -661,11 +654,8 @@ class AADApplication : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $tries = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $deletedApp = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $appEntity = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -675,12 +665,9 @@ class AADApplication : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of Azure AD Application '$($this.DisplayName)'"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         # Ensure we throw an error if PublicClient is set to $true and we're trying to also configure either RequiredResourceAccess
         # or IdentifierUris
@@ -1391,12 +1378,9 @@ class AADApplication : M365DSCResourceBase
             return [string] $this.InvokeInPowerShellCore('Export')
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 

@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -330,9 +328,7 @@ class SCDLPComplianceRule : M365DSCResourceBase
 
     [SCDLPComplianceRule] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $NotifyAllowOverrideValue = $null
-        # Declared up front: assigned conditionally below, which class methods reject.
         $setHeaders = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -349,12 +345,9 @@ class SCDLPComplianceRule : M365DSCResourceBase
             {
                 $null = $this.Connect('SecurityComplianceCenter')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
@@ -549,12 +542,9 @@ class SCDLPComplianceRule : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of DLPComplianceRule for $($this.Name)"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $CurrentRule = $this.Get().ToHashtable()
         $BoundParameters = $this.GetBoundParameters()
@@ -810,12 +800,9 @@ class SCDLPComplianceRule : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('SecurityComplianceCenter')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {

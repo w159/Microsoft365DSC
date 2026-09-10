@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -301,12 +299,9 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
             {
                 $null = $this.Connect('MicrosoftGraph')
 
-                #Ensure the proper dependencies are installed in the current environment.
                 Confirm-M365DSCDependencies
 
-                #region Telemetry
                 $this.AddTelemetry('Get')
-                #endregion
 
                 if ($this.GetBoundParameters().ContainsKey('Id') -and -not [System.String]::IsNullOrEmpty($this.Id))
                 {
@@ -822,7 +817,6 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $NewParameters = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -832,12 +826,9 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration of AzureAD Conditional Access Policy for {$($this.DisplayName)}"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentPolicy = $this.Get().ToHashtable()
         $currentParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
@@ -1728,12 +1719,9 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
             return [string] $this.InvokeInPowerShellCore('Export')
         }
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 

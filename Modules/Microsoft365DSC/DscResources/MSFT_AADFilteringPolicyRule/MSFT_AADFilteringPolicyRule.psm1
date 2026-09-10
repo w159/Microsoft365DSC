@@ -1,5 +1,3 @@
-# Editor-only: lets this file resolve [M365DSCResourceBase] when parsed on its own.
-# Build-Microsoft365DSC.ps1 emits only the class extent, so this line is not shipped.
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
@@ -71,7 +69,6 @@ class AADFilteringPolicyRule : M365DSCResourceBase
 
     [AADFilteringPolicyRule] Get()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $instance = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -165,7 +162,6 @@ class AADFilteringPolicyRule : M365DSCResourceBase
 
     [void] Set()
     {
-        # Declared up front: assigned conditionally below, which class methods reject.
         $instanceParams = $null
         if ($this.RequiresPowerShellCore())
         {
@@ -175,12 +171,9 @@ class AADFilteringPolicyRule : M365DSCResourceBase
 
         Write-Verbose -Message "Setting configuration for the Azure AD Filtering Policy Rule with Id {$($this.Id)} and Name {$($this.Name)}"
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Set')
-        #endregion
 
         $currentInstance = $this.Get().ToHashtable()
         $policyInstance = Get-MgBetaNetworkAccessFilteringPolicy | Where-Object -Filter { $_.Name -eq $this.Policy }
@@ -259,12 +252,9 @@ class AADFilteringPolicyRule : M365DSCResourceBase
 
         $ConnectionMode = $this.Connect('MicrosoftGraph')
 
-        #Ensure the proper dependencies are installed in the current environment.
         Confirm-M365DSCDependencies
 
-        #region Telemetry
         $this.AddTelemetry('Export')
-        #endregion
 
         try
         {
