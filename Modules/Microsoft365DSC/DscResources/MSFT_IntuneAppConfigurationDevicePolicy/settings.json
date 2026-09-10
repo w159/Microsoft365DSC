@@ -13,7 +13,13 @@
     "includeNavigationProperties": false,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "AppSupportsOemConfig",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    }
+  ],
   "description": "This resource configures an Intune App Configuration Device Policy.",
   "permissions": {
     "graph": {

@@ -12,14 +12,49 @@
   },
   "excludedProperties": [
     {
+      "name": "DependentAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "ExpirationDateTime",
       "reason": "ReadOnly",
       "note": "Derived from the supplied line of business app during upload."
     },
     {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "PublishingState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "Relationships",
       "reason": "NotConfigurable",
       "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
+      "name": "Size",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersededAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersedingAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "UploadState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Lob App for iOS.",

@@ -913,6 +913,47 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             $finding | Should -HaveCount 1
             $finding[0].code | Should -Be 'RES-PROP-READONLY'
         }
+
+        It 'drops a read-only property the global list names' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName     = New-TestProperty
+                            createdDateTime = New-TestProperty -Type 'Edm.DateTimeOffset' -IsReadOnly $true
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+            $exclusion = [PSCustomObject]@{
+                globalReadOnlyProperties = @([PSCustomObject]@{ name = 'CreatedDateTime'; reason = 'ReadOnly' })
+            }
+
+            @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -Exclusion $exclusion).Findings |
+                    Where-Object { $_.property -eq 'CreatedDateTime' }) | Should -HaveCount 0
+        }
+
+        It 'keeps a globally listed name on the report where the type leaves it writable' {
+            $snapshot = New-TestSnapshot -GraphType ([ordered]@{
+                    'beta:testPolicy' = [ordered]@{
+                        kind = 'EntityType'; baseType = 'entity'; isAbstract = $false
+                        properties = [ordered]@{
+                            displayName       = New-TestProperty
+                            supportsScopeTags = New-TestProperty -Type 'Edm.Boolean'
+                        }
+                    }
+                })
+            $keyword = New-TestKeyword -Property @{ DisplayName = @{ typeConstraint = 'String' } }
+            $exclusion = [PSCustomObject]@{
+                globalReadOnlyProperties = @([PSCustomObject]@{ name = 'SupportsScopeTags'; reason = 'ReadOnly' })
+            }
+
+            $finding = @((Invoke-TestCompare -Current $snapshot -Origin @(New-TestOrigin) -SchemaKeyword $keyword -Exclusion $exclusion).Findings |
+                    Where-Object { $_.property -eq 'SupportsScopeTags' })
+
+            $finding | Should -HaveCount 1
+            $finding[0].code | Should -Be 'RES-PROP-BACKLOG'
+        }
     }
 
     Describe 'Finding identity' {

@@ -15,6 +15,16 @@
   },
   "excludedProperties": [
     {
+      "name": "DependentAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "PackageFileType",
       "reason": "Deferred",
       "note": "The package file type. Used to differentiate between their types."
@@ -30,9 +40,34 @@
       "note": "Derived from the first IncludedApps entry at create time"
     },
     {
+      "name": "PublishingState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "Relationships",
       "reason": "NotConfigurable",
       "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
+      "name": "Size",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersededAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersedingAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "UploadState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Bundle types Dmg and Pkg for macOS.",

@@ -17,14 +17,49 @@
       "note": "AllowedArchitectures controls the architecture list. Value is always 'none'."
     },
     {
+      "name": "DependentAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "DetectionRules",
       "reason": "Accepted",
       "note": "Rules models detection and requirement rules in one collection keyed by RuleType"
     },
     {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "PublishingState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "RequirementRules",
       "reason": "Accepted",
       "note": "Rules models detection and requirement rules in one collection keyed by RuleType"
+    },
+    {
+      "name": "Size",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersededAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersedingAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "UploadState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Win32 App for Windows10.",

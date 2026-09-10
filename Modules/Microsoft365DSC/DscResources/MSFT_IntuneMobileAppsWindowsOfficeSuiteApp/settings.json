@@ -12,9 +12,19 @@
   },
   "excludedProperties": [
     {
+      "name": "DependentAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "Developer",
       "reason": "Accepted",
       "note": "Fixed to a predefined value."
+    },
+    {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     },
     {
       "name": "Owner",
@@ -27,9 +37,29 @@
       "note": "Fixed to a predefined value."
     },
     {
+      "name": "PublishingState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "Relationships",
       "reason": "NotConfigurable",
       "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
+      "name": "SupersededAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersedingAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "UploadState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "This resource configures an Intune mobile app.",

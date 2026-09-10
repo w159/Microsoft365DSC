@@ -408,7 +408,7 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
 
         It 'runs weekly and on demand, never nightly' {
             $script:workflow | Should -Match "cron: '0 0 \* \* 6'"
-            $script:workflow | Should -Match '(?m)^  workflow_dispatch:$'
+            $script:workflow | Should -Match '(?m)^  workflow_dispatch:\r?$'
         }
 
         It 'uploads the drift report as an artifact' {

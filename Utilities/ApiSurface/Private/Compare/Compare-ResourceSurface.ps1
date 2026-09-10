@@ -76,6 +76,8 @@ function Compare-ResourceSurface
         $serviceManagedProperty = Get-DefaultServiceManagedProperty
     }
 
+    $globalReadOnly = @(Get-SurfaceMember -Container $Exclusion -Name 'globalReadOnlyProperties')
+
     $backlogTotal = 0
 
     $gateByResource = @{}
@@ -274,6 +276,13 @@ function Compare-ResourceSurface
             {
                 $code = 'RES-PROP-MISSING'
                 $autoFixable = -not $vendorProperty.IsComplex
+            }
+
+            # Exclude a property if it is read-only and globally suppressed
+            if ($code -eq 'RES-PROP-READONLY' -and
+                (Resolve-FindingExclusion -Exclusion $globalReadOnly -Property $dscName).Suppressed)
+            {
+                continue
             }
 
             if ($code -eq 'RES-PROP-NESTED' -and -not $seenBefore -and [System.String]::IsNullOrEmpty($suppression.Severity))

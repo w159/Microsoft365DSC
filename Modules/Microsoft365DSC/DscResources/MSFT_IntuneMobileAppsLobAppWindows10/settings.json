@@ -27,6 +27,11 @@
       "note": "Populated from the supplied package file when the content is committed."
     },
     {
+      "name": "DependentAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "IdentityName",
       "reason": "Accepted",
       "note": "Set writes a fixed placeholder on create and Get never reads it back"
@@ -42,14 +47,44 @@
       "note": "Set writes a fixed placeholder on create only"
     },
     {
+      "name": "IsAssigned",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "IsBundle",
       "reason": "Accepted",
       "note": "Derived from the FileName extension and written only on create"
     },
     {
+      "name": "PublishingState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "Relationships",
       "reason": "NotConfigurable",
       "note": "Can only be configured for IntuneMobileAppsWin32AppWindows10."
+    },
+    {
+      "name": "Size",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersededAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "SupersedingAppCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "UploadState",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "This resource configures an Intune Mobile Apps Lob App for Windows10.",

@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "CertificateSerialNumber",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "CertificateUploadFailureReason",
       "reason": "ReadOnly",
       "note": "Apple push service reports the upload failure"

@@ -34,6 +34,78 @@
     "modifiedDateTime",
     "version"
   ],
+  "globalReadOnlyProperties": [
+    {
+      "name": "CommittedContentVersion",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "ContentVersions",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "CreatedBy",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "CreatedByAppId",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "CreatedDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "CreatedOnBehalfOf",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "DeletedDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "LastModifiedBy",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "LastModifiedByAppId",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "LastModifiedDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "ModifiedBy",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "ModifiedDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "SupportsScopeTags",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    },
+    {
+      "name": "Version",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on every type that carries it."
+    }
+  ],
   "nonVendorProperties": [
     "AccessTokens",
     "ApplicationId",

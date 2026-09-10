@@ -299,7 +299,7 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
         }
 
         It 'triggers on an issue comment carrying the command' {
-            $script:workflow | Should -Match '(?m)^  issue_comment:$'
+            $script:workflow | Should -Match '(?m)^  issue_comment:\r?$'
             $script:workflow | Should -Match "contains\(github\.event\.comment\.body, '/apply-drift'\)"
         }
 
@@ -314,9 +314,9 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
         }
 
         It 'can also be dispatched by hand' {
-            $script:workflow | Should -Match '(?m)^  workflow_dispatch:$'
-            $script:workflow | Should -Match '(?m)^      issue_number:$'
-            $script:workflow | Should -Match '(?m)^      finding_id:$'
+            $script:workflow | Should -Match '(?m)^  workflow_dispatch:\r?$'
+            $script:workflow | Should -Match '(?m)^      issue_number:\r?$'
+            $script:workflow | Should -Match '(?m)^      finding_id:\r?$'
             $script:workflow | Should -Match "github\.event_name == 'workflow_dispatch'"
         }
 

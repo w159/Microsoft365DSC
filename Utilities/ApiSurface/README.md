@@ -214,6 +214,21 @@ catalog resource is written by a template: pointing the property splicer at one 
 **`-AllowNonAutomatic` is local only.** It throws when `GITHUB_ACTIONS` is set, and the apply
 workflow never passes it.
 
+## Read-only properties
+
+`RES-PROP-READONLY` names a vendor property the CSDL annotates read only, or one the
+`serviceManagedProperties` list claims. Neither is a gap a resource can close, and 561 of them
+were on the report before they were written down.
+
+`globalReadOnlyProperties` in `exclusions.json` drops the names that behave the same way on
+every type carrying them: the timestamps and author stamps the directory writes, the content
+version pair the app upload sequence owns, and `SupportsScopeTags`, which Graph computes from
+whether the underlying configuration accepts a scope tag assignment. The suppression is gated on
+the code, so the same name still reads as a gap on a type whose CSDL leaves it writable.
+
+Everything else is a per-resource judgement and lands in that resource `excludedProperties` under
+reason `ReadOnly`, noted with the type it was read off.
+
 ## The GitHub path
 
 ### The weekly check

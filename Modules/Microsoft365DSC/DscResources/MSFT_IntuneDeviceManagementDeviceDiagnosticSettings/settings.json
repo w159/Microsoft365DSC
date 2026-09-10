@@ -32,6 +32,11 @@
       "note": "IntuneWindowsDataProcessingSettings owns this property and patches the same endpoint"
     },
     {
+      "name": "DeviceComplianceReportSummarizationDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "DeviceProtectionOverview",
       "reason": "ReadOnly",
       "note": "The service computes these device protection counts from reporting data"
@@ -50,6 +55,16 @@
       "name": "IntuneBrand",
       "reason": "OwnedByOtherResource",
       "note": "IntuneCustomizationBrandingProfile owns Company Portal branding"
+    },
+    {
+      "name": "LastReportAggregationDateTime",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
+      "name": "LegacyPcManangementEnabled",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     },
     {
       "name": "ManagedDeviceCleanupSettings",
@@ -75,6 +90,11 @@
       "name": "SubscriptionState",
       "reason": "ReadOnly",
       "note": "The service reports the state of the Intune subscription."
+    },
+    {
+      "name": "UnlicensedAdminstratorsEnabled",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     },
     {
       "name": "UserExperienceAnalyticsAnomalySeverityOverview",

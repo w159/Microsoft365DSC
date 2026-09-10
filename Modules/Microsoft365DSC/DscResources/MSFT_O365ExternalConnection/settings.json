@@ -20,6 +20,11 @@
       "name": "IngestedItemsCount",
       "reason": "ReadOnly",
       "note": "The service counts the items ingested into the connection"
+    },
+    {
+      "name": "State",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
     }
   ],
   "description": "Configures external connectors in Microsoft 365.",

@@ -22,6 +22,11 @@
       "note": "A flattened value from the settingInstance property."
     },
     {
+      "name": "ReferencingConfigurationPolicyCount",
+      "reason": "ReadOnly",
+      "note": "Graph marks the property as read only on this type."
+    },
+    {
       "name": "SettingDefinitionId",
       "reason": "Accepted",
       "note": "A flattened value from the settingInstance property."
