@@ -57,6 +57,7 @@ Configuration Example
             Description           = "Per-app VPN access to the corporate network from Android Enterprise work profiles";
             DisplayName           = "IntuneVPNConfigurationPolicyAndroidWork DisplayName";
             Ensure                = "Present";
+            lockdownExclusionList = @("com.android.vending", "com.microsoft.windowsintune.companyportal");
             proxyExclusionList    = @("intranet.contoso.com", "*.contoso.local");
             proxyServer           = @(
                 MSFT_MicrosoftvpnProxyServer{

@@ -85,6 +85,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ServicePrincipalNames     = 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     ServicePrincipalType      = 'Application'
                     Tags                      = '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    Description               = 'Submit, review and approve expense reports from any device.'
+                    NotificationEmailAddresses = 'certificatealerts@contoso.com'
+                    SamlSingleSignOnSettings  = [MSFT_MicrosoftGraphsamlSingleSignOnSettings] @{
+                        RelayState = '/expenses/dashboard'
+                    }
+                    TokenEncryptionKeyId      = 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     PasswordCredentials       = @(
                         [MSFT_MicrosoftGraphpasswordCredential] @{
                             KeyId = 'keyid'
@@ -144,6 +150,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ServicePrincipalNames     = 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     ServicePrincipalType      = 'Application'
                     Tags                      = '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    Description               = 'Submit, review and approve expense reports from any device.'
+                    NotificationEmailAddresses = 'certificatealerts@contoso.com'
+                    SamlSingleSignOnSettings  = [MSFT_MicrosoftGraphsamlSingleSignOnSettings] @{
+                        RelayState = '/expenses/dashboard'
+                    }
+                    TokenEncryptionKeyId      = 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     PasswordCredentials       = @(
                         [MSFT_MicrosoftGraphpasswordCredential] @{
                             KeyId = 'keyid'
@@ -189,6 +201,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalNames -Value 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalType -Value 'Application'
                     $AADSP | Add-Member -MemberType NoteProperty -Name Tags -Value '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name Description -Value 'Submit, review and approve expense reports from any device.'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name NotificationEmailAddresses -Value 'certificatealerts@contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name SamlSingleSignOnSettings -Value @{
+                        relayState = '/expenses/dashboard'
+                    }
+                    $AADSP | Add-Member -MemberType NoteProperty -Name TokenEncryptionKeyId -Value 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     $AADSP | Add-Member -MemberType NoteProperty -Name KeyCredentials -Value @{
                         Usage = 'Verify'
                         StartDateTime = '2024-09-25T09:13:11.0000000+00:00'
@@ -240,6 +258,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ServicePrincipalNames     = 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     ServicePrincipalType      = 'Application'
                     Tags                      = '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    Description               = 'Submit, review and approve expense reports from any device.'
+                    NotificationEmailAddresses = 'certificatealerts@contoso.com'
+                    SamlSingleSignOnSettings  = [MSFT_MicrosoftGraphsamlSingleSignOnSettings] @{
+                        RelayState = '/expenses/dashboard'
+                    }
+                    TokenEncryptionKeyId      = 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     PasswordCredentials       = @(
                         [MSFT_MicrosoftGraphpasswordCredential] @{
                             KeyId = 'keyid'
@@ -286,6 +310,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalNames -Value 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalType -Value 'Application'
                     $AADSP | Add-Member -MemberType NoteProperty -Name Tags -Value '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name Description -Value 'Submit, review and approve expense reports from any device.'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name NotificationEmailAddresses -Value 'certificatealerts@contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name SamlSingleSignOnSettings -Value @{
+                        relayState = '/expenses/dashboard'
+                    }
+                    $AADSP | Add-Member -MemberType NoteProperty -Name TokenEncryptionKeyId -Value 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     $AADSP | Add-Member -MemberType NoteProperty -Name KeyCredentials -Value @{
                         Usage = 'Verify'
                         StartDateTime = '2024-09-25T09:13:11.0000000+00:00'
@@ -333,6 +363,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ServicePrincipalNames     = 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     ServicePrincipalType      = 'Application'
                     Tags                      = '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    Description               = 'Submit, review and approve expense reports from any device.'
+                    NotificationEmailAddresses = 'certificatealerts@contoso.com'
+                    SamlSingleSignOnSettings  = [MSFT_MicrosoftGraphsamlSingleSignOnSettings] @{
+                        RelayState = '/expenses/dashboard'
+                    }
+                    TokenEncryptionKeyId      = 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     PasswordCredentials       = @()
                     KeyCredentials            = @()
                     Ensure                    = 'Present'
@@ -360,6 +396,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalNames -Value 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalType -Value 'Application'
                     $AADSP | Add-Member -MemberType NoteProperty -Name Tags -Value '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name Description -Value 'Submit, review and approve expense reports from any device.'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name NotificationEmailAddresses -Value 'certificatealerts@contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name SamlSingleSignOnSettings -Value @{
+                        relayState = '/expenses/dashboard'
+                    }
+                    $AADSP | Add-Member -MemberType NoteProperty -Name TokenEncryptionKeyId -Value 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     $AADSP | Add-Member -MemberType NoteProperty -Name KeyCredentials -Value @{
                         Usage = 'Verify'
                         StartDateTime = '2024-09-25T09:13:11.0000000+00:00'
@@ -424,6 +466,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalNames -Value 'b4f08c68-7276-4cb8-b9ae-e75fca5ff834', 'https://app1.contoso.com'
                     $AADSP | Add-Member -MemberType NoteProperty -Name ServicePrincipalType -Value 'Application'
                     $AADSP | Add-Member -MemberType NoteProperty -Name Tags -Value '{WindowsAzureActiveDirectoryIntegratedApp}'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name Description -Value 'Submit, review and approve expense reports from any device.'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name NotificationEmailAddresses -Value 'certificatealerts@contoso.com'
+                    $AADSP | Add-Member -MemberType NoteProperty -Name SamlSingleSignOnSettings -Value @{
+                        relayState = '/expenses/dashboard'
+                    }
+                    $AADSP | Add-Member -MemberType NoteProperty -Name TokenEncryptionKeyId -Value 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
                     $AADSP | Add-Member -MemberType NoteProperty -Name KeyCredentials -Value @{
                         Usage = 'Verify'
                         StartDateTime = '2024-09-25T09:13:11.0000000+00:00'

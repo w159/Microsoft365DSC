@@ -27,6 +27,11 @@
       "note": "AADServicePrincipal creates these through AppRoleAssignedTo with principal type Group"
     },
     {
+      "name": "AssignedLabels",
+      "reason": "OwnedByOtherResource",
+      "note": "EXOGroupSettings assigns the label through SensitivityLabelId. Graph refuses the property in an app only context."
+    },
+    {
       "name": "AssignedToRole",
       "reason": "Deferred",
       "note": "The resource creates and removes unifiedRoleAssignment objects for the group"
@@ -35,6 +40,16 @@
       "name": "AutoSubscribeNewMembers",
       "reason": "OwnedByOtherResource",
       "note": "EXOGroupSettings manages this flag under the same name"
+    },
+    {
+      "name": "Calendar",
+      "reason": "ReadOnly",
+      "note": "The service provisions the group calendar with the group mailbox and Graph marks the navigation read only."
+    },
+    {
+      "name": "CalendarView",
+      "reason": "ReadOnly",
+      "note": "A read only query surface over the events of the group calendar."
     },
     {
       "name": "Classification",
@@ -65,6 +80,11 @@
       "name": "ExpirationDateTime",
       "reason": "ReadOnly",
       "note": "The service computes it from the lifecycle policy and the last renewal"
+    },
+    {
+      "name": "Extensions",
+      "reason": "ReadOnly",
+      "note": "Open extension payloads belong to the applications that define them and are written through the extensions endpoint."
     },
     {
       "name": "GroupAsMembers",
@@ -165,6 +185,11 @@
       "name": "OrganizationId",
       "reason": "ReadOnly",
       "note": "The service stamps the owning tenant"
+    },
+    {
+      "name": "Photos",
+      "reason": "ReadOnly",
+      "note": "The collection holds the sizes the service renders from the uploaded profile photo."
     },
     {
       "name": "Planner",

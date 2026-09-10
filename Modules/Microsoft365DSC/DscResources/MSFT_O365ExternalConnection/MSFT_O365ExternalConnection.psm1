@@ -20,6 +20,15 @@ class O365ExternalConnection : M365DSCResourceBase
     [System.String[]] $AuthorizedAppIds
 
     [DscProperty()]
+    [System.ComponentModel.Description('Collects configurable settings related to activities involving connector content.')]
+    [MSFT_MicrosoftGraphActivitySettings] $ActivitySettings
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the domain category of the content associated with the external connection. This property helps Microsoft Graph optimize relevance, ranking, and semantic understanding by signaling the nature of the ingested content. For example, setting this value correctly ensures better query interpretation and improves Copilot experiences. The possible values are: uncategorized, knowledgeBase, wikis, fileRepository, qna, crm, dashboard, people, media, email, messaging, meetingTranscripts, taskManagement, learningManagement. Optional. The default value is uncategorized.')]
+    [ValidateSet('uncategorized', 'knowledgeBase', 'wikis', 'fileRepository', 'qna', 'crm', 'dashboard', 'people', 'media', 'email', 'messaging', 'meetingTranscripts', 'taskManagement', 'learningManagement')]
+    [System.String] $ContentCategory
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
     [ValidateSet('Absent', 'Present')]
     [System.String] $Ensure
@@ -124,11 +133,38 @@ class O365ExternalConnection : M365DSCResourceBase
                 }
             }
 
+            $activitySettingsValue = $null
+            if ($null -ne $instance.ActivitySettings)
+            {
+                $resolversValue = @()
+                foreach ($resolver in $instance.ActivitySettings.UrlToItemResolvers)
+                {
+                    $urlMatchInfoValue = $null
+                    if ($null -ne $resolver.UrlMatchInfo)
+                    {
+                        $urlMatchInfoValue = @{
+                            BaseUrls   = [System.String[]]$resolver.UrlMatchInfo.BaseUrls
+                            UrlPattern = $resolver.UrlMatchInfo.UrlPattern
+                        }
+                    }
+                    $resolversValue += @{
+                        ItemId       = $resolver.ItemId
+                        Priority     = $resolver.Priority
+                        UrlMatchInfo = $urlMatchInfoValue
+                    }
+                }
+                $activitySettingsValue = @{
+                    UrlToItemResolvers = [Array]$resolversValue
+                }
+            }
+
             $results = @{
                 Name                  = $instance.Name
                 Id                    = $instance.id
                 Description           = $instance.Description
                 AuthorizedAppIds      = $AuthorizedAppIdsValue
+                ActivitySettings      = $activitySettingsValue
+                ContentCategory       = $instance.ContentCategory
                 Ensure                = 'Present'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -194,6 +230,39 @@ class O365ExternalConnection : M365DSCResourceBase
             configuration = @{
                 AuthorizedAppIds = $AuthorizedAppIdsValue
             }
+        }
+        if (-not [System.String]::IsNullOrEmpty($this.ContentCategory))
+        {
+            $body.Add('contentCategory', $this.ContentCategory)
+        }
+        if ($null -ne $this.ActivitySettings)
+        {
+            $resolversBody = @()
+            foreach ($resolver in $this.ActivitySettings.UrlToItemResolvers)
+            {
+                # itemIdResolver is the only concrete type behind the abstract urlToItemResolverBase
+                # and Graph rejects an element that does not name it.
+                $resolverBody = @{
+                    '@odata.type' = '#microsoft.graph.externalConnectors.itemIdResolver'
+                    itemId        = $resolver.ItemId
+                }
+                if ($null -ne $resolver.Priority)
+                {
+                    $resolverBody.Add('priority', $resolver.Priority)
+                }
+                if ($null -ne $resolver.UrlMatchInfo)
+                {
+                    $resolverBody.Add('urlMatchInfo', @{
+                            '@odata.type' = 'microsoft.graph.externalConnectors.urlMatchInfo'
+                            baseUrls      = [System.Collections.ArrayList]@($resolver.UrlMatchInfo.BaseUrls)
+                            urlPattern    = $resolver.UrlMatchInfo.UrlPattern
+                        })
+                }
+                $resolversBody += $resolverBody
+            }
+            $body.Add('activitySettings', @{
+                    urlToItemResolvers = [System.Collections.ArrayList]$resolversBody
+                })
         }
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -272,11 +341,46 @@ class O365ExternalConnection : M365DSCResourceBase
                 $this.ExportedInstance = $config
                 $Results = $this.GetForExport($Params)
 
+                if ($null -ne $Results.ActivitySettings)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'ActivitySettings'
+                            CimInstanceName = 'MicrosoftGraphActivitySettings'
+                            IsRequired      = $False
+                        }
+                        @{
+                            Name            = 'UrlToItemResolvers'
+                            CimInstanceName = 'MicrosoftGraphUrlToItemResolverBase'
+                            IsRequired      = $False
+                        }
+                        @{
+                            Name            = 'UrlMatchInfo'
+                            CimInstanceName = 'MicrosoftGraphUrlMatchInfo'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.ActivitySettings `
+                        -CIMInstanceName 'MicrosoftGraphActivitySettings' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.ActivitySettings = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('ActivitySettings') | Out-Null
+                    }
+                }
+
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
-                    -Credential $this.Credential
+                    -Credential $this.Credential `
+                    -NoEscape @('ActivitySettings')
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
                     -FileName $Global:PartialExportFileName
@@ -309,4 +413,37 @@ class O365ExternalConnection : M365DSCResourceBase
 
         return $result
     }
+}
+
+class MSFT_MicrosoftGraphActivitySettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies configurations to identify an externalItem based on a shared URL.')]
+    [MSFT_MicrosoftGraphUrlToItemResolverBase[]] $UrlToItemResolvers
+}
+
+class MSFT_MicrosoftGraphUrlToItemResolverBase
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Pattern that specifies how to form the ID of the external item that the URL represents. The named groups from the regular expression in urlPattern within the urlMatchInfo can be referenced by inserting the group name inside curly brackets.')]
+    [System.String] $ItemId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The priority which defines the sequence in which the urlToItemResolverBase instances are evaluated.')]
+    [System.Nullable[System.Int32]] $Priority
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Configurations to match and resolve URL.')]
+    [MSFT_MicrosoftGraphUrlMatchInfo] $UrlMatchInfo
+}
+
+class MSFT_MicrosoftGraphUrlMatchInfo
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('A list of the URL prefixes that must match URLs to be processed by this URL-to-item-resolver.')]
+    [System.String[]] $BaseUrls
+
+    [DscProperty()]
+    [System.ComponentModel.Description('A regular expression that will be matched towards the URL that is processed by this URL-to-item-resolver. The ECMAScript specification for regular expressions (ECMA-262) is used for the evaluation. The named groups defined by the regular expression will be used later to extract values from the URL.')]
+    [System.String] $UrlPattern
 }

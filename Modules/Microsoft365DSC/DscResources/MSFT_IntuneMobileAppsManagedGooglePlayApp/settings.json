@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AppIdentifier",
+      "reason": "NotConfigurable",
+      "note": "The app is seeded by the Managed Google Play product approval and the service takes the identity on neither create nor update."
+    },
+    {
       "name": "AppStoreUrl",
       "reason": "ReadOnly",
       "note": "Graph marks the property as read only on this type."

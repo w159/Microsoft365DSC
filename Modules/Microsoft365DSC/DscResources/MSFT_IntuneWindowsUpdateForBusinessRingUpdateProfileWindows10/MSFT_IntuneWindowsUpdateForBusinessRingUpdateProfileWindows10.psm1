@@ -104,6 +104,10 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
     [System.Nullable[System.UInt32]] $FeatureUpdatesRollbackWindowInDays
 
     [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, rollback Feature Updates on the next device check in. When FALSE, do not rollback Feature Updates on the next device check in. Returned by default.Query parameters are not supported.')]
+    [System.Nullable[System.Boolean]] $FeatureUpdatesWillBeRolledBack
+
+    [DscProperty()]
     [System.ComponentModel.Description('The Installation Schedule. Possible values are: ActiveHoursStart, ActiveHoursEnd, ScheduledInstallDay, ScheduledInstallTime. Returned by default. Query parameters are not supported.')]
     [MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType] $InstallationSchedule
 
@@ -139,6 +143,10 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
     [DscProperty()]
     [System.ComponentModel.Description('The Quality Updates Rollback Start datetime. This value is the time when the admin rolled back the Quality update for the ring. Returned by default. Query parameters are not supported.')]
     [System.String] $QualityUpdatesRollbackStartDateTime
+
+    [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, rollback Quality Updates on the next device check in. When FALSE, do not rollback Quality Updates on the next device check in. Returned by default. Query parameters are not supported.')]
+    [System.Nullable[System.Boolean]] $QualityUpdatesWillBeRolledBack
 
     [DscProperty()]
     [System.ComponentModel.Description('Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes). Returned by default. Query parameters are not supported.')]
@@ -454,6 +462,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                 FeatureUpdatesPauseStartDate                = $dateFeatureUpdatesPauseStartDate
                 FeatureUpdatesRollbackStartDateTime         = $dateFeatureUpdatesRollbackStartDateTime
                 FeatureUpdatesRollbackWindowInDays          = $getValue.featureUpdatesRollbackWindowInDays
+                FeatureUpdatesWillBeRolledBack              = $getValue.featureUpdatesWillBeRolledBack
                 InstallationSchedule                        = $complexInstallationSchedule
                 MicrosoftUpdateServiceAllowed               = $getValue.microsoftUpdateServiceAllowed
                 PostponeRebootUntilAfterDeadline            = $getValue.postponeRebootUntilAfterDeadline
@@ -463,6 +472,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                 QualityUpdatesPauseExpiryDateTime           = $dateQualityUpdatesPauseExpiryDateTime
                 QualityUpdatesPauseStartDate                = $dateQualityUpdatesPauseStartDate
                 QualityUpdatesRollbackStartDateTime         = $dateQualityUpdatesRollbackStartDateTime
+                QualityUpdatesWillBeRolledBack              = $getValue.qualityUpdatesWillBeRolledBack
                 ScheduleImminentRestartWarningInMinutes     = $getValue.scheduleImminentRestartWarningInMinutes
                 ScheduleRestartWarningInHours               = $getValue.scheduleRestartWarningInHours
                 SkipChecksBeforeRestart                     = $getValue.skipChecksBeforeRestart

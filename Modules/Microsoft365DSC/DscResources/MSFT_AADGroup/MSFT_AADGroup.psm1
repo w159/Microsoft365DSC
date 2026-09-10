@@ -74,8 +74,17 @@ class AADGroup : M365DSCResourceBase
     [System.String] $Visibility
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies a Microsoft 365 group''s color theme. Possible values are Teal, Purple, Green, Blue, Pink, Orange or Red. Returned by default.')]
+    [ValidateSet('Teal', 'Purple', 'Green', 'Blue', 'Pink', 'Orange', 'Red')]
+    [System.String] $Theme
+
+    [DscProperty()]
     [System.ComponentModel.Description('List of Licenses assigned to the group.')]
     [MSFT_AADGroupLicense[]] $AssignedLicenses
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether or not a group is configured to write back group object properties to on-premises Active Directory. These properties are used when group writeback is configured in the Microsoft Entra Connect sync client.')]
+    [MSFT_MicrosoftGraphGroupWritebackConfiguration] $WritebackConfiguration
 
     [DscProperty()]
     [System.ComponentModel.Description('Specify if the Azure AD Group should exist or not.')]
@@ -151,17 +160,20 @@ class AADGroup : M365DSCResourceBase
                 $nullReturn.AssignedToRole = @()
                 $nullReturn.AssignedLicenses = @()
 
+                # Graph omits writebackConfiguration and assignedLicenses from the default group projection
+                $selectProperties = @('id', 'displayName', 'description', 'mailNickname', 'mail', 'mailEnabled', 'securityEnabled', 'groupTypes', 'membershipRule', 'membershipRuleProcessingState', 'isAssignableToRole', 'visibility', 'theme', 'assignedLicenses', 'writebackConfiguration')
+
                 if ($this.GetBoundParameters().ContainsKey('Id') -and -not [System.String]::IsNullOrEmpty($this.Id))
                 {
                     Write-Verbose -Message 'GroupID was specified'
                     try
                     {
-                        $Group = Get-MgBetaGroup -GroupId $this.Id -ExpandProperty 'members' -ErrorAction Stop
+                        $Group = Get-MgBetaGroup -GroupId $this.Id -Property $selectProperties -ExpandProperty 'members' -ErrorAction Stop
                     }
                     catch
                     {
                         Write-Verbose -Message "Couldn't get group by ID, trying by name"
-                        [array]$Group = Get-MgBetaGroup -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" -ExpandProperty 'members' -ErrorAction Stop
+                        [array]$Group = Get-MgBetaGroup -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" -Property $selectProperties -ExpandProperty 'members' -ErrorAction Stop
                         if ($Group.Count -gt 1)
                         {
                             throw "Duplicate AzureAD Groups named $($this.DisplayName) exist in tenant"
@@ -172,7 +184,7 @@ class AADGroup : M365DSCResourceBase
                 {
                     Write-Verbose -Message 'Id was NOT specified'
                     ## Can retreive multiple AAD Groups since displayname is not unique
-                    [array]$Group = Get-MgBetaGroup -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" -ExpandProperty 'members' -ErrorAction Stop
+                    [array]$Group = Get-MgBetaGroup -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" -Property $selectProperties -ExpandProperty 'members' -ErrorAction Stop
                     if ($Group.Count -gt 1)
                     {
                         throw "Duplicate AzureAD Groups named $($this.DisplayName) exist in tenant"
@@ -321,6 +333,17 @@ class AADGroup : M365DSCResourceBase
                 [Array]$assignedLicensesValues = $this.GetGroupLicenses($Group.AssignedLicenses)
             }
 
+            $writebackConfigurationValue = $null
+            if ($null -ne $Group.WritebackConfiguration -and `
+                ($null -ne $Group.WritebackConfiguration.isEnabled -or `
+                    -not [System.String]::IsNullOrEmpty($Group.WritebackConfiguration.onPremisesGroupType)))
+            {
+                $writebackConfigurationValue = @{
+                    IsEnabled           = $Group.WritebackConfiguration.isEnabled
+                    OnPremisesGroupType = $Group.WritebackConfiguration.onPremisesGroupType
+                }
+            }
+
             # GroupLifecyclePolicies
             $groupLifecyclePoliciesRequest = if ($null -ne $prefetched) { $prefetched.GroupLifecyclePolicies } else { ($batchResponse | Where-Object -FilterScript { $_.id -eq 'GroupLifecyclePolicies' }).body.value }
             $isGroupLifecyclePoliciesEnabled = $null -ne $groupLifecyclePoliciesRequest -and `
@@ -343,7 +366,9 @@ class AADGroup : M365DSCResourceBase
                 AssignedToRole                = $AssignedToRoleValues
                 MailNickname                  = $Group.MailNickname
                 Visibility                    = $Group.Visibility
+                Theme                         = $Group.Theme
                 AssignedLicenses              = $assignedLicensesValues
+                WritebackConfiguration        = $writebackConfigurationValue
                 Ensure                        = 'Present'
                 ApplicationId                 = $this.ApplicationId
                 TenantId                      = $this.TenantId
@@ -396,6 +421,20 @@ class AADGroup : M365DSCResourceBase
         $currentParameters.Remove('GroupAsMembers') | Out-Null
         $currentParameters.Remove('MemberOf') | Out-Null
         $currentParameters.Remove('AssignedToRole') | Out-Null
+
+        if ($null -ne $this.WritebackConfiguration)
+        {
+            $writebackConfigurationBody = @{}
+            if ($null -ne $this.WritebackConfiguration.IsEnabled)
+            {
+                $writebackConfigurationBody.Add('isEnabled', $this.WritebackConfiguration.IsEnabled)
+            }
+            if (-not [System.String]::IsNullOrEmpty($this.WritebackConfiguration.OnPremisesGroupType))
+            {
+                $writebackConfigurationBody.Add('onPremisesGroupType', $this.WritebackConfiguration.OnPremisesGroupType)
+            }
+            $currentParameters.WritebackConfiguration = $writebackConfigurationBody
+        }
 
         if ($this.Ensure -eq 'Present' -and `
             ($null -ne $this.GroupTypes -and $this.GroupTypes.Contains('Unified')) -and `
@@ -939,7 +978,7 @@ class AADGroup : M365DSCResourceBase
                 Filter         = $this.Filter
                 All            = [switch]$true
                 ExpandProperty = 'members'
-                Property       = 'id', 'displayName', 'description', 'mailNickname', 'mail', 'mailEnabled', 'securityEnabled', 'groupTypes', 'membershipRule', 'membershipRuleProcessingState', 'isAssignableToRole', 'visibility', 'assignedLicenses'
+                Property       = 'id', 'displayName', 'description', 'mailNickname', 'mail', 'mailEnabled', 'securityEnabled', 'groupTypes', 'membershipRule', 'membershipRuleProcessingState', 'isAssignableToRole', 'visibility', 'theme', 'assignedLicenses', 'writebackConfiguration'
                 ErrorAction    = 'Stop'
                 Sort           = 'DisplayName'
             }
@@ -1091,12 +1130,36 @@ class AADGroup : M365DSCResourceBase
                         $Results.Remove('AssignedLicenses') | Out-Null
                     }
                 }
+
+                if ($null -ne $Results.WritebackConfiguration)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'WritebackConfiguration'
+                            CimInstanceName = 'MicrosoftGraphGroupWritebackConfiguration'
+                            IsRequired      = $False
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.WritebackConfiguration `
+                        -CIMInstanceName 'MicrosoftGraphGroupWritebackConfiguration' `
+                        -ComplexTypeMapping $complexMapping
+
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.WritebackConfiguration = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('WritebackConfiguration') | Out-Null
+                    }
+                }
                 $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
                     -ConnectionMode $ConnectionMode `
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('AssignedLicenses') `
+                    -NoEscape @('AssignedLicenses', 'WritebackConfiguration') `
                     -RawResults $rawResults
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
@@ -1255,4 +1318,16 @@ class MSFT_AADGroupLicense
     [DscProperty(Mandatory)]
     [System.ComponentModel.Description('The unique identifier for the SKU.')]
     [System.String] $SkuId
+}
+
+class MSFT_MicrosoftGraphGroupWritebackConfiguration
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether writeback of cloud groups to on-premise Active Directory is enabled. Default value is true for Microsoft 365 groups and false for security groups.')]
+    [System.Nullable[System.Boolean]] $IsEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the target on-premises group type the cloud object is written back as. Nullable. The possible values are: universalDistributionGroup, universalSecurityGroup, universalMailEnabledSecurityGroup.If the cloud group is a unified (Microsoft 365) group, this property can be one of the following: universalDistributionGroup, universalSecurityGroup, universalMailEnabledSecurityGroup. Microsoft Entra security groups can be written back as universalSecurityGroup. If isEnabled or the NewUnifiedGroupWritebackDefault group setting is true but this property isn''t explicitly configured: Microsoft 365 groups are written back as universalDistributionGroup by defaultSecurity groups are written back as universalSecurityGroup by default')]
+    [ValidateSet('universalDistributionGroup', 'universalSecurityGroup', 'universalMailEnabledSecurityGroup')]
+    [System.String] $OnPremisesGroupType
 }

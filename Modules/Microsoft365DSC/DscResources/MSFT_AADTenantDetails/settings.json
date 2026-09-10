@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "OnPremisesSyncEnabled",
+      "reason": "Deferred",
+      "note": "Graph accepts the property on the organization PATCH, but turning synchronization off converts every synced object to cloud only, clears the on premises attributes and locks the tenant out of re-enabling for 72 hours. Managing it from an exported configuration needs its own design."
+    },
+    {
       "name": "AssignedPlans",
       "reason": "ReadOnly",
       "note": "Derived from the licenses purchased for the tenant"

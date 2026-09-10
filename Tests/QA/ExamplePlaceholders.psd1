@@ -319,6 +319,12 @@
             Properties = @('DefaultFileUploadAppId')
         }
         @{
+            Name       = '<token-encryption-key-id>'
+            Meaning    = 'Key id of a certificate already present on the service principal, used to encrypt issued tokens.'
+            Sample     = 'a7f3c9d1-6e42-4b58-90ac-5d2e1b874f36'
+            Properties = @('TokenEncryptionKeyId')
+        }
+        @{
             Name       = '<wifi-pre-shared-key>'
             Meaning    = 'Pre-shared key of a WPA-Personal Wi-Fi network.'
             Sample     = 'Contoso!Corp2026Wifi'

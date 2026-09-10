@@ -67,6 +67,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     automaticUpdateMode                         = 'userDefined'
                     allowWindows11Upgrade                       = $True
                     featureUpdatesRollbackWindowInDays          = 25
+                    featureUpdatesWillBeRolledBack              = $True
                     engagedRestartTransitionScheduleInDays      = 25
                     engagedRestartDeadlineInDays                = 25
                     qualityUpdatesDeferralPeriodInDays          = 25
@@ -83,6 +84,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     engagedRestartSnoozeScheduleInDays          = 25
                     '@odata.type'                               = '#microsoft.graph.windowsUpdateForBusinessConfiguration'
                     qualityUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
+                    qualityUpdatesWillBeRolledBack              = $True
                     userPauseAccess                             = 'notConfigured'
                     userWindowsUpdateScanAccess                 = 'notConfigured'
                     microsoftUpdateServiceAllowed               = $True
@@ -159,6 +161,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FeatureUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     FeatureUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
                     FeatureUpdatesRollbackWindowInDays          = 25
+                    FeatureUpdatesWillBeRolledBack              = $True
                     id                                          = 'FakeStringValue'
                     installationSchedule                        = ([MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType] @{
                             activeHoursStart     = '00:00:00'
@@ -175,6 +178,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     qualityUpdatesPauseExpiryDateTime           = '2023-01-01T00:00:00.0000000+00:00'
                     qualityUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     qualityUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
+                    qualityUpdatesWillBeRolledBack              = $True
                     scheduleImminentRestartWarningInMinutes     = 25
                     scheduleRestartWarningInHours               = 25
                     skipChecksBeforeRestart                     = $True
@@ -241,6 +245,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FeatureUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     FeatureUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
                     FeatureUpdatesRollbackWindowInDays          = 25
+                    FeatureUpdatesWillBeRolledBack              = $True
                     id                                          = 'FakeStringValue'
                     installationSchedule                        = ([MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType] @{
                             activeHoursStart     = '00:00:00'
@@ -257,6 +262,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     qualityUpdatesPauseExpiryDateTime           = '2023-01-01T00:00:00.0000000+00:00'
                     qualityUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     qualityUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
+                    qualityUpdatesWillBeRolledBack              = $True
                     scheduleImminentRestartWarningInMinutes     = 25
                     scheduleRestartWarningInHours               = 25
                     skipChecksBeforeRestart                     = $True
@@ -322,6 +328,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FeatureUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     FeatureUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
                     FeatureUpdatesRollbackWindowInDays          = 25
+                    FeatureUpdatesWillBeRolledBack              = $True
                     id                                          = 'FakeStringValue'
                     installationSchedule                        = ([MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType] @{
                             activeHoursStart     = '00:00:00'
@@ -338,6 +345,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     qualityUpdatesPauseExpiryDateTime           = '2023-01-01T00:00:00.0000000+00:00'
                     qualityUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     qualityUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
+                    qualityUpdatesWillBeRolledBack              = $True
                     scheduleImminentRestartWarningInMinutes     = 25
                     scheduleRestartWarningInHours               = 25
                     skipChecksBeforeRestart                     = $True
@@ -394,6 +402,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     FeatureUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     FeatureUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
                     FeatureUpdatesRollbackWindowInDays          = 25
+                    FeatureUpdatesWillBeRolledBack              = $False # Updated property
                     id                                          = 'FakeStringValue'
                     installationSchedule                        = ([MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType] @{
                             activeHoursStart     = '00:00:00'
@@ -410,6 +419,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     qualityUpdatesPauseExpiryDateTime           = '2023-01-01T00:00:00.0000000+00:00'
                     qualityUpdatesPauseStartDate                = '2023-01-01T00:00:00.0000000'
                     qualityUpdatesRollbackStartDateTime         = '2023-01-01T00:00:00.0000000+00:00'
+                    qualityUpdatesWillBeRolledBack              = $False # Updated property
                     scheduleImminentRestartWarningInMinutes     = 25
                     scheduleRestartWarningInHours               = 25
                     skipChecksBeforeRestart                     = $True

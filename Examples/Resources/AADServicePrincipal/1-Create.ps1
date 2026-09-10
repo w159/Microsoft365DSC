@@ -39,10 +39,16 @@ Configuration Example
             Tags                      = "{WindowsAzureActiveDirectoryIntegratedApp}"
             ErrorUrl                  = "https://$TenantId/error"
             Notes                     = "Service principal used by the expense reporting application."
+            Description               = "Submit, review and approve expense reports from any device."
+            NotificationEmailAddresses = @("appcertificates@$TenantId")
             PublisherName             = "Contoso"
             Owners                    = @("admin@$TenantId")
             PreferredSingleSignOnMode = "notSupported"
             SamlMetadataUrl           = "https://$TenantId/saml/metadata"
+            SamlSingleSignOnSettings  = MSFT_MicrosoftGraphsamlSingleSignOnSettings{
+                RelayState = "/expenses/dashboard"
+            }
+            TokenEncryptionKeyId      = "<token-encryption-key-id>"
             PasswordCredentials       = @(
                 MSFT_MicrosoftGraphpasswordCredential{
                     DisplayName   = "Expense Reporting Secret"

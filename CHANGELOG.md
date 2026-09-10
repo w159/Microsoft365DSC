@@ -5,6 +5,8 @@
 * AADAccessReviewDefinition
   * [BREAKING CHANGE] Renamed property `SettingsValue` to `Settings` to match the
     name Microsoft Graph uses.
+* AADActivityBasedTimeoutPolicy
+  * Added support for the `Description` property.
 * AADAgreement
   * [BREAKING CHANGE] Removed property `AcceptanceStatement`. It was not part of the
     Graph Schema definition for the resource.
@@ -41,6 +43,8 @@
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
 * AADDeviceRegistrationPolicy
   * Added support for the `AzureADRegistration` property.
+* AADGroup
+  * Added support for the `Theme` and `WritebackConfiguration` properties.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
@@ -83,7 +87,8 @@
   * Switched the resource to the Microsoft Graph beta endpoint, which is where
     the `ClaimsPolicy`, `ErrorUrl`, `PublisherName` and `SamlMetadataUrl`
     properties are defined.
-  * Added support for the `LoginUrl` property.
+  * Added support for the `LoginUrl`, `Description`, `NotificationEmailAddresses`,
+    `SamlSingleSignOnSettings` and `TokenEncryptionKeyId` properties.
 * AADTenantDetails
   * Added support for the `BusinessPhones`, `City`, `PostalCode`, `PreferredLanguage`,
     `PrivacyProfile`, `State` and `Street` properties.
@@ -132,8 +137,17 @@
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDeviceConfigurationEndpointProtectionPolicyWindows10` instead.
 * IntuneAppProtectionPolicyAndroid
-  * Added support for the `AllowedAndroidDeviceManufacturers`, `MinimumWipeAppVersion`
-    and `MinimumWipeOsVersion` properties.
+  * Added support for the `AllowedAndroidDeviceManufacturers`,
+    `AppActionIfAccountIsClockedOut`, `AppActionIfDevicePasscodeComplexityLessThanHigh`,
+    `AppActionIfDevicePasscodeComplexityLessThanLow`,
+    `AppActionIfDevicePasscodeComplexityLessThanMedium`,
+    `AppActionIfSamsungKnoxAttestationRequired`,
+    `GracePeriodToBlockAppsDuringOffClockHours`, `MaximumRequiredOsVersion`,
+    `MaximumWarningOsVersion`, `MaximumWipeOsVersion`,
+    `MinimumRequiredCompanyPortalVersion`, `MinimumWarningCompanyPortalVersion`,
+    `MinimumWipeAppVersion`, `MinimumWipeOsVersion`, `MinimumWipeCompanyPortalVersion`,
+    `MobileThreatDefensePartnerPriority` and `PinRequiredInsteadOfBiometricTimeout`
+    properties.
 * IntuneAppProtectionPolicyiOS
   * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
     Microsoft Graph uses.
@@ -306,8 +320,9 @@
 * IntuneMobileThreatDefenseConnector
   * Added support for the `MacDeviceBlockedOnMissingPartnerData`, `MacEnabled`,
     `AllowPartnerToCollectIosCertificateMetadata`,
-    `AllowPartnerToCollectIosPersonalCertificateMetadata` and
-    `WindowsMobileApplicationManagementEnabled` properties.
+    `AllowPartnerToCollectIosPersonalCertificateMetadata`,
+    `WindowsMobileApplicationManagementEnabled`, `GrantMobileThreatDefensePartnerRole`
+    and `LaunchMobileThreatDefensePartnerOnSetupEnabled` properties.
 * IntuneRoleAssignment
   * Added support for the `RoleScopeTagIds` property.
 * IntuneRoleDefinitionWindows365
@@ -322,7 +337,7 @@
   * Added support for the `LockdownExclusionList` property.
 * IntuneVPNConfigurationPolicyAndroidWork
   * Added value `paloAltoGlobalProtect` to property `connectionType`.
-  * Added support for the `fingerprint` property.
+  * Added support for the `fingerprint` and `lockdownExclusionList` properties.
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
@@ -372,8 +387,11 @@
   * Added support for the `ApprovalSettings` property.
 * IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10
   * Added support for the `DeviceManagementApplicabilityRuleDeviceMode`,
-    `DeviceManagementApplicabilityRuleOsEdition` and
-    `DeviceManagementApplicabilityRuleOsVersion` properties.
+    `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion`, `FeatureUpdatesWillBeRolledBack` and
+    `QualityUpdatesWillBeRolledBack` properties.
+* O365ExternalConnection
+  * Added support for the `ActivitySettings` and `ContentCategory` properties.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket

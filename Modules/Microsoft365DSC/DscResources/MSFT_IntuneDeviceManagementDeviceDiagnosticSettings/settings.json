@@ -82,6 +82,11 @@
       "note": "The service publishes the Samsung E-FOTA firmware versions available to the tenant."
     },
     {
+      "name": "Settings",
+      "reason": "Accepted",
+      "note": "Configured through the EnableLogCollection, EnableAutopilotDiagnostics and M365AppDiagnosticsEnabled properties on the resource. Responsible for the account level device management settings."
+    },
+    {
       "name": "Subscriptions",
       "reason": "ReadOnly",
       "note": "The service derives the Intune subscriptions from tenant licensing."

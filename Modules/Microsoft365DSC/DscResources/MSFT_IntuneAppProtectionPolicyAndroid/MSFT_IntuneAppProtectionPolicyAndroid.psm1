@@ -76,6 +76,10 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String] $MinimumWipeAppVersion
 
     [DscProperty()]
+    [System.ComponentModel.Description('Minimum version of the Company portal that must be installed on the device or the company data on the app will be wiped')]
+    [System.String] $MinimumWipeCompanyPortalVersion
+
+    [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will wipe the managed app and the associated company data.')]
     [System.String] $MinimumWipeOsVersion
 
@@ -98,6 +102,11 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Sources from which data is allowed to be transferred.')]
     [System.String[]] $Alloweddataingestionlocations
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines a managed app behavior, either block or warn, if the user is clocked out (non-working time). Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
+    [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+    [System.String] $AppActionIfAccountIsClockedOut
 
     [DscProperty()]
     [System.ComponentModel.Description('Defines a managed app behavior, either block or wipe, if the specified device manufacturer is not allowed.')]
@@ -130,14 +139,39 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String] $AppActionIfDeviceLockNotSet
 
     [DscProperty()]
+    [System.ComponentModel.Description('If the device does not have a passcode of high complexity or higher, trigger the stored action. Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
+    [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+    [System.String] $AppActionIfDevicePasscodeComplexityLessThanHigh
+
+    [DscProperty()]
+    [System.ComponentModel.Description('If the device does not have a passcode of low complexity or higher, trigger the stored action. Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
+    [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+    [System.String] $AppActionIfDevicePasscodeComplexityLessThanLow
+
+    [DscProperty()]
+    [System.ComponentModel.Description('If the device does not have a passcode of medium complexity or higher, trigger the stored action. Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
+    [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+    [System.String] $AppActionIfDevicePasscodeComplexityLessThanMedium
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines a managed app behavior, either block or wipe, based on the maximum number of incorrect pin retry attempts.')]
     [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
     [System.String] $AppActionIfMaximumPinRetriesExceeded
 
     [DscProperty()]
+    [System.ComponentModel.Description('Defines the behavior of a managed app when Samsung Knox Attestation is required. Possible values are null, warn, block & wipe. If the admin does not set this action, the default is null, which indicates this setting is not configured. Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
+    [ValidateSet('block', 'wipe', 'warn', 'blockWhenSettingIsSupported')]
+    [System.String] $AppActionIfSamsungKnoxAttestationRequired
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies what action to take in the case where the user is unable to check in because their authentication token is invalid, such as when the user is deleted or disabled in Azure AD.')]
     [ValidateSet('block', 'wipe', 'warn', 'BlockWhenSettingIsSupported')]
     [System.String] $appActionIfUnableToAuthenticateUser
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates how to prioritize which Mobile Threat Defense (MTD) partner is enabled for a given platform, when more than one is enabled. An app can only be actively using a single Mobile Threat Defense partner. When NULL, Microsoft Defender will be given preference. Otherwise setting the value to defenderOverThirdPartyPartner or thirdPartyPartnerOverDefender will make explicit which partner to prioritize. Possible values are: null, defenderOverThirdPartyPartner, thirdPartyPartnerOverDefender and unknownFutureValue. Default value is null. Possible values are: defenderOverThirdPartyPartner, thirdPartyPartnerOverDefender, unknownFutureValue.')]
+    [ValidateSet('defenderOverThirdPartyPartner', 'thirdPartyPartnerOverDefender')]
+    [System.String] $MobileThreatDefensePartnerPriority
 
     [DscProperty()]
     [System.ComponentModel.Description('Determines what action to take if the mobile threat defense threat threshold isn''t met. Warn isn''t a supported value for this property.')]
@@ -193,12 +227,20 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String[]] $ExemptedAppPackages
 
     [DscProperty()]
+    [System.ComponentModel.Description('A grace period before blocking app access during off clock hours.')]
+    [System.String] $GracePeriodToBlockAppsDuringOffClockHours
+
+    [DscProperty()]
     [System.ComponentModel.Description('The period after which access is checked when the device is not connected to the internet. Must be an ISO8601 timespan format.')]
     [System.String] $PeriodOfflineBeforeAccessCheck
 
     [DscProperty()]
     [System.ComponentModel.Description('The period after which access is checked when the device is connected to the internet. Must be an ISO8601 timespan format.')]
     [System.String] $PeriodOnlineBeforeAccessCheck
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Timeout in minutes for an app pin instead of non biometrics passcode')]
+    [System.String] $PinRequiredInsteadOfBiometricTimeout
 
     [DscProperty()]
     [System.ComponentModel.Description('Sources from which data is allowed to be transferred. Possible values are: allApps, managedApps, none.')]
@@ -343,8 +385,24 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String] $ManagedBrowser
 
     [DscProperty()]
+    [System.ComponentModel.Description('Versions bigger than the specified version will block the managed app from accessing company data.')]
+    [System.String] $MaximumRequiredOsVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Versions bigger than the specified version will block the managed app from accessing company data.')]
+    [System.String] $MaximumWarningOsVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Versions bigger than the specified version will block the managed app from accessing company data.')]
+    [System.String] $MaximumWipeOsVersion
+
+    [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
     [System.String] $MinimumRequiredAppVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Minimum version of the Company portal that must be installed on the device or app access will be blocked')]
+    [System.String] $MinimumRequiredCompanyPortalVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
@@ -357,6 +415,10 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will result in warning message on the managed app')]
     [System.String] $MinimumWarningAppVersion
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Minimum version of the Company portal that must be installed on the device or the user will receive a warning')]
+    [System.String] $MinimumWarningCompanyPortalVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will result in warning message on the managed app')]
@@ -505,13 +567,18 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 AllowedOutboundClipboardSharingExceptionLength     = $policy.AllowedOutboundClipboardSharingExceptionLength
                 AllowedOutboundClipboardSharingLevel               = $policy.AllowedOutboundClipboardSharingLevel
                 AllowedOutboundDataTransferDestinations            = $policy.AllowedOutboundDataTransferDestinations
+                AppActionIfAccountIsClockedOut                     = $policy.AppActionIfAccountIsClockedOut
                 AppActionIfAndroidDeviceManufacturerNotAllowed     = $policy.AppActionIfAndroidDeviceManufacturerNotAllowed
                 AppActionIfAndroidDeviceModelNotAllowed            = $policy.AppActionIfAndroidDeviceModelNotAllowed
                 AppActionIfAndroidSafetyNetAppsVerificationFailed  = $policy.AppActionIfAndroidSafetyNetAppsVerificationFailed
                 AppActionIfAndroidSafetyNetDeviceAttestationFailed = $policy.AppActionIfAndroidSafetyNetDeviceAttestationFailed
                 AppActionIfDeviceComplianceRequired                = $policy.AppActionIfDeviceComplianceRequired
                 AppActionIfDeviceLockNotSet                        = $policy.AppActionIfDeviceLockNotSet
+                AppActionIfDevicePasscodeComplexityLessThanHigh    = $policy.AppActionIfDevicePasscodeComplexityLessThanHigh
+                AppActionIfDevicePasscodeComplexityLessThanLow     = $policy.AppActionIfDevicePasscodeComplexityLessThanLow
+                AppActionIfDevicePasscodeComplexityLessThanMedium  = $policy.AppActionIfDevicePasscodeComplexityLessThanMedium
                 AppActionIfMaximumPinRetriesExceeded               = $policy.AppActionIfMaximumPinRetriesExceeded
+                AppActionIfSamsungKnoxAttestationRequired          = $policy.AppActionIfSamsungKnoxAttestationRequired
                 AppActionIfUnableToAuthenticateUser                = $policy.AppActionIfUnableToAuthenticateUser
                 AppGroupType                                       = $policy.AppGroupType.ToString()
                 ApprovedKeyboards                                  = $approvedKeyboardArray
@@ -538,24 +605,32 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 ExemptedAppPackages                                = $exemptedAppPackagesArray
                 FingerprintAndBiometricEnabled                     = $policy.FingerprintAndBiometricEnabled
                 FingerprintBlocked                                 = $policy.FingerprintBlocked
+                GracePeriodToBlockAppsDuringOffClockHours          = $policy.GracePeriodToBlockAppsDuringOffClockHours
                 Id                                                 = $policy.Id
                 KeyboardsRestricted                                = $policy.KeyboardsRestricted
                 ManagedBrowser                                     = $policy.ManagedBrowser.ToString()
                 ManagedBrowserToOpenLinksRequired                  = $policy.ManagedBrowserToOpenLinksRequired
                 MaximumAllowedDeviceThreatLevel                    = $policy.MaximumAllowedDeviceThreatLevel
                 MaximumPinRetries                                  = $policy.MaximumPinRetries
+                MaximumRequiredOsVersion                           = $policy.MaximumRequiredOsVersion
+                MaximumWarningOsVersion                            = $policy.MaximumWarningOsVersion
+                MaximumWipeOsVersion                               = $policy.MaximumWipeOsVersion
                 MessagingRedirectAppDisplayName                    = $policy.MessagingRedirectAppDisplayName
                 MessagingRedirectAppPackageId                      = $policy.MessagingRedirectAppPackageId
                 MinimumPinLength                                   = $policy.MinimumPinLength
                 MinimumRequiredAppVersion                          = $policy.MinimumRequiredAppVersion
+                MinimumRequiredCompanyPortalVersion                = $policy.MinimumRequiredCompanyPortalVersion
                 MinimumRequiredOSVersion                           = $policy.MinimumRequiredOSVersion
                 MinimumRequiredPatchVersion                        = $policy.MinimumRequiredPatchVersion
                 MinimumWarningAppVersion                           = $policy.MinimumWarningAppVersion
+                MinimumWarningCompanyPortalVersion                 = $policy.MinimumWarningCompanyPortalVersion
                 MinimumWarningOSVersion                            = $policy.MinimumWarningOSVersion
                 MinimumWarningPatchVersion                         = $policy.MinimumWarningPatchVersion
                 MinimumWipeAppVersion                              = $policy.MinimumWipeAppVersion
+                MinimumWipeCompanyPortalVersion                    = $policy.MinimumWipeCompanyPortalVersion
                 MinimumWipeOsVersion                               = $policy.MinimumWipeOsVersion
                 MinimumWipePatchVersion                            = $policy.MinimumWipePatchVersion
+                MobileThreatDefensePartnerPriority                 = $policy.MobileThreatDefensePartnerPriority
                 MobileThreatDefenseRemediationAction               = $policy.MobileThreatDefenseRemediationAction
                 NotificationRestriction                            = $policy.NotificationRestriction
                 OrganizationalCredentialsRequired                  = $policy.OrganizationalCredentialsRequired
@@ -565,6 +640,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 PeriodOnlineBeforeAccessCheck                      = $policy.PeriodOnlineBeforeAccessCheck
                 PinCharacterSet                                    = $policy.PinCharacterSet
                 PinRequired                                        = $policy.PinRequired
+                PinRequiredInsteadOfBiometricTimeout               = $policy.PinRequiredInsteadOfBiometricTimeout
                 PreviousPinBlockCount                              = $policy.PreviousPinBlockCount
                 PrintBlocked                                       = $policy.PrintBlocked
                 ProtectedMessagingRedirectAppType                  = $policy.ProtectedMessagingRedirectAppType
@@ -616,6 +692,16 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
 
         $currentPolicy = $this.Get().ToHashtable()
         $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        # The service rejects an empty string on the maximum OS version properties.
+        $emptyStringSensitiveProperties = @('MaximumRequiredOsVersion', 'MaximumWarningOsVersion', 'MaximumWipeOsVersion')
+        foreach ($property in $emptyStringSensitiveProperties)
+        {
+            if ([System.String]::IsNullOrEmpty($BoundParameters.$property))
+            {
+                $BoundParameters.Remove($property) | Out-Null
+            }
+        }
 
         #rebuild array as a MicrosoftGraphKeyValuePair hash table for ApprovedKeyboards
         $myApprovedKeyboards = @()

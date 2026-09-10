@@ -36,6 +36,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [MSFT_AADServicePrincipalClaimsPolicy] $ClaimsPolicy
 
     [DscProperty()]
+    [System.ComponentModel.Description('Free text field to provide an internal end-user facing description of the service principal. End-user portals such MyApps displays the application description in this field. The maximum allowed size is 1,024 characters. Supports $filter (eq, ne, not, ge, le, startsWith) and $search.')]
+    [System.String] $Description
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies the error URL of the ServicePrincipal.')]
     [System.String] $ErrorUrl
 
@@ -54,6 +58,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Notes associated with the ServicePrincipal.')]
     [System.String] $Notes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the list of email addresses where Microsoft Entra ID sends a notification when the active certificate is near the expiration date. This is only for the certificates used to sign the SAML token issued for Microsoft Entra Gallery applications.')]
+    [System.String[]] $NotificationEmailAddresses
 
     [DscProperty()]
     [System.ComponentModel.Description('Specifies the PublisherName of the ServicePrincipal.')]
@@ -76,6 +84,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [System.String] $SamlMetadataUrl
 
     [DscProperty()]
+    [System.ComponentModel.Description('The collection for settings related to saml single sign-on.')]
+    [MSFT_MicrosoftGraphsamlSingleSignOnSettings] $SamlSingleSignOnSettings
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies an array of service principal names. Based on the identifierURIs collection, plus the application''s appId property, these URIs are used to reference an application''s service principal.')]
     [System.String[]] $ServicePrincipalNames
 
@@ -86,6 +98,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('Tags linked to this service principal.Note that if you intend for this service principal to show up in the All Applications list in the admin portal, you need to set this value to {WindowsAzureActiveDirectoryIntegratedApp}')]
     [System.String[]] $Tags
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the keyId of a public key from the keyCredentials collection. When configured, Microsoft Entra ID issues tokens for this application encrypted using the key specified by this property. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.')]
+    [System.String] $TokenEncryptionKeyId
 
     [DscProperty()]
     [System.ComponentModel.Description('The permission classifications for delegated permissions exposed by the app that this service principal represents.')]
@@ -149,7 +165,7 @@ class AADServicePrincipal : M365DSCResourceBase
 
     AADServicePrincipal() : base()
     {
-        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'ErrorUrl', 'Homepage', 'LoginUrl', 'LogoutUrl', 'Notes', 'PreferredSingleSignOnMode', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'KeyCredentials', 'PasswordCredentials'
+        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'Description', 'ErrorUrl', 'Homepage', 'LoginUrl', 'LogoutUrl', 'Notes', 'NotificationEmailAddresses', 'PreferredSingleSignOnMode', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'SamlSingleSignOnSettings', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'TokenEncryptionKeyId', 'KeyCredentials', 'PasswordCredentials'
         $this.ResourceCache['NavigationsToExpand'] = 'AppRoleAssignedTo'
     }
 
@@ -448,6 +464,20 @@ class AADServicePrincipal : M365DSCResourceBase
                 $servicePrincipalNamesValue = [Array]($AADServicePrincipal.ServicePrincipalNames)
             }
 
+            $notificationEmailAddressesValue = @()
+            if ($null -ne $AADServicePrincipal.NotificationEmailAddresses)
+            {
+                $notificationEmailAddressesValue = Get-M365DSCArrayFromProperty -PropertyValue ($AADServicePrincipal.NotificationEmailAddresses) -ElementType ([System.String])
+            }
+
+            $samlSingleSignOnSettingsValue = $null
+            if ($null -ne $AADServicePrincipal.SamlSingleSignOnSettings)
+            {
+                $samlSingleSignOnSettingsValue = @{
+                    RelayState = $AADServicePrincipal.SamlSingleSignOnSettings.relayState
+                }
+            }
+
             $result = @{
                 AppId                              = $appIdToExport
                 AppRoleAssignedTo                  = $AppRoleAssignedToValues
@@ -459,19 +489,23 @@ class AADServicePrincipal : M365DSCResourceBase
                 ClaimsPolicy                       = $claimsPolicyValue
                 CustomSecurityAttributes           = $complexCustomSecurityAttributes
                 DelegatedPermissionClassifications = [Array]$complexDelegatedPermissionClassifications
+                Description                        = $AADServicePrincipal.Description
                 ErrorUrl                           = $AADServicePrincipal.ErrorUrl
                 Homepage                           = $AADServicePrincipal.Homepage
                 LoginUrl                           = $AADServicePrincipal.LoginUrl
                 LogoutUrl                          = $AADServicePrincipal.LogoutUrl
                 Notes                              = $AADServicePrincipal.Notes
+                NotificationEmailAddresses         = $notificationEmailAddressesValue
                 Owners                             = $ownersValues
                 PreferredSingleSignOnMode          = $AADServicePrincipal.PreferredSingleSignOnMode
                 PublisherName                      = $AADServicePrincipal.PublisherName
                 ReplyURLs                          = $replyUrlsValue
                 SamlMetadataURL                    = $AADServicePrincipal.SamlMetadataURL
+                SamlSingleSignOnSettings           = $samlSingleSignOnSettingsValue
                 ServicePrincipalNames              = $servicePrincipalNamesValue
                 ServicePrincipalType               = $AADServicePrincipal.ServicePrincipalType
                 Tags                               = $tagsValue
+                TokenEncryptionKeyId               = $AADServicePrincipal.TokenEncryptionKeyId
                 KeyCredentials                     = $complexKeyCredentials
                 PasswordCredentials                = $complexPasswordCredentials
                 Ensure                             = 'Present'
@@ -541,6 +575,11 @@ class AADServicePrincipal : M365DSCResourceBase
         else
         {
             $currentParameters.Remove('CustomSecurityAttributes')
+        }
+
+        if ($null -ne $currentParameters.SamlSingleSignOnSettings)
+        {
+            $currentParameters.SamlSingleSignOnSettings = Rename-M365DSCCimInstanceParameter -Properties $currentParameters.SamlSingleSignOnSettings
         }
 
         # ServicePrincipal should exist but it doesn't
@@ -1084,6 +1123,28 @@ class AADServicePrincipal : M365DSCResourceBase
                             $Results.Remove('PasswordCredentials') | Out-Null
                         }
                     }
+                    if ($null -ne $Results.SamlSingleSignOnSettings)
+                    {
+                        $complexMapping = @(
+                            @{
+                                Name            = 'SamlSingleSignOnSettings'
+                                CimInstanceName = 'MicrosoftGraphsamlSingleSignOnSettings'
+                                IsRequired      = $False
+                            }
+                        )
+                        $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                            -ComplexObject $Results.SamlSingleSignOnSettings `
+                            -CIMInstanceName 'MicrosoftGraphsamlSingleSignOnSettings' `
+                            -ComplexTypeMapping $complexMapping
+                        if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                        {
+                            $Results.SamlSingleSignOnSettings = $complexTypeStringResult
+                        }
+                        else
+                        {
+                            $Results.Remove('SamlSingleSignOnSettings') | Out-Null
+                        }
+                    }
                     if ($Results.CustomSecurityAttributes.Count -gt 0)
                     {
                         $complexMapping = @(
@@ -1117,7 +1178,7 @@ class AADServicePrincipal : M365DSCResourceBase
                         -ModulePath $this.GetModulePath() `
                         -Results $Results `
                         -Credential $this.Credential `
-                        -NoEscape @('AppRoleAssignedTo', 'ClaimsPolicy', 'DelegatedPermissionClassifications', 'KeyCredentials', 'PasswordCredentials', 'CustomSecurityAttributes') `
+                        -NoEscape @('AppRoleAssignedTo', 'ClaimsPolicy', 'DelegatedPermissionClassifications', 'KeyCredentials', 'PasswordCredentials', 'CustomSecurityAttributes', 'SamlSingleSignOnSettings') `
                         -RawResults $rawResults
 
                     [void]$dscContent.Append($currentDSCBlock)
@@ -1387,6 +1448,13 @@ class MSFT_MicrosoftGraphpasswordCredential
     [DscProperty()]
     [System.ComponentModel.Description('The date and time at which the password becomes valid. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Optional.')]
     [System.String] $StartDateTime
+}
+
+class MSFT_MicrosoftGraphsamlSingleSignOnSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The relative URI the service provider would redirect to after completion of the single sign-on flow.')]
+    [System.String] $RelayState
 }
 
 class MSFT_MicrosoftGraphkeyCredential

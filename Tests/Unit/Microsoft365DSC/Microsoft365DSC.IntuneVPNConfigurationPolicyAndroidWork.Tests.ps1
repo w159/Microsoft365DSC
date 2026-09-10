@@ -52,6 +52,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     connectionName                          = 'FakeStringValue'
                     connectionType                          = 'ciscoAnyConnect'
                     fingerprint                             = 'FakeStringValue'
+                    lockdownExclusionList                   = @('FakeStringValue')
                     proxyServer                             = @(
                         @{
                             port                            = 80
@@ -111,6 +112,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName                                = 'FakeStringValue'
                     fingerprint                                = 'FakeStringValue'
                     Id                                         = 'FakeStringValue'
+                    lockdownExclusionList                      = @('FakeStringValue')
                     proxyServer                                = @(
                         ([MSFT_MicrosoftvpnProxyServer] @{
                             port                               = 80
@@ -178,6 +180,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     connectionName                            = 'FakeStringValue'
                     connectionType                            = 'ciscoAnyConnect'
                     fingerprint                               = 'UpdatedFakeStringValue' # Updated property
+                    lockdownExclusionList                     = @('UpdatedFakeStringValue') # Updated property
                     proxyServer                               = @(
                         ([MSFT_MicrosoftvpnProxyServer] @{
                             port                              = 80
@@ -241,6 +244,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     connectionName                           = 'FakeStringValue'
                     connectionType                           = 'ciscoAnyConnect'
                     fingerprint                              = 'FakeStringValue'
+                    lockdownExclusionList                    = @('FakeStringValue')
                     proxyServer                              = @(
                         ([MSFT_MicrosoftvpnProxyServer] @{
                             port                             = 80
@@ -294,6 +298,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     connectionName                          = 'FakeStringValue'
                     connectionType                          = 'ciscoAnyConnect'
                     fingerprint                             = 'FakeStringValue'
+                    lockdownExclusionList                   = @('FakeStringValue')
                     proxyServer                             = @(
                         ([MSFT_MicrosoftvpnProxyServer] @{
                             port = 80

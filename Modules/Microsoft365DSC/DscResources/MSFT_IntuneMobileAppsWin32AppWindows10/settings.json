@@ -32,6 +32,11 @@
       "note": "Graph marks the property as read only on this type."
     },
     {
+      "name": "MinimumSupportedOperatingSystem",
+      "reason": "Accepted",
+      "note": "Configured through the MinimumSupportedWindowsRelease property on the resource. Responsible for the minimum operating system a Win32 app applies to."
+    },
+    {
       "name": "PublishingState",
       "reason": "ReadOnly",
       "note": "Graph marks the property as read only on this type."

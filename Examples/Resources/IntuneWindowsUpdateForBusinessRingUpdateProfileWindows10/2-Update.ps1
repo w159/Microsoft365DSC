@@ -70,6 +70,7 @@ Configuration Example
             FeatureUpdatesPauseExpiryDateTime           = '0001-01-01T00:00:00.0000000+00:00'
             FeatureUpdatesRollbackStartDateTime         = '0001-01-01T00:00:00.0000000+00:00'
             FeatureUpdatesRollbackWindowInDays          = 10
+            FeatureUpdatesWillBeRolledBack              = $False
             InstallationSchedule                        = MSFT_MicrosoftGraphwindowsUpdateInstallScheduleType {
                 ActiveHoursStart = '08:00:00'
                 ActiveHoursEnd   = '17:00:00'
@@ -82,6 +83,7 @@ Configuration Example
             QualityUpdatesPaused                        = $False
             QualityUpdatesPauseExpiryDateTime           = '0001-01-01T00:00:00.0000000+00:00'
             QualityUpdatesRollbackStartDateTime         = '0001-01-01T00:00:00.0000000+00:00'
+            QualityUpdatesWillBeRolledBack              = $False
             SkipChecksBeforeRestart                     = $False
             UpdateNotificationLevel                     = 'defaultNotifications'
             UserPauseAccess                             = 'enabled'

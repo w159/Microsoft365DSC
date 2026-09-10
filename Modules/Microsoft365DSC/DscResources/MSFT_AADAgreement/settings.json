@@ -17,6 +17,11 @@
       "note": "Per-user and per-device acceptance records stamped by the service"
     },
     {
+      "name": "File",
+      "reason": "Accepted",
+      "note": "Configured through the FileData, FileName and Language properties on the resource. Responsible for the default PDF linked to the agreement."
+    },
+    {
       "name": "Files",
       "reason": "Accepted",
       "note": "Built from FileData, FileName and Language. Only one localization is expressible."

@@ -56,6 +56,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Name = 'Contoso Hr'
                     Id   = "contosohr"
                     Description = 'Connection to index Contoso HR system'
+                    ContentCategory = 'knowledgeBase'
+                    ActivitySettings = @{
+                        UrlToItemResolvers = @(
+                            @{
+                                ItemId       = '{employeeId}'
+                                Priority     = 1
+                                UrlMatchInfo = @{
+                                    BaseUrls   = @('https://hr.contoso.com')
+                                    UrlPattern = '/employees/(?<employeeId>[0-9]+)'
+                                }
+                            }
+                        )
+                    }
                     Configuration = @{
                         AuthorizedAppIds = @('12345-12345-12345-12345-12345')
                     }
@@ -72,7 +85,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
+                    ActivitySettings    = ([MSFT_MicrosoftGraphActivitySettings]@{
+                        UrlToItemResolvers = @(
+                            ([MSFT_MicrosoftGraphUrlToItemResolverBase]@{
+                                ItemId       = "{employeeId}"
+                                Priority     = 1
+                                UrlMatchInfo = ([MSFT_MicrosoftGraphUrlMatchInfo]@{
+                                    BaseUrls   = @("https://hr.contoso.com")
+                                    UrlPattern = "/employees/(?<employeeId>[0-9]+)"
+                                })
+                            })
+                        )
+                    });
                     AuthorizedAppIds    = @("MyApp");
+                    ContentCategory     = "knowledgeBase";
                     Description         = "Connection to index Contoso HR system";
                     Ensure              = "Present";
                     Id                  = "contosohr";
@@ -100,7 +126,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
+                    ActivitySettings    = ([MSFT_MicrosoftGraphActivitySettings]@{
+                        UrlToItemResolvers = @(
+                            ([MSFT_MicrosoftGraphUrlToItemResolverBase]@{
+                                ItemId       = "{employeeId}"
+                                Priority     = 1
+                                UrlMatchInfo = ([MSFT_MicrosoftGraphUrlMatchInfo]@{
+                                    BaseUrls   = @("https://hr.contoso.com")
+                                    UrlPattern = "/employees/(?<employeeId>[0-9]+)"
+                                })
+                            })
+                        )
+                    });
                     AuthorizedAppIds    = @("MyApp");
+                    ContentCategory     = "knowledgeBase";
                     Description         = "Connection to index Contoso HR system";
                     Ensure              = "Absent";
                     Id                  = "contosohr";
@@ -124,7 +163,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
+                    ActivitySettings    = ([MSFT_MicrosoftGraphActivitySettings]@{
+                        UrlToItemResolvers = @(
+                            ([MSFT_MicrosoftGraphUrlToItemResolverBase]@{
+                                ItemId       = "{employeeId}"
+                                Priority     = 1
+                                UrlMatchInfo = ([MSFT_MicrosoftGraphUrlMatchInfo]@{
+                                    BaseUrls   = @("https://hr.contoso.com")
+                                    UrlPattern = "/employees/(?<employeeId>[0-9]+)"
+                                })
+                            })
+                        )
+                    });
                     AuthorizedAppIds    = @("MyApp");
+                    ContentCategory     = "knowledgeBase";
                     Description         = "Connection to index Contoso HR system";
                     Ensure              = "Present";
                     Id                  = "contosohr";
@@ -141,7 +193,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name "The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
+                    ActivitySettings    = ([MSFT_MicrosoftGraphActivitySettings]@{
+                        UrlToItemResolvers = @(
+                            ([MSFT_MicrosoftGraphUrlToItemResolverBase]@{
+                                ItemId       = "{ticketId}"
+                                Priority     = 2
+                                UrlMatchInfo = ([MSFT_MicrosoftGraphUrlMatchInfo]@{
+                                    BaseUrls   = @("https://support.contoso.com")
+                                    UrlPattern = "/tickets/(?<ticketId>[0-9]+)"
+                                })
+                            })
+                        )
+                    }); # Drift
                     AuthorizedAppIds    = @(); # Drift
+                    ContentCategory     = "crm"; # Drift
                     Description         = "Connection to index Contoso HR system";
                     Ensure              = "Present";
                     Id                  = "contosohr";

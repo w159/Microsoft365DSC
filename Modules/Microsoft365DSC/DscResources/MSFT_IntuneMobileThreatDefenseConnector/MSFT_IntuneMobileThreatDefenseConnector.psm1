@@ -40,6 +40,10 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $AndroidMobileApplicationManagementEnabled
 
     [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, indicates that the Mobile Threat Defense partner is granted the Mobile Threat Defense role on enrolled Android Corporate Owned Business Only and Corporate Owned Personally Enabled devices. When FALSE, indicates that the Mobile Threat Defense partner is not granted the Mobile Threat Defense role. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $GrantMobileThreatDefensePartnerRole
+
+    [DscProperty()]
     [System.ComponentModel.Description('For IOS, set whether Intune must receive data from the Mobile Threat Defense partner prior to marking a device compliant.')]
     [System.Nullable[System.Boolean]] $IosDeviceBlockedOnMissingPartnerData
 
@@ -54,6 +58,10 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('DateTime of last Heartbeat received from the Mobile Threat Defense partner.')]
     [System.Nullable[System.DateTime]] $LastHeartbeatDateTime
+
+    [DscProperty()]
+    [System.ComponentModel.Description('When TRUE, indicates that the Mobile Threat Defense partner will be automatically launched during Android Corporate Owned Business Only and Corporate Owned Personally Enabled device setup. When FALSE, indicates that the Mobile Threat Defense partner will not be automatically launched during setup. Default value is FALSE.')]
+    [System.Nullable[System.Boolean]] $LaunchMobileThreatDefensePartnerOnSetupEnabled
 
     [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates that Intune must receive data from the Mobile Threat Defense partner prior to marking a device compliant for Mac. When FALSE, indicates that Intune may make a device compliant without receiving data from the Mobile Threat Defense partner for Mac. Default value is FALSE.')]
@@ -206,10 +214,12 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 AndroidDeviceBlockedOnMissingPartnerData            = $instance.AndroidDeviceBlockedOnMissingPartnerData
                 AndroidEnabled                                      = $instance.AndroidEnabled
                 AndroidMobileApplicationManagementEnabled           = $instance.AndroidMobileApplicationManagementEnabled
+                GrantMobileThreatDefensePartnerRole                 = $instance.GrantMobileThreatDefensePartnerRole
                 IosDeviceBlockedOnMissingPartnerData                = $instance.IosDeviceBlockedOnMissingPartnerData
                 IosEnabled                                          = $instance.IosEnabled
                 IosMobileApplicationManagementEnabled               = $instance.IosMobileApplicationManagementEnabled
                 LastHeartbeatDateTime                               = $instance.LastHeartbeatDateTime
+                LaunchMobileThreatDefensePartnerOnSetupEnabled      = $instance.LaunchMobileThreatDefensePartnerOnSetupEnabled
                 MacDeviceBlockedOnMissingPartnerData                = $instance.MacDeviceBlockedOnMissingPartnerData
                 MacEnabled                                          = $instance.MacEnabled
                 MicrosoftDefenderForEndpointAttachEnabled           = $instance.MicrosoftDefenderForEndpointAttachEnabled

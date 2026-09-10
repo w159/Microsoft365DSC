@@ -28,6 +28,7 @@ Configuration Example
         {
             AzurePortalTimeOut    = "02:00:00";
             DefaultTimeOut        = "03:00:00";
+            Description           = "Signs out inactive administrators after two hours";
             DisplayName           = "displayName-value";
             Ensure                = "Present";
             Id                    = "000000-0000-0000-0000-000000000000";

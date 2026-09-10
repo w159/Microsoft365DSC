@@ -34,12 +34,17 @@ Configuration Example
             MailNickname                        = "MarketingTeam"
             Members                             = @("AdeleV@$TenantId") # Updated Property
             Visibility                          = "Private"
+            Theme                               = "Blue"
             Owners                              = @("admin@$TenantId", "AdeleV@$TenantId")
             AssignedLicenses                    = @(
                 MSFT_AADGroupLicense {
                     SkuId = 'AAD_PREMIUM_P2'
                 }
             )
+            WritebackConfiguration              = MSFT_MicrosoftGraphGroupWritebackConfiguration{
+                IsEnabled           = $true
+                OnPremisesGroupType = "universalDistributionGroup"
+            }
             AssignedToRole                      = @()
             IsAssignableToRole                  = $false
             GroupLifecyclePolicySelectedEnabled = $false
