@@ -248,8 +248,8 @@
     },
     {
       "name": "Roles",
-      "reason": "Deferred",
-      "note": "The unifiedRoleAssignment objects for the user."
+      "reason": "Accepted",
+      "note": "Role display names from the role assignments naming the user."
     },
     {
       "name": "ScopedRoleMemberOf",

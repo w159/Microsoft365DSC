@@ -13,52 +13,52 @@
   "excludedProperties": [
     {
       "name": "IdentityCertificateForClientAuthenticationDisplayName",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "A display name lookup for the client authentication certificate profile owned by IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 or IntuneDeviceConfigurationPkcsCertificatePolicyWindows10."
     },
     {
       "name": "IdentityCertificateForClientAuthenticationId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Binds to the client authentication certificate profile from IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 or IntuneDeviceConfigurationPkcsCertificatePolicyWindows10."
     },
     {
       "name": "RootCertificateForClientValidationDisplayName",
-      "reason": "Deferred",
-      "note": "A display name lookup for the trusted root certificate owned by IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
+      "reason": "Accepted",
+      "note": "Fallback for RootCertificateForClientValidationId."
     },
     {
       "name": "RootCertificateForClientValidationId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Binds to the trusted root certificate from IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
     },
     {
       "name": "RootCertificatesForServerValidationDisplayNames",
-      "reason": "Deferred",
-      "note": "A display name lookup for the trusted root certificates owned by IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
+      "reason": "Accepted",
+      "note": "Fallback for RootCertificatesForServerValidationIds."
     },
     {
       "name": "RootCertificatesForServerValidationIds",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Binds to the trusted root certificates from IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
     },
     {
       "name": "SecondaryIdentityCertificateForClientAuthenticationDisplayName",
-      "reason": "Deferred",
-      "note": "Display name lookup for a certificate profile owned by the SCEP and PKCS resources."
+      "reason": "Accepted",
+      "note": "Fallback for SecondaryIdentityCertificateForClientAuthenticationId."
     },
     {
       "name": "SecondaryIdentityCertificateForClientAuthenticationId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Binds to the secondary client authentication certificate profile from IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 or IntuneDeviceConfigurationPkcsCertificatePolicyWindows10."
     },
     {
       "name": "SecondaryRootCertificateForClientValidationDisplayName",
-      "reason": "Deferred",
-      "note": "A display name lookup for the secondary trusted root certificate owned by IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
+      "reason": "Accepted",
+      "note": "Fallback for SecondaryRootCertificateForClientValidationId."
     },
     {
       "name": "SecondaryRootCertificateForClientValidationId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Binds to the secondary trusted root certificate from IntuneDeviceConfigurationTrustedCertificatePolicyWindows10."
     }
   ],

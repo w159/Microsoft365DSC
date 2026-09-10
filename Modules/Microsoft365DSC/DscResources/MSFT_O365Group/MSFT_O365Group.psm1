@@ -263,9 +263,9 @@ class O365Group : M365DSCResourceBase
                     $membersToAdd = @()
                     foreach ($diff in $difference)
                     {
-                        if (-not $this.ManagedBy.Contains($diff.InputObject))
+                        if ($null -eq $this.ManagedBy -or -not $this.ManagedBy.Contains($diff.InputObject))
                         {
-                            if ($diff.SideIndicator -eq '<=' -and $diff.InputObject -ne $this.ManagedBy.Split('@')[0])
+                            if ($diff.SideIndicator -eq '<=')
                             {
                                 Write-Verbose "Will be removing Member: {$($diff.InputObject)}"
                                 $membersToRemove += $diff.InputObject

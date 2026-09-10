@@ -23,8 +23,8 @@
     },
     {
       "name": "OwnerGroup",
-      "reason": "Deferred",
-      "note": "Id or display name of the owning group"
+      "reason": "Accepted",
+      "note": "Accepts the id or the display name of the owning group and resolves it to the group id"
     }
   ],
   "description": "",

@@ -605,6 +605,66 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Only the display name is supplied and values are not in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    ActivateApprover                                          = @()
+                    ActivationMaxDuration                                     = 'PT8H'
+                    ActivationReqJustification                                = $False
+                    ActivationReqMFA                                          = $True
+                    ActivationReqTicket                                       = $False
+                    ActiveAlertNotificationAdditionalRecipient                = @()
+                    ActiveAlertNotificationDefaultRecipient                   = $True
+                    ActiveAlertNotificationOnlyCritical                       = $False
+                    ActiveApproveNotificationAdditionalRecipient              = @()
+                    ActiveApproveNotificationDefaultRecipient                 = $True
+                    ActiveApproveNotificationOnlyCritical                     = $False
+                    ActiveAssigneeNotificationAdditionalRecipient             = @()
+                    ActiveAssigneeNotificationDefaultRecipient                = $True
+                    ActiveAssigneeNotificationOnlyCritical                    = $False
+                    ApplicationId                                             = $ConfigurationData.NonNodeData.ApplicationId
+                    ApprovaltoActivate                                        = $False
+                    AssignmentReqJustification                                = $True
+                    AssignmentReqMFA                                          = $False
+                    CertificateThumbprint                                     = $ConfigurationData.NonNodeData.CertificateThumbprint
+                    Displayname                                               = 'User administrator'
+                    EligibilityAssignmentReqJustification                     = $False
+                    EligibilityAssignmentReqMFA                               = $False
+                    EligibleAlertNotificationAdditionalRecipient              = @()
+                    EligibleAlertNotificationDefaultRecipient                 = $True
+                    EligibleAlertNotificationOnlyCritical                     = $False
+                    EligibleApproveNotificationAdditionalRecipient            = @()
+                    EligibleApproveNotificationDefaultRecipient               = $True
+                    EligibleApproveNotificationOnlyCritical                   = $False
+                    EligibleAssigneeNotificationAdditionalRecipient           = @()
+                    EligibleAssigneeNotificationDefaultRecipient              = $True
+                    EligibleAssigneeNotificationOnlyCritical                  = $False
+                    EligibleAssignmentAlertNotificationAdditionalRecipient    = @()
+                    EligibleAssignmentAlertNotificationDefaultRecipient       = $True
+                    EligibleAssignmentAlertNotificationOnlyCritical           = $False
+                    EligibleAssignmentAssigneeNotificationAdditionalRecipient = @()
+                    EligibleAssignmentAssigneeNotificationDefaultRecipient    = $True
+                    EligibleAssignmentAssigneeNotificationOnlyCritical        = $False
+                    ExpireActiveAssignment                                    = 'P180D'
+                    ExpireEligibleAssignment                                  = 'P365D'
+                    PermanentActiveAssignmentisExpirationRequired             = $False
+                    PermanentEligibleAssignmentisExpirationRequired           = $False
+                }
+            }
+
+            It 'Should resolve the role definition from the display name' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADRoleSetting' -Property $testParams).Get().ToHashtable()).Id | Should -Be 'fe930be7-5e62-47db-91af-98c3a49a38b1'
+            }
+
+            It 'Should return the current value of the drifted property from the get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADRoleSetting' -Property $testParams).Get().ToHashtable()).ActivationReqJustification | Should -Be $true
+            }
+
+            It 'Should return false from the test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADRoleSetting' -Property $testParams).Test() | Should -Be $false
+            }
+        }
+
         Context -Name 'ReverseDSC tests' -Fixture {
             BeforeAll {
                 $testParams = @{

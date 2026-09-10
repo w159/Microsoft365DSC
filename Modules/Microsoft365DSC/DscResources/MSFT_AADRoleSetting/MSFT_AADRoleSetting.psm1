@@ -265,7 +265,8 @@ class AADRoleSetting : M365DSCResourceBase
 
             if ($null -eq $RoleDefinition -and -not [System.String]::IsNullOrEmpty($this.DisplayName))
             {
-                $RoleDefinition = ($this.ResourceCache['RoleDefinitions'].GetEnumerator() | Where-Object { $_.Value.DisplayName -eq ($RoleDefinition.DisplayName -replace "'", "''") }).Value
+                $roleDisplayName = $this.DisplayName
+                $RoleDefinition = ($this.ResourceCache['RoleDefinitions'].GetEnumerator() | Where-Object { $_.Value.DisplayName -eq $roleDisplayName }).Value
             }
         }
         else

@@ -18,8 +18,8 @@
     },
     {
       "name": "Devices",
-      "reason": "Deferred",
-      "note": "Imported device identities written through the import route"
+      "reason": "Accepted",
+      "note": "Aggregates the tenant importedDeviceIdentity collection."
     },
     {
       "name": "EnrollmentState",

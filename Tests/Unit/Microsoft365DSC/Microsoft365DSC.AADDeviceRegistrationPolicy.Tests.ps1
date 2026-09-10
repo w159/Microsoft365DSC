@@ -111,7 +111,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsSingleInstance                        = "Yes";
                     LocalAdminPasswordIsEnabled             = $False;
                     LocalAdminsEnableGlobalAdmins           = $True;
-                    MultiFactorAuthConfiguration            = $False;
+                    MultiFactorAuthConfiguration            = "notRequired";
                     UserDeviceQuota                         = 50;
                     Credential                              = $Credential;
                 }
@@ -142,7 +142,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsSingleInstance                        = "Yes";
                     LocalAdminPasswordIsEnabled             = $False;
                     LocalAdminsEnableGlobalAdmins           = $False; # drift
-                    MultiFactorAuthConfiguration            = $False;
+                    MultiFactorAuthConfiguration            = "notRequired";
                     UserDeviceQuota                         = 50;
                     Credential                              = $Credential;
                 }

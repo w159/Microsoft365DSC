@@ -333,6 +333,56 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'The IntuneDeviceConfigurationWiredNetworkPolicyWindows10 should be created with root certificate identifiers and no display names' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName                            = 'FakeStringValue'
+                    Id                                     = 'FakeStringValue'
+                    Ensure                                 = 'Present'
+                    Credential                             = $Credential
+                    RootCertificatesForServerValidationIds = @('a485d322-13cd-43ef-beda-733f656f48ea')
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
+                    return $null
+                }
+            }
+
+            It 'Should bind the root certificate by identifier in the create body' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationWiredNetworkPolicyWindows10' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MgBetaDeviceManagementDeviceConfiguration -Exactly 1 -ParameterFilter {
+                    $BodyParameter['rootCertificatesForServerValidation@odata.bind'] -contains "beta/deviceManagement/deviceConfigurations('a485d322-13cd-43ef-beda-733f656f48ea')"
+                }
+            }
+        }
+
+        Context -Name 'The IntuneDeviceConfigurationWiredNetworkPolicyWindows10 exists and gains a root certificate identifier with no display names' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName                            = 'FakeStringValue'
+                    Id                                     = 'FakeStringValue'
+                    Ensure                                 = 'Present'
+                    Credential                             = $Credential
+                    RootCertificatesForServerValidationIds = @('a485d322-13cd-43ef-beda-733f656f48ea', '2c8bd6a5-9f2f-4c07-9d64-5a4a1a2d3b7e')
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
+                    return @{
+                        Id = '2c8bd6a5-9f2f-4c07-9d64-5a4a1a2d3b7e'
+                        DisplayName = 'SecondRootCertificate'
+                        '@odata.type' = '#microsoft.graph.windows81TrustedRootCertificate'
+                    }
+                } -ParameterFilter { $DeviceConfigurationId -eq '2c8bd6a5-9f2f-4c07-9d64-5a4a1a2d3b7e' }
+            }
+
+            It 'Should post the added root certificate reference by identifier' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationWiredNetworkPolicyWindows10' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and $Body -like "*2c8bd6a5-9f2f-4c07-9d64-5a4a1a2d3b7e*"
+                }
+            }
+        }
+
         Context -Name 'The IntuneDeviceConfigurationWiredNetworkPolicyWindows10 exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{

@@ -22,8 +22,8 @@
     },
     {
       "name": "OdataType",
-      "reason": "Deferred",
-      "note": "Differentiates between named location types"
+      "reason": "Accepted",
+      "note": "Selects an IP or a country named location type."
     }
   ],
   "description": "This resource configures the Azure AD Named Location Policies in Azure Active Directory.",

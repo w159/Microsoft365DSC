@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AlternateNotificationEmails",
+      "reason": "Accepted",
+      "note": "Graph carries the addresses as one semicolon delimited string instead of a String array."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."

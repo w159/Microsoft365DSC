@@ -221,6 +221,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsStoreApp' -Property $testParams).Set()
                 Should -Invoke -CommandName New-MgBetaDeviceAppManagementMobileApp -Exactly 1
             }
+
+            It 'Should send the canonical OData type to the Graph cmdlet' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsStoreApp' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MgBetaDeviceAppManagementMobileApp -Exactly 1 -ParameterFilter {
+                    $BodyParameter['@odata.type'] -ceq '#microsoft.graph.iosStoreApp'
+                }
+            }
         }
 
         Context -Name "The IntuneMobileAppsStoreApp exists but it SHOULD NOT" -Fixture {
@@ -397,6 +404,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should call the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsStoreApp' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-MgBetaDeviceAppManagementMobileApp -Exactly 1
+            }
+
+            It 'Should send the canonical OData type to the Graph cmdlet' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsStoreApp' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaDeviceAppManagementMobileApp -Exactly 1 -ParameterFilter {
+                    $BodyParameter['@odata.type'] -ceq '#microsoft.graph.iosStoreApp'
+                }
             }
         }
 

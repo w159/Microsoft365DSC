@@ -19,7 +19,7 @@
     {
       "name": "File",
       "reason": "Accepted",
-      "note": "Configured through the FileData, FileName and Language properties on the resource. Responsible for the default PDF linked to the agreement."
+      "note": "Configured through the FileData, FileName and Language properties on the resource."
     },
     {
       "name": "Files",

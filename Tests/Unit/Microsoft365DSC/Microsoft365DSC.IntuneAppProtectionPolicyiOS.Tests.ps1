@@ -598,6 +598,108 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'When the policy exists and AllowedIosDeviceModels lists several device models' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName                 = 'DSC Policy'
+                    Id                          = '12345-12345-12345-12345-12345'
+                    Ensure                      = 'Present'
+                    Credential                  = $Credential
+                    AppGroupType                = 'selectedPublicApps'
+                    Apps                        = @('com.cisco.jabberimintune.ios', 'com.pervasent.boardpapers.ios', 'com.sharefile.mobile.intune.ios')
+                    TargetedAppManagementLevels = @('unmanaged')
+                    AllowedIosDeviceModels      = @('iPhone10,1', 'iPhone11,2')
+                }
+
+                Mock -CommandName Get-MgBetaDeviceAppManagementiosManagedAppProtection -MockWith {
+                    return @{
+                        id                          = '12345-12345-12345-12345-12345'
+                        DisplayName                 = 'DSC Policy'
+                        AppGroupType                = 'selectedPublicApps'
+                        TargetedAppManagementLevels = 'unmanaged'
+                        AllowedIosDeviceModels      = 'iPhone10,1;iPhone11,2'
+                    }
+                }
+            }
+
+            It 'Should return one entry per device model from the Get method' {
+                $result = ((New-M365DSCResourceInstance -ResourceName 'IntuneAppProtectionPolicyiOS' -Property $testParams).Get().ToHashtable()).AllowedIosDeviceModels
+                $result.Count | Should -Be 2
+                $result[0] | Should -Be 'iPhone10,1'
+                $result[1] | Should -Be 'iPhone11,2'
+            }
+
+            It 'Should send a semicolon separated string to the update cmdlet from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppProtectionPolicyiOS' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaDeviceAppManagementiosManagedAppProtection -Exactly 1 -ParameterFilter {
+                    $BodyParameter.AllowedIosDeviceModels -is [System.String] -and
+                    $BodyParameter.AllowedIosDeviceModels -eq 'iPhone10,1;iPhone11,2'
+                }
+            }
+        }
+
+        Context -Name 'When the policy exists without a value for AllowedIosDeviceModels' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName                 = 'DSC Policy'
+                    Id                          = '12345-12345-12345-12345-12345'
+                    Ensure                      = 'Present'
+                    Credential                  = $Credential
+                    AppGroupType                = 'selectedPublicApps'
+                    Apps                        = @('com.cisco.jabberimintune.ios', 'com.pervasent.boardpapers.ios', 'com.sharefile.mobile.intune.ios')
+                    TargetedAppManagementLevels = @('unmanaged')
+                }
+
+                Mock -CommandName Get-MgBetaDeviceAppManagementiosManagedAppProtection -MockWith {
+                    return @{
+                        id                          = '12345-12345-12345-12345-12345'
+                        DisplayName                 = 'DSC Policy'
+                        AppGroupType                = 'selectedPublicApps'
+                        TargetedAppManagementLevels = 'unmanaged'
+                        AllowedIosDeviceModels      = $null
+                    }
+                }
+            }
+
+            It 'Should return no device model from the Get method' {
+                $result = ((New-M365DSCResourceInstance -ResourceName 'IntuneAppProtectionPolicyiOS' -Property $testParams).Get().ToHashtable()).AllowedIosDeviceModels
+                $result.Count | Should -Be 0
+            }
+
+            It 'Should not add AllowedIosDeviceModels to the body of the update cmdlet from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppProtectionPolicyiOS' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MgBetaDeviceAppManagementiosManagedAppProtection -Exactly 1 -ParameterFilter {
+                    -not $BodyParameter.ContainsKey('AllowedIosDeviceModels')
+                }
+            }
+        }
+
+        Context -Name "When the policy doesn't exist and AllowedIosDeviceModels lists several device models" -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName                 = 'DSC Policy'
+                    Ensure                      = 'Present'
+                    Credential                  = $Credential
+                    AppGroupType                = 'selectedPublicApps'
+                    Apps                        = @('com.cisco.jabberimintune.ios', 'com.pervasent.boardpapers.ios', 'com.sharefile.mobile.intune.ios')
+                    TargetedAppManagementLevels = @('unmanaged')
+                    AllowedIosDeviceModels      = @('iPhone10,1', 'iPhone11,2')
+                }
+
+                Mock -CommandName Get-MgBetaDeviceAppManagementiosManagedAppProtection -MockWith {
+                    return $null
+                }
+            }
+
+            It 'Should send a semicolon separated string to the create cmdlet from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneAppProtectionPolicyiOS' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MgBetaDeviceAppManagementiosManagedAppProtection -Exactly 1 -ParameterFilter {
+                    $BodyParameter.AllowedIosDeviceModels -is [System.String] -and
+                    $BodyParameter.AllowedIosDeviceModels -eq 'iPhone10,1;iPhone11,2'
+                }
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true

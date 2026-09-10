@@ -16,8 +16,8 @@
   "excludedProperties": [
     {
       "name": "Policy",
-      "reason": "Deferred",
-      "note": "The parent filtering policy comes from the request route"
+      "reason": "Accepted",
+      "note": "Names the parent filtering policy that owns the rule."
     }
   ],
   "description": "Configures filtering rules in Entra Id.",

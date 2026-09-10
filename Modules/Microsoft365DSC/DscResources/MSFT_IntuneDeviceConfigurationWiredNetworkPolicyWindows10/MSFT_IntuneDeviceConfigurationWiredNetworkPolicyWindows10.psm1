@@ -445,9 +445,15 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 $rootCertificatesForServerValidation = @()
                 for ($i = 0; $i -lt $this.RootCertificatesForServerValidationIds.Length; $i++)
                 {
+                    $certName = $null
+                    if ($null -ne $this.RootCertificatesForServerValidationDisplayNames -and $i -lt $this.RootCertificatesForServerValidationDisplayNames.Count)
+                    {
+                        $certName = $this.RootCertificatesForServerValidationDisplayNames[$i]
+                    }
+
                     $checkedCertId = $this.GetCertificateId(
                         $this.RootCertificatesForServerValidationIds[$i],
-                        $this.RootCertificatesForServerValidationDisplayNames[$i],
+                        $certName,
                         @('#microsoft.graph.windows81TrustedRootCertificate'))
                     $rootCertificatesForServerValidation += "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
                 }
@@ -551,7 +557,12 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 for ($i = 0; $i -lt $this.RootCertificatesForServerValidationIds.Count; $i++)
                 {
                     $certId = $this.RootCertificatesForServerValidationIds[$i]
-                    $certName = $this.RootCertificatesForServerValidationDisplayNames[$i]
+                    $certName = $null
+                    if ($null -ne $this.RootCertificatesForServerValidationDisplayNames -and $i -lt $this.RootCertificatesForServerValidationDisplayNames.Count)
+                    {
+                        $certName = $this.RootCertificatesForServerValidationDisplayNames[$i]
+                    }
+
                     $checkedCertId = $this.GetCertificateId($certId, $certName, @('#microsoft.graph.windows81TrustedRootCertificate'))
                     $rootCertificatesForServerValidationChecked += $checkedCertId
                 }

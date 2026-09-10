@@ -18,8 +18,8 @@
     },
     {
       "name": "DomainId",
-      "reason": "Deferred",
-      "note": "Parent domain key from the federationConfiguration route"
+      "reason": "Accepted",
+      "note": "Parent domain of the federation configuration. Held as the key."
     },
     {
       "name": "OpenIdConnectDiscoveryEndpoint",

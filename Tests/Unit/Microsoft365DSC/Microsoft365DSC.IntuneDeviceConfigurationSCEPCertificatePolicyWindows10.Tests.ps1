@@ -199,6 +199,84 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationSCEPCertificatePolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName New-MgBetaDeviceManagementDeviceConfiguration -Exactly 1
             }
+            It 'Should not send the projected root certificate properties in the create body' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationSCEPCertificatePolicyWindows10' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MgBetaDeviceManagementDeviceConfiguration -Exactly 1 -ParameterFilter {
+                    -not $BodyParameter.ContainsKey('RootCertificateDisplayName') -and
+                    -not $BodyParameter.ContainsKey('RootCertificateId') -and
+                    $BodyParameter['rootCertificate@odata.bind'] -like "*deviceConfigurations('$RootCertificateId')"
+                }
+            }
+        }
+
+        Context -Name "The IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 should be created from the root certificate display name alone" -Fixture {
+            BeforeAll {
+                $ResolvedRootCertificateId = '11111111-1111-1111-1111-111111111111'
+
+                $testParams = @{
+                    CertificateStore = "user"
+                    certificateValidityPeriodScale = "days"
+                    certificateValidityPeriodValue = 25
+                    customSubjectAlternativeNames = @(
+                        ([MSFT_MicrosoftGraphcustomSubjectAlternativeName] @{
+                            sanType = "none"
+                            name = "FakeStringValue"
+                        })
+                    )
+                    description = "FakeStringValue"
+                    displayName = "FakeStringValue"
+                    extendedKeyUsages = @(
+                        ([MSFT_MicrosoftGraphextendedKeyUsage] @{
+                            objectIdentifier = "FakeStringValue"
+                            name = "FakeStringValue"
+                        })
+                    )
+                    HashAlgorithm = "sha1"
+                    id = "FakeStringValue"
+                    KeySize = "size1024"
+                    keyStorageProvider = "useTpmKspOtherwiseUseSoftwareKsp"
+                    KeyUsage = @("keyEncipherment")
+                    renewalThresholdPercentage = 25
+                    ScepServerUrls = @("FakeStringValue")
+                    SubjectAlternativeNameFormatString = "FakeStringValue"
+                    subjectAlternativeNameType = "none"
+                    subjectNameFormat = "commonName"
+                    SubjectNameFormatString = "FakeStringValue"
+                    RootCertificateDisplayName = "RootCertificate"
+                    Ensure = "Present"
+                    Credential = $Credential;
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -MockWith {
+                    return $null
+                }
+
+                # An identifier-less deviceConfigurations lookup falls back to a collection GET and returns every profile.
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -ParameterFilter { [System.String]::IsNullOrEmpty($DeviceConfigurationId) -and [System.String]::IsNullOrEmpty($Filter) } -MockWith {
+                    return @(
+                        @{
+                            Id = '22222222-2222-2222-2222-222222222222'
+                            DisplayName = "AnotherRootCertificate"
+                            '@odata.type' = "#microsoft.graph.windows81TrustedRootCertificate"
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfiguration -ParameterFilter { $Filter -like '*windows81TrustedRootCertificate*' } -MockWith {
+                    return @{
+                        Id = $ResolvedRootCertificateId
+                        DisplayName = "RootCertificate"
+                        '@odata.type' = "#microsoft.graph.windows81TrustedRootCertificate"
+                    }
+                }
+            }
+            It 'Should resolve the root certificate by display name and bind it in the create body' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationSCEPCertificatePolicyWindows10' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MgBetaDeviceManagementDeviceConfiguration -Exactly 1 -ParameterFilter {
+                    -not $BodyParameter.ContainsKey('RootCertificateDisplayName') -and
+                    $BodyParameter['rootCertificate@odata.bind'] -like "*deviceConfigurations('$ResolvedRootCertificateId')"
+                }
+            }
         }
 
         Context -Name "The IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 exists but it SHOULD NOT" -Fixture {

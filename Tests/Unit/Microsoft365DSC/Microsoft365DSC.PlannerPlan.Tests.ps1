@@ -195,6 +195,86 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name "OwnerGroup is a display name and the Plan doesn't exist" -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Title      = 'Contoso Plan'
+                    OwnerGroup = 'Contoso Group'
+                    Credential = $Credential
+                    Ensure     = 'Present'
+                }
+
+                Mock -CommandName Get-MgGroup -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-MgGroup -ParameterFilter { $Filter -eq "displayName eq 'Contoso Group'" } -MockWith {
+                    return @(
+                        @{
+                            DisplayName = 'Contoso Group'
+                            Id          = '12345-12345-12345-12345-12345'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgGroupPlannerPlan -MockWith {
+                    return $null
+                }
+            }
+
+            It 'Should look the group up by display name filter in the Get method' {
+                $null = (New-M365DSCResourceInstance -ResourceName 'PlannerPlan' -Property $testParams).Get()
+                Should -Invoke -CommandName Get-MgGroup -ParameterFilter { $Filter -eq "displayName eq 'Contoso Group'" } -Exactly 1
+                Should -Invoke -CommandName Get-MgGroup -ParameterFilter { -not [System.String]::IsNullOrEmpty($Search) } -Exactly 0
+            }
+
+            It 'Should create the Plan with the resolved group id in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'PlannerPlan' -Property $testParams).Set()
+                Should -Invoke -CommandName New-MGPlannerPlan -ParameterFilter { $Owner -eq '12345-12345-12345-12345-12345' } -Exactly 1
+            }
+        }
+
+        Context -Name 'OwnerGroup is a display name and the Plan exists' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Title      = 'Contoso Plan'
+                    OwnerGroup = 'Contoso Group'
+                    Credential = $Credential
+                    Ensure     = 'Present'
+                }
+
+                Mock -CommandName Get-MgGroup -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-MgGroup -ParameterFilter { $Filter -eq "displayName eq 'Contoso Group'" } -MockWith {
+                    return @(
+                        @{
+                            DisplayName = 'Contoso Group'
+                            Id          = '12345-12345-12345-12345-12345'
+                        }
+                    )
+                }
+
+                Mock -CommandName Get-MgGroupPlannerPlan -MockWith {
+                    return @{
+                        Title = 'Contoso Plan'
+                        Id    = '1234567890'
+                        Owner = '12345-12345-12345-12345-12345'
+                    }
+                }
+            }
+
+            It 'Should return Present from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'PlannerPlan' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
+            }
+
+            It 'Should update the Plan with the resolved group id in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'PlannerPlan' -Property $testParams).Set()
+                Should -Invoke -CommandName Update-MGPlannerPlan -ParameterFilter { $BodyParameter.Owner -eq '12345-12345-12345-12345-12345' } -Exactly 1
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true

@@ -84,7 +84,7 @@
     {
       "name": "Settings",
       "reason": "Accepted",
-      "note": "Configured through the EnableLogCollection, EnableAutopilotDiagnostics and M365AppDiagnosticsEnabled properties on the resource. Responsible for the account level device management settings."
+      "note": "Configured through EnableLogCollection, EnableAutopilotDiagnostics and M365AppDiagnosticsEnabled."
     },
     {
       "name": "Subscriptions",

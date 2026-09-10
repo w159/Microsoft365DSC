@@ -33,8 +33,13 @@
     },
     {
       "name": "TargetGroupIds",
-      "reason": "Accepted",
-      "note": "Configured through the TargetGroups property on the resource, which carries the same groups by display name."
+      "reason": "ReadOnly",
+      "note": "Replaced through TargetGroups with the corresponding display names."
+    },
+    {
+      "name": "TargetGroups",
+      "reason": "ReadOnly",
+      "note": "Display names of targetGroupIds."
     }
   ],
   "description": "This resource configures Intune Android enrollment settings.",

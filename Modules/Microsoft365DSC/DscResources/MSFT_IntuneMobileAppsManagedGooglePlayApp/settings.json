@@ -14,7 +14,7 @@
     {
       "name": "AppIdentifier",
       "reason": "NotConfigurable",
-      "note": "The app is seeded by the Managed Google Play product approval and the service takes the identity on neither create nor update."
+      "note": "Created by the Managed Google Play approval process."
     },
     {
       "name": "AppStoreUrl",

@@ -33,8 +33,8 @@
     },
     {
       "name": "AssignedToRole",
-      "reason": "Deferred",
-      "note": "The resource creates and removes unifiedRoleAssignment objects for the group"
+      "reason": "Accepted",
+      "note": "Resolved from the role assignments whose principal is the group."
     },
     {
       "name": "AutoSubscribeNewMembers",
@@ -49,7 +49,7 @@
     {
       "name": "CalendarView",
       "reason": "ReadOnly",
-      "note": "A read only query surface over the events of the group calendar."
+      "note": "A read only view of the group calendar events."
     },
     {
       "name": "Classification",
@@ -84,12 +84,12 @@
     {
       "name": "Extensions",
       "reason": "ReadOnly",
-      "note": "Open extension payloads belong to the applications that define them and are written through the extensions endpoint."
+      "note": "Open extensions belong to the applications that define them."
     },
     {
       "name": "GroupAsMembers",
-      "reason": "Deferred",
-      "note": "Holds the group typed entries of the vendor members navigation collection"
+      "reason": "Accepted",
+      "note": "The group typed entries of members."
     },
     {
       "name": "GroupLifecyclePolicies",
@@ -98,8 +98,8 @@
     },
     {
       "name": "GroupLifecyclePolicySelectedEnabled",
-      "reason": "Deferred",
-      "note": "Toggles group membership in the selected scope lifecycle policy"
+      "reason": "Accepted",
+      "note": "Flattens the groupLifecyclePolicies navigation into a flag saying whether the group sits in the selected scope policy."
     },
     {
       "name": "HasMembersWithLicenseErrors",
@@ -189,7 +189,7 @@
     {
       "name": "Photos",
       "reason": "ReadOnly",
-      "note": "The collection holds the sizes the service renders from the uploaded profile photo."
+      "note": "The sizes the service renders from the profile photo."
     },
     {
       "name": "Planner",

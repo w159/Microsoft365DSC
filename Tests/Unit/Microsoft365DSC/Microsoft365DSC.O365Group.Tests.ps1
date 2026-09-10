@@ -224,6 +224,84 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Office 365 Group - When the group already exists with different members and no owners are specified' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName  = 'Test Group'
+                    MailNickName = 'TestGroup'
+                    Description  = 'This is a test'
+                    Members      = @('JohnSmith@contoso.onmicrosoft.com')
+                    Ensure       = 'Present'
+                    Credential   = $Credential
+                }
+
+                Mock -CommandName Get-MSCloudLoginConnectionProfile -MockWith {
+                    return @{
+                        ResourceUrl = 'https://graph.microsoft.com/'
+                    }
+                }
+
+                Mock -CommandName Get-MgGroup -MockWith {
+                    return @{
+                        DisplayName  = 'Test Group'
+                        MailNickName = 'TestGroup'
+                        Description  = 'This is a test'
+                        Id           = 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770'
+                    }
+                }
+
+                Mock -CommandName Get-MgGroupMember -MockWith {
+                    return @{
+                        UserPrincipalName = 'SecondUser@contoso.onmicrosoft.com'
+                    }
+                }
+
+                Mock -CommandName Get-MgGroupOwner -MockWith {
+                    return @{
+                        UserPrincipalName = 'Bob.Houle@contoso.onmicrosoft.com'
+                    }
+                }
+
+                Mock -CommandName Get-MgUser -MockWith {
+                    return @{
+                        Id = '12345-12345-12345-12345-12345'
+                    }
+                }
+
+                Mock -CommandName New-MgGroupMemberByRef -MockWith {
+                }
+
+                Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
+                }
+            }
+
+            It 'Should add the desired member in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Set()
+
+                Should -Invoke -CommandName New-MgGroupMemberByRef -Exactly 1 -ParameterFilter {
+                    $GroupId -eq 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770' -and
+                    $BodyParameter['@odata.id'] -eq 'https://graph.microsoft.com/v1.0/directoryObjects/12345-12345-12345-12345-12345'
+                }
+            }
+
+            It 'Should remove the undesired member in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Set()
+
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'DELETE' -and
+                    $Uri -eq '/v1.0/groups/a53dbbd6-7e9b-4df9-841a-a2c3071a1770/members/12345-12345-12345-12345-12345/$ref'
+                }
+            }
+
+            It 'Should leave the existing owners untouched in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Set()
+
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 0 -ParameterFilter {
+                    $Uri -like '*/owners/*'
+                }
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true

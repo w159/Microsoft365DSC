@@ -34,8 +34,9 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
     [MSFT_AzureADRegistrationPolicy] $AzureADRegistration
 
     [DscProperty()]
-    [System.ComponentModel.Description('Specifies the authentication policy for a user to complete registration using Microsoft Entra join or Microsoft Entra registered within your organization.')]
-    [System.Nullable[System.Boolean]] $MultiFactorAuthConfiguration
+    [System.ComponentModel.Description('Specifies the authentication policy for a user to complete registration using Microsoft Entra join or Microsoft Entra registered within your organization. The possible values are: notRequired, required, unknownFutureValue. The default value is notRequired.')]
+    [ValidateSet('notRequired', 'required')]
+    [System.String] $MultiFactorAuthConfiguration
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates whether global administrators are local administrators on all Microsoft Entra-joined devices. This setting only applies to future registrations. Default is true.')]
@@ -246,11 +247,6 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
                 IsAdminConfigurable = [Boolean]$getValue.AzureADRegistration.IsAdminConfigurable
             }
 
-            $multiFactorAuthConfigurationValue = $false
-            if ($getValue.MultiFactorAuthConfiguration -eq 'required')
-            {
-                $multiFactorAuthConfigurationValue = $true
-            }
             $localAdminsEnableGlobalAdminsValue = $true
             if (-not $getValue.AzureAdJoin.LocalAdmins.EnableGlobalAdmins)
             {
@@ -264,7 +260,7 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
                 AzureADAllowedToJoinUsers               = $azureADAllowedToJoinUsersValue
                 AzureADRegistration                     = $azureADRegistrationValue
                 UserDeviceQuota                         = $getValue.UserDeviceQuota
-                MultiFactorAuthConfiguration            = $multiFactorAuthConfigurationValue
+                MultiFactorAuthConfiguration            = $getValue.MultiFactorAuthConfiguration
                 LocalAdminsEnableGlobalAdmins           = $localAdminsEnableGlobalAdminsValue
                 LocalAdminPasswordIsEnabled             = [Boolean]$getValue.LocalAdminPassword.IsEnabled
                 AzureAdJoinLocalAdminsRegisteringMode   = $localAdminsRegisteringModeValue
@@ -310,12 +306,6 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
         Confirm-M365DSCDependencies
 
         $this.AddTelemetry('Set')
-
-        $MultiFactorAuthConfigurationValue = 'notRequired'
-        if ($this.MultiFactorAuthConfiguration)
-        {
-            $MultiFactorAuthConfigurationValue = 'required'
-        }
 
         $azureADRegistrationAllowedToRegister = '#microsoft.graph.noDeviceRegistrationMembership'
         if ($this.AzureADAllowedToJoin -eq 'All')
@@ -399,9 +389,15 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
             }
         }
 
+        $multiFactorAuthConfigurationValue = $this.MultiFactorAuthConfiguration
+        if ([System.String]::IsNullOrEmpty($multiFactorAuthConfigurationValue))
+        {
+            $multiFactorAuthConfigurationValue = 'notRequired'
+        }
+
         $updateParameters = @{
             userDeviceQuota              = $this.UserDeviceQuota
-            multiFactorAuthConfiguration = $MultiFactorAuthConfigurationValue
+            multiFactorAuthConfiguration = $multiFactorAuthConfigurationValue
             azureADJoin                  = @{
                 isAdminConfigurable = $this.AzureADJoinIsAdminConfigurable
                 allowedToJoin       = @{

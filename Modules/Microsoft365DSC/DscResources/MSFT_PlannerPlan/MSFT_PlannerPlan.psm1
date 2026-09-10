@@ -87,7 +87,7 @@ class PlannerPlan : M365DSCResourceBase
             {
                 Write-Verbose -Message "Could not get Azure AD Group {$($this.OwnerGroup)} by ID. `
                 Trying by Name."
-                [Array]$AllGroups = Get-MgGroup -Search $this.OwnerGroup
+                [Array]$AllGroups = Get-MgGroup -Filter "displayName eq '$($this.OwnerGroup -replace "'", "''")'"
             }
             else
             {
@@ -183,23 +183,34 @@ class PlannerPlan : M365DSCResourceBase
         $currentValues = $this.Get().ToHashtable()
         $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        $ownerGroupId = $null
+        if ($this.Ensure -eq 'Present')
+        {
+            [Array]$AllGroups = Get-MgGroup -GroupId $this.OwnerGroup -ErrorAction 'SilentlyContinue'
+            if ($null -eq $AllGroups)
+            {
+                [Array]$AllGroups = Get-MgGroup -Filter "displayName eq '$($this.OwnerGroup -replace "'", "''")'"
+            }
+
+            if ($null -eq $AllGroups)
+            {
+                throw "Could not find the Azure AD Group {$($this.OwnerGroup)} that owns the Planner Plan {$($this.Title)}."
+            }
+
+            $ownerGroupId = $AllGroups[0].Id
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentValues.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Planner Plan {$($this.Title)} doesn't already exist. Creating it."
-            New-MgPlannerPlan -Owner $this.OwnerGroup -Title $this.Title | Out-Null
+            New-MgPlannerPlan -Owner $ownerGroupId -Title $this.Title | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentValues.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Planner Plan {$($this.Title)} already exists, but is not in the `
             Desired State. Updating it."
-            [Array]$AllGroups = Get-MgGroup -GroupId $this.OwnerGroup -ErrorAction 'SilentlyContinue'
-            Write-Verbose -Message $AllGroups[0]
-            if ($null -eq $AllGroups)
-            {
-                [Array]$AllGroups = Get-MgGroup -Search $this.OwnerGroup
-            }
-            $plan = Get-MgGroupPlannerPlan -GroupId $AllGroups[0].Id | Where-Object -FilterScript { $_.Title -eq $this.Title }
-            $SetParams.Add('Owner', $AllGroups[0].Id)
+            $plan = Get-MgGroupPlannerPlan -GroupId $ownerGroupId | Where-Object -FilterScript { $_.Title -eq $this.Title }
+            $SetParams.Add('Owner', $ownerGroupId)
             $SetParams.Remove('OwnerGroup') | Out-Null
             Update-MgPlannerPlan -PlannerPlanId $plan.Id -BodyParameter $SetParams
         }

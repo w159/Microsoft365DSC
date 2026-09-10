@@ -18,8 +18,8 @@
     },
     {
       "name": "SelectedMobileAppNames",
-      "reason": "Deferred",
-      "note": "Display name alternative to SelectedMobileAppIds"
+      "reason": "Accepted",
+      "note": "Display names of the apps in selectedMobileAppIds."
     }
   ],
   "description": "This resource configures an Intune Device Enrollment Status Page Configuration for Windows10.",

@@ -28,7 +28,7 @@ class TeamsChannelTab : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Index of the sort order for the custom tab.')]
-    [System.Nullable[System.UInt32]] $SortOrderIndex
+    [System.String] $SortOrderIndex
 
     [DscProperty()]
     [System.ComponentModel.Description('Container for custom settings applied to a tab.')]

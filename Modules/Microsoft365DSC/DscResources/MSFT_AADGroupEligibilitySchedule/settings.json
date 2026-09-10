@@ -28,8 +28,8 @@
     },
     {
       "name": "PrincipalType",
-      "reason": "Deferred",
-      "note": "The type of the Principal, differentiating between principal types"
+      "reason": "Accepted",
+      "note": "Resolved from the odata type of the directory object behind PrincipalId."
     },
     {
       "name": "Status",

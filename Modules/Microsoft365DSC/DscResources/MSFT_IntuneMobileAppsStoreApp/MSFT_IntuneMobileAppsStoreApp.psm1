@@ -133,6 +133,12 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
     {
         $this.ResourceCache['androidExclusive'] = @('V4_0', 'V4_0_3', 'V4_1', 'V4_2', 'V4_3', 'V4_4', 'V5_0', 'V5_1', 'V6_0', 'V7_0', 'V7_1', 'V8_1')
         $this.ResourceCache['iOSExclusive'] = @('V16_0', 'V17_0', 'V18_0')
+
+        # Graph resolves OData type casts case-sensitively, while ValidateSet accepts any casing.
+        $this.ResourceCache['odataTypes'] = @{
+            android = '#microsoft.graph.androidStoreApp'
+            ios     = '#microsoft.graph.iosStoreApp'
+        }
     }
 
     [IntuneMobileAppsStoreApp] Get()
@@ -368,7 +374,7 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $createParameters.Add('@odata.type', "#microsoft.graph.$($this.TargetPlatform)StoreApp")
+            $createParameters.Add('@odata.type', $this.GetODataType())
             $policy = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $createParameters
 
             if ($this.GetBoundParameters().ContainsKey('Categories'))
@@ -396,7 +402,7 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $updateParameters.Add('@odata.type', "#microsoft.graph.$($this.TargetPlatform)StoreApp")
+            $updateParameters.Add('@odata.type', $this.GetODataType())
             Update-MgBetaDeviceAppManagementMobileApp `
                 -MobileAppId $currentInstance.Id `
                 -BodyParameter $updateParameters
@@ -608,6 +614,17 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
         return @{
             ExcludedProperties = @('AppStoreUrl', 'TargetPlatform')
         }
+    }
+
+    hidden [System.String] GetODataType()
+    {
+        $odataTypes = $this.ResourceCache['odataTypes']
+        if ([System.String]::IsNullOrEmpty($this.TargetPlatform) -or -not $odataTypes.ContainsKey($this.TargetPlatform))
+        {
+            throw "TargetPlatform {$($this.TargetPlatform)} is not supported for an Intune Mobile Apps Store App."
+        }
+
+        return $odataTypes[$this.TargetPlatform]
     }
 
     hidden [void] ValidateBoundParameters()

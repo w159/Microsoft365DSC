@@ -406,6 +406,7 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
             Write-Verbose -Message "Creating an Intune Device Configuration Scep Certificate Policy for Windows10 with DisplayName {$($this.DisplayName)}"
             $BoundParameters.Remove('Assignments') | Out-Null
             $BoundParameters.Remove('RootCertificateId') | Out-Null
+            $BoundParameters.Remove('RootCertificateDisplayName') | Out-Null
 
             $CreateParameters = ([Hashtable]$BoundParameters).Clone()
             $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
@@ -413,9 +414,15 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
             $CreateParameters['keyUsage'] = $CreateParameters['keyUsage'] -join ','
 
             $rootCertificateIdValue = $this.RootCertificateId
-            $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
-                -DeviceConfigurationId $rootCertificateIdValue `
-                -ErrorAction SilentlyContinue
+            $RootCertificate = $null
+            if (-not [System.String]::IsNullOrEmpty($rootCertificateIdValue))
+            {
+                $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -DeviceConfigurationId $rootCertificateIdValue `
+                    -ErrorAction SilentlyContinue | Where-Object -FilterScript {
+                        $_.'@odata.type' -eq '#microsoft.graph.windows81TrustedRootCertificate'
+                    }
+            }
 
             if ($null -eq $RootCertificate)
             {
@@ -480,8 +487,7 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
             $rootCertificateIdValue = $this.RootCertificateId
             $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
                 -DeviceConfigurationId $rootCertificateIdValue `
-                -ErrorAction SilentlyContinue | `
-                    Where-Object -FilterScript {
+                -ErrorAction SilentlyContinue | Where-Object -FilterScript {
                     $_.'@odata.type' -eq '#microsoft.graph.windows81TrustedRootCertificate'
                 }
 

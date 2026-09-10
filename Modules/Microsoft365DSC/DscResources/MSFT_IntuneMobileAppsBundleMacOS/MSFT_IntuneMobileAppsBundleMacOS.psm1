@@ -11,7 +11,7 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
     [System.ComponentModel.Description('The admin provided or imported title of the app.')]
     [System.String] $DisplayName
 
-    [DscProperty()]
+    [DscProperty(Mandatory)]
     [System.ComponentModel.Description('The bundle type. To change the app type, you have to first delete and then recreate it. Possible values are: Dmg, Pkg')]
     [ValidateSet('Dmg', 'Pkg')]
     [System.String] $PackageFileType

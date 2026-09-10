@@ -13,8 +13,8 @@
   "excludedProperties": [
     {
       "name": "GuestUserRole",
-      "reason": "Deferred",
-      "note": "Friendly-name alias for guestUserRoleId, needs a name mapping"
+      "reason": "Accepted",
+      "note": "Friendly name for guestUserRoleId."
     },
     {
       "name": "GuestUserRoleId",

@@ -13,13 +13,13 @@
   "excludedProperties": [
     {
       "name": "RootCertificateDisplayName",
-      "reason": "Deferred",
-      "note": "Display name of the referenced windows81TrustedRootCertificate"
+      "reason": "Accepted",
+      "note": "Display name of the referenced windows81TrustedRootCertificate."
     },
     {
       "name": "RootCertificateId",
-      "reason": "Deferred",
-      "note": "Identifier of the referenced windows81TrustedRootCertificate"
+      "reason": "Accepted",
+      "note": "Identifier of the referenced windows81TrustedRootCertificate."
     }
   ],
   "description": "This resource configures an Intune Device Configuration Scep Certificate Policy for Windows10.",

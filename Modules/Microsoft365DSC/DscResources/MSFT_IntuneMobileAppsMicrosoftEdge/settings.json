@@ -46,8 +46,8 @@
     },
     {
       "name": "TargetPlatform",
-      "reason": "Deferred",
-      "note": "The platform the app targets. Used to differentiate between their types."
+      "reason": "Accepted",
+      "note": "Selects the Windows or macOS Edge app type."
     },
     {
       "name": "UploadState",

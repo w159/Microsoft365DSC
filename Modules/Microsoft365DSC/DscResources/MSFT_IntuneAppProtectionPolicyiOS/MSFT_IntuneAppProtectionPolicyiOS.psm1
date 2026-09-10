@@ -487,6 +487,12 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 $allowedDataStorageLocationsValue = [String[]]($policy.AllowedDataStorageLocations)
             }
 
+            $allowedIosDeviceModelsValue = @()
+            if (-not [System.String]::IsNullOrEmpty($policy.AllowedIosDeviceModels))
+            {
+                $allowedIosDeviceModelsValue = [String[]]($policy.AllowedIosDeviceModels -split ';')
+            }
+
             $gracePeriodToBlockAppsDuringOffClockHoursString = $null
             if (-not [System.String]::IsNullOrEmpty($policy.GracePeriodToBlockAppsDuringOffClockHours))
             {
@@ -566,7 +572,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 TargetedAppManagementLevels                    = [string[]]$policy.TargetedAppManagementLevels.ToString().Split(',')
                 ExemptedAppProtocols                           = $exemptedAppProtocolsArray
                 MinimumWipeSdkVersion                          = $policy.MinimumWipeSdkVersion
-                AllowedIosDeviceModels                         = $policy.AllowedIosDeviceModels
+                AllowedIosDeviceModels                         = $allowedIosDeviceModelsValue
                 AppActionIfIosDeviceModelNotAllowed            = $policy.AppActionIfIosDeviceModelNotAllowed
                 FilterOpenInToOnlyManagedApps                  = $policy.FilterOpenInToOnlyManagedApps
                 DisableProtectionOfManagedOutboundOpenInData   = $policy.DisableProtectionOfManagedOutboundOpenInData
@@ -627,6 +633,11 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
             }
             $createParameters.ExemptedAppProtocols = $myExemptedAppProtocols
 
+            if ($createParameters.ContainsKey('AllowedIosDeviceModels'))
+            {
+                $createParameters.AllowedIosDeviceModels = $this.AllowedIosDeviceModels -join ';'
+            }
+
             # Remove empty string parameters that the cmdlet can't handle
             $arrayTemp = @('MinimumWarningSdkVersion', 'MaximumRequiredOsVersion', 'MaximumWarningOsVersion', 'MaximumWipeOsVersion')
             foreach ($item in $arrayTemp)
@@ -680,6 +691,12 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 }
             }
             $updateParameters.ExemptedAppProtocols = $myExemptedAppProtocols
+
+            if ($updateParameters.ContainsKey('AllowedIosDeviceModels'))
+            {
+                $updateParameters.AllowedIosDeviceModels = $this.AllowedIosDeviceModels -join ';'
+            }
+
             Update-MgBetaDeviceAppManagementiOSManagedAppProtection -IosManagedAppProtectionId $currentPolicy.Id -BodyParameter $updateParameters
 
             Write-Verbose -Message "Updating targetApps for iOS App Protection Policy with Id {$($currentPolicy.Id)} and DisplayName {$($this.DisplayName)}"

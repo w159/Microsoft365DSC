@@ -19,7 +19,7 @@
     {
       "name": "EndOfSupportDate",
       "reason": "NotConfigurable",
-      "note": "The service derives the date from the Windows servicing lifecycle of the build named by FeatureUpdateVersion."
+      "note": "Derived from the Windows servicing lifecycle of the build named by FeatureUpdateVersion."
     }
   ],
   "description": "This resource configures an Intune Windows Update For Business Feature Update Profile for Windows10.",

@@ -42,7 +42,12 @@
   * [BREAKING CHANGE] Renamed the property `ClientConfigurationTimeoutMilliseconds` to
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
 * AADDeviceRegistrationPolicy
+  * [BREAKING CHANGE] Changed `MultiFactorAuthConfiguration` from a boolean to the
+    values `notRequired` and `required`, matching the type Microsoft Graph defines.
   * Added support for the `AzureADRegistration` property.
+* AADFilteringProfile
+  * Changed `Priority`, on the profile and on its associated policies, to a 64 bit
+    integer to match the type Microsoft Graph defines.
 * AADGroup
   * Added support for the `Theme` and `WritebackConfiguration` properties.
 * AADIdentityAPIConnector
@@ -80,6 +85,9 @@
   * Fixed an issue where roles with empty permissions were not exported.
 * AADRoleEligibilityScheduleRequest
   * [BREAKING CHANGE] Removed deprecated properties `Action` and `IsValidationOnly`.
+* AADRoleSetting
+  * Fixed an issue where a configuration that identified the role by its display name
+    instead of its id was always reported as compliant and never applied its settings.
 * AADServicePrincipal
   * [BREAKING CHANGE] Fixed an issue where the allowed values for the
     `MSFT_AADServicePrincipalClaimsPolicyGroupFilter` properties `type` and `matchOn`
@@ -159,6 +167,8 @@
     and `androidOpenSourceProjectUserless` to property `TargetedAppManagementLevels`.
   * Added support for the `GenmojiConfigurationState`, `ScreenCaptureConfigurationState`
     and `WritingToolsConfigurationState` properties.
+  * Fixed an issue where a policy that allowed more than one device model failed to
+    apply and exported every model as a single combined value.
 * IntuneAppProtectionPolicyWindows10
   * Added value `selectedApps` to property `AllowedInboundDataTransferSources`.
   * Added value `selectedApps` to property `AllowedOutboundDataTransferDestinations`.
@@ -260,6 +270,8 @@
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
+  * Fixed an issue where creating a policy failed when the configuration named the root
+    certificate by its display name.
 * IntuneDeviceConfigurationSecureAssessmentPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
@@ -286,6 +298,8 @@
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
+  * Fixed an issue where a policy that listed its root certificates for server
+    validation by identifier alone failed to apply.
 * IntuneDeviceEnrollmentPlatformRestriction
   * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
     Microsoft Graph uses.
@@ -299,6 +313,9 @@
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
 * IntuneDeviceFeaturesConfigurationPolicyIOS
   * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneMobileAppsBundleMacOS
+  * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
+    that carry a type discriminator. Intune rejected a configuration that omitted it.
 * IntuneMobileAppsLobAppiOS
   * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
 * IntuneMobileAppsLobAppWindows10
@@ -309,6 +326,8 @@
     `LargeIcon`, `Notes`, `Owner`, `PrivacyInformationUrl` and `Publisher` properties.
 * IntuneMobileAppsStoreApp
   * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
+  * Fixed an issue where a configuration that wrote the target platform in a different
+    casing was rejected on create and update.
 * IntuneMobileAppsSystemAppAndroid
   * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementSystemMobileAppAssignment`.
   * Added support for the `Description`, `Developer`, `InformationUrl`, `IsFeatured`,
@@ -392,10 +411,16 @@
     `QualityUpdatesWillBeRolledBack` properties.
 * O365ExternalConnection
   * Added support for the `ActivitySettings` and `ContentCategory` properties.
+* O365Group
+  * Fixed an issue where a configuration that listed members without owners failed to
+    apply whenever the membership changed.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket
   * [BREAKING CHANGE] Renamed the property `BucketId` to `Id`.
+* PlannerPlan
+  * Fixed an issue where a configuration that named the owning group by display name
+    failed to retrieve, create or update the plan.
 * PlannerTask
   * [BREAKING CHANGE] Renamed the properties `AssignedUsers` to `Assignments`,
     `Bucket` to `BucketId`, `Notes` to `Description` and `TaskId` to `Id` to
@@ -470,6 +495,8 @@
 * TeamsCallQueue
   * Added GUID resolution to `AuthorizedUsers` and `Users`.
 * TeamsChannelTab
+  * [BREAKING CHANGE] Changed `SortOrderIndex` to a string to match the type Microsoft
+    Graph declares. A numeric value in an existing configuration keeps working.
   * [BREAKING CHANGE] Replaced the flattened `ContentUrl`, `EntityId`, `RemoveUrl` and
     `WebSiteUrl` properties with the `Configuration` complex property, which carries the
     same four members under the names Microsoft Graph uses.

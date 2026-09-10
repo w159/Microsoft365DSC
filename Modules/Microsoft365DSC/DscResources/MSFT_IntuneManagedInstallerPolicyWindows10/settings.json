@@ -43,7 +43,7 @@
     },
     {
       "name": "IsIntuneManagedInstaller",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Indicates whether the Intune managed installer is enabled"
     },
     {

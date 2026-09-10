@@ -113,8 +113,8 @@
     },
     {
       "name": "DisplayName",
-      "reason": "Deferred",
-      "note": "Display name of the role the policy applies to"
+      "reason": "Accepted",
+      "note": "Display name of the role whose policy rules this resource writes."
     },
     {
       "name": "EligibilityAssignmentReqJustification",

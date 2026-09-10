@@ -20,8 +20,8 @@ class AADFilteringProfile : M365DSCResourceBase
     [System.String] $State
 
     [DscProperty()]
-    [System.ComponentModel.Description('Priority level for the profile.')]
-    [System.Nullable[System.UInt32]] $Priority
+    [System.ComponentModel.Description('The priority used to order the profile for processing within a list.')]
+    [System.Nullable[System.Int64]] $Priority
 
     [DscProperty()]
     [System.ComponentModel.Description('List of filtering policy names associated with the profile.')]
@@ -352,8 +352,8 @@ class MSFT_AADFilteringProfilePolicyLink
     [System.String] $LoggingState
 
     [DscProperty()]
-    [System.ComponentModel.Description('Priority of the associated policy.')]
-    [System.Nullable[System.UInt32]] $Priority
+    [System.ComponentModel.Description('Provides an integer priority level for each instance of a URL filtering policy linked to a profile. Required.')]
+    [System.Nullable[System.Int64]] $Priority
 
     [DscProperty()]
     [System.ComponentModel.Description('State of the associated policy.')]

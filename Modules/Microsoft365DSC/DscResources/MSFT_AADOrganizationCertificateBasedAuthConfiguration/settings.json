@@ -18,7 +18,7 @@
     },
     {
       "name": "OrganizationId",
-      "reason": "Deferred",
+      "reason": "Accepted",
       "note": "Parent organization identifier that identifies the authentication configuration"
     }
   ],

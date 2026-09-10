@@ -13,8 +13,8 @@
   "excludedProperties": [
     {
       "name": "CrossTenantAccessPolicyConfigurationPartnerTenantId",
-      "reason": "Deferred",
-      "note": "Renamed from tenantId to avoid clashing with the authentication TenantId parameter"
+      "reason": "Accepted",
+      "note": "Renamed from tenantId so the key does not collide with the authentication TenantId parameter."
     },
     {
       "name": "GroupSyncInbound",

@@ -43,7 +43,7 @@ Configuration Example
             IsSingleInstance                        = "Yes";
             LocalAdminPasswordIsEnabled             = $False;
             LocalAdminsEnableGlobalAdmins           = $True;
-            MultiFactorAuthConfiguration            = $False;
+            MultiFactorAuthConfiguration            = "required";
             UserDeviceQuota                         = 50;
             ApplicationId                           = $ApplicationId;
             TenantId                                = $TenantId;
