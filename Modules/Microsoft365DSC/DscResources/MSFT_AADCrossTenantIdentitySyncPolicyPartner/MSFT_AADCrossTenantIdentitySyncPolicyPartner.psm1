@@ -16,6 +16,14 @@ class AADCrossTenantIdentitySyncPolicyPartner : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $IsSyncAllowed
 
     [DscProperty()]
+    [System.ComponentModel.Description('Identifier of the authorized application in the external cloud.')]
+    [System.String] $ExternalCloudAuthorizedApplicationId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Defines whether role enabled groups can be synchronized from the partner tenant.')]
+    [System.Nullable[System.Boolean]] $IsRoleEnabledGroupSyncAllowed
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the instance exists, absent ensures it is removed.')]
     [ValidateSet('Absent', 'Present')]
     [System.String] $Ensure
@@ -97,10 +105,18 @@ class AADCrossTenantIdentitySyncPolicyPartner : M365DSCResourceBase
                 $instance = $this.ExportedInstance
             }
 
+            $roleEnabledGroupSyncAllowed = $null
+            if ($null -ne $instance.roleEnabledGroupSyncInbound)
+            {
+                $roleEnabledGroupSyncAllowed = $instance.roleEnabledGroupSyncInbound.IsSyncAllowed
+            }
+
             $results = @{
                 DisplayName                                         = $instance.DisplayName
                 CrossTenantAccessPolicyConfigurationPartnerTenantId = $instance.TenantId
                 IsSyncAllowed                                       = $instance.userSyncInbound.IsSyncAllowed
+                ExternalCloudAuthorizedApplicationId                = $instance.ExternalCloudAuthorizedApplicationId
+                IsRoleEnabledGroupSyncAllowed                       = $roleEnabledGroupSyncAllowed
                 Ensure                                              = 'Present'
                 Credential                                          = $this.Credential
                 ApplicationId                                       = $this.ApplicationId
@@ -134,27 +150,23 @@ class AADCrossTenantIdentitySyncPolicyPartner : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
+        $params = @{
+            displayName     = $this.DisplayName
+            userSyncInbound = @{
+                isSyncAllowed = $this.IsSyncAllowed
+            }
+        }
+        $this.AddOptionalSyncValues($params)
+
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $params = @{
-                displayName     = $this.DisplayName
-                userSyncInbound = @{
-                    isSyncAllowed = $this.IsSyncAllowed
-                }
-            }
             Write-Verbose -Message "Creating Cross-Tenant Identity Sync Policy for Tenant {$($this.CrossTenantAccessPolicyConfigurationPartnerTenantId)} with:`r`n$(ConvertTo-Json $params -Depth 10)"
             Set-MgBetaPolicyCrossTenantAccessPolicyPartnerIdentitySynchronization -BodyParameter $params `
                 -CrossTenantAccessPolicyConfigurationPartnerTenantId $this.CrossTenantAccessPolicyConfigurationPartnerTenantId
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            $params = @{
-                displayName     = $this.DisplayName
-                userSyncInbound = @{
-                    isSyncAllowed = $this.IsSyncAllowed
-                }
-            }
             $body = $params | ConvertTo-Json -Depth 10
             Write-Verbose -Message "Updating Cross-Tenant Identity Sync Policy for Tenant {$($this.CrossTenantAccessPolicyConfigurationPartnerTenantId)} with:`r`n$body"
             Invoke-M365DSCGraphRequest -Method 'PATCH' `
@@ -235,7 +247,6 @@ class AADCrossTenantIdentitySyncPolicyPartner : M365DSCResourceBase
                 $params = @{
                     DisplayName                                         = $config.DisplayName
                     CrossTenantAccessPolicyConfigurationPartnerTenantId = $partner.TenantId
-                    IsSyncAllowed                                       = $config.userSyncInbound.IsSyncAllowed
                     Ensure                                              = 'Present'
                     Credential                                          = $this.Credential
                     ApplicationId                                       = $this.ApplicationId
@@ -267,6 +278,24 @@ class AADCrossTenantIdentitySyncPolicyPartner : M365DSCResourceBase
             $this.LogError($_, 'Error during Export:')
 
             throw
+        }
+    }
+
+    hidden [void] AddOptionalSyncValues([System.Collections.Hashtable] $Params)
+    {
+        $bound = $this.GetBoundParameters()
+        if ($bound.ContainsKey('ExternalCloudAuthorizedApplicationId'))
+        {
+            $Params.externalCloudAuthorizedApplicationId = $this.ExternalCloudAuthorizedApplicationId
+        }
+
+        # Graph rejects roleEnabledGroupSyncInbound unless group synchronization is already enabled
+        # on the partner, which another resource owns.
+        if ($bound.ContainsKey('IsRoleEnabledGroupSyncAllowed'))
+        {
+            $Params.roleEnabledGroupSyncInbound = @{
+                isSyncAllowed = $this.IsRoleEnabledGroupSyncAllowed
+            }
         }
     }
 

@@ -117,6 +117,11 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
     [System.String] $ProtectedMessagingRedirectAppType
 
     [DscProperty()]
+    [System.ComponentModel.Description('Determines whether a Microsoft Purview content evaluation is required. The possible values are: notRequired, requiredWhenOnline, required.')]
+    [ValidateSet('notRequired', 'requiredWhenOnline', 'required')]
+    [System.String] $PurviewContentEvaluationRequired
+
+    [DscProperty()]
     [System.ComponentModel.Description('Configuration state (blocked or not blocked) for Apple Intelligence screen capture setting.')]
     [ValidateSet('notBlocked', 'blocked')]
     [System.String] $ScreenCaptureConfigurationState
@@ -526,6 +531,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 MobileThreatDefenseRemediationAction           = $policy.mobileThreatDefenseRemediationAction
                 PreviousPinBlockCount                          = $policy.previousPinBlockCount
                 ProtectedMessagingRedirectAppType              = $policy.protectedMessagingRedirectAppType
+                PurviewContentEvaluationRequired               = $policy.purviewContentEvaluationRequired
                 ScreenCaptureConfigurationState                = $policy.screenCaptureConfigurationState
                 thirdPartyKeyboardsBlocked                     = $policy.thirdPartyKeyboardsBlocked
                 WritingToolsConfigurationState                 = $policy.writingToolsConfigurationState

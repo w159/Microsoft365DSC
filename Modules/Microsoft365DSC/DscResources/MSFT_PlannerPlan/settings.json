@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "Container",
+      "reason": "ReadOnly",
+      "note": "Set when the plan is created and never updatable afterwards."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on title and owning group."

@@ -17,6 +17,11 @@
       "note": "Absent from the documented update body and the resource property table."
     },
     {
+      "name": "DisplayName",
+      "reason": "ReadOnly",
+      "note": "Graph refuses the write even when the value is unchanged."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."

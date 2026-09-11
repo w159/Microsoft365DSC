@@ -123,6 +123,7 @@ Configuration Example
             PreviousPinBlockCount                              = 5
             PrintBlocked                                       = $true
             ProtectedMessagingRedirectAppType                  = 'specificApps'
+            PurviewContentEvaluationRequired                   = 'requiredWhenOnline'
             RequireClass3Biometrics                            = $true
             RequiredAndroidSafetyNetAppsVerificationType       = 'enabled'
             RequiredAndroidSafetyNetDeviceAttestationType      = 'basicIntegrityAndDeviceCertification'

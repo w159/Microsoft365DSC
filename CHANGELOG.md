@@ -42,6 +42,9 @@
   * Added support for the `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationInbound`, `TenantRestrictions`
     and `M365CollaborationOutbound` properties.
+* AADCrossTenantIdentitySyncPolicyPartner
+  * Added support for the `ExternalCloudAuthorizedApplicationId` and
+    `IsRoleEnabledGroupSyncAllowed` properties.
 * AADCustomAuthenticationExtension
   * [BREAKING CHANGE] Renamed the property `ClientConfigurationTimeoutMilliseconds` to
     `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
@@ -168,8 +171,8 @@
     `MaximumWarningOsVersion`, `MaximumWipeOsVersion`,
     `MinimumRequiredCompanyPortalVersion`, `MinimumWarningCompanyPortalVersion`,
     `MinimumWipeAppVersion`, `MinimumWipeOsVersion`, `MinimumWipeCompanyPortalVersion`,
-    `MobileThreatDefensePartnerPriority` and `PinRequiredInsteadOfBiometricTimeout`
-    properties.
+    `MobileThreatDefensePartnerPriority`, `PinRequiredInsteadOfBiometricTimeout` and
+    `PurviewContentEvaluationRequired` properties.
 * IntuneAppProtectionPolicyiOS
   * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
     Microsoft Graph uses.
@@ -179,8 +182,9 @@
   * Added value `blockWhenSettingIsSupported` to property `AppActionIfMaximumPinRetriesExceeded`.
   * Added values `androidEnterpriseDedicatedDevicesWithAzureAdSharedMode`, `androidOpenSourceProjectUserAssociated`
     and `androidOpenSourceProjectUserless` to property `TargetedAppManagementLevels`.
-  * Added support for the `GenmojiConfigurationState`, `ScreenCaptureConfigurationState`
-    and `WritingToolsConfigurationState` properties.
+  * Added support for the `GenmojiConfigurationState`,
+    `ScreenCaptureConfigurationState`, `WritingToolsConfigurationState` and
+    `PurviewContentEvaluationRequired` properties.
   * Fixed an issue where a policy that allowed more than one device model failed to
     apply and exported every model as a single combined value.
 * IntuneAppProtectionPolicyWindows10
@@ -348,6 +352,8 @@
     `LargeIcon`, `Notes`, `Owner` and `PrivacyInformationUrl` properties.
 * IntuneMobileAppsWin32AppWindows10
   * Added values `arm` and `neutral` to property `AllowedArchitectures`.
+  * Added support for the `Relationships` property, which carries the dependency and
+    supersedence relationships of the app.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
 * IntuneMobileThreatDefenseConnector

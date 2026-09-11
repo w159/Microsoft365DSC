@@ -199,6 +199,11 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
     [System.String] $ProtectedMessagingRedirectAppType
 
     [DscProperty()]
+    [System.ComponentModel.Description('Determines whether a Microsoft Purview content evaluation is required. The possible values are: notRequired, requiredWhenOnline, required.')]
+    [ValidateSet('notRequired', 'requiredWhenOnline', 'required')]
+    [System.String] $PurviewContentEvaluationRequired
+
+    [DscProperty()]
     [System.ComponentModel.Description('Defines the Android SafetyNet Apps Verification requirement for a managed app to work.')]
     [ValidateSet('none', 'enabled')]
     [System.String] $RequiredAndroidSafetyNetAppsVerificationType
@@ -644,6 +649,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 PreviousPinBlockCount                              = $policy.PreviousPinBlockCount
                 PrintBlocked                                       = $policy.PrintBlocked
                 ProtectedMessagingRedirectAppType                  = $policy.ProtectedMessagingRedirectAppType
+                PurviewContentEvaluationRequired                   = $policy.PurviewContentEvaluationRequired
                 RequireClass3Biometrics                            = $policy.RequireClass3Biometrics
                 RequiredAndroidSafetyNetAppsVerificationType       = $policy.RequiredAndroidSafetyNetAppsVerificationType
                 RequiredAndroidSafetyNetDeviceAttestationType      = $policy.RequiredAndroidSafetyNetDeviceAttestationType

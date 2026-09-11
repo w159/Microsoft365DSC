@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "HybridAgentUpdaterConfiguration",
+      "reason": "Deferred",
+      "note": "Absent from the documented update body of the publishing profile."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."

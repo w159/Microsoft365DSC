@@ -12,9 +12,19 @@
   },
   "excludedProperties": [
     {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "The service refuses the write on the default Windows Hello record."
+    },
+    {
       "name": "DeviceEnrollmentConfigurationType",
       "reason": "Accepted",
       "note": "The odata subtype is fixed here and other members belong to sibling resources"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "NotConfigurable",
+      "note": "The service refuses the write on the default Windows Hello record."
     },
     {
       "name": "Id",

@@ -42,9 +42,19 @@
       "note": "The service creates a run per execution with status and computed counts"
     },
     {
+      "name": "Settings",
+      "reason": "Deferred",
+      "note": "Absent from the documented update body of the workflow."
+    },
+    {
       "name": "SubjectProcessingResults",
       "reason": "ReadOnly",
       "note": "The service writes one read-only result per subject during execution"
+    },
+    {
+      "name": "TargetSubjectType",
+      "reason": "Deferred",
+      "note": "Absent from the documented update body of the workflow."
     },
     {
       "name": "TaskReports",

@@ -29,6 +29,11 @@
       "note": "Flattened from authenticationConfiguration."
     },
     {
+      "name": "BehaviorOnError",
+      "reason": "NotConfigurable",
+      "note": "The complex type declares no members. Nothing to configure."
+    },
+    {
       "name": "ClientConfiguration",
       "reason": "Accepted",
       "note": "Flattened into ClientConfigurationTimeoutInMilliseconds and ClientConfigurationMaximumRetries"

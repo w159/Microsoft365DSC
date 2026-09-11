@@ -50,6 +50,11 @@
       "name": "RuleType",
       "reason": "Accepted",
       "note": "The type of the policy rule, differentiating between rule types"
+    },
+    {
+      "name": "Target",
+      "reason": "NotConfigurable",
+      "note": "Declared on the abstract policy rule, with no writable shape here."
     }
   ],
   "description": "This resource configures an Azure AD Group Eligibility Schedule Settings.",

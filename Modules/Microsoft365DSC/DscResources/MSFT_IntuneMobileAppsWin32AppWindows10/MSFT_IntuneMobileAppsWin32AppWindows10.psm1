@@ -125,6 +125,10 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
     [MSFT_DeviceManagementWin32MobileAppAssignment[]] $Assignments
 
     [DscProperty()]
+    [System.ComponentModel.Description('The set of direct relationships for this app.')]
+    [MSFT_MicrosoftGraphMobileAppRelationship[]] $Relationships
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the policy exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -394,6 +398,33 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
             }
             $results.Add('Assignments', $assignmentResult)
 
+            $relationshipsUri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/deviceAppManagement/mobileApps/$resolvedId/relationships"
+            $relationshipsResponse = Invoke-MgGraphRequest -Method GET -Uri $relationshipsUri -ErrorAction Stop
+            $relationshipsResult = @()
+            if ($null -ne $relationshipsResponse -and $null -ne $relationshipsResponse.value)
+            {
+                foreach ($relationship in $relationshipsResponse.value)
+                {
+                    $myRelationship = [ordered]@{}
+                    $myRelationship.Add('odataType', $relationship.'@odata.type')
+                    $myRelationship.Add('targetId', $relationship.targetId)
+                    $myRelationship.Add('targetDisplayName', $relationship.targetDisplayName)
+                    switch ($relationship.'@odata.type')
+                    {
+                        '#microsoft.graph.mobileAppDependency'
+                        {
+                            $myRelationship.Add('dependencyType', $relationship.dependencyType)
+                        }
+                        '#microsoft.graph.mobileAppSupersedence'
+                        {
+                            $myRelationship.Add('supersedenceType', $relationship.supersedenceType)
+                        }
+                    }
+                    $relationshipsResult += $myRelationship
+                }
+            }
+            $results.Add('Relationships', $relationshipsResult)
+
             return $this.AsResult($results)
         }
         catch
@@ -421,6 +452,7 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters.Remove('Categories') | Out-Null
+        $boundParameters.Remove('Relationships') | Out-Null
 
         if ($boundParameters.ContainsKey('AllowedArchitectures'))
         {
@@ -503,6 +535,11 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                 Update-DeviceAppManagementPolicyAssignment `
                     -AppManagementPolicyId $policy.Id `
                     -Assignments $assignmentsHash
+
+                if ($this.GetBoundParameters().ContainsKey('Relationships'))
+                {
+                    $this.UpdateRelationships($policy.Id, $this.Relationships)
+                }
             }
             #endregion
         }
@@ -564,6 +601,11 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
             Update-DeviceAppManagementPolicyAssignment `
                 -AppManagementPolicyId $currentInstance.Id `
                 -Assignments $assignmentsHash
+
+            if ($this.GetBoundParameters().ContainsKey('Relationships'))
+            {
+                $this.UpdateRelationships($currentInstance.Id, $this.Relationships)
+            }
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
@@ -735,6 +777,29 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                     }
                 }
 
+                if ($null -ne $Results.Relationships)
+                {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'Relationships'
+                            CIMInstanceName = 'MicrosoftGraphMobileAppRelationship'
+                            IsRequired      = $false
+                        }
+                    )
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.Relationships `
+                        -CIMInstanceName 'MicrosoftGraphMobileAppRelationship' `
+                        -ComplexTypeMapping $complexMapping
+                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.Relationships = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('Relationships') | Out-Null
+                    }
+                }
+
                 if ($Results.Assignments)
                 {
                     $complexMapping = @(
@@ -778,7 +843,7 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'Categories', 'Rules', 'LargeIcon', 'InstallExperience', 'ReturnCodes', 'MsiInformation') `
+                    -NoEscape @('Assignments', 'Categories', 'Rules', 'LargeIcon', 'InstallExperience', 'ReturnCodes', 'MsiInformation', 'Relationships') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)
@@ -795,6 +860,76 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
 
             throw
         }
+    }
+
+    hidden [void] UpdateRelationships([System.String] $AppId, [System.Object[]] $Relationships)
+    {
+        $resourceUrl = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl
+        $entries = @()
+
+        foreach ($relationship in $Relationships)
+        {
+            $targetId = $relationship.targetId
+            if ([System.String]::IsNullOrEmpty($targetId))
+            {
+                if ([System.String]::IsNullOrEmpty($relationship.targetDisplayName))
+                {
+                    throw 'A relationship of an Intune Mobile Apps Win32 App for Windows10 requires either a targetId or a targetDisplayName.'
+                }
+
+                $targetFilter = [System.Uri]::EscapeDataString("displayName eq '$($relationship.targetDisplayName -replace "'", "''")'")
+                $targetUri = $resourceUrl + "beta/deviceAppManagement/mobileApps?`$filter=$targetFilter"
+                $targetResponse = Invoke-MgGraphRequest -Method GET -Uri $targetUri -ErrorAction Stop
+
+                $targetApp = $null
+                if ($null -ne $targetResponse -and $null -ne $targetResponse.value)
+                {
+                    $targetApp = @($targetResponse.value)[0]
+                }
+
+                if ($null -eq $targetApp)
+                {
+                    throw "Could not find a mobile app with DisplayName {$($relationship.targetDisplayName)} to relate to the Intune Mobile Apps Win32 App for Windows10 with Id {$AppId}."
+                }
+
+                $targetId = $targetApp.id
+            }
+
+            $entry = @{
+                '@odata.type' = $relationship.odataType
+                targetId      = $targetId
+            }
+
+            switch ($relationship.odataType)
+            {
+                '#microsoft.graph.mobileAppDependency'
+                {
+                    if (-not [System.String]::IsNullOrEmpty($relationship.dependencyType))
+                    {
+                        $entry.Add('dependencyType', $relationship.dependencyType)
+                    }
+                }
+                '#microsoft.graph.mobileAppSupersedence'
+                {
+                    if (-not [System.String]::IsNullOrEmpty($relationship.supersedenceType))
+                    {
+                        $entry.Add('supersedenceType', $relationship.supersedenceType)
+                    }
+                }
+            }
+
+            $entries += $entry
+        }
+
+        $body = @{
+            relationships = [System.Collections.ArrayList]@($entries)
+        }
+
+        Invoke-MgGraphRequest -Method POST `
+            -Uri ($resourceUrl + "beta/deviceAppManagement/mobileApps/$AppId/updateRelationships") `
+            -Body ($body | ConvertTo-Json -Depth 10) `
+            -ContentType 'application/json' `
+            -ErrorAction Stop | Out-Null
     }
 
     hidden [IntuneMobileAppsWin32AppWindows10] AsResult([System.Object] $Values)
@@ -987,6 +1122,32 @@ class MSFT_MicrosoftGraphWin32LobAppMsiInformation
     [DscProperty()]
     [System.ComponentModel.Description('The MSI publisher')]
     [System.String] $Publisher
+}
+
+class MSFT_MicrosoftGraphMobileAppRelationship
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Selects whether the entry is a dependency or a supersedence relationship.')]
+    [ValidateSet('#microsoft.graph.mobileAppDependency', '#microsoft.graph.mobileAppSupersedence')]
+    [System.String] $odataType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The unique app identifier of the target of the mobile app relationship entity. For example: 2dbc75b9-e993-4e4d-a071-91ac5a218672. Read-Only. Returned by default. Supports: $select. Does not support $search, $filter, $orderBy.')]
+    [System.String] $targetId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The display name of the app that is the target of the mobile app relationship entity. For example: Firefox Setup 52.0.2 32bit.intunewin. Maximum length is 500 characters. Read-Only. Returned by default. Supports: $select. Does not support $search, $filter, $orderBy. This property is read-only.')]
+    [System.String] $targetDisplayName
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The type of dependency relationship between the parent and child apps. Possible values are: detect, autoInstall. Read-Only. Possible values are: detect, autoInstall, unknownFutureValue.')]
+    [ValidateSet('detect', 'autoInstall')]
+    [System.String] $dependencyType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The supersedence relationship type between the parent and child apps. Possible values are: update, replace. Read-Only. Possible values are: update, replace, unknownFutureValue.')]
+    [ValidateSet('update', 'replace')]
+    [System.String] $supersedenceType
 }
 
 class MSFT_DeviceManagementMobileAppAssignment

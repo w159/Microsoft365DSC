@@ -12,6 +12,16 @@
   },
   "excludedProperties": [
     {
+      "name": "AllowedInboundDataTransferSourceApps",
+      "reason": "Deferred",
+      "note": "The service accepts only the value none."
+    },
+    {
+      "name": "AllowedOutboundDataTransferDestinationApps",
+      "reason": "Deferred",
+      "note": "The service accepts only the value none."
+    },
+    {
       "name": "DeployedAppCount",
       "reason": "ReadOnly",
       "note": "Intune counts the apps targeted through the Apps property"

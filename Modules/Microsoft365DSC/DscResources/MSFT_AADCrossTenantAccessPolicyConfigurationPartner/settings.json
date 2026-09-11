@@ -17,9 +17,14 @@
       "note": "The service derives this from partner multitenant-organization membership and accepts no value."
     },
     {
+      "name": "IsServiceProvider",
+      "reason": "Deferred",
+      "note": "Absent from the documented update body."
+    },
+    {
       "name": "M365Capabilities",
       "reason": "Deferred",
-      "note": "Written through its own endpoints, and abstract per subtype."
+      "note": "Written through its own endpoints under the partner configuration."
     },
     {
       "name": "PartnerTenantId",
@@ -29,7 +34,7 @@
     {
       "name": "ServiceProviderConstraints",
       "reason": "Deferred",
-      "note": "Absent from the property table and the JSON representation, and undocumented in the metadata."
+      "note": "The schema declares no members to send."
     }
   ],
   "description": "This resource configures an Azure AD Cross Tenant Access Policy Configuration Partner.",

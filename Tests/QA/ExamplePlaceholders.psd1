@@ -22,7 +22,7 @@
             Name       = '<application-id>'
             Meaning    = 'Application (client) ID of an Entra application registration.'
             Sample     = 'e35c54ff-bd24-4c52-921a-4b90a35808eb'
-            Properties = @('AppId')
+            Properties = @('AppId', 'ExternalCloudAuthorizedApplicationId', 'ManagementServiceAppId')
         }
         @{
             Name       = '<application-id-updated>'

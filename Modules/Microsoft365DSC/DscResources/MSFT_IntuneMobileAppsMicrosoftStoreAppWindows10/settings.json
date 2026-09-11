@@ -22,6 +22,11 @@
       "note": "Graph marks the property as read only on this type."
     },
     {
+      "name": "ManifestHash",
+      "reason": "ReadOnly",
+      "note": "Computed from the package metadata in the source repository."
+    },
+    {
       "name": "PublishingState",
       "reason": "ReadOnly",
       "note": "Graph marks the property as read only on this type."

@@ -22,9 +22,20 @@
       "note": "AADCrossTenantAccessPolicyConfigurationPartner writes it through its IdentitySynchronization property."
     },
     {
+      "name": "IsRoleEnabledGroupSyncAllowed",
+      "reason": "Accepted",
+      "vendorPath": "roleEnabledGroupSyncInbound.isSyncAllowed",
+      "note": "Flattened from roleEnabledGroupSyncInbound, the way IsSyncAllowed carries the user sync value."
+    },
+    {
+      "name": "RoleEnabledGroupSyncInbound",
+      "reason": "Accepted",
+      "note": "Flattened onto IsRoleEnabledGroupSyncAllowed"
+    },
+    {
       "name": "UserSyncInbound",
       "reason": "Accepted",
-      "note": "Flattened onto IsSyncAllowed, which the resource reads and writes"
+      "note": "Flattened onto IsSyncAllowed"
     }
   ],
   "description": "Create a cross-tenant user synchronization policy for a partner-specific configuration.",
