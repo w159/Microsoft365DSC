@@ -38,6 +38,41 @@
       "note": "Configured through the flattened condition properties on the resource. Responsible for when the policy applies."
     },
     {
+      "name": "ConditionsAgentIdRiskLevels",
+      "reason": "Deferred",
+      "note": "Preview surface the service does not recognize on a tenant without it."
+    },
+    {
+      "name": "ConditionsClientApplicationsExcludeAgentIdServicePrincipals",
+      "reason": "Deferred",
+      "note": "Targeting agents needs an Agent 365 or Microsoft 365 E7 license."
+    },
+    {
+      "name": "ConditionsClientApplicationsIncludeAgentIdServicePrincipals",
+      "reason": "Deferred",
+      "note": "Targeting agents needs an Agent 365 or Microsoft 365 E7 license."
+    },
+    {
+      "name": "ConditionsDevicesExcludeDevices",
+      "reason": "NotConfigurable",
+      "note": "Retired by the service, which names DeviceFilter as the replacement."
+    },
+    {
+      "name": "ConditionsDevicesExcludeDeviceStates",
+      "reason": "NotConfigurable",
+      "note": "Retired by the service, which names the device lists as the replacement."
+    },
+    {
+      "name": "ConditionsDevicesIncludeDevices",
+      "reason": "NotConfigurable",
+      "note": "Retired by the service, which names DeviceFilter as the replacement."
+    },
+    {
+      "name": "ConditionsDevicesIncludeDeviceStates",
+      "reason": "NotConfigurable",
+      "note": "Retired by the service, which names the device lists as the replacement."
+    },
+    {
       "name": "Description",
       "reason": "NotConfigurable",
       "note": "Microsoft Graph documents the property as not used."

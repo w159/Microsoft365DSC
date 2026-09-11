@@ -63,6 +63,7 @@ Configuration Example
             GrantControlOperator                     = "OR";
             IncludeApplications                      = @("All");
             IncludeRoles                             = @("Attack Payload Author");
+            SignInFrequencyAuthenticationType        = "primaryAndSecondaryAuthentication";
             SignInFrequencyInterval                  = "timeBased";
             SignInFrequencyIsEnabled                 = $True;
             SignInFrequencyType                      = "hours";

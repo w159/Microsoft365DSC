@@ -22,6 +22,11 @@
       "note": "Same content as rolePermissions, modelled through AllowedResourceActions and NotAllowedResourceActions"
     },
     {
+      "name": "PermissionsActions",
+      "reason": "NotConfigurable",
+      "note": "Deprecated predecessor of resourceActions, which AllowedResourceActions carries."
+    },
+    {
       "name": "RolePermissions",
       "reason": "Accepted",
       "note": "Set writes it from AllowedResourceActions and NotAllowedResourceActions"

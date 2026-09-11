@@ -87,6 +87,51 @@
       "note": "Configured through EnableLogCollection, EnableAutopilotDiagnostics and M365AppDiagnosticsEnabled."
     },
     {
+      "name": "SettingsAndroidDeviceAdministratorEnrollmentEnabled",
+      "reason": "NotConfigurable",
+      "note": "The service drops it from the settings patch and answers that nothing changed."
+    },
+    {
+      "name": "SettingsDerivedCredentialProvider",
+      "reason": "OwnedByOtherResource",
+      "note": "IntuneDerivedCredential writes the provider through its Issuer property."
+    },
+    {
+      "name": "SettingsDerivedCredentialUrl",
+      "reason": "OwnedByOtherResource",
+      "note": "IntuneDerivedCredential writes the self service URI through its HelpUrl property."
+    },
+    {
+      "name": "SettingsDeviceInactivityBeforeRetirementInDay",
+      "reason": "OwnedByOtherResource",
+      "note": "IntuneDeviceCleanupRuleV2 owns the device inactivity threshold."
+    },
+    {
+      "name": "SettingsEnableDeviceGroupMembershipReport",
+      "reason": "NotConfigurable",
+      "note": "The service drops it from the settings patch and answers that nothing changed."
+    },
+    {
+      "name": "SettingsEnableEnhancedTroubleshootingExperience",
+      "reason": "NotConfigurable",
+      "note": "The service drops it from the settings patch and answers that nothing changed."
+    },
+    {
+      "name": "SettingsEnhancedJailBreak",
+      "reason": "Deferred",
+      "note": "Outside the diagnostics scope of this resource. Up for its own resource."
+    },
+    {
+      "name": "SettingsIgnoreDevicesForUnsupportedSettingsEnabled",
+      "reason": "Deferred",
+      "note": "Outside the diagnostics scope of this resource. Up for its own resource."
+    },
+    {
+      "name": "SettingsIsScheduledActionEnabled",
+      "reason": "NotConfigurable",
+      "note": "The service drops it from the settings patch and answers that nothing changed."
+    },
+    {
       "name": "Subscriptions",
       "reason": "ReadOnly",
       "note": "The service derives the Intune subscriptions from tenant licensing."

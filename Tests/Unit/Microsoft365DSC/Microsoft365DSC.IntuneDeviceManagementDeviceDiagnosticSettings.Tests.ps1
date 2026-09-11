@@ -43,6 +43,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     enableLogCollection = $true
                     enableAutopilotDiagnostics = $true
                     m365AppDiagnosticsEnabled = $true
+                    enhancedJailBreak = $true
+                    ignoreDevicesForUnsupportedSettingsEnabled = $true
                 }
             }
 

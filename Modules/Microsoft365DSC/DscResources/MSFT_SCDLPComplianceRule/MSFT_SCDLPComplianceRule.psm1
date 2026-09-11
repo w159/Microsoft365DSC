@@ -508,9 +508,9 @@ class SCDLPComplianceRule : M365DSCResourceBase
                 AccessTokens                                 = $this.AccessTokens
             }
 
+            $paramsToRemove = @()
             if (-not [System.String]::IsNullOrEmpty($PolicyRule.AdvancedRule))
             {
-                $paramsToRemove = @()
                 foreach ($paramName in $result.Keys)
                 {
                     if ($paramName -eq 'GenerateAlert')

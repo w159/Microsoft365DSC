@@ -29,6 +29,7 @@
 * AADConditionalAccessPolicy
   * [BREAKING CHANGE] Changed `TermsOfUse` to a collection, so a policy that requires
     more than one agreement carries all of them.
+  * Added support for the `SignInFrequencyAuthenticationType` property.
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
   * An agreement that cannot be found in the tenant is now reported with a warning and
     left out of the policy.
@@ -452,6 +453,9 @@
     drift, because the labels were read back as color names.
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
+* SCDLPComplianceRule
+  * Fixed an issue where the module failed to build because a variable was assigned
+    inside a conditional block and read outside it.
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings

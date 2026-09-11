@@ -200,6 +200,11 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
     [System.String] $SignInFrequencyInterval
 
     [DscProperty()]
+    [System.ComponentModel.Description('The possible values are primaryAndSecondaryAuthentication, secondaryAuthentication, unknownFutureValue. This property isn''t required when using frequencyInterval with the value of timeBased.')]
+    [ValidateSet('primaryAndSecondaryAuthentication', 'secondaryAuthentication')]
+    [System.String] $SignInFrequencyAuthenticationType
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies, whether Browser Persistence is controlled by the Policy.')]
     [System.Nullable[System.Boolean]] $PersistentBrowserIsEnabled
 
@@ -581,11 +586,13 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
             {
                 $signInFrequencyTypeValue = [System.String]$Policy.SessionControls.SignInFrequency.Type
                 $SignInFrequencyIntervalValue = [System.String]$Policy.SessionControls.SignInFrequency.FrequencyInterval
+                $signInFrequencyAuthenticationTypeValue = [System.String]$Policy.SessionControls.SignInFrequency.AuthenticationType
             }
             else
             {
                 $signInFrequencyTypeValue = $null
                 $SignInFrequencyIntervalValue = $null
+                $signInFrequencyAuthenticationTypeValue = $null
             }
             $persistentBrowserModeValue = $null
             if ($Policy.SessionControls.PersistentBrowser.IsEnabled)
@@ -785,6 +792,7 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
                 #no translation or conversion needed, $null returned if undefined
                 SignInFrequencyType                      = [System.String]$signInFrequencyTypeValue
                 SignInFrequencyInterval                  = $SignInFrequencyIntervalValue
+                SignInFrequencyAuthenticationType        = $signInFrequencyAuthenticationTypeValue
                 #no translation needed
                 PersistentBrowserIsEnabled               = $false -or $Policy.SessionControls.PersistentBrowser.IsEnabled
                 #no translation needed
@@ -1647,6 +1655,10 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
                         $sessionControls.signInFrequency.Remove('value') | Out-Null
                     }
                     $sessionControls.signInFrequency.frequencyInterval = $this.SignInFrequencyInterval
+                    if ($this.GetBoundParameters().ContainsKey('SignInFrequencyAuthenticationType'))
+                    {
+                        $sessionControls.signInFrequency.authenticationType = $this.SignInFrequencyAuthenticationType
+                    }
                 }
                 if ($this.PersistentBrowserIsEnabled)
                 {
