@@ -76,6 +76,10 @@ class AADServicePrincipal : M365DSCResourceBase
     [System.String] $PreferredSingleSignOnMode
 
     [DscProperty()]
+    [System.ComponentModel.Description('This property can be used on SAML applications (apps that have preferredSingleSignOnMode set to saml) to control which certificate is used to sign the SAML responses. For applications that aren''t SAML, don''t write or otherwise rely on this property.')]
+    [System.String] $PreferredTokenSigningKeyThumbprint
+
+    [DscProperty()]
     [System.ComponentModel.Description('The URLs that user tokens are sent to for sign in with the associated application, or the redirect URIs that OAuth 2.0 authorization codes and access tokens are sent to for the associated application.')]
     [System.String[]] $ReplyUrls
 
@@ -165,7 +169,7 @@ class AADServicePrincipal : M365DSCResourceBase
 
     AADServicePrincipal() : base()
     {
-        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'Description', 'ErrorUrl', 'Homepage', 'LoginUrl', 'LogoutUrl', 'Notes', 'NotificationEmailAddresses', 'PreferredSingleSignOnMode', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'SamlSingleSignOnSettings', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'TokenEncryptionKeyId', 'KeyCredentials', 'PasswordCredentials'
+        $this.ResourceCache['PropertiesToExport'] = 'AppDisplayName', 'AppId', 'Id', 'DisplayName', 'CustomSecurityAttributes', 'AlternativeNames', 'AccountEnabled', 'AppRoleAssignmentRequired', 'Description', 'ErrorUrl', 'Homepage', 'LoginUrl', 'LogoutUrl', 'Notes', 'NotificationEmailAddresses', 'PreferredSingleSignOnMode', 'PreferredTokenSigningKeyThumbprint', 'PublisherName', 'ReplyUrls', 'SamlMetadataUrl', 'SamlSingleSignOnSettings', 'ServicePrincipalNames', 'ServicePrincipalType', 'Tags', 'TokenEncryptionKeyId', 'KeyCredentials', 'PasswordCredentials'
         $this.ResourceCache['NavigationsToExpand'] = 'AppRoleAssignedTo'
     }
 
@@ -498,6 +502,7 @@ class AADServicePrincipal : M365DSCResourceBase
                 NotificationEmailAddresses         = $notificationEmailAddressesValue
                 Owners                             = $ownersValues
                 PreferredSingleSignOnMode          = $AADServicePrincipal.PreferredSingleSignOnMode
+                PreferredTokenSigningKeyThumbprint = $AADServicePrincipal.PreferredTokenSigningKeyThumbprint
                 PublisherName                      = $AADServicePrincipal.PublisherName
                 ReplyURLs                          = $replyUrlsValue
                 SamlMetadataURL                    = $AADServicePrincipal.SamlMetadataURL

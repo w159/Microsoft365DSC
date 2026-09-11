@@ -49,6 +49,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MailNickName = 'TestGroup'
                     Description  = 'This is a test'
                     ManagedBy    = 'JohnSmith@contoso.onmicrosoft.com'
+                    Theme        = 'Teal'
                     Ensure       = 'Present'
                     Credential   = $Credential
                 }
@@ -74,6 +75,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MailNickName = 'TestGroup'
                     ManagedBy    = 'Bob.Houle@contoso.onmicrosoft.com'
                     Description  = 'This is a test'
+                    Theme        = 'Teal'
                     Ensure       = 'Present'
                     Credential   = $Credential
                 }
@@ -86,6 +88,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MailNickName = 'TestGroup'
                         Owners       = @('Bob.Houle@contoso.onmcirosoft.com')
                         Description  = 'This is a test'
+                        Theme        = 'Teal'
                     }
                 }
 
@@ -131,6 +134,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description  = 'This is a test'
                     Members      = @('GoodUser1', 'GoodUser2')
                     ManagedBy    = @('JohnSmith@contoso.onmicrosoft.com', 'Bob.Houle@contoso.onmicrosoft.com')
+                    Theme        = 'Teal'
                     Ensure       = 'Present'
                     Credential   = $Credential
                 }
@@ -178,6 +182,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName  = 'Test Group'
                         MailNickName = 'TestGroup'
                         Description  = 'This is a test'
+                        Theme        = 'Teal'
                         ID           = 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770'
                     }
                 }
@@ -231,6 +236,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MailNickName = 'TestGroup'
                     Description  = 'This is a test'
                     Members      = @('JohnSmith@contoso.onmicrosoft.com')
+                    Theme        = 'Teal'
                     Ensure       = 'Present'
                     Credential   = $Credential
                 }
@@ -246,6 +252,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName  = 'Test Group'
                         MailNickName = 'TestGroup'
                         Description  = 'This is a test'
+                        Theme        = 'Teal'
                         Id           = 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770'
                     }
                 }
@@ -302,6 +309,62 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Office 365 Group - When the group already exists with a different theme' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName  = 'Test Group'
+                    MailNickName = 'TestGroup'
+                    Description  = 'This is a test'
+                    Theme        = 'Purple'
+                    Ensure       = 'Present'
+                    Credential   = $Credential
+                }
+
+                Mock -CommandName Get-MgGroup -MockWith {
+                    return @{
+                        DisplayName  = 'Test Group'
+                        MailNickName = 'TestGroup'
+                        Description  = 'This is a test'
+                        Theme        = 'Teal'
+                        Id           = 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770'
+                    }
+                }
+
+                Mock -CommandName Get-MgGroupMember -MockWith {
+                    return @{
+                        UserPrincipalName = 'JohnSmith@contoso.onmicrosoft.com'
+                    }
+                }
+
+                Mock -CommandName Get-MgGroupOwner -MockWith {
+                    return @{
+                        UserPrincipalName = 'Bob.Houle@contoso.onmicrosoft.com'
+                    }
+                }
+
+                Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
+                }
+            }
+
+            It 'Should return the current theme from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Get().ToHashtable()).Theme | Should -Be 'Teal'
+            }
+
+            It 'Should return false from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Test() | Should -Be $false
+            }
+
+            It 'Should update the theme in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'O365Group' -Property $testParams).Set()
+
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'PATCH' -and
+                    $Uri -eq '/v1.0/groups/a53dbbd6-7e9b-4df9-841a-a2c3071a1770' -and
+                    $Body['theme'] -eq 'Purple'
+                }
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true
@@ -315,6 +378,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         DisplayName  = 'Test Group'
                         MailNickName = 'TestGroup'
                         Description  = 'This is a test'
+                        Theme        = 'Teal'
                         ID           = 'a53dbbd6-7e9b-4df9-841a-a2c3071a1770'
                     }
                 }

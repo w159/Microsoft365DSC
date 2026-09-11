@@ -24,6 +24,11 @@ class O365Group : M365DSCResourceBase
     [System.String[]] $Members
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies a Microsoft 365 group''s color theme. Possible values are Teal, Purple, Green, Blue, Pink, Orange or Red. Returned by default.')]
+    [ValidateSet('Teal', 'Purple', 'Green', 'Blue', 'Pink', 'Orange', 'Red')]
+    [System.String] $Theme
+
+    [DscProperty()]
     [System.ComponentModel.Description('Present ensures the group exists, absent ensures it is removed.')]
     [ValidateSet('Present', 'Absent')]
     [System.String] $Ensure
@@ -153,6 +158,7 @@ class O365Group : M365DSCResourceBase
                     Members               = $newMemberList
                     ManagedBy             = $ownersUPN
                     Description           = $currentDescription
+                    Theme                 = $ADGroup.Theme
                     Credential            = $this.Credential
                     ApplicationId         = $this.ApplicationId
                     ApplicationSecret     = $this.ApplicationSecret
@@ -215,6 +221,10 @@ class O365Group : M365DSCResourceBase
                 {
                     $groupParams.Add('mailNickName', $this.MailNickName)
                 }
+                if (-not [System.String]::IsNullOrEmpty($this.Theme))
+                {
+                    $groupParams.Add('theme', $this.Theme)
+                }
                 Write-Verbose -Message 'Initiating Group Creation'
                 Write-Verbose -Message "Owner = $($groupParams.Owners)"
                 Write-Verbose -Message "Creating New Group with values: $(Convert-M365DscHashtableToString -Hashtable $groupParams)"
@@ -240,6 +250,15 @@ class O365Group : M365DSCResourceBase
                 }
             }
             Write-Verbose -Message "Found Existing Instance of Group {$($ADGroup.DisplayName)}"
+
+            #region Theme
+            if (-not [System.String]::IsNullOrEmpty($this.Theme) -and $this.Theme -ne $currentGroup.Theme)
+            {
+                Write-Verbose -Message "Updating the theme of Group {$($ADGroup.DisplayName)} to {$($this.Theme)}"
+                $url = "/v1.0/groups/$($ADGroup[0].Id)"
+                Invoke-M365DSCGraphRequest -Method PATCH -Uri $url -Body @{ theme = $this.Theme } | Out-Null
+            }
+            #endregion
 
             #region Members
             $membersList = Get-MgGroupMember -GroupId $ADGroup[0].Id

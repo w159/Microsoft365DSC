@@ -62,6 +62,11 @@
       "note": "AADApplication writes the marketing, support, terms and privacy URLs through Info"
     },
     {
+      "name": "IsDisabled",
+      "reason": "NotConfigurable",
+      "note": "Derived from the application and the service rejects any write"
+    },
+    {
       "name": "LicenseDetails",
       "reason": "ReadOnly",
       "note": "The service reports assigned licenses as read only"

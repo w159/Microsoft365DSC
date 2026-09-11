@@ -325,6 +325,12 @@
             Properties = @('TokenEncryptionKeyId')
         }
         @{
+            Name       = '<token-signing-key-thumbprint>'
+            Meaning    = 'Thumbprint of a certificate already present on the service principal, used to sign the issued SAML responses.'
+            Sample     = 'B7E3A19C5D428F06A1C93E7B2054D8F6C3A1E97B'
+            Properties = @('PreferredTokenSigningKeyThumbprint')
+        }
+        @{
             Name       = '<wifi-pre-shared-key>'
             Meaning    = 'Pre-shared key of a WPA-Personal Wi-Fi network.'
             Sample     = 'Contoso!Corp2026Wifi'

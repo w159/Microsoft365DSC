@@ -30,6 +30,7 @@ Configuration Example
             GivenName             = "John"
             Surname               = "Smith"
             DisplayName           = "John J. Smith"
+            AgeGroup              = "Adult"
             City                  = "Ottawa" # Updated Property
             Country               = "Canada"
             OfficeLocation        = "Ottawa - Queen"
@@ -56,7 +57,9 @@ Configuration Example
             AccountEnabled        = $true
             CompanyName           = "Contoso"
             Department            = "Human Resources"
+            EmployeeHireDate      = "2026-01-01T00:00:00.0000000Z"
             EmployeeId            = "E1234567"
+            EmployeeType          = "Employee"
             JobTitle              = "Senior Program Manager"
             StreetAddress         = "100 Rue Principale"
             State                 = "Quebec"

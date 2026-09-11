@@ -101,6 +101,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = @('https://app.contoso.com')
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -136,6 +141,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                    = 'Absent'
                     Credential                = $Credential
                 }
@@ -154,7 +164,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
-                        SamlMetadataUrl = ''
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
                     }
                 }
             }
@@ -261,6 +275,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             }
                         )
                     }
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -271,6 +290,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Description = 'App description'
                         GroupMembershipClaims = 0
                         SignInAudience = 'AzureADMyOrg'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
                         OptionalClaims = @{
                             Saml2Token = @(
                                 @{
@@ -387,6 +411,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $true
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -405,6 +434,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
                     }
                 }
             }
@@ -439,6 +473,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             blockAzureADGraphAccess       = 'false'
                             removeUnverifiedEmailClaim    = 'true'
                     }
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -499,6 +538,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             AdminConsentGranted = $True
                         }
                     )
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -545,6 +589,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
                     }
                 }
             }

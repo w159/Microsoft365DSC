@@ -14,6 +14,8 @@
 * AADApplication
   * [BREAKING CHANGE] Renamed property `Permissions` to `RequiredResourceAccess`
     to match the name Microsoft Graph uses.
+  * Added support for the `IsDeviceOnlyAuthSupported`, `IsDisabled`,
+    `NativeAuthenticationApisEnabled`, `Notes` and `SamlMetadataUrl` properties.
   * Updated `Owners` to use `DisplayName` for Service Principal objects.
 * AADAuthenticationMethodPolicyVoice
   * Added support for the `CallerIdNumber` property.
@@ -106,7 +108,8 @@
     the `ClaimsPolicy`, `ErrorUrl`, `PublisherName` and `SamlMetadataUrl`
     properties are defined.
   * Added support for the `LoginUrl`, `Description`, `NotificationEmailAddresses`,
-    `SamlSingleSignOnSettings` and `TokenEncryptionKeyId` properties.
+    `SamlSingleSignOnSettings`, `TokenEncryptionKeyId` and
+    `PreferredTokenSigningKeyThumbprint` properties.
 * AADTenantDetails
   * Added support for the `BusinessPhones`, `City`, `PostalCode`, `PreferredLanguage`,
     `PrivacyProfile`, `State` and `Street` properties.
@@ -121,6 +124,7 @@
   * Updated the password generation routine to work with PowerShell 7.
   * Fixed an issue where licenses were never removed from a user, including when
     `LicenseAssignment` was emptied to strip every license.
+  * Added support for the `AgeGroup`, `EmployeeHireDate` and `EmployeeType` properties.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.
@@ -435,6 +439,7 @@
 * O365Group
   * Fixed an issue where a configuration that listed members without owners failed to
     apply whenever the membership changed.
+  * Added support for the `Theme` property.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket

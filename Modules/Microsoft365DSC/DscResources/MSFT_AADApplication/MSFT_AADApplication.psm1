@@ -36,12 +36,29 @@ class AADApplication : M365DSCResourceBase
     [System.String[]] $IdentifierUris
 
     [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether this application supports device authentication without a user. The default is false.')]
+    [System.Nullable[System.Boolean]] $IsDeviceOnlyAuthSupported
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Deactivate an app without deleting it. This configuration specifies whether the service principal of the app in a tenant or across tenants for multi-tenant apps can obtain new access tokens or access protected resources. When set to true, existing tokens remain valid until they expire based on their configured lifetimes, and the app stays visible in the Enterprise apps list but users cannot sign in.true if the application is deactivated (disabled); otherwise false. Learn more in Deactivate an app registration.')]
+    [System.Nullable[System.Boolean]] $IsDisabled
+
+    [DscProperty()]
     [System.ComponentModel.Description('Specifies the fallback application type as public client, such as an installed application running on a mobile device. The default value is false, which means the fallback application type is confidential client such as web app. There are certain scenarios where Microsoft Entra ID cannot determine the client application type (for example, ROPC flow where it is configured without specifying a redirect URI). In those cases, Microsoft Entra ID will interpret the application type based on the value of this property.')]
     [System.Nullable[System.Boolean]] $IsFallbackPublicClient
 
     [DscProperty()]
     [System.ComponentModel.Description('Client applications that are tied to this resource application.')]
     [System.String[]] $KnownClientApplications
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies whether the Native Authentication APIs are enabled for the application. The possible values are: noneand all. Default is none. For more information, see Native Authentication.')]
+    [ValidateSet('none', 'all')]
+    [System.String] $NativeAuthenticationApisEnabled
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Notes relevant for the management of the application.')]
+    [System.String] $Notes
 
     [DscProperty()]
     [System.ComponentModel.Description('Application developers can configure optional claims in their Microsoft Entra applications to specify the claims that are sent to their application by the Microsoft security token service. For more information, see How to: Provide optional claims to your app.')]
@@ -102,6 +119,10 @@ class AADApplication : M365DSCResourceBase
     [DscProperty()]
     [System.ComponentModel.Description('List of public clients redirect URIs.')]
     [System.String[]] $PublicClientRedirectUris
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The URL where the service exposes SAML metadata for federation. This property is valid only for single-tenant applications. Nullable.')]
+    [System.String] $SamlMetadataUrl
 
     [DscProperty()]
     [System.ComponentModel.Description('References application or service contact information from a Service or Asset Management database. Nullable.')]
@@ -170,7 +191,7 @@ class AADApplication : M365DSCResourceBase
 
     AADApplication() : base()
     {
-        $this.ResourceCache['PropertiesToRetrieve'] = 'appRoles, defaultRedirectUri, info, identifierUris, displayName, description, groupMembershipClaims, optionalClaims, web, api, id, appId, spa, applicationTemplateId, serviceManagementReference, signInAudience, authenticationBehaviors, isFallbackPublicClient, publicClient, keyCredentials, passwordCredentials, requiredResourceAccess'
+        $this.ResourceCache['PropertiesToRetrieve'] = 'appRoles, defaultRedirectUri, info, identifierUris, displayName, description, groupMembershipClaims, optionalClaims, web, api, id, appId, spa, applicationTemplateId, serviceManagementReference, signInAudience, authenticationBehaviors, isFallbackPublicClient, publicClient, keyCredentials, passwordCredentials, requiredResourceAccess, isDeviceOnlyAuthSupported, isDisabled, nativeAuthenticationApisEnabled, notes, samlMetadataUrl'
     }
 
     [AADApplication] Get()
@@ -600,46 +621,51 @@ class AADApplication : M365DSCResourceBase
             }
 
             $result = @{
-                Api                        = $complexApi
-                AppId                      = $AADApp.AppId
-                ApplicationTemplateId      = $AADApp.applicationTemplateId
-                AppRoles                   = $complexAppRoles
-                AuthenticationBehaviors    = $complexAuthenticationBehaviors
-                DefaultRedirectUri         = $AADApp.DefaultRedirectUri
-                Description                = $AADApp.Description
-                DisplayName                = $AADApp.DisplayName
-                GroupMembershipClaims      = $AADApp.GroupMembershipClaims
-                Homepage                   = $AADApp.web.HomepageUrl
-                IdentifierUris             = $IdentifierUrisValue
-                Info                       = $complexInfoValue
-                IsFallbackPublicClient     = $IsFallbackPublicClientValue
-                KeyCredentials             = $complexKeyCredentials
-                KnownClientApplications    = $AADApp.Api.KnownClientApplications
-                Logo                       = $logoResponse
-                LogoutURL                  = $AADApp.web.LogoutURL
-                ObjectId                   = $AADApp.Id
-                OnPremisesPublishing       = $onPremisesPublishingValue
-                OptionalClaims             = $complexOptionalClaims
-                Owners                     = $OwnersValues
-                PasswordCredentials        = $complexPasswordCredentials
-                RequiredResourceAccess     = $permissionsObj
-                PublicClient               = $isPublicClient
-                PublicClientRedirectUris   = $PublicClientRedirectUrisValue
-                ReplyURLs                  = $AADApp.web.RedirectUris
-                ServiceManagementReference = $AADApp.ServiceManagementReference
-                SignInAudience             = $AADApp.SignInAudience
-                Spa                        = $spaValue
-                TokenLifetimePolicy        = $lifetimePolicy.displayName
-                Ensure                     = 'Present'
-                Credential                 = $this.Credential
-                ApplicationId              = $this.ApplicationId
-                TenantId                   = $this.TenantId
-                ApplicationSecret          = $this.ApplicationSecret
-                CertificateThumbprint      = $this.CertificateThumbprint
-                CertificatePath            = $this.CertificatePath
-                CertificatePassword        = $this.CertificatePassword
-                ManagedIdentity            = $this.ManagedIdentity.IsPresent
-                AccessTokens               = $this.AccessTokens
+                Api                             = $complexApi
+                AppId                           = $AADApp.AppId
+                ApplicationTemplateId           = $AADApp.applicationTemplateId
+                AppRoles                        = $complexAppRoles
+                AuthenticationBehaviors         = $complexAuthenticationBehaviors
+                DefaultRedirectUri              = $AADApp.DefaultRedirectUri
+                Description                     = $AADApp.Description
+                DisplayName                     = $AADApp.DisplayName
+                GroupMembershipClaims           = $AADApp.GroupMembershipClaims
+                Homepage                        = $AADApp.web.HomepageUrl
+                IdentifierUris                  = $IdentifierUrisValue
+                Info                            = $complexInfoValue
+                IsDeviceOnlyAuthSupported       = $AADApp.IsDeviceOnlyAuthSupported
+                IsDisabled                      = $AADApp.IsDisabled
+                IsFallbackPublicClient          = $IsFallbackPublicClientValue
+                KeyCredentials                  = $complexKeyCredentials
+                KnownClientApplications         = $AADApp.Api.KnownClientApplications
+                Logo                            = $logoResponse
+                LogoutURL                       = $AADApp.web.LogoutURL
+                NativeAuthenticationApisEnabled = $AADApp.NativeAuthenticationApisEnabled
+                Notes                           = $AADApp.Notes
+                ObjectId                        = $AADApp.Id
+                OnPremisesPublishing            = $onPremisesPublishingValue
+                OptionalClaims                  = $complexOptionalClaims
+                Owners                          = $OwnersValues
+                PasswordCredentials             = $complexPasswordCredentials
+                RequiredResourceAccess          = $permissionsObj
+                PublicClient                    = $isPublicClient
+                PublicClientRedirectUris        = $PublicClientRedirectUrisValue
+                ReplyURLs                       = $AADApp.web.RedirectUris
+                SamlMetadataUrl                 = $AADApp.SamlMetadataUrl
+                ServiceManagementReference      = $AADApp.ServiceManagementReference
+                SignInAudience                  = $AADApp.SignInAudience
+                Spa                             = $spaValue
+                TokenLifetimePolicy             = $lifetimePolicy.displayName
+                Ensure                          = 'Present'
+                Credential                      = $this.Credential
+                ApplicationId                   = $this.ApplicationId
+                TenantId                        = $this.TenantId
+                ApplicationSecret               = $this.ApplicationSecret
+                CertificateThumbprint           = $this.CertificateThumbprint
+                CertificatePath                 = $this.CertificatePath
+                CertificatePassword             = $this.CertificatePassword
+                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                AccessTokens                    = $this.AccessTokens
             }
 
             return $this.AsResult($result)

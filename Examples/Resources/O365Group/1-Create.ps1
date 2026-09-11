@@ -31,6 +31,7 @@ Configuration Example
             Description           = "This is only for employees of the Ottawa Office"
             ManagedBy             = @("megan.bowen@$TenantId")
             Members               = @("alex.wilber@$TenantId", "diego.siciliani@$TenantId")
+            Theme                 = "Teal"
             Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId

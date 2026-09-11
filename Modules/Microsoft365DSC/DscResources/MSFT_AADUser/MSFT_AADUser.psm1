@@ -40,6 +40,11 @@ class AADUser : M365DSCResourceBase
     [System.Management.Automation.PSCredential] $Password
 
     [DscProperty()]
+    [System.ComponentModel.Description('Sets the age group of the user. Allowed values: null, Minor, NotAdult, and Adult. For more information, see legal age group property definitions.')]
+    [ValidateSet('Minor', 'NotAdult', 'Adult')]
+    [System.String] $AgeGroup
+
+    [DscProperty()]
     [System.ComponentModel.Description('The City name of the user')]
     [System.String] $City
 
@@ -56,8 +61,16 @@ class AADUser : M365DSCResourceBase
     [System.String] $Department
 
     [DscProperty()]
+    [System.ComponentModel.Description('The date and time when the user was hired or will start work if there is a future hire.')]
+    [System.String] $EmployeeHireDate
+
+    [DscProperty()]
     [System.ComponentModel.Description('The employee identifier assigned to the user by the organization')]
     [System.String] $EmployeeId
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Captures enterprise worker type. For example, Employee, Contractor, Consultant, or Vendor.')]
+    [System.String] $EmployeeType
 
     [DscProperty()]
     [System.ComponentModel.Description('The Fax Number of the user')]
@@ -170,8 +183,8 @@ class AADUser : M365DSCResourceBase
 
     AADUser() : base()
     {
-        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'City', 'CompanyName', 'Country', 'Department', 'EmployeeId', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'OnPremisesExtensionAttributes', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
-        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; City = 'City'; CompanyName = 'CompanyName'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; EmployeeId = 'EmployeeId'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; OnPremisesExtensionAttributes = 'OnPremisesExtensionAttributes'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
+        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'AgeGroup', 'City', 'CompanyName', 'Country', 'Department', 'EmployeeHireDate', 'EmployeeId', 'EmployeeType', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'OnPremisesExtensionAttributes', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
+        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; AgeGroup = 'AgeGroup'; City = 'City'; CompanyName = 'CompanyName'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; EmployeeHireDate = 'EmployeeHireDate'; EmployeeId = 'EmployeeId'; EmployeeType = 'EmployeeType'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; OnPremisesExtensionAttributes = 'OnPremisesExtensionAttributes'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
     }
 
     [AADUser] Get()
@@ -305,6 +318,12 @@ class AADUser : M365DSCResourceBase
 
             $complexOnPremisesExtensionAttributes = $this.GetOnPremisesExtensionAttributes($user)
 
+            $employeeHireDateValue = $null
+            if ($null -ne $user.EmployeeHireDate)
+            {
+                $employeeHireDateValue = ([System.DateTimeOffset]$user.EmployeeHireDate).UtcDateTime.ToString('o')
+            }
+
             $results = @{
                 UserPrincipalName             = $this.UserPrincipalName
                 AccountEnabled                = $user.AccountEnabled
@@ -315,11 +334,14 @@ class AADUser : M365DSCResourceBase
                 LicenseAssignment             = $currentLicenseAssignment
                 MemberOf                      = $currentMemberOf
                 Password                      = $this.Password
+                AgeGroup                      = $user.AgeGroup
                 City                          = $user.City
                 CompanyName                   = $user.CompanyName
                 Country                       = $user.Country
                 Department                    = $user.Department
+                EmployeeHireDate              = $employeeHireDateValue
                 EmployeeId                    = $user.EmployeeId
+                EmployeeType                  = $user.EmployeeType
                 FaxNumber                     = $user.FaxNumber
                 MobilePhone                   = $user.MobilePhone
                 OfficeLocation                = $user.OfficeLocation
