@@ -27,6 +27,11 @@
       "note": "Microsoft sets this status when it disables a registration."
     },
     {
+      "name": "ExtensionProperties",
+      "reason": "Accepted",
+      "note": "Directory extension definitions are separate entities with their own endpoints."
+    },
+    {
       "name": "FederatedIdentityCredentials",
       "reason": "OwnedByOtherResource",
       "note": "AADApplicationFederatedIdentityCredential manages these credentials per application."
@@ -60,6 +65,11 @@
       "name": "ReplyURLs",
       "reason": "Accepted",
       "note": "The flattened web.redirectUris property"
+    },
+    {
+      "name": "Synchronization",
+      "reason": "Accepted",
+      "note": "Provisioning jobs, schemas and templates are a product area of their own."
     },
     {
       "name": "UniqueName",

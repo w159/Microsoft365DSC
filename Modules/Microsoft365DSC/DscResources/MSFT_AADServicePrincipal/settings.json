@@ -102,6 +102,11 @@
       "note": "AADApplication writes it through its own SignInAudience property"
     },
     {
+      "name": "Synchronization",
+      "reason": "Accepted",
+      "note": "Provisioning jobs, schema and templates sit behind their own sub-API."
+    },
+    {
       "name": "TransitiveMemberOf",
       "reason": "ReadOnly",
       "note": "Computed transitive group membership assigned on the group"

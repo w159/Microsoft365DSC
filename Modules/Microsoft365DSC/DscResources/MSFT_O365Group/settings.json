@@ -62,6 +62,11 @@
       "note": "EXOGroupSettings sets the group classification"
     },
     {
+      "name": "Conversations",
+      "reason": "Accepted",
+      "note": "Group mailbox conversations are user authored content."
+    },
+    {
       "name": "Drive",
       "reason": "ReadOnly",
       "note": "SharePoint provisions the default document library with the group"
@@ -72,9 +77,19 @@
       "note": "SharePoint creates and maintains the group document libraries"
     },
     {
+      "name": "Events",
+      "reason": "Accepted",
+      "note": "Calendar events are user authored content."
+    },
+    {
       "name": "ExpirationDateTime",
       "reason": "ReadOnly",
       "note": "Computed from the lifecycle policy that AADGroupLifecyclePolicy manages"
+    },
+    {
+      "name": "Extensions",
+      "reason": "Accepted",
+      "note": "Open and schema extensions carry arbitrary application data."
     },
     {
       "name": "GroupLifecyclePolicies",
@@ -177,6 +192,11 @@
       "note": "The directory computes the members whose license assignment failed"
     },
     {
+      "name": "Onenote",
+      "reason": "Accepted",
+      "note": "The group notebook holds user authored content."
+    },
+    {
       "name": "OnPremisesDomainName",
       "reason": "ReadOnly",
       "note": "Directory synchronization writes this value"
@@ -225,6 +245,16 @@
       "name": "Owners",
       "reason": "Accepted",
       "note": "The resource writes the owners navigation through ManagedBy"
+    },
+    {
+      "name": "PermissionGrants",
+      "reason": "Accepted",
+      "note": "Resource-specific consent records written by the consent flow."
+    },
+    {
+      "name": "Photo",
+      "reason": "Accepted",
+      "note": "The group photo is uploaded image bytes rather than a declarative value."
     },
     {
       "name": "Photos",
@@ -295,6 +325,11 @@
       "name": "Team",
       "reason": "OwnedByOtherResource",
       "note": "TeamsTeam creates and configures the attached team"
+    },
+    {
+      "name": "Threads",
+      "reason": "Accepted",
+      "note": "Conversation threads are group mailbox content authored by users."
     },
     {
       "name": "TransitiveMemberOf",

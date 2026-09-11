@@ -67,6 +67,11 @@
       "note": "The service derives cloud licensing usage rights from assigned licenses"
     },
     {
+      "name": "Conversations",
+      "reason": "Accepted",
+      "note": "Group mailbox conversations are user authored content."
+    },
+    {
       "name": "Drive",
       "reason": "ReadOnly",
       "note": "The service provisions and maintains the default document library"
@@ -80,6 +85,11 @@
       "name": "Endpoints",
       "reason": "ReadOnly",
       "note": "The service publishes group endpoints and Graph returns them as read only"
+    },
+    {
+      "name": "Events",
+      "reason": "Accepted",
+      "note": "Calendar events are user authored content."
     },
     {
       "name": "ExpirationDateTime",
@@ -167,6 +177,11 @@
       "note": "The service computes members with license assignment errors"
     },
     {
+      "name": "Onenote",
+      "reason": "Accepted",
+      "note": "The group notebook holds user authored content."
+    },
+    {
       "name": "OnPremisesDomainName",
       "reason": "ReadOnly",
       "note": "Synced from the on premises directory"
@@ -210,6 +225,16 @@
       "name": "OrganizationId",
       "reason": "ReadOnly",
       "note": "The service stamps the owning tenant"
+    },
+    {
+      "name": "PermissionGrants",
+      "reason": "Accepted",
+      "note": "Resource-specific consent records written by the consent flow."
+    },
+    {
+      "name": "Photo",
+      "reason": "Accepted",
+      "note": "The group photo is uploaded image bytes rather than a declarative value."
     },
     {
       "name": "Photos",
@@ -275,6 +300,11 @@
       "name": "Team",
       "reason": "OwnedByOtherResource",
       "note": "TeamsTeam manages the team of a group through GroupID"
+    },
+    {
+      "name": "Threads",
+      "reason": "Accepted",
+      "note": "Conversation threads are group mailbox content authored by users."
     },
     {
       "name": "TransitiveMemberOf",

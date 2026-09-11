@@ -229,6 +229,28 @@ the code, so the same name still reads as a gap on a type whose CSDL leaves it w
 Everything else is a per-resource judgement and lands in that resource `excludedProperties` under
 reason `ReadOnly`, noted with the type it was read off.
 
+## Two properties held back
+
+Both stay on the report on purpose. Neither is a mistake in the checker, and neither fits a
+one-line note in `excludedProperties`.
+
+`OnPremisesSyncEnabled` on `AADTenantDetails` is writable, and Microsoft documents
+`Update-MgOrganization` with `onPremisesSyncEnabled = $false` as the supported way to turn
+directory synchronization off. The blast radius is what disqualifies it as an ordinary property.
+Sending false converts every synced user and group to cloud only, clears `DnsDomainName`,
+`NetBiosName`, `OnPremisesDistinguishedName`, `OnPremisesSamAccountName` and
+`OnPremisesUserPrincipalName`, and locks the tenant out of re-enabling synchronization for 72
+hours. The resource is a singleton that sends every bound property in one PATCH, so an export
+taken after synchronization was turned off carries false into any configuration built from that
+tenant. Sending true only stamps the flag, since synchronization itself starts when Entra Connect
+or Cloud Sync runs. Whatever shape an implementation takes needs an explicit opt-in a normal
+export cannot produce, and it has to keep the value out of exported configurations.
+
+The `O365Group` members are the second. `O365Group` and `AADGroup` both sit on the `group`
+entity and their property sets overlap, so deciding which resource owns a member, and whether a
+mail-enabled group even exposes it, is a question about the split between the two resources
+rather than about any single property.
+
 ## The GitHub path
 
 ### The weekly check
