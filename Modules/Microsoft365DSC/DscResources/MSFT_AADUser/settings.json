@@ -13,8 +13,8 @@
   "excludedProperties": [
     {
       "name": "AboutMe",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which maybe SPOUserProfileProperty writes."
     },
     {
       "name": "AgreementAcceptances",
@@ -38,8 +38,8 @@
     },
     {
       "name": "Birthday",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "BusinessPhones",
@@ -82,11 +82,6 @@
       "note": "Computed from the manager relationship set on other users"
     },
     {
-      "name": "EmployeeLeaveDateTime",
-      "reason": "Deferred",
-      "note": "Refused on permissions the module does not request today."
-    },
-    {
       "name": "ExternalUserState",
       "reason": "ReadOnly",
       "note": "The invitation flow sets the guest redemption state"
@@ -123,8 +118,8 @@
     },
     {
       "name": "Interests",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "IsManagementRestricted",
@@ -188,8 +183,8 @@
     },
     {
       "name": "MySite",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "OnPremisesDistinguishedName",
@@ -253,8 +248,8 @@
     },
     {
       "name": "PastProjects",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "People",
@@ -303,8 +298,8 @@
     },
     {
       "name": "Responsibilities",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "Roles",
@@ -313,8 +308,8 @@
     },
     {
       "name": "Schools",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "ScopedRoleMemberOf",
@@ -348,8 +343,8 @@
     },
     {
       "name": "Skills",
-      "reason": "Deferred",
-      "note": "Graph refuses the write with an app only token."
+      "reason": "OwnedByOtherResource",
+      "note": "Stored in the SharePoint user profile, which SPOUserProfileProperty writes."
     },
     {
       "name": "SponsorOf",
@@ -383,6 +378,9 @@
             "name": "User.Read.All"
           },
           {
+            "name": "User-LifeCycleInfo.Read.All"
+          },
+          {
             "name": "GroupMember.Read.All"
           },
           {
@@ -401,6 +399,9 @@
           },
           {
             "name": "User.ReadWrite.All"
+          },
+          {
+            "name": "User-LifeCycleInfo.ReadWrite.All"
           },
           {
             "name": "User.DeleteRestore.All"
@@ -425,6 +426,9 @@
             "name": "User.Read.All"
           },
           {
+            "name": "User-LifeCycleInfo.Read.All"
+          },
+          {
             "name": "GroupMember.Read.All"
           },
           {
@@ -443,6 +447,9 @@
           },
           {
             "name": "User.ReadWrite.All"
+          },
+          {
+            "name": "User-LifeCycleInfo.ReadWrite.All"
           },
           {
             "name": "User.DeleteRestore.All"

@@ -76,6 +76,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = @{
                         ExtensionAttribute1 = 'Head Office'
@@ -101,6 +102,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -151,6 +153,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -171,6 +174,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup                      = 'Adult'
                         EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId                    = 'E1234567'
+                        EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType                  = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'
@@ -226,6 +230,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -246,6 +251,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup                      = 'Adult'
                         EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId                    = 'E1234567'
+                        EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType                  = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'
@@ -310,6 +316,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -330,6 +337,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup                      = 'Adult'
                         EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId                    = 'E1234567'
+                        EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType                  = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'
@@ -389,6 +397,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -409,6 +418,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup                      = 'Adult'
                         EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId                    = 'E1234567'
+                        EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType                  = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'
@@ -474,6 +484,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -494,6 +505,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup                      = 'Adult'
                         EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId                    = 'E1234567'
+                        EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType                  = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'
@@ -572,6 +584,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -651,6 +664,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AgeGroup                      = 'Adult'
                     EmployeeHireDate              = '2026-01-01T00:00:00.0000000Z'
                     EmployeeId                    = 'E1234567'
+                    EmployeeLeaveDateTime         = '2027-06-30T00:00:00.0000000Z'
                     EmployeeType                  = 'Employee'
                     OnPremisesExtensionAttributes = ([MSFT_AADUserOnPremisesExtensionAttributes] @{
                         ExtensionAttribute1 = 'Head Office'
@@ -713,6 +727,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         AgeGroup          = 'Adult'
                         EmployeeHireDate  = '2026-01-01T00:00:00.0000000Z'
                         EmployeeId        = 'E1234567'
+                        EmployeeLeaveDateTime = '2027-06-30T00:00:00.0000000Z'
                         EmployeeType      = 'Employee'
                         OnPremisesExtensionAttributes = @{
                             ExtensionAttribute1 = 'Head Office'

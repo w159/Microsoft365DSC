@@ -61,8 +61,12 @@ class AADUser : M365DSCResourceBase
     [System.String] $Department
 
     [DscProperty()]
-    [System.ComponentModel.Description('The date and time when the user was hired or will start work if there is a future hire.')]
+    [System.ComponentModel.Description('The date and time when the user was hired or will start work if there is a future hire. Supports $filter (eq, ne, not , ge, le, in).')]
     [System.String] $EmployeeHireDate
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The date and time when the user left or will leave the organization. To read this property, the calling app must be assigned the User-LifeCycleInfo.Read.All permission. To write this property, the calling app must be assigned the User.Read.All and User-LifeCycleInfo.ReadWrite.All permissions. To read this property in delegated scenarios, the admin needs at least one of the following Microsoft Entra roles: Lifecycle Workflows Administrator (least privilege), Global Reader. To write this property in delegated scenarios, the admin needs the Global Administrator role. Supports $filter (eq, ne, not , ge, le, in). For more information, see Configure the employeeLeaveDateTime property for a user.')]
+    [System.String] $EmployeeLeaveDateTime
 
     [DscProperty()]
     [System.ComponentModel.Description('The employee identifier assigned to the user by the organization')]
@@ -183,8 +187,8 @@ class AADUser : M365DSCResourceBase
 
     AADUser() : base()
     {
-        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'AgeGroup', 'City', 'CompanyName', 'Country', 'Department', 'EmployeeHireDate', 'EmployeeId', 'EmployeeType', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'OnPremisesExtensionAttributes', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
-        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; AgeGroup = 'AgeGroup'; City = 'City'; CompanyName = 'CompanyName'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; EmployeeHireDate = 'EmployeeHireDate'; EmployeeId = 'EmployeeId'; EmployeeType = 'EmployeeType'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; OnPremisesExtensionAttributes = 'OnPremisesExtensionAttributes'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
+        $this.ResourceCache['propertiesToRetrieve'] = @('Id', 'AccountEnabled', 'UserPrincipalName', 'DisplayName', 'GivenName', 'Surname', 'UsageLocation', 'AgeGroup', 'City', 'CompanyName', 'Country', 'Department', 'EmployeeHireDate', 'EmployeeId', 'EmployeeLeaveDateTime', 'EmployeeType', 'FaxNumber', 'MobilePhone', 'OfficeLocation', 'Mail', 'OtherMails', 'BusinessPhones', 'OnPremisesExtensionAttributes', 'PostalCode', 'PreferredLanguage', 'State', 'StreetAddress', 'JobTitle', 'UserType', 'PasswordPolicies', 'customSecurityAttributes')
+        $this.ResourceCache['creationParamsMap'] = @{AccountEnabled = 'AccountEnabled'; AgeGroup = 'AgeGroup'; City = 'City'; CompanyName = 'CompanyName'; Country = 'Country'; Department = 'Department'; DisplayName = 'DisplayName'; EmployeeHireDate = 'EmployeeHireDate'; EmployeeId = 'EmployeeId'; EmployeeLeaveDateTime = 'EmployeeLeaveDateTime'; EmployeeType = 'EmployeeType'; FaxNumber = 'FaxNumber'; GivenName = 'GivenName'; JobTitle = 'JobTitle'; MobilePhone = 'MobilePhone'; OfficeLocation = 'OfficeLocation'; Mail = 'Mail'; OtherMails = 'OtherMails'; OnPremisesExtensionAttributes = 'OnPremisesExtensionAttributes'; PostalCode = 'PostalCode'; PreferredLanguage = 'PreferredLanguage'; State = 'State'; StreetAddress = 'StreetAddress'; Surname = 'Surname'; BusinessPhones = 'PhoneNumber'; UsageLocation = 'UsageLocation'; UserPrincipalName = 'UserPrincipalName'; UserType = 'UserType'; PasswordPolicies = 'PasswordPolicies'}
     }
 
     [AADUser] Get()
@@ -324,6 +328,12 @@ class AADUser : M365DSCResourceBase
                 $employeeHireDateValue = ([System.DateTimeOffset]$user.EmployeeHireDate).UtcDateTime.ToString('o')
             }
 
+            $employeeLeaveDateTimeValue = $null
+            if ($null -ne $user.EmployeeLeaveDateTime)
+            {
+                $employeeLeaveDateTimeValue = ([System.DateTimeOffset]$user.EmployeeLeaveDateTime).UtcDateTime.ToString('o')
+            }
+
             $results = @{
                 UserPrincipalName             = $this.UserPrincipalName
                 AccountEnabled                = $user.AccountEnabled
@@ -341,6 +351,7 @@ class AADUser : M365DSCResourceBase
                 Department                    = $user.Department
                 EmployeeHireDate              = $employeeHireDateValue
                 EmployeeId                    = $user.EmployeeId
+                EmployeeLeaveDateTime         = $employeeLeaveDateTimeValue
                 EmployeeType                  = $user.EmployeeType
                 FaxNumber                     = $user.FaxNumber
                 MobilePhone                   = $user.MobilePhone

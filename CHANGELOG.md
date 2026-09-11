@@ -125,7 +125,8 @@
   * Updated the password generation routine to work with PowerShell 7.
   * Fixed an issue where licenses were never removed from a user, including when
     `LicenseAssignment` was emptied to strip every license.
-  * Added support for the `AgeGroup`, `EmployeeHireDate` and `EmployeeType` properties.
+  * Added support for the `AgeGroup`, `EmployeeHireDate`, `EmployeeLeaveDateTime`
+    and `EmployeeType` properties.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.

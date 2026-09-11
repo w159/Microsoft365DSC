@@ -59,6 +59,7 @@ Configuration Example
             Department            = "Human Resources"
             EmployeeHireDate      = "2026-01-01T00:00:00.0000000Z"
             EmployeeId            = "E1234567"
+            EmployeeLeaveDateTime = "2027-06-30T00:00:00.0000000Z"
             EmployeeType          = "Employee"
             JobTitle              = "Senior Program Manager"
             StreetAddress         = "100 Rue Principale"
