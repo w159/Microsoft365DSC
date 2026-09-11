@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AboutMe",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
+    },
+    {
       "name": "AgreementAcceptances",
       "reason": "ReadOnly",
       "note": "The service records terms of use acceptances"
@@ -32,6 +37,11 @@
       "note": "Derived from the licenses on the user"
     },
     {
+      "name": "Birthday",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
+    },
+    {
       "name": "BusinessPhones",
       "reason": "Accepted",
       "note": "PhoneNumber writes the single supported business phone number"
@@ -40,6 +50,11 @@
       "name": "CloudPCs",
       "reason": "ReadOnly",
       "note": "Windows 365 provisioning policies and licenses attach Cloud PCs to the user"
+    },
+    {
+      "name": "ConsentProvidedForMinor",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as null."
     },
     {
       "name": "CreatedObjects",
@@ -52,6 +67,11 @@
       "note": "The directory sets the creation type at account creation"
     },
     {
+      "name": "DeviceEnrollmentLimit",
+      "reason": "Deferred",
+      "note": "Refused on permissions the module does not request today."
+    },
+    {
       "name": "DeviceManagementTroubleshootingEvents",
       "reason": "ReadOnly",
       "note": "Intune emits these troubleshooting events for the user"
@@ -60,6 +80,11 @@
       "name": "DirectReports",
       "reason": "ReadOnly",
       "note": "Computed from the manager relationship set on other users"
+    },
+    {
+      "name": "EmployeeLeaveDateTime",
+      "reason": "Deferred",
+      "note": "Refused on permissions the module does not request today."
     },
     {
       "name": "ExternalUserState",
@@ -95,6 +120,11 @@
       "name": "Insights",
       "reason": "ReadOnly",
       "note": "The service computes item insights from user activity"
+    },
+    {
+      "name": "Interests",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
     },
     {
       "name": "IsManagementRestricted",
@@ -157,6 +187,11 @@
       "note": "Intune enrollment creates the managed devices for the user"
     },
     {
+      "name": "MySite",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
+    },
+    {
       "name": "OnPremisesDistinguishedName",
       "reason": "ReadOnly",
       "note": "Directory synchronization writes it from the on premises directory"
@@ -165,6 +200,11 @@
       "name": "OnPremisesDomainName",
       "reason": "ReadOnly",
       "note": "Directory synchronization writes this value from the on premises directory."
+    },
+    {
+      "name": "OnPremisesImmutableId",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as null."
     },
     {
       "name": "OnPremisesLastSyncDateTime",
@@ -212,6 +252,11 @@
       "note": "Declared as Password and sent to New-MgUser only on create."
     },
     {
+      "name": "PastProjects",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
+    },
+    {
       "name": "People",
       "reason": "ReadOnly",
       "note": "The service computes the relevant people list."
@@ -225,6 +270,11 @@
       "name": "Photos",
       "reason": "ReadOnly",
       "note": "The service generates sized renditions from the uploaded picture."
+    },
+    {
+      "name": "PreferredDataLocation",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as null."
     },
     {
       "name": "PreferredName",
@@ -242,14 +292,29 @@
       "note": "The service reports provisioning status following from assigned licenses."
     },
     {
+      "name": "ProxyAddresses",
+      "reason": "Deferred",
+      "note": "Refused on permissions the module does not request today."
+    },
+    {
       "name": "RegisteredDevices",
       "reason": "ReadOnly",
       "note": "Device registration and join create these entries."
     },
     {
+      "name": "Responsibilities",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
+    },
+    {
       "name": "Roles",
       "reason": "Accepted",
       "note": "Role display names from the role assignments naming the user."
+    },
+    {
+      "name": "Schools",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
     },
     {
       "name": "ScopedRoleMemberOf",
@@ -280,6 +345,11 @@
       "name": "SignInSessionsValidFromDateTime",
       "reason": "ReadOnly",
       "note": "The directory stamps this when it revokes sign in sessions."
+    },
+    {
+      "name": "Skills",
+      "reason": "Deferred",
+      "note": "Graph refuses the write with an app only token."
     },
     {
       "name": "SponsorOf",

@@ -12,11 +12,6 @@
   },
   "excludedProperties": [
     {
-      "name": "OnPremisesSyncEnabled",
-      "reason": "Deferred",
-      "note": "Disabling converts every synced object to cloud only and blocks re-enabling for 72 hours."
-    },
-    {
       "name": "AssignedPlans",
       "reason": "ReadOnly",
       "note": "Derived from the licenses purchased for the tenant"
@@ -37,9 +32,19 @@
       "note": "Derived from the unchangeable signup country"
     },
     {
+      "name": "DefaultUsageLocation",
+      "reason": "Deferred",
+      "note": "Not yet verified against a tenant."
+    },
+    {
       "name": "DirectorySizeQuota",
       "reason": "ReadOnly",
       "note": "Computed used and total directory object quota"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "Deferred",
+      "note": "Not yet verified against a tenant."
     },
     {
       "name": "Id",
@@ -52,6 +57,11 @@
       "note": "The service sets it when the tenant becomes Multi-Geo enabled"
     },
     {
+      "name": "MobileDeviceManagementAuthority",
+      "reason": "Deferred",
+      "note": "Changing the authority is effectively one way, so it stays untested."
+    },
+    {
       "name": "OnPremisesLastPasswordSyncDateTime",
       "reason": "ReadOnly",
       "note": "Directory synchronization stamps it on each password sync request"
@@ -60,6 +70,11 @@
       "name": "OnPremisesLastSyncDateTime",
       "reason": "ReadOnly",
       "note": "Directory synchronization stamps it on every sync cycle"
+    },
+    {
+      "name": "OnPremisesSyncEnabled",
+      "reason": "Deferred",
+      "note": "Disabling converts every synced object to cloud only and blocks re-enabling for 72 hours."
     },
     {
       "name": "PartnerTenantType",

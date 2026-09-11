@@ -17,6 +17,11 @@
       "note": "EXOGroupSettings writes it through AcceptMessagesOnlyFromSendersOrMembers"
     },
     {
+      "name": "AccessType",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as the value the service derives from Visibility."
+    },
+    {
       "name": "AllowExternalSenders",
       "reason": "OwnedByOtherResource",
       "note": "EXOGroupSettings writes the inverse through RequireSenderAuthenticationEnabled"
@@ -102,14 +107,34 @@
       "note": "The directory assigns the object id at creation"
     },
     {
+      "name": "InfoCatalogs",
+      "reason": "Deferred",
+      "note": "Refused on permissions the module does not request today."
+    },
+    {
+      "name": "IsArchived",
+      "reason": "NotConfigurable",
+      "note": "The service answers that the path is not supported."
+    },
+    {
       "name": "IsAssignableToRole",
       "reason": "OwnedByOtherResource",
       "note": "AADGroup exposes IsAssignableToRole for role-assignable groups"
     },
     {
+      "name": "IsFavorite",
+      "reason": "NotConfigurable",
+      "note": "The service directs the property to the joined groups API."
+    },
+    {
       "name": "IsManagementRestricted",
       "reason": "OwnedByOtherResource",
       "note": "Derived from membership in an AADAdministrativeUnit with restricted management"
+    },
+    {
+      "name": "IsSubscribedByMail",
+      "reason": "NotConfigurable",
+      "note": "Graph refuses the write with an app only token."
     },
     {
       "name": "LicenseProcessingState",
@@ -280,6 +305,11 @@
       "name": "TransitiveMembers",
       "reason": "ReadOnly",
       "note": "The directory computes the transitive member closure"
+    },
+    {
+      "name": "UniqueName",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as null."
     },
     {
       "name": "UnseenConversationsCount",

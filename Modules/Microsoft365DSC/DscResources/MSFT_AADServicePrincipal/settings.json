@@ -64,7 +64,7 @@
     {
       "name": "IsDisabled",
       "reason": "NotConfigurable",
-      "note": "Derived from the application and the service rejects any write"
+      "note": "Derived from the application. The portal toggle writes AccountEnabled."
     },
     {
       "name": "LicenseDetails",

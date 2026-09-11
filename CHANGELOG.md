@@ -15,7 +15,8 @@
   * [BREAKING CHANGE] Renamed property `Permissions` to `RequiredResourceAccess`
     to match the name Microsoft Graph uses.
   * Added support for the `IsDeviceOnlyAuthSupported`, `IsDisabled`,
-    `NativeAuthenticationApisEnabled`, `Notes` and `SamlMetadataUrl` properties.
+    `NativeAuthenticationApisEnabled`, `Notes`, `SamlMetadataUrl`, `Tags` and
+    `TokenEncryptionKeyId` properties.
   * Updated `Owners` to use `DisplayName` for Service Principal objects.
 * AADAuthenticationMethodPolicyVoice
   * Added support for the `CallerIdNumber` property.

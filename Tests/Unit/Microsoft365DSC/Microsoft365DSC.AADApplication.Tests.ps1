@@ -106,6 +106,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -146,6 +148,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Absent'
                     Credential                = $Credential
                 }
@@ -169,6 +173,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NativeAuthenticationApisEnabled = 'none'
                         Notes = 'Reviewed annually by the identity governance team'
                         SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }
@@ -280,6 +286,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -295,6 +303,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NativeAuthenticationApisEnabled = 'none'
                         Notes = 'Reviewed annually by the identity governance team'
                         SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                         OptionalClaims = @{
                             Saml2Token = @(
                                 @{
@@ -416,6 +426,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -439,6 +451,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NativeAuthenticationApisEnabled = 'none'
                         Notes = 'Reviewed annually by the identity governance team'
                         SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }
@@ -478,6 +492,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -543,6 +559,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     NativeAuthenticationApisEnabled = 'none'
                     Notes                     = 'Reviewed annually by the identity governance team'
                     SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -594,6 +612,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         NativeAuthenticationApisEnabled = 'none'
                         Notes = 'Reviewed annually by the identity governance team'
                         SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }

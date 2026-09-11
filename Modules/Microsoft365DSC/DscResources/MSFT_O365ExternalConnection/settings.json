@@ -17,6 +17,16 @@
       "note": "The container holds only authorizedAppIds, which the resource models as AuthorizedAppIds"
     },
     {
+      "name": "ConnectorId",
+      "reason": "Deferred",
+      "note": "Not yet verified against a tenant."
+    },
+    {
+      "name": "EnabledContentExperiences",
+      "reason": "Deferred",
+      "note": "Not yet verified against a tenant."
+    },
+    {
       "name": "IngestedItemsCount",
       "reason": "ReadOnly",
       "note": "The service counts the items ingested into the connection"

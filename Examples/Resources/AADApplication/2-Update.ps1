@@ -126,6 +126,8 @@ Configuration Example
                     AdminConsentGranted = $True
                 }
             )
+            Tags                            = @("Finance", "Expense Reporting")
+            TokenEncryptionKeyId            = "<token-encryption-key-id>"
             TokenLifetimePolicy             = 'AADTokenLifetimePolicy_2' # Updated Property
             Ensure                          = "Present"
             ApplicationId                   = $ApplicationId

@@ -17,6 +17,11 @@
       "note": "EXOGroupSettings writes it through AcceptMessagesOnlyFromSendersOrMembers"
     },
     {
+      "name": "AccessType",
+      "reason": "NotConfigurable",
+      "note": "Written and read back as the value the service derives from Visibility."
+    },
+    {
       "name": "AllowExternalSenders",
       "reason": "OwnedByOtherResource",
       "note": "EXOGroupSettings writes the inverse through RequireSenderAuthenticationEnabled"
@@ -117,9 +122,29 @@
       "note": "EXOGroupSettings writes it through HiddenFromExchangeClientsEnabled"
     },
     {
+      "name": "InfoCatalogs",
+      "reason": "Deferred",
+      "note": "Refused on permissions the module does not request today."
+    },
+    {
+      "name": "IsArchived",
+      "reason": "NotConfigurable",
+      "note": "The service answers that the path is not supported."
+    },
+    {
+      "name": "IsFavorite",
+      "reason": "NotConfigurable",
+      "note": "The service directs the property to the joined groups API."
+    },
+    {
       "name": "IsManagementRestricted",
       "reason": "OwnedByOtherResource",
       "note": "AADAdministrativeUnit controls it through IsMemberManagementRestricted and Members"
+    },
+    {
+      "name": "IsSubscribedByMail",
+      "reason": "NotConfigurable",
+      "note": "Graph refuses the write with an app only token."
     },
     {
       "name": "LicenseProcessingState",

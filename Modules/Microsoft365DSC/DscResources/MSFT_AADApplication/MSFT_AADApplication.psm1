@@ -138,6 +138,14 @@ class AADApplication : M365DSCResourceBase
     [System.String] $SignInAudience
 
     [DscProperty()]
+    [System.ComponentModel.Description('Custom strings that can be used to categorize and identify the application. Not nullable. Strings added here also appear in the tags property of any associated service principals.Supports $filter (eq, not, ge, le, startsWith) and $search.')]
+    [System.String[]] $Tags
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the keyId of a public key from the keyCredentials collection. When configured, Microsoft Entra ID encrypts all the tokens it emits by using the key this property points to. The application code that receives the encrypted token must use the matching private key to decrypt the token before it can be used for the signed-in user.')]
+    [System.String] $TokenEncryptionKeyId
+
+    [DscProperty()]
     [System.ComponentModel.Description('The Token Lifetime Policy assigned to the application with its DisplayName.')]
     [System.String] $TokenLifetimePolicy
 
@@ -191,7 +199,7 @@ class AADApplication : M365DSCResourceBase
 
     AADApplication() : base()
     {
-        $this.ResourceCache['PropertiesToRetrieve'] = 'appRoles, defaultRedirectUri, info, identifierUris, displayName, description, groupMembershipClaims, optionalClaims, web, api, id, appId, spa, applicationTemplateId, serviceManagementReference, signInAudience, authenticationBehaviors, isFallbackPublicClient, publicClient, keyCredentials, passwordCredentials, requiredResourceAccess, isDeviceOnlyAuthSupported, isDisabled, nativeAuthenticationApisEnabled, notes, samlMetadataUrl'
+        $this.ResourceCache['PropertiesToRetrieve'] = 'appRoles, defaultRedirectUri, info, identifierUris, displayName, description, groupMembershipClaims, optionalClaims, web, api, id, appId, spa, applicationTemplateId, serviceManagementReference, signInAudience, authenticationBehaviors, isFallbackPublicClient, publicClient, keyCredentials, passwordCredentials, requiredResourceAccess, isDeviceOnlyAuthSupported, isDisabled, nativeAuthenticationApisEnabled, notes, samlMetadataUrl, tags, tokenEncryptionKeyId'
     }
 
     [AADApplication] Get()
@@ -601,6 +609,12 @@ class AADApplication : M365DSCResourceBase
                 $IdentifierUrisValue = $AADApp.IdentifierUris
             }
 
+            $TagsValue = @()
+            if ($null -ne $AADApp.Tags)
+            {
+                $TagsValue = $AADApp.Tags
+            }
+
             $complexInfoValue = $null
             if ($null -ne $AADApp.Info)
             {
@@ -655,6 +669,8 @@ class AADApplication : M365DSCResourceBase
                 ServiceManagementReference      = $AADApp.ServiceManagementReference
                 SignInAudience                  = $AADApp.SignInAudience
                 Spa                             = $spaValue
+                Tags                            = $TagsValue
+                TokenEncryptionKeyId            = $AADApp.TokenEncryptionKeyId
                 TokenLifetimePolicy             = $lifetimePolicy.displayName
                 Ensure                          = 'Present'
                 Credential                      = $this.Credential

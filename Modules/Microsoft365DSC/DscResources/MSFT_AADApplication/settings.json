@@ -42,14 +42,29 @@
       "note": "ObjectId carries the vendor id and comparison skips both."
     },
     {
+      "name": "ManagerApplications",
+      "reason": "NotConfigurable",
+      "note": "The service answers that the Application feature is not supported."
+    },
+    {
       "name": "ObjectId",
       "reason": "NotConfigurable",
       "note": "ObjectId echoes the service-assigned application id."
     },
     {
+      "name": "PublisherDomain",
+      "reason": "ReadOnly",
+      "note": "The service refuses any value other than the one it already holds."
+    },
+    {
       "name": "ReplyURLs",
       "reason": "Accepted",
       "note": "The flattened web.redirectUris property"
+    },
+    {
+      "name": "UniqueName",
+      "reason": "Deferred",
+      "note": "Accepted on create and immutable afterwards."
     }
   ],
   "description": "This resource configures an Azure Active Directory Application.",
