@@ -17,6 +17,11 @@
       "note": "Read-only containment expansion of the admin-selectable AppScopeIds"
     },
     {
+      "name": "Condition",
+      "reason": "NotConfigurable",
+      "note": "The service takes the write and reads the value back as null."
+    },
+    {
       "name": "DirectoryScopeIds",
       "reason": "Accepted",
       "note": "DirectoryScopes carries the resolved group display names for these ids"

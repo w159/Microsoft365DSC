@@ -10,7 +10,13 @@
     "includeNavigationProperties": true,
     "generatorVersion": "2.0.0"
   },
-  "excludedProperties": [],
+  "excludedProperties": [
+    {
+      "name": "DefaultPasskeyProfile",
+      "reason": "ReadOnly",
+      "note": "The non-deletable baseline profile the service creates."
+    }
+  ],
   "description": "This resource configures an Azure AD Authentication Method Policy Fido2.",
   "roles": {
     "read": [

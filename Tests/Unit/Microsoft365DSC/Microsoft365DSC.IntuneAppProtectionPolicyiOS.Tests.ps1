@@ -92,6 +92,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    PurviewContentEvaluationRequired               = "requiredWhenOnline";
                     ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
                     WritingToolsConfigurationState                 = "blocked";
@@ -253,6 +254,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    PurviewContentEvaluationRequired               = "requiredWhenOnline";
                     ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
                     WritingToolsConfigurationState                 = "blocked";
@@ -354,6 +356,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    PurviewContentEvaluationRequired               = "requiredWhenOnline";
                     ScreenCaptureConfigurationState                = "notBlocked"; #Drift
                     ThirdPartyKeyboardsBlocked                     = $True;
                     WritingToolsConfigurationState                 = "notBlocked"; #Drift
@@ -452,6 +455,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    PurviewContentEvaluationRequired               = "requiredWhenOnline";
                     ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
                     WritingToolsConfigurationState                 = "blocked";
@@ -529,6 +533,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PreviousPinBlockCount                          = 0;
                     ProtectedMessagingRedirectAppType              = "anyApp";
                     ProtectInboundDataFromUnknownSources           = $False;
+                    PurviewContentEvaluationRequired               = "requiredWhenOnline";
                     ScreenCaptureConfigurationState                = "blocked";
                     ThirdPartyKeyboardsBlocked                     = $True;
                     WritingToolsConfigurationState                 = "blocked";

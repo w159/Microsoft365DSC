@@ -75,6 +75,11 @@
       "name": "TargetScheduleId",
       "reason": "Accepted",
       "note": "Modelled as the Id property holding the eligibility schedule identifier"
+    },
+    {
+      "name": "TicketInfo",
+      "reason": "Deferred",
+      "note": "Carried on the request, but the schedule the resource reads never returns it."
     }
   ],
   "description": "This resource configures an Azure Active Directory Privilege Identity Management eligibility request.",

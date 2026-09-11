@@ -80,6 +80,11 @@
       "name": "TargetScheduleId",
       "reason": "Accepted",
       "note": "Configured through the Id property on the resource. Responsible for identifying the assignment schedule."
+    },
+    {
+      "name": "TicketInfo",
+      "reason": "Deferred",
+      "note": "Carried on the request, but the schedule the resource reads never returns it."
     }
   ],
   "description": "This resource configures an Azure Active Directory Privilege Identity Management assignment.",

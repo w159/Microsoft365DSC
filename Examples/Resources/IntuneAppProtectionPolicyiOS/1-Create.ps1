@@ -107,6 +107,7 @@ Configuration Example
             PrintBlocked                                   = $true
             ProtectedMessagingRedirectAppType              = 'specificApps'
             ProtectInboundDataFromUnknownSources           = $false
+            PurviewContentEvaluationRequired               = 'requiredWhenOnline'
             RoleScopeTagIds                                = @('0')
             SaveAsBlocked                                  = $true
             ScreenCaptureConfigurationState                = 'blocked'

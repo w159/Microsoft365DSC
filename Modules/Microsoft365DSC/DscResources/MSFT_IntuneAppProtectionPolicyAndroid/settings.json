@@ -12,6 +12,11 @@
   },
   "excludedProperties": [
     {
+      "name": "AppActionIfDeveloperOptionsEnabled",
+      "reason": "NotConfigurable",
+      "note": "The service answers that the property does not exist on the type."
+    },
+    {
       "name": "DeployedAppCount",
       "reason": "ReadOnly",
       "note": "Computed from the targeted apps, which Apps manages"

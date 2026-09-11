@@ -97,6 +97,13 @@ Configuration Example
             Notes                          = "";
             Owner                          = "";
             Publisher                      = "Microsoft";
+            Relationships                  = @(
+                MSFT_MicrosoftGraphMobileAppRelationship{
+                    odataType         = "#microsoft.graph.mobileAppDependency"
+                    targetDisplayName = "Visual C++ Redistributable 2015-2022"
+                    dependencyType    = "autoInstall"
+                }
+            );
             ReturnCodes                    = @(
                 MSFT_MicrosoftGraphWin32LobAppReturnCode{
                     ReturnCode = 0

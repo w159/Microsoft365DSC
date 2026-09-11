@@ -17,6 +17,11 @@
       "note": "Graph marks the property as read only on this type."
     },
     {
+      "name": "IdentityVersion",
+      "reason": "ReadOnly",
+      "note": "Parsed from the uploaded package."
+    },
+    {
       "name": "IsAssigned",
       "reason": "ReadOnly",
       "note": "Graph marks the property as read only on this type."

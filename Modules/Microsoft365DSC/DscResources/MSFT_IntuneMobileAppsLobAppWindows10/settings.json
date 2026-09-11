@@ -42,6 +42,11 @@
       "note": "Set writes a fixed placeholder on create only"
     },
     {
+      "name": "IdentityResourceIdentifier",
+      "reason": "ReadOnly",
+      "note": "Parsed from the uploaded appx package."
+    },
+    {
       "name": "IdentityVersion",
       "reason": "Accepted",
       "note": "Set writes a fixed placeholder on create only"

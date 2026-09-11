@@ -12,6 +12,16 @@
   },
   "excludedProperties": [
     {
+      "name": "ActiveInstallScript",
+      "reason": "NotConfigurable",
+      "note": "References a content version script the resource does not manage."
+    },
+    {
+      "name": "ActiveUninstallScript",
+      "reason": "NotConfigurable",
+      "note": "References a content version script the resource does not manage."
+    },
+    {
       "name": "ApplicableArchitectures",
       "reason": "Accepted",
       "note": "AllowedArchitectures controls the architecture list. Value is always 'none'."

@@ -27,6 +27,11 @@
       "note": "Service-assigned. The resource keys on IsSingleInstance."
     },
     {
+      "name": "MicrosoftAuthenticatorPlatformSettings",
+      "reason": "NotConfigurable",
+      "note": "The service takes the write and reads the value back as null."
+    },
+    {
       "name": "PolicyMigrationState",
       "reason": "Deprecated",
       "note": "Administrators change the migration state in the Entra admin center."

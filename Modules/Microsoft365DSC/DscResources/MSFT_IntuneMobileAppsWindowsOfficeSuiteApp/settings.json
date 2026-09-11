@@ -27,6 +27,11 @@
       "note": "Graph marks the property as read only on this type."
     },
     {
+      "name": "LargeIcon",
+      "reason": "ReadOnly",
+      "note": "The service supplies the icon for the office suite app."
+    },
+    {
       "name": "Owner",
       "reason": "Accepted",
       "note": "Fixed to a predefined value."

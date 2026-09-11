@@ -25,6 +25,16 @@
       "name": "DeviceManagementApplicabilityRuleOsVersion",
       "reason": "NotConfigurable",
       "note": "Intune scopes applicability rules to Windows profiles."
+    },
+    {
+      "name": "ExcludeLocalNetworks",
+      "reason": "Deferred",
+      "note": "Announced as in development and absent from the documented update body."
+    },
+    {
+      "name": "IncludeAllNetworks",
+      "reason": "Deferred",
+      "note": "Announced as in development and absent from the documented update body."
     }
   ],
   "description": "This resource configures an Intune VPN Configuration Policy for iOS Device.",

@@ -12,9 +12,19 @@
   },
   "excludedProperties": [
     {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "Service supplied on the default enrollment record."
+    },
+    {
       "name": "DeviceEnrollmentConfigurationType",
       "reason": "ReadOnly",
       "note": "Derived from the entity subtype, which this resource pins to windowsRestore"
+    },
+    {
+      "name": "DisplayName",
+      "reason": "NotConfigurable",
+      "note": "Service supplied on the default enrollment record."
     },
     {
       "name": "Id",
@@ -25,6 +35,11 @@
       "name": "Priority",
       "reason": "ReadOnly",
       "note": "Singleton configuration with no sibling to order against"
+    },
+    {
+      "name": "RoleScopeTagIds",
+      "reason": "NotConfigurable",
+      "note": "Scope tags do not apply to the default enrollment record."
     }
   ],
   "description": "This resource configures an Intune Windows Backup For Organization Configuration.",

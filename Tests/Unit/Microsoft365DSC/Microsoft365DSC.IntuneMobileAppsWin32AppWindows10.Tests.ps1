@@ -28,6 +28,28 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             Mock -CommandName Get-MSCloudLoginConnectionProfile -MockWith {
+                return @{
+                    ResourceUrl = "https://graph.microsoft.com/"
+                }
+            }
+
+            Mock -CommandName Invoke-MgGraphRequest -MockWith {
+                if ($Uri -like "*/relationships")
+                {
+                    return @{
+                        value = @(
+                            @{
+                                "@odata.type" = "#microsoft.graph.mobileAppDependency"
+                                id = "11111111-1111-1111-1111-111111111111"
+                                targetId = "11111111-1111-1111-1111-111111111111"
+                                targetDisplayName = "FakeStringValue"
+                                dependencyType = "autoInstall"
+                            }
+                        )
+                    }
+                }
+
+                return $null
             }
 
             Mock -CommandName Reset-MSCloudLoginConnectionProfileContext -MockWith {
@@ -370,6 +392,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl = "FakeStringValue"
                     Publisher = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
+                    Relationships = @(
+                        ([MSFT_MicrosoftGraphMobileAppRelationship] @{
+                            odataType = "#microsoft.graph.mobileAppDependency"
+                            targetId = "11111111-1111-1111-1111-111111111111"
+                            targetDisplayName = "FakeStringValue"
+                            dependencyType = "autoInstall"
+                        })
+                    )
                     Ensure = "Present"
                     Credential = $Credential;
                 }
@@ -473,6 +503,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl = "FakeStringValue"
                     Publisher = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
+                    Relationships = @(
+                        ([MSFT_MicrosoftGraphMobileAppRelationship] @{
+                            odataType = "#microsoft.graph.mobileAppDependency"
+                            targetId = "11111111-1111-1111-1111-111111111111"
+                            targetDisplayName = "FakeStringValue"
+                            dependencyType = "autoInstall"
+                        })
+                    )
                     Ensure = "Absent"
                     Credential = $Credential;
                 }
@@ -575,6 +613,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl = "FakeStringValue"
                     Publisher = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
+                    Relationships = @(
+                        ([MSFT_MicrosoftGraphMobileAppRelationship] @{
+                            odataType = "#microsoft.graph.mobileAppDependency"
+                            targetId = "11111111-1111-1111-1111-111111111111"
+                            targetDisplayName = "FakeStringValue"
+                            dependencyType = "autoInstall"
+                        })
+                    )
                     Ensure = "Present"
                     Credential = $Credential;
                 }
@@ -668,6 +714,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl = "FakeStringValue"
                     Publisher = "FakeStringValue"
                     RoleScopeTagIds = @("FakeStringValue")
+                    Relationships = @(
+                        ([MSFT_MicrosoftGraphMobileAppRelationship] @{
+                            odataType = "#microsoft.graph.mobileAppDependency"
+                            targetId = "11111111-1111-1111-1111-111111111111"
+                            targetDisplayName = "FakeStringValue"
+                            dependencyType = "autoInstall"
+                        })
+                    )
                     Ensure = "Present"
                     Credential = $Credential;
                 }
@@ -684,6 +738,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should call the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsWin32AppWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-MgBetaDeviceAppManagementMobileApp -Exactly 1
+            }
+
+            It 'Should post the relationships to the updateRelationships action from the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsWin32AppWindows10' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-MgGraphRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and
+                    $Uri -like '*/mobileApps/FakeStringValue/updateRelationships' -and
+                    $Body -like '*#microsoft.graph.mobileAppDependency*' -and
+                    $Body -like '*11111111-1111-1111-1111-111111111111*' -and
+                    $Body -like '*autoInstall*'
+                }
             }
         }
 

@@ -25,6 +25,11 @@
       "name": "IsAssigned",
       "reason": "ReadOnly",
       "note": "Derived from the assignments that Assignments manages"
+    },
+    {
+      "name": "Settings",
+      "reason": "NotConfigurable",
+      "note": "The settings catalog surface, written through its own endpoint."
     }
   ],
   "description": "This resource configures the Intune App configuration policies.",

@@ -77,6 +77,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PinRequiredInsteadOfBiometricTimeout              = 'PT30M'
                     PreviousPinBlockCount                             = 4
                     ProtectedMessagingRedirectAppType                 = 'specificApps'
+                    PurviewContentEvaluationRequired                  = 'requiredWhenOnline'
                     RequiredAndroidSafetyNetAppsVerificationType      = 'enabled'
                     RequiredAndroidSafetyNetDeviceAttestationType     = 'basicIntegrity'
                     RequiredAndroidSafetyNetEvaluationType            = 'hardwareBacked'
@@ -206,6 +207,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PinRequiredInsteadOfBiometricTimeout              = 'PT30M'
                     PreviousPinBlockCount                             = 4
                     ProtectedMessagingRedirectAppType                 = 'specificApps'
+                    PurviewContentEvaluationRequired                  = 'requiredWhenOnline'
                     RequiredAndroidSafetyNetAppsVerificationType      = 'enabled'
                     RequiredAndroidSafetyNetDeviceAttestationType     = 'basicIntegrity'
                     RequiredAndroidSafetyNetEvaluationType            = 'hardwareBacked'

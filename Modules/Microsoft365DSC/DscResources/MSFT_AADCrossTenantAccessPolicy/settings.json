@@ -17,6 +17,11 @@
       "note": "The SDK marks this raw JSON form of the whole policy deprecated."
     },
     {
+      "name": "Description",
+      "reason": "NotConfigurable",
+      "note": "Graph answers a write with the property not being present on the type."
+    },
+    {
       "name": "Id",
       "reason": "ReadOnly",
       "note": "Service-assigned. The resource keys on IsSingleInstance."

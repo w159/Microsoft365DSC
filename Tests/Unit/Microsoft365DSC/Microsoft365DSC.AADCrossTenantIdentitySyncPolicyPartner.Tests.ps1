@@ -58,6 +58,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CrossTenantAccessPolicyConfigurationPartnerTenantId = "d8295cae-8bd0-4a7f-9288-933d2dc4573c";
                     DisplayName                                         = "IdentitySync";
                     Ensure                                              = "Present";
+                    ExternalCloudAuthorizedApplicationId                = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47";
+                    IsRoleEnabledGroupSyncAllowed                       = $true;
                     IsSyncAllowed                                       = $True;
                     Credential                                          = $Credential;
                 }
@@ -85,6 +87,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CrossTenantAccessPolicyConfigurationPartnerTenantId = "d8295cae-8bd0-4a7f-9288-933d2dc4573c";
                     DisplayName                                         = "IdentitySync";
                     Ensure                                              = "Absent";
+                    ExternalCloudAuthorizedApplicationId                = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47";
+                    IsRoleEnabledGroupSyncAllowed                       = $true;
                     IsSyncAllowed                                       = $True;
                     Credential                                          = $Credential;
                 }
@@ -93,7 +97,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         TenantID = "d8295cae-8bd0-4a7f-9288-933d2dc4573c"
                         DisplayName = "IdentitySync"
+                        ExternalCloudAuthorizedApplicationId = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47"
                         UserSyncInbound = @{
+                            IsSyncAllowed = $true
+                        }
+                        RoleEnabledGroupSyncInbound = @{
                             IsSyncAllowed = $true
                         }
                     }
@@ -118,6 +126,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CrossTenantAccessPolicyConfigurationPartnerTenantId = "d8295cae-8bd0-4a7f-9288-933d2dc4573c";
                     DisplayName                                         = "IdentitySync";
                     Ensure                                              = "Present";
+                    ExternalCloudAuthorizedApplicationId                = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47";
+                    IsRoleEnabledGroupSyncAllowed                       = $true;
                     IsSyncAllowed                                       = $True;
                     Credential                                          = $Credential;
                 }
@@ -126,7 +136,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         TenantID = "d8295cae-8bd0-4a7f-9288-933d2dc4573c"
                         DisplayName = "IdentitySync"
+                        ExternalCloudAuthorizedApplicationId = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47"
                         UserSyncInbound = @{
+                            IsSyncAllowed = $true
+                        }
+                        RoleEnabledGroupSyncInbound = @{
                             IsSyncAllowed = $true
                         }
                     }
@@ -144,6 +158,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     CrossTenantAccessPolicyConfigurationPartnerTenantId = "d8295cae-8bd0-4a7f-9288-933d2dc4573c";
                     DisplayName                                         = "IdentitySync";
                     Ensure                                              = "Present";
+                    ExternalCloudAuthorizedApplicationId                = "0f4d9b1c-7a3e-4c8b-9d2a-5e6f3b8c1d47";
+                    IsRoleEnabledGroupSyncAllowed                       = $true;
                     IsSyncAllowed                                       = $True;
                     Credential                                          = $Credential;
                 }
@@ -152,7 +168,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         TenantID = "d8295cae-8bd0-4a7f-9288-933d2dc4573c"
                         DisplayName = "IdentitySync"
+                        ExternalCloudAuthorizedApplicationId = "7c2e5a90-4b13-4f6d-8e51-2a9c6d0b3f84"
                         UserSyncInbound = @{
+                            IsSyncAllowed = $false
+                        }
+                        RoleEnabledGroupSyncInbound = @{
                             IsSyncAllowed = $false
                         }
                     }
@@ -191,7 +211,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     return @{
                         TenantID = "d8295cae-8bd0-4a7f-9288-933d2dc4573c"
                         DisplayName = "IdentitySync"
+                        ExternalCloudAuthorizedApplicationId = "7c2e5a90-4b13-4f6d-8e51-2a9c6d0b3f84"
                         UserSyncInbound = @{
+                            IsSyncAllowed = $false
+                        }
+                        RoleEnabledGroupSyncInbound = @{
                             IsSyncAllowed = $false
                         }
                     }
