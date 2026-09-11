@@ -445,7 +445,7 @@ class SCDLPComplianceRule : M365DSCResourceBase
                 ContentPropertyContainsWords                 = $PolicyRule.ContentPropertyContainsWords
                 Disabled                                     = $PolicyRule.Disabled
                 Quarantine                                   = $PolicyRule.Quarantine
-                GenerateAlert                                = $PolicyRule.GenerateAlert
+                GenerateAlert                                = Get-M365DSCArrayFromProperty -PropertyValue $PolicyRule.GenerateAlert -ElementType ([System.String])
                 GenerateIncidentReport                       = $PolicyRule.GenerateIncidentReport
                 IncidentReportContent                        = $ArrayIncidentReportContent
                 NotifyAllowOverride                          = $NotifyAllowOverrideValue
@@ -508,12 +508,20 @@ class SCDLPComplianceRule : M365DSCResourceBase
                 AccessTokens                                 = $this.AccessTokens
             }
 
-            $paramsToRemove = @()
-            foreach ($paramName in $result.Keys)
+            if (-not [System.String]::IsNullOrEmpty($PolicyRule.AdvancedRule))
             {
-                if ($null -eq $result[$paramName] -or '' -eq $result[$paramName] -or @() -eq $result[$paramName])
+                $paramsToRemove = @()
+                foreach ($paramName in $result.Keys)
                 {
-                    $paramsToRemove += $paramName
+                    if ($paramName -eq 'GenerateAlert')
+                    {
+                        continue
+                    }
+
+                    if ($null -eq $result[$paramName] -or '' -eq $result[$paramName] -or @() -eq $result[$paramName])
+                    {
+                        $paramsToRemove += $paramName
+                    }
                 }
             }
 

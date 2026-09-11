@@ -16795,6 +16795,10 @@
       "Type": "System.String"
     },
     {
+      "Name": "ManagerApplications",
+      "Type": "System.String[]"
+    },
+    {
       "Name": "NativeAuthenticationApisEnabled",
       "Type": "System.String"
     },
@@ -17301,6 +17305,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "PurviewContentEvaluationRequired",
+      "Type": "System.Object"
+    },
+    {
       "Name": "RequireClass3Biometrics",
       "Type": "System.Management.Automation.SwitchParameter"
     },
@@ -17692,6 +17700,10 @@
     },
     {
       "Name": "ProtectedMessagingRedirectAppType",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "PurviewContentEvaluationRequired",
       "Type": "System.Object"
     },
     {
@@ -23163,6 +23175,10 @@
       "Type": "System.String"
     },
     {
+      "Name": "OnPremisesExtensionAttributes",
+      "Type": "System.Object"
+    },
+    {
       "Name": "OnPremisesLastSyncDateTime",
       "Type": "System.DateTime"
     },
@@ -25541,6 +25557,10 @@
       "Type": "System.Collections.Hashtable"
     },
     {
+      "Name": "AppServiceConnectInbound",
+      "Type": "System.Object"
+    },
+    {
       "Name": "AutomaticUserConsentSettings",
       "Type": "System.Object"
     },
@@ -25561,6 +25581,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "BlockServiceProviderOutboundAccess",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
       "Name": "DeletedDateTime",
       "Type": "System.DateTime"
     },
@@ -25579,6 +25603,22 @@
     {
       "Name": "IsServiceProvider",
       "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "M365Capabilities",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationInbound",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationOutbound",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ServiceProviderConstraints",
+      "Type": "System.Object"
     },
     {
       "Name": "TenantId",
@@ -27819,6 +27859,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "AccessType",
+      "Type": "System.String"
+    },
+    {
       "Name": "AdditionalProperties",
       "Type": "System.Collections.Hashtable"
     },
@@ -27923,11 +27967,19 @@
       "Type": "System.String"
     },
     {
+      "Name": "InfoCatalogs",
+      "Type": "System.String[]"
+    },
+    {
       "Name": "IsArchived",
       "Type": "System.Management.Automation.SwitchParameter"
     },
     {
       "Name": "IsAssignableToRole",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "IsFavorite",
       "Type": "System.Management.Automation.SwitchParameter"
     },
     {
@@ -27977,6 +28029,10 @@
     {
       "Name": "OnPremisesDomainName",
       "Type": "System.String"
+    },
+    {
+      "Name": "OnPremisesExtensionAttributes",
+      "Type": "System.Object"
     },
     {
       "Name": "OnPremisesLastSyncDateTime",
@@ -28051,6 +28107,14 @@
       "Type": "System.DateTime"
     },
     {
+      "Name": "ResourceBehaviorOptions",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "ResourceProvisioningOptions",
+      "Type": "System.String[]"
+    },
+    {
       "Name": "SecurityEnabled",
       "Type": "System.Management.Automation.SwitchParameter"
     },
@@ -28095,12 +28159,24 @@
       "Type": "System.String"
     },
     {
+      "Name": "UnseenConversationsCount",
+      "Type": "System.Int32"
+    },
+    {
       "Name": "UnseenCount",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "UnseenMessagesCount",
       "Type": "System.Int32"
     },
     {
       "Name": "Visibility",
       "Type": "System.String"
+    },
+    {
+      "Name": "WelcomeMessageEnabled",
+      "Type": "System.Management.Automation.SwitchParameter"
     },
     {
       "Name": "Break",
@@ -28669,6 +28745,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "CreatedByAppId",
+      "Type": "System.String"
+    },
+    {
       "Name": "CreatedObjects",
       "Type": "System.Object"
     },
@@ -28719,6 +28799,10 @@
     {
       "Name": "Info",
       "Type": "System.Object"
+    },
+    {
+      "Name": "IsDisabled",
+      "Type": "System.Management.Automation.SwitchParameter"
     },
     {
       "Name": "KeyCredentials",
@@ -29089,6 +29173,10 @@
     {
       "Name": "Identities",
       "Type": "System.Object"
+    },
+    {
+      "Name": "IdentityParentId",
+      "Type": "System.String"
     },
     {
       "Name": "ImAddresses",
@@ -36497,6 +36585,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "CreatedByAppId",
+      "Type": "System.String"
+    },
+    {
       "Name": "CreatedDateTime",
       "Type": "System.DateTime"
     },
@@ -36557,6 +36649,10 @@
       "Type": "System.Management.Automation.SwitchParameter"
     },
     {
+      "Name": "IsDisabled",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
       "Name": "IsFallbackPublicClient",
       "Type": "System.Management.Automation.SwitchParameter"
     },
@@ -36567,6 +36663,10 @@
     {
       "Name": "LogoInputFile",
       "Type": "System.String"
+    },
+    {
+      "Name": "ManagerApplications",
+      "Type": "System.String[]"
     },
     {
       "Name": "NativeAuthenticationApisEnabled",
@@ -37035,6 +37135,10 @@
     {
       "Name": "LogoInputFile",
       "Type": "System.String"
+    },
+    {
+      "Name": "ManagerApplications",
+      "Type": "System.String[]"
     },
     {
       "Name": "NativeAuthenticationApisEnabled",
@@ -37551,6 +37655,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "PurviewContentEvaluationRequired",
+      "Type": "System.Object"
+    },
+    {
       "Name": "RequireClass3Biometrics",
       "Type": "System.Management.Automation.SwitchParameter"
     },
@@ -37950,6 +38058,10 @@
     },
     {
       "Name": "ProtectedMessagingRedirectAppType",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "PurviewContentEvaluationRequired",
       "Type": "System.Object"
     },
     {
@@ -38947,6 +39059,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "AndroidAppConfigurationSchema",
+      "Type": "System.Object"
+    },
+    {
       "Name": "AndroidDeviceOwnerEnrollmentProfiles",
       "Type": "System.Object"
     },
@@ -39384,6 +39500,10 @@
     },
     {
       "Name": "RoleScopeTags",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "SamsungEFotaFirmwareVersions",
       "Type": "System.Object"
     },
     {
@@ -43739,6 +43859,10 @@
       "Type": "System.String"
     },
     {
+      "Name": "OnPremisesExtensionAttributes",
+      "Type": "System.Object"
+    },
+    {
       "Name": "OnPremisesLastSyncDateTime",
       "Type": "System.DateTime"
     },
@@ -44802,7 +44926,7 @@
     },
     {
       "Name": "BodyParameter",
-      "Type": "System.Object"
+      "Type": "System.Collections.Hashtable"
     },
     {
       "Name": "ResponseHeadersVariable",
@@ -46435,6 +46559,10 @@
       "Type": "System.Collections.Hashtable"
     },
     {
+      "Name": "AppServiceConnectInbound",
+      "Type": "System.Object"
+    },
+    {
       "Name": "AutomaticUserConsentSettings",
       "Type": "System.Object"
     },
@@ -46455,6 +46583,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "BlockServiceProviderOutboundAccess",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
       "Name": "Id",
       "Type": "System.String"
     },
@@ -46469,6 +46601,18 @@
     {
       "Name": "IsServiceDefault",
       "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "M365Capabilities",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationInbound",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationOutbound",
+      "Type": "System.Object"
     },
     {
       "Name": "TenantRestrictions",
@@ -46525,6 +46669,10 @@
       "Type": "System.Collections.Hashtable"
     },
     {
+      "Name": "AppServiceConnectInbound",
+      "Type": "System.Object"
+    },
+    {
       "Name": "AutomaticUserConsentSettings",
       "Type": "System.Object"
     },
@@ -46545,6 +46693,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "BlockServiceProviderOutboundAccess",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
       "Name": "DeletedDateTime",
       "Type": "System.DateTime"
     },
@@ -46563,6 +46715,22 @@
     {
       "Name": "IsServiceProvider",
       "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "M365Capabilities",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationInbound",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "M365CollaborationOutbound",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ServiceProviderConstraints",
+      "Type": "System.Object"
     },
     {
       "Name": "TenantId",
@@ -48789,6 +48957,10 @@
       "Type": "System.Object"
     },
     {
+      "Name": "CreatedByAppId",
+      "Type": "System.String"
+    },
+    {
       "Name": "CreatedObjects",
       "Type": "System.Object"
     },
@@ -48839,6 +49011,10 @@
     {
       "Name": "Info",
       "Type": "System.Object"
+    },
+    {
+      "Name": "IsDisabled",
+      "Type": "System.Management.Automation.SwitchParameter"
     },
     {
       "Name": "KeyCredentials",
@@ -49217,6 +49393,10 @@
     {
       "Name": "Identities",
       "Type": "System.Object"
+    },
+    {
+      "Name": "IdentityParentId",
+      "Type": "System.String"
     },
     {
       "Name": "ImAddresses",

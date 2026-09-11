@@ -613,7 +613,12 @@
     resource that only resolves a group display name, id or membership and never modifies
     the group.
 
-# UNRELEASED
+# 1.26.909.1
+
+* MISC
+  * Refreshed Microsoft Graph shim module.
+
+# 1.26.902.1
 
 * AADApplicationFederatedIdentityCredential
   * Fixed an issue where an incorrect count check resulted in a single object
@@ -628,6 +633,10 @@
 * IntuneDeviceRemediation
   * Fixed an issue where the `DetectionScriptContent` and `RemediationScriptContent`
     properties were incorrectly converted to a binary array during Set.
+* SCDLPComplianceRule
+  * Updated the `GenerateAlert` property to always export as an array without
+    being omitted from the export.
+    FIXES [#7434](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7434)
 * M365DSCGraphShim
   * Changed how an object is returned from Graph if both `value` and
     `presentation` properties are present. This fixes an issue with the resource
