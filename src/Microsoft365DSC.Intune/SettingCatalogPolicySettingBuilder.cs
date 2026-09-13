@@ -70,7 +70,7 @@ namespace Microsoft365DSC.Intune
             // Collect all definitions across all templates
             List<SettingDefinitionInfo> allDefinitions = settingTemplates.SelectMany(t => t.SettingDefinitions).ToList();
             List<Hashtable> settingInstances = [];
-            List<string> processedSettingDefinitionIds = [];
+            HashSet<string> processedSettingDefinitionIds = new(StringComparer.Ordinal);
 
             foreach (var settingTemplate in settingTemplates)
             {
@@ -174,8 +174,11 @@ namespace Microsoft365DSC.Intune
             List<SettingTemplateInfo> settingTemplates,
             Hashtable dscParams)
         {
+            // User scope is always announced through the user_ prefix; everything else is
+            // device-scoped (the CSP default context), including definitions without a
+            // device_ prefix whose base URI goes straight to ./Vendor/MSFT.
             var deviceTemplates = settingTemplates
-                .Where(t => t.SettingInstanceTemplate?.SettingDefinitionId?.StartsWith("device_", StringComparison.OrdinalIgnoreCase) == true)
+                .Where(t => t.SettingInstanceTemplate?.SettingDefinitionId?.StartsWith("user_", StringComparison.OrdinalIgnoreCase) != true)
                 .ToList();
             var userTemplates = settingTemplates
                 .Where(t => t.SettingInstanceTemplate?.SettingDefinitionId?.StartsWith("user_", StringComparison.OrdinalIgnoreCase) == true)
@@ -277,6 +280,7 @@ namespace Microsoft365DSC.Intune
             string cimParamName = null;
             Hashtable effectiveDscParams = dscParams;
             List<SettingDefinitionInfo> effectiveAllDefinitions = allDefinitions;
+            string childInstanceName = settingInstanceName;
 
             // Multi-instance detection
             bool isMultiInstance =
@@ -288,6 +292,7 @@ namespace Microsoft365DSC.Intune
             {
                 string settingName = SettingsCatalogHelper.GetSettingName(settingDefinition, allDefinitions);
                 string fullClassName = settingInstanceName + settingName;
+                childInstanceName = fullClassName;
 
                 var (paramName, cimInstances) = FindCimInstancesByClassName(dscParams, fullClassName);
                 cimParamName = paramName;
@@ -326,7 +331,7 @@ namespace Microsoft365DSC.Intune
                     string childSettingValueType = ODataTypePrefix + childSettingValueName;
                     if (childSettingValueName.Length > 0)
                     {
-                        childSettingValueName = char.ToLowerInvariant(childSettingValueName[0]) + childSettingValueName.Substring(1);
+                        childSettingValueName = SettingsCatalogHelper.ToCamelCase(childSettingValueName);
                     }
 
                     // Find matching child template from parent's children
@@ -350,7 +355,7 @@ namespace Microsoft365DSC.Intune
                         childSettingValueName,
                         childSettingValueType,
                         childValueTemplateId,
-                        settingInstanceName + (isMultiInstance ? SettingsCatalogHelper.GetSettingName(settingDefinition, allDefinitions) : string.Empty),
+                        childInstanceName,
                         level + 1);
 
                     if (childValue is null || childValue.Count == 0)
@@ -452,7 +457,7 @@ namespace Microsoft365DSC.Intune
                 string childSettingValueType = ODataTypePrefix + childSettingValueName;
                 if (childSettingValueName.Length > 0)
                 {
-                    childSettingValueName = char.ToLowerInvariant(childSettingValueName[0]) + childSettingValueName.Substring(1);
+                    childSettingValueName = SettingsCatalogHelper.ToCamelCase(childSettingValueName);
                 }
 
                 // Find child template from parent's choiceSettingValueTemplate.children
@@ -708,11 +713,7 @@ namespace Microsoft365DSC.Intune
             List<SettingDefinitionInfo> definitions,
             string parentSettingId)
         {
-            return definitions
-                .Where(d =>
-                    (d.DependentOnParentSettingIds.Count > 0 && d.DependentOnParentSettingIds.Contains(parentSettingId)) ||
-                    (d.OptionsDependentOnParentSettingIds.Count > 0 && d.OptionsDependentOnParentSettingIds.Contains(parentSettingId)))
-                .ToList();
+            return SettingsCatalogHelper.DefinitionLookups.For(definitions).ChildrenOf(parentSettingId);
         }
 
         /// <summary>
@@ -744,26 +745,32 @@ namespace Microsoft365DSC.Intune
 
         private static bool IsGroupSettingCollection(string settingType)
         {
-            return string.Equals(settingType, GroupSettingCollectionInstanceType, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(settingType, SettingGroupCollectionDefinitionType, StringComparison.OrdinalIgnoreCase);
+            return IsAnyOf(settingType, GroupSettingCollectionInstanceType, SettingGroupCollectionDefinitionType);
         }
 
         private static bool IsChoiceSetting(string settingType)
         {
-            return string.Equals(settingType, ChoiceSettingInstanceType, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(settingType, ChoiceSettingDefinitionType, StringComparison.OrdinalIgnoreCase);
+            return IsAnyOf(settingType, ChoiceSettingInstanceType, ChoiceSettingDefinitionType);
         }
 
         private static bool IsChoiceSettingCollection(string settingType)
         {
-            return string.Equals(settingType, ChoiceSettingCollectionInstanceType, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(settingType, ChoiceSettingCollectionDefinitionType, StringComparison.OrdinalIgnoreCase);
+            return IsAnyOf(settingType, ChoiceSettingCollectionInstanceType, ChoiceSettingCollectionDefinitionType);
         }
 
         private static bool IsSimpleSettingCollection(string settingType)
         {
-            return string.Equals(settingType, SimpleSettingCollectionInstanceType, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(settingType, SimpleSettingCollectionDefinitionType, StringComparison.OrdinalIgnoreCase);
+            return IsAnyOf(settingType, SimpleSettingCollectionInstanceType, SimpleSettingCollectionDefinitionType);
+        }
+
+        /// <summary>
+        /// A setting type arrives either as the instance OData type or as the matching definition
+        /// type, so every check above accepts both spellings.
+        /// </summary>
+        private static bool IsAnyOf(string settingType, string instanceType, string definitionType)
+        {
+            return string.Equals(settingType, instanceType, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(settingType, definitionType, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion
@@ -891,7 +898,7 @@ namespace Microsoft365DSC.Intune
                         continue;
 
                     string camelName = property.Name.Length > 0
-                        ? char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1)
+                        ? SettingsCatalogHelper.ToCamelCase(property.Name)
                         : property.Name;
                     result[camelName] = property.Value;
                 }

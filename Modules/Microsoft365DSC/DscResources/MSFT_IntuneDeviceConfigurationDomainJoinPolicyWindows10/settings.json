@@ -1,12 +1,23 @@
 {
   "resourceName": "IntuneDeviceConfigurationDomainJoinPolicyWindows10",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "deviceConfiguration",
+    "odataSubtype": "windowsDomainJoinConfiguration",
+    "cmdletNoun": "MgBetaDeviceManagementDeviceConfiguration",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures an Intune Device Configuration Domain Join Policy for Windows10.",
   "permissions": {
     "graph": {
       "delegated": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -15,13 +26,16 @@
         "update": [
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
+          },
+          {
+            "name": "GroupMember.Read.All"
           }
         ]
       },
       "application": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -29,7 +43,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"

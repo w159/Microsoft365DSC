@@ -22,28 +22,28 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneTermsAndConditions "IntuneTermsAndConditions-IntuneTermsAndConditions_1"
+        IntuneTermsAndConditions "IntuneTermsAndConditions-Example"
         {
             AcceptanceStatement   = "Summary of Terms and Conditions";
-            ApplicationId         = $ConfigurationData.NonNodeData.ApplicationId;
             Assignments           = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
-                    dataType = "#microsoft.graph.groupAssignmentTarget"
+                    dataType                                   = "#microsoft.graph.groupAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
-                    groupDisplayName = "Include"
-                    groupId = "56ae142c-f960-4436-a445-6b371fc8338b"
+                    groupDisplayName                           = "Include"
+                    groupId                                    = "56ae142c-f960-4436-a445-6b371fc8338b"
                 }
             );
-            BodyText              = "Some Terms and Conditions - With new updates"; # Updated property
-            CertificateThumbprint = $ConfigurationData.NonNodeData.CertificateThumbprint;
+            BodyText              = "Some Terms and Conditions - With new updates"; # Updated Property
             Description           = "";
             DisplayName           = "IntuneTermsAndConditions_1";
             Ensure                = "Present";
             RoleScopeTagIds       = @("0");
-            TenantId              = $OrganizationName;
             Title                 = "IntuneTermsAndConditions_1";
+            ApplicationId         = $ConfigurationData.NonNodeData.ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $ConfigurationData.NonNodeData.CertificateThumbprint;
         }
     }
 }

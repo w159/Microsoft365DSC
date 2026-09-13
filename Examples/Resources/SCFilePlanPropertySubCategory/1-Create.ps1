@@ -4,21 +4,33 @@ This example shows how to create a new File Plan Property Sub-Category.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        SCFilePlanPropertySubCategory 'FilePlanPropertySubCategory'
+        SCFilePlanPropertySubCategory 'SCFilePlanPropertySubCategory-Example'
         {
-            Name       = "My Sub-Category"
-            Category   = "My Category"
-            Ensure     = "Present"
-            Credential = $Credscredential
+            Name                  = "My Sub-Category"
+            Category              = "My Category"
+            Ensure                = "Present"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }

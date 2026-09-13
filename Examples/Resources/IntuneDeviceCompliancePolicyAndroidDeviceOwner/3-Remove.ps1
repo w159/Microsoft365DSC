@@ -21,27 +21,12 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceCompliancePolicyAndroidDeviceOwner 'ConfigureAndroidDeviceCompliancePolicyOwner'
+        IntuneDeviceCompliancePolicyAndroidDeviceOwner 'IntuneDeviceCompliancePolicyAndroidDeviceOwner-Example'
         {
-            DisplayName                                        = 'DeviceOwner'
-            Description                                        = ''
-            DeviceThreatProtectionEnabled                      = $False
-            DeviceThreatProtectionRequiredSecurityLevel        = 'unavailable'
-            AdvancedThreatProtectionRequiredSecurityLevel      = 'unavailable'
-            SecurityRequireSafetyNetAttestationBasicIntegrity  = $False
-            SecurityRequireSafetyNetAttestationCertifiedDevice = $False
-            OsMinimumVersion                                   = '10'
-            OsMaximumVersion                                   = '11'
-            PasswordRequired                                   = $True
-            PasswordMinimumLength                              = 8 # Updated Property
-            PasswordRequiredType                               = 'numericComplex'
-            PasswordMinutesOfInactivityBeforeLock              = 5
-            PasswordExpirationDays                             = 90
-            PasswordPreviousPasswordCountToBlock               = 13
-            StorageRequireEncryption                           = $True
-            Ensure                                             = 'Present'
+            DisplayName           = 'DeviceOwner'
+            Ensure                = 'Present'
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;

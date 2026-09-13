@@ -1,12 +1,26 @@
 {
   "resourceName": "IntuneAntivirusExclusionsPolicyLinux",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "deviceManagementConfigurationPolicy",
+    "odataSubtype": null,
+    "cmdletNoun": "MgBetaDeviceManagementConfigurationPolicy",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures an Intune Antivirus Exclusions Policy Linux.",
   "permissions": {
     "graph": {
       "application": {
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementConfiguration.ReadWrite.All"
           }
         ],
         "read": [
@@ -14,14 +28,17 @@
             "name": "DeviceManagementConfiguration.Read.All"
           },
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           }
         ]
       },
       "delegated": {
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementConfiguration.ReadWrite.All"
           }
         ],
         "read": [
@@ -29,7 +46,7 @@
             "name": "DeviceManagementConfiguration.Read.All"
           },
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           }
         ]
       }

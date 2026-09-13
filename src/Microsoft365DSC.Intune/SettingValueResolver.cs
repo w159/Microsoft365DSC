@@ -106,26 +106,6 @@ namespace Microsoft365DSC.Intune
         }
 
         /// <summary>
-        /// Overload that accepts Graph objects directly (for callers that haven't pre-mapped).
-        /// Maps the objects internally using <see cref="SettingDefinitionMapper"/>.
-        ///
-        /// This overload incurs the cost of reflection-based mapping. For bulk operations,
-        /// prefer pre-mapping via <see cref="SettingDefinitionMapper.FromGraphObjects"/> and
-        /// calling the <see cref="Resolve(string, SettingDefinitionInfo, List{SettingDefinitionInfo}, Hashtable)"/>
-        /// overload.
-        /// </summary>
-        public static SettingDSCValueResult ResolveFromGraph(
-            string settingValueType,
-            object settingDefinitionGraph,
-            List<object> allSettingDefinitionsGraph,
-            Hashtable dscParams)
-        {
-            var settingDefinition = SettingDefinitionMapper.FromGraphObject(settingDefinitionGraph);
-            var allSettingDefinitions = SettingDefinitionMapper.FromGraphObjects(allSettingDefinitionsGraph);
-            return Resolve(settingValueType, settingDefinition, allSettingDefinitions, dscParams);
-        }
-
-        /// <summary>
         /// Resolves Simple setting values (string, int, or arrays thereof).
         /// </summary>
         private static SettingDSCValueResult ResolveSimpleSettingValue(
@@ -257,6 +237,11 @@ namespace Microsoft365DSC.Intune
         /// </summary>
         private static string? FindKeyIgnoreCase(Hashtable hashtable, string key)
         {
+            if (hashtable.ContainsKey(key))
+            {
+                return key;
+            }
+
             foreach (var k in hashtable.Keys)
             {
                 if (string.Equals(k?.ToString(), key, StringComparison.OrdinalIgnoreCase))

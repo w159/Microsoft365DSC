@@ -1,15 +1,15 @@
-# Resource Comparison Metadata Architecture
+# Resource Comparison Architecture
 
 ## Overview
 
-This document describes the metadata-driven approach for handling resource-specific comparison logic in Microsoft365DSC.
-This ensures that drift detection and reporting use the same comparison parameters as the DSC runtime, regardless of whether the comparison is triggered by `Test-TargetResource` or `New-M365DSCDeltaReport`.
+This document describes how resource-specific comparison logic is handled in Microsoft365DSC.
+This ensures that drift detection and reporting use the same comparison parameters as the DSC runtime, regardless of whether the comparison is triggered by `Test()` or `New-M365DSCDeltaReport`.
 
 ## Problem Statement
 
 Previously, there were two comparison pathways that produced inconsistent results:
 
-1. **Resource-Level Comparison** (via `Test-TargetResource`):
+1. **Resource-Level Comparison** (via `Test()`):
    * Resources could specify custom comparison logic (PostProcessing, ExcludedProperties, IncludedProperties)
    * Used during DSC runtime operations
 
@@ -19,60 +19,39 @@ Previously, there were two comparison pathways that produced inconsistent result
 
 ## Solution Architecture
 
-The solution uses a **metadata-driven approach** with three key components:
+Both pathways ask the resource class itself for its comparison parameters.
 
-### 1. Comparison Metadata File
+### 1. Resource-Level `GetCompareParameters()` Method
 
-**Location:** `Modules/Microsoft365DSC/ComparisonMetadata.json`
+`M365DSCResourceBase` declares the method and returns an empty hashtable. Resources that require custom comparison logic override it, returning the same parameters that are passed to `Test-M365DSCTargetResource`:
 
-This JSON file flags which resources require custom comparison logic:
-
-```json
-{
-  "Description": "Metadata for resources that require custom comparison logic...",
-  "Resources": {
-    "AADRoleAssignmentScheduleRequest": {
-      "HasCustomComparison": true,
-      "Description": "Uses PostProcessing to handle past StartDateTime values"
-    },
-    "PlannerTask": {
-      "HasCustomComparison": true,
-      "Description": "Uses PostProcessing to handle null Bucket values"
-    }
-  }
-}
-```
-
-**Fields:**
-
-* `HasCustomComparison` (boolean): When `true`, the resource has a `Get-CompareParameters` function
-* `Description` (string): Human-readable explanation of why custom comparison is needed
-
-### 2. Resource-Level Get-CompareParameters Function
-
-Resources that require custom comparison logic must implement a `Get-CompareParameters` function that returns a hashtable with the same parameters passed to `Test-M365DSCTargetResource`:
-
-**Example:** `MSFT_AADRoleAssignmentScheduleRequest\Get-CompareParameters`
+**Example:** `MSFT_AADRoleAssignmentScheduleRequest`
 
 ```powershell
-function Get-CompareParameters
-{
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param()
-
-    $postProcessingScript = {
-        param($DesiredValues, $CurrentValues, $ValuesToCheck, $ignore)
-        # Custom comparison logic here
-        # ... transform values as needed ...
-        return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            ExcludedProperties = @('Action', 'IsValidationOnly', 'Justification', 'TicketInfo')
+            PostProcessing     = {
+                param($DesiredValues, $CurrentValues, $ValuesToCheck, $PostProcessingArgs)
+                # ... transform values as needed ...
+                return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+            }
+        }
     }
+```
 
-    return @{
-        ExcludedProperties = @('Action', 'IsValidationOnly', 'Justification', 'TicketInfo')
-        PostProcessing = $postProcessingScript
+The resource's own `Test()` splats the result:
+
+```powershell
+    [bool] Test()
+    {
+        ...
+        $compareParameters = $this.GetCompareParameters()
+        return Test-M365DSCTargetResource -DesiredValues $this.GetBoundParameters() `
+            -ResourceName $this.GetResourceName() `
+            @compareParameters -CurrentValues $this.Get().ToHashtable()
     }
-}
 ```
 
 **Supported Return Values:**
@@ -82,42 +61,38 @@ function Get-CompareParameters
 * `PostProcessing` (ScriptBlock): Custom transformation logic (must return Tuple[Hashtable, Hashtable, Hashtable])
 * `PostProcessingArgs` (object[]): Additional arguments passed to PostProcessing scriptblock
 
-### 3. Helper Functions
+The base class also provides `GetSettingsCatalogCompareParameters()`, which the settings-catalog resources delegate to instead of writing their own body.
 
-**`Get-M365DSCResourceComparisonMetadata`** (in M365DSCUtil.psm1)
+### 2. Helper Functions
 
-* Loads and caches the ComparisonMetadata.json file
-* Returns metadata for a specific resource
-* Returns `@{HasCustomComparison = $false}` if resource not in metadata
+**`Get-M365DSCResourceCompareParameters`** (in `DscResources/_Base/M365DSCResourceFactory.psm1`)
 
-**`Get-M365DSCResourceComparisonParameters`** (in M365DSCUtil.psm1)
+* Resolves the resource name to its class type through the `M365DSCResourceBase` registry
+* Constructs an instance with no properties set and returns its `GetCompareParameters()`
+* Returns `@{}` for an unknown resource name rather than throwing
 
-* Checks metadata to see if resource has custom comparison
-* Imports the resource module if needed
-* Invokes the resource's `Get-CompareParameters` function
-* Returns the comparison parameters hashtable
+This lives with the other class entry points because PowerShell classes do not cross module boundaries: `M365DSCUtil.psm1` cannot write `[AADGroup]::new()`.
 
-### 4. Integration with New-M365DSCDeltaReport
+**`Get-M365DSCResourceComparisonParameters`** (in `M365DSCUtil.psm1`)
 
-The report generation now uses the metadata-driven approach:
+* Caches the result per resource for the lifetime of the session
+* Delegates to `Get-M365DSCResourceCompareParameters`
+
+### 3. Integration with New-M365DSCDeltaReport
+
+Report generation asks every resource for its parameters and merges them with the report's own exclusions:
 
 ```powershell
-# Check if this resource has custom comparison logic
-$metadata = Get-M365DSCResourceComparisonMetadata -ResourceName $resource.ResourceName
-if ($metadata.HasCustomComparison)
+$customCompareParams = Get-M365DSCResourceComparisonParameters -ResourceName $resource.ResourceName
+
+# Merge with global exclusions
+if ($customCompareParams.ContainsKey('ExcludedProperties'))
 {
-    # Retrieve custom comparison parameters from the resource
-    $customCompareParams = Get-M365DSCResourceComparisonParameters -ResourceName $resource.ResourceName
-
-    # Merge with global exclusions
-    if ($customCompareParams.ContainsKey('ExcludedProperties'))
-    {
-        $resourceCompareParams.ExcludedProperties = $ExcludedProperties + $customCompareParams.ExcludedProperties | Select-Object -Unique
-    }
-
-    # Add PostProcessing, IncludedProperties, etc.
-    # ...
+    $resourceCompareParams.ExcludedProperties = $ExcludedProperties + $customCompareParams.ExcludedProperties | Select-Object -Unique
 }
+
+# Add PostProcessing, IncludedProperties, etc.
+# ...
 
 # Perform comparison with resource-specific parameters
 $compareResult = Compare-M365DSCResourceState @resourceCompareParams
@@ -127,35 +102,26 @@ $compareResult = Compare-M365DSCResourceState @resourceCompareParams
 
 ### Adding Custom Comparison to a New Resource
 
-1. **Add metadata entry** in `ComparisonMetadata.json`:
-
-    ```json
-    "YourResourceName": {
-        "HasCustomComparison": true,
-        "Description": "Brief description of why custom comparison is needed"
-    }
-    ```
-
-2. **Implement `Get-CompareParameters`** in your resource module (before `Export-ModuleMember`):
+1. **Override `GetCompareParameters()`** on your resource class:
 
     ```powershell
-    function Get-CompareParameters
-    {
-        [CmdletBinding()]
-        [OutputType([System.Collections.Hashtable])]
-        param()
-
-        return @{
-            ExcludedProperties = @('PropertyToExclude1', 'PropertyToExclude2')
-            # IncludedProperties = @('PropertyToInclude1')  # Optional
-            # PostProcessing = $scriptBlock  # Optional
+        [System.Collections.Hashtable] GetCompareParameters()
+        {
+            return @{
+                ExcludedProperties = @('PropertyToExclude1', 'PropertyToExclude2')
+                # IncludedProperties = @('PropertyToInclude1')  # Optional
+                # PostProcessing = $scriptBlock  # Optional
+            }
         }
-    }
     ```
 
+2. **Splat it** in the resource's `Test()`, as shown above.
+
 3. **Test your implementation**
-   * Run your resource's `Test-TargetResource` - should work as before
+   * Run your resource's `Test()` - should work as before
    * Run `Assert-M365DSCBlueprint` - should now use the same comparison logic
+
+No registration step is needed: the report path resolves the class and calls the method, so an override is picked up on its own.
 
 ### PostProcessing Script Pattern
 
@@ -186,22 +152,22 @@ $postProcessingScript = {
 }
 ```
 
+The scriptblock is invoked by `Test-M365DSCTargetResource`, outside the instance's scope, so `$this` is not available inside it. State travels via `PostProcessingArgs`.
+
+Note that the report path constructs the instance with no properties set, so any state an override reads from `$this` holds its default there.
+
 ## Benefits
 
 1. **Consistency**: Report generation and DSC runtime use identical comparison logic
-2. **Maintainability**: Comparison logic lives in one place (the resource module)
+2. **Maintainability**: Comparison logic lives in one place (the resource class)
 3. **Flexibility**: Resources can define complex comparison rules without modifying core engine
-4. **Performance**: Only loads custom logic when needed (metadata-driven)
-5. **Discoverability**: Metadata file provides clear inventory of resources with custom logic
+4. **Discoverability**: The override sits next to the `Test()` that uses it
 
 ## File Locations
 
-* **Metadata:** `Modules/Microsoft365DSC/ComparisonMetadata.json`
+* **Base Class:** `Modules/Microsoft365DSC/DscResources/_Base/M365DSCResourceBase.psm1`
+* **Class Entry Points:** `Modules/Microsoft365DSC/DscResources/_Base/M365DSCResourceFactory.psm1`
 * **Helper Functions:** `Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1`
 * **Comparison Engine:** `Modules/Microsoft365DSC/Modules/M365DSCCompare.psm1`
 * **Report Generator:** `Modules/Microsoft365DSC/Modules/M365DSCReport.psm1`
 * **Resource Example:** `Modules/Microsoft365DSC/DscResources/MSFT_AADRoleAssignmentScheduleRequest/MSFT_AADRoleAssignmentScheduleRequest.psm1`
-
-## Resources Currently Using Custom Comparison
-
-See `ComparisonMetadata.json` for the complete list.

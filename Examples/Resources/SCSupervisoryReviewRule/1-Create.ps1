@@ -24,12 +24,12 @@ Configuration Example
 
     Node localhost
     {
-        SCSupervisoryReviewRule 'SupervisoryReviewRule'
+        SCSupervisoryReviewRule 'SCSupervisoryReviewRule-Example'
         {
-            Name                  = 'DemoRule'
+            Name                  = 'Trading Desk Review'
             Condition             = '(NOT(Reviewee:US Compliance))'
             SamplingRate          = 100
-            Policy                = 'TestPolicy'
+            Policy                = 'MyPolicy'
             Ensure                = 'Present'
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId

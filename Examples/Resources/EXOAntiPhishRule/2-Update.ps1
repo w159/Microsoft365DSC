@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,21 +19,28 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOAntiPhishRule 'ConfigureAntiPhishRule'
+        EXOAntiPhishRule 'EXOAntiPhishRule-Example'
         {
-            Identity                  = "Test Rule"
+            Identity                  = "Executive Impersonation Protection"
             Comments                  = "This is an updated comment." # Updated Property
             AntiPhishPolicy           = "Our Rule"
             Enabled                   = $True
+            Priority                  = 0
+            RecipientDomainIs         = @("contoso.com")
+            SentTo                    = @("AdeleV@$TenantId")
             SentToMemberOf            = @("executives@$TenantId")
+            ExceptIfRecipientDomainIs = @("fabrikam.com")
+            ExceptIfSentTo            = @("AlexW@$TenantId")
+            ExceptIfSentToMemberOf    = @("LegalTeam@$TenantId")
             Ensure                    = "Present"
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            ApplicationId             = $ApplicationId
+            TenantId                  = $TenantId
+            CertificateThumbprint     = $CertificateThumbprint
         }
     }
 }

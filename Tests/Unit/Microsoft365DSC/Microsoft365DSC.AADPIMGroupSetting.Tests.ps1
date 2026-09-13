@@ -21,7 +21,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
         BeforeAll {
             $secpasswd = ConvertTo-SecureString (New-Guid | Out-String) -AsPlainText -Force
-            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@mydomain.com', $secpasswd)
+            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@onmicrosoft.com', $secpasswd)
 
             $Global:PartialExportFileName = 'c:\TestPath'
 
@@ -51,7 +51,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
-            Mock -CommandName New-M365DSCConnection -MockWith {
+            Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
                 return 'Credentials'
             }
             $policyJson = @'
@@ -564,13 +564,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be "Present"
+                ((New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be "Present"
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
             }
 
             It 'Should return true from the test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Test() | Should -Be $true
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
             }
@@ -626,13 +626,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be "Present"
+                ((New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be "Present"
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
             }
 
             It 'Should call the set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Update-MgBetaPolicyRoleManagementPolicyRule' -Exactly 15
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
@@ -651,7 +651,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should reverse engineer resource from the export method' {
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADPIMGroupSetting' -MethodName 'Export' -Parameters $testParams
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 if ($isM365DSCAvailable)
                 {
@@ -662,7 +662,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should reverse engineer resource from the export method with a filter' {
                 $testParams.Filter = "displayName eq 'FakeGroup'"
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADPIMGroupSetting' -MethodName 'Export' -Parameters $testParams
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
                 if ($isM365DSCAvailable)
                 {

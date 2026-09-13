@@ -4,7 +4,8 @@ This example creates a new Device Enrollment Platform Restriction.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,23 +18,16 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceEnrollmentPlatformRestriction 'DeviceEnrollmentPlatformRestriction'
+        IntuneDeviceEnrollmentPlatformRestriction 'IntuneDeviceEnrollmentPlatformRestriction-Example'
         {
-            DisplayName                       = "Removed Policy";
-            Ensure                            = "Absent";
-            Assignments                       = @();
-            Description                       = "This is a single platform restriction policy.";
-            DeviceEnrollmentConfigurationType = "singlePlatformRestriction";
-            Identity                          = "d59e4c28-b6b2-48ad-a6f0-a2132300b99d_SinglePlatformRestriction";
-            IosRestriction                    = MSFT_DeviceEnrollmentPlatformRestriction{
-                PlatformBlocked                 = $True
-                PersonalDeviceEnrollmentBlocked = $False
-            };
-            Priority                          = 1;
+            DisplayName           = "All users and all devices";
+            Ensure                = "Absent";
+            Id                    = "3868d43e-873e-4416-8fd1-fc3d67c7c15c_DefaultPlatformRestrictions";
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;

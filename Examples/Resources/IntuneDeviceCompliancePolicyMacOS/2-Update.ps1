@@ -4,7 +4,8 @@ This example creates a new Device Comliance Policy for MacOS.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,14 +18,15 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceCompliancePolicyMacOS 'ConfigureDeviceCompliancePolicyMacOS'
+        IntuneDeviceCompliancePolicyMacOS 'IntuneDeviceCompliancePolicyMacOS-Example'
         {
-            DisplayName                                 = 'MacOS DSC Policy'
-            Description                                 = 'Test policy'
+            DisplayName                                 = 'macOS Device Compliance'
+            Description                                 = 'Baseline compliance requirements for corporate Macs'
             PasswordRequired                            = $False
             PasswordBlockSimple                         = $False
             PasswordExpirationDays                      = 365
@@ -42,10 +44,14 @@ Configuration Example
             FirewallEnabled                             = $False
             FirewallBlockAllIncoming                    = $False
             FirewallEnableStealthMode                   = $False
+            DeviceCompliancePolicyScript                = MSFT_MicrosoftGraphDeviceCompliancePolicyScript{
+                DisplayName  = 'macOS Intune Agent Version Check'
+                RulesContent = '{"Rules":[{"SettingName":"IntuneAgentVersion","Operator":"IsEquals","DataType":"String","Operand":"2.24","MoreInfoUrl":"https://contoso.com/compliance","RemediationStrings":[{"Language":"en_US","Title":"Intune Agent must be up to date","Description":"Update the Microsoft Intune Agent app."}]}]}'
+            };
             Ensure                                      = 'Present'
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

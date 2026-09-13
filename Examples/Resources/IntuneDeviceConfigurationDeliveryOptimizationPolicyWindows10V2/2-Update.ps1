@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,20 +19,23 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2'
+        IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2-Example'
         {
-            Assignments                                               = @(
+            Assignments                                    = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
-                    dataType = '#microsoft.graph.allLicensedUsersAssignmentTarget'
+                    dataType                                   = '#microsoft.graph.allLicensedUsersAssignmentTarget'
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = '#microsoft.graph.exclusionGroupAssignmentTarget'
+                    groupDisplayName = 'Policy Exclusions'
                 }
             );
-            ApplicationId                                  = $ApplicationId;
-            CertificateThumbprint                          = $CertificateThumbprint;
             Description                                    = "";
             DisplayName                                    = "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2_1";
             DOAbsoluteMaxCacheSize                         = 4;
@@ -57,7 +61,7 @@ Configuration Example
             DOMinRAMAllowedToPeer                          = 15000;
             DOModifyCacheDrive                             = "%SystemDrive%\";
             DOMonthlyUploadDataCap                         = 67890;
-            DOPercentageMaxBackgroundBandwidth             = 20; # Updated property
+            DOPercentageMaxBackgroundBandwidth             = 20; # Updated Property
             DOPercentageMaxForegroundBandwidth             = 10;
             DORestrictPeerSelectionBy                      = "1";
             DOVpnKeywords                                  = @("vpn 1","vpn 2");
@@ -73,7 +77,9 @@ Configuration Example
             SetHoursToLimitForegroundDownloadBandwidthIn   = 10;
             SetHoursToLimitForegroundDownloadBandwidthOut  = 31;
             SetHoursToLimitForegroundDownloadBandwidthTo   = "17";
+            ApplicationId                                  = $ApplicationId;
             TenantId                                       = $TenantId;
+            CertificateThumbprint                          = $CertificateThumbprint;
         }
     }
 }

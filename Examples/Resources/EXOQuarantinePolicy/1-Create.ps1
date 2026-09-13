@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,19 +19,29 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOQuarantinePolicy 'ConfigureQuarantinePolicy'
+        EXOQuarantinePolicy 'EXOQuarantinePolicy-Example'
         {
-            EndUserQuarantinePermissionsValue = 87;
-            ESNEnabled                        = $False;
-            Identity                          = "$TenantId\IntegrationPolicy";
-            Ensure                            = "Present"
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            EndUserQuarantinePermissionsValue        = 87;
+            ESNEnabled                               = $False;
+            Identity                                 = "$TenantId\CorporateQuarantinePolicy";
+            CustomDisclaimer                         = "Contact the service desk if you believe a message was quarantined in error.";
+            EndUserSpamNotificationCustomFromAddress = "quarantine@$TenantId";
+            EndUserSpamNotificationFrequency         = "1.00:00:00";
+            EndUserSpamNotificationFrequencyInDays   = "1";
+            MultiLanguageCustomDisclaimer            = @("Contact the service desk if you believe a message was quarantined in error.");
+            MultiLanguageSenderName                  = @("Contoso Quarantine");
+            MultiLanguageSetting                     = @("English");
+            OrganizationBrandingEnabled              = $False;
+            QuarantinePolicyType                     = "QuarantinePolicy";
+            Ensure                                   = "Present"
+            ApplicationId                            = $ApplicationId
+            TenantId                                 = $TenantId
+            CertificateThumbprint                    = $CertificateThumbprint
         }
     }
 }

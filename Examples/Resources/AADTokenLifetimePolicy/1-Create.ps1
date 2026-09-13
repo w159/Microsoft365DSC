@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,13 +19,15 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        AADTokenLifetimePolicy 'CreateTokenLifetimePolicy'
+        AADTokenLifetimePolicy 'AADTokenLifetimePolicy-Example'
         {
             DisplayName           = "PolicyDisplayName"
+            Description           = "Limits the access token lifetime for the expense reporting application."
             Definition            = @("{`"TokenLifetimePolicy`":{`"Version`":1,`"AccessTokenLifetime`":`"02:00:00`"}}");
             IsOrganizationDefault = $false
             Ensure                = "Present"

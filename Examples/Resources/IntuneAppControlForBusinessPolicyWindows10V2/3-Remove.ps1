@@ -22,15 +22,15 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneAppControlForBusinessPolicyWindows10V2 'Example'
+        IntuneAppControlForBusinessPolicyWindows10V2 'IntuneAppControlForBusinessPolicyWindows10V2-Example'
         {
-            ApplicationId                                             = $ApplicationId;
-            CertificateThumbprint                                     = $CertificateThumbprint;
-            DisplayName                                               = "Example";
-            Ensure                                                    = "Absent";
-            TenantId                                                  = $TenantId;
+            DisplayName           = "App Control for Business - Audit Mode";
+            Ensure                = "Absent";
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

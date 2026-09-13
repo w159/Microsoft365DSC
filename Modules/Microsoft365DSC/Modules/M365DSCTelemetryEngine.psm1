@@ -1,6 +1,9 @@
 $Script:TelemetryEnabled = [System.Environment]::GetEnvironmentVariable('M365DSCTelemetryEnabled', `
             [System.EnvironmentVariableTarget]::Machine)
 
+$Script:M365DSCCurrentRolesResolved = $false
+$Script:M365DSCCurrentRoles = @()
+
 <#
 .SYNOPSIS
     Returns whether Microsoft365DSC telemetry is enabled.
@@ -42,7 +45,7 @@ function Get-M365DSCApplicationInsightsTelemetryClient
     [CmdletBinding()]
     param()
 
-    if ($null -eq $Global:M365DSCTelemetryEngine)
+    if ($null -eq $Script:M365DSCTelemetryEngine)
     {
         $AI = "$PSScriptRoot/../Dependencies/Microsoft.ApplicationInsights.dll"
         [Reflection.Assembly]::LoadFile($AI) | Out-Null
@@ -67,9 +70,9 @@ function Get-M365DSCApplicationInsightsTelemetryClient
             $TelClient.InstrumentationKey = $InstrumentationKey
         }
 
-        $Global:M365DSCTelemetryEngine = $TelClient
+        $Script:M365DSCTelemetryEngine = $TelClient
     }
-    return $Global:M365DSCTelemetryEngine
+    return $Script:M365DSCTelemetryEngine
 }
 
 <#
@@ -186,11 +189,13 @@ function Add-M365DSCTelemetryEvent
 
             if ($null -ne $dataNew.ConnectionMode -and $dataNew.ConnectionMode.StartsWith('Credential'))
             {
-                if ($null -eq $Script:M365DSCCurrentRoles -or $Script:M365DSCCurrentRoles.Length -eq 0)
+                if (-not $Script:M365DSCCurrentRolesResolved)
                 {
+                    $Script:M365DSCCurrentRoles = @()
+                    $Script:M365DSCCurrentRolesResolved = $true
+
                     $telemetryParameters = Get-M365DSCTelemetryConnectionParameter
                     Connect-M365Tenant -Workload 'MicrosoftGraph' @telemetryParameters -ErrorAction SilentlyContinue
-                    $Script:M365DSCCurrentRoles = @()
 
                     $uri = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + 'v1.0/me?$select=id'
                     $currentUser = Invoke-MgGraphRequest -Uri $uri -Method GET
@@ -208,24 +213,26 @@ function Add-M365DSCTelemetryEvent
                                 $Script:M365DSCCurrentRoles += $assignment.RoleDefinition.DisplayName + '|' + $assignment.DirectoryScopeId
                             }
                         }
-                        $dataNew.Add('M365DSCCurrentRoles', $Script:M365DSCCurrentRoles -join ',')
                     }
                 }
-                else
+
+                if ($Script:M365DSCCurrentRoles.Count -gt 0)
                 {
                     $dataNew.Add('M365DSCCurrentRoles', $Script:M365DSCCurrentRoles -join ',')
                 }
             }
             elseif ($null -ne $dataNew.ConnectionMode -and $dataNew.ConnectionMode.StartsWith('ServicePrincipal'))
             {
-                if ($null -eq $Script:M365DSCCurrentRoles -or $Script:M365DSCCurrentRoles.Length -eq 0)
+                if (-not $Script:M365DSCCurrentRolesResolved)
                 {
+                    $Script:M365DSCCurrentRoles = @()
+                    $Script:M365DSCCurrentRolesResolved = $true
+
                     try
                     {
                         $telemetryParameters = Get-M365DSCTelemetryConnectionParameter
                         Connect-M365Tenant -Workload 'MicrosoftGraph' @telemetryParameters -ErrorAction Stop
 
-                        $Script:M365DSCCurrentRoles = @()
                         $sp = Get-MgServicePrincipal -Filter "AppId eq '$($telemetryParameters.ApplicationId)'" `
                             -ErrorAction 'SilentlyContinue'
                         if ($null -ne $sp)
@@ -241,7 +248,6 @@ function Add-M365DSCTelemetryEvent
                                         $Script:M365DSCCurrentRoles += $assignment.RoleDefinition.DisplayName + '|' + $assignment.DirectoryScopeId
                                     }
                                 }
-                                $dataNew.Add('M365DSCCurrentRoles', $Script:M365DSCCurrentRoles -join ',')
                             }
                         }
                     }
@@ -250,7 +256,8 @@ function Add-M365DSCTelemetryEvent
                         Write-Verbose -Message $_
                     }
                 }
-                else
+
+                if ($Script:M365DSCCurrentRoles.Count -gt 0)
                 {
                     $dataNew.Add('M365DSCCurrentRoles', $Script:M365DSCCurrentRoles -join ',')
                 }
@@ -427,11 +434,11 @@ function Add-M365DSCTelemetryEvent
             # OS Version
             try
             {
-                if ($null -eq $Global:M365DSCOSInfo)
+                if ($null -eq $Script:M365DSCOSInfo)
                 {
-                    $Global:M365DSCOSInfo = (Get-CimInstance -ClassName Win32_OperatingSystem -Property Caption -ErrorAction SilentlyContinue).Caption
+                    $Script:M365DSCOSInfo = (Get-CimInstance -ClassName Win32_OperatingSystem -Property Caption -ErrorAction SilentlyContinue -Verbose:$false).Caption
                 }
-                $dataNew.Add('M365DSCOSVersion', $Global:M365DSCOSInfo)
+                $dataNew.Add('M365DSCOSVersion', $Script:M365DSCOSInfo)
             }
             catch
             {

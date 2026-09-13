@@ -1,521 +1,326 @@
-Confirm-M365DSCModuleDependency -ModuleName 'MSFT_IntuneDeviceCleanupRuleV2'
+using module ..\_Base\M365DSCResourceBase.psm1
 
-function Get-TargetResource
+[DscResource()]
+class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
 {
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        #region resource generator code
-        [Parameter()]
-        [System.String]
-        $Description,
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the description for the device clean up rule.')]
+    [System.String] $Description
 
-        [Parameter()]
-        [ValidateSet('all', 'androidAOSP', 'androidDeviceAdministrator', 'androidDedicatedAndFullyManagedCorporateOwnedWorkProfile', 'chromeOS', 'androidPersonallyOwnedWorkProfile', 'ios', 'macOS', 'windows', 'windowsHolographic', 'visionOS', 'tvOS')]
-        [System.String]
-        $DeviceCleanupRulePlatformType,
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the managed device platform for which the admin wants to create the device clean up rule. Possible values are: all, androidAOSP, androidDeviceAdministrator, androidDedicatedAndFullyManagedCorporateOwnedWorkProfile, chromeOS, androidPersonallyOwnedWorkProfile, ios, macOS, windows, windowsHolographic, unknownFutureValue, visionOS, tvOS.')]
+    [ValidateSet('all', 'androidAOSP', 'androidDeviceAdministrator', 'androidDedicatedAndFullyManagedCorporateOwnedWorkProfile', 'chromeOS', 'androidPersonallyOwnedWorkProfile', 'ios', 'macOS', 'windows', 'windowsHolographic', 'visionOS', 'tvOS')]
+    [System.String] $DeviceCleanupRulePlatformType
 
-        [Parameter()]
-        [System.Int32]
-        $DeviceInactivityBeforeRetirementInDays,
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the number of days when the device has not contacted Intune. Valid values 0 to 2147483647')]
+    [System.Nullable[System.UInt32]] $DeviceInactivityBeforeRetirementInDays
 
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('Indicates the display name of the device cleanup rule.')]
+    [System.String] $DisplayName
 
-        [Parameter()]
-        [System.String]
-        $Id,
-        #endregion
+    [DscProperty()]
+    [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
+    [System.String] $Id
 
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
+    [DscProperty()]
+    [System.ComponentModel.Description('Present ensures the policy exists, absent ensures it is removed.')]
+    [ValidateSet('Present', 'Absent')]
+    [System.String] $Ensure
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
+    [DscProperty()]
+    [System.ComponentModel.Description('Credentials of the Admin')]
+    [System.Management.Automation.PSCredential] $Credential
 
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Id of the Azure Active Directory application to authenticate with.')]
+    [System.String] $ApplicationId
 
-        [Parameter()]
-        [System.String]
-        $TenantId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Id of the Azure Active Directory tenant used for authentication.')]
+    [System.String] $TenantId
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
+    [DscProperty()]
+    [System.ComponentModel.Description('Secret of the Azure Active Directory tenant used for authentication.')]
+    [System.Management.Automation.PSCredential] $ApplicationSecret
 
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
+    [DscProperty()]
+    [System.ComponentModel.Description('Thumbprint of the Azure Active Directory application''s authentication certificate to use for authentication.')]
+    [System.String] $CertificateThumbprint
 
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
+    [DscProperty()]
+    [System.ComponentModel.Description('Username can be made up to anything but password will be used for CertificatePassword')]
+    [System.Management.Automation.PSCredential] $CertificatePassword
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
+    [DscProperty()]
+    [System.ComponentModel.Description('Path to certificate used in service principal usually a PFX file.')]
+    [System.String] $CertificatePath
 
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
+    [DscProperty()]
+    [System.ComponentModel.Description('Managed ID being used for authentication.')]
+    [System.Nullable[System.Boolean]] $ManagedIdentity
 
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
+    [DscProperty()]
+    [System.ComponentModel.Description('Access token used for authentication.')]
+    [System.String[]] $AccessTokens
 
-    Write-Verbose -Message "Getting configuration for the Intune Device Cleanup Rule V2 with Id {$Id} and DisplayName {$DisplayName}"
+    # Export-only. Not part of the resource schema.
+    [System.String] $Filter
 
-    try
+    [IntuneDeviceCleanupRuleV2] Get()
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.DisplayName -ne $DisplayName)
+        if ($this.RequiresPowerShellCore())
         {
+            $remote = [IntuneDeviceCleanupRuleV2]::new()
+            $remote.FromHashtable($this.InvokeInPowerShellCore('Get'))
+            return $remote
+        }
 
-            $null = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-                -InboundParameters $PSBoundParameters
+        Write-Verbose -Message "Getting configuration for the Intune Device Cleanup Rule V2 with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
 
-            #Ensure the proper dependencies are installed in the current environment.
-            Confirm-M365DSCDependencies
-
-            #region Telemetry
-            $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-            $CommandName = $MyInvocation.MyCommand
-            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-                -CommandName $CommandName `
-                -Parameters $PSBoundParameters
-            Add-M365DSCTelemetryEvent -Data $data
-            #endregion
-
-            $nullResult = $PSBoundParameters
-            $nullResult.Ensure = 'Absent'
-
-            $getValue = $null
-
-            #region resource generator code
-            if (-not [System.String]::IsNullOrEmpty($Id))
+        try
+        {
+            if (-not $this.ExportedInstance -or $this.ExportedInstance.DisplayName -ne $this.DisplayName)
             {
-                $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule -ManagedDeviceCleanupRuleId $Id -ErrorAction SilentlyContinue
-            }
 
-            if ($null -eq $getValue)
-            {
-                Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with Id {$Id}"
+                $null = $this.Connect('MicrosoftGraph')
 
-                if (-not [System.String]::IsNullOrEmpty($DisplayName))
+                Confirm-M365DSCDependencies
+
+                $this.AddTelemetry('Get')
+
+                $nullResult = $this.GetBoundParameters()
+                $nullResult.Ensure = 'Absent'
+
+                $getValue = $null
+
+                #region resource generator code
+                if (-not [System.String]::IsNullOrEmpty($this.Id))
                 {
-                    $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule `
-                        -Filter "DisplayName eq '$($DisplayName -replace "'", "''")'" `
-                        -ErrorAction SilentlyContinue
+                    $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule -ManagedDeviceCleanupRuleId $this.Id -ErrorAction SilentlyContinue
+                }
+
+                if ($null -eq $getValue)
+                {
+                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with Id {$($this.Id)}"
+
+                    if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
+                    {
+                        $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule `
+                            -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
+                            -ErrorAction SilentlyContinue
+                    }
+                }
+                #endregion
+                if ($null -eq $getValue)
+                {
+                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with DisplayName {$($this.DisplayName)}."
+                    return $this.AsResult($nullResult)
                 }
             }
-            #endregion
-            if ($null -eq $getValue)
+            else
             {
-                Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with DisplayName {$DisplayName}."
-                return $nullResult
+                $getValue = $this.ExportedInstance
             }
-        }
-        else
-        {
-            $getValue = $Script:exportedInstance
-        }
-        $Id = $getValue.Id
-        Write-Verbose -Message "An Intune Device Cleanup Rule V2 with Id {$Id} and DisplayName {$DisplayName} was found"
+            $resolvedId = $getValue.Id
+            Write-Verbose -Message "An Intune Device Cleanup Rule V2 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
-        #region resource generator code
-        $enumDeviceCleanupRulePlatformType = $null
-        if ($null -ne $getValue.DeviceCleanupRulePlatformType)
-        {
-            $enumDeviceCleanupRulePlatformType = $getValue.DeviceCleanupRulePlatformType.ToString()
-        }
-        #endregion
-
-        $results = @{
             #region resource generator code
-            Description                            = $getValue.Description
-            DeviceCleanupRulePlatformType          = $enumDeviceCleanupRulePlatformType
-            DeviceInactivityBeforeRetirementInDays = $getValue.DeviceInactivityBeforeRetirementInDays
-            DisplayName                            = $getValue.DisplayName
-            Id                                     = $getValue.Id
-            Ensure                                 = 'Present'
-            Credential                             = $Credential
-            ApplicationId                          = $ApplicationId
-            TenantId                               = $TenantId
-            ApplicationSecret                      = $ApplicationSecret
-            CertificateThumbprint                  = $CertificateThumbprint
-            CertificatePath                        = $CertificatePath
-            CertificatePassword                    = $CertificatePassword
-            ManagedIdentity                        = $ManagedIdentity.IsPresent
+            $enumDeviceCleanupRulePlatformType = $null
+            if ($null -ne $getValue.DeviceCleanupRulePlatformType)
+            {
+                $enumDeviceCleanupRulePlatformType = $getValue.DeviceCleanupRulePlatformType.ToString()
+            }
+            #endregion
+
+            $results = @{
+                #region resource generator code
+                Description                            = $getValue.Description
+                DeviceCleanupRulePlatformType          = $enumDeviceCleanupRulePlatformType
+                DeviceInactivityBeforeRetirementInDays = $getValue.DeviceInactivityBeforeRetirementInDays
+                DisplayName                            = $getValue.DisplayName
+                Id                                     = $getValue.Id
+                Ensure                                 = 'Present'
+                Credential                             = $this.Credential
+                ApplicationId                          = $this.ApplicationId
+                TenantId                               = $this.TenantId
+                ApplicationSecret                      = $this.ApplicationSecret
+                CertificateThumbprint                  = $this.CertificateThumbprint
+                CertificatePath                        = $this.CertificatePath
+                CertificatePassword                    = $this.CertificatePassword
+                ManagedIdentity                        = $this.ManagedIdentity.IsPresent
+                #endregion
+            }
+
+            return $this.AsResult($results)
+        }
+        catch
+        {
+            $this.LogError($_, 'Error retrieving data:')
+
+            throw
+        }
+    }
+
+    [void] Set()
+    {
+        if ($this.RequiresPowerShellCore())
+        {
+            $null = $this.InvokeInPowerShellCore('Set')
+            return
+        }
+
+        Write-Verbose -Message "Setting configuration of the Intune Device Cleanup Rule V2 with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
+
+        Confirm-M365DSCDependencies
+
+        $this.AddTelemetry('Set')
+
+        $currentInstance = $this.Get().ToHashtable()
+        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
+        {
+            Write-Verbose -Message "Creating an Intune Device Cleanup Rule V2 with DisplayName {$($this.DisplayName)}"
+
+            $createParameters = ([Hashtable]$boundParameters).Clone()
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters.Remove('Id') | Out-Null
+
+            #region resource generator code
+            $createParameters.Add('@odata.type', '#microsoft.graph.ManagedDeviceCleanupRule')
+            $policy = New-MgBetaDeviceManagementManagedDeviceCleanupRule -BodyParameter $createParameters
             #endregion
         }
-
-        return $results
-    }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error retrieving data:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
-
-        throw
-    }
-}
-
-function Set-TargetResource
-{
-    [CmdletBinding()]
-    param
-    (
-        #region resource generator code
-        [Parameter()]
-        [System.String]
-        $Description,
-
-        [Parameter()]
-        [ValidateSet('all', 'androidAOSP', 'androidDeviceAdministrator', 'androidDedicatedAndFullyManagedCorporateOwnedWorkProfile', 'chromeOS', 'androidPersonallyOwnedWorkProfile', 'ios', 'macOS', 'windows', 'windowsHolographic', 'visionOS', 'tvOS')]
-        [System.String]
-        $DeviceCleanupRulePlatformType,
-
-        [Parameter()]
-        [System.Int32]
-        $DeviceInactivityBeforeRetirementInDays,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Id,
-
-        #endregion
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    Write-Verbose -Message "Setting configuration of the Intune Device Cleanup Rule V2 with Id {$Id} and DisplayName {$DisplayName}"
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $currentInstance = Get-TargetResource @PSBoundParameters
-    $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-
-    if ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
-    {
-        Write-Verbose -Message "Creating an Intune Device Cleanup Rule V2 with DisplayName {$DisplayName}"
-
-        $createParameters = ([Hashtable]$boundParameters).Clone()
-        $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
-        $createParameters.Remove('Id') | Out-Null
-
-        #region resource generator code
-        $createParameters.Add('@odata.type', '#microsoft.graph.ManagedDeviceCleanupRule')
-        $policy = New-MgBetaDeviceManagementManagedDeviceCleanupRule -BodyParameter $createParameters
-        #endregion
-    }
-    elseif ($Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
-    {
-        Write-Verbose -Message "Updating the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
-
-        $updateParameters = ([Hashtable]$boundParameters).Clone()
-        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
-        $updateParameters.Remove('Id') | Out-Null
-
-        #region resource generator code
-        $updateParameters.Add('@odata.type', '#microsoft.graph.ManagedDeviceCleanupRule')
-        Update-MgBetaDeviceManagementManagedDeviceCleanupRule `
-            -ManagedDeviceCleanupRuleId $currentInstance.Id `
-            -BodyParameter $UpdateParameters
-
-        #endregion
-    }
-    elseif ($Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
-    {
-        Write-Verbose -Message "Removing the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
-        #region resource generator code
-        Remove-MgBetaDeviceManagementManagedDeviceCleanupRule -ManagedDeviceCleanupRuleId $currentInstance.Id
-        #endregion
-    }
-}
-
-function Test-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        #region resource generator code
-        [Parameter()]
-        [System.String]
-        $Description,
-
-        [Parameter()]
-        [ValidateSet('all', 'androidAOSP', 'androidDeviceAdministrator', 'androidDedicatedAndFullyManagedCorporateOwnedWorkProfile', 'chromeOS', 'androidPersonallyOwnedWorkProfile', 'ios', 'macOS', 'windows', 'windowsHolographic', 'visionOS', 'tvOS')]
-        [System.String]
-        $DeviceCleanupRulePlatformType,
-
-        [Parameter()]
-        [System.Int32]
-        $DeviceInactivityBeforeRetirementInDays,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DisplayName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Id,
-
-        #endregion
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $result = Test-M365DSCTargetResource -DesiredValues $PSBoundParameters `
-        -ResourceName $($MyInvocation.MyCommand.Source).Replace('MSFT_', '')
-    return $result
-}
-
-function Export-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $Filter,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $ApplicationSecret,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftGraph' `
-        -InboundParameters $PSBoundParameters
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    try
-    {
-        #region resource generator code
-        [array]$getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule `
-            -Filter $Filter `
-            -All `
-            -ErrorAction Stop
-        #endregion
-
-        $i = 1
-        $dscContent = [System.Text.StringBuilder]::new()
-        if ($getValue.Length -eq 0)
+        elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+            Write-Verbose -Message "Updating the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
+
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters.Remove('Id') | Out-Null
+
+            #region resource generator code
+            $updateParameters.Add('@odata.type', '#microsoft.graph.ManagedDeviceCleanupRule')
+            Update-MgBetaDeviceManagementManagedDeviceCleanupRule `
+                -ManagedDeviceCleanupRuleId $currentInstance.Id `
+                -BodyParameter $UpdateParameters
+
+            #endregion
         }
-        else
+        elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-M365DSCHost -Message "`r`n" -DeferWrite
+            Write-Verbose -Message "Removing the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
+            #region resource generator code
+            Remove-MgBetaDeviceManagementManagedDeviceCleanupRule -ManagedDeviceCleanupRuleId $currentInstance.Id
+            #endregion
         }
-        foreach ($config in $getValue)
+    }
+
+    [bool] Test()
+    {
+        return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [string] Export()
+    {
+        if ($this.RequiresPowerShellCore())
         {
-            $displayedKey = $config.Id
-            if (-not [String]::IsNullOrEmpty($config.displayName))
+            return [string] $this.InvokeInPowerShellCore('Export')
+        }
+
+        $ConnectionMode = $this.Connect('MicrosoftGraph')
+
+        Confirm-M365DSCDependencies
+
+        $this.AddTelemetry('Export')
+
+        try
+        {
+            #region resource generator code
+            [array]$getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule `
+                -Filter $this.Filter `
+                -All `
+                -ErrorAction Stop
+            #endregion
+
+            $i = 1
+            $dscContent = [System.Text.StringBuilder]::new()
+            if ($getValue.Length -eq 0)
             {
-                $displayedKey = $config.displayName
+                Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
             }
-            elseif (-not [string]::IsNullOrEmpty($config.name))
+            else
             {
-                $displayedKey = $config.name
+                Write-M365DSCHost -Message "`r`n" -DeferWrite
             }
-            Write-M365DSCHost -Message "    |---[$i/$($getValue.Count)] $displayedKey" -DeferWrite
-            $params = @{
-                Id                    = $config.Id
-                DisplayName           = $config.DisplayName
-                Ensure                = 'Present'
-                Credential            = $Credential
-                ApplicationId         = $ApplicationId
-                TenantId              = $TenantId
-                ApplicationSecret     = $ApplicationSecret
-                CertificateThumbprint = $CertificateThumbprint
-                CertificatePath       = $CertificatePath
-                CertificatePassword   = $CertificatePassword
-                ManagedIdentity       = $ManagedIdentity.IsPresent
-                AccessTokens          = $AccessTokens
+            foreach ($config in $getValue)
+            {
+                $displayedKey = $config.Id
+                if (-not [String]::IsNullOrEmpty($config.displayName))
+                {
+                    $displayedKey = $config.displayName
+                }
+                elseif (-not [string]::IsNullOrEmpty($config.name))
+                {
+                    $displayedKey = $config.name
+                }
+                Write-M365DSCHost -Message "    |---[$i/$($getValue.Count)] $displayedKey" -DeferWrite
+                $params = @{
+                    Id                    = $config.Id
+                    DisplayName           = $config.DisplayName
+                    Ensure                = 'Present'
+                    Credential            = $this.Credential
+                    ApplicationId         = $this.ApplicationId
+                    TenantId              = $this.TenantId
+                    ApplicationSecret     = $this.ApplicationSecret
+                    CertificateThumbprint = $this.CertificateThumbprint
+                    CertificatePath       = $this.CertificatePath
+                    CertificatePassword   = $this.CertificatePassword
+                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    AccessTokens          = $this.AccessTokens
+                }
+
+                $this.ExportedInstance = $config
+                $Results = $this.GetForExport($Params)
+
+                $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
+                    -ConnectionMode $ConnectionMode `
+                    -ModulePath $this.GetModulePath() `
+                    -Results $Results `
+                    -Credential $this.Credential
+
+                [void]$dscContent.Append($currentDSCBlock)
+                Save-M365DSCPartialExport -Content $currentDSCBlock `
+                    -FileName $Global:PartialExportFileName
+                $i++
+                Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
             }
-
-            $Script:exportedInstance = $config
-            $Results = Get-TargetResource @Params
-
-            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
-
-            [void]$dscContent.Append($currentDSCBlock)
-            Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
-            $i++
-            Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+            return $dscContent.ToString()
         }
-        return $dscContent.ToString()
-    }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error during Export:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
+        catch
+        {
+            $this.LogError($_, 'Error during Export:')
 
-        throw
+            throw
+        }
+    }
+
+    hidden [IntuneDeviceCleanupRuleV2] AsResult([System.Object] $Values)
+    {
+        if ($Values -is [IntuneDeviceCleanupRuleV2])
+        {
+            return $Values
+        }
+
+        $result = [IntuneDeviceCleanupRuleV2]::new()
+        $result.ClearNonSchemaProperties()
+        if ($Values -is [System.Collections.Hashtable])
+        {
+            $result.FromHashtable($Values)
+        }
+
+        return $result
     }
 }
-
-Export-ModuleMember -Function *-TargetResource

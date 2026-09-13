@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,44 +19,92 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
         IntuneVPNConfigurationPolicyIOS "IntuneVPNConfigurationPolicyIOS-Example"
         {
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
-            Assignments            = @();
-            associatedDomains      = @();
-            authenticationMethod   = "usernameAndPassword";
-            connectionName         = "IntuneVPNConfigurationPolicyIOS-ConnectionName";
-            connectionType         = "ciscoAnyConnectV2";
-            Description            = "IntuneVPNConfigurationPolicyIOS-Example Description";
-            DisplayName            = "IntuneVPNConfigurationPolicyIOS-Example";
-            enableSplitTunneling   = $False;
-            Ensure                 = "Present";
-            excludedDomains        = @();
-            excludeList            = @();
-            Id                     = "ec5432ff-d536-40cb-ba0a-e16260b01382";
-            optInToDeviceIdSharing = $True;
-            proxyServer            = @(
+            Assignments                    = @(
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType                                   = "#microsoft.graph.groupAssignmentTarget"
+                    deviceAndAppManagementAssignmentFilterType = "none"
+                    groupDisplayName                           = "Corporate iOS Devices"
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = "#microsoft.graph.exclusionGroupAssignmentTarget"
+                    groupDisplayName = "iOS Retail Loaner Devices"
+                }
+            );
+            associatedDomains              = @("contoso.com", "portal.contoso.com");
+            authenticationMethod           = "usernameAndPassword";
+            connectionName                 = "Contoso Corporate VPN";
+            connectionType                 = "ciscoAnyConnectV2";
+            customData                     = @(
+                MSFT_customData{
+                    key   = "TunnelGroup"
+                    value = "Corporate"
+                }
+            );
+            customKeyValueData             = @(
+                MSFT_customKeyValueData{
+                    name  = "BlockUntrustedServers"
+                    value = "true"
+                }
+            );
+            Description                    = "Corporate VPN profile for iOS devices";
+            disableOnDemandUserOverride    = $true;
+            disconnectOnIdle               = $true;
+            disconnectOnIdleTimerInSeconds = 300;
+            DisplayName                    = "Corporate VPN - iOS";
+            enablePerApp                   = $true;
+            enableSplitTunneling           = $false;
+            Ensure                         = "Present";
+            excludedDomains                = @("cdn.contoso.com", "status.contoso.com");
+            excludeList                    = @("updates.contoso.com");
+            onDemandRules                  = @(
+                MSFT_DeviceManagementConfigurationPolicyVpnOnDemandRule{
+                    action                = "evaluateConnection"
+                    domainAction          = "connectIfNeeded"
+                    domains               = @("intranet.contoso.com", "sharepoint.contoso.com")
+                    probeRequiredUrl      = "https://intranet.contoso.com/probe"
+                    probeUrl              = "https://intranet.contoso.com/health"
+                    interfaceTypeMatch    = "wiFi"
+                    ssids                 = @("Contoso-Corp")
+                    dnsSearchDomains      = @("contoso.com")
+                    dnsServerAddressMatch = @("10.10.0.10", "10.10.0.11")
+                }
+            );
+            optInToDeviceIdSharing         = $true;
+            providerType                   = "packetTunnel";
+            proxyServer                    = @(
                 MSFT_MicrosoftvpnProxyServer{
-                    port = 80
-                    automaticConfigurationScriptUrl = 'https://www.test.com'
-                    address = 'proxy.test.com'
+                    port                            = 80
+                    automaticConfigurationScriptUrl = "https://proxy.contoso.com/proxy.pac"
+                    address                         = "proxy.contoso.com"
                 }
             );
-            safariDomains          = @();
-            server                 = @(
+            RoleScopeTagIds                = @("0");
+            safariDomains                  = @("intranet.contoso.com", "sharepoint.contoso.com");
+            server                         = @(
                 MSFT_MicrosoftGraphvpnServer{
-                    isDefaultServer = $True
-                    description = 'server'
-                    address = 'vpn.test.com'
+                    isDefaultServer = $true
+                    description     = "Primary VPN gateway"
+                    address         = "vpn.contoso.com"
                 }
             );
-            targetedMobileApps     = @();
+            targetedMobileApps             = @(
+                MSFT_targetedMobileApps{
+                    name        = "Outlook"
+                    publisher   = "Microsoft Corporation"
+                    appStoreUrl = "https://apps.apple.com/app/microsoft-outlook/id951937596"
+                    appId       = "com.microsoft.Office.Outlook"
+                }
+            );
+            ApplicationId                  = $ApplicationId;
+            TenantId                       = $TenantId;
+            CertificateThumbprint          = $CertificateThumbprint;
         }
     }
 }

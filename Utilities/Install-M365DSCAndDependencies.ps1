@@ -163,12 +163,8 @@ Import-Module PSDesiredStateConfiguration -Force
 
         if ($IsSDK.IsPresent)
         {
-            $moduleBasePath = "/DSC/Modules/Microsoft365DSC"
-
-            Write-Output "Generating SchemaDefinition.json"
-            $M365DSCSchemaHandlerPath = Join-Path -Path $moduleBasePath -ChildPath "Modules/M365DSCSchemaHandler.psm1"
-            Import-Module $M365DSCSchemaHandlerPath
-            New-M365DSCSchemaDefinition
+            Write-Output "Building the class modules and SchemaDefinition.json"
+            & "/DSC/Utilities/Build-Microsoft365DSC.ps1"
 
             Write-Output "Building DLL files"
             & "/DSC/Utilities/Build-DllFiles.ps1" -Configuration Release

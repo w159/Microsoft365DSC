@@ -4,7 +4,8 @@ This example creates a new Device Enrollment Status Page.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,11 +18,12 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceEnrollmentStatusPageWindows10 '6b43c039-c1d0-4a9f-aab9-48c5531acbd6'
+        IntuneDeviceEnrollmentStatusPageWindows10 'IntuneDeviceEnrollmentStatusPageWindows10-Example'
         {
             AllowDeviceResetOnInstallFailure        = $True;
             AllowDeviceUseOnInstallFailure          = $True;
@@ -30,7 +32,11 @@ Configuration Example
             Assignments                             = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
-                    dataType = '#microsoft.graph.allDevicesAssignmentTarget'
+                    dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = '#microsoft.graph.exclusionGroupAssignmentTarget'
+                    groupDisplayName = 'Policy Exclusions'
                 }
             );
             BlockDeviceSetupRetryByUser             = $False;
@@ -45,9 +51,9 @@ Configuration Example
             SelectedMobileAppIds                    = @();
             ShowInstallationProgress                = $True;
             TrackInstallProgressForAutopilotOnly    = $True;
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId                           = $ApplicationId;
+            TenantId                                = $TenantId;
+            CertificateThumbprint                   = $CertificateThumbprint;
         }
     }
 }

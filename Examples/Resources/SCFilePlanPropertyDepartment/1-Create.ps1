@@ -5,20 +5,32 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
     Node localhost
     {
-        SCFilePlanPropertyDepartment 'FilePlanPropertyDepartment'
+        SCFilePlanPropertyDepartment 'SCFilePlanPropertyDepartment-Example'
         {
-            Name               = "Demo Department"
-            Ensure             = "Present"
-            Credential         = $Credscredential
+            Name                  = "Finance"
+            Ensure                = "Present"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }

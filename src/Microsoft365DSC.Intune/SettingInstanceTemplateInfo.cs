@@ -78,7 +78,7 @@ namespace Microsoft365DSC.Intune
     /// <item>Child templates (from value template's <c>children</c>): data at top level (plain dictionaries)</item>
     /// </list>
     /// </summary>
-    public static class SettingInstanceTemplateMapper
+    internal static class SettingInstanceTemplateMapper
     {
         private const string ODataTypePrefix = "#microsoft.graph.deviceManagementConfiguration";
 
@@ -112,7 +112,7 @@ namespace Microsoft365DSC.Intune
             string settingValueName = settingType.Replace(ODataTypePrefix, "").Replace("Instance", "Value");
             if (settingValueName.Length > 0)
             {
-                settingValueName = char.ToLowerInvariant(settingValueName[0]) + settingValueName.Substring(1);
+                settingValueName = SettingsCatalogHelper.ToCamelCase(settingValueName);
             }
             info.SettingValueName = settingValueName;
 
@@ -188,7 +188,7 @@ namespace Microsoft365DSC.Intune
     /// Maps raw Graph API setting template objects to <see cref="SettingTemplateInfo"/>.
     /// These are the objects returned by <c>Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate</c>.
     /// </summary>
-    public static class SettingTemplateMapper
+    internal static class SettingTemplateMapper
     {
         /// <summary>
         /// Maps a single setting template from the Graph API.

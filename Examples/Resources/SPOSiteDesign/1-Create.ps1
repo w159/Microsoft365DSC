@@ -5,25 +5,37 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        SPOSiteDesign 'ConfigureSiteDesign'
+        SPOSiteDesign 'SPOSiteDesign-Example'
         {
-            Title               = "DSC Site Design"
-            SiteScriptNames     = @("Cust List", "List_Views")
-            WebTemplate         = "TeamSite"
-            IsDefault           = $false
-            Description         = "Created by DSC"
-            PreviewImageAltText = "Office 365"
-            Ensure              = "Present"
-            Credential          = $Credscredential
+            Title                 = "Contoso Team Site Design"
+            SiteScriptNames       = @("Cust List", "List_Views")
+            WebTemplate           = "TeamSite"
+            IsDefault             = $false
+            Description           = "Standard layout for departmental team sites"
+            PreviewImageAltText   = "Office 365"
+            Ensure                = "Present"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }

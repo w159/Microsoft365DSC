@@ -21,12 +21,12 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        TeamsChannelsPolicy 'ConfigureChannelsPolicy'
+        TeamsChannelsPolicy 'TeamsChannelsPolicy-Example'
         {
             Identity                                      = 'New Channels Policy'
-            Description                                   = 'This is an example'
+            Description                                   = 'Enables private and shared channels for project teams'
             AllowChannelSharingToExternalUser             = $True
             AllowOrgWideTeamCreation                      = $True
             EnablePrivateTeamDiscovery                    = $True

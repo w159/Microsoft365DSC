@@ -5,24 +5,36 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        TeamsCallParkPolicy 'Example'
+        TeamsCallParkPolicy 'TeamsCallParkPolicy-Example'
         {
-            AllowCallPark        = $False;
-            Credential           = $Credscredential;
-            Ensure               = "Present";
-            Identity             = "Global";
-            ParkTimeoutSeconds   = 300;
-            PickupRangeEnd       = 99;
-            PickupRangeStart     = 10;
+            AllowCallPark         = $False;
+            Ensure                = "Present";
+            Identity              = "Global";
+            ParkTimeoutSeconds    = 300;
+            PickupRangeEnd        = 99;
+            PickupRangeStart      = 10;
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

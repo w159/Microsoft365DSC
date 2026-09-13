@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -21,30 +22,30 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOMailboxFolderPermission "EXOMailboxFolderPermission-admin:\Calendar"
+        EXOMailboxFolderPermission "EXOMailboxFolderPermission-Example"
         {
+            Ensure                = "Present";
+            Identity              = "admin:\Calendar";
+            UserPermissions       = @(
+                MSFT_EXOMailboxFolderUserPermission {
+                    User         = 'Default'
+                    AccessRights = 'AvailabilityOnly'
+                }
+                MSFT_EXOMailboxFolderUserPermission {
+                    User         = 'Anonymous'
+                    AccessRights = 'AvailabilityOnly'
+                }
+                MSFT_EXOMailboxFolderUserPermission {
+                    User                   = 'AlexW'
+                    AccessRights           = 'Owner'
+                    SharingPermissionFlags = 'Delegate'
+                }
+            );
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint
-            Ensure                = "Present";
-            Identity              = "amdin:\Calendar";
-            UserPermissions       = @(
-                MSFT_EXOMailboxFolderUserPermission {
-                    User                   = 'Default'
-                    AccessRights           = 'AvailabilityOnly'
-                }
-                MSFT_EXOMailboxFolderUserPermission {
-                    User                   = 'Anonymous'
-                    AccessRights           = 'AvailabilityOnly'
-                }
-                MSFT_EXOMailboxFolderUserPermission {
-                    User                          = 'AlexW'
-                    AccessRights                  = 'Owner'
-                    SharingPermissionFlags        = 'Delegate'
-                }
-            );
         }
     }
 }

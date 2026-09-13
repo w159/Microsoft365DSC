@@ -23,16 +23,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
         BeforeAll {
             $secpasswd = ConvertTo-SecureString ((New-Guid).ToString()) -AsPlainText -Force
-            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@mydomain.com', $secpasswd)
+            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@onmicrosoft.com', $secpasswd)
 
             Mock -ModuleName M365DSCUtil -CommandName Confirm-M365DSCDependencies -MockWith {
             }
 
-            Mock -CommandName New-M365DSCConnection -MockWith {
+            Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
                 return 'Credentials'
             }
 
-            Mock -CommandName Invoke-MgGraphRequest -MockWith {
+            Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
             }
 
             Mock -CommandName Update-MgBetaDeviceManagementDeviceCompliancePolicy -MockWith {
@@ -51,6 +51,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 return @()
             }
 
+            Mock -CommandName Get-M365DSCExportCachedCollection -MockWith {
+                return Get-MgBetaDeviceManagementDeviceCompliancePolicy
+            }
             Mock -CommandName Get-MgBetaDeviceManagementDeviceCompliancePolicy -MockWith {
                 return @{
                     DisplayName          = 'Windows 10 DSC Policy'
@@ -75,6 +78,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -89,6 +96,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     RoleScopeTagIds                             = '0'
                 }
             }
@@ -133,6 +147,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -147,6 +165,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
@@ -157,15 +182,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return absent from the Get method' {
-                    (Get-TargetResource @testParams).Ensure | Should -Be 'Absent'
+                    ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
             }
 
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should create the Windows 10 Device Compliance Policy from the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName 'New-MgBetaDeviceManagementDeviceCompliancePolicy' -Exactly 1
             }
         }
@@ -193,6 +218,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -207,21 +236,28 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '22.04' # Drift
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
             }
 
             It 'Should return Present from the Get method' {
-                    (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                    ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
 
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should update the iOS Device Compliance Policy from the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-MgBetaDeviceManagementDeviceCompliancePolicy -Exactly 1
             }
         }
@@ -249,6 +285,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -263,13 +303,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Present'
                     Credential                                  = $Credential
                 }
             }
 
             It 'Should return true from the Test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Test() | Should -Be $true
             }
         }
 
@@ -296,6 +343,10 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     BitLockerEnabled                            = $False
                     SecureBootEnabled                           = $True
                     CodeIntegrityEnabled                        = $True
+                    FirmwareProtectionEnabled                   = $True
+                    KernelDmaProtectionEnabled                  = $True
+                    MemoryIntegrityEnabled                      = $True
+                    VirtualizationBasedSecurityEnabled          = $True
                     StorageRequireEncryption                    = $True
                     ActiveFirewallRequired                      = $True
                     DefenderEnabled                             = $True
@@ -310,21 +361,28 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     TPMRequired                                 = $False
                     DeviceCompliancePolicyScript                = $null
                     ValidOperatingSystemBuildRanges             = @()
+                    WslDistributions                            = @(
+                        @{
+                            Distribution     = 'Ubuntu'
+                            MinimumOSVersion = '20.04'
+                            MaximumOSVersion = '24.04'
+                        }
+                    )
                     Ensure                                      = 'Absent'
                     Credential                                  = $Credential
                 }
             }
 
             It 'Should return Present from the Get method' {
-                    (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                    ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
 
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should remove the iOS Device Compliance Policy from the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementDeviceCompliancePolicy -Exactly 1
             }
         }
@@ -339,7 +397,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should Reverse Engineer resource from the Export method' {
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'IntuneDeviceCompliancePolicyWindows10' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
             }
         }

@@ -89,7 +89,7 @@ function Rename-M365DSCCimInstanceParameter
         foreach ($item in $Properties)
         {
             $itemType = $item.GetType().FullName
-            if ($itemType -like '*Hashtable*' -or $itemType -like '*CimInstance*' -or $itemType -like '*Object*')
+            if ($itemType -like '*Hashtable*' -or $itemType -like '*CimInstance*' -or $itemType -like '*Object*' -or $itemType -like "*MSFT_*")
             {
                 try
                 {
@@ -117,7 +117,7 @@ function Rename-M365DSCCimInstanceParameter
         $result = [System.Collections.Specialized.CollectionsUtil]::CreateCaseInsensitiveHashtable([Hashtable]$Properties)
     }
 
-    if ($type -like '*CimInstance*' -or $type -like '*Hashtable*' -or $type -like '*Object*')
+    if ($type -like '*CimInstance*' -or $type -like '*Hashtable*' -or $type -like '*Object*' -or $type -like "*MSFT_*")
     {
         $hashProperties = Get-M365DSCDRGComplexTypeToHashtable -ComplexObject $result
         $keys = ($hashProperties.Clone()).Keys

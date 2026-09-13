@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,35 +19,41 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        AADGroup 'DependantGroup'
+        AADGroup 'AADGroup-CatalogResource'
         {
-            DisplayName     = "MyGroup"
-            Description     = "Microsoft DSC Group"
-            SecurityEnabled = $True
-            MailEnabled     = $True
-            GroupTypes      = @("Unified")
-            MailNickname    = "MyGroup"
-            Visibility      = "Private"
-            Ensure          = "Present"
+            DisplayName           = "Project Management Office"
+            Description           = "Collaboration group for the project management office"
+            SecurityEnabled       = $True
+            MailEnabled           = $True
+            GroupTypes            = @("Unified")
+            MailNickname          = "projectmanagementoffice"
+            Visibility            = "Private"
+            Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint
         }
-        AADEntitlementManagementAccessPackageCatalogResource 'myAccessPackageCatalogResource'
+        AADEntitlementManagementAccessPackageCatalogResource 'AADEntitlementManagementAccessPackageCatalogResource-Example'
         {
-            ApplicationId         = $ApplicationId;
             CatalogId             = "My Catalog";
-            CertificateThumbprint = $CertificateThumbprint;
-            DisplayName           = "MyGroup";
+            DisplayName           = "Project Management Office";
             OriginSystem          = "AADGroup";
-            OriginId              = 'MyGroup'
+            OriginId              = 'Project Management Office'
+            AddedBy               = "admin@$TenantId";
+            AddedOn               = "2026-01-01T00:00:00.0000000Z";
+            Description           = "Collaboration group for the project management office";
+            ResourceType          = "O365 Group";
+            Url                   = "https://portal.azure.com/Microsoft_AAD_IAM/GroupDetailsMenuBlade/Overview/groupId/849b3661-61a8-44a8-92e7-fcc91d296235";
             Ensure                = "Present";
             IsPendingOnboarding   = $False;
+            ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

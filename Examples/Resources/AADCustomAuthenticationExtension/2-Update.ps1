@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,14 +19,16 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
-    node localhost
+
+    Node localhost
     {
-        AADCustomAuthenticationExtension "AADCustomAuthenticationExtension1"
+        AADCustomAuthenticationExtension "AADCustomAuthenticationExtension-Example"
         {
-            AuthenticationConfigurationResourceId  = "api://microsoft365dsc.com/a5352e69-55c0-4160-b4b5-03d034d842fd"
-            AuthenticationConfigurationType        = "#microsoft.graph.azureAdTokenAuthentication"
-            ClaimsForTokenConfiguration            = @(
+            AuthenticationConfigurationResourceId    = "api://contoso.com/a5352e69-55c0-4160-b4b5-03d034d842fd"
+            AuthenticationConfigurationType          = "#microsoft.graph.azureAdTokenAuthentication"
+            ClaimsForTokenConfiguration              = @(
                 MSFT_AADCustomAuthenticationExtensionClaimForTokenConfiguration{
                     ClaimIdInApiResponse = 'MyClaim'
                 }
@@ -33,19 +36,19 @@ Configuration Example
                     ClaimIdInApiResponse = 'My2ndClaim'
                 }
             )
-            ClientConfigurationMaximumRetries      = 1
-            ClientConfigurationTimeoutMilliseconds = 2000
-            CustomAuthenticationExtensionType      = "#microsoft.graph.onTokenIssuanceStartCustomExtension"
-            Description                            = "DSC Testing 1"
-            DisplayName                            = "DSCTestExtension"
-            EndPointConfiguration                  = MSFT_AADCustomAuthenticationExtensionEndPointConfiguration{
+            ClientConfigurationMaximumRetries        = 1
+            ClientConfigurationTimeoutInMilliseconds = 2000
+            CustomAuthenticationExtensionType        = "#microsoft.graph.onTokenIssuanceStartCustomExtension"
+            Description                              = "Adds employee cost centre and division claims at token issuance" # Updated Property
+            DisplayName                              = "TokenEnrichmentExtension"
+            EndPointConfiguration                    = MSFT_AADCustomAuthenticationExtensionEndPointConfiguration{
                 EndpointType = '#microsoft.graph.httpRequestEndpoint'
-                TargetUrl = 'https://Microsoft365DSC.com'
+                TargetUrl    = 'https://api.contoso.com/tokenenrichment'
             }
-            Ensure                                 = "Present";
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            Ensure                                   = "Present";
+            ApplicationId                            = $ApplicationId
+            TenantId                                 = $TenantId
+            CertificateThumbprint                    = $CertificateThumbprint
         }
     }
 }

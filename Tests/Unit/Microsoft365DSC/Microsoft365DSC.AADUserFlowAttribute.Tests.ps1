@@ -21,7 +21,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
         BeforeAll {
             $secpasswd = ConvertTo-SecureString (New-Guid | Out-String) -AsPlainText -Force
-            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@mydomain.com', $secpasswd)
+            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@onmicrosoft.com', $secpasswd)
 
             $Global:PartialExportFileName = 'c:\TestPath'
 
@@ -55,7 +55,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
-            Mock -CommandName New-M365DSCConnection -MockWith {
+            Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
                 return 'Credentials'
             }
 
@@ -84,14 +84,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Absent'
+                ((New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
                 Should -Invoke -CommandName 'Get-MgBetaIdentityUserFlowAttribute' -Exactly 2
             }
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Test() | Should -Be $false
             }
             It 'Should create the role definition from the set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Set()
                 Should -Invoke -CommandName 'New-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
         }
@@ -109,16 +109,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
                 Should -Invoke -CommandName 'Get-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should remove the app from the set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Remove-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
         }
@@ -135,12 +135,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
 
             It 'Should return true from the test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Test() | Should -Be $true
             }
         }
 
@@ -157,16 +157,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADUserFlowAttribute' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Update-MgBetaIdentityUserFlowAttribute' -Exactly 1
             }
         }
@@ -181,7 +181,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should reverse engineer resource from the export method' {
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADUserFlowAttribute' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
             }
         }

@@ -22,20 +22,20 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneWindowsAutopilotDevicePreparationAutomaticPolicy 'Example'
+        IntuneWindowsAutopilotDevicePreparationAutomaticPolicy 'IntuneWindowsAutopilotDevicePreparationAutomaticPolicy-Example'
         {
-            AllowedApplications   = @("IntuneMobileAppsWindowsOfficeSuiteApp_1"); # Updated property
+            AllowedApplications   = @("IntuneMobileAppsWindowsOfficeSuiteApp_1"); # Updated Property
             AllowedScripts        = @("IntuneDeviceConfigurationPlatformScriptWindows_1");
-            ApplicationId         = $ApplicationId;
             AssignmentTarget      = "Include";
-            CertificateThumbprint = $CertificateThumbprint;
             Description           = "";
             DisplayName           = "IntuneWindowsAutopilotDevicePreparationPolicy_1";
             Ensure                = "Present";
             RoleScopeTagIds       = @("0");
+            ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

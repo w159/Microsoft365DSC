@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,16 +19,21 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceConfigurationPlatformScriptWindows 'Example'
+        IntuneDeviceConfigurationPlatformScriptWindows 'IntuneDeviceConfigurationPlatformScriptWindows-Example'
         {
-            Assignments          = @(
+            Assignments           = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
-                    dataType = '#microsoft.graph.allDevicesAssignmentTarget'
+                    dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = '#microsoft.graph.exclusionGroupAssignmentTarget'
+                    groupDisplayName = 'Policy Exclusions'
                 }
             );
             DisplayName           = "custom";
@@ -35,7 +41,7 @@ Configuration Example
             EnforceSignatureCheck = $False;
             FileName              = "script.ps1";
             Id                    = "00000000-0000-0000-0000-000000000000";
-            RunAs32Bit            = $False; # Updated property
+            RunAs32Bit            = $False; # Updated Property
             RunAsAccount          = "system";
             ScriptContent         = "Base64 encoded script content";
             ApplicationId         = $ApplicationId;

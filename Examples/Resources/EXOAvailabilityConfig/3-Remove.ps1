@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -21,12 +22,12 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOAvailabilityConfig 'ConfigureAvailabilityConfig'
+        EXOAvailabilityConfig 'EXOAvailabilityConfig-Example'
         {
             IsSingleInstance      = "Yes"
-            Ensure               = "Absent"
+            Ensure                = "Absent"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint

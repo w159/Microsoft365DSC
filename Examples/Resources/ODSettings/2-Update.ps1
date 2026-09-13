@@ -5,16 +5,26 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        ODSettings 'OneDriveSettings'
+        ODSettings 'ODSettings-Example'
         {
             IsSingleInstance                          = "Yes"
             OneDriveStorageQuota                      = "1024"
@@ -29,7 +39,9 @@ Configuration Example
             ODBMembersCanShare                        = "On"
             NotificationsInOneDriveForBusinessEnabled = $false
             Ensure                                    = "Present"
-            Credential                                = $Credscredential
+            ApplicationId                             = $ApplicationId
+            TenantId                                  = $TenantId
+            CertificateThumbprint                     = $CertificateThumbprint
         }
     }
 }

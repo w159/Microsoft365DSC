@@ -276,7 +276,7 @@ in other scripts.
 The full path to the .schema.mof file to process.
 
 .Example
-$mof = Get-MofSchemaObject -FileName C:\repos\SharePointDsc\DSCRescoures\MSFT_SPSite\MSFT_SPSite.schema.mof
+$mof = Get-MofSchemaObject -FileName C:\repos\Microsoft365DSC\Modules\Microsoft365DSC\DscResources\MSFT_AADGroup\MSFT_AADGroup.schema.mof
 
 This example parses a MOF schema file.
 
@@ -563,15 +563,13 @@ function New-DscMofResourceWikiPage
             $null = $output.AppendLine($descriptionContent)
 
             # Add required permissions information
-            $settingsFile = Join-Path -Path $mofSchemaFile.DirectoryName -ChildPath 'settings.json'
+            $settingsJson = Get-M365DSCResourceSetting -ResourceName (Split-Path -Path $mofSchemaFile.DirectoryName -Leaf)
 
             $permissionsContent = New-Object -TypeName System.Text.StringBuilder
 
-            if (Test-Path -Path $settingsFile)
+            if ($null -ne $settingsJson)
             {
                 $null = $permissionsContent.AppendLine('## Permissions')
-                $settingsContent = Get-Content -Path $settingsFile -Raw
-                $settingsJson = ConvertFrom-Json -InputObject $settingsContent
 
                 $workloads = @('exchange', 'purview')
                 foreach ($workload in $workloads)

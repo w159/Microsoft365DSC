@@ -1,12 +1,23 @@
 {
   "resourceName": "IntuneAndroidManagedStoreAppConfiguration",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "managedDeviceMobileAppConfiguration",
+    "odataSubtype": "androidManagedStoreAppConfiguration",
+    "cmdletNoun": "MgBetaDeviceAppManagementMobileAppConfiguration",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures an Intune Android Managed Store Application Configuration Policy.",
   "permissions": {
     "graph": {
       "delegated": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementApps.Read.All"
@@ -14,7 +25,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementApps.ReadWrite.All"
@@ -24,7 +35,7 @@
       "application": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementApps.Read.All"
@@ -32,7 +43,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementApps.ReadWrite.All"

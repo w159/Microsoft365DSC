@@ -4,7 +4,8 @@ This example creates a new Intune Role Definition.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,11 +18,12 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
     Node localhost
     {
-        IntuneRoleDefinition 'IntuneRoleDefinition'
+        IntuneRoleDefinition 'IntuneRoleDefinition-Example'
         {
             DisplayName               = 'This is my role'
             allowedResourceActions    = @('Microsoft.Intune_Organization_Read', 'Microsoft.Intune_Roles_Create', 'Microsoft.Intune_Roles_Read', 'Microsoft.Intune_Roles_Update')
@@ -30,9 +32,9 @@ Configuration Example
             notallowedResourceActions = @()
             roleScopeTagIds           = @('0', '1')
             Ensure                    = 'Present'
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId             = $ApplicationId;
+            TenantId                  = $TenantId;
+            CertificateThumbprint     = $CertificateThumbprint;
         }
     }
 }

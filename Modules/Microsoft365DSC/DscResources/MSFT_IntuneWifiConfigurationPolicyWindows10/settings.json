@@ -1,12 +1,29 @@
 {
   "resourceName": "IntuneWifiConfigurationPolicyWindows10",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "deviceConfiguration",
+    "odataSubtype": "windowsWifiConfiguration",
+    "cmdletNoun": "MgBetaDeviceManagementDeviceConfiguration",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [
+    {
+      "name": "ForcePreSharedKeyUpdate",
+      "reason": "NotConfigurable",
+      "note": "Forces an update of the pre shared key. Never read back."
+    }
+  ],
   "description": "This resource configures an Intune Wifi Configuration Policy for Windows10 with Basic Wi-Fi type.",
   "permissions": {
     "graph": {
       "delegated": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -14,7 +31,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
@@ -24,7 +41,7 @@
       "application": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -32,7 +49,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"

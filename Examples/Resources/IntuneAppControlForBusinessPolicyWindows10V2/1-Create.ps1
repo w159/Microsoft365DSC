@@ -22,33 +22,33 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneAppControlForBusinessPolicyWindows10V2 'Example'
+        IntuneAppControlForBusinessPolicyWindows10V2 'IntuneAppControlForBusinessPolicyWindows10V2-Example'
         {
-            ApplicationId                                             = $ApplicationId;
             Assignments                                               = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
-                    dataType = "#microsoft.graph.exclusionGroupAssignmentTarget"
+                    dataType                                   = "#microsoft.graph.exclusionGroupAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
-                    groupDisplayName = "Exclude"
+                    groupDisplayName                           = "Exclude"
                 }
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
-                    dataType = "#microsoft.graph.groupAssignmentTarget"
+                    dataType                                   = "#microsoft.graph.groupAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
-                    groupDisplayName = "Include"
+                    groupDisplayName                           = "Include"
                 }
             );
-            CertificateThumbprint                                     = $CertificateThumbprint;
             ConfigureApplicationControlOptions                        = "1";
             ConfigureApplicationControlsAuditMode                     = "1";
             ConfigureApplicationControlsTrustAppsFromManagedInstaller = "1";
             ConfigureApplicationControlsTrustAppsWithGoodReputation   = "1";
             Description                                               = "";
-            DisplayName                                               = "Example";
+            DisplayName                                               = "App Control for Business - Audit Mode";
             Ensure                                                    = "Present";
             RoleScopeTagIds                                           = @("0");
+            ApplicationId                                             = $ApplicationId;
             TenantId                                                  = $TenantId;
+            CertificateThumbprint                                     = $CertificateThumbprint;
         }
     }
 }

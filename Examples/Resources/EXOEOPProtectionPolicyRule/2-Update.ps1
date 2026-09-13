@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,21 +19,28 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOEOPProtectionPolicyRule "EXOEOPProtectionPolicyRule-Strict Preset Security Policy"
+        EXOEOPProtectionPolicyRule "EXOEOPProtectionPolicyRule-Example"
         {
+            Comments                  = "Scopes the Strict preset EOP policy to the pilot recipients.";
             Ensure                    = "Present";
-            ExceptIfRecipientDomainIs = @("sandrodev.onmicrosoft.com");
+            ExceptIfRecipientDomainIs = @("fabrikam.com");
+            ExceptIfSentTo            = @("AlexW@$TenantId");
+            ExceptIfSentToMemberOf    = @("Executives@$TenantId");
             Identity                  = "Strict Preset Security Policy";
             Name                      = "Strict Preset Security Policy";
             Priority                  = 0;
-            State                     = "Enabled";
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            RecipientDomainIs         = @("contoso.com");
+            SentTo                    = @("AdeleV@$TenantId");
+            SentToMemberOf            = @("LegalTeam@$TenantId");
+            State                     = "Disabled";
+            ApplicationId             = $ApplicationId
+            TenantId                  = $TenantId
+            CertificateThumbprint     = $CertificateThumbprint
         }
     }
 }

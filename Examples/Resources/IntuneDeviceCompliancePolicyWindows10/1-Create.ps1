@@ -4,7 +4,8 @@ This example creates a new Device Comliance Policy for Windows.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,14 +18,15 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceCompliancePolicyWindows10 'ConfigureDeviceCompliancePolicyWindows10'
+        IntuneDeviceCompliancePolicyWindows10 'IntuneDeviceCompliancePolicyWindows10-Example'
         {
-            DisplayName                                 = 'Windows 10 DSC Policy'
-            Description                                 = 'Test policy'
+            DisplayName                                 = 'Windows 10 Device Compliance'
+            Description                                 = 'Baseline compliance requirements for corporate Windows 10 devices'
             PasswordRequired                            = $False
             PasswordBlockSimple                         = $False
             PasswordRequiredToUnlockFromIdle            = $True
@@ -43,6 +45,10 @@ Configuration Example
             BitLockerEnabled                            = $False
             SecureBootEnabled                           = $True
             CodeIntegrityEnabled                        = $True
+            FirmwareProtectionEnabled                   = $True
+            KernelDmaProtectionEnabled                  = $True
+            MemoryIntegrityEnabled                      = $True
+            VirtualizationBasedSecurityEnabled          = $True
             StorageRequireEncryption                    = $True
             ActiveFirewallRequired                      = $True
             DefenderEnabled                             = $True
@@ -57,17 +63,25 @@ Configuration Example
             TPMRequired                                 = $False
             deviceCompliancePolicyScript                = $null
             ValidOperatingSystemBuildRanges             = @()
+            WslDistributions                            = @(
+                MSFT_MicrosoftGraphWslDistributionConfiguration
+                {
+                    Distribution     = 'Ubuntu'
+                    MinimumOSVersion = '20.04'
+                    MaximumOSVersion = '24.04'
+                }
+            )
             ScheduledActionsForRule                     = @(
                 MSFT_MicrosoftGraphDeviceComplianceScheduledActionsForRuleConfiguration
                 {
-                    ActionType         = 'block'
-                    GracePeriodHours   = 0
+                    ActionType       = 'block'
+                    GracePeriodHours = 0
                 }
             )
             Ensure                                      = 'Present'
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId                               = $ApplicationId;
+            TenantId                                    = $TenantId;
+            CertificateThumbprint                       = $CertificateThumbprint;
         }
     }
 }

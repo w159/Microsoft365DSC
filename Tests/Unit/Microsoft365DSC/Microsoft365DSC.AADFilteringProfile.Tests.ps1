@@ -26,12 +26,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         BeforeAll {
 
             $secpasswd = ConvertTo-SecureString (New-Guid | Out-String) -AsPlainText -Force
-            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@mydomain.com', $secpasswd)
+            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@onmicrosoft.com', $secpasswd)
 
             Mock -ModuleName M365DSCUtil -CommandName Confirm-M365DSCDependencies -MockWith {
             }
 
-            Mock -CommandName New-M365DSCConnection -MockWith {
+            Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
                 return "Credentials"
             }
 
@@ -91,12 +91,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description           = "Description of profile";
                     Name                  = "My Profile";
                     Policies              = @(
-                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                        ([MSFT_AADFilteringProfilePolicyLink] @{
                             Priority = 200
                             LoggingState = 'enabled'
                             PolicyName = 'MyTopPolicy'
                             State = 'enabled'
-                        } -ClientOnly)
+                        })
                     );
                     Priority              = 120;
                     State                 = "enabled";
@@ -109,14 +109,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
             It 'Should return Values from the Get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Absent'
+                ((New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
             }
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should create a new instance from the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Set()
                 Should -Invoke -CommandName New-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
         }
@@ -127,12 +127,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description           = "Description of profile";
                     Name                  = "My Profile";
                     Policies              = @(
-                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                        ([MSFT_AADFilteringProfilePolicyLink] @{
                             Priority = 200
                             LoggingState = 'enabled'
                             PolicyName = 'MyTopPolicy'
                             State = 'enabled'
-                        } -ClientOnly)
+                        })
                     );
                     Priority              = 120;
                     State                 = "enabled";
@@ -141,14 +141,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
             It 'Should return Values from the Get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should remove the instance from the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Set()
                 Should -Invoke -CommandName Remove-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
         }
@@ -159,12 +159,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description           = "Description of profile";
                     Name                  = "My Profile";
                     Policies              = @(
-                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                        ([MSFT_AADFilteringProfilePolicyLink] @{
                             Priority = 200
                             LoggingState = 'enabled'
                             PolicyName = 'MyTopPolicy'
                             State = 'enabled'
-                        } -ClientOnly)
+                        })
                     );
                     Priority              = 120;
                     State                 = "enabled";
@@ -174,7 +174,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return true from the Test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Test() | Should -Be $true
             }
         }
 
@@ -184,12 +184,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Description           = "Description of profile";
                     Name                  = "My Profile";
                     Policies              = @(
-                        (New-CimInstance -ClassName MSFT_AADFilteringProfilePolicyLink -Property @{
+                        ([MSFT_AADFilteringProfilePolicyLink] @{
                             Priority = 200
                             LoggingState = 'enabled'
                             PolicyName = 'MyTopPolicy'
                             State = 'enabled'
-                        } -ClientOnly)
+                        })
                     );
                     Priority              = 122; # Drift
                     State                 = "enabled";
@@ -199,15 +199,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the Get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
 
             It 'Should return false from the Test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the Set method' {
-                Set-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADFilteringProfile' -Property $testParams).Set()
                 Should -Invoke -CommandName Remove-MgBetaNetworkAccessFilteringProfile -Exactly 1
                 Should -Invoke -CommandName New-MgBetaNetworkAccessFilteringProfile -Exactly 1
             }
@@ -222,7 +222,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
             It 'Should Reverse Engineer resource from the Export method' {
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADFilteringProfile' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
             }
         }

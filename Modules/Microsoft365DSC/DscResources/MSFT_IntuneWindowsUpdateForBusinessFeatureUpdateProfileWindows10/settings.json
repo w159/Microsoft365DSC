@@ -1,12 +1,34 @@
 {
   "resourceName": "IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "windowsFeatureUpdateProfile",
+    "odataSubtype": null,
+    "cmdletNoun": "MgBetaDeviceManagementWindowsFeatureUpdateProfile",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [
+    {
+      "name": "DeployableContentDisplayName",
+      "reason": "NotConfigurable",
+      "note": "The service sets this display value on the server side."
+    },
+    {
+      "name": "EndOfSupportDate",
+      "reason": "NotConfigurable",
+      "note": "Derived from the Windows servicing lifecycle of the build named by FeatureUpdateVersion."
+    }
+  ],
   "description": "This resource configures an Intune Windows Update For Business Feature Update Profile for Windows10.",
   "permissions": {
     "graph": {
       "delegated": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -14,7 +36,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
@@ -24,7 +46,7 @@
       "application": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.Read.All"
@@ -32,7 +54,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"

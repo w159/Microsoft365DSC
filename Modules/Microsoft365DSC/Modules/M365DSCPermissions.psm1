@@ -124,24 +124,13 @@ function Get-M365DSCCompiledPermissionList
         {
             $currentResourceResults = $baseObject.Clone()
         }
-        $settingsFilePath = $null
-        try
+        $resourceSettings = Get-M365DSCResourceSetting -ResourceName $resourceName
+        if ($null -eq $resourceSettings)
         {
-            $settingsFilePath = Join-Path -Path $PSScriptRoot `
-                -ChildPath "..\DscResources\MSFT_$resourceName\settings.json" `
-                -Resolve `
-                -ErrorAction Stop
+            Write-Warning -Message "Settings were not found for resource {$resourceName}"
         }
-        catch
+        else
         {
-            Write-Warning -Message "File settings.json was not found for resource {$resourceName}"
-        }
-
-        if ($null -ne $settingsFilePath)
-        {
-            $fileContent = Get-Content $settingsFilePath -Raw
-            $resourceSettings = ConvertFrom-Json -InputObject $fileContent
-
             $targetMatrix = if ($GroupByResourceName) { $currentResourceResults } else { $results }
 
             # Entra / Administrative roles
@@ -1110,7 +1099,7 @@ function Update-M365DSCAzureAdApplication
                         displayName = 'Created by Microsoft365DSC'
                         endDateTime = $endDate
                     }
-                    $appCred = Add-MgApplicationPassword -ApplicationId $azureADApp.Id -BodyParameter @{
+                    $appCred = Add-MgBetaApplicationPassword -ApplicationId $azureADApp.Id -BodyParameter @{
                         passwordCredential = $passwordCred
                     }
                 }

@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,15 +19,15 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        AADActivityBasedTimeoutPolicy "AADActivityBasedTimeoutPolicy-displayName-value"
+        AADActivityBasedTimeoutPolicy "AADActivityBasedTimeoutPolicy-Example"
         {
             DisplayName           = "displayName-value";
             Ensure                = "Absent";
-            Id                    = "000000-0000-0000-0000-000000000000";
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint

@@ -1,5 +1,22 @@
 {
   "resourceName": "PlannerBucket",
+  "generatedFrom": {
+    "workload": "MicrosoftGraph",
+    "apiVersion": "v1.0",
+    "entityType": "plannerBucket",
+    "odataSubtype": null,
+    "cmdletNoun": "MgPlannerBucket",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [
+    {
+      "name": "OrderHint",
+      "reason": "NotConfigurable",
+      "note": "Planner recalculates the order hint server side."
+    }
+  ],
   "description": "",
   "permissions": {
     "graph": {

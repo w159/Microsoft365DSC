@@ -1,4 +1,641 @@
-# Change log for Microsoft365DSC
+﻿# Change log for Microsoft365DSC
+
+# UNRELEASED
+
+* AADAccessReviewDefinition
+  * [BREAKING CHANGE] Renamed property `SettingsValue` to `Settings` to match the
+    name Microsoft Graph uses.
+* AADActivityBasedTimeoutPolicy
+  * Added support for the `Description` property.
+* AADAgreement
+  * [BREAKING CHANGE] Removed property `AcceptanceStatement`. It was not part of the
+    Graph Schema definition for the resource.
+  * Added support for the `TermsExpiration` property.
+* AADApplication
+  * [BREAKING CHANGE] Renamed property `Permissions` to `RequiredResourceAccess`
+    to match the name Microsoft Graph uses.
+  * Added support for the `IsDeviceOnlyAuthSupported`, `IsDisabled`,
+    `NativeAuthenticationApisEnabled`, `Notes`, `SamlMetadataUrl`, `Tags` and
+    `TokenEncryptionKeyId` properties.
+  * Updated `Owners` to use `DisplayName` for Service Principal objects.
+* AADAuthenticationMethodPolicyVoice
+  * Added support for the `CallerIdNumber` property.
+* AADAuthenticationMethodPolicyX509
+  * Added support for the `CertificateAuthorityScopes` and `IssuerHintsConfiguration`
+    properties.
+* AADAuthorizationPolicy
+  * [BREAKING CHANGE] Moved all `DefaultUserRole*` properties to the new
+    `DefaultUserRolePermissions` complex property type for separation.
+  * Added support for the `EnabledPreviewFeatures` property.
+  * Fixed an issue where a comparison threw when the tenant returned no value for a
+    collection property.
+* AADConditionalAccessPolicy
+  * [BREAKING CHANGE] Changed `TermsOfUse` to a collection, so a policy that requires
+    more than one agreement carries all of them.
+  * Added support for the `SignInFrequencyAuthenticationType` property.
+  * Added value `hidden` to property `ServicePrincipalRiskLevels`.
+  * An agreement that cannot be found in the tenant is now reported with a warning and
+    left out of the policy.
+* AADCrossTenantAccessPolicyConfigurationDefault
+  * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
+    `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
+    `M365CollaborationInbound` properties.
+  * Fixed an issue where the loop resolving user and group targets walked one entry past
+    the end of the collection.
+* AADCrossTenantAccessPolicyConfigurationPartner
+  * Added support for the `AppServiceConnectInbound`,
+    `BlockServiceProviderOutboundAccess`, `M365CollaborationInbound`, `TenantRestrictions`
+    and `M365CollaborationOutbound` properties.
+* AADCrossTenantIdentitySyncPolicyPartner
+  * Added support for the `ExternalCloudAuthorizedApplicationId` and
+    `IsRoleEnabledGroupSyncAllowed` properties.
+* AADCustomAuthenticationExtension
+  * [BREAKING CHANGE] Renamed the property `ClientConfigurationTimeoutMilliseconds` to
+    `ClientConfigurationTimeoutInMilliseconds` to match the name Microsoft Graph uses.
+* AADDeviceRegistrationPolicy
+  * [BREAKING CHANGE] Changed `MultiFactorAuthConfiguration` from a boolean to the
+    values `notRequired` and `required`, matching the type Microsoft Graph defines.
+  * Added support for the `AzureADRegistration` property.
+* AADFilteringProfile
+  * Changed `Priority`, on the profile and on its associated policies, to a 64 bit
+    integer to match the type Microsoft Graph defines.
+* AADGroup
+  * Added support for the `Theme` and `WritebackConfiguration` properties.
+* AADIdentityAPIConnector
+  * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
+    properties with the `AuthenticationConfiguration` complex property. Its `dataType`
+    member carries the odata subtype and `CertificateList` carries the certificates.
+  * Excluded `Password` and `Pkcs12Value` from the comparison, because Microsoft Graph
+    returns neither the password nor the certificate material on a read.
+* AADEntitlementManagementAccessPackageAssignmentPolicy
+  * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
+    avoid a conflict with a reserved PowerShell keyword.
+  * Added support for the `AccessPackageNotificationSettings` and
+    `VerifiableCredentialSettings` properties.
+* AADEntitlementManagementAccessPackageCatalogResource
+  * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
+    avoid a conflict with a reserved PowerShell keyword.
+  * Fixed an issue where naming the catalog by its identifier reported drift on every
+    run and never converged.
+* AADIdentityGovernanceLifecycleWorkflow
+  * Added support for the `AdministrationScopeTargets` property.
+* AADIdentityGovernanceProgram
+  * [BREAKING CHANGE] Removed resource. Please use the resources
+    `AADAccessReview[Definition|Policy]` instead.
+* AADLifecycleWorkflowSettings
+  * Added support for the `QuarantineConfiguration` property.
+* AADOnPremisesPublishingProfilesSettings
+  * Added support for the `IsDefaultAccessEnabled` property.
+* AADPermissionGrantPolicy
+  * Added support for the `IncludeAllPreApprovedApplications` and `ResourceScopeType`
+    properties.
+* AADPIMGroupSetting
+  * Improved performance with batch requests.
+* AADRoleAssignmentScheduleRequest
+  * [BREAKING CHANGE] Removed deprecated properties `Action`, `IsValidationOnly`
+    and `TicketInfo`.
+* AADRoleDefinition
+  * Fixed an issue where roles with empty permissions were not exported.
+* AADRoleEligibilityScheduleRequest
+  * [BREAKING CHANGE] Removed deprecated properties `Action` and `IsValidationOnly`.
+* AADRoleSetting
+  * Fixed an issue where a configuration that identified the role by its display name
+    instead of its id was always reported as compliant and never applied its settings.
+* AADServicePrincipal
+  * [BREAKING CHANGE] Fixed an issue where the allowed values for the
+    `MSFT_AADServicePrincipalClaimsPolicyGroupFilter` properties `type` and `matchOn`
+    were inverted.
+  * Switched the resource to the Microsoft Graph beta endpoint, which is where
+    the `ClaimsPolicy`, `ErrorUrl`, `PublisherName` and `SamlMetadataUrl`
+    properties are defined.
+  * Added support for the `LoginUrl`, `Description`, `NotificationEmailAddresses`,
+    `SamlSingleSignOnSettings`, `TokenEncryptionKeyId` and
+    `PreferredTokenSigningKeyThumbprint` properties.
+* AADTenantDetails
+  * Added support for the `BusinessPhones`, `City`, `PostalCode`, `PreferredLanguage`,
+    `PrivacyProfile`, `State` and `Street` properties.
+* AADUser
+  * [BREAKING CHANGE] Renamed properties `Fax` to `FaxNumber`, `FirstName` to
+    `GivenName`, `LastName` to `Surname`, `Office` to `OfficeLocation` and `Title`
+    to `JobTitle` to match the names Microsoft Graph uses.
+  * [BREAKING CHANGE] Removed deprecated property `PasswordNeverExpires`.
+    Please use `PasswordPolicies` instead with `DisablePasswordExpiration`.
+  * Added support for the `CompanyName`, `EmployeeId` and
+    `OnPremisesExtensionAttributes` properties.
+  * Updated the password generation routine to work with PowerShell 7.
+  * Fixed an issue where licenses were never removed from a user, including when
+    `LicenseAssignment` was emptied to strip every license.
+  * Added support for the `AgeGroup`, `EmployeeHireDate`, `EmployeeLeaveDateTime`
+    and `EmployeeType` properties.
+* EXOAvailabilityAddressSpace
+  * [BREAKING CHANGE] Changed type for `Credentials` from String
+    to PSCredential and removed it from the export output.
+* EXOArcConfig
+  * Fixed an issue where the `ArcTrustedSealers` property was exported as
+    a single string instead of an array.
+* EXODistributionGroup
+  * [BREAKING CHANGE] Removed deprecated property `Notes`.
+* EXOIRMConfiguration
+  * [BREAKING CHANGE] Removed deprecated property `EnablePortalTrackingLogs`.
+* EXOManagementRoleEntry
+  * Reinstated deprecated property `Type`.
+* EXOPlace
+  * [BREAKING CHANGE] Removed deprecated property `Desks`.
+* EXOTenantAllowBlockListItems
+  * [BREAKING CHANGE] Removed property `AppliationSecret`.
+* IntuneAlertRuleWindows365
+  * Added value `unknown` to property `Severity`.
+* IntuneAndroidManagedStoreAppConfiguration
+  * Added support for the `RoleScopeTagIds` and `credentialProviderRoleState`
+    properties.
+* IntuneAntivirusPolicySecurityExperienceWindows10ConfigMgr
+  * Fixed an issue where the resource was missing from the Intune template
+    registry, which left its policies out of the export cache.
+* IntuneAntivirusPolicyWindows10ConfigMgr
+  * Fixed an issue where the resource was missing from the Intune template
+    registry, which left its policies out of the export cache.
+* IntuneAppConfigurationDevicePolicy
+  * Added support for the `CredentialProviderRoleState` property.
+* IntuneAppControlForBusinessPolicyWindows10
+  * [BREAKING CHANGE] Removed resource. Please use the resource
+    `IntuneAppControlForBusinessPolicyWindows10V2` instead.
+* IntuneAppleMDMPushNotificationCertificate
+  * [BREAKING CHANGE] Renamed the property `DataSharingConsetGranted` to
+    `DataSharingConsentGranted` to correct the spelling.
+  * Fixed an issue where `DataSharingConsentGranted` was ignored, granting the consent on
+    create whatever the configuration asked and never granting it on an existing
+    certificate.
+* IntuneApplicationControlPolicyWindows10
+  * [BREAKING CHANGE] Removed resource. Please use the resource
+    `IntuneDeviceConfigurationEndpointProtectionPolicyWindows10` instead.
+* IntuneAppProtectionPolicyAndroid
+  * Added support for the `AllowedAndroidDeviceManufacturers`,
+    `AppActionIfAccountIsClockedOut`, `AppActionIfDevicePasscodeComplexityLessThanHigh`,
+    `AppActionIfDevicePasscodeComplexityLessThanLow`,
+    `AppActionIfDevicePasscodeComplexityLessThanMedium`,
+    `AppActionIfSamsungKnoxAttestationRequired`,
+    `GracePeriodToBlockAppsDuringOffClockHours`, `MaximumRequiredOsVersion`,
+    `MaximumWarningOsVersion`, `MaximumWipeOsVersion`,
+    `MinimumRequiredCompanyPortalVersion`, `MinimumWarningCompanyPortalVersion`,
+    `MinimumWipeAppVersion`, `MinimumWipeOsVersion`, `MinimumWipeCompanyPortalVersion`,
+    `MobileThreatDefensePartnerPriority`, `PinRequiredInsteadOfBiometricTimeout` and
+    `PurviewContentEvaluationRequired` properties.
+* IntuneAppProtectionPolicyiOS
+  * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
+    Microsoft Graph uses.
+  * [BREAKING CHANGE] Removed property `DeployedAppCount`.
+  * Added value `blockWhenSettingIsSupported` to property `AppActionIfDeviceComplianceRequired`.
+  * Added value `blockWhenSettingIsSupported` to property `AppActionIfIosDeviceModelNotAllowed`.
+  * Added value `blockWhenSettingIsSupported` to property `AppActionIfMaximumPinRetriesExceeded`.
+  * Added values `androidEnterpriseDedicatedDevicesWithAzureAdSharedMode`, `androidOpenSourceProjectUserAssociated`
+    and `androidOpenSourceProjectUserless` to property `TargetedAppManagementLevels`.
+  * Added support for the `GenmojiConfigurationState`,
+    `ScreenCaptureConfigurationState`, `WritingToolsConfigurationState` and
+    `PurviewContentEvaluationRequired` properties.
+  * Fixed an issue where a policy that allowed more than one device model failed to
+    apply and exported every model as a single combined value.
+* IntuneAppProtectionPolicyWindows10
+  * Added value `selectedApps` to property `AllowedInboundDataTransferSources`.
+  * Added value `selectedApps` to property `AllowedOutboundDataTransferDestinations`.
+* IntuneAzureNetworkConnectionWindows365
+  * [BREAKING CHANGE] Renamed property `RoleScopeTagIds` to `ScopeIds` to match the
+    name Microsoft Graph uses.
+* IntuneCloudProvisioningPolicyWindows365
+  * [BREAKING CHANGE] Renamed property `RoleScopeTagIds` to `ScopeIds` to match the
+    name Microsoft Graph uses.
+  * Removed unused class reference `MSFT_MicrosoftGraphMicrosoftManagedDesktop`.
+* IntuneDeviceAndAppManagementAssignmentFilter
+  * [BREAKING CHANGE] Renamed the property `Identity` to `Id` to match the name
+    Microsoft Graph uses.
+  * Added value `windowsMobileApplicationManagement` to property `Platform`.
+  * Added support for the `RoleScopeTags` property.
+* IntuneDeviceCategory
+  * Added support for the `RoleScopeTagIds` property.
+* IntuneDeviceCompliancePolicyAndroidDeviceOwner
+  * Added values `customPassword` and `required` to property `PasswordRequiredType`.
+* IntuneDeviceCompliancePolicyAndroidWorkProfile
+  * [BREAKING CHANGE] Removed the properties `RestrictedApps` and
+    `SecurityBlockDeviceAdministratorManagedDevices`, which the
+    androidWorkProfileCompliancePolicy Graph type does not define.
+* IntuneDeviceCompliancePolicyMacOS
+  * Added support for the `DeviceCompliancePolicyScript` property.
+  * Added the `DeviceManagementScripts.Read.All` permission and the
+    `Invoke-MgGraphRequest` command, both required to resolve the compliance script.
+* IntuneDeviceCompliancePolicyWindows10
+  * Added support for the `FirmwareProtectionEnabled`, `KernelDmaProtectionEnabled`,
+    `MemoryIntegrityEnabled`, `VirtualizationBasedSecurityEnabled` and
+    `WslDistributions` properties.
+* IntuneDeviceConfigurationCustomPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10
+  * [BREAKING CHANGE] Removed resource. Please use the resource
+    `IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2` instead.
+* IntuneDeviceConfigurationDomainJoinPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationEmailProfilePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationEndpointProtectionPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationFirmwareInterfacePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationHealthMonitoringPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationIdentityProtectionPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationKioskPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationPkcsCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationPolicyAndroidDeviceOwner
+  * Added support for the `AndroidDeviceOwnerDelegatedScopeAppSettings`,
+    `DeviceLocationMode`, `KioskModeManagedHomeScreenAppSettings`,
+    `LocateDeviceLostModeEnabled`, `LocateDeviceUserlessDisabled` and
+    `ShareDeviceLocationDisabled` properties.
+* IntuneDeviceConfigurationPolicyAndroidWorkProfile
+  * Added support for the `AllowedGoogleAccountDomains`,
+    `BlockUnifiedPasswordForWorkProfile` and `WorkProfileAccountUse`
+    properties.
+* IntuneDeviceConfigurationPolicyMacOS
+  * Added support for the `ActivationLockWhenSupervisedAllowed` property.
+* IntuneDeviceConfigurationPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationSCEPCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+  * Fixed an issue where creating a policy failed when the configuration named the root
+    certificate by its display name.
+* IntuneDeviceConfigurationSecureAssessmentPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationTrustedCertificatePolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationVpnPolicyWindows10
+  * [BREAKING CHANGE] Renamed property `ServerCollection` to `Servers` to match the
+    name Microsoft Graph uses.
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationWindowsTeamPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationWiredNetworkPolicyWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion` and
+    `DeviceManagementApplicabilityRuleDeviceMode` properties.
+  * Fixed an issue where a policy that listed its root certificates for server
+    validation by identifier alone failed to apply.
+* IntuneDeviceEnrollmentPlatformRestriction
+  * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
+    Microsoft Graph uses.
+* IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
+  * Added support for the `DeviceNameTemplate` property.
+* IntuneDeviceManagementEnrollmentAndroidGooglePlay
+  * Added support for the `TargetGroups` and `ManagedGooglePlayInitialScopeTagIds`
+    properties.
+* IntuneDiskEncryptionMacOS
+  * [BREAKING CHANGE] Removed resource. Please use the resource
+    `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
+* IntuneDeviceFeaturesConfigurationPolicyIOS
+  * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneMobileAppsBundleMacOS
+  * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
+    that carry a type discriminator. Intune rejected a configuration that omitted it.
+* IntuneMobileAppsLobAppiOS
+  * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
+* IntuneMobileAppsLobAppWindows10
+  * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementAppxMobileAppAssignment`.
+  * Added support for the `MinimumSupportedOperatingSystem` property.
+* IntuneMobileAppsManagedGooglePlayApp
+  * Added support for the `Description`, `Developer`, `InformationUrl`, `IsFeatured`,
+    `LargeIcon`, `Notes`, `Owner`, `PrivacyInformationUrl` and `Publisher` properties.
+* IntuneMobileAppsStoreApp
+  * Added support for the `AppleDeviceAppDeliveryProtocolType` property.
+  * Fixed an issue where a configuration that wrote the target platform in a different
+    casing was rejected on create and update.
+* IntuneMobileAppsSystemAppAndroid
+  * [BREAKING CHANGE] Updated `Assignments` to use `MSFT_DeviceManagementSystemMobileAppAssignment`.
+  * Added support for the `Description`, `Developer`, `InformationUrl`, `IsFeatured`,
+    `LargeIcon`, `Notes`, `Owner` and `PrivacyInformationUrl` properties.
+* IntuneMobileAppsWin32AppWindows10
+  * Added values `arm` and `neutral` to property `AllowedArchitectures`.
+  * Added support for the `Relationships` property, which carries the dependency and
+    supersedence relationships of the app.
+* IntuneMobileAppsWindowsOfficeSuiteApp
+  * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
+* IntuneMobileThreatDefenseConnector
+  * Added support for the `MacDeviceBlockedOnMissingPartnerData`, `MacEnabled`,
+    `AllowPartnerToCollectIosCertificateMetadata`,
+    `AllowPartnerToCollectIosPersonalCertificateMetadata`,
+    `WindowsMobileApplicationManagementEnabled`, `GrantMobileThreatDefensePartnerRole`
+    and `LaunchMobileThreatDefensePartnerOnSetupEnabled` properties.
+* IntuneRoleAssignment
+  * Added support for the `RoleScopeTagIds` property.
+* IntuneRoleDefinitionWindows365
+  * Added support for the `TemplateId` property.
+* IntuneSecurityBaselineMicrosoftEdge
+  * [BREAKING CHANGE] Removed deprecated properties `WebSQLAccess` and `EdgeEnhanceImagesEnabled`.
+* IntuneSettingCatalogCustomPolicyWindows10
+  * Fixed an issue where some nested properties didn't have the correct type.
+* IntuneUserSettingsPolicyWindows365
+  * Added support for the `ProvisioningSourceType` property.
+* IntuneVPNConfigurationPolicyAndroidDeviceOwner
+  * Added support for the `LockdownExclusionList` property.
+* IntuneVPNConfigurationPolicyAndroidWork
+  * Added value `paloAltoGlobalProtect` to property `connectionType`.
+  * Added support for the `fingerprint` and `lockdownExclusionList` properties.
+* IntuneVPNConfigurationPolicyIOS
+  * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
+* IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
+  * Added support for the `AuthenticationMethod`, `EapType`,
+    `TrustedServerCertificateNames`, `InnerAuthenticationProtocolForEapTtls`,
+    `InnerAuthenticationProtocolForPeap`, `MacAddressRandomizationMode` and
+    `OuterIdentityPrivacyTemporaryValue` properties.
+* IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile
+  * Added `wep` and `wpaPersonal` to property `WiFiSecurityType`.
+  * Added support for the `PreSharedKey`, `PreSharedKeyIsSet`,
+    `ProxyAutomaticConfigurationUrl` and `ProxySettings` properties.
+* IntuneWifiConfigurationPolicyAndroidForWork
+  * Added values `wep` and `wpaPersonal` to property `WiFiSecurityType`.
+* IntuneWifiConfigurationPolicyAndroidOpenSourceProject
+  * Added support for the `ProxySetting`, `ProxyAutomaticConfigurationUrl`,
+    `ProxyExclusionList`, `ProxyManualAddress` and `ProxyManualPort` properties.
+* IntuneWifiConfigurationPolicyMacOS
+  * Added `wpa3Personal` to property `WiFiSecurityType`.
+  * Added support for the `WifiRequirePhysicalMacAddressEnabled` property.
+* IntuneWifiConfigurationPolicyWindows10
+  * Added value `wpa3Personal` to property `WifiSecurityType`.
+  * Added support for the `DeviceManagementApplicabilityRuleDeviceMode` property.
+  * Fixed an issue where the `Name` member of the applicability rules was not returned,
+    which reported drift on every profile that named a rule.
+* IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined
+  * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
+    with the `OutOfBoxExperienceSetting` property.
+  * [BREAKING CHANGE] Replaced the deprecated `EnableWhiteGlove` property with the
+    `PreprovisioningAllowed` property.
+  * [BREAKING CHANGE] Replaced the deprecated `ExtractHardwareHash` property with the
+    `HardwareHashExtractionEnabled` property.
+  * [BREAKING CHANGE] Replaced the deprecated `Language` property with the `Locale`
+    property.
+* IntuneWindowsAutopilotDeploymentProfileAzureADJoined
+  * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
+    with the `OutOfBoxExperienceSetting` property. Its members now carry the names
+    Microsoft Graph uses, so `HideEscapeLink` becomes `EscapeLinkHidden`, `HideEULA`
+    becomes `EulaHidden`, `HidePrivacySettings` becomes `PrivacySettingsHidden` and
+    `SkipKeyboardSelectionPage` becomes `KeyboardSelectionPageSkipped`.
+  * [BREAKING CHANGE] Replaced the deprecated `EnableWhiteGlove` property with the
+    `PreprovisioningAllowed` property.
+  * [BREAKING CHANGE] Replaced the deprecated `ExtractHardwareHash` property with the
+    `HardwareHashExtractionEnabled` property.
+  * [BREAKING CHANGE] Replaced the deprecated `Language` property with the `Locale`
+    property.
+* IntuneWindowsUpdateForBusinessHotpatchProfileWindows10
+  * Added support for the `ApprovalSettings` property.
+* IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10
+  * Added support for the `DeviceManagementApplicabilityRuleDeviceMode`,
+    `DeviceManagementApplicabilityRuleOsEdition`,
+    `DeviceManagementApplicabilityRuleOsVersion`, `FeatureUpdatesWillBeRolledBack` and
+    `QualityUpdatesWillBeRolledBack` properties.
+* O365ExternalConnection
+  * Added support for the `ActivitySettings` and `ContentCategory` properties.
+* O365Group
+  * Fixed an issue where a configuration that listed members without owners failed to
+    apply whenever the membership changed.
+  * Added support for the `Theme` property.
+* O365OrgCustomizationSetting
+  * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
+* PlannerBucket
+  * [BREAKING CHANGE] Renamed the property `BucketId` to `Id`.
+* PlannerPlan
+  * Fixed an issue where a configuration that named the owning group by display name
+    failed to retrieve, create or update the plan.
+* PlannerTask
+  * [BREAKING CHANGE] Renamed the properties `AssignedUsers` to `Assignments`,
+    `Bucket` to `BucketId`, `Notes` to `Description` and `TaskId` to `Id` to
+    match the names Microsoft Graph uses.
+  * Added support for the `PreviewType` property.
+  * Fixed an issue where the attachments, checklist items, description and preview type
+    were dropped when a task was created rather than updated.
+  * Fixed an issue where a task on a plan with custom category labels always reported
+    drift, because the labels were read back as color names.
+* SCComplianceTag
+  * Fixed an issue where `EventType` was never exported.
+* SCDLPComplianceRule
+  * Fixed an issue where the module failed to build because a variable was assigned
+    inside a conditional block and read outside it.
+* SPOAccessControlSettings
+  * Added property `RestrictResourceAccountAccess`.
+* SPOSharingSettings
+  * Added properties `AllowGuestUserShareToUsersNotInSiteCollection`,
+    `CoreDefaultShareLinkRole`, `CoreDefaultShareLinkScope`,
+    `CoreLoopSharingCapability`, `CoreLoopDefaultSharingLinkScope`,
+    `CoreLoopDefaultSharingLinkRole`, `CoreDefaultLinkToExistingAccess`,
+    `CoreOrganizationSharingLinkMaxExpirationInDays`,
+    `CoreOrganizationSharingLinkRecommendedExpirationInDays`,
+    `GuestSharingGroupAllowListInTenantByPrincipalIdentity`,
+    `OneDriveLoopSharingCapability`, `OneDriveLoopDefaultSharingLinkScope`,
+    `OneDriveLoopDefaultSharingLinkRole`, `OneDriveOrganizationSharingLinkMaxExpirationInDays`,
+    `OneDriveOrganizationSharingLinkRecommendedExpirationInDays`, `RestrictExternalSharing`,
+    `RestrictExternalSharingForAgents`, `WhoCanShareAllowListInTenant`,
+    `WhoCanShareAllowListInTenantByPrincipalIdentity`.
+    FIXES [#2004](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/2004)
+* SPOSite
+  * Added properties `AllowFileArchive`, `AllowFileArchiveOnNewSitesByDefault`,
+    `AllowWebPropertyBagUpdateWhenDenyAddAndCustomizePagesIsEnabled`,
+    `DefaultShareLinkScope`, `DefaultShareLinkRole`,
+    `DisableClassicPageBaselineSecurityMode`, `HidePeoplePreviewingFiles`,
+    `HidePeopleWhoHaveListsOpen`, `InheritVersionPolicyFromTenant`,
+    `ListsShowHeaderAndNavigation`, `LoopDefaultSharingLinkScope`,
+    `LoopDefaultSharingLinkRole`, `OrganizationSharingLinkMaxExpirationInDays`,
+    `OrganizationSharingLinkRecommendedExpirationInDays`, `OverrideSharingCapability`,
+    `OverrideTenantOrganizationSharingLinkExpirationPolicy`,
+    `RequestFilesLinkEnabled`, `RequestFilesLinkExpirationInDays`,
+    `ReadOnlyForUnmanagedDevices`, `RestrictContentOrgWideSearch`,
+    `RestrictedAccessControl`, `RestrictedAccessControlGroups`.
+* SPOTenantSettings
+  * Added properties `AllowAnonymousMeetingParticipantsToAccessWhiteboards`,
+    `AllowAppsBypassOfUnmanagedDevicePolicy`, `AllowCommentsTextOnEmailEnabled`,
+    `AllowFileArchive`, `AllOrganizationSecurityGroupId`,
+    `AllowWebPropertyBagUpdateWhenDenyAddAndCustomizePagesIsEnabled`,
+    `AppBypassInformationBarriers`, `ArchiveRedirectUrl`, `AuthContextResilienceMode`,
+    `BlockDownloadFileTypeIds`, `BlockDownloadFileTypePolicy`, `BlockSendLabelMismatchEmail`,
+    `ConditionalAccessPolicyErrorHelpLink`, `ContentSecurityPolicyEnforcement`,
+    `ContentTypeSyncSiteTemplatesList`, `CoreBlockGuestsAsSiteAdmin`,
+    `CoreRequestFilesLinkEnabled`, `CoreRequestFilesLinkExpirationInDays`,
+    `CustomizedExternalSharingServiceUrl`, `DefaultOneDriveInformationBarrierMode`,
+    `DisabledAdaptiveCardExtensionIds`, `DisableDocumentLibraryDefaultLabeling`,
+    `DisableSpacesActivation`, `DisableVivaConnectionsAnalytics`,
+    `EnableAutoExpirationVersionTrim`, `EnableDiscoverableByOrganizationForVideos`,
+    `EnableMediaReactions`, `EnableNotificationsSubscriptions`, `EnableSensitivityLabelForPDF`,
+    `EnforceRequestDigest`, `ExpireVersionsAfterDays`, `HideSyncButtonOnDocLib`,
+    `HideSyncButtonOnODB`, `HideSyncButtonOnTeamSite`, `IBImplicitGroupBased`,
+    `IncludeAtAGlanceInShareEmails`, `IsCollabMeetingNotesFluidEnabled`,
+    `IsDataAccessInCardDesignerEnabled`, `IsEnableAppAuthPopUpEnabled`,
+    `IsSharePointAddInsDisabled`, `IsWBFluidEnabled`, `KnowledgeAgentEnabled`,
+    `KnowledgeAgentSelectedSitesList`, `LegacyBrowserAuthProtocolsEnabled`,
+    `MajorVersionLimit`, `MassDeleteNotificationDisabled`, `MediaTranscription`,
+     `MediaTranscriptionAutomaticFeatures`, `OneDriveBlockGuestsAsSiteAdmin`,
+    `OneDriveRequestFilesLinkEnabled`, `OneDriveRequestFilesLinkExpirationInDays`,
+    `RecycleBinRetentionPeriod`, `ReduceTempTokenLifetimeEnabled`,
+    `ReduceTempTokenLifetimeValue`, `RestrictedAccessControlforSitesErrorHelpLink`,
+    `ShowPeoplePickerGroupSuggestionsForIB`, `ShowOpenInDesktopOptionForSyncedFiles`,
+    `SiteOwnerManageLegacyServicePrincipalEnabled`, `StreamLaunchConfig`,
+    `TlsTokenBindingPolicyValue`, `ViewersCanCommentOnMediaDisabled`, `Workflow2010Disabled`.
+  * [BREAKING CHANGE] Removed property `OneDriveSharingCapability`. Is is replaced
+    with `MySiteSharingCapability` in the `SPOSharingSettings` resource.
+* SPOUserProfileProperty
+  * Updated fetching of user profile properties.
+* TeamsAudioConferencingPolicy
+  * [BREAKING CHANGE] Changed type of `MeetingInvitePhoneNumbers` from ``String`` to ``String[]``.
+* TeamsCallQueue
+  * Added GUID resolution to `AuthorizedUsers` and `Users`.
+* TeamsChannelTab
+  * [BREAKING CHANGE] Changed `SortOrderIndex` to a string to match the type Microsoft
+    Graph declares. A numeric value in an existing configuration keeps working.
+  * [BREAKING CHANGE] Replaced the flattened `ContentUrl`, `EntityId`, `RemoveUrl` and
+    `WebSiteUrl` properties with the `Configuration` complex property, which carries the
+    same four members under the names Microsoft Graph uses.
+* TeamsGuestMessagingConfiguration
+  * [BREAKING CHANGE] Removed deprecated property `UsersCanDeleteBotMessages`. It is available
+    on the `TeamsMessagingPolicy` resource instead.
+* TeamsOnlineVoicemailUserSettings
+  * [BREAKING CHANGE] Removed deprecated property `OofGreetingFollowCalendarEnabled`.
+  * Updated `UpdateTimeOfDay` to use the format `h:mm tt` with invariant culture.
+    An example is `6:00 pm`. This is the standard on en-US cultures.
+* TeamsTenantNetworkSite
+  * [BREAKING CHANGE] Removed deprecated property `SiteAddress`.
+* M365DSCCheckProperties
+  * [BREAKING CHANGE] Removed the module and its function `Get-PropertyReport`. The API surface
+    checker in `Utilities/ApiSurface` replaces it and covers every workload, not only Exchange
+    Online, Security and Compliance and Teams.
+* M365DSCGraphShim
+  * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
+* M365DSCModuleMgmt
+  * Added automatic dependency update for both Windows PowerShell and PowerShell 7.
+* M365DSCReport
+  * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
+* DEPENDENCIES
+  * Added `M365DSC.Mgx` with version 2.1.1.
+  * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
+  * Updated `DSCParser` to version 3.1.0.4.
+  * Updated `Microsoft.Graph.*` to version 2.39.0.
+  * Updated `MSCloudLoginAssistant` to version 1.2.6.
+  * Updated `PnP.PowerShell` to version 3.3.0.
+    FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
+  * Updated `ReverseDSC` to version 2.0.0.38.
+* MISC
+  * Added caching for Intune device configurations, compliance policies and enrollment
+    configurations across resources.
+  * Added caching for Entra groups referenced by assignments for Intune resources.
+  * Added handling of a workload connection that fails during connect. It is reported
+    once and skipped for the rest of the export.
+  * Added `Absent` as an accepted value for `Ensure` to several resources to make them work
+    when the requested instance does not exist.
+  * Added `Utilities/Measure-M365DSCExampleCoverage.ps1`, which reports how much of each
+    resource's schema its examples configure, whether the update example drifts from the create
+    example, and what the remove example carries beyond keys, mandatory properties,
+    authentication and `Ensure`.
+  * Added `Utilities/New-M365DSCAdaptedResourceManifest.ps1`, which writes the DSC v3 adapted
+    resource manifest of every exported resource into `Microsoft365DSC.dsc.manifests.json`.
+  * Added `ConfigurationName` and `ConfigurationData` parameters to
+    `Invoke-M365DSCConfigurationBuild` so it can compile a script that only declares a
+    configuration instead of invoking one.
+  * Updated the examples QA test to compile through `Invoke-M365DSCConfigurationBuild` and the
+    fast compile host, and gave it `Workload` and `ResourceName` container parameters so a single
+    batch of examples can be verified on its own. The whole example set now compiles in minutes
+    rather than hours.
+  * Fixed several issues with formatting and parameters of the example files.
+  * Aligned the layout of every example with the generator template: `Node`, `param` on its own
+    line, and a blank line before `Import-DscResource` and the `Node` block.
+  * Fixed keys that differed between the create, update and remove example of a resource, which
+    had the update and remove steps target an object the create step never made.
+  * Expanded examples to configure as much of each resource as is simultaneously
+    valid, stripped the remove examples back to keys, mandatory properties, authentication and
+    `Ensure`, and gave every update example a drift.
+  * Fixed the example emitter of the Dynamic Resource Generator, which dropped mandatory
+    properties from the remove example - making it uncompilable, since `[DscProperty(Mandatory)]`
+    becomes `Required` in the MOF - drifted every property in the update example instead of one,
+    and placed `IsSingleInstance` last although it is the key.
+  * Updated the example emitter to name string placeholders after the property they belong to,
+    instead of writing `FakeStringValue` into every string property of a published example.
+  * Updated many call sites of `Invoke-MgGraphRequest` to their Graph SDK cmdlet variant.
+  * Added many new relations between resources to improve dependency handling during export.
+  * Added QA new test to check for unreferenced classes in the schema file.
+    FIXES [#3637](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/3637)
+  * Added `RawResults` to the export of every resource that is part of a relation template.
+  * Added support for the `like` and `notlike` operators in relation conditions, and for
+    `$_` as the subject so a condition can test a value in a simple array rather than a
+    property of an object.
+  * Fixed dependency stub blocks omitting most mandatory properties. Only a fixed list of
+    property names was ever emitted, so stubs such as `AADUser` carried no identifying
+    property at all and `AADRoleDefinition` was missing `IsEnabled` and `RolePermissions`.
+    Every mandatory property is now emitted with a placeholder matching its type.
+  * Fixed an issue with module parsing for Teams resources after changing to PowerShell classes.
+  * Fixed an issue where many `settings.json` files contained invalid role elements.
+  * Fixed an issue where several resources had a different resource name in the Mof definition.
+  * Moved export relation resolution and `DependsOn` injection into the new
+    `Microsoft365DSC.Relations` assembly. Relation lookup, dependency collection and the
+    rewrite of the generated configuration no longer scale quadratically with the number of
+    exported objects.
+  * Fixed relation conditions using the `eq` operator being ignored.
+  * Fixed hashtable-valued properties never resolving in a relation, because they were
+    walked as a sequence instead of read as an object.
+  * Fixed relation resolution aborting the whole export when a property had an unexpected
+    type. The relation is now skipped and reported as verbose output.
+  * Fixed an issue where relations were always resolved instead of only when
+    `Export-M365DSCConfiguration` is called with `-IncludeDependencies`.
+  * Fixed the relation templates failing to parse on Windows PowerShell, which prevented
+    the module from being imported on that edition.
+  * Updated `Get-CompareParameters` to class method and replaced all usages with class method calls.
+  * Updated module to invoke PowerShell 7 for all resources if not already running under it.
+  * Updated all DSC resources from script-based to class-based.
+  * Replaced the `Group.Read.All` Graph permission with `GroupMember.Read.All` in every
+    resource that only resolves a group display name, id or membership and never modifies
+    the group.
+  * Changed `Update-M365DSCAzureAdApplication` to `Add-MgBetaApplicationPassword` so it
+    uses the same beta endpoint and module as the other cmdlets.
+  * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
+    modules and the resource base classes.
 
 # 1.26.909.1
 
@@ -376,7 +1013,6 @@
 * Added `License Requirements` section to README.md documenting Microsoft
     365 E5 / Defender for Office 365 Plan 2 licensing requirements for EXO
     Defender resources.
-
 
 # 1.26.708.1
 

@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,32 +19,37 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneDeviceConfigurationPlatformScriptMacOS 'Example'
+        IntuneDeviceConfigurationPlatformScriptMacOS 'IntuneDeviceConfigurationPlatformScriptMacOS-Example'
         {
-            Assignments          = @(
+            Assignments                 = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
                     deviceAndAppManagementAssignmentFilterType = 'none'
-                    dataType = '#microsoft.graph.allDevicesAssignmentTarget'
+                    dataType                                   = '#microsoft.graph.allDevicesAssignmentTarget'
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = '#microsoft.graph.exclusionGroupAssignmentTarget'
+                    groupDisplayName = 'Policy Exclusions'
                 }
             );
-            DisplayName          = "custom";
-            Ensure               = "Present";
+            DisplayName                 = "custom";
+            Ensure                      = "Present";
             BlockExecutionNotifications = $False;
             Description                 = "";
             ExecutionFrequency          = "00:00:00";
             FileName                    = "shellscript.sh";
             Id                          = "00000000-0000-0000-0000-000000000000";
-            RetryCount                  = 1; # Updated property
+            RetryCount                  = 1; # Updated Property
             RoleScopeTagIds             = @("0");
             RunAsAccount                = "user";
             ScriptContent               = "Base64 encoded script content";
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId               = $ApplicationId;
+            TenantId                    = $TenantId;
+            CertificateThumbprint       = $CertificateThumbprint;
         }
     }
 }

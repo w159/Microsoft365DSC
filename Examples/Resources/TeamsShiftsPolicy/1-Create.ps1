@@ -19,11 +19,12 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        TeamsShiftsPolicy 'Example'
+        TeamsShiftsPolicy 'TeamsShiftsPolicy-Example'
         {
             Identity                       = 'Global'
             AccessGracePeriodMinutes       = 15

@@ -1,12 +1,23 @@
 {
   "resourceName": "IntuneDeviceConfigurationCustomPolicyWindows10",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "deviceConfiguration",
+    "odataSubtype": "windows10CustomConfiguration",
+    "cmdletNoun": "MgBetaDeviceManagementDeviceConfiguration",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures an Intune Device Configuration Custom Policy for Windows10.",
   "permissions": {
     "graph": {
       "delegated": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
@@ -14,7 +25,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
@@ -24,7 +35,7 @@
       "application": {
         "read": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
@@ -32,7 +43,7 @@
         ],
         "update": [
           {
-            "name": "Group.Read.All"
+            "name": "GroupMember.Read.All"
           },
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"

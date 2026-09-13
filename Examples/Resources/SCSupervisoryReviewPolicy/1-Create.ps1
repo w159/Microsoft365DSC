@@ -5,22 +5,34 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
     Node localhost
     {
-        SCSupervisoryReviewPolicy 'SupervisoryReviewPolicy'
+        SCSupervisoryReviewPolicy 'SCSupervisoryReviewPolicy-Example'
         {
-            Name       = "MyPolicy"
-            Comment    = "Test Policy"
-            Reviewers  = @("admin@contoso.com")
-            Ensure     = "Present"
-            Credential = $Credscredential
+            Name                  = "MyPolicy"
+            Comment               = "Reviews outbound communications from the trading desk"
+            Reviewers             = @("admin@contoso.com")
+            Ensure                = "Present"
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }

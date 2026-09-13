@@ -13,7 +13,7 @@ Install-Module Microsoft365DSC -Force
 
 Executing this command can take a minute or two to complete, after which the base Microsoft365DSC module has been installed.
 
-> **NOTE:** Make sure you run the above command in an elevated PowerShell window. In a regular window the module will be installed in the Current User scope, which will not work!
+> **NOTE:** Make sure you run the above command in an elevated **Windows PowerShell 5.1** window. In a regular window the module will be installed in the Current User scope, which will not work!
 
 ## Dependencies
 

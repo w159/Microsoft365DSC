@@ -1,5 +1,22 @@
 {
   "resourceName": "IntuneDeviceCategory",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "deviceCategory",
+    "odataSubtype": null,
+    "cmdletNoun": "MgBetaDeviceManagementDeviceCategory",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [
+    {
+      "name": "Id",
+      "reason": "ReadOnly",
+      "note": "Graph assigns it on create and the resource keys on DisplayName"
+    }
+  ],
   "description": "This resource configures the Intune device categories.",
   "permissions": {
     "graph": {

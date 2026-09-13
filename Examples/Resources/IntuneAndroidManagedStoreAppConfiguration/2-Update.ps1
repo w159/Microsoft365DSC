@@ -4,7 +4,8 @@ This example creates a new Intune Mobile App Configuration Policy for iOs device
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,38 +18,41 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName 'Microsoft365DSC'
 
     Node localhost
     {
-        IntuneAndroidManagedStoreAppConfiguration "ConfigureIntuneAndroidManagedStoreAppConfiguration"
+        IntuneAndroidManagedStoreAppConfiguration "IntuneAndroidManagedStoreAppConfiguration-Example"
         {
-            Description           = "IntuneAndroidManagedStoreAppConfiguration Description";
-            DisplayName           = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
-            Ensure                = "Present";
-            appSupportsOemConfig  = $False;
-            connectedAppsEnabled  = $True; #updated value
-            packageId             = "app:org.mozilla.firefox";
-            payloadJson           = "";
-            permissionActions     = @(
+            Description                 = "IntuneAndroidManagedStoreAppConfiguration Description";
+            RoleScopeTagIds             = @("0");
+            DisplayName                 = "IntuneAndroidManagedStoreAppConfiguration DisplayName";
+            Ensure                      = "Present";
+            appSupportsOemConfig        = $False;
+            connectedAppsEnabled        = $True; # Updated Property
+            credentialProviderRoleState = "allowed";
+            packageId                   = "app:org.mozilla.firefox";
+            payloadJson                 = "";
+            permissionActions           = @(
                 MSFT_androidPermissionAction{
-                    action = 'prompt'
+                    action     = 'prompt'
                     permission = 'android.permission.RECEIVE_SMS'
                 }
                 MSFT_androidPermissionAction{
-                    action = 'prompt'
+                    action     = 'prompt'
                     permission = 'android.permission.READ_SMS'
                 }
                 MSFT_androidPermissionAction{
-                    action = 'prompt'
+                    action     = 'prompt'
                     permission = 'android.permission.RECEIVE_WAP_PUSH'
                 }
             );
-            profileApplicability  = "androidDeviceOwner";
-            targetedMobileApps    = @("30ab8f7a-14fb-4a05-befa-ea7f51141ad9");
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            profileApplicability        = "androidDeviceOwner";
+            targetedMobileApps          = @("30ab8f7a-14fb-4a05-befa-ea7f51141ad9");
+            ApplicationId               = $ApplicationId;
+            TenantId                    = $TenantId;
+            CertificateThumbprint       = $CertificateThumbprint;
         }
     }
 }

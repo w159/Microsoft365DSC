@@ -1,411 +1,242 @@
-Confirm-M365DSCModuleDependency -ModuleName 'MSFT_SCSupervisoryReviewRule'
+using module ..\_Base\M365DSCResourceBase.psm1
 
-function Get-TargetResource
+[DscResource()]
+class SCSupervisoryReviewRule : M365DSCResourceBase
 {
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [ValidateLength(1, 64)]
-        [System.String]
-        $Name,
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('The Name parameter specifies the unique name for the supervisory review policy. The name can''t exceed 64 characters. If the value contains spaces, enclose the value in quotation marks.')]
+    [ValidateLength(1, 64)]
+    [System.String] $Name
 
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Policy,
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('The Policy parameter specifies the supervisory review policy that''s assigned to the rule. You can use any value that uniquely identifies the policy.')]
+    [System.String] $Policy
 
-        [Parameter()]
-        [System.String]
-        $Condition,
+    [DscProperty()]
+    [System.ComponentModel.Description('The Condition parameter specifies the conditions and exceptions for the rule.')]
+    [System.String] $Condition
 
-        [Parameter()]
-        [ValidateRange(0, 100)]
-        [System.UInt32]
-        $SamplingRate,
+    [DscProperty()]
+    [System.ComponentModel.Description('The SamplingRate parameter specifies the percentage of communications for review. If you want reviewers to review all detected items, use the value 100.')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.UInt32]] $SamplingRate
 
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
+    [DscProperty()]
+    [System.ComponentModel.Description('Specify if this rule should exist or not.')]
+    [ValidateSet('Present', 'Absent')]
+    [System.String] $Ensure
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
+    [DscProperty()]
+    [System.ComponentModel.Description('Credentials of the Exchange Global Admin')]
+    [System.Management.Automation.PSCredential] $Credential
 
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Id of the Azure Active Directory application to authenticate with.')]
+    [System.String] $ApplicationId
 
-        [Parameter()]
-        [System.String]
-        $TenantId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Id of the Azure Active Directory tenant used for authentication.')]
+    [System.String] $TenantId
 
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
+    [DscProperty()]
+    [System.ComponentModel.Description('Thumbprint of the Azure Active Directory application''s authentication certificate to use for authentication.')]
+    [System.String] $CertificateThumbprint
 
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
+    [DscProperty()]
+    [System.ComponentModel.Description('Username can be made up to anything but password will be used for CertificatePassword')]
+    [System.Management.Automation.PSCredential] $CertificatePassword
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
+    [DscProperty()]
+    [System.ComponentModel.Description('Path to certificate used in service principal usually a PFX file.')]
+    [System.String] $CertificatePath
 
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
+    [DscProperty()]
+    [System.ComponentModel.Description('Managed ID being used for authentication.')]
+    [System.Nullable[System.Boolean]] $ManagedIdentity
 
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
+    [DscProperty()]
+    [System.ComponentModel.Description('Access token used for authentication.')]
+    [System.String[]] $AccessTokens
 
-    Write-Verbose -Message "Getting configuration of SupervisoryReviewRule for $Name"
-
-    try
+    [SCSupervisoryReviewRule] Get()
     {
-        if (-not $Script:exportedInstance -or $Script:exportedInstance.Name -ne $Name)
+        if ($this.RequiresPowerShellCore())
         {
-            $null = New-M365DSCConnection -Workload 'SecurityComplianceCenter' `
-                -InboundParameters $PSBoundParameters
+            $remote = [SCSupervisoryReviewRule]::new()
+            $remote.FromHashtable($this.InvokeInPowerShellCore('Get'))
+            return $remote
+        }
 
-            #Ensure the proper dependencies are installed in the current environment.
-            Confirm-M365DSCDependencies
+        Write-Verbose -Message "Getting configuration of SupervisoryReviewRule for $($this.Name)"
 
-            #region Telemetry
-            $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-            $CommandName = $MyInvocation.MyCommand
-            $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-                -CommandName $CommandName `
-                -Parameters $PSBoundParameters
-            Add-M365DSCTelemetryEvent -Data $data
-            #endregion
-
-            $nullReturn = $PSBoundParameters
-            $nullReturn.Ensure = 'Absent'
-
-            $RuleObject = Invoke-M365DSCCommand -ScriptBlock { Get-SupervisoryReviewRule -Identity $Name -ErrorAction Stop } -SuppressNotFoundError
-
-            if ($null -eq $RuleObject)
+        try
+        {
+            if (-not $this.ExportedInstance -or $this.ExportedInstance.Name -ne $this.Name)
             {
-                Write-Verbose -Message "SupervisoryReviewRule $($Name) does not exist."
-                return $nullReturn
+                $null = $this.Connect('SecurityComplianceCenter')
+
+                Confirm-M365DSCDependencies
+
+                $this.AddTelemetry('Get')
+
+                $nullReturn = $this.GetBoundParameters()
+                $nullReturn.Ensure = 'Absent'
+
+                $RuleObject = Invoke-M365DSCCommand -ScriptBlock { Get-SupervisoryReviewRule -Identity $this.Name -ErrorAction Stop } -SuppressNotFoundError
+
+                if ($null -eq $RuleObject)
+                {
+                    Write-Verbose -Message "SupervisoryReviewRule $($this.Name) does not exist."
+                    return $this.AsResult($nullReturn)
+                }
             }
+            else
+            {
+                $RuleObject = $this.ExportedInstance
+            }
+
+            Write-Verbose "Found existing SupervisoryReviewRule $($this.Name)"
+            $PolicyName = (Get-SupervisoryReviewPolicyV2 -Identity $RuleObject.Policy).Name
+
+            $result = @{
+                Name                  = $RuleObject.Name
+                Policy                = $PolicyName
+                Condition             = $RuleObject.Condition
+                SamplingRate          = $RuleObject.SamplingRate
+                Ensure                = 'Present'
+                Credential            = $this.Credential
+                ApplicationId         = $this.ApplicationId
+                TenantId              = $this.TenantId
+                CertificateThumbprint = $this.CertificateThumbprint
+                CertificatePath       = $this.CertificatePath
+                CertificatePassword   = $this.CertificatePassword
+                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                AccessTokens          = $this.AccessTokens
+            }
+
+            Write-Verbose -Message "Found SupervisoryReviewRule $($this.Name)"
+            return $this.AsResult($result)
         }
-        else
+        catch
         {
-            $RuleObject = $Script:exportedInstance
+            $this.LogError($_, 'Error retrieving data:')
+
+            throw
+        }
+    }
+
+    [void] Set()
+    {
+        if ($this.RequiresPowerShellCore())
+        {
+            $null = $this.InvokeInPowerShellCore('Set')
+            return
         }
 
-        Write-Verbose "Found existing SupervisoryReviewRule $($Name)"
-        $PolicyName = (Get-SupervisoryReviewPolicyV2 -Identity $RuleObject.Policy).Name
+        Write-Verbose -Message "Setting configuration of SupervisoryReviewRule for $($this.Name)"
 
-        $result = @{
-            Name                  = $RuleObject.Name
-            Policy                = $PolicyName
-            Condition             = $RuleObject.Condition
-            SamplingRate          = $RuleObject.SamplingRate
-            Ensure                = 'Present'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            CertificatePath       = $CertificatePath
-            CertificatePassword   = $CertificatePassword
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
+        Confirm-M365DSCDependencies
+
+        $this.AddTelemetry('Set')
+
+        $CurrentRule = $this.Get().ToHashtable()
+
+        if ($this.Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Absent')
+        {
+            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            New-SupervisoryReviewRule @CreationParams
+        }
+        elseif ($this.Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Present')
+        {
+            Set-SupervisoryReviewRule -Identity $CurrentRule.Name `
+                -Condition $CurrentRule.Condition `
+                -SamplingRate $CurrentRule.SamplingRate
+        }
+        elseif ($this.Ensure -eq 'Absent' -and $CurrentRule.Ensure -eq 'Present')
+        {
+            throw ("The SCSupervisoryReviewRule resource doesn't not support deleting Rules. " + `
+                    'Instead try removing the associated policy, or modifying the existing rule.')
+        }
+    }
+
+    [bool] Test()
+    {
+        return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [string] Export()
+    {
+        if ($this.RequiresPowerShellCore())
+        {
+            return [string] $this.InvokeInPowerShellCore('Export')
         }
 
-        Write-Verbose -Message "Found SupervisoryReviewRule $($Name)"
+        $ConnectionMode = $this.Connect('SecurityComplianceCenter')
+
+        Confirm-M365DSCDependencies
+
+        $this.AddTelemetry('Export')
+
+        try
+        {
+            [array]$rules = Get-SupervisoryReviewRule -ErrorAction Stop
+            $i = 1
+            $dscContent = [System.Text.StringBuilder]::new()
+            if ($rules.Length -eq 0)
+            {
+                Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+            }
+            else
+            {
+                Write-M365DSCHost -Message "`r`n" -DeferWrite
+            }
+            foreach ($rule in $rules)
+            {
+                if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+                {
+                    $Global:M365DSCExportResourceInstancesCount++
+                }
+
+                Write-M365DSCHost -Message "    |---[$i/$($rules.Length)] $($rule.Name)" -DeferWrite
+                $this.ExportedInstance = $rule
+                $Results = $this.GetForExport(@{ Name = $rule.Name; Policy = $rule.Policy })
+                $rawResults = $Results.Clone()
+                $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
+                    -ConnectionMode $ConnectionMode `
+                    -ModulePath $this.GetModulePath() `
+                    -Results $Results `
+                    -Credential $this.Credential `
+                    -RawResults $rawResults
+                [void]$dscContent.Append($currentDSCBlock)
+                Save-M365DSCPartialExport -Content $currentDSCBlock `
+                    -FileName $Global:PartialExportFileName
+                Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+                $i++
+            }
+            return $dscContent.ToString()
+        }
+        catch
+        {
+            $this.LogError($_, 'Error during Export:')
+
+            throw
+        }
+    }
+
+    hidden [SCSupervisoryReviewRule] AsResult([System.Object] $Values)
+    {
+        if ($Values -is [SCSupervisoryReviewRule])
+        {
+            return $Values
+        }
+
+        $result = [SCSupervisoryReviewRule]::new()
+        $result.ClearNonSchemaProperties()
+        if ($Values -is [System.Collections.Hashtable])
+        {
+            $result.FromHashtable($Values)
+        }
+
         return $result
     }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error retrieving data:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
-
-        throw
-    }
 }
-
-function Set-TargetResource
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [ValidateLength(1, 64)]
-        [System.String]
-        $Name,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Policy,
-
-        [Parameter()]
-        [System.String]
-        $Condition,
-
-        [Parameter()]
-        [ValidateRange(0, 100)]
-        [System.UInt32]
-        $SamplingRate,
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    Write-Verbose -Message "Setting configuration of SupervisoryReviewRule for $Name"
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $CurrentRule = Get-TargetResource @PSBoundParameters
-
-    if ($Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Absent')
-    {
-        $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-        New-SupervisoryReviewRule @CreationParams
-    }
-    elseif ($Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Present')
-    {
-        Set-SupervisoryReviewRule -Identity $CurrentRule.Name `
-            -Condition $CurrentRule.Condition `
-            -SamplingRate $CurrentRule.SamplingRate
-    }
-    elseif ($Ensure -eq 'Absent' -and $CurrentRule.Ensure -eq 'Present')
-    {
-        throw ("The SCSupervisoryReviewRule resource doesn't not support deleting Rules. " + `
-                'Instead try removing the associated policy, or modifying the existing rule.')
-    }
-}
-
-function Test-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [ValidateLength(1, 64)]
-        [System.String]
-        $Name,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Policy,
-
-        [Parameter()]
-        [System.String]
-        $Condition,
-
-        [Parameter()]
-        [ValidateRange(0, 100)]
-        [System.UInt32]
-        $SamplingRate,
-
-        [Parameter()]
-        [ValidateSet('Present', 'Absent')]
-        [System.String]
-        $Ensure = 'Present',
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $result = Test-M365DSCTargetResource -DesiredValues $PSBoundParameters `
-        -ResourceName $($MyInvocation.MyCommand.Source).Replace('MSFT_', '')
-    return $result
-}
-
-function Export-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param
-    (
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    $ConnectionMode = New-M365DSCConnection -Workload 'SecurityComplianceCenter' `
-        -InboundParameters $PSBoundParameters
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    try
-    {
-        [array]$rules = Get-SupervisoryReviewRule -ErrorAction Stop
-        $i = 1
-        $dscContent = [System.Text.StringBuilder]::new()
-        if ($rules.Length -eq 0)
-        {
-            Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
-        }
-        else
-        {
-            Write-M365DSCHost -Message "`r`n" -DeferWrite
-        }
-        foreach ($rule in $rules)
-        {
-            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
-            {
-                $Global:M365DSCExportResourceInstancesCount++
-            }
-
-            Write-M365DSCHost -Message "    |---[$i/$($rules.Length)] $($rule.Name)" -DeferWrite
-            $Script:exportedInstance = $rule
-            $Results = Get-TargetResource @PSBoundParameters `
-                -Name $rule.Name `
-                -Policy $rule.Policy
-            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
-            [void]$dscContent.Append($currentDSCBlock)
-            Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
-            Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
-            $i++
-        }
-        return $dscContent.ToString()
-    }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error during Export:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
-
-        throw
-    }
-}
-
-Export-ModuleMember -Function *-TargetResource

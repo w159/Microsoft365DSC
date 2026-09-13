@@ -22,9 +22,9 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        TeamsChannel 'ConfigureChannel'
+        TeamsChannel 'TeamsChannel-Example'
         {
             TeamName              = 'SuperSecretTeam'
             DisplayName           = 'SP2013 Review teams group'

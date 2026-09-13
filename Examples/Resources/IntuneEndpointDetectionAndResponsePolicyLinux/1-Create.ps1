@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,22 +19,23 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneEndpointDetectionAndResponsePolicyLinux 'myEDRPolicy'
+        IntuneEndpointDetectionAndResponsePolicyLinux 'IntuneEndpointDetectionAndResponsePolicyLinux-Example'
         {
-            DisplayName     = 'Edr Policy'
-            tags_item_key   = 'GROUP'
-            tags_item_value = 'tag'
-            Assignments     = @()
-            Description     = 'My revised description'
-            Ensure          = 'Present'
+            DisplayName           = 'Edr Policy'
+            tags_item_key         = 'GROUP'
+            tags_item_value       = 'tag'
+            Assignments           = @()
+            Description           = 'My revised description'
+            Ensure                = 'Present'
+
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;
-
         }
     }
 }

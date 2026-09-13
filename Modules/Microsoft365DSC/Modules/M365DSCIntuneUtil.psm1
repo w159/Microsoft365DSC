@@ -42,6 +42,7 @@ function ConvertFrom-IntunePolicyAssignment
     $assignmentResult = @()
     foreach ($assignment in $Assignments)
     {
+        $groupDisplayName = $null
         $hashAssignment = [ordered]@{}
         if ($null -ne $assignment.Target.'@odata.type')
         {
@@ -75,7 +76,7 @@ function ConvertFrom-IntunePolicyAssignment
         {
             $hashAssignment.Add('groupId', $groupId)
 
-            $group = Get-MgGroup -GroupId ($groupId) -ErrorAction SilentlyContinue
+            $group = Get-M365DSCIntuneGroup -GroupId $groupId
             if ($null -ne $group)
             {
                 $groupDisplayName = $group.DisplayName
@@ -199,12 +200,11 @@ function ConvertTo-IntunePolicyAssignment
             $group = $null
             if (-not [System.String]::IsNullOrEmpty($assignment.groupId))
             {
-                $group = Get-MgGroup -GroupId ($assignment.groupId) -ErrorAction SilentlyContinue
+                $group = Get-M365DSCIntuneGroup -GroupId $assignment.groupId
             }
             if ($null -eq $group -and -not [System.String]::IsNullOrEmpty($assignment.groupDisplayName))
             {
-                $escapedName = $assignment.groupDisplayName -replace "'", "''"
-                [array]$group = Get-MgGroup -Filter "DisplayName eq '$escapedName'" -All -ErrorAction SilentlyContinue
+                [array]$group = Get-M365DSCIntuneGroup -DisplayName $assignment.groupDisplayName
                 if ($null -eq $group -or $group.Count -eq 0)
                 {
                     Write-Warning "Skipping assignment: groupDisplayName '{$($assignment.groupDisplayName)}' not found."
@@ -283,6 +283,7 @@ function ConvertFrom-IntuneMobileAppAssignment
     $assignmentResult = @()
     foreach ($assignment in $Assignments)
     {
+        $groupDisplayName = $null
         $hashAssignment = @{}
         if ($null -ne $assignment.Target.'@odata.type')
         {
@@ -307,7 +308,7 @@ function ConvertFrom-IntuneMobileAppAssignment
         {
             $hashAssignment.Add('groupId', $groupId)
 
-            $group = Get-MgGroup -GroupId ($groupId) -ErrorAction SilentlyContinue
+            $group = Get-M365DSCIntuneGroup -GroupId $groupId
             if ($null -ne $group)
             {
                 $groupDisplayName = $group.DisplayName
@@ -346,6 +347,12 @@ function ConvertFrom-IntuneMobileAppAssignment
         if ($null -ne $assignment.settings -and $assignment.settings.Count -gt 0)
         {
             $settings = (Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $assignment.settings)
+            if ($settings.Contains('@odata.type'))
+            {
+                $settings['odataType'] = $settings['@odata.type']
+                $settings.Remove('@odata.type')
+            }
+
             $hashAssignment.Add('assignmentSettings', $settings)
         }
 
@@ -442,13 +449,12 @@ function ConvertTo-IntuneMobileAppAssignment
             $group = $null
             if (-not [System.String]::IsNullOrEmpty($assignment.groupId))
             {
-                $group = Get-MgGroup -GroupId $assignment.groupId -ErrorAction SilentlyContinue
+                $group = Get-M365DSCIntuneGroup -GroupId $assignment.groupId
             }
             # If groupId lookup failed, try by display name
             if ($null -eq $group -and -not [System.String]::IsNullOrEmpty($assignment.groupDisplayName))
             {
-                $escapedName = $assignment.groupDisplayName -replace "'", "''"
-                [array]$group = Get-MgGroup -Filter "DisplayName eq '$escapedName'" -All -ErrorAction SilentlyContinue
+                [array]$group = Get-M365DSCIntuneGroup -DisplayName $assignment.groupDisplayName
                 if ($null -eq $group -or $group.Count -eq 0)
                 {
                     Write-Warning "Skipping assignment: groupDisplayName '{$($assignment.groupDisplayName)}' not found."
@@ -536,12 +542,134 @@ function Get-M365DSCExportCachedConfigurationPolicies
     {
         return Get-MgBetaDeviceManagementConfigurationPolicy -All `
             -Filter $Filter `
+            -ExpandProperty 'assignments' `
             -ErrorAction Stop
     }
 
     return Get-MgBetaDeviceManagementConfigurationPolicy -All `
         -Filter "templateReference/TemplateId eq '$TemplateId'" `
+        -ExpandProperty 'assignments' `
         -ErrorAction Stop
+}
+
+
+<#
+.SYNOPSIS
+    Returns the assignments expanded on a Graph item, or $null when they must be fetched.
+
+.DESCRIPTION
+    Reads the 'assignments' navigation property of an item returned with $expand=assignments. Returns
+    $null when the item carries no expanded assignments or when Graph truncated them.
+
+.PARAMETER Instance
+    Specifies the Graph item, as a hashtable or object.
+
+.OUTPUTS
+    System.Object[]
+#>
+function Get-M365DSCIntuneExpandedAssignments
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param (
+        [Parameter(Mandatory = $true)]
+        [AllowNull()]
+        [System.Object]
+        $Instance
+    )
+
+    if ($null -eq $Instance)
+    {
+        return $null
+    }
+
+    if ($Instance -is [System.Collections.IDictionary])
+    {
+        if ($Instance.Contains('assignments@odata.nextLink') -or -not $Instance.Contains('assignments'))
+        {
+            return $null
+        }
+
+        return , [System.Object[]]@($Instance['assignments'] | Where-Object -FilterScript { $null -ne $_ })
+    }
+
+    $properties = $Instance.PSObject.Properties
+    if ($null -ne $properties['assignments@odata.nextLink'])
+    {
+        return $null
+    }
+
+    $property = $properties['assignments']
+    if ($null -eq $property)
+    {
+        return $null
+    }
+
+    return , [System.Object[]]@($property.Value | Where-Object -FilterScript { $null -ne $_ })
+}
+
+<#
+.SYNOPSIS
+    Resolves an Entra group by identifier or display name.
+
+.DESCRIPTION
+    Looks a group up by id or by an exact display name match and returns its id and display name.
+    Results are served from the export group cache while an export session is active.
+
+.PARAMETER GroupId
+    Specifies the group identifier. Returns a single group, or $null when not found.
+
+.PARAMETER DisplayName
+    Specifies the exact display name. Returns the matching groups as an array, empty when none match.
+
+.OUTPUTS
+    System.Object
+#>
+function Get-M365DSCIntuneGroup
+{
+    [CmdletBinding(DefaultParameterSetName = 'ById')]
+    param (
+        [Parameter(Mandatory = $true, ParameterSetName = 'ById')]
+        [System.String]
+        $GroupId,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByDisplayName')]
+        [System.String]
+        $DisplayName
+    )
+
+    $cacheAvailable = $null -ne ('Microsoft365DSC.Intune.IntuneGroupCache' -as [System.Type]) -and
+        [Microsoft365DSC.Intune.IntuneGroupCache]::IsEnabled
+
+    if ($PSCmdlet.ParameterSetName -eq 'ById')
+    {
+        $group = $null
+        if ($cacheAvailable -and [Microsoft365DSC.Intune.IntuneGroupCache]::TryGetById($GroupId, [ref] $group))
+        {
+            return $group
+        }
+
+        $group = Get-MgGroup -GroupId $GroupId -Property 'id,displayName' -ErrorAction SilentlyContinue
+        if ($cacheAvailable)
+        {
+            [Microsoft365DSC.Intune.IntuneGroupCache]::SetById($GroupId, $group)
+        }
+        return $group
+    }
+
+    $groups = $null
+    if ($cacheAvailable -and [Microsoft365DSC.Intune.IntuneGroupCache]::TryGetByName($DisplayName, [ref] $groups))
+    {
+        return , [System.Object[]]$groups
+    }
+
+    $escapedName = $DisplayName -replace "'", "''"
+    [System.Object[]]$groups = @(Get-MgGroup -Filter "displayName eq '$escapedName'" -Property 'id,displayName' -All -ErrorAction SilentlyContinue | Where-Object -FilterScript { $null -ne $_ })
+    if ($cacheAvailable)
+    {
+        [Microsoft365DSC.Intune.IntuneGroupCache]::SetByName($DisplayName, $groups)
+    }
+    return , $groups
 }
 
 <#
@@ -624,12 +752,12 @@ function Update-DeviceConfigurationPolicyAssignment
             }
             if ($target.groupId)
             {
-                $group = Get-MgGroup -GroupId ($target.groupId) -ErrorAction SilentlyContinue
+                $group = Get-M365DSCIntuneGroup -GroupId $target.groupId
                 if ($null -eq $group)
                 {
                     if ($target.groupDisplayName)
                     {
-                        [array]$group = Get-MgGroup -Filter "DisplayName eq '$($target.groupDisplayName -replace "'", "''")'" -All -ErrorAction SilentlyContinue
+                        [array]$group = Get-M365DSCIntuneGroup -DisplayName $target.groupDisplayName
                         if ($null -eq $group -or $group.Count -eq 0)
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it could not be found in the directory.`r`n"
@@ -773,12 +901,12 @@ function Update-DeviceAppManagementPolicyAssignment
             }
             if ($target.groupId)
             {
-                $group = Get-MgGroup -GroupId ($target.groupId) -ErrorAction SilentlyContinue
+                $group = Get-M365DSCIntuneGroup -GroupId $target.groupId
                 if ($null -eq $group)
                 {
                     if ($target.groupDisplayName)
                     {
-                        [array]$group = Get-MgGroup -Filter "DisplayName eq '$($target.groupDisplayName -replace "'", "''")'" -All -ErrorAction SilentlyContinue
+                        [array]$group = Get-M365DSCIntuneGroup -DisplayName $target.groupDisplayName
                         if ($null -eq $group -or $group.Count -eq 0)
                         {
                             $message = "Skipping assignment for the group with DisplayName {$($target.groupDisplayName)} as it could not be found in the directory.`r`n"
@@ -1188,11 +1316,7 @@ function Get-IntuneSettingCatalogPolicySetting
 
     if ($PSCmdlet.ParameterSetName -eq 'Start')
     {
-        # Prepare setting definitions mapping
-        $SettingTemplates = Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate `
-            -DeviceManagementConfigurationPolicyTemplateId $TemplateId `
-            -ExpandProperty 'SettingDefinitions' `
-            -All
+        $SettingTemplates = Get-M365DSCSettingCatalogTemplate -TemplateId $TemplateId
     }
 
     Initialize-M365DSCDllLoader -ErrorAction Stop
@@ -1201,6 +1325,111 @@ function Get-IntuneSettingCatalogPolicySetting
         [System.Collections.Generic.List[object]]@($SettingTemplates),
         $DSCParams,
         $ContainsDeviceAndUserSettings.IsPresent)
+}
+
+<#
+.SYNOPSIS
+    Returns the setting templates of a Settings Catalog template, with their setting definitions.
+
+.DESCRIPTION
+    Fetches the template once per process and serves every later request for the same template id
+    from the cache. The payload of a security baseline runs to several megabytes, and every Set of
+    every instance would otherwise download it again.
+
+.PARAMETER TemplateId
+    Specifies the configuration policy template id, including its version suffix.
+
+.EXAMPLE
+    Get-M365DSCSettingCatalogTemplate -TemplateId '66df8dce-0166-4b82-92f7-1f74e3ca17a3_4'
+
+.OUTPUTS
+    System.Object[]
+#>
+function Get-M365DSCSettingCatalogTemplate
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TemplateId
+    )
+
+    $templates = Get-M365DSCCachedSettingCatalogTemplate -TemplateId $TemplateId
+    if ($null -ne $templates)
+    {
+        return , $templates
+    }
+
+    $templates = [System.Object[]] @(Get-MgBetaDeviceManagementConfigurationPolicyTemplateSettingTemplate `
+            -DeviceManagementConfigurationPolicyTemplateId $TemplateId `
+            -ExpandProperty 'settingDefinitions' `
+            -All `
+            -ErrorAction Stop)
+    Set-M365DSCCachedSettingCatalogTemplate -TemplateId $TemplateId -Templates $templates
+
+    return , $templates
+}
+
+<#
+.SYNOPSIS
+    Returns the cached setting templates of a Settings Catalog template, or null on a miss.
+
+.PARAMETER TemplateId
+    Specifies the configuration policy template id, including its version suffix.
+
+.OUTPUTS
+    System.Object[]
+#>
+function Get-M365DSCCachedSettingCatalogTemplate
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TemplateId
+    )
+
+    Initialize-M365DSCDllLoader -ErrorAction Stop
+
+    $templates = $null
+    if ([Microsoft365DSC.Intune.SettingTemplateCache]::TryGet($TemplateId, [ref] $templates))
+    {
+        return , $templates
+    }
+
+    return $null
+}
+
+<#
+.SYNOPSIS
+    Stores the setting templates of a Settings Catalog template for the rest of the process.
+
+.PARAMETER TemplateId
+    Specifies the configuration policy template id, including its version suffix.
+
+.PARAMETER Templates
+    Specifies the setting templates, each carrying its setting definitions.
+#>
+function Set-M365DSCCachedSettingCatalogTemplate
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TemplateId,
+
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]
+        $Templates
+    )
+
+    Initialize-M365DSCDllLoader -ErrorAction Stop
+    [Microsoft365DSC.Intune.SettingTemplateCache]::Set($TemplateId, $Templates)
 }
 
 <#
@@ -1754,7 +1983,12 @@ Export-ModuleMember -Function @(
     'Get-ComplexFunctionsFromFilterQuery',
     'Get-IntuneSettingCatalogPolicySetting',
     'Get-M365DSCExportCachedConfigurationPolicies',
+    'Get-M365DSCCachedSettingCatalogTemplate',
+    'Get-M365DSCSettingCatalogTemplate',
+    'Set-M365DSCCachedSettingCatalogTemplate',
     'Get-M365DSCIntuneDeviceConfigurationSettings',
+    'Get-M365DSCIntuneExpandedAssignments',
+    'Get-M365DSCIntuneGroup',
     'Get-OmaSettingPlainTextValue',
     'Invoke-M365DSCIntuneMobileAppInitialUpload',
     'Remove-ComplexFunctionsFromFilterQuery',

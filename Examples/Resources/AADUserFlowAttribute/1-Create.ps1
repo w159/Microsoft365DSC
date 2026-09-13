@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,17 +19,18 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        AADUserFlowAttribute 'SaiTest'
+        AADUserFlowAttribute 'AADUserFlowAttribute-Example'
         {
-            Id                 = "testIdSai"
-            DisplayName        = "saitest"
-            Description        = "sai test description"
-            DataType           = "string"
-            Ensure             = "Present"
+            Id                    = "costCentre"
+            DisplayName           = "Cost Centre"
+            Description           = "Cost centre supplied by the user"
+            DataType              = "string"
+            Ensure                = "Present"
             ApplicationId         = $ApplicationId
             TenantId              = $TenantId
             CertificateThumbprint = $CertificateThumbprint

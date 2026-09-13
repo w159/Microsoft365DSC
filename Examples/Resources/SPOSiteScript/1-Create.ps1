@@ -7,19 +7,28 @@ Configuration Example
 {
     param
     (
-        [Parameter(Mandatory = $true)]
-        [PSCredential]
-        $Credscredential
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.String]
+        $TenantId,
+
+        [Parameter()]
+        [System.String]
+        $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        SPOSiteScript 'ConfigureSiteScript'
+        SPOSiteScript 'SPOSiteScript-Example'
         {
-            Identity             = "5c73382d-9643-4aa0-9160-d0cba35e40fd"
-            Title                = "My Site Script"
-            Content              = '{
+            Identity = "5c73382d-9643-4aa0-9160-d0cba35e40fd"
+            Title    = "My Site Script"
+            Content  = '{
                 "$schema": "schema.json",
                 "actions": [
                     {
@@ -30,7 +39,9 @@ Configuration Example
             }'
             Description          = "My custom site script"
             Ensure               = "Present"
-            Credential           = $Credscredential
+            ApplicationId         = $ApplicationId
+            TenantId              = $TenantId
+            CertificateThumbprint = $CertificateThumbprint
         }
     }
 }

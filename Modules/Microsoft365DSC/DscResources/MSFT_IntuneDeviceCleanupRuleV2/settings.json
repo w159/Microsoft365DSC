@@ -1,5 +1,16 @@
 {
   "resourceName": "IntuneDeviceCleanupRuleV2",
+  "generatedFrom": {
+    "workload": "Intune",
+    "apiVersion": "beta",
+    "entityType": "managedDeviceCleanupRule",
+    "odataSubtype": null,
+    "cmdletNoun": "MgBetaDeviceManagementManagedDeviceCleanupRule",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures an Intune Device Cleanup Rule V2.",
   "permissions": {
     "graph": {

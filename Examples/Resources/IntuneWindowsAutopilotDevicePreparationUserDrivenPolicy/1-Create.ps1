@@ -22,25 +22,23 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy 'Example'
+        IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy 'IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy-Example'
         {
             AccountType           = "1";
             AllowDiagnostics      = "true";
             AllowedApplications   = @("IntuneMobileAppsMicrosoftEdge_Windows","IntuneMobileAppsWindowsOfficeSuiteApp_1");
             AllowedScripts        = @("IntuneDeviceConfigurationPlatformScriptWindows_1");
             AllowSkip             = "true";
-            ApplicationId         = $ApplicationId;
             Assignments           = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
-                    dataType = "#microsoft.graph.groupAssignmentTarget"
+                    dataType                                   = "#microsoft.graph.groupAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
-                    groupDisplayName = "Include"
+                    groupDisplayName                           = "Include"
                 }
             );
             AssignmentTarget      = "Include";
-            CertificateThumbprint = $CertificateThumbprint;
             CustomErrorMessage    = "Contact your organization’s support person for help.";
             DeploymentMode        = "0";
             DeploymentType        = "0";
@@ -49,8 +47,10 @@ Configuration Example
             Ensure                = "Present";
             JoinType              = "0";
             RoleScopeTagIds       = @("0");
-            TenantId              = $TenantId;
             Timeout               = 60;
+            ApplicationId         = $ApplicationId;
+            TenantId              = $TenantId;
+            CertificateThumbprint = $CertificateThumbprint;
         }
     }
 }

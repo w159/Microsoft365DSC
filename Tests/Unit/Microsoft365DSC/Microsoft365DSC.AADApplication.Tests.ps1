@@ -21,7 +21,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
         BeforeAll {
             $secpasswd = ConvertTo-SecureString (New-Guid | Out-String) -AsPlainText -Force
-            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@mydomain.com', $secpasswd)
+            $Credential = New-Object System.Management.Automation.PSCredential ('tenantadmin@onmicrosoft.com', $secpasswd)
 
             Mock -ModuleName M365DSCUtil -CommandName Confirm-M365DSCDependencies -MockWith {
             }
@@ -38,16 +38,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Update-MgBetaApplication -MockWith {
             }
 
-            Mock -CommandName Update-MgApplication -MockWith {
+            Mock -CommandName Update-MgBetaApplication -MockWith {
             }
 
-            Mock -CommandName Remove-MgApplication -MockWith {
+            Mock -CommandName Remove-MgBetaApplication -MockWith {
             }
 
             Mock -CommandName Get-MgBetaDirectoryDeletedItemAsApplication -MockWith {
             }
 
-            Mock -CommandName Invoke-MgGraphRequest -MockWith {
+            Mock -CommandName Invoke-M365DSCGraphRequest -MockWith {
             }
 
             Mock -CommandName Get-MgBetaPolicyTokenLifetimePolicy -MockWith {
@@ -59,7 +59,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             Mock -CommandName Remove-MgApplicationTokenLifetimePolicyTokenLifetimePolicyByRef -MockWith {
             }
 
-            Mock -CommandName New-MgApplication -MockWith {
+            Mock -CommandName New-MgBetaApplication -MockWith {
                 return @{
                     ID    = '12345-12345-12345-12345-12345'
                     AppId = '12345-12345-12345-12345-12345'
@@ -74,7 +74,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
-            Mock -CommandName New-M365DSCConnection -MockWith {
+            Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
                 return 'Credentials'
             }
 
@@ -101,6 +101,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = @('https://app.contoso.com')
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -111,15 +118,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Absent'
+                ((New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $false
             }
             It 'Should create the application from the set method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName 'New-MgApplication' -Exactly 1
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'New-MgBetaApplication' -Exactly 1
             }
         }
 
@@ -136,6 +143,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Absent'
                     Credential                = $Credential
                 }
@@ -154,23 +168,29 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
-                        SamlMetadataUrl = ''
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }
 
             It 'Should return values from the get method' {
-                (Get-TargetResource @testParams).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should remove the app from the set method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName 'Remove-MgApplication' -Exactly 1
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Remove-MgBetaApplication' -Exactly 1
             }
         }
 
@@ -187,7 +207,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
                     AppRoles                  = @(
-                        New-CimInstance -ClassName MSFT_MicrosoftGraphappRole -Property @{
+                        [MSFT_MicrosoftGraphappRole] @{
                             AllowedMemberTypes = @('Application')
                             Id = 'Task Reader'
                             IsEnabled = $True
@@ -195,8 +215,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Description = 'Readers have ability to read task'
                             Value = 'Task.Read'
                             DisplayName = 'Readers'
-                        } -ClientOnly
-                        New-CimInstance -ClassName MSFT_MicrosoftGraphappRole @{
+                        }
+                        [MSFT_MicrosoftGraphappRole] @{
                             AllowedMemberTypes = @('Application')
                             Id = 'Task Writer'
                             IsEnabled = $True
@@ -204,63 +224,70 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Description = 'Writers have ability to write task'
                             Value = 'Task.Write'
                             DisplayName = 'Writers'
-                        } -ClientOnly
+                        }
                     )
                     PasswordCredentials       = @(
-                        New-CimInstance -ClassName MSFT_MicrosoftGraphpasswordCredential -Property @{
+                        [MSFT_MicrosoftGraphpasswordCredential] @{
                             KeyId = 'keyid'
                             EndDateTime = '2025-03-15T19:50:29.0310000+00:00'
                             Hint = 'VsO'
                             DisplayName = 'Super Secret'
                             StartDateTime = '2024-09-16T19:50:29.0310000+00:00'
-                        } -ClientOnly
+                        }
                     )
                     KeyCredentials = @(
-                        New-CimInstance -ClassName MSFT_MicrosoftGraphkeyCredential -Property @{
+                        [MSFT_MicrosoftGraphkeyCredential] @{
                             Usage = 'Verify'
                             StartDateTime = '2024-09-25T09:13:11.0000000+00:00'
                             Type = 'AsymmetricX509Cert'
                             KeyId = 'Key ID'
                             EndDateTime = '2025-09-25T09:33:11.0000000+00:00'
                             DisplayName = 'anexas_test_2'
-                        } -ClientOnly
+                        }
                     )
-                    OptionalClaims = New-CimInstance -ClassName MSFT_MicrosoftGraphoptionalClaims -Property @{
-                        Saml2Token = [CimInstance[]]@(
-                            New-CimInstance -ClassName MSFT_MicrosoftGraphOptionalClaim -Property @{
+                    OptionalClaims = [MSFT_MicrosoftGraphoptionalClaims] @{
+                        Saml2Token = @(
+                            [MSFT_MicrosoftGraphOptionalClaim] @{
                                 Name = 'groups'
                                 Essential = $False
-                            } -ClientOnly
+                            }
                         )
-                        AccessToken = [CimInstance[]]@(
-                            New-CimInstance -ClassName MSFT_MicrosoftGraphOptionalClaim -Property @{
+                        AccessToken = @(
+                            [MSFT_MicrosoftGraphOptionalClaim] @{
                                 Name = 'groups'
                                 Essential = $False
-                            } -ClientOnly
+                            }
                         )
-                        IdToken = [CimInstance[]]@(
-                            New-CimInstance -ClassName MSFT_MicrosoftGraphOptionalClaim -Property @{
+                        IdToken = @(
+                            [MSFT_MicrosoftGraphOptionalClaim] @{
                                 Name = 'acrs'
                                 Essential = $False
-                            } -ClientOnly
-                            New-CimInstance -ClassName MSFT_MicrosoftGraphOptionalClaim -Property @{
+                            }
+                            [MSFT_MicrosoftGraphOptionalClaim] @{
                                 Name = 'groups'
                                 Essential = $False
-                            } -ClientOnly
+                            }
                         )
-                    } -ClientOnly
-                    AuthenticationBehaviors   = New-CimInstance -ClassName MSFT_MicrosoftGraphAuthenticationBehaviors -Property @{
+                    }
+                    AuthenticationBehaviors   = [MSFT_MicrosoftGraphauthenticationBehaviors] @{
                              blockAzureADGraphAccess       = 'false'
                              removeUnverifiedEmailClaim    = 'true'
-                     } -ClientOnly
-                    Api = New-CimInstance -ClassName MSFT_MicrosoftGraphapiApplication -Property @{
-                        PreAuthorizedApplications = [CimInstance[]]@(
-                            New-CimInstance -ClassName MSFT_MicrosoftGraphPreAuthorizedApplication  -Property @{
+                     }
+                    Api = [MSFT_MicrosoftGraphapiApplication] @{
+                        PreAuthorizedApplications = @(
+                            [MSFT_MicrosoftGraphPreAuthorizedApplication] @{
                                 AppId = 'Microsoft Graph'
                                 PermissionIds = @('12345-12345-12345-12345-12345')
-                            } -ClientOnly
+                            }
                         )
-                    } -ClientOnly
+                    }
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -271,6 +298,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Description = 'App description'
                         GroupMembershipClaims = 0
                         SignInAudience = 'AzureADMyOrg'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                         OptionalClaims = @{
                             Saml2Token = @(
                                 @{
@@ -366,12 +400,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
 
             It 'Should return true from the test method' {
-                Test-TargetResource @testParams | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $true
             }
         }
 
@@ -387,6 +421,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $true
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                    = 'Present'
                     Credential                = $Credential
                 }
@@ -405,22 +446,29 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }
 
             It 'Should return values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the set method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName 'Update-MgApplication' -Exactly 1
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1
             }
         }
 
@@ -435,10 +483,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
-                    AuthenticationBehaviors   = New-CimInstance -ClassName MSFT_MicrosoftGraphAuthenticationBehaviors -Property @{
+                    AuthenticationBehaviors   = [MSFT_MicrosoftGraphauthenticationBehaviors] @{
                             blockAzureADGraphAccess       = 'false'
                             removeUnverifiedEmailClaim    = 'true'
-                    } -ClientOnly
+                    }
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -455,21 +510,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the new method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 2
             }
         }
 
-        Context -Name 'Assigning Permissions to a new Application' -Fixture {
+        Context -Name 'Assigning RequiredResourceAccess to a new Application' -Fixture {
             BeforeAll {
                 $testParams = @{
                     DisplayName               = 'App1'
@@ -480,25 +535,32 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     LogoutURL                 = 'https://app.contoso.com/logout'
                     PublicClient              = $false
                     ReplyURLs                 = 'https://app.contoso.com'
-                    Permissions               = @(New-CimInstance -ClassName MSFT_AADApplicationPermission -Property @{
+                    RequiredResourceAccess    = @([MSFT_AADApplicationPermission] @{
                             Name                = 'User.Read'
                             Type                = 'Delegated'
                             SourceAPI           = 'Microsoft Graph'
                             AdminConsentGranted = $false
-                        } -ClientOnly
-                        New-CimInstance -ClassName MSFT_AADApplicationPermission -Property @{
+                        }
+                        [MSFT_AADApplicationPermission] @{
                             Name                = 'User.ReadWrite.All'
                             type                = 'Delegated'
                             SourceAPI           = 'Microsoft Graph'
                             AdminConsentGranted = $True
-                        } -ClientOnly
-                        New-CimInstance -ClassName MSFT_AADApplicationPermission -Property @{
+                        }
+                        [MSFT_AADApplicationPermission] @{
                             Name                = 'User.Read.All'
                             type                = 'AppOnly'
                             SourceAPI           = 'Microsoft Graph'
                             AdminConsentGranted = $True
-                        } -ClientOnly
+                        }
                     )
+                    IsDeviceOnlyAuthSupported = $false
+                    IsDisabled                = $false
+                    NativeAuthenticationApisEnabled = 'none'
+                    Notes                     = 'Reviewed annually by the identity governance team'
+                    SamlMetadataUrl           = 'https://app.contoso.com/federationmetadata.xml'
+                    Tags                      = @('Finance', 'Expense Reporting')
+                    TokenEncryptionKeyId      = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     Ensure                  = 'Present'
                     Credential              = $Credential
                 }
@@ -509,17 +571,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return values from the get method' {
-                Get-TargetResource @testParams
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Get().ToHashtable()
                 Should -Invoke -CommandName 'Get-MgBetaApplication' -Exactly 1
             }
 
             It 'Should return false from the test method' {
-                Test-TargetResource @testParams | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the new method' {
-                Set-TargetResource @testParams
-                Should -Invoke -CommandName 'New-MgApplication' -Exactly 1
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'New-MgBetaApplication' -Exactly 1
             }
         }
 
@@ -545,12 +607,19 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         Oauth2RequirePostResponse = $false
                         PublicClient = $false
                         ReplyURLs = 'https://app.contoso.com'
+                        IsDeviceOnlyAuthSupported = $false
+                        IsDisabled = $false
+                        NativeAuthenticationApisEnabled = 'none'
+                        Notes = 'Reviewed annually by the identity governance team'
+                        SamlMetadataUrl = 'https://app.contoso.com/federationmetadata.xml'
+                        Tags = @('Expense Reporting', 'Finance')
+                        TokenEncryptionKeyId = '2b5d1c0f-6a72-4b19-9e27-8c5a3d94f1ab'
                     }
                 }
             }
 
             It 'Should reverse engineer resource from the export method' {
-                $result = Export-TargetResource @testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADApplication' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
             }
         }

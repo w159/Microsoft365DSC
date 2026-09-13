@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -21,31 +22,38 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        IntuneMobileThreatDefenseConnector "IntuneMobileThreatDefenseConnector-Microsoft Defender for Endpoint"
+        IntuneMobileThreatDefenseConnector "IntuneMobileThreatDefenseConnector-Example"
         {
             AllowPartnerToCollectIosApplicationMetadata         = $False;
+            AllowPartnerToCollectIosCertificateMetadata         = $True;
             AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
+            AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
             AndroidDeviceBlockedOnMissingPartnerData            = $False;
-            AndroidEnabled                                      = $True; #drift
+            AndroidEnabled                                      = $True; # Updated Property
             AndroidMobileApplicationManagementEnabled           = $False;
             DisplayName                                         = "Microsoft Defender for Endpoint";
+            GrantMobileThreatDefensePartnerRole                 = $false;
             Id                                                  = "fc780465-2017-40d4-a0c5-307022471b92";
             IosDeviceBlockedOnMissingPartnerData                = $False;
             IosEnabled                                          = $False;
             IosMobileApplicationManagementEnabled               = $False;
             LastHeartbeatDateTime                               = "1/1/0001 12:00:00 AM";
+            LaunchMobileThreatDefensePartnerOnSetupEnabled      = $false;
+            MacDeviceBlockedOnMissingPartnerData                = $False;
+            MacEnabled                                          = $False;
             MicrosoftDefenderForEndpointAttachEnabled           = $False;
             PartnerState                                        = "notSetUp";
             PartnerUnresponsivenessThresholdInDays              = 7;
             PartnerUnsupportedOSVersionBlocked                  = $False;
             WindowsDeviceBlockedOnMissingPartnerData            = $False;
             WindowsEnabled                                      = $False;
+            WindowsMobileApplicationManagementEnabled           = $True;
             Ensure                                              = "Present";
-            ApplicationId         = $ApplicationId;
-            TenantId              = $TenantId;
-            CertificateThumbprint = $CertificateThumbprint;
+            ApplicationId                                       = $ApplicationId;
+            TenantId                                            = $TenantId;
+            CertificateThumbprint                               = $CertificateThumbprint;
         }
     }
 }

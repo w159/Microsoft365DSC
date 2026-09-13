@@ -1,0 +1,54 @@
+{
+  "modules": [
+    {
+      "module": "Reports",
+      "reason": "Usage and activity reports are read-only telemetry. There is nothing to configure."
+    },
+    {
+      "module": "DeviceManagement.Functions",
+      "reason": "Query and report helpers over device management, not configurable surface."
+    },
+    {
+      "module": "Financials",
+      "reason": "Dynamics business data. Microsoft365DSC configures tenants, not business records."
+    },
+    {
+      "module": "Search",
+      "reason": "Search query surface, not configuration."
+    }
+  ],
+  "uriRoots": [
+    {
+      "uriRoot": "/print/printers",
+      "reason": "Per printer runtime state and job queues, not tenant configuration."
+    },
+    {
+      "uriRoot": "/communications",
+      "reason": "Live call and meeting state. Nothing here survives a configuration run."
+    },
+    {
+      "uriRoot": "/bookingBusinesses/{bookingBusiness-id}/appointments",
+      "reason": "Booked appointments are customer records rather than tenant configuration."
+    },
+    {
+      "uriRoot": "/bookingBusinesses/{bookingBusiness-id}/calendarView",
+      "reason": "A calendar view is a projection of the appointments."
+    },
+    {
+      "uriRoot": "/bookingBusinesses/{bookingBusiness-id}/customers",
+      "reason": "Booking customers are customer records rather than tenant configuration."
+    },
+    {
+      "uriRoot": "/solutions/virtualEvents",
+      "reason": "Webinars, town halls and their attendance records are events rather than tenant configuration."
+    },
+    {
+      "uriRoot": "/chats",
+      "reason": "Chat threads, their members and their messages are conversation data rather than tenant configuration."
+    },
+    {
+      "uriRoot": "/me/",
+      "reason": "The signed-in user's own mailbox and drive, which a tenant configuration never sets."
+    }
+  ]
+}

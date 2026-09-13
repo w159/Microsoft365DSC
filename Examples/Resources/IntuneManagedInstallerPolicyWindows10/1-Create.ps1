@@ -4,7 +4,8 @@ This example creates a new Intune Mobile App Configuration Policy for iOs device
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -17,18 +18,23 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName 'Microsoft365DSC'
 
     Node localhost
     {
-        IntuneManagedInstallerPolicyWindows10 "IntuneManagedInstallerPolicyWindows10-SideCar ManagedInstaller Script"
+        IntuneManagedInstallerPolicyWindows10 "IntuneManagedInstallerPolicyWindows10-Example"
         {
             Assignments              = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
-                    dataType = "#microsoft.graph.allDevicesAssignmentTarget"
+                    dataType                                   = "#microsoft.graph.allDevicesAssignmentTarget"
                     deviceAndAppManagementAssignmentFilterType = "none"
-                    deviceAndAppManagementAssignmentFilterId = "00000000-0000-0000-0000-000000000000"
-                    groupDisplayName = "All devices"
+                    deviceAndAppManagementAssignmentFilterId   = "00000000-0000-0000-0000-000000000000"
+                    groupDisplayName                           = "All devices"
+                }
+                MSFT_DeviceManagementConfigurationPolicyAssignments{
+                    dataType         = "#microsoft.graph.exclusionGroupAssignmentTarget"
+                    groupDisplayName = "Policy Exclusions"
                 }
             );
             Description              = "This script is used to set SideCar as ManagedInstaller";
@@ -37,8 +43,8 @@ Configuration Example
             IsIntuneManagedInstaller = $True;
             RoleScopeTagIds          = @("0");
             ApplicationId            = $ApplicationId;
+            TenantId                 = $TenantId;
             CertificateThumbprint    = $CertificateThumbprint;
-            TenantId                 = $OrganizationName;
         }
     }
 }

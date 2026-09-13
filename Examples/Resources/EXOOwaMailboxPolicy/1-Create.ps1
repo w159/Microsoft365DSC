@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,13 +19,14 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOOwaMailboxPolicy 'ConfigureOwaMailboxPolicy'
+        EXOOwaMailboxPolicy 'EXOOwaMailboxPolicy-Example'
         {
-            Name                                                 = "OwaMailboxPolicy-Integration"
+            Name                                                 = "OwaMailboxPolicy-Restricted"
             ActionForUnknownFileAndMIMETypes                     = "ForceSave"
             ActiveSyncIntegrationEnabled                         = $True
             AdditionalStorageProvidersAvailable                  = $True
@@ -98,9 +100,9 @@ Configuration Example
             WeatherEnabled                                       = $True
             WebPartsFrameOptionsType                             = "SameOrigin"
             Ensure                                               = "Present"
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            ApplicationId                                        = $ApplicationId
+            TenantId                                             = $TenantId
+            CertificateThumbprint                                = $CertificateThumbprint
         }
     }
 }

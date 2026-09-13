@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -18,25 +19,39 @@ Configuration Example
         [System.String]
         $CertificateThumbprint
     )
+
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        AADGroup 'MyGroups'
+        AADGroup 'AADGroup-Example'
         {
-            DisplayName     = "DSCGroup"
-            Description     = "Microsoft DSC Group"
-            SecurityEnabled = $True
-            MailEnabled     = $True
-            GroupTypes      = @("Unified")
-            MailNickname    = "M365DSC"
-            Members         = @("admin@$TenantId", "AdeleV@$TenantId")
-            Visibility      = "Private"
-            Owners          = @("admin@$TenantId", "AdeleV@$TenantId")
-            Ensure          = "Present"
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            DisplayName                         = "Marketing Team"
+            Description                         = "Collaboration group for the marketing department"
+            SecurityEnabled                     = $True
+            MailEnabled                         = $True
+            GroupTypes                          = @("Unified")
+            MailNickname                        = "MarketingTeam"
+            Members                             = @("admin@$TenantId", "AdeleV@$TenantId")
+            Visibility                          = "Private"
+            Theme                               = "Blue"
+            Owners                              = @("admin@$TenantId", "AdeleV@$TenantId")
+            AssignedLicenses                    = @(
+                MSFT_AADGroupLicense {
+                    SkuId = 'AAD_PREMIUM_P2'
+                }
+            )
+            WritebackConfiguration              = MSFT_MicrosoftGraphGroupWritebackConfiguration{
+                IsEnabled           = $true
+                OnPremisesGroupType = "universalDistributionGroup"
+            }
+            AssignedToRole                      = @()
+            IsAssignableToRole                  = $false
+            GroupLifecyclePolicySelectedEnabled = $false
+            Ensure                              = "Present"
+            ApplicationId                       = $ApplicationId
+            TenantId                            = $TenantId
+            CertificateThumbprint               = $CertificateThumbprint
         }
     }
 }

@@ -5,7 +5,8 @@ It is not meant to use as a production baseline.
 
 Configuration Example
 {
-    param(
+    param
+    (
         [Parameter()]
         [System.String]
         $ApplicationId,
@@ -21,9 +22,9 @@ Configuration Example
 
     Import-DscResource -ModuleName Microsoft365DSC
 
-    node localhost
+    Node localhost
     {
-        EXOCalendarProcessing "CalendarProcessing"
+        EXOCalendarProcessing "EXOCalendarProcessing-Example"
         {
             AddAdditionalResponse                = $False;
             AddNewRequestsTentatively            = $True;
@@ -63,9 +64,9 @@ Configuration Example
             ResourceDelegates                    = @();
             ScheduleOnlyDuringWorkHours          = $False;
             TentativePendingApproval             = $True;
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
+            ApplicationId                        = $ApplicationId
+            TenantId                             = $TenantId
+            CertificateThumbprint                = $CertificateThumbprint
         }
     }
 }

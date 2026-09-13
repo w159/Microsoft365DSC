@@ -1,5 +1,16 @@
 {
   "resourceName": "SCSupervisoryReviewPolicy",
+  "generatedFrom": {
+    "workload": "SecurityComplianceCenter",
+    "apiVersion": null,
+    "entityType": null,
+    "odataSubtype": null,
+    "cmdletNoun": "SupervisoryReviewPolicyV2",
+    "cmdletVerb": "New",
+    "includeNavigationProperties": false,
+    "generatorVersion": "2.0.0"
+  },
+  "excludedProperties": [],
   "description": "This resource configures a Supervisory Review Policy in Purview.",
   "roles": {
     "read": [
@@ -25,14 +36,24 @@
       }
     },
     "purview": {
-      "requiredroles": [
-        "Security Reader",
-        "Supervisory Review Administrator"
-      ],
-      "requiredrolegroups": [
-        "Global Reader",
-        "Supervisory Review"
-      ]
+      "requiredRoles": {
+        "read": [
+          "Security Reader"
+        ],
+        "update": [
+          "Supervisory Review Administrator"
+        ]
+      },
+      "requiredRoleGroups": {
+        "read": [
+          "Global Reader",
+          "Supervisory Review"
+        ],
+        "update": [
+          "Global Reader",
+          "Supervisory Review"
+        ]
+      }
     }
   },
   "requiredModules": [],
@@ -40,5 +61,16 @@
     "Global",
     "USGov"
   ],
-  "mode": "Configuration"
+  "mode": "Configuration",
+  "commands": [
+    {
+      "module": "ExchangeOnlineManagement",
+      "cmdlets": [
+        "Get-SupervisoryReviewPolicyV2",
+        "New-SupervisoryReviewPolicyV2",
+        "Remove-SupervisoryReviewPolicyV2",
+        "Set-SupervisoryReviewPolicyV2"
+      ]
+    }
+  ]
 }

@@ -1,542 +1,275 @@
-Confirm-M365DSCModuleDependency -ModuleName 'MSFT_TeamsMeetingConfiguration'
+using module ..\_Base\M365DSCResourceBase.psm1
 
-function Get-TargetResource
+[DscResource()]
+class TeamsMeetingConfiguration : M365DSCResourceBase
 {
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $LogoURL,
+    [DscProperty(Key)]
+    [System.ComponentModel.Description('Only valid value is ''Yes''.')]
+    [ValidateSet('Yes')]
+    [System.String] $IsSingleInstance
 
-        [Parameter()]
-        [System.String]
-        $LegalURL,
+    [DscProperty()]
+    [System.ComponentModel.Description('URL to a logo image. This would be included in the meeting invite. Please ensure this URL is publicly accessible for invites that go beyond your federation boundaries.')]
+    [System.String] $LogoURL
 
-        [Parameter()]
-        [System.String]
-        $HelpURL,
+    [DscProperty()]
+    [System.ComponentModel.Description('URL to a website containing legal information and meeting disclaimers. This would be included in the meeting invite. Please ensure this URL is publicly accessible for invites that go beyond your federation boundaries.')]
+    [System.String] $LegalURL
 
-        [Parameter()]
-        [System.String]
-        $CustomFooterText,
+    [DscProperty()]
+    [System.ComponentModel.Description('URL to a website where users can obtain assistance on joining the meeting.This would be included in the meeting invite. Please ensure this URL is publicly accessible for invites that go beyond your federation boundaries.')]
+    [System.String] $HelpURL
 
-        [Parameter()]
-        [System.Boolean]
-        $DisableAnonymousJoin,
+    [DscProperty()]
+    [System.ComponentModel.Description('Text to be used on custom meeting invitations.')]
+    [System.String] $CustomFooterText
 
-        [Parameter()]
-        [System.Boolean]
-        $DisableAppInteractionForAnonymousUsers,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether anonymous users are blocked from joining meetings in the tenant. Set this to TRUE to block anonymous users from joining. Set this to FALSE to allow anonymous users to join meetings.')]
+    [System.Nullable[System.Boolean]] $DisableAnonymousJoin
 
-        [Parameter()]
-        [System.Boolean]
-        $EnableQoS,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines if anonymous users can interact with apps in meetings. Set to TRUE to disable App interaction. ')]
+    [System.Nullable[System.Boolean]] $DisableAppInteractionForAnonymousUsers
 
-        [Parameter()]
-        [ValidateSet('Disabled', 'Enabled')]
-        [System.String]
-        $FeedbackSurveyForAnonymousUsers,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether Quality of Service Marking for real-time media (audio, video, screen/app sharing) is enabled in the tenant. Set this to TRUE to enable and FALSE to disable.')]
+    [System.Nullable[System.Boolean]] $EnableQoS
 
-        [Parameter()]
-        [System.Boolean]
-        $LimitPresenterRolePermissions,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines if anonymous participants receive surveys to provide feedback about their meeting experience. Set to Disabled to disable anonymous meeting participants to receive surveys. Set to Enabled to allow anonymous meeting participants to receive surveys. Possible values: Enabled, Disabled')]
+    [ValidateSet('Disabled', 'Enabled')]
+    [System.String] $FeedbackSurveyForAnonymousUsers
 
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAudioPort = 50000,
+    [DscProperty()]
+    [System.ComponentModel.Description('When set to True, users within the Tenant will have their presenter role capabilities limited. When set to False, the presenter role capabilities will not be impacted and will remain as is.')]
+    [System.Nullable[System.Boolean]] $LimitPresenterRolePermissions
 
-        [Parameter()]
-        [System.UInt32]
-        $ClientAudioPortRange = 20,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the starting port number for client audio. Minimum allowed value: 1024 Maximum allowed value: 65535 Default value: 50000.')]
+    [ValidateRange(1024, 65535)]
+    [System.Nullable[System.UInt32]] $ClientAudioPort
 
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientVideoPort = 50020,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the total number of ports available for client audio. Default value is 20.')]
+    [System.Nullable[System.UInt32]] $ClientAudioPortRange
 
-        [Parameter()]
-        [System.UInt32]
-        $ClientVideoPortRange = 20,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the starting port number for client video. Minimum allowed value: 1024 Maximum allowed value: 65535 Default value: 50020.')]
+    [ValidateRange(1024, 65535)]
+    [System.Nullable[System.UInt32]] $ClientVideoPort
 
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAppSharingPort = 50040,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the total number of ports available for client video. Default value is 20.')]
+    [System.Nullable[System.UInt32]] $ClientVideoPortRange
 
-        [Parameter()]
-        [System.UInt32]
-        $ClientAppSharingPortRange = 20,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the starting port number for client screen sharing or application sharing. Minimum allowed value: 1024 Maximum allowed value: 65535 Default value: 50040.')]
+    [ValidateRange(1024, 65535)]
+    [System.Nullable[System.UInt32]] $ClientAppSharingPort
 
-        [Parameter()]
-        [System.Boolean]
-        $ClientMediaPortRangeEnabled,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines whether custom media port and range selections need to be enforced. When set to True, clients will use the specified port range for media traffic. When set to False (the default value) for any available port (from port 1024 through port 65535) will be used to accommodate media traffic.')]
+    [System.Nullable[System.Boolean]] $ClientMediaPortRangeEnabled
 
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('Yes')]
-        [System.String]
-        $IsSingleInstance,
+    [DscProperty()]
+    [System.ComponentModel.Description('Determines the total number of ports available for client sharing or application sharing. Default value is 20.')]
+    [System.Nullable[System.UInt32]] $ClientAppSharingPortRange
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
+    [DscProperty()]
+    [System.ComponentModel.Description('Credentials of the Teams Admin')]
+    [System.Management.Automation.PSCredential] $Credential
 
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Id of the Azure Active Directory application to authenticate with.')]
+    [System.String] $ApplicationId
 
-        [Parameter()]
-        [System.String]
-        $TenantId,
+    [DscProperty()]
+    [System.ComponentModel.Description('Name of the Azure Active Directory tenant used for authentication. Format contoso.onmicrosoft.com')]
+    [System.String] $TenantId
 
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
+    [DscProperty()]
+    [System.ComponentModel.Description('Thumbprint of the Azure Active Directory application''s authentication certificate to use for authentication.')]
+    [System.String] $CertificateThumbprint
 
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
+    [DscProperty()]
+    [System.ComponentModel.Description('Username can be made up to anything but password will be used for CertificatePassword')]
+    [System.Management.Automation.PSCredential] $CertificatePassword
 
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
+    [DscProperty()]
+    [System.ComponentModel.Description('Path to certificate used in service principal usually a PFX file.')]
+    [System.String] $CertificatePath
 
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
+    [DscProperty()]
+    [System.ComponentModel.Description('Managed ID being used for authentication.')]
+    [System.Nullable[System.Boolean]] $ManagedIdentity
 
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
+    [DscProperty()]
+    [System.ComponentModel.Description('Access token used for authentication.')]
+    [System.String[]] $AccessTokens
 
-    Write-Verbose -Message 'Getting configuration of Teams Meeting'
-
-    try
+    [TeamsMeetingConfiguration] Get()
     {
-        $null = New-M365DSCConnection -Workload 'MicrosoftTeams' `
-            -InboundParameters $PSBoundParameters
+        if ($this.RequiresPowerShellCore())
+        {
+            $remote = [TeamsMeetingConfiguration]::new()
+            $remote.FromHashtable($this.InvokeInPowerShellCore('Get'))
+            return $remote
+        }
 
-        #Ensure the proper dependencies are installed in the current environment.
+        Write-Verbose -Message 'Getting configuration of Teams Meeting'
+
+        try
+        {
+            $null = $this.Connect('MicrosoftTeams')
+
+            #Ensure the proper dependencies are installed in the current environment.
+            Confirm-M365DSCDependencies
+
+            #region Telemetry
+            $this.AddTelemetry('Get')
+            #endregion
+
+            $config = Get-CsTeamsMeetingConfiguration -ErrorAction Stop
+
+            return $this.AsResult(@{
+                IsSingleInstance                        = 'Yes'
+                LogoURL                                = $config.LogoURL
+                LegalURL                               = $config.LegalURL
+                HelpURL                                = $config.HelpURL
+                CustomFooterText                       = $config.CustomFooterText
+                DisableAnonymousJoin                   = $config.DisableAnonymousJoin
+                EnableQoS                              = $config.EnableQoS
+                ClientAudioPort                        = $config.ClientAudioPort
+                ClientAudioPortRange                   = $config.ClientAudioPortRange
+                ClientVideoPort                        = $config.ClientVideoPort
+                ClientVideoPortRange                   = $config.ClientVideoPortRange
+                ClientAppSharingPort                   = $config.ClientAppSharingPort
+                ClientAppSharingPortRange              = $config.ClientAppSharingPortRange
+                ClientMediaPortRangeEnabled            = $config.ClientMediaPortRangeEnabled
+                DisableAppInteractionForAnonymousUsers = $config.DisableAppInteractionForAnonymousUsers
+                FeedbackSurveyForAnonymousUsers        = $config.FeedbackSurveyForAnonymousUsers
+                LimitPresenterRolePermissions          = $config.LimitPresenterRolePermissions
+                Credential                             = $this.Credential
+                ApplicationId                          = $this.ApplicationId
+                TenantId                               = $this.TenantId
+                CertificateThumbprint                  = $this.CertificateThumbprint
+                CertificatePath                        = $this.CertificatePath
+                CertificatePassword                    = $this.CertificatePassword
+                ManagedIdentity                        = $this.ManagedIdentity.IsPresent
+                AccessTokens                           = $this.AccessTokens
+            })
+        }
+        catch
+        {
+            $this.LogError($_, 'Error retrieving data:')
+
+            throw
+        }
+    }
+
+    [void] Set()
+    {
+        if ($this.RequiresPowerShellCore())
+        {
+            $null = $this.InvokeInPowerShellCore('Set')
+            return
+        }
+
+        Write-Verbose -Message 'Setting configuration of Teams Meetings'
+
         Confirm-M365DSCDependencies
 
-        #region Telemetry
-        $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-        $CommandName = $MyInvocation.MyCommand
-        $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-            -CommandName $CommandName `
-            -Parameters $PSBoundParameters
-        Add-M365DSCTelemetryEvent -Data $data
-        #endregion
+        $this.AddTelemetry('Set')
 
-        $config = Get-CsTeamsMeetingConfiguration -ErrorAction Stop
+        $null = $this.Connect('MicrosoftTeams')
 
-        return @{
-            IsSingleInstance                        = 'Yes'
-            LogoURL                                = $config.LogoURL
-            LegalURL                               = $config.LegalURL
-            HelpURL                                = $config.HelpURL
-            CustomFooterText                       = $config.CustomFooterText
-            DisableAnonymousJoin                   = $config.DisableAnonymousJoin
-            EnableQoS                              = $config.EnableQoS
-            ClientAudioPort                        = $config.ClientAudioPort
-            ClientAudioPortRange                   = $config.ClientAudioPortRange
-            ClientVideoPort                        = $config.ClientVideoPort
-            ClientVideoPortRange                   = $config.ClientVideoPortRange
-            ClientAppSharingPort                   = $config.ClientAppSharingPort
-            ClientAppSharingPortRange              = $config.ClientAppSharingPortRange
-            ClientMediaPortRangeEnabled            = $config.ClientMediaPortRangeEnabled
-            DisableAppInteractionForAnonymousUsers = $config.DisableAppInteractionForAnonymousUsers
-            FeedbackSurveyForAnonymousUsers        = $config.FeedbackSurveyForAnonymousUsers
-            LimitPresenterRolePermissions          = $config.LimitPresenterRolePermissions
-            Credential                             = $Credential
-            ApplicationId                          = $ApplicationId
-            TenantId                               = $TenantId
-            CertificateThumbprint                  = $CertificateThumbprint
-            CertificatePath                        = $CertificatePath
-            CertificatePassword                    = $CertificatePassword
-            ManagedIdentity                        = $ManagedIdentity.IsPresent
-            AccessTokens                           = $AccessTokens
-        }
+        $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $SetParams.Add('Identity', 'Global')
+        $SetParams.Remove('IsSingleInstance') | Out-Null
+        Set-CsTeamsMeetingConfiguration @SetParams
     }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error retrieving data:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
 
-        throw
+    [bool] Test()
+    {
+        return ([M365DSCResourceBase] $this).Test()
     }
-}
 
-function Set-TargetResource
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $LogoURL,
-
-        [Parameter()]
-        [System.String]
-        $LegalURL,
-
-        [Parameter()]
-        [System.String]
-        $HelpURL,
-
-        [Parameter()]
-        [System.String]
-        $CustomFooterText,
-
-        [Parameter()]
-        [System.Boolean]
-        $DisableAnonymousJoin,
-
-        [Parameter()]
-        [System.Boolean]
-        $DisableAppInteractionForAnonymousUsers,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableQoS,
-
-        [Parameter()]
-        [ValidateSet('Disabled', 'Enabled')]
-        [System.String]
-        $FeedbackSurveyForAnonymousUsers,
-
-        [Parameter()]
-        [System.Boolean]
-        $LimitPresenterRolePermissions,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAudioPort = 50000,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientAudioPortRange = 20,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientVideoPort = 50020,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientVideoPortRange = 20,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAppSharingPort = 50040,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientAppSharingPortRange = 20,
-
-        [Parameter()]
-        [System.Boolean]
-        $ClientMediaPortRangeEnabled,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('Yes')]
-        [System.String]
-        $IsSingleInstance,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    Write-Verbose -Message 'Setting configuration of Teams Meetings'
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $null = New-M365DSCConnection -Workload 'MicrosoftTeams' `
-        -InboundParameters $PSBoundParameters
-
-    $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $PSBoundParameters
-    $SetParams.Add('Identity', 'Global')
-    $SetParams.Remove('IsSingleInstance') | Out-Null
-    Set-CsTeamsMeetingConfiguration @SetParams
-}
-
-function Test-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        [Parameter()]
-        [System.String]
-        $LogoURL,
-
-        [Parameter()]
-        [System.String]
-        $LegalURL,
-
-        [Parameter()]
-        [System.String]
-        $HelpURL,
-
-        [Parameter()]
-        [System.String]
-        $CustomFooterText,
-
-        [Parameter()]
-        [System.Boolean]
-        $DisableAnonymousJoin,
-
-        [Parameter()]
-        [System.Boolean]
-        $DisableAppInteractionForAnonymousUsers,
-
-        [Parameter()]
-        [System.Boolean]
-        $EnableQoS,
-
-        [Parameter()]
-        [ValidateSet('Disabled', 'Enabled')]
-        [System.String]
-        $FeedbackSurveyForAnonymousUsers,
-
-        [Parameter()]
-        [System.Boolean]
-        $LimitPresenterRolePermissions,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAudioPort = 50000,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientAudioPortRange = 20,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientVideoPort = 50020,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientVideoPortRange = 20,
-
-        [Parameter()]
-        [System.UInt32]
-        [ValidateRange(1024, 65535)]
-        $ClientAppSharingPort = 50040,
-
-        [Parameter()]
-        [System.UInt32]
-        $ClientAppSharingPortRange = 20,
-
-        [Parameter()]
-        [System.Boolean]
-        $ClientMediaPortRangeEnabled,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('Yes')]
-        [System.String]
-        $IsSingleInstance,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName.Replace('MSFT_', '')
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    $result = Test-M365DSCTargetResource -DesiredValues $PSBoundParameters `
-        -ResourceName $($MyInvocation.MyCommand.Source).Replace('MSFT_', '')
-    return $result
-}
-
-function Export-TargetResource
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param
-    (
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter()]
-        [System.String]
-        $ApplicationId,
-
-        [Parameter()]
-        [System.String]
-        $TenantId,
-
-        [Parameter()]
-        [System.String]
-        $CertificateThumbprint,
-
-        [Parameter()]
-        [System.String]
-        $CertificatePath,
-
-        [Parameter()]
-        [System.Management.Automation.PSCredential]
-        $CertificatePassword,
-
-        [Parameter()]
-        [Switch]
-        $ManagedIdentity,
-
-        [Parameter()]
-        [System.String[]]
-        $AccessTokens
-    )
-
-    $ConnectionMode = New-M365DSCConnection -Workload 'MicrosoftTeams' `
-        -InboundParameters $PSBoundParameters
-
-    #Ensure the proper dependencies are installed in the current environment.
-    Confirm-M365DSCDependencies
-
-    #region Telemetry
-    $ResourceName = $MyInvocation.MyCommand.ModuleName -replace 'MSFT_', ''
-    $CommandName = $MyInvocation.MyCommand
-    $data = Format-M365DSCTelemetryParameters -ResourceName $ResourceName `
-        -CommandName $CommandName `
-        -Parameters $PSBoundParameters
-    Add-M365DSCTelemetryEvent -Data $data
-    #endregion
-
-    try
+    [string] Export()
     {
-        $dscContent = [System.Text.StringBuilder]::new()
-        $params = @{
-            IsSingleInstance      = 'Yes'
-            Credential            = $Credential
-            ApplicationId         = $ApplicationId
-            TenantId              = $TenantId
-            CertificateThumbprint = $CertificateThumbprint
-            CertificatePath       = $CertificatePath
-            CertificatePassword   = $CertificatePassword
-            ManagedIdentity       = $ManagedIdentity.IsPresent
-            AccessTokens          = $AccessTokens
-        }
-        $Results = Get-TargetResource @Params
-        if ($Results -is [System.Collections.Hashtable] -and $Results.Count -gt 1)
+        if ($this.RequiresPowerShellCore())
         {
-            if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+            return [string] $this.InvokeInPowerShellCore('Export')
+        }
+
+        $ConnectionMode = $this.Connect('MicrosoftTeams')
+
+        Confirm-M365DSCDependencies
+
+        $this.AddTelemetry('Export')
+
+        try
+        {
+            $dscContent = [System.Text.StringBuilder]::new()
+            $params = @{
+                IsSingleInstance      = 'Yes'
+                Credential            = $this.Credential
+                ApplicationId         = $this.ApplicationId
+                TenantId              = $this.TenantId
+                CertificateThumbprint = $this.CertificateThumbprint
+                CertificatePath       = $this.CertificatePath
+                CertificatePassword   = $this.CertificatePassword
+                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                AccessTokens          = $this.AccessTokens
+            }
+            $Results = $this.GetForExport($Params)
+            if ($Results -is [System.Collections.Hashtable] -and $Results.Count -gt 1)
             {
-                $Global:M365DSCExportResourceInstancesCount++
+                if ($null -ne $Global:M365DSCExportResourceInstancesCount)
+                {
+                    $Global:M365DSCExportResourceInstancesCount++
+                }
+
+                $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $this.GetResourceName() `
+                    -ConnectionMode $ConnectionMode `
+                    -ModulePath $this.GetModulePath() `
+                    -Results $Results `
+                    -Credential $this.Credential
+                [void]$dscContent.Append($currentDSCBlock)
+                Save-M365DSCPartialExport -Content $currentDSCBlock `
+                    -FileName $Global:PartialExportFileName
+
+                Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+            }
+            else
+            {
+                Write-M365DSCHost -Message $Global:M365DSCEmojiRedX -CommitWrite
             }
 
-            $currentDSCBlock = Get-M365DSCExportContentForResource -ResourceName $ResourceName `
-                -ConnectionMode $ConnectionMode `
-                -ModulePath $PSScriptRoot `
-                -Results $Results `
-                -Credential $Credential
-            [void]$dscContent.Append($currentDSCBlock)
-            Save-M365DSCPartialExport -Content $currentDSCBlock `
-                -FileName $Global:PartialExportFileName
-
-            Write-M365DSCHost -Message $Global:M365DSCEmojiGreenCheckMark -CommitWrite
+            return $dscContent.ToString()
         }
-        else
+        catch
         {
-            Write-M365DSCHost -Message $Global:M365DSCEmojiRedX -CommitWrite
+            $this.LogError($_, 'Error during Export:')
+
+            throw
+        }
+    }
+
+    hidden [TeamsMeetingConfiguration] AsResult([System.Object] $Values)
+    {
+        if ($Values -is [TeamsMeetingConfiguration])
+        {
+            return $Values
         }
 
-        return $dscContent.ToString()
-    }
-    catch
-    {
-        New-M365DSCLogEntry -Message 'Error during Export:' `
-            -Exception $_ `
-            -Source $($MyInvocation.MyCommand.Source) `
-            -TenantId $TenantId `
-            -Credential $Credential
+        $result = [TeamsMeetingConfiguration]::new()
+        $result.ClearNonSchemaProperties()
+        if ($Values -is [System.Collections.Hashtable])
+        {
+            $result.FromHashtable($Values)
+        }
 
-        throw
+        return $result
     }
 }
-
-Export-ModuleMember -Function *-TargetResource
