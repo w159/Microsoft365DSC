@@ -1,4 +1,15 @@
 {
+  "Add-MgBetaApplicationPassword": {
+    "SourceModule": "Microsoft.Graph.Beta.Applications",
+    "ApiVersion": "beta",
+    "Variants": [
+      {
+        "Method": "POST",
+        "URI": "/applications/{application-id}/addPassword",
+        "ApiVersion": "beta"
+      }
+    ]
+  },
   "Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp": {
     "SourceModule": "Microsoft.Graph.Beta.DeviceManagement",
     "ApiVersion": "beta",
@@ -1054,6 +1065,38 @@
       {
         "Method": "GET",
         "URI": "/deviceManagement/deviceManagementScripts/{deviceManagementScript-id}/assignments",
+        "ApiVersion": "beta"
+      }
+    ]
+  },
+  "Get-MgBetaDeviceManagementTemplateCategory": {
+    "SourceModule": "Microsoft.Graph.Beta.DeviceManagement",
+    "ApiVersion": "beta",
+    "Variants": [
+      {
+        "Method": "GET",
+        "URI": "/deviceManagement/templates/{deviceManagementTemplate-id}/categories/{deviceManagementTemplateSettingCategory-id}",
+        "ApiVersion": "beta"
+      },
+      {
+        "Method": "GET",
+        "URI": "/deviceManagement/templates/{deviceManagementTemplate-id}/categories",
+        "ApiVersion": "beta"
+      }
+    ]
+  },
+  "Get-MgBetaDeviceManagementTemplateCategoryRecommendedSetting": {
+    "SourceModule": "Microsoft.Graph.Beta.DeviceManagement",
+    "ApiVersion": "beta",
+    "Variants": [
+      {
+        "Method": "GET",
+        "URI": "/deviceManagement/templates/{deviceManagementTemplate-id}/categories/{deviceManagementTemplateSettingCategory-id}/recommendedSettings/{deviceManagementSettingInstance-id}",
+        "ApiVersion": "beta"
+      },
+      {
+        "Method": "GET",
+        "URI": "/deviceManagement/templates/{deviceManagementTemplate-id}/categories/{deviceManagementTemplateSettingCategory-id}/recommendedSettings",
         "ApiVersion": "beta"
       }
     ]
@@ -3170,6 +3213,17 @@
         "Method": "POST",
         "URI": "/identity/apiConnectors/{identityApiConnector-id}/uploadClientCertificate",
         "ApiVersion": "beta"
+      }
+    ]
+  },
+  "New-MgApplication": {
+    "SourceModule": "Microsoft.Graph.Applications",
+    "ApiVersion": "v1.0",
+    "Variants": [
+      {
+        "Method": "POST",
+        "URI": "/applications",
+        "ApiVersion": "v1.0"
       }
     ]
   },

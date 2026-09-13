@@ -724,6 +724,66 @@ function Invoke-M365DSCGraphShimDeleteResource
 
 #endregion Shared Helpers
 
+function Add-MgBetaApplicationPassword
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $ApplicationId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.Object]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Object]
+        $PasswordCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
+    )
+
+    return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/applications/$($ApplicationId)/addPassword" -Method 'POST' -ExtraExcludeParams @('ApplicationId') -ErrorAction $ErrorActionPreference
+}
+
 function Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp
 {
     [CmdletBinding()]
@@ -6650,6 +6710,196 @@ function Get-MgBetaDeviceManagementScriptAssignment
 
     $singleItemUri = if ($PSBoundParameters.ContainsKey('DeviceManagementScriptAssignmentId') -and -not [System.String]::IsNullOrEmpty($DeviceManagementScriptAssignmentId)) { "/beta/deviceManagement/deviceManagementScripts/$($DeviceManagementScriptId)/assignments/$($DeviceManagementScriptAssignmentId)" } else { $null }
     return Invoke-M365DSCGraphShimGetResource -BoundParameters $PSBoundParameters -CollectionUri "/beta/deviceManagement/deviceManagementScripts/$($DeviceManagementScriptId)/assignments" -SingleItemUri $singleItemUri -ErrorAction $ErrorActionPreference
+}
+
+function Get-MgBetaDeviceManagementTemplateCategory
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DeviceManagementTemplateId,
+
+        [Parameter()]
+        [System.String]
+        $DeviceManagementTemplateSettingCategoryId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Search,
+
+        [Parameter()]
+        [System.Int32]
+        $Skip,
+
+        [Parameter()]
+        [System.String[]]
+        $Sort,
+
+        [Parameter()]
+        [System.Int32]
+        $Top,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Int32]
+        $PageSize,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
+
+        [Parameter()]
+        [System.String]
+        $CountVariable
+    )
+
+    $singleItemUri = if ($PSBoundParameters.ContainsKey('DeviceManagementTemplateSettingCategoryId') -and -not [System.String]::IsNullOrEmpty($DeviceManagementTemplateSettingCategoryId)) { "/beta/deviceManagement/templates/$($DeviceManagementTemplateId)/categories/$($DeviceManagementTemplateSettingCategoryId)" } else { $null }
+    return Invoke-M365DSCGraphShimGetResource -BoundParameters $PSBoundParameters -CollectionUri "/beta/deviceManagement/templates/$($DeviceManagementTemplateId)/categories" -SingleItemUri $singleItemUri -ErrorAction $ErrorActionPreference
+}
+
+function Get-MgBetaDeviceManagementTemplateCategoryRecommendedSetting
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.String]
+        $DeviceManagementSettingInstanceId,
+
+        [Parameter()]
+        [System.String]
+        $DeviceManagementTemplateId,
+
+        [Parameter()]
+        [System.String]
+        $DeviceManagementTemplateSettingCategoryId,
+
+        [Parameter()]
+        [System.Object]
+        $InputObject,
+
+        [Parameter()]
+        [System.String[]]
+        $ExpandProperty,
+
+        [Parameter()]
+        [System.String[]]
+        $Property,
+
+        [Parameter()]
+        [System.String]
+        $Filter,
+
+        [Parameter()]
+        [System.String]
+        $Search,
+
+        [Parameter()]
+        [System.Int32]
+        $Skip,
+
+        [Parameter()]
+        [System.String[]]
+        $Sort,
+
+        [Parameter()]
+        [System.Int32]
+        $Top,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials,
+
+        [Parameter()]
+        [System.Int32]
+        $PageSize,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $All,
+
+        [Parameter()]
+        [System.String]
+        $CountVariable
+    )
+
+    $singleItemUri = if ($PSBoundParameters.ContainsKey('DeviceManagementSettingInstanceId') -and -not [System.String]::IsNullOrEmpty($DeviceManagementSettingInstanceId)) { "/beta/deviceManagement/templates/$($DeviceManagementTemplateId)/categories/$($DeviceManagementTemplateSettingCategoryId)/recommendedSettings/$($DeviceManagementSettingInstanceId)" } else { $null }
+    return Invoke-M365DSCGraphShimGetResource -BoundParameters $PSBoundParameters -CollectionUri "/beta/deviceManagement/templates/$($DeviceManagementTemplateId)/categories/$($DeviceManagementTemplateSettingCategoryId)/recommendedSettings" -SingleItemUri $singleItemUri -ErrorAction $ErrorActionPreference
 }
 
 function Get-MgBetaDeviceManagementTermAndCondition
@@ -18319,7 +18569,53 @@ function Import-MgBetaDeviceManagementImportedDeviceIdentityList
 {
     [CmdletBinding()]
     param(
+        [Parameter()]
+        [System.Object]
+        $BodyParameter,
 
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Object]
+        $ImportedDeviceIdentities,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $OverwriteImportedDeviceIdentities,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
     )
 
     return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/deviceManagement/importedDeviceIdentities/importDeviceIdentityList" -Method 'POST' -ErrorAction $ErrorActionPreference
@@ -18579,6 +18875,266 @@ function Invoke-MgBetaUploadIdentityApiConnectorClientCertificate
     )
 
     return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/beta/identity/apiConnectors/$($IdentityApiConnectorId)/uploadClientCertificate" -Method 'POST' -ExtraExcludeParams @('IdentityApiConnectorId') -ErrorAction $ErrorActionPreference
+}
+
+function New-MgApplication
+{
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [System.Object]
+        $BodyParameter,
+
+        [Parameter()]
+        [System.String]
+        $ResponseHeadersVariable,
+
+        [Parameter()]
+        [System.Object]
+        $AddIns,
+
+        [Parameter()]
+        [System.Collections.Hashtable]
+        $AdditionalProperties,
+
+        [Parameter()]
+        [System.Object]
+        $Api,
+
+        [Parameter()]
+        [System.String]
+        $AppId,
+
+        [Parameter()]
+        [System.Object]
+        $AppManagementPolicies,
+
+        [Parameter()]
+        [System.Object]
+        $AppRoles,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationTemplateId,
+
+        [Parameter()]
+        [System.Object]
+        $AuthenticationBehaviors,
+
+        [Parameter()]
+        [System.Object]
+        $Certification,
+
+        [Parameter()]
+        [System.String]
+        $CreatedByAppId,
+
+        [Parameter()]
+        [System.DateTime]
+        $CreatedDateTime,
+
+        [Parameter()]
+        [System.Object]
+        $CreatedOnBehalfOf,
+
+        [Parameter()]
+        [System.String]
+        $DefaultRedirectUri,
+
+        [Parameter()]
+        [System.DateTime]
+        $DeletedDateTime,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $DisabledByMicrosoftStatus,
+
+        [Parameter()]
+        [System.String]
+        $DisplayName,
+
+        [Parameter()]
+        [System.Object]
+        $ExtensionProperties,
+
+        [Parameter()]
+        [System.Object]
+        $FederatedIdentityCredentials,
+
+        [Parameter()]
+        [System.String]
+        $GroupMembershipClaims,
+
+        [Parameter()]
+        [System.Object]
+        $HomeRealmDiscoveryPolicies,
+
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.String[]]
+        $IdentifierUris,
+
+        [Parameter()]
+        [System.Object]
+        $Info,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsDeviceOnlyAuthSupported,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsDisabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsFallbackPublicClient,
+
+        [Parameter()]
+        [System.Object]
+        $KeyCredentials,
+
+        [Parameter()]
+        [System.String]
+        $LogoInputFile,
+
+        [Parameter()]
+        [System.String[]]
+        $ManagerApplications,
+
+        [Parameter()]
+        [System.String]
+        $NativeAuthenticationApisEnabled,
+
+        [Parameter()]
+        [System.String]
+        $Notes,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Oauth2RequirePostResponse,
+
+        [Parameter()]
+        [System.Object]
+        $OptionalClaims,
+
+        [Parameter()]
+        [System.Object]
+        $Owners,
+
+        [Parameter()]
+        [System.Object]
+        $ParentalControlSettings,
+
+        [Parameter()]
+        [System.Object]
+        $PasswordCredentials,
+
+        [Parameter()]
+        [System.Object]
+        $PublicClient,
+
+        [Parameter()]
+        [System.String]
+        $PublisherDomain,
+
+        [Parameter()]
+        [System.Object]
+        $RequestSignatureVerification,
+
+        [Parameter()]
+        [System.Object]
+        $RequiredResourceAccess,
+
+        [Parameter()]
+        [System.String]
+        $SamlMetadataUrl,
+
+        [Parameter()]
+        [System.String]
+        $ServiceManagementReference,
+
+        [Parameter()]
+        [System.Object]
+        $ServicePrincipalLockConfiguration,
+
+        [Parameter()]
+        [System.String]
+        $SignInAudience,
+
+        [Parameter()]
+        [System.Object]
+        $Spa,
+
+        [Parameter()]
+        [System.Object]
+        $Synchronization,
+
+        [Parameter()]
+        [System.String[]]
+        $Tags,
+
+        [Parameter()]
+        [System.String]
+        $TokenEncryptionKeyId,
+
+        [Parameter()]
+        [System.Object]
+        $TokenIssuancePolicies,
+
+        [Parameter()]
+        [System.Object]
+        $TokenLifetimePolicies,
+
+        [Parameter()]
+        [System.String]
+        $UniqueName,
+
+        [Parameter()]
+        [System.Object]
+        $VerifiedPublisher,
+
+        [Parameter()]
+        [System.Object]
+        $Web,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Break,
+
+        [Parameter()]
+        [System.Collections.IDictionary]
+        $Headers,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelineAppend,
+
+        [Parameter()]
+        [System.Object[]]
+        $HttpPipelinePrepend,
+
+        [Parameter()]
+        [System.Uri]
+        $Proxy,
+
+        [Parameter()]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProxyUseDefaultCredentials
+    )
+
+    return Invoke-M365DSCGraphShimWriteResource -BoundParameters $PSBoundParameters -Uri "/v1.0/applications" -Method 'POST' -ErrorAction $ErrorActionPreference
 }
 
 function New-MgApplicationFederatedIdentityCredential
@@ -54175,6 +54731,7 @@ function Update-MgUser
 
 # Export all wrapper functions
 Export-ModuleMember -Function @(
+    'Add-MgBetaApplicationPassword',
     'Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp',
     'Add-MgBetaGroupToLifecyclePolicy',
     'Clear-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget',
@@ -54244,6 +54801,8 @@ Export-ModuleMember -Function @(
     'Get-MgBetaDeviceManagementRoleScopeTagAssignment',
     'Get-MgBetaDeviceManagementScript',
     'Get-MgBetaDeviceManagementScriptAssignment',
+    'Get-MgBetaDeviceManagementTemplateCategory',
+    'Get-MgBetaDeviceManagementTemplateCategoryRecommendedSetting',
     'Get-MgBetaDeviceManagementTermAndCondition',
     'Get-MgBetaDeviceManagementTermAndConditionAssignment',
     'Get-MgBetaDeviceManagementVirtualEndpointOnPremiseConnection',
@@ -54389,6 +54948,7 @@ Export-ModuleMember -Function @(
     'Invoke-MgBetaInstantiateApplicationTemplate',
     'Invoke-MgBetaScheduleDeviceManagementDeviceCompliancePolicyActionForRule',
     'Invoke-MgBetaUploadIdentityApiConnectorClientCertificate',
+    'New-MgApplication',
     'New-MgApplicationFederatedIdentityCredential',
     'New-MgApplicationOwnerByRef',
     'New-MgApplicationTokenLifetimePolicyByRef',

@@ -8,6 +8,9 @@
     every Graph SDK cmdlet Microsoft365DSC uses as a lightweight wrapper
     around Invoke-MgGraphRequest.
 
+    The cmdlet list comes from the commands declared in every resource settings.json,
+    plus the Graph cmdlets called from the helper modules and the resource base classes.
+
     The generated module depends ONLY on Microsoft.Graph.Authentication and
     eliminates the need to install/import the ~22 heavy Graph SDK sub-modules.
 
@@ -83,6 +86,63 @@ foreach ($file in $settingsFiles)
         }
     }
 }
+
+$hiddenScanPaths = @(
+    "$PSScriptRoot\..\Modules\Microsoft365DSC\Modules",
+    "$PSScriptRoot\..\Modules\Microsoft365DSC\DscResources\_Base"
+)
+$hiddenReferences = [ordered]@{}
+foreach ($path in $hiddenScanPaths)
+{
+    foreach ($file in Get-ChildItem -Path $path -Filter '*.psm1' -Recurse -File)
+    {
+        if ($file.Name -eq (Split-Path -Path $OutputModulePath -Leaf))
+        {
+            continue
+        }
+
+        $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref] $null, [ref] $null)
+        $commandAsts = $ast.FindAll(
+            {
+                param($Item)
+                return ($Item -is [System.Management.Automation.Language.CommandAst])
+            }, $true)
+
+        foreach ($commandAst in $commandAsts)
+        {
+            $name = $commandAst.GetCommandName()
+            if ([System.String]::IsNullOrEmpty($name) -or $name -notmatch '^[A-Za-z]+-Mg[A-Za-z0-9]+$')
+            {
+                continue
+            }
+            if ($map.Contains($name) -or $hiddenReferences.Contains($name))
+            {
+                continue
+            }
+
+            $hiddenReferences[$name] = $file.Name
+        }
+    }
+}
+
+foreach ($reference in $hiddenReferences.GetEnumerator())
+{
+    $resolved = @(Get-Command -Name $reference.Key -ErrorAction SilentlyContinue |
+            Where-Object -FilterScript { $_.ModuleName -like 'Microsoft.Graph*' })
+    $fromSdk = @($resolved | Where-Object -FilterScript { $_.ModuleName -ne 'Microsoft.Graph.Authentication' })
+    if ($fromSdk.Count -eq 0)
+    {
+        if ($resolved.Count -eq 0)
+        {
+            Write-Warning -Message "$($reference.Key) is called in $($reference.Value) but resolves to no Graph module; it is left out of the shim."
+        }
+        continue
+    }
+
+    $map[$reference.Key] = ($fromSdk | Sort-Object -Property Version -Descending | Select-Object -First 1).ModuleName
+    Write-Host "Adding $($reference.Key) from $($reference.Value) ($($map[$reference.Key]))."
+}
+
 $map | ConvertTo-Json -Depth 10 | Out-File -FilePath "$PSScriptRoot\cmdlet-source-modules.json" -Encoding UTF8
 
 if (-not $SkipCmdletMappingGeneration) {
@@ -1181,6 +1241,53 @@ $manifestParams = @{
     Guid              = '730f252e-c4a5-4290-b1da-5d410df44e2d'
 }
 New-ModuleManifest @manifestParams
+
+$manifestContent = [System.IO.File]::ReadAllText($OutputManifestPath)
+$manifestLines = [System.Collections.Generic.List[System.String]]::new()
+$manifestLines.AddRange([System.String[]] ($manifestContent -split "`r`n"))
+
+for ($index = 0; $index -lt $manifestLines.Count; $index++)
+{
+    if ($manifestLines[$index].StartsWith('# Generated on:'))
+    {
+        $manifestLines[$index] = "# Generated on: $(Get-Date -Format 'yyyy-MM-dd')"
+        break
+    }
+}
+
+$exportStart = -1
+for ($index = 0; $index -lt $manifestLines.Count; $index++)
+{
+    if ($manifestLines[$index].StartsWith('FunctionsToExport = '))
+    {
+        $exportStart = $index
+        break
+    }
+}
+if ($exportStart -lt 0)
+{
+    throw 'The generated manifest has no FunctionsToExport entry to reformat.'
+}
+
+$exportEnd = $exportStart
+while ($exportEnd + 1 -lt $manifestLines.Count -and -not [System.String]::IsNullOrWhiteSpace($manifestLines[$exportEnd + 1]))
+{
+    $exportEnd++
+}
+
+$exportLines = [System.Collections.Generic.List[System.String]]::new()
+for ($index = 0; $index -lt $exportedFunctions.Count; $index++)
+{
+    $prefix = if ($index -eq 0) { 'FunctionsToExport = ' } else { ' ' * 15 }
+    $separator = if ($index -lt $exportedFunctions.Count - 1) { ',' } else { '' }
+    $exportLines.Add("$prefix'$($exportedFunctions[$index])'$separator")
+}
+
+$manifestLines.RemoveRange($exportStart, $exportEnd - $exportStart + 1)
+$manifestLines.InsertRange($exportStart, $exportLines)
+
+$manifestContent = (($manifestLines | ForEach-Object { $_.TrimEnd() }) -join "`r`n").TrimEnd("`r", "`n") + "`r`n"
+[System.IO.File]::WriteAllText($OutputManifestPath, $manifestContent)
 
 Write-Host "Done. Generated $generated wrappers, skipped $skipped."
 Write-Host "Exported functions: $($exportedFunctions.Count)"

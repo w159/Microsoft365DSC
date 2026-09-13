@@ -630,6 +630,10 @@
   * Replaced the `Group.Read.All` Graph permission with `GroupMember.Read.All` in every
     resource that only resolves a group display name, id or membership and never modifies
     the group.
+  * Changed `Update-M365DSCAzureAdApplication` to `Add-MgBetaApplicationPassword` so it
+    uses the same beta endpoint and module as the other cmdlets.
+  * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
+    modules and the resource base classes.
 
 # 1.26.909.1
 

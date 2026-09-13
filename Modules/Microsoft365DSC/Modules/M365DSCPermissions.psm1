@@ -1099,7 +1099,7 @@ function Update-M365DSCAzureAdApplication
                         displayName = 'Created by Microsoft365DSC'
                         endDateTime = $endDate
                     }
-                    $appCred = Add-MgApplicationPassword -ApplicationId $azureADApp.Id -BodyParameter @{
+                    $appCred = Add-MgBetaApplicationPassword -ApplicationId $azureADApp.Id -BodyParameter @{
                         passwordCredential = $passwordCred
                     }
                 }

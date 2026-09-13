@@ -1,4 +1,58 @@
 {
+  "Add-MgBetaApplicationPassword": [
+    {
+      "Name": "ApplicationId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "InputObject",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "BodyParameter",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ResponseHeadersVariable",
+      "Type": "System.String"
+    },
+    {
+      "Name": "AdditionalProperties",
+      "Type": "System.Collections.Hashtable"
+    },
+    {
+      "Name": "PasswordCredential",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Break",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Headers",
+      "Type": "System.Collections.IDictionary"
+    },
+    {
+      "Name": "HttpPipelineAppend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "HttpPipelinePrepend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "Proxy",
+      "Type": "System.Uri"
+    },
+    {
+      "Name": "ProxyCredential",
+      "Type": "System.Management.Automation.PSCredential"
+    },
+    {
+      "Name": "ProxyUseDefaultCredentials",
+      "Type": "System.Management.Automation.SwitchParameter"
+    }
+  ],
   "Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp": [
     {
       "Name": "BodyParameter",
@@ -5374,6 +5428,182 @@
     },
     {
       "Name": "DeviceManagementScriptId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "InputObject",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ExpandProperty",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Property",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Filter",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Search",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Skip",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "Sort",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Top",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "ResponseHeadersVariable",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Break",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Headers",
+      "Type": "System.Collections.IDictionary"
+    },
+    {
+      "Name": "HttpPipelineAppend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "HttpPipelinePrepend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "Proxy",
+      "Type": "System.Uri"
+    },
+    {
+      "Name": "ProxyCredential",
+      "Type": "System.Management.Automation.PSCredential"
+    },
+    {
+      "Name": "ProxyUseDefaultCredentials",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "PageSize",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "All",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "CountVariable",
+      "Type": "System.String"
+    }
+  ],
+  "Get-MgBetaDeviceManagementTemplateCategory": [
+    {
+      "Name": "DeviceManagementTemplateId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DeviceManagementTemplateSettingCategoryId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "InputObject",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ExpandProperty",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Property",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Filter",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Search",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Skip",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "Sort",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Top",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "ResponseHeadersVariable",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Break",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Headers",
+      "Type": "System.Collections.IDictionary"
+    },
+    {
+      "Name": "HttpPipelineAppend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "HttpPipelinePrepend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "Proxy",
+      "Type": "System.Uri"
+    },
+    {
+      "Name": "ProxyCredential",
+      "Type": "System.Management.Automation.PSCredential"
+    },
+    {
+      "Name": "ProxyUseDefaultCredentials",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "PageSize",
+      "Type": "System.Int32"
+    },
+    {
+      "Name": "All",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "CountVariable",
+      "Type": "System.String"
+    }
+  ],
+  "Get-MgBetaDeviceManagementTemplateCategoryRecommendedSetting": [
+    {
+      "Name": "DeviceManagementSettingInstanceId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DeviceManagementTemplateId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DeviceManagementTemplateSettingCategoryId",
       "Type": "System.String"
     },
     {
@@ -16173,6 +16403,56 @@
       "Type": "System.String"
     }
   ],
+  "Import-MgBetaDeviceManagementImportedDeviceIdentityList": [
+    {
+      "Name": "BodyParameter",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ResponseHeadersVariable",
+      "Type": "System.String"
+    },
+    {
+      "Name": "AdditionalProperties",
+      "Type": "System.Collections.Hashtable"
+    },
+    {
+      "Name": "ImportedDeviceIdentities",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "OverwriteImportedDeviceIdentities",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Break",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Headers",
+      "Type": "System.Collections.IDictionary"
+    },
+    {
+      "Name": "HttpPipelineAppend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "HttpPipelinePrepend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "Proxy",
+      "Type": "System.Uri"
+    },
+    {
+      "Name": "ProxyCredential",
+      "Type": "System.Management.Automation.PSCredential"
+    },
+    {
+      "Name": "ProxyUseDefaultCredentials",
+      "Type": "System.Management.Automation.SwitchParameter"
+    }
+  ],
   "Invoke-MgBetaForceDomainDelete": [
     {
       "Name": "DomainId",
@@ -16375,6 +16655,260 @@
     {
       "Name": "Pkcs12Value",
       "Type": "System.String"
+    },
+    {
+      "Name": "Break",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "Headers",
+      "Type": "System.Collections.IDictionary"
+    },
+    {
+      "Name": "HttpPipelineAppend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "HttpPipelinePrepend",
+      "Type": "System.Object[]"
+    },
+    {
+      "Name": "Proxy",
+      "Type": "System.Uri"
+    },
+    {
+      "Name": "ProxyCredential",
+      "Type": "System.Management.Automation.PSCredential"
+    },
+    {
+      "Name": "ProxyUseDefaultCredentials",
+      "Type": "System.Management.Automation.SwitchParameter"
+    }
+  ],
+  "New-MgApplication": [
+    {
+      "Name": "BodyParameter",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ResponseHeadersVariable",
+      "Type": "System.String"
+    },
+    {
+      "Name": "AddIns",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "AdditionalProperties",
+      "Type": "System.Collections.Hashtable"
+    },
+    {
+      "Name": "Api",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "AppId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "AppManagementPolicies",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "AppRoles",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ApplicationTemplateId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "AuthenticationBehaviors",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Certification",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "CreatedByAppId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "CreatedDateTime",
+      "Type": "System.DateTime"
+    },
+    {
+      "Name": "CreatedOnBehalfOf",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "DefaultRedirectUri",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DeletedDateTime",
+      "Type": "System.DateTime"
+    },
+    {
+      "Name": "Description",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DisabledByMicrosoftStatus",
+      "Type": "System.String"
+    },
+    {
+      "Name": "DisplayName",
+      "Type": "System.String"
+    },
+    {
+      "Name": "ExtensionProperties",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "FederatedIdentityCredentials",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "GroupMembershipClaims",
+      "Type": "System.String"
+    },
+    {
+      "Name": "HomeRealmDiscoveryPolicies",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Id",
+      "Type": "System.String"
+    },
+    {
+      "Name": "IdentifierUris",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "Info",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "IsDeviceOnlyAuthSupported",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "IsDisabled",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "IsFallbackPublicClient",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "KeyCredentials",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "LogoInputFile",
+      "Type": "System.String"
+    },
+    {
+      "Name": "ManagerApplications",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "NativeAuthenticationApisEnabled",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Notes",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Oauth2RequirePostResponse",
+      "Type": "System.Management.Automation.SwitchParameter"
+    },
+    {
+      "Name": "OptionalClaims",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Owners",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "ParentalControlSettings",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "PasswordCredentials",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "PublicClient",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "PublisherDomain",
+      "Type": "System.String"
+    },
+    {
+      "Name": "RequestSignatureVerification",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "RequiredResourceAccess",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "SamlMetadataUrl",
+      "Type": "System.String"
+    },
+    {
+      "Name": "ServiceManagementReference",
+      "Type": "System.String"
+    },
+    {
+      "Name": "ServicePrincipalLockConfiguration",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "SignInAudience",
+      "Type": "System.String"
+    },
+    {
+      "Name": "Spa",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Synchronization",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Tags",
+      "Type": "System.String[]"
+    },
+    {
+      "Name": "TokenEncryptionKeyId",
+      "Type": "System.String"
+    },
+    {
+      "Name": "TokenIssuancePolicies",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "TokenLifetimePolicies",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "UniqueName",
+      "Type": "System.String"
+    },
+    {
+      "Name": "VerifiedPublisher",
+      "Type": "System.Object"
+    },
+    {
+      "Name": "Web",
+      "Type": "System.Object"
     },
     {
       "Name": "Break",
