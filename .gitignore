@@ -36,6 +36,7 @@ Modules/Microsoft365DSC/DscSchemaCache.json
 Utilities/ApiSurface/api-drift.json
 Utilities/ApiSurface/api-drift.md
 Modules/Microsoft365DSC/ResourcePermissions.json
+Modules/Microsoft365DSC/Microsoft365DSC.dsc.manifests.json
 
 # NuGet packages produced by dotnet pack
 artifacts/

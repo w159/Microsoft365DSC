@@ -1,4 +1,4 @@
-# Change log for Microsoft365DSC
+﻿# Change log for Microsoft365DSC
 
 # UNRELEASED
 
@@ -575,6 +575,8 @@
     resource's schema its examples configure, whether the update example drifts from the create
     example, and what the remove example carries beyond keys, mandatory properties,
     authentication and `Ensure`.
+  * Added `Utilities/New-M365DSCAdaptedResourceManifest.ps1`, which writes the DSC v3 adapted
+    resource manifest of every exported resource into `Microsoft365DSC.dsc.manifests.json`.
   * Added `ConfigurationName` and `ConfigurationData` parameters to
     `Invoke-M365DSCConfigurationBuild` so it can compile a script that only declares a
     configuration instead of invoking one.

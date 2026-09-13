@@ -100,8 +100,16 @@ A few things worth knowing:
   modified only when you add or remove a resource — commit it when it does.
 - The committed manifest assumes the default `-BucketCount 16`. Building with a different bucket
   count changes the part list and will dirty the manifest.
-- Use `-SkipValidation` to skip the post-build import and discovery check when iterating, and
-  `-SkipSchema` to leave `SchemaDefinition.json` alone.
+- The build also writes `Microsoft365DSC.dsc.manifests.json` next to `Microsoft365DSC.psd1`.
+  That one bundle holds the DSC v3 adapted resource manifest of every resource, which is how
+  `dsc.exe` discovers them. It is generated with the
+  `DscResource.Authoring` module (0.3.0 or later) through PowerShell 7, so install it
+  once with `Install-PSResource -Name DscResource.Authoring`. That version is not on the
+  PowerShell Gallery yet, and until it is the build warns and skips this step, as it does
+  whenever the module is missing. The file is not in version control.
+- Use `-SkipValidation` to skip the post-build import and discovery check when iterating,
+  `-SkipSchema` to leave `SchemaDefinition.json` alone, and `-SkipAdaptedManifests` to skip the
+  adapted resource manifest bundle.
 
 ## Committing Changes
 

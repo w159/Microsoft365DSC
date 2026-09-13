@@ -71,6 +71,13 @@
 .PARAMETER SkipResourcePermissions
     Skip regenerating ResourcePermissions.json.
 
+.PARAMETER SkipSchemaCache
+    Skip generating DscSchemaCache.json for the fast compile host.
+
+.PARAMETER SkipAdaptedManifests
+    Skip generating the DSC v3 adapted resource manifests. They are also skipped with a warning
+    when DscResource.Authoring is not installed.
+
 .PARAMETER SkipValidation
     Skip the post-build import and discovery check.
 
@@ -124,6 +131,10 @@ param
     [Parameter()]
     [Switch]
     $SkipResourcePermissions,
+
+    [Parameter()]
+    [Switch]
+    $SkipAdaptedManifests,
 
     [Parameter()]
     [Switch]
@@ -1076,6 +1087,12 @@ if (-not $SkipResourcePermissions)
 {
     Write-BuildLog 'Regenerating ResourcePermissions.json from the resource settings files...'
     $null = & (Join-Path -Path $PSScriptRoot -ChildPath 'New-M365DSCResourcePermissions.ps1') -RepositoryRoot $RepositoryRoot
+}
+
+if (-not $SkipAdaptedManifests)
+{
+    Write-BuildLog 'Generating DSC v3 adapted resource manifests...'
+    $null = & (Join-Path -Path $PSScriptRoot -ChildPath 'New-M365DSCAdaptedResourceManifest.ps1') -RepositoryRoot $RepositoryRoot -WarnOnly
 }
 
 if (-not $SkipSchemaCache)

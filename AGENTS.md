@@ -10,6 +10,7 @@ Purpose: concise, enforceable rules for AI coding agents editing this repository
 Generated files (do not edit):
 
 - `Modules/Microsoft365DSC/SchemaDefinition.json` is produced by `Utilities/New-M365DSCSchemaFromClasses.ps1`, which reflects over the built class-based resources, and is regenerated in CI by `Utilities/New-M365DSCDscSchemaCache.ps1`. **Never modify this file directly.**
+- `Modules/Microsoft365DSC/Microsoft365DSC.dsc.manifests.json` is the DSC v3 adapted resource manifest bundle produced by `Utilities/New-M365DSCAdaptedResourceManifest.ps1` from the resource sources with the `DscResource.Authoring` module. It is not in version control. **Never modify this file directly.**
 
 Resource definitions (manually authored):
 

@@ -31,6 +31,16 @@ jobs:
 
           Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
           Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
+          # New-M365DSCAdaptedResourceManifest.ps1 requires 0.3.0 or later, which is not on the
+          # gallery yet. Until it is, a missing tool only skips the manifests.
+          try
+          {
+              Install-PSResource -Name DscResource.Authoring -Scope AllUsers -TrustRepository -ErrorAction Stop
+          }
+          catch
+          {
+              Write-Warning -Message "DscResource.Authoring could not be installed, so the adapted resource manifests are skipped: $($_.Exception.Message)"
+          }
           [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
 
       - name: Build Class Modules
@@ -99,6 +109,16 @@ jobs:
 
           Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
           Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
+          # New-M365DSCAdaptedResourceManifest.ps1 requires 0.3.0 or later, which is not on the
+          # gallery yet. Until it is, a missing tool only skips the manifests.
+          try
+          {
+              Install-PSResource -Name DscResource.Authoring -Scope AllUsers -TrustRepository -ErrorAction Stop
+          }
+          catch
+          {
+              Write-Warning -Message "DscResource.Authoring could not be installed, so the adapted resource manifests are skipped: $($_.Exception.Message)"
+          }
           [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
 
       - name: Build Class Modules
