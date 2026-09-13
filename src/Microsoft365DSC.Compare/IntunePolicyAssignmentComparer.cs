@@ -70,19 +70,19 @@ namespace Microsoft365DSC.Compare
                     if (dataType.Equals("#microsoft.graph.allDevicesAssignmentTarget", StringComparison.OrdinalIgnoreCase)
                         || dataType.Equals("#microsoft.graph.allLicensedUsersAssignmentTarget", StringComparison.OrdinalIgnoreCase))
                     {
-                        assignmentTarget = FindAssignmentTarget(targetHashtables,"dataType", dataType);
+                        assignmentTarget = FindAssignmentTarget(targetHashtables, "dataType", dataType);
                     }
 
                     // Find matching assignment target by dataType and groupId
                     if (assignmentTarget is null && assignmentGroupId is not null)
                     {
-                        assignmentTarget = FindAssignmentTarget(targetHashtables,"groupId", assignmentGroupId);
+                        assignmentTarget = FindAssignmentTarget(targetHashtables, "groupId", assignmentGroupId);
                         testResult = assignmentTarget is not null;
                     }
 
                     if (assignmentTarget is null && assignmentCollectionId is not null)
                     {
-                        assignmentTarget = FindAssignmentTarget(targetHashtables,"collectionId", assignmentCollectionId);
+                        assignmentTarget = FindAssignmentTarget(targetHashtables, "collectionId", assignmentCollectionId);
                         testResult = assignmentTarget is not null;
                     }
 
@@ -90,7 +90,7 @@ namespace Microsoft365DSC.Compare
                     if (!testResult || (testResult && assignmentTarget is null))
                     {
                         var assignmentGroupDisplayName = GetPropertyValue<string>(assignment, "groupDisplayName");
-                        assignmentTarget = FindAssignmentTarget(targetHashtables,"groupDisplayName", assignmentGroupDisplayName);
+                        assignmentTarget = FindAssignmentTarget(targetHashtables, "groupDisplayName", assignmentGroupDisplayName);
                         testResult = assignmentTarget is not null;
 
                         if (!testResult)

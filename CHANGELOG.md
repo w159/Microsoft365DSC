@@ -558,6 +558,7 @@
   * Added `M365DSC.Mgx` with version 2.1.1.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
   * Updated `DSCParser` to version 3.1.0.4.
+  * Updated `Microsoft.Graph.*` to version 2.39.0.
   * Updated `MSCloudLoginAssistant` to version 1.2.6.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)

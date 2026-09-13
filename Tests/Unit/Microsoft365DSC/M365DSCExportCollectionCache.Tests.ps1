@@ -1,8 +1,7 @@
 BeforeAll {
     Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCDllLoader.psm1" -Force -Global
     Initialize-M365DSCDllLoader
-    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCIntuneUtil.psm1" -Force -Global
-    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCExportUtil.psm1" -Force -Global
+    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Microsoft365DSC.psd1" -Global
 
     function global:Get-MgBetaDeviceManagementDeviceConfiguration
     {
@@ -35,10 +34,6 @@ BeforeAll {
     }
 
     $Script:Cache = [Microsoft365DSC.Cache.ExportCollectionCache]
-}
-
-AfterAll {
-    Remove-Module -Name M365DSCIntuneUtil -Force -ErrorAction SilentlyContinue
 }
 
 Describe 'M365DSCExportCollectionCache' {

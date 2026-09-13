@@ -34,7 +34,7 @@ function Invoke-TestHarness
         }
     }
 
-    Import-Module -Name "$repoDir/Modules/Microsoft365DSC/Microsoft365DSC.psd1"
+    Import-Module -Name "$repoDir/Modules/Microsoft365DSC/Microsoft365DSC.psd1" -Global
     $testsToRun = @()
 
     # Run Unit Tests

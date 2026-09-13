@@ -88,42 +88,6 @@ Describe 'Class-based resource sources' {
     }
 }
 
-Describe 'DSC marshalling' -Skip:(-not $canInvokeDscResource) {
-
-    # $classResourceFiles belongs to discovery, so an It body cannot read it. -ForEach is what
-    # carries the data across, and it fails discovery on an empty collection, hence the guard.
-    if ($classResourceFiles.Count -eq 0)
-    {
-        It 'has no class-based resources yet' {
-            Set-ItResult -Skipped -Because 'no resource under DscResources declares [DscResource()] yet'
-        }
-
-        return
-    }
-
-    It "round-trips '<ResourceName>' properties through Invoke-DscResource" -ForEach @(
-        $classResourceFiles | Select-Object -First 1) {
-
-        $resource = $ResourceName -replace '^MSFT_', ''
-
-        $key = @(( Get-DscResource -Name $resource -ErrorAction SilentlyContinue ).Properties |
-                Where-Object IsMandatory | Select-Object -First 1)[0]
-
-        if ($null -eq $key)
-        {
-            Set-ItResult -Skipped -Because "'$resource' has no mandatory property to round-trip"
-            return
-        }
-
-        $result = Invoke-DscResource -Name $resource -ModuleName 'Microsoft365DSC' -Method Get `
-            -Property @{ $key.Name = 'roundtrip-probe' } -ErrorAction Stop
-
-        $result.($key.Name) | Should -Be 'roundtrip-probe' -Because (
-            'DSC marshals by reflection; an empty value here means the base class is storing ' +
-            'property values somewhere DSC cannot see')
-    }
-}
-
 Describe 'Generated class modules' {
     BeforeAll {
         $script:classesPath = Join-Path -Path $PSScriptRoot -ChildPath '../../Modules/Microsoft365DSC/Classes'

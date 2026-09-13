@@ -521,6 +521,15 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
 }
 
 Describe 'Update-M365DSCResourceFromDrift' {
+    BeforeAll {
+        $script:previousGitHubActions = $env:GITHUB_ACTIONS
+        $env:GITHUB_ACTIONS = $null
+    }
+
+    AfterAll {
+        $env:GITHUB_ACTIONS = $script:previousGitHubActions
+    }
+
     It 'Throws on a settings catalog finding and names the generator' {
         $finding = [ordered]@{
             code     = 'CAT-SETTING-ADDED'

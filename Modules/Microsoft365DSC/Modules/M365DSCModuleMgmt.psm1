@@ -394,6 +394,9 @@ function Set-M365DSCVerbosePreferenceInScope
 .PARAMETER ModuleName
     Specifies which module scopes keep the preference. Defaults to every Microsoft365DSC scope.
 
+.PARAMETER Restore
+    Specifies the previous preference to restore.
+
 .EXAMPLE
     PS> $previous = Set-M365DSCVerboseScope
     PS> try { Invoke-Something } finally { $null = Set-M365DSCVerboseScope -Restore $previous }

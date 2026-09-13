@@ -405,6 +405,15 @@ class Probe
     }
 
     Describe 'Update-M365DSCResourceFromDrift' {
+        BeforeAll {
+            $script:previousGitHubActions = $env:GITHUB_ACTIONS
+            $env:GITHUB_ACTIONS = $null
+        }
+
+        AfterAll {
+            $env:GITHUB_ACTIONS = $script:previousGitHubActions
+        }
+
         It 'applies a stale ValidateSet and reports the edit' {
             $path = New-FixtureResource -Fixture 'TestApplyBasic' -Resource 'TestApplyBasic'
             $finding = New-EnumFinding -Resource 'TestApplyBasic' -Property 'Mode' -Added @('gamma')
