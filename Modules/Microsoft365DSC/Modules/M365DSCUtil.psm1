@@ -1,4 +1,4 @@
-#region Session Objects
+﻿#region Session Objects
 $Global:SessionSecurityCompliance = $null
 #endregion
 
@@ -41,16 +41,19 @@ function Get-TemporaryPath
         {
             # Windows PowerShell or PowerShell 6+
             $temporaryPath = (Get-Item -Path env:TEMP).Value
+            break
         }
 
         ((Get-Variable -Name 'IsMacOs' -ValueOnly -ErrorAction SilentlyContinue) -eq $true)
         {
             $temporaryPath = (Get-Item -Path env:TMPDIR).Value
+            break
         }
 
         ((Get-Variable -Name 'IsLinux' -ValueOnly -ErrorAction SilentlyContinue) -eq $true)
         {
             $temporaryPath = '/tmp'
+            break
         }
 
         default
@@ -2266,10 +2269,23 @@ function Invoke-M365DSCClassResourceInPowerShellCore
         Initialize-PowerShellCoreSession
     }
 
+    $partialExportFileName = $Global:PartialExportFileName
+    $exportResourceInstancesCount = $Global:M365DSCExportResourceInstancesCount
+
     $output = Invoke-Command -Session $Script:PSCoreSession -ScriptBlock {
+        $Global:PartialExportFileName = $using:partialExportFileName
+        $Global:M365DSCExportResourceInstancesCount = $using:exportResourceInstancesCount
+
         Invoke-M365DSCResourceMethod -ResourceName $using:ClassName `
             -MethodName $using:MethodName `
             -Parameters $using:Parameters
+    }
+
+    if ($null -ne $exportResourceInstancesCount)
+    {
+        $Global:M365DSCExportResourceInstancesCount = Invoke-Command -Session $Script:PSCoreSession -ScriptBlock {
+            $Global:M365DSCExportResourceInstancesCount
+        }
     }
 
     return $output

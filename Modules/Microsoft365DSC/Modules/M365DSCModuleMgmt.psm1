@@ -1,4 +1,4 @@
-$Script:IsPowerShellCore = $PSVersionTable.PSEdition -eq 'Core'
+﻿$Script:IsPowerShellCore = $PSVersionTable.PSEdition -eq 'Core'
 $Script:IsPsResourceGetAvailable = $null -ne (Get-Module -Name Microsoft.PowerShell.PSResourceGet -ListAvailable)
 $Script:M365DSCDependenciesValidated = $false
 $Script:M365DSCGraphShimLoaded = $false
@@ -349,10 +349,14 @@ function Set-M365DSCVerbosePreferenceInScope
     )
 
     $value = $Preference
-    $parsed = [System.Management.Automation.ActionPreference]::SilentlyContinue
-    if ([System.Enum]::TryParse([System.Management.Automation.ActionPreference], $Preference, $true, [ref] $parsed))
+    try
     {
-        $value = $parsed
+        $value = [System.Management.Automation.ActionPreference] [System.Enum]::Parse(
+            [System.Management.Automation.ActionPreference], $Preference, $true)
+    }
+    catch
+    {
+        $value = $Preference
     }
 
     foreach ($module in $Scope)
