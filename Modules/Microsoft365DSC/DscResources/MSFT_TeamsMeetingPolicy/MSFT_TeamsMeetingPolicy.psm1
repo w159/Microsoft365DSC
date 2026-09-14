@@ -699,8 +699,6 @@ class TeamsMeetingPolicy : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
-            # If we get here, it's because the Test-TargetResource detected a drift, therefore we always call
-            # into the Set-CsTeamsMeetingPolicy cmdlet.
             Write-Verbose -Message "Updating the Teams Meeting Policy with Identity {$($this.Identity)}"
 
             # The AllowAnonymousUsersToDialOut is temporarly disabled. Therefore

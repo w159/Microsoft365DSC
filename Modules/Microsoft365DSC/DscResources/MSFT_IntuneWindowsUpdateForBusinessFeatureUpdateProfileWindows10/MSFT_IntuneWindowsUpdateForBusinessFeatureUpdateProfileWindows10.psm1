@@ -412,7 +412,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
             ($null -ne $this.RolloutSettings -and $null -eq $currentValues.RolloutSettings))
         {
             Write-Verbose -Message 'RolloutSettings is null in either the desired configuration or the current configuration.'
-            Write-Verbose -Message "Test-TargetResource returned $false"
+            Write-Verbose -Message "Test() returned $false"
             return $false
         }
 
@@ -429,12 +429,12 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                         -and ($offerEndDate -ne [datetime]::MinValue -and $offerEndDate -lt $currentTime))
                 {
                     Write-Verbose -Message 'Start and end time are in the past, skip the configuration.'
-                    Write-Verbose -Message "Test-TargetResource returned $true"
+                    Write-Verbose -Message "Test() returned $true"
                     return $true
                 }
             }
 
-            Write-Verbose -Message "Test-TargetResource returned $false"
+            Write-Verbose -Message "Test() returned $false"
             return $false
         }
 

@@ -194,8 +194,6 @@ class TeamsEmergencyCallRoutingPolicy : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
-            # If we get here, it's because the Test-TargetResource detected a drift, therefore we always call
-            # into the Set-CsTeamsEmergencyCallRoutingPolicy cmdlet.
             Write-Verbose -Message "Updating settings for Teams Emergency Call Routing Policy {$($this.Identity)}"
             $numbers = @()
             if ($null -ne $SetParameters['EmergencyNumbers'])
