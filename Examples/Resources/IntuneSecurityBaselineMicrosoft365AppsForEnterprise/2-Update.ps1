@@ -31,7 +31,7 @@ Configuration Example
             RoleScopeTagIds       = @("0")
             DeviceSettings        = MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBaselineMicrosoft365AppsForEnterprise{
                 Pol_SecGuide_A001_Block_Flash        = 1
-                Pol_SecGuide_Block_Flash             = "block all flash activation"
+                Pol_SecGuide_Block_Flash             = "Block all Flash activation"
                 Pol_SecGuide_Legacy_JScript          = 1
                 POL_SG_powerpnt                      = 69632
                 POL_SG_onenote                       = 69632
@@ -243,7 +243,6 @@ Configuration Example
             UserSettings          = MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselineMicrosoft365AppsForEnterprise{
                 MicrosoftAccess_Security_TrustCenter_L_BlockMacroExecutionFromInternet                                      = 1
                 MicrosoftAccess_Security_TrustCenter_L_DisableTrustBarNotificationforunsigned                               = 1
-                MicrosoftAccess_Security_TrustCenter_L_RequirethatApplicationExtensionsaresigned                            = 1
                 MicrosoftAccess_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork                    = 1
                 MicrosoftAccess_Security_TrustCenter_L_VBAWarningsPolicy                                                    = 1
                 MicrosoftAccess_Security_TrustCenter_L_VBAWarningsPolicy_L_Empty                                            = 2
@@ -469,6 +468,14 @@ Configuration Example
                 L_empty19                                                                                                   = 2
                 MicrosoftWord_Security_L_TurnOffFileValidation                                                              = 1
                 MicrosoftWord_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork                      = 1
+                L_ExcelFileBlockExternalLinks                                                                               = 1
+                L_BlockInsecureProtocols                                                                                    = 1
+                L_BlockOLEGraph                                                                                             = 1
+                L_BlockOrgChart                                                                                             = 1
+                L_BlockWecFallback                                                                                          = 1
+                L_OLEActions                                                                                                = 1
+                L_OLEActions_L_Empty                                                                                        = "0"
+                MicrosoftProjectV3_Security_TrustCenter_L_BlockMacroExecutionFromInternet                                   = 1
             }
             Assignments           = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{

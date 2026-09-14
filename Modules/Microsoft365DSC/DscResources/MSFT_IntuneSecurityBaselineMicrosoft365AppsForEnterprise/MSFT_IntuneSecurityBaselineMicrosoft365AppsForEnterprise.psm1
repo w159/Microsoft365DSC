@@ -157,72 +157,72 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexDeviceSettings.Add('POL_SG_onenote', $policySettings.DeviceSettings.pOL_SG_onenote)
             $complexDeviceSettings.Add('POL_SG_mspub', $policySettings.DeviceSettings.pOL_SG_mspub)
             $complexDeviceSettings.Add('POL_SG_msaccess', $policySettings.DeviceSettings.pOL_SG_msaccess)
-            $complexDeviceSettings.Add('POL_SG_winproj', $policySettings.DeviceSettings.pOL_SG_winproj)
             $complexDeviceSettings.Add('POL_SG_visio', $policySettings.DeviceSettings.pOL_SG_visio)
-            $complexDeviceSettings.Add('POL_SG_outlook', $policySettings.DeviceSettings.pOL_SG_outlook)
+            $complexDeviceSettings.Add('POL_SG_winproj', $policySettings.DeviceSettings.pOL_SG_winproj)
             $complexDeviceSettings.Add('POL_SG_winword', $policySettings.DeviceSettings.pOL_SG_winword)
+            $complexDeviceSettings.Add('POL_SG_outlook', $policySettings.DeviceSettings.pOL_SG_outlook)
             $complexDeviceSettings.Add('POL_SG_excel', $policySettings.DeviceSettings.pOL_SG_excel)
             $complexDeviceSettings.Add('L_PolicyEnableSIPHighSecurityMode', $policySettings.DeviceSettings.l_PolicyEnableSIPHighSecurityMode)
             $complexDeviceSettings.Add('L_PolicyDisableHttpConnect', $policySettings.DeviceSettings.l_PolicyDisableHttpConnect)
             $complexDeviceSettings.Add('L_AddonManagement', $policySettings.DeviceSettings.l_AddonManagement)
             $complexDeviceSettings.Add('L_powerpntexe17', $policySettings.DeviceSettings.l_powerpntexe17)
-            $complexDeviceSettings.Add('L_excelexe15', $policySettings.DeviceSettings.l_excelexe15)
-            $complexDeviceSettings.Add('L_visioexe19', $policySettings.DeviceSettings.l_visioexe19)
-            $complexDeviceSettings.Add('L_onenoteexe26', $policySettings.DeviceSettings.l_onenoteexe26)
-            $complexDeviceSettings.Add('L_outlookexe22', $policySettings.DeviceSettings.l_outlookexe22)
             $complexDeviceSettings.Add('L_pptviewexe18', $policySettings.DeviceSettings.l_pptviewexe18)
             $complexDeviceSettings.Add('L_winwordexe21', $policySettings.DeviceSettings.l_winwordexe21)
+            $complexDeviceSettings.Add('L_outlookexe22', $policySettings.DeviceSettings.l_outlookexe22)
+            $complexDeviceSettings.Add('L_visioexe19', $policySettings.DeviceSettings.l_visioexe19)
             $complexDeviceSettings.Add('L_exprwdexe24', $policySettings.DeviceSettings.l_exprwdexe24)
-            $complexDeviceSettings.Add('L_spdesignexe23', $policySettings.DeviceSettings.l_spdesignexe23)
+            $complexDeviceSettings.Add('L_excelexe15', $policySettings.DeviceSettings.l_excelexe15)
+            $complexDeviceSettings.Add('L_onenoteexe26', $policySettings.DeviceSettings.l_onenoteexe26)
             $complexDeviceSettings.Add('L_winprojexe20', $policySettings.DeviceSettings.l_winprojexe20)
+            $complexDeviceSettings.Add('L_spdesignexe23', $policySettings.DeviceSettings.l_spdesignexe23)
             $complexDeviceSettings.Add('L_grooveexe14', $policySettings.DeviceSettings.l_grooveexe14)
             $complexDeviceSettings.Add('L_mspubexe16', $policySettings.DeviceSettings.l_mspubexe16)
-            $complexDeviceSettings.Add('L_mse7exe27', $policySettings.DeviceSettings.l_mse7exe27)
             $complexDeviceSettings.Add('L_msaccessexe25', $policySettings.DeviceSettings.l_msaccessexe25)
+            $complexDeviceSettings.Add('L_mse7exe27', $policySettings.DeviceSettings.l_mse7exe27)
             $complexDeviceSettings.Add('L_ConsistentMimeHandling', $policySettings.DeviceSettings.l_ConsistentMimeHandling)
-            $complexDeviceSettings.Add('L_excelexe43', $policySettings.DeviceSettings.l_excelexe43)
             $complexDeviceSettings.Add('L_spdesignexe51', $policySettings.DeviceSettings.l_spdesignexe51)
-            $complexDeviceSettings.Add('L_onenoteexe54', $policySettings.DeviceSettings.l_onenoteexe54)
-            $complexDeviceSettings.Add('L_outlookexe50', $policySettings.DeviceSettings.l_outlookexe50)
-            $complexDeviceSettings.Add('L_pptviewexe46', $policySettings.DeviceSettings.l_pptviewexe46)
+            $complexDeviceSettings.Add('L_excelexe43', $policySettings.DeviceSettings.l_excelexe43)
             $complexDeviceSettings.Add('L_mspubexe44', $policySettings.DeviceSettings.l_mspubexe44)
             $complexDeviceSettings.Add('L_visioexe47', $policySettings.DeviceSettings.l_visioexe47)
+            $complexDeviceSettings.Add('L_outlookexe50', $policySettings.DeviceSettings.l_outlookexe50)
+            $complexDeviceSettings.Add('L_onenoteexe54', $policySettings.DeviceSettings.l_onenoteexe54)
+            $complexDeviceSettings.Add('L_pptviewexe46', $policySettings.DeviceSettings.l_pptviewexe46)
             $complexDeviceSettings.Add('L_winprojexe48', $policySettings.DeviceSettings.l_winprojexe48)
-            $complexDeviceSettings.Add('L_msaccessexe53', $policySettings.DeviceSettings.l_msaccessexe53)
             $complexDeviceSettings.Add('L_powerpntexe45', $policySettings.DeviceSettings.l_powerpntexe45)
-            $complexDeviceSettings.Add('L_grooveexe42', $policySettings.DeviceSettings.l_grooveexe42)
             $complexDeviceSettings.Add('L_mse7exe55', $policySettings.DeviceSettings.l_mse7exe55)
+            $complexDeviceSettings.Add('L_grooveexe42', $policySettings.DeviceSettings.l_grooveexe42)
+            $complexDeviceSettings.Add('L_msaccessexe53', $policySettings.DeviceSettings.l_msaccessexe53)
             $complexDeviceSettings.Add('L_winwordexe49', $policySettings.DeviceSettings.l_winwordexe49)
             $complexDeviceSettings.Add('L_exprwdexe52', $policySettings.DeviceSettings.l_exprwdexe52)
             $complexDeviceSettings.Add('L_Disableusernameandpassword', $policySettings.DeviceSettings.l_Disableusernameandpassword)
-            $complexDeviceSettings.Add('L_excelexe127', $policySettings.DeviceSettings.l_excelexe127)
-            $complexDeviceSettings.Add('L_grooveexe126', $policySettings.DeviceSettings.l_grooveexe126)
             $complexDeviceSettings.Add('L_onenoteexe138', $policySettings.DeviceSettings.l_onenoteexe138)
+            $complexDeviceSettings.Add('L_grooveexe126', $policySettings.DeviceSettings.l_grooveexe126)
             $complexDeviceSettings.Add('L_mse7exe139', $policySettings.DeviceSettings.l_mse7exe139)
-            $complexDeviceSettings.Add('L_mspubexe128', $policySettings.DeviceSettings.l_mspubexe128)
+            $complexDeviceSettings.Add('L_excelexe127', $policySettings.DeviceSettings.l_excelexe127)
             $complexDeviceSettings.Add('L_visioexe131', $policySettings.DeviceSettings.l_visioexe131)
-            $complexDeviceSettings.Add('L_exprwdexe136', $policySettings.DeviceSettings.l_exprwdexe136)
-            $complexDeviceSettings.Add('L_msaccessexe137', $policySettings.DeviceSettings.l_msaccessexe137)
             $complexDeviceSettings.Add('L_spdesignexe135', $policySettings.DeviceSettings.l_spdesignexe135)
+            $complexDeviceSettings.Add('L_exprwdexe136', $policySettings.DeviceSettings.l_exprwdexe136)
             $complexDeviceSettings.Add('L_winwordexe133', $policySettings.DeviceSettings.l_winwordexe133)
+            $complexDeviceSettings.Add('L_mspubexe128', $policySettings.DeviceSettings.l_mspubexe128)
+            $complexDeviceSettings.Add('L_msaccessexe137', $policySettings.DeviceSettings.l_msaccessexe137)
             $complexDeviceSettings.Add('L_powerpntexe129', $policySettings.DeviceSettings.l_powerpntexe129)
             $complexDeviceSettings.Add('L_outlookexe134', $policySettings.DeviceSettings.l_outlookexe134)
             $complexDeviceSettings.Add('L_winprojexe132', $policySettings.DeviceSettings.l_winprojexe132)
             $complexDeviceSettings.Add('L_pptviewexe130', $policySettings.DeviceSettings.l_pptviewexe130)
             $complexDeviceSettings.Add('L_Informationbar', $policySettings.DeviceSettings.l_Informationbar)
-            $complexDeviceSettings.Add('L_excelexe113', $policySettings.DeviceSettings.l_excelexe113)
-            $complexDeviceSettings.Add('L_mspubexe114', $policySettings.DeviceSettings.l_mspubexe114)
-            $complexDeviceSettings.Add('L_msaccessexe123', $policySettings.DeviceSettings.l_msaccessexe123)
-            $complexDeviceSettings.Add('L_onenoteexe124', $policySettings.DeviceSettings.l_onenoteexe124)
             $complexDeviceSettings.Add('L_outlookexe120', $policySettings.DeviceSettings.l_outlookexe120)
+            $complexDeviceSettings.Add('L_mspubexe114', $policySettings.DeviceSettings.l_mspubexe114)
+            $complexDeviceSettings.Add('L_excelexe113', $policySettings.DeviceSettings.l_excelexe113)
+            $complexDeviceSettings.Add('L_msaccessexe123', $policySettings.DeviceSettings.l_msaccessexe123)
             $complexDeviceSettings.Add('L_winprojexe118', $policySettings.DeviceSettings.l_winprojexe118)
-            $complexDeviceSettings.Add('L_powerpntexe115', $policySettings.DeviceSettings.l_powerpntexe115)
+            $complexDeviceSettings.Add('L_onenoteexe124', $policySettings.DeviceSettings.l_onenoteexe124)
             $complexDeviceSettings.Add('L_spdesignexe121', $policySettings.DeviceSettings.l_spdesignexe121)
+            $complexDeviceSettings.Add('L_powerpntexe115', $policySettings.DeviceSettings.l_powerpntexe115)
             $complexDeviceSettings.Add('L_grooveexe112', $policySettings.DeviceSettings.l_grooveexe112)
-            $complexDeviceSettings.Add('L_visioexe117', $policySettings.DeviceSettings.l_visioexe117)
-            $complexDeviceSettings.Add('L_mse7exe125', $policySettings.DeviceSettings.l_mse7exe125)
             $complexDeviceSettings.Add('L_winwordexe119', $policySettings.DeviceSettings.l_winwordexe119)
             $complexDeviceSettings.Add('L_exprwdexe122', $policySettings.DeviceSettings.l_exprwdexe122)
+            $complexDeviceSettings.Add('L_mse7exe125', $policySettings.DeviceSettings.l_mse7exe125)
+            $complexDeviceSettings.Add('L_visioexe117', $policySettings.DeviceSettings.l_visioexe117)
             $complexDeviceSettings.Add('L_pptviewexe116', $policySettings.DeviceSettings.l_pptviewexe116)
             $complexDeviceSettings.Add('L_LocalMachineZoneLockdownSecurity', $policySettings.DeviceSettings.l_LocalMachineZoneLockdownSecurity)
             $complexDeviceSettings.Add('L_mse7exe41', $policySettings.DeviceSettings.l_mse7exe41)
@@ -234,92 +234,92 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexDeviceSettings.Add('L_exprwdexe38', $policySettings.DeviceSettings.l_exprwdexe38)
             $complexDeviceSettings.Add('L_grooveexe28', $policySettings.DeviceSettings.l_grooveexe28)
             $complexDeviceSettings.Add('L_winwordexe35', $policySettings.DeviceSettings.l_winwordexe35)
-            $complexDeviceSettings.Add('L_msaccessexe39', $policySettings.DeviceSettings.l_msaccessexe39)
-            $complexDeviceSettings.Add('L_spdesignexe37', $policySettings.DeviceSettings.l_spdesignexe37)
             $complexDeviceSettings.Add('L_visioexe33', $policySettings.DeviceSettings.l_visioexe33)
             $complexDeviceSettings.Add('L_onenoteexe40', $policySettings.DeviceSettings.l_onenoteexe40)
+            $complexDeviceSettings.Add('L_spdesignexe37', $policySettings.DeviceSettings.l_spdesignexe37)
+            $complexDeviceSettings.Add('L_msaccessexe39', $policySettings.DeviceSettings.l_msaccessexe39)
             $complexDeviceSettings.Add('L_winprojexe34', $policySettings.DeviceSettings.l_winprojexe34)
             $complexDeviceSettings.Add('L_MimeSniffingSafetyFature', $policySettings.DeviceSettings.l_MimeSniffingSafetyFature)
             $complexDeviceSettings.Add('L_powerpntexe59', $policySettings.DeviceSettings.l_powerpntexe59)
-            $complexDeviceSettings.Add('L_exprwdexe66', $policySettings.DeviceSettings.l_exprwdexe66)
-            $complexDeviceSettings.Add('L_grooveexe56', $policySettings.DeviceSettings.l_grooveexe56)
             $complexDeviceSettings.Add('L_visioexe61', $policySettings.DeviceSettings.l_visioexe61)
+            $complexDeviceSettings.Add('L_grooveexe56', $policySettings.DeviceSettings.l_grooveexe56)
+            $complexDeviceSettings.Add('L_exprwdexe66', $policySettings.DeviceSettings.l_exprwdexe66)
             $complexDeviceSettings.Add('L_outlookexe64', $policySettings.DeviceSettings.l_outlookexe64)
             $complexDeviceSettings.Add('L_mspubexe58', $policySettings.DeviceSettings.l_mspubexe58)
             $complexDeviceSettings.Add('L_mse7exe69', $policySettings.DeviceSettings.l_mse7exe69)
-            $complexDeviceSettings.Add('L_msaccessexe67', $policySettings.DeviceSettings.l_msaccessexe67)
             $complexDeviceSettings.Add('L_pptviewexe60', $policySettings.DeviceSettings.l_pptviewexe60)
+            $complexDeviceSettings.Add('L_msaccessexe67', $policySettings.DeviceSettings.l_msaccessexe67)
             $complexDeviceSettings.Add('L_winprojexe62', $policySettings.DeviceSettings.l_winprojexe62)
             $complexDeviceSettings.Add('L_spdesignexe65', $policySettings.DeviceSettings.l_spdesignexe65)
             $complexDeviceSettings.Add('L_onenoteexe68', $policySettings.DeviceSettings.l_onenoteexe68)
             $complexDeviceSettings.Add('L_winwordexe63', $policySettings.DeviceSettings.l_winwordexe63)
             $complexDeviceSettings.Add('L_excelexe57', $policySettings.DeviceSettings.l_excelexe57)
             $complexDeviceSettings.Add('L_NavigateURL', $policySettings.DeviceSettings.l_NavigateURL)
+            $complexDeviceSettings.Add('L_pptviewexe172', $policySettings.DeviceSettings.l_pptviewexe172)
             $complexDeviceSettings.Add('L_spdesignexe177', $policySettings.DeviceSettings.l_spdesignexe177)
             $complexDeviceSettings.Add('L_onenoteexe180', $policySettings.DeviceSettings.l_onenoteexe180)
-            $complexDeviceSettings.Add('L_pptviewexe172', $policySettings.DeviceSettings.l_pptviewexe172)
             $complexDeviceSettings.Add('L_outlookexe176', $policySettings.DeviceSettings.l_outlookexe176)
             $complexDeviceSettings.Add('L_winprojexe174', $policySettings.DeviceSettings.l_winprojexe174)
+            $complexDeviceSettings.Add('L_excelexe169', $policySettings.DeviceSettings.l_excelexe169)
+            $complexDeviceSettings.Add('L_exprwdexe178', $policySettings.DeviceSettings.l_exprwdexe178)
             $complexDeviceSettings.Add('L_msaccessexe179', $policySettings.DeviceSettings.l_msaccessexe179)
             $complexDeviceSettings.Add('L_winwordexe175', $policySettings.DeviceSettings.l_winwordexe175)
-            $complexDeviceSettings.Add('L_excelexe169', $policySettings.DeviceSettings.l_excelexe169)
             $complexDeviceSettings.Add('L_mspubexe170', $policySettings.DeviceSettings.l_mspubexe170)
-            $complexDeviceSettings.Add('L_exprwdexe178', $policySettings.DeviceSettings.l_exprwdexe178)
             $complexDeviceSettings.Add('L_powerpntexe171', $policySettings.DeviceSettings.l_powerpntexe171)
+            $complexDeviceSettings.Add('L_grooveexe168', $policySettings.DeviceSettings.l_grooveexe168)
             $complexDeviceSettings.Add('L_visioexe173', $policySettings.DeviceSettings.l_visioexe173)
             $complexDeviceSettings.Add('L_mse7exe181', $policySettings.DeviceSettings.l_mse7exe181)
-            $complexDeviceSettings.Add('L_grooveexe168', $policySettings.DeviceSettings.l_grooveexe168)
             $complexDeviceSettings.Add('L_ObjectCachingProtection', $policySettings.DeviceSettings.l_ObjectCachingProtection)
             $complexDeviceSettings.Add('L_winwordexe77', $policySettings.DeviceSettings.l_winwordexe77)
-            $complexDeviceSettings.Add('L_powerpntexe73', $policySettings.DeviceSettings.l_powerpntexe73)
             $complexDeviceSettings.Add('L_spdesignexe79', $policySettings.DeviceSettings.l_spdesignexe79)
             $complexDeviceSettings.Add('L_mse7exe83', $policySettings.DeviceSettings.l_mse7exe83)
+            $complexDeviceSettings.Add('L_powerpntexe73', $policySettings.DeviceSettings.l_powerpntexe73)
             $complexDeviceSettings.Add('L_mspubexe72', $policySettings.DeviceSettings.l_mspubexe72)
             $complexDeviceSettings.Add('L_msaccessexe81', $policySettings.DeviceSettings.l_msaccessexe81)
-            $complexDeviceSettings.Add('L_onenoteexe82', $policySettings.DeviceSettings.l_onenoteexe82)
             $complexDeviceSettings.Add('L_outlookexe78', $policySettings.DeviceSettings.l_outlookexe78)
+            $complexDeviceSettings.Add('L_visioexe75', $policySettings.DeviceSettings.l_visioexe75)
+            $complexDeviceSettings.Add('L_onenoteexe82', $policySettings.DeviceSettings.l_onenoteexe82)
             $complexDeviceSettings.Add('L_grooveexe70', $policySettings.DeviceSettings.l_grooveexe70)
             $complexDeviceSettings.Add('L_excelexe71', $policySettings.DeviceSettings.l_excelexe71)
-            $complexDeviceSettings.Add('L_visioexe75', $policySettings.DeviceSettings.l_visioexe75)
+            $complexDeviceSettings.Add('L_exprwdexe80', $policySettings.DeviceSettings.l_exprwdexe80)
             $complexDeviceSettings.Add('L_pptviewexe74', $policySettings.DeviceSettings.l_pptviewexe74)
             $complexDeviceSettings.Add('L_winprojexe76', $policySettings.DeviceSettings.l_winprojexe76)
-            $complexDeviceSettings.Add('L_exprwdexe80', $policySettings.DeviceSettings.l_exprwdexe80)
             $complexDeviceSettings.Add('L_ProtectionFromZoneElevation', $policySettings.DeviceSettings.l_ProtectionFromZoneElevation)
             $complexDeviceSettings.Add('L_mspubexe100', $policySettings.DeviceSettings.l_mspubexe100)
             $complexDeviceSettings.Add('L_visioexe103', $policySettings.DeviceSettings.l_visioexe103)
-            $complexDeviceSettings.Add('L_powerpntexe101', $policySettings.DeviceSettings.l_powerpntexe101)
-            $complexDeviceSettings.Add('L_excelexe99', $policySettings.DeviceSettings.l_excelexe99)
-            $complexDeviceSettings.Add('L_mse7exe111', $policySettings.DeviceSettings.l_mse7exe111)
             $complexDeviceSettings.Add('L_winwordexe105', $policySettings.DeviceSettings.l_winwordexe105)
+            $complexDeviceSettings.Add('L_excelexe99', $policySettings.DeviceSettings.l_excelexe99)
+            $complexDeviceSettings.Add('L_powerpntexe101', $policySettings.DeviceSettings.l_powerpntexe101)
+            $complexDeviceSettings.Add('L_mse7exe111', $policySettings.DeviceSettings.l_mse7exe111)
+            $complexDeviceSettings.Add('L_onenoteexe110', $policySettings.DeviceSettings.l_onenoteexe110)
+            $complexDeviceSettings.Add('L_pptviewexe102', $policySettings.DeviceSettings.l_pptviewexe102)
             $complexDeviceSettings.Add('L_exprwdexe108', $policySettings.DeviceSettings.l_exprwdexe108)
             $complexDeviceSettings.Add('L_msaccessexe109', $policySettings.DeviceSettings.l_msaccessexe109)
             $complexDeviceSettings.Add('L_spdesignexe107', $policySettings.DeviceSettings.l_spdesignexe107)
-            $complexDeviceSettings.Add('L_onenoteexe110', $policySettings.DeviceSettings.l_onenoteexe110)
-            $complexDeviceSettings.Add('L_pptviewexe102', $policySettings.DeviceSettings.l_pptviewexe102)
             $complexDeviceSettings.Add('L_winprojexe104', $policySettings.DeviceSettings.l_winprojexe104)
             $complexDeviceSettings.Add('L_grooveexe98', $policySettings.DeviceSettings.l_grooveexe98)
             $complexDeviceSettings.Add('L_outlookexe106', $policySettings.DeviceSettings.l_outlookexe106)
             $complexDeviceSettings.Add('L_RestrictActiveXInstall', $policySettings.DeviceSettings.l_RestrictActiveXInstall)
+            $complexDeviceSettings.Add('L_spDesignexe', $policySettings.DeviceSettings.l_spDesignexe)
             $complexDeviceSettings.Add('L_mse7exe', $policySettings.DeviceSettings.l_mse7exe)
             $complexDeviceSettings.Add('L_powerpntexe', $policySettings.DeviceSettings.l_powerpntexe)
-            $complexDeviceSettings.Add('L_spDesignexe', $policySettings.DeviceSettings.l_spDesignexe)
             $complexDeviceSettings.Add('L_onenoteexe', $policySettings.DeviceSettings.l_onenoteexe)
+            $complexDeviceSettings.Add('L_exprwdexe', $policySettings.DeviceSettings.l_exprwdexe)
             $complexDeviceSettings.Add('L_excelexe', $policySettings.DeviceSettings.l_excelexe)
             $complexDeviceSettings.Add('L_mspubexe', $policySettings.DeviceSettings.l_mspubexe)
             $complexDeviceSettings.Add('L_visioexe', $policySettings.DeviceSettings.l_visioexe)
-            $complexDeviceSettings.Add('L_exprwdexe', $policySettings.DeviceSettings.l_exprwdexe)
-            $complexDeviceSettings.Add('L_outlookexe', $policySettings.DeviceSettings.l_outlookexe)
             $complexDeviceSettings.Add('L_pptviewexe', $policySettings.DeviceSettings.l_pptviewexe)
-            $complexDeviceSettings.Add('L_winprojexe', $policySettings.DeviceSettings.l_winprojexe)
-            $complexDeviceSettings.Add('L_winwordexe', $policySettings.DeviceSettings.l_winwordexe)
+            $complexDeviceSettings.Add('L_outlookexe', $policySettings.DeviceSettings.l_outlookexe)
             $complexDeviceSettings.Add('L_grooveexe', $policySettings.DeviceSettings.l_grooveexe)
             $complexDeviceSettings.Add('L_msaccessexe', $policySettings.DeviceSettings.l_msaccessexe)
+            $complexDeviceSettings.Add('L_winprojexe', $policySettings.DeviceSettings.l_winprojexe)
+            $complexDeviceSettings.Add('L_winwordexe', $policySettings.DeviceSettings.l_winwordexe)
             $complexDeviceSettings.Add('L_RestrictFileDownload', $policySettings.DeviceSettings.l_RestrictFileDownload)
+            $complexDeviceSettings.Add('L_msaccessexe11', $policySettings.DeviceSettings.l_msaccessexe11)
             $complexDeviceSettings.Add('L_visioexe5', $policySettings.DeviceSettings.l_visioexe5)
             $complexDeviceSettings.Add('L_winprojexe6', $policySettings.DeviceSettings.l_winprojexe6)
-            $complexDeviceSettings.Add('L_msaccessexe11', $policySettings.DeviceSettings.l_msaccessexe11)
-            $complexDeviceSettings.Add('L_spdesignexe9', $policySettings.DeviceSettings.l_spdesignexe9)
             $complexDeviceSettings.Add('L_excelexe1', $policySettings.DeviceSettings.l_excelexe1)
+            $complexDeviceSettings.Add('L_spdesignexe9', $policySettings.DeviceSettings.l_spdesignexe9)
             $complexDeviceSettings.Add('L_powerpntexe3', $policySettings.DeviceSettings.l_powerpntexe3)
             $complexDeviceSettings.Add('L_mspubexe2', $policySettings.DeviceSettings.l_mspubexe2)
             $complexDeviceSettings.Add('L_exprwdexe10', $policySettings.DeviceSettings.l_exprwdexe10)
@@ -330,34 +330,34 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexDeviceSettings.Add('L_mse7exe13', $policySettings.DeviceSettings.l_mse7exe13)
             $complexDeviceSettings.Add('L_grooveexe0', $policySettings.DeviceSettings.l_grooveexe0)
             $complexDeviceSettings.Add('L_SavedfromURL', $policySettings.DeviceSettings.l_SavedfromURL)
-            $complexDeviceSettings.Add('L_pptviewexe158', $policySettings.DeviceSettings.l_pptviewexe158)
             $complexDeviceSettings.Add('L_exprwdexe164', $policySettings.DeviceSettings.l_exprwdexe164)
             $complexDeviceSettings.Add('L_mse7exe167', $policySettings.DeviceSettings.l_mse7exe167)
             $complexDeviceSettings.Add('L_spdesignexe163', $policySettings.DeviceSettings.l_spdesignexe163)
+            $complexDeviceSettings.Add('L_pptviewexe158', $policySettings.DeviceSettings.l_pptviewexe158)
             $complexDeviceSettings.Add('L_winprojexe160', $policySettings.DeviceSettings.l_winprojexe160)
-            $complexDeviceSettings.Add('L_mspubexe156', $policySettings.DeviceSettings.l_mspubexe156)
             $complexDeviceSettings.Add('L_visioexe159', $policySettings.DeviceSettings.l_visioexe159)
-            $complexDeviceSettings.Add('L_winwordexe161', $policySettings.DeviceSettings.l_winwordexe161)
+            $complexDeviceSettings.Add('L_mspubexe156', $policySettings.DeviceSettings.l_mspubexe156)
             $complexDeviceSettings.Add('L_msaccessexe165', $policySettings.DeviceSettings.l_msaccessexe165)
-            $complexDeviceSettings.Add('L_onenoteexe166', $policySettings.DeviceSettings.l_onenoteexe166)
+            $complexDeviceSettings.Add('L_winwordexe161', $policySettings.DeviceSettings.l_winwordexe161)
             $complexDeviceSettings.Add('L_outlookexe162', $policySettings.DeviceSettings.l_outlookexe162)
-            $complexDeviceSettings.Add('L_grooveexe154', $policySettings.DeviceSettings.l_grooveexe154)
             $complexDeviceSettings.Add('L_excelexe155', $policySettings.DeviceSettings.l_excelexe155)
             $complexDeviceSettings.Add('L_powerpntexe157', $policySettings.DeviceSettings.l_powerpntexe157)
+            $complexDeviceSettings.Add('L_onenoteexe166', $policySettings.DeviceSettings.l_onenoteexe166)
+            $complexDeviceSettings.Add('L_grooveexe154', $policySettings.DeviceSettings.l_grooveexe154)
             $complexDeviceSettings.Add('L_ScriptedWindowSecurityRestrictions', $policySettings.DeviceSettings.l_ScriptedWindowSecurityRestrictions)
+            $complexDeviceSettings.Add('L_powerpntexe87', $policySettings.DeviceSettings.l_powerpntexe87)
             $complexDeviceSettings.Add('L_exprwdexe94', $policySettings.DeviceSettings.l_exprwdexe94)
-            $complexDeviceSettings.Add('L_mse7exe97', $policySettings.DeviceSettings.l_mse7exe97)
             $complexDeviceSettings.Add('L_mspubexe86', $policySettings.DeviceSettings.l_mspubexe86)
             $complexDeviceSettings.Add('L_outlookexe92', $policySettings.DeviceSettings.l_outlookexe92)
+            $complexDeviceSettings.Add('L_mse7exe97', $policySettings.DeviceSettings.l_mse7exe97)
             $complexDeviceSettings.Add('L_msaccessexe95', $policySettings.DeviceSettings.l_msaccessexe95)
-            $complexDeviceSettings.Add('L_powerpntexe87', $policySettings.DeviceSettings.l_powerpntexe87)
             $complexDeviceSettings.Add('L_grooveexe84', $policySettings.DeviceSettings.l_grooveexe84)
             $complexDeviceSettings.Add('L_excelexe85', $policySettings.DeviceSettings.l_excelexe85)
             $complexDeviceSettings.Add('L_pptviewexe88', $policySettings.DeviceSettings.l_pptviewexe88)
             $complexDeviceSettings.Add('L_spdesignexe93', $policySettings.DeviceSettings.l_spdesignexe93)
             $complexDeviceSettings.Add('L_visioexe89', $policySettings.DeviceSettings.l_visioexe89)
-            $complexDeviceSettings.Add('L_onenoteexe96', $policySettings.DeviceSettings.l_onenoteexe96)
             $complexDeviceSettings.Add('L_winprojexe90', $policySettings.DeviceSettings.l_winprojexe90)
+            $complexDeviceSettings.Add('L_onenoteexe96', $policySettings.DeviceSettings.l_onenoteexe96)
             $complexDeviceSettings.Add('L_winwordexe91', $policySettings.DeviceSettings.l_winwordexe91)
             if ($complexDeviceSettings.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -368,7 +368,6 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexUserSettings = [ordered]@{}
             $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenter_L_BlockMacroExecutionFromInternet', $policySettings.UserSettings.microsoftAccess_Security_TrustCenter_L_BlockMacroExecutionFromInternet)
             $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenter_L_DisableTrustBarNotificationforunsigned', $policySettings.UserSettings.microsoftAccess_Security_TrustCenter_L_DisableTrustBarNotificationforunsigned)
-            $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenter_L_RequirethatApplicationExtensionsaresigned', $policySettings.UserSettings.microsoftAccess_Security_TrustCenter_L_RequirethatApplicationExtensionsaresigned)
             $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork', $policySettings.UserSettings.microsoftAccess_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork)
             $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenter_L_VBAWarningsPolicy', $policySettings.UserSettings.microsoftAccess_Security_TrustCenter_L_VBAWarningsPolicy)
             $complexUserSettings.Add('MicrosoftAccess_Security_TrustCenter_L_VBAWarningsPolicy_L_Empty', $policySettings.UserSettings.microsoftAccess_Security_TrustCenter_L_VBAWarningsPolicy_L_Empty)
@@ -438,8 +437,8 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyPublisher', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyPublisher)
             $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyOutlook', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyOutlook)
             $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyProject', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyProject)
-            $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyAccess', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyAccess)
             $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyInfoPath', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyInfoPath)
+            $complexUserSettings.Add('L_NoExtensibilityCustomizationFromDocumentPolicyAccess', $policySettings.UserSettings.l_NoExtensibilityCustomizationFromDocumentPolicyAccess)
             $complexUserSettings.Add('L_ActiveXControlInitialization', $policySettings.UserSettings.l_ActiveXControlInitialization)
             $complexUserSettings.Add('L_ActiveXControlInitializationcolon', $policySettings.UserSettings.l_ActiveXControlInitializationcolon)
             $complexUserSettings.Add('L_BasicAuthProxyBehavior', $policySettings.UserSettings.l_BasicAuthProxyBehavior)
@@ -594,6 +593,14 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $complexUserSettings.Add('L_empty19', $policySettings.UserSettings.l_empty19)
             $complexUserSettings.Add('MicrosoftWord_Security_L_TurnOffFileValidation', $policySettings.UserSettings.microsoftWord_Security_L_TurnOffFileValidation)
             $complexUserSettings.Add('MicrosoftWord_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork', $policySettings.UserSettings.microsoftWord_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork)
+            $complexUserSettings.Add('L_ExcelFileBlockExternalLinks', $policySettings.UserSettings.l_ExcelFileBlockExternalLinks)
+            $complexUserSettings.Add('L_BlockInsecureProtocols', $policySettings.UserSettings.l_BlockInsecureProtocols)
+            $complexUserSettings.Add('L_BlockOLEGraph', $policySettings.UserSettings.l_BlockOLEGraph)
+            $complexUserSettings.Add('L_BlockOrgChart', $policySettings.UserSettings.l_BlockOrgChart)
+            $complexUserSettings.Add('L_BlockWecFallback', $policySettings.UserSettings.l_BlockWecFallback)
+            $complexUserSettings.Add('L_OLEActions', $policySettings.UserSettings.l_OLEActions)
+            $complexUserSettings.Add('L_OLEActions_L_Empty', $policySettings.UserSettings.l_OLEActions_L_Empty)
+            $complexUserSettings.Add('MicrosoftProjectV3_Security_TrustCenter_L_BlockMacroExecutionFromInternet', $policySettings.UserSettings.microsoftProjectV3_Security_TrustCenter_L_BlockMacroExecutionFromInternet)
             if ($complexUserSettings.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexUserSettings = $null
@@ -665,7 +672,7 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
             $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
 
-        $templateReferenceId = '90316f12-246d-44c6-a767-f87692e86083_2'
+        $templateReferenceId = '90316f12-246d-44c6-a767-f87692e86083_3'
         $platforms = 'windows10'
         $technologies = 'mdm'
 
@@ -760,7 +767,7 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
         try
         {
             #region resource generator code
-            $policyTemplateID = '90316f12-246d-44c6-a767-f87692e86083_2'
+            $policyTemplateID = '90316f12-246d-44c6-a767-f87692e86083_3'
             $baseFilter = "templateReference/templateId eq '$policyTemplateID'"
             $mergedFilter = $baseFilter
             if (-not [System.String]::IsNullOrEmpty($this.Filter))
@@ -910,8 +917,8 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $Pol_SecGuide_A001_Block_Flash
 
     [DscProperty()]
-    [System.ComponentModel.Description('Block Flash player in Office (Device) - Depends on Pol_SecGuide_A001_Block_Flash (block all flash activation: Block all activation, block embedded flash activation only: Block embedding/linking, allow other activation, allow all flash activation: Allow all activation)')]
-    [ValidateSet('block all flash activation', 'block embedded flash activation only', 'allow all flash activation')]
+    [System.ComponentModel.Description('Block Flash player in Office (Device) - Depends on Pol_SecGuide_A001_Block_Flash (Block all Flash activation: Block all activation, Block embedded Flash activation only: Block embedding/linking, allow other activation, Allow all Flash activation: Allow all activation)')]
+    [ValidateSet('Block all Flash activation', 'Block embedded Flash activation only', 'Allow all Flash activation')]
     [System.String] $Pol_SecGuide_Block_Flash
 
     [DscProperty()]
@@ -936,20 +943,20 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $POL_SG_msaccess
 
     [DscProperty()]
-    [System.ComponentModel.Description('Project: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
-    [System.Nullable[System.Int32]] $POL_SG_winproj
-
-    [DscProperty()]
     [System.ComponentModel.Description('Visio: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
     [System.Nullable[System.Int32]] $POL_SG_visio
 
     [DscProperty()]
-    [System.ComponentModel.Description('Outlook: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
-    [System.Nullable[System.Int32]] $POL_SG_outlook
+    [System.ComponentModel.Description('Project: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
+    [System.Nullable[System.Int32]] $POL_SG_winproj
 
     [DscProperty()]
     [System.ComponentModel.Description('Word: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
     [System.Nullable[System.Int32]] $POL_SG_winword
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Outlook: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
+    [System.Nullable[System.Int32]] $POL_SG_outlook
 
     [DscProperty()]
     [System.ComponentModel.Description('Excel: (Device) - Depends on Pol_SecGuide_Legacy_JScript')]
@@ -976,26 +983,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_powerpntexe17
 
     [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe15
-
-    [DscProperty()]
-    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_visioexe19
-
-    [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe26
-
-    [DscProperty()]
-    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_outlookexe22
-
-    [DscProperty()]
     [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_pptviewexe18
@@ -1006,19 +993,39 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winwordexe21
 
     [DscProperty()]
+    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_outlookexe22
+
+    [DscProperty()]
+    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_visioexe19
+
+    [DscProperty()]
     [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_exprwdexe24
 
     [DscProperty()]
-    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_spdesignexe23
+    [System.Nullable[System.Int32]] $L_excelexe15
+
+    [DscProperty()]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_onenoteexe26
 
     [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winprojexe20
+
+    [DscProperty()]
+    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_spdesignexe23
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
@@ -1031,14 +1038,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_mspubexe16
 
     [DscProperty()]
-    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mse7exe27
-
-    [DscProperty()]
     [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_msaccessexe25
+
+    [DscProperty()]
+    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_AddonManagement (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_mse7exe27
 
     [DscProperty()]
     [System.ComponentModel.Description('Consistent Mime Handling (0: Disabled, 1: Enabled)')]
@@ -1046,29 +1053,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_ConsistentMimeHandling
 
     [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe43
-
-    [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_spdesignexe51
 
     [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe54
-
-    [DscProperty()]
-    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_outlookexe50
-
-    [DscProperty()]
-    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_pptviewexe46
+    [System.Nullable[System.Int32]] $L_excelexe43
 
     [DscProperty()]
     [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
@@ -1081,14 +1073,24 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe47
 
     [DscProperty()]
+    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_outlookexe50
+
+    [DscProperty()]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_onenoteexe54
+
+    [DscProperty()]
+    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_pptviewexe46
+
+    [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winprojexe48
-
-    [DscProperty()]
-    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_msaccessexe53
 
     [DscProperty()]
     [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
@@ -1096,14 +1098,19 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_powerpntexe45
 
     [DscProperty()]
+    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_mse7exe55
+
+    [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_grooveexe42
 
     [DscProperty()]
-    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
+    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mse7exe55
+    [System.Nullable[System.Int32]] $L_msaccessexe53
 
     [DscProperty()]
     [System.ComponentModel.Description('winword.exe (Device) - Depends on L_ConsistentMimeHandling (0: False, 1: True)')]
@@ -1121,9 +1128,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_Disableusernameandpassword
 
     [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe127
+    [System.Nullable[System.Int32]] $L_onenoteexe138
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
@@ -1131,19 +1138,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_grooveexe126
 
     [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe138
-
-    [DscProperty()]
     [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_mse7exe139
 
     [DscProperty()]
-    [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mspubexe128
+    [System.Nullable[System.Int32]] $L_excelexe127
 
     [DscProperty()]
     [System.ComponentModel.Description('visio.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
@@ -1151,24 +1153,29 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe131
 
     [DscProperty()]
-    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_exprwdexe136
-
-    [DscProperty()]
-    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_msaccessexe137
-
-    [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_spdesignexe135
 
     [DscProperty()]
+    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_exprwdexe136
+
+    [DscProperty()]
     [System.ComponentModel.Description('winword.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winwordexe133
+
+    [DscProperty()]
+    [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_mspubexe128
+
+    [DscProperty()]
+    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_msaccessexe137
 
     [DscProperty()]
     [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_Disableusernameandpassword (0: False, 1: True)')]
@@ -1196,9 +1203,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_Informationbar
 
     [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe113
+    [System.Nullable[System.Int32]] $L_outlookexe120
 
     [DscProperty()]
     [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
@@ -1206,19 +1213,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_mspubexe114
 
     [DscProperty()]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_excelexe113
+
+    [DscProperty()]
     [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_msaccessexe123
-
-    [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe124
-
-    [DscProperty()]
-    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_outlookexe120
 
     [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
@@ -1226,9 +1228,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winprojexe118
 
     [DscProperty()]
-    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_powerpntexe115
+    [System.Nullable[System.Int32]] $L_onenoteexe124
 
     [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
@@ -1236,19 +1238,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_spdesignexe121
 
     [DscProperty()]
+    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_powerpntexe115
+
+    [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_grooveexe112
-
-    [DscProperty()]
-    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_visioexe117
-
-    [DscProperty()]
-    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mse7exe125
 
     [DscProperty()]
     [System.ComponentModel.Description('winword.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
@@ -1259,6 +1256,16 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_exprwdexe122
+
+    [DscProperty()]
+    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_mse7exe125
+
+    [DscProperty()]
+    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_visioexe117
 
     [DscProperty()]
     [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_Informationbar (0: False, 1: True)')]
@@ -1316,16 +1323,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winwordexe35
 
     [DscProperty()]
-    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_msaccessexe39
-
-    [DscProperty()]
-    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_spdesignexe37
-
-    [DscProperty()]
     [System.ComponentModel.Description('visio.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_visioexe33
@@ -1334,6 +1331,16 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('onent.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_onenoteexe40
+
+    [DscProperty()]
+    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_spdesignexe37
+
+    [DscProperty()]
+    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_msaccessexe39
 
     [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_LocalMachineZoneLockdownSecurity (0: False, 1: True)')]
@@ -1351,9 +1358,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_powerpntexe59
 
     [DscProperty()]
-    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
+    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_exprwdexe66
+    [System.Nullable[System.Int32]] $L_visioexe61
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
@@ -1361,9 +1368,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_grooveexe56
 
     [DscProperty()]
-    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
+    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_visioexe61
+    [System.Nullable[System.Int32]] $L_exprwdexe66
 
     [DscProperty()]
     [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
@@ -1381,14 +1388,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_mse7exe69
 
     [DscProperty()]
-    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_msaccessexe67
-
-    [DscProperty()]
     [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_pptviewexe60
+
+    [DscProperty()]
+    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_msaccessexe67
 
     [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_MimeSniffingSafetyFature (0: False, 1: True)')]
@@ -1421,6 +1428,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_NavigateURL
 
     [DscProperty()]
+    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_pptviewexe172
+
+    [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_spdesignexe177
@@ -1429,11 +1441,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('onent.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_onenoteexe180
-
-    [DscProperty()]
-    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_pptviewexe172
 
     [DscProperty()]
     [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
@@ -1446,6 +1453,16 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winprojexe174
 
     [DscProperty()]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_excelexe169
+
+    [DscProperty()]
+    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_exprwdexe178
+
+    [DscProperty()]
     [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_msaccessexe179
@@ -1456,24 +1473,19 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winwordexe175
 
     [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe169
-
-    [DscProperty()]
     [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_mspubexe170
 
     [DscProperty()]
-    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_exprwdexe178
-
-    [DscProperty()]
     [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_powerpntexe171
+
+    [DscProperty()]
+    [System.ComponentModel.Description('groove.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_grooveexe168
 
     [DscProperty()]
     [System.ComponentModel.Description('visio.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
@@ -1486,11 +1498,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_mse7exe181
 
     [DscProperty()]
-    [System.ComponentModel.Description('groove.exe (Device) - Depends on L_NavigateURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_grooveexe168
-
-    [DscProperty()]
     [System.ComponentModel.Description('Object Caching Protection (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_ObjectCachingProtection
@@ -1499,11 +1506,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('winword.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winwordexe77
-
-    [DscProperty()]
-    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_powerpntexe73
 
     [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
@@ -1516,6 +1518,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_mse7exe83
 
     [DscProperty()]
+    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_powerpntexe73
+
+    [DscProperty()]
     [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_mspubexe72
@@ -1526,14 +1533,19 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_msaccessexe81
 
     [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe82
-
-    [DscProperty()]
     [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_outlookexe78
+
+    [DscProperty()]
+    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_visioexe75
+
+    [DscProperty()]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_onenoteexe82
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
@@ -1546,9 +1558,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_excelexe71
 
     [DscProperty()]
-    [System.ComponentModel.Description('visio.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
+    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_visioexe75
+    [System.Nullable[System.Int32]] $L_exprwdexe80
 
     [DscProperty()]
     [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
@@ -1559,11 +1571,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winprojexe76
-
-    [DscProperty()]
-    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_ObjectCachingProtection (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_exprwdexe80
 
     [DscProperty()]
     [System.ComponentModel.Description('Protection From Zone Elevation (0: Disabled, 1: Enabled)')]
@@ -1581,9 +1588,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe103
 
     [DscProperty()]
-    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
+    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_powerpntexe101
+    [System.Nullable[System.Int32]] $L_winwordexe105
 
     [DscProperty()]
     [System.ComponentModel.Description('excel.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
@@ -1591,14 +1598,24 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_excelexe99
 
     [DscProperty()]
+    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_powerpntexe101
+
+    [DscProperty()]
     [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_mse7exe111
 
     [DscProperty()]
-    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_winwordexe105
+    [System.Nullable[System.Int32]] $L_onenoteexe110
+
+    [DscProperty()]
+    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_pptviewexe102
 
     [DscProperty()]
     [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
@@ -1614,16 +1631,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_spdesignexe107
-
-    [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe110
-
-    [DscProperty()]
-    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_pptviewexe102
 
     [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_ProtectionFromZoneElevation (0: False, 1: True)')]
@@ -1646,6 +1653,11 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_RestrictActiveXInstall
 
     [DscProperty()]
+    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_spDesignexe
+
+    [DscProperty()]
     [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_mse7exe
@@ -1656,14 +1668,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_powerpntexe
 
     [DscProperty()]
-    [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_spDesignexe
-
-    [DscProperty()]
     [System.ComponentModel.Description('onent.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_onenoteexe
+
+    [DscProperty()]
+    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_exprwdexe
 
     [DscProperty()]
     [System.ComponentModel.Description('excel.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
@@ -1681,29 +1693,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe
 
     [DscProperty()]
-    [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_exprwdexe
-
-    [DscProperty()]
-    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_outlookexe
-
-    [DscProperty()]
     [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_pptviewexe
 
     [DscProperty()]
-    [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
+    [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_winprojexe
-
-    [DscProperty()]
-    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_winwordexe
+    [System.Nullable[System.Int32]] $L_outlookexe
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
@@ -1716,9 +1713,24 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_msaccessexe
 
     [DscProperty()]
+    [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_winprojexe
+
+    [DscProperty()]
+    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_RestrictActiveXInstall (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_winwordexe
+
+    [DscProperty()]
     [System.ComponentModel.Description('Restrict File Download (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_RestrictFileDownload
+
+    [DscProperty()]
+    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_msaccessexe11
 
     [DscProperty()]
     [System.ComponentModel.Description('visio.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
@@ -1731,19 +1743,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_winprojexe6
 
     [DscProperty()]
-    [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
+    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_msaccessexe11
+    [System.Nullable[System.Int32]] $L_excelexe1
 
     [DscProperty()]
     [System.ComponentModel.Description('spDesign.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_spdesignexe9
-
-    [DscProperty()]
-    [System.ComponentModel.Description('excel.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_excelexe1
 
     [DscProperty()]
     [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_RestrictFileDownload (0: False, 1: True)')]
@@ -1796,11 +1803,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_SavedfromURL
 
     [DscProperty()]
-    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_pptviewexe158
-
-    [DscProperty()]
     [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_exprwdexe164
@@ -1816,14 +1818,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_spdesignexe163
 
     [DscProperty()]
+    [System.ComponentModel.Description('pptview.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_pptviewexe158
+
+    [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winprojexe160
-
-    [DscProperty()]
-    [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mspubexe156
 
     [DscProperty()]
     [System.ComponentModel.Description('visio.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
@@ -1831,9 +1833,9 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe159
 
     [DscProperty()]
-    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
+    [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_winwordexe161
+    [System.Nullable[System.Int32]] $L_mspubexe156
 
     [DscProperty()]
     [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
@@ -1841,19 +1843,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_msaccessexe165
 
     [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
+    [System.ComponentModel.Description('winword.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe166
+    [System.Nullable[System.Int32]] $L_winwordexe161
 
     [DscProperty()]
     [System.ComponentModel.Description('outlook.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_outlookexe162
-
-    [DscProperty()]
-    [System.ComponentModel.Description('groove.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_grooveexe154
 
     [DscProperty()]
     [System.ComponentModel.Description('excel.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
@@ -1866,19 +1863,29 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_powerpntexe157
 
     [DscProperty()]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_onenoteexe166
+
+    [DscProperty()]
+    [System.ComponentModel.Description('groove.exe (Device) - Depends on L_SavedfromURL (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_grooveexe154
+
+    [DscProperty()]
     [System.ComponentModel.Description('Scripted Window Security Restrictions (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_ScriptedWindowSecurityRestrictions
 
     [DscProperty()]
+    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_powerpntexe87
+
+    [DscProperty()]
     [System.ComponentModel.Description('exprwd.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_exprwdexe94
-
-    [DscProperty()]
-    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_mse7exe97
 
     [DscProperty()]
     [System.ComponentModel.Description('mspub.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
@@ -1891,14 +1898,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_outlookexe92
 
     [DscProperty()]
+    [System.ComponentModel.Description('mse7.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_mse7exe97
+
+    [DscProperty()]
     [System.ComponentModel.Description('msaccess.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_msaccessexe95
-
-    [DscProperty()]
-    [System.ComponentModel.Description('powerpnt.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_powerpntexe87
 
     [DscProperty()]
     [System.ComponentModel.Description('groove.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
@@ -1926,14 +1933,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogDeviceSettings_IntuneSecurityBasel
     [System.Nullable[System.Int32]] $L_visioexe89
 
     [DscProperty()]
-    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_onenoteexe96
-
-    [DscProperty()]
     [System.ComponentModel.Description('winproj.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_winprojexe90
+
+    [DscProperty()]
+    [System.ComponentModel.Description('onent.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_onenoteexe96
 
     [DscProperty()]
     [System.ComponentModel.Description('winword.exe (Device) - Depends on L_ScriptedWindowSecurityRestrictions (0: False, 1: True)')]
@@ -1952,11 +1959,6 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselin
     [System.ComponentModel.Description('Disable Trust Bar Notification for unsigned application add-ins and block them (User) (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $MicrosoftAccess_Security_TrustCenter_L_DisableTrustBarNotificationforunsigned
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Require that application add-ins are signed by Trusted Publisher (User) (0: Disabled, 1: Enabled)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $MicrosoftAccess_Security_TrustCenter_L_RequirethatApplicationExtensionsaresigned
 
     [DscProperty()]
     [System.ComponentModel.Description('Allow Trusted Locations on the network (User) (0: Disabled, 1: Enabled)')]
@@ -2304,14 +2306,14 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselin
     [System.Nullable[System.Int32]] $L_NoExtensibilityCustomizationFromDocumentPolicyProject
 
     [DscProperty()]
-    [System.ComponentModel.Description('Disallow in Access (User) - Depends on L_NoExtensibilityCustomizationFromDocumentPolicy (0: False, 1: True)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $L_NoExtensibilityCustomizationFromDocumentPolicyAccess
-
-    [DscProperty()]
     [System.ComponentModel.Description('Disallow in InfoPath (User) - Depends on L_NoExtensibilityCustomizationFromDocumentPolicy (0: False, 1: True)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $L_NoExtensibilityCustomizationFromDocumentPolicyInfoPath
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Disallow in Access (User) - Depends on L_NoExtensibilityCustomizationFromDocumentPolicy (0: False, 1: True)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_NoExtensibilityCustomizationFromDocumentPolicyAccess
 
     [DscProperty()]
     [System.ComponentModel.Description('ActiveX Control Initialization (User) (0: Disabled, 1: Enabled)')]
@@ -3076,6 +3078,46 @@ class MSFT_MicrosoftGraphIntuneSettingsCatalogUserSettings_IntuneSecurityBaselin
     [System.ComponentModel.Description('Allow Trusted Locations on the network (User) (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
     [System.Nullable[System.Int32]] $MicrosoftWord_Security_TrustCenterTrustedLocations_L_AllowTrustedLocationsOnTheNetwork
+
+    [DscProperty()]
+    [System.ComponentModel.Description('File Block includes external link files (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_ExcelFileBlockExternalLinks
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Block Insecure Protocols (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_BlockInsecureProtocols
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Block OLE Graph (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_BlockOLEGraph
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Block OrgChart (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_BlockOrgChart
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Restrict Apps from FPRPC Fallback (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_BlockWecFallback
+
+    [DscProperty()]
+    [System.ComponentModel.Description('OLE Active Content (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $L_OLEActions
+
+    [DscProperty()]
+    [System.ComponentModel.Description(' - Depends on L_OLEActions (0: disable (don''t allow activating OLE Active Content), 1: enable (prompt user before activating OLE Active Content), 2: enable all (allow activating OLE Active Content without prompting))')]
+    [ValidateSet('0', '1', '2')]
+    [System.String] $L_OLEActions_L_Empty
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Block macros from running in Office files from the internet (User) (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $MicrosoftProjectV3_Security_TrustCenter_L_BlockMacroExecutionFromInternet
 }
 
 class MSFT_DeviceManagementConfigurationPolicyAssignments
