@@ -679,6 +679,9 @@ function Get-M365DSCResourcesByExportMode
 .PARAMETER SkipAuthenticationUpdate
     Indicates that authentication fields should not be transformed.
 
+.PARAMETER SkipRemoveSpecialCharacters
+    Indicates that special characters should not be removed from the resource instance name.
+
 .PARAMETER AllowVariablesInStrings
     Indicates that variable placeholders may be preserved inside strings.
 
