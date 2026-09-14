@@ -246,12 +246,13 @@ class IntuneAzureNetworkConnectionWindows365 : M365DSCResourceBase
             $boundParameters.Remove('OrganizationalUnit') | Out-Null
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Azure Network Connection for Windows365 with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
             $createParameters.Add('ManagedBy', 'windows365')
 
@@ -263,8 +264,7 @@ class IntuneAzureNetworkConnectionWindows365 : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Azure Network Connection for Windows365 with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

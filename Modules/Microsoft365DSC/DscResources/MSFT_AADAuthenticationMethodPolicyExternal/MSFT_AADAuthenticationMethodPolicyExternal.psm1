@@ -234,10 +234,9 @@ class AADAuthenticationMethodPolicyExternal : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        $params = ([Hashtable]$BoundParameters).Clone()
-        $params = Rename-M365DSCCimInstanceParameter -Properties $params
+        $params = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         Update-M365DSCAuthenticationTargets -Targets $params.ExcludeTargets
         Update-M365DSCAuthenticationTargets -Targets $params.IncludeTargets

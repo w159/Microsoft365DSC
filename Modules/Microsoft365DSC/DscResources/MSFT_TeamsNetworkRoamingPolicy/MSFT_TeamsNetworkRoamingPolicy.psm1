@@ -145,12 +145,14 @@ class TeamsNetworkRoamingPolicy : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a Teams Network Roaming Policy with Identity {$($this.Identity)}"
-            New-CsTeamsNetworkRoamingPolicy @boundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-CsTeamsNetworkRoamingPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Network Roaming Policy with Identity {$($this.Identity)}"
-            Set-CsTeamsNetworkRoamingPolicy @boundParameters | Out-Null
+            $updateParameters = $boundParameters
+            Set-CsTeamsNetworkRoamingPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

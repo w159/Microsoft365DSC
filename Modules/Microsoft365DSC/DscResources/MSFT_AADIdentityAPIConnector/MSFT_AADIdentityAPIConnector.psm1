@@ -190,7 +190,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         $authentication = $this.AuthenticationConfiguration
 
@@ -207,8 +207,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             {
                 Write-Verbose -Message "Creating an Azure AD Identity API Connector with DisplayName {$($this.DisplayName)}"
 
-                $createParameters = ([Hashtable]$BoundParameters).Clone()
-                $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+                $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
                 $createParameters.Remove('Id') | Out-Null
 
                 $createParameters.Remove('AuthenticationConfiguration') | Out-Null
@@ -229,8 +228,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             {
                 Write-Verbose -Message "Updating the Azure AD Identity API Connector with Id {$($currentInstance.Id)}"
 
-                $updateParameters = ([Hashtable]$BoundParameters).Clone()
-                $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+                $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
                 $updateParameters.Remove('Id') | Out-Null
 
@@ -242,10 +240,10 @@ class AADIdentityAPIConnector : M365DSCResourceBase
                         'username'    = $authentication.Username
                     })
 
-                $UpdateParameters.Add('@odata.type', '#microsoft.graph.IdentityApiConnector')
+                $updateParameters.Add('@odata.type', '#microsoft.graph.IdentityApiConnector')
                 Update-MgBetaIdentityApiConnector `
                     -IdentityApiConnectorId $currentInstance.Id `
-                    -BodyParameter $UpdateParameters
+                    -BodyParameter $updateParameters
             }
             elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
             {
@@ -265,8 +263,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             # Create a new instance with the certificates
             Write-Verbose -Message "Creating an Azure AD Identity API Connector with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             $createParameters.Remove('AuthenticationConfiguration') | Out-Null

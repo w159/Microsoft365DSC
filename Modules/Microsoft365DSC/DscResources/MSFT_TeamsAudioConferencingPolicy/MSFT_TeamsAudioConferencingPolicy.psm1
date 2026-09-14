@@ -138,39 +138,39 @@ class TeamsAudioConferencingPolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            $keys = @($CreateParameters.Keys)
+            $keys = @($createParameters.Keys)
             foreach ($key in $keys)
             {
                 if ($key -eq 'MeetingInvitePhoneNumbers')
                 {
-                    $keyValue = $CreateParameters.$key -join ','
-                    $CreateParameters.Remove($key) | Out-Null
-                    $CreateParameters.Add($key, $keyValue)
+                    $keyValue = $createParameters.$key -join ','
+                    $createParameters.Remove($key) | Out-Null
+                    $createParameters.Add($key, $keyValue)
                 }
             }
             Write-Verbose -Message "Creating a Teams Audio Conferencing Policy with Identity {$($this.Identity)}"
-            New-CsTeamsAudioConferencingPolicy @CreateParameters | Out-Null
+            New-CsTeamsAudioConferencingPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Audio Conferencing Policy with Identity {$($this.Identity)}"
 
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            $keys = @($UpdateParameters.Keys)
+            $keys = @($updateParameters.Keys)
             foreach ($key in $keys)
             {
                 if ($key -eq 'MeetingInvitePhoneNumbers')
                 {
-                    $keyValue = $UpdateParameters.$key -join ','
-                    $UpdateParameters.Remove($key) | Out-Null
-                    $UpdateParameters.Add($key, $keyValue)
+                    $keyValue = $updateParameters.$key -join ','
+                    $updateParameters.Remove($key) | Out-Null
+                    $updateParameters.Add($key, $keyValue)
                 }
             }
 
-            Set-CsTeamsAudioConferencingPolicy @UpdateParameters | Out-Null
+            Set-CsTeamsAudioConferencingPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

@@ -456,22 +456,22 @@ class EXOGroupSettings : M365DSCResourceBase
 
         $CurrentValues = $this.Get().ToHashtable()
 
-        $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $UpdateParameters.Add('Identity', $CurrentValues.Id)
-        $UpdateParameters.Remove('Id') | Out-Null
-        $UpdateParameters.Remove('DisplayName') | Out-Null
+        $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $updateParameters.Add('Identity', $CurrentValues.Id)
+        $updateParameters.Remove('Id') | Out-Null
+        $updateParameters.Remove('DisplayName') | Out-Null
 
         # Cannot use PrimarySmtpAddress and EmailAddresses at the same time. If both are present, then give priority to PrimarySmtpAddress.
-        if ($UpdateParameters.ContainsKey('PrimarySmtpAddress') -and $null -ne $UpdateParameters.PrimarySmtpAddress)
+        if ($updateParameters.ContainsKey('PrimarySmtpAddress') -and $null -ne $updateParameters.PrimarySmtpAddress)
         {
-            $UpdateParameters.Remove('EmailAddresses') | Out-Null
+            $updateParameters.Remove('EmailAddresses') | Out-Null
         }
 
         # Renaming of WelcomeMessageEnabled to UnifiedGroupWelcomeMessageEnabled
-        if ($UpdateParameters.ContainsKey('WelcomeMessageEnabled'))
+        if ($updateParameters.ContainsKey('WelcomeMessageEnabled'))
         {
-            $UpdateParameters.Add('UnifiedGroupWelcomeMessageEnabled', $UpdateParameters.WelcomeMessageEnabled)
-            $UpdateParameters.Remove('WelcomeMessageEnabled') | Out-Null
+            $updateParameters.Add('UnifiedGroupWelcomeMessageEnabled', $updateParameters.WelcomeMessageEnabled)
+            $updateParameters.Remove('WelcomeMessageEnabled') | Out-Null
         }
 
         foreach ($key in $this.ResourceCache['displayNameProperties'].Keys)
@@ -480,7 +480,7 @@ class EXOGroupSettings : M365DSCResourceBase
             if ($this.GetBoundParameters().ContainsKey($key))
             {
                 $convertedList = [System.Collections.Generic.List[System.String]]::new()
-                foreach ($member in $UpdateParameters.$key)
+                foreach ($member in $updateParameters.$key)
                 {
                     # If member is a GUID, keep as-is
                     if ([System.Guid]::TryParse($member, [ref][System.Guid]::Empty))
@@ -493,11 +493,11 @@ class EXOGroupSettings : M365DSCResourceBase
                     $convertedList.Add($entry.Name)
                 }
 
-                $UpdateParameters[$key] = $convertedList.ToArray()
+                $updateParameters[$key] = $convertedList.ToArray()
             }
         }
 
-        Set-UnifiedGroup @UpdateParameters
+        Set-UnifiedGroup @updateParameters
     }
 
     [bool] Test()

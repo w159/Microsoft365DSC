@@ -186,11 +186,12 @@ class EXOHostedContentFilterRule : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $CurrentValues = $this.Get().ToHashtable()
-        $BoundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Absent')
         {
+            $createParameters = $boundParameters
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-HostedContentFilterPolicy -Identity $this.HostedContentFilterPolicy -ErrorAction 'SilentlyContinue'
             if ($null -eq $AssociatedPolicy)
@@ -213,13 +214,14 @@ class EXOHostedContentFilterRule : M365DSCResourceBase
                 Remove-HostedContentFilterRule -Identity $this.Identity -Confirm:$false
             }
             Write-Verbose -Message "Creating new HostedContentFilterRule {$($this.Identity)}"
-            Write-Verbose -Message "With Parameters: $(Convert-M365DscHashtableToString -Hashtable $BoundParameters)"
-            $BoundParameters.Add('Name', $this.Identity)
-            $BoundParameters.Remove('Identity') | Out-Null
-            New-HostedContentFilterRule @BoundParameters
+            Write-Verbose -Message "With Parameters: $(Convert-M365DscHashtableToString -Hashtable $createParameters)"
+            $createParameters.Add('Name', $this.Identity)
+            $createParameters.Remove('Identity') | Out-Null
+            New-HostedContentFilterRule @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
+            $updateParameters = $boundParameters
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-HostedContentFilterPolicy -Identity $this.HostedContentFilterPolicy -ErrorAction 'SilentlyContinue'
             if ($null -eq $AssociatedPolicy)
@@ -234,13 +236,13 @@ class EXOHostedContentFilterRule : M365DSCResourceBase
                 throw "Policy $($this.Identity) is marked as the default. Creating a rule to apply the default policy is not allowed."
             }
 
-            $BoundParameters.Remove('Enabled') | Out-Null
-            if ($CurrentValues.HostedContentFilterPolicy -eq $BoundParameters.HostedContentFilterPolicy)
+            $updateParameters.Remove('Enabled') | Out-Null
+            if ($CurrentValues.HostedContentFilterPolicy -eq $updateParameters.HostedContentFilterPolicy)
             {
-                $BoundParameters.Remove('HostedContentFilterPolicy') | Out-Null
+                $updateParameters.Remove('HostedContentFilterPolicy') | Out-Null
             }
             Write-Verbose -Message "Updating HostedContentFilterRule {$($this.Identity)}"
-            Set-HostedContentFilterRule @BoundParameters
+            Set-HostedContentFilterRule @updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $CurrentValues.Ensure -eq 'Present')
         {

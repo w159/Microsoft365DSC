@@ -221,7 +221,7 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
 
     [void] Set()
     {
-        $CreateParameters = $null
+        $createParameters = $null
         if ($this.RequiresPowerShellCore())
         {
             $null = $this.InvokeInPowerShellCore('Set')
@@ -241,25 +241,25 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
             Write-Verbose -Message "Creating access package {$($this.DisplayName)}"
 
             #region basic information
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            if (-not [System.Guid]::TryParse($CreateParameters.CatalogId, [ref][System.Guid]::Empty))
+            if (-not [System.Guid]::TryParse($createParameters.CatalogId, [ref][System.Guid]::Empty))
             {
-                $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -Filter "DisplayName eq '$($CreateParameters.CatalogId -replace "'", "''")'"
+                $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -Filter "DisplayName eq '$($createParameters.CatalogId -replace "'", "''")'"
                 if ($catalogInstance)
                 {
-                    $CreateParameters.CatalogId = $catalogInstance.Id
+                    $createParameters.CatalogId = $catalogInstance.Id
                 }
             }
 
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('AccessPackageResourceRoleScopes') | Out-Null
-            $CreateParameters.Remove('IncompatibleAccessPackages') | Out-Null
-            $CreateParameters.Remove('AccessPackagesIncompatibleWith') | Out-Null
-            $CreateParameters.Remove('IncompatibleGroups') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('AccessPackageResourceRoleScopes') | Out-Null
+            $createParameters.Remove('IncompatibleAccessPackages') | Out-Null
+            $createParameters.Remove('AccessPackagesIncompatibleWith') | Out-Null
+            $createParameters.Remove('IncompatibleGroups') | Out-Null
 
             $accessPackage = New-MgBetaEntitlementManagementAccessPackage `
-                -BodyParameter $CreateParameters
+                -BodyParameter $createParameters
 
             #endregion
 
@@ -321,19 +321,19 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
                 Write-Verbose -Message "Adding roleScope {$originId`:$roleName} to access package with Id {$($accessPackage.Id)}"
 
                 $resourceScope = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResource `
-                    -AccessPackageCatalogId $CreateParameters.CatalogId `
+                    -AccessPackageCatalogId $createParameters.CatalogId `
                     -Filter "originId eq '$originId'" `
                     -ExpandProperty 'accessPackageResourceScopes'
 
                 $resourceRole = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResourceRole `
-                    -AccessPackageCatalogId $CreateParameters.CatalogId `
+                    -AccessPackageCatalogId $createParameters.CatalogId `
                     -Filter "(accessPackageResource/Id eq '$($resourceScope.id)' and DisplayName eq '$($roleName -replace "'", "''")' and originSystem eq '$($resourceScope.originSystem)')" `
                     -ExpandProperty 'accessPackageResource'
 
                 $isValidRoleScope = $true
                 if ($null -eq $resourceScope)
                 {
-                    Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($CreateParameters.CatalogId)}"
+                    Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($createParameters.CatalogId)}"
                     $isValidRoleScope = $false
                 }
 
@@ -378,24 +378,24 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
             Write-Verbose -Message "Updating access package with id {$($this.id)} and displayName {$($this.DisplayName)}"
 
             #region basic information
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            if (-not [System.Guid]::TryParse($CreateParameters.CatalogId, [ref][System.Guid]::Empty))
+            if (-not [System.Guid]::TryParse($createParameters.CatalogId, [ref][System.Guid]::Empty))
             {
-                $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -Filter "DisplayName eq '$($UpdateParameters.CatalogId -replace "'", "''")'"
+                $catalogInstance = Get-MgBetaEntitlementManagementAccessPackageCatalog -Filter "DisplayName eq '$($updateParameters.CatalogId -replace "'", "''")'"
                 if ($catalogInstance)
                 {
-                    $UpdateParameters.CatalogId = $catalogInstance.Id
+                    $updateParameters.CatalogId = $catalogInstance.Id
                 }
             }
 
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('AccessPackageResourceRoleScopes') | Out-Null
-            $UpdateParameters.Remove('IncompatibleAccessPackages') | Out-Null
-            $UpdateParameters.Remove('AccessPackagesIncompatibleWith') | Out-Null
-            $UpdateParameters.Remove('IncompatibleGroups') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('AccessPackageResourceRoleScopes') | Out-Null
+            $updateParameters.Remove('IncompatibleAccessPackages') | Out-Null
+            $updateParameters.Remove('AccessPackagesIncompatibleWith') | Out-Null
+            $updateParameters.Remove('IncompatibleGroups') | Out-Null
 
-            Update-MgBetaEntitlementManagementAccessPackage -BodyParameter $UpdateParameters `
+            Update-MgBetaEntitlementManagementAccessPackage -BodyParameter $updateParameters `
                 -AccessPackageId $currentInstance.Id
             #endregion
 
@@ -514,19 +514,19 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
                     Write-Verbose -Message "Adding roleScope {$originId`:$roleName} to access package with Id {$($currentInstance.Id)}"
 
                     $resourceScope = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResource `
-                        -AccessPackageCatalogId $UpdateParameters.CatalogId `
+                        -AccessPackageCatalogId $updateParameters.CatalogId `
                         -Filter "originId eq '$originId'" `
                         -ExpandProperty 'accessPackageResourceScopes'
 
                     $resourceRole = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResourceRole `
-                        -AccessPackageCatalogId $UpdateParameters.CatalogId `
+                        -AccessPackageCatalogId $updateParameters.CatalogId `
                         -Filter "(accessPackageResource/Id eq '$($resourceScope.id)' and DisplayName eq '$($roleName -replace "'", "''")' and originSystem eq '$($resourceScope.originSystem)')" `
                         -ExpandProperty 'accessPackageResource'
 
                     $isValidRoleScope = $true
                     if ($null -eq $resourceScope)
                     {
-                        Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($UpdateParameters.CatalogId)}"
+                        Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($updateParameters.CatalogId)}"
                         $isValidRoleScope = $false
                     }
 
@@ -578,19 +578,19 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
                         Write-Verbose -Message "Updating role {$roleName} from access package rolescope with Id {$($accessPackageResourceRoleScope.id)}"
 
                         $resourceScope = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResource `
-                            -AccessPackageCatalogId $UpdateParameters.CatalogId `
+                            -AccessPackageCatalogId $updateParameters.CatalogId `
                             -Filter "originId eq '$originId'" `
                             -ExpandProperty 'accessPackageResourceScopes'
 
                         $resourceRole = Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResourceRole `
-                            -AccessPackageCatalogId $UpdateParameters.CatalogId `
+                            -AccessPackageCatalogId $updateParameters.CatalogId `
                             -Filter "(accessPackageResource/Id eq '$($resourceScope.id)' and DisplayName eq '$($roleName -replace "'", "''")' and originSystem eq '$($resourceScope.originSystem)')" `
                             -ExpandProperty 'accessPackageResource'
 
                         $isValidRoleScope = $true
                         if ($null -eq $resourceScope)
                         {
-                            Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($UpdateParameters.CatalogId)}"
+                            Write-Verbose -Message "The AccessPackageResourceOriginId {$originId} could not be found in catalog with id {$($updateParameters.CatalogId)}"
                             $isValidRoleScope = $false
                         }
 

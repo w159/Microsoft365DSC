@@ -148,37 +148,38 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
 
         $currentPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "The Group Lifecycle Policy should exist but it doesn't. Creating it."
-            $creationParams = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $creationParams.Remove('IsSingleInstance') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('IsSingleInstance') | Out-Null
 
             $emails = ''
-            foreach ($email in $creationParams.alternateNotificationEmails)
+            foreach ($email in $createParameters.alternateNotificationEmails)
             {
                 $emails += $email + ';'
             }
             $emails = $emails.TrimEnd(';')
-            $creationParams.alternateNotificationEmails = $emails
-            New-MgGroupLifecyclePolicy -BodyParameter $creationParams
+            $createParameters.alternateNotificationEmails = $emails
+            New-MgGroupLifecyclePolicy -BodyParameter $createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
-            $updateParams = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $updateParams.Remove('IsSingleInstance') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('IsSingleInstance') | Out-Null
 
             $emails = ''
-            foreach ($email in $updateParams.alternateNotificationEmails)
+            foreach ($email in $updateParameters.alternateNotificationEmails)
             {
                 $emails += $email + ';'
             }
             $emails = $emails.TrimEnd(';')
-            $updateParams.alternateNotificationEmails = $emails
+            $updateParameters.alternateNotificationEmails = $emails
 
             Write-Verbose -Message "The Group Lifecycle Policy exists but it's not in the Desired State. Updating it."
-            Update-MgGroupLifecyclePolicy -GroupLifecyclePolicyId (Get-MgGroupLifecyclePolicy).Id -BodyParameter $updateParams
+            Update-MgGroupLifecyclePolicy -GroupLifecyclePolicyId (Get-MgGroupLifecyclePolicy).Id -BodyParameter $updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentPolicy.Ensure -eq 'Present')
         {

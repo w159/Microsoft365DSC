@@ -192,12 +192,13 @@ class IntuneDeviceComplianceScriptLinux : M365DSCResourceBase
                 }
             })
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Compliance Script for Linux with Name {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -208,8 +209,7 @@ class IntuneDeviceComplianceScriptLinux : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Device Compliance Script for Linux with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

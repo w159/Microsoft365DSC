@@ -158,18 +158,18 @@ class AADActivityBasedTimeoutPolicy : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
 
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $AzurePortalTimeOutexist = $false
         $DefaultTimeOutexistst = $false
-        if ($BoundParameters.ContainsKey('AzurePortalTimeOut') `
-                -and $null -ne $BoundParameters.AzurePortalTimeOut `
-                -and -not [System.String]::IsNullOrEmpty($BoundParameters.AzurePortalTimeOut))
+        if ($boundParameters.ContainsKey('AzurePortalTimeOut') `
+                -and $null -ne $boundParameters.AzurePortalTimeOut `
+                -and -not [System.String]::IsNullOrEmpty($boundParameters.AzurePortalTimeOut))
         {
             $AzurePortalTimeOutexist = $true
         }
-        if ($BoundParameters.ContainsKey('DefaultTimeOut') `
-                -and $null -ne $BoundParameters.DefaultTimeOut `
-                -and -not [System.String]::IsNullOrEmpty($BoundParameters.DefaultTimeOut))
+        if ($boundParameters.ContainsKey('DefaultTimeOut') `
+                -and $null -ne $boundParameters.DefaultTimeOut `
+                -and -not [System.String]::IsNullOrEmpty($boundParameters.DefaultTimeOut))
         {
             $DefaultTimeOutexistst = $true
         }

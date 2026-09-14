@@ -203,12 +203,14 @@ class TeamsVoiceRoute : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a new Voice Route {$($this.Identity)}"
-            New-CsOnlineVoiceRoute @boundParameters
+            $createParameters = $boundParameters
+            New-CsOnlineVoiceRoute @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating settings for Voice Route {$($this.Identity)}"
-            Set-CsOnlineVoiceRoute @boundParameters
+            $updateParameters = $boundParameters
+            Set-CsOnlineVoiceRoute @updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $CurrentValues.Ensure -eq 'Present')
         {

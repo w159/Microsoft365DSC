@@ -177,13 +177,14 @@ class EXOAntiPhishRule : M365DSCResourceBase
         $null = $this.Connect('ExchangeOnline')
 
         $CurrentValues = $this.Get().ToHashtable()
-        $BoundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Absent')
         {
-            $BoundParameters.Add('Name', $this.Identity) | Out-Null
-            $BoundParameters.Remove('Identity') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Add('Name', $this.Identity) | Out-Null
+            $createParameters.Remove('Identity') | Out-Null
 
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-AntiPhishPolicy -Identity $this.AntiPhishPolicy -ErrorAction 'SilentlyContinue'
@@ -202,11 +203,12 @@ class EXOAntiPhishRule : M365DSCResourceBase
             }
 
             Write-Verbose -Message "Creating AntiPhishRule {$($this.Identity)}"
-            New-AntiPhishRule @BoundParameters
+            New-AntiPhishRule @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
-            $BoundParameters.Remove('Enabled') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Enabled') | Out-Null
 
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-AntiPhishPolicy -Identity $this.AntiPhishPolicy -ErrorAction 'SilentlyContinue'
@@ -222,11 +224,11 @@ class EXOAntiPhishRule : M365DSCResourceBase
             if ($null -ne $existingRule)
             {
                 # The rule is already assigned to the policy, do try to update the AntiPhishPolicy parameter;
-                $BoundParameters.Remove('AntiPhishPolicy') | Out-Null
+                $updateParameters.Remove('AntiPhishPolicy') | Out-Null
             }
 
             Write-Verbose -Message "Updating AntiPhishRule {$($this.Identity)}."
-            Set-AntiPhishRule @BoundParameters
+            Set-AntiPhishRule @updateParameters
         }
         if ($this.Ensure -eq 'Absent' -and $CurrentValues.Ensure -eq 'Present')
         {

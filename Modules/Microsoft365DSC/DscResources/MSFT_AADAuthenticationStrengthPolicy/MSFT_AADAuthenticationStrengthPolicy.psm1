@@ -151,20 +151,22 @@ class AADAuthenticationStrengthPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Azure AD AuthenticationStrengthPolicy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Id') | Out-Null
-            New-MgBetaPolicyAuthenticationStrengthPolicy -BodyParameter $BoundParameters | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            New-MgBetaPolicyAuthenticationStrengthPolicy -BodyParameter $createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Azure AD Authentication Strength Policy with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Id') | Out-Null
-            $combinations = $BoundParameters.AllowedCombinations
-            $BoundParameters.Remove('AllowedCombinations') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            $combinations = $updateParameters.AllowedCombinations
+            $updateParameters.Remove('AllowedCombinations') | Out-Null
 
             # Need to retrieve the policy to make sure we are not trying to update a builtIn one.
             $policyObject = Get-MgBetaPolicyAuthenticationStrengthPolicy -AuthenticationStrengthPolicyId $currentInstance.Id
@@ -174,7 +176,7 @@ class AADAuthenticationStrengthPolicy : M365DSCResourceBase
             }
             else
             {
-                Update-MgBetaPolicyAuthenticationStrengthPolicy -AuthenticationStrengthPolicyId $currentInstance.Id -BodyParameter $BoundParameters
+                Update-MgBetaPolicyAuthenticationStrengthPolicy -AuthenticationStrengthPolicyId $currentInstance.Id -BodyParameter $updateParameters
 
                 Write-Verbose -Message "Updating the Azure AD Authentication Strength Policy allowed combination with DisplayName {$($this.DisplayName)}"
                 Update-MgBetaPolicyAuthenticationStrengthPolicyAllowedCombination -AuthenticationStrengthPolicyId $currentInstance.Id `

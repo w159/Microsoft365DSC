@@ -164,15 +164,14 @@ class AADConnectorGroupApplicationProxy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $OnPremisesPublishingProfileId = 'applicationProxy'
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Azure AD Connector Group Application Proxy with Name {$DisplayName}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -185,13 +184,13 @@ class AADConnectorGroupApplicationProxy : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Connector Group Application Proxy with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
             $updateParameters.Remove('Id') | Out-Null
 
             Update-MgBetaOnPremisePublishingProfileConnectorGroup `
                 -ConnectorGroupId $currentInstance.Id `
                 -OnPremisesPublishingProfileId $OnPremisesPublishingProfileId `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

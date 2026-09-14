@@ -474,32 +474,31 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Azure AD Authentication Method Policy Authenticator with Id {$($currentInstance.Id)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
 
             # replace group Displayname with group id
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.companionAppAllowedState.includeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.companionAppAllowedState.excludeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.displayAppInformationRequiredState.includeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.displayAppInformationRequiredState.excludeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.displayLocationInformationRequiredState.includeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.featureSettings.displayLocationInformationRequiredState.excludeTarget
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.ExcludeTargets
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.IncludeTargets
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.companionAppAllowedState.includeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.companionAppAllowedState.excludeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.displayAppInformationRequiredState.includeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.displayAppInformationRequiredState.excludeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.displayLocationInformationRequiredState.includeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.featureSettings.displayLocationInformationRequiredState.excludeTarget
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.ExcludeTargets
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.IncludeTargets
 
             #region resource generator code
-            Write-Verbose -Message "Parameters:`r`n$(ConvertTo-Json $UpdateParameters -Depth 10)"
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.microsoftAuthenticatorAuthenticationMethodConfiguration')
+            Write-Verbose -Message "Parameters:`r`n$(ConvertTo-Json $updateParameters -Depth 10)"
+            $updateParameters.Add('@odata.type', '#microsoft.graph.microsoftAuthenticatorAuthenticationMethodConfiguration')
             Update-MgBetaPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
                 -AuthenticationMethodConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

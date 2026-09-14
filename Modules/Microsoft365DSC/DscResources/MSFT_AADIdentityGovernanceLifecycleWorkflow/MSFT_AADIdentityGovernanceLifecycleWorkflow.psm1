@@ -253,10 +253,10 @@ class AADIdentityGovernanceLifecycleWorkflow : M365DSCResourceBase
             $setParameters.Add('Tasks', $taskList)
         }
 
-        $UpdateParameters = ([Hashtable]$setParameters).Clone()
+        $updateParameters = ([Hashtable]$setParameters).Clone()
 
         $newParams = @{}
-        $newParams.Add('workflow', $UpdateParameters)
+        $newParams.Add('workflow', $updateParameters)
 
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')

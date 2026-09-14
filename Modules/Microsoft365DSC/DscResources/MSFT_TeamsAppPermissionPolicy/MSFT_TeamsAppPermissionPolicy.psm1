@@ -205,27 +205,27 @@ class TeamsAppPermissionPolicy : M365DSCResourceBase
         }
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters.Remove('Verbose') | Out-Null
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters.Remove('Verbose') | Out-Null
             Write-Verbose -Message "Creating a Teams App Permission Policy with Identity {$($this.Identity)}"
 
-            $CreateParameters.GlobalCatalogApps = $GlobalCatalogAppsValue
-            $CreateParameters.PrivateCatalogApps = $PrivateCatalogAppsValue
-            $CreateParameters.DefaultCatalogApps = $DefaultCatalogAppsValue
+            $createParameters.GlobalCatalogApps = $GlobalCatalogAppsValue
+            $createParameters.PrivateCatalogApps = $PrivateCatalogAppsValue
+            $createParameters.DefaultCatalogApps = $DefaultCatalogAppsValue
 
-            New-CsTeamsAppPermissionPolicy @CreateParameters | Out-Null
+            New-CsTeamsAppPermissionPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters.Remove('Verbose') | Out-Null
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters.Remove('Verbose') | Out-Null
             Write-Verbose -Message "Updating the Teams App Permission Policy with Identity {$($this.Identity)}"
 
-            $UpdateParameters.GlobalCatalogApps = $GlobalCatalogAppsValue
-            $UpdateParameters.PrivateCatalogApps = $PrivateCatalogAppsValue
-            $UpdateParameters.DefaultCatalogApps = $DefaultCatalogAppsValue
+            $updateParameters.GlobalCatalogApps = $GlobalCatalogAppsValue
+            $updateParameters.PrivateCatalogApps = $PrivateCatalogAppsValue
+            $updateParameters.DefaultCatalogApps = $DefaultCatalogAppsValue
 
-            Set-CsTeamsAppPermissionPolicy @UpdateParameters | Out-Null
+            Set-CsTeamsAppPermissionPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

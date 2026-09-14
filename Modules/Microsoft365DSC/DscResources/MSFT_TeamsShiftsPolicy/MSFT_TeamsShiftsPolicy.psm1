@@ -158,18 +158,19 @@ class TeamsShiftsPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a Teams Shifts Policy with Identity {$($this.Identity)}"
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            New-CsTeamsShiftsPolicy @CreateParameters | Out-Null
+            $createParameters = $boundParameters
+            New-CsTeamsShiftsPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Shifts Policy with Identity {$($this.Identity)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            Set-CsTeamsShiftsPolicy @UpdateParameters | Out-Null
+            $updateParameters = $boundParameters
+            Set-CsTeamsShiftsPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

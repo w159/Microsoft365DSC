@@ -175,14 +175,13 @@ class AADNetworkAccessForwardingProfile : M365DSCResourceBase
         #endregion
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($null -ne $currentInstance)
         {
             Write-Verbose -Message "Updating the Azure AD Network Access Forwarding Profile with  {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             Write-Verbose -Message "Updating the Azure AD Network Access Forwarding Profile with  {$($currentInstance.Id)} {$($currentInstance.Name)} State"

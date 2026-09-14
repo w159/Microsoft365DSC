@@ -154,6 +154,7 @@ class TeamsTenantDialPlan : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Absent')
         {
             Write-Verbose "Tenant Dial Plan {$($this.Identity)} doesn't exist but it should. Creating it."
+            $createParameters = $boundParameters
             #region VoiceNormalizationRules
             $AllRules = @()
             # Ensure the VoiceNormalizationRules all exist
@@ -170,13 +171,14 @@ class TeamsTenantDialPlan : M365DSCResourceBase
                 $AllRules += $ruleObject
             }
 
-            $boundParameters.NormalizationRules = @{ Add = $AllRules }
-            New-CsTenantDialPlan @boundParameters
+            $createParameters.NormalizationRules = @{ Add = $AllRules }
+            New-CsTenantDialPlan @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Tenant Dial Plan {$($this.Identity)} already exists. Updating it."
 
+            $updateParameters = $boundParameters
             $desiredRules = @()
             foreach ($rule in $this.NormalizationRules)
             {
@@ -190,8 +192,8 @@ class TeamsTenantDialPlan : M365DSCResourceBase
                 $desiredRules += $desiredRule
             }
 
-            $boundParameters.Remove('NormalizationRules') | Out-Null
-            Set-CsTenantDialPlan @boundParameters
+            $updateParameters.Remove('NormalizationRules') | Out-Null
+            Set-CsTenantDialPlan @updateParameters
 
             $differences = $this.GetVoiceNormalizationRulesDifference($CurrentValues.NormalizationRules, $desiredRules)
             foreach ($ruleToAdd in $differences.RulesToAdd)

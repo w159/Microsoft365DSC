@@ -310,22 +310,21 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Azure AD Authentication Method Policy Fido2 with Id {$($currentInstance.Id)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.ExcludeTargets
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.IncludeTargets
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.ExcludeTargets
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.IncludeTargets
 
-            if ($UpdateParameters.ContainsKey('PasskeyProfiles'))
+            if ($updateParameters.ContainsKey('PasskeyProfiles'))
             {
                 # Ensure passkeyTypes is handled as a single string value for API compatibility
-                foreach ($passkeyProfile in $UpdateParameters.PasskeyProfiles)
+                foreach ($passkeyProfile in $updateParameters.PasskeyProfiles)
                 {
                     if ($null -ne $passkeyProfile.passkeyTypes -and $passkeyProfile.passkeyTypes -is [Array])
                     {
@@ -335,11 +334,11 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
             }
 
             #region resource generator code
-            Write-Verbose -Message "Parameters:`r`n$(ConvertTo-Json $UpdateParameters -Depth 10)"
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.fido2AuthenticationMethodConfiguration')
+            Write-Verbose -Message "Parameters:`r`n$(ConvertTo-Json $updateParameters -Depth 10)"
+            $updateParameters.Add('@odata.type', '#microsoft.graph.fido2AuthenticationMethodConfiguration')
             Update-MgBetaPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
                 -AuthenticationMethodConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

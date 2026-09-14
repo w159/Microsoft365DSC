@@ -336,22 +336,23 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
             }
         }
 
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters -KeyMapping $keyToRename
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a new Entitlement Management Connected Organization {$($this.DisplayName)}"
 
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters -KeyMapping $keyToRename
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('ExternalSponsors') | Out-Null
+            $createParameters.Remove('InternalSponsors') | Out-Null
 
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('ExternalSponsors') | Out-Null
-            $CreateParameters.Remove('InternalSponsors') | Out-Null
-
-            Write-Verbose -Message "Create Parameters: $(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
-            $TenantIdValue = $CreateParameters.IdentitySources.TenantId
+            Write-Verbose -Message "Create Parameters: $(Convert-M365DscHashtableToString -Hashtable $createParameters)"
+            $TenantIdValue = $createParameters.IdentitySources.TenantId
             $url = "/beta/tenantRelationships/microsoft.graph.findTenantInformationByTenantId(tenantId='$TenantIdValue')"
             $DomainName = (Invoke-M365DSCGraphRequest -Method 'GET' -Uri $url).defaultDomainName
-            $newConnectedOrganization = New-MgBetaEntitlementManagementConnectedOrganization -Description $CreateParameters.Description -DisplayName $CreateParameters.DisplayName -State $CreateParameters.State -DomainName $DomainName
+            $newConnectedOrganization = New-MgBetaEntitlementManagementConnectedOrganization -Description $createParameters.Description -DisplayName $createParameters.DisplayName -State $createParameters.State -DomainName $DomainName
 
             foreach ($sponsor in $ExternalSponsorsValues)
             {
@@ -385,14 +386,12 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating a new Entitlement Management Connected Organization {$($currentInstance.Id)}"
 
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters -KeyMapping $keyToRename
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('ExternalSponsors') | Out-Null
+            $updateParameters.Remove('InternalSponsors') | Out-Null
 
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('ExternalSponsors') | Out-Null
-            $UpdateParameters.Remove('InternalSponsors') | Out-Null
-
-            Update-MgBetaEntitlementManagementConnectedOrganization -BodyParameter $UpdateParameters `
+            Update-MgBetaEntitlementManagementConnectedOrganization -BodyParameter $updateParameters `
                 -ConnectedOrganizationId $currentInstance.Id
 
             #region External Sponsors

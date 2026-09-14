@@ -414,32 +414,32 @@ class EXODistributionGroup : M365DSCResourceBase
         $newGroup = $null
         if ($this.Ensure -eq 'Present' -and $currentDistributionGroup.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters ([Hashtable]$boundParameters).Clone()
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters ([Hashtable]$boundParameters).Clone()
             Write-Verbose -Message "The Distribution Group {$($this.Identity)} does not exist but it should. Creating it."
-            $CreateParameters.Remove('Identity') | Out-Null
-            $CreateParameters.Remove('AcceptMessagesOnlyFrom') | Out-Null
-            $CreateParameters.Remove('AcceptMessagesOnlyFromSendersOrMembers') | Out-Null
-            $CreateParameters.Remove('CustomAttribute1') | Out-Null
-            $CreateParameters.Remove('CustomAttribute2') | Out-Null
-            $CreateParameters.Remove('CustomAttribute3') | Out-Null
-            $CreateParameters.Remove('CustomAttribute4') | Out-Null
-            $CreateParameters.Remove('CustomAttribute5') | Out-Null
-            $CreateParameters.Remove('CustomAttribute6') | Out-Null
-            $CreateParameters.Remove('CustomAttribute7') | Out-Null
-            $CreateParameters.Remove('CustomAttribute8') | Out-Null
-            $CreateParameters.Remove('CustomAttribute9') | Out-Null
-            $CreateParameters.Remove('CustomAttribute10') | Out-Null
-            $CreateParameters.Remove('CustomAttribute11') | Out-Null
-            $CreateParameters.Remove('CustomAttribute12') | Out-Null
-            $CreateParameters.Remove('CustomAttribute13') | Out-Null
-            $CreateParameters.Remove('CustomAttribute14') | Out-Null
-            $CreateParameters.Remove('CustomAttribute15') | Out-Null
-            $CreateParameters.Remove('EmailAddresses') | Out-Null
-            $CreateParameters.Remove('GrantSendOnBehalfTo') | Out-Null
-            $CreateParameters.Remove('HiddenFromAddressListsEnabled') | Out-Null
-            $CreateParameters.Remove('SendOofMessageToOriginatorEnabled') | Out-Null
-            $CreateParameters.Remove('BypassModerationFromSendersOrMembers') | Out-Null
-            $newGroup = New-DistributionGroup @CreateParameters
+            $createParameters.Remove('Identity') | Out-Null
+            $createParameters.Remove('AcceptMessagesOnlyFrom') | Out-Null
+            $createParameters.Remove('AcceptMessagesOnlyFromSendersOrMembers') | Out-Null
+            $createParameters.Remove('CustomAttribute1') | Out-Null
+            $createParameters.Remove('CustomAttribute2') | Out-Null
+            $createParameters.Remove('CustomAttribute3') | Out-Null
+            $createParameters.Remove('CustomAttribute4') | Out-Null
+            $createParameters.Remove('CustomAttribute5') | Out-Null
+            $createParameters.Remove('CustomAttribute6') | Out-Null
+            $createParameters.Remove('CustomAttribute7') | Out-Null
+            $createParameters.Remove('CustomAttribute8') | Out-Null
+            $createParameters.Remove('CustomAttribute9') | Out-Null
+            $createParameters.Remove('CustomAttribute10') | Out-Null
+            $createParameters.Remove('CustomAttribute11') | Out-Null
+            $createParameters.Remove('CustomAttribute12') | Out-Null
+            $createParameters.Remove('CustomAttribute13') | Out-Null
+            $createParameters.Remove('CustomAttribute14') | Out-Null
+            $createParameters.Remove('CustomAttribute15') | Out-Null
+            $createParameters.Remove('EmailAddresses') | Out-Null
+            $createParameters.Remove('GrantSendOnBehalfTo') | Out-Null
+            $createParameters.Remove('HiddenFromAddressListsEnabled') | Out-Null
+            $createParameters.Remove('SendOofMessageToOriginatorEnabled') | Out-Null
+            $createParameters.Remove('BypassModerationFromSendersOrMembers') | Out-Null
+            $newGroup = New-DistributionGroup @createParameters
             Start-Sleep -Seconds 5
             Write-Verbose -Message "New Distribution Group with Identity {$($newGroup.Identity)} was successfully created"
         }

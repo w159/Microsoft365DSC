@@ -555,19 +555,20 @@ class SCDLPComplianceRule : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $CurrentRule = $this.Get().ToHashtable()
-        $BoundParameters = $this.GetBoundParameters()
+        $boundParameters = $this.GetBoundParameters()
 
-        if ($null -ne $BoundParameters.AdvancedRule)
+        if ($null -ne $boundParameters.AdvancedRule)
         {
-            $newAdvancedRule = $BoundParameters.AdvancedRule | ConvertFrom-Json | ConvertFrom-Json
+            $newAdvancedRule = $boundParameters.AdvancedRule | ConvertFrom-Json | ConvertFrom-Json
             $newAdvancedRule.Condition = $this.AddAdvancedRuleConditionId($newAdvancedRule.Condition, $this.ResourceCache)
-            $BoundParameters.AdvancedRule = [SCDLPComplianceRule]::FormatJson(($newAdvancedRule | ConvertTo-Json -Depth 32))
+            $boundParameters.AdvancedRule = [SCDLPComplianceRule]::FormatJson(($newAdvancedRule | ConvertTo-Json -Depth 32))
         }
 
         if ($this.Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Absent')
         {
             Write-Verbose "Rule {$($CurrentRule.Name)} doesn't exists but need to. Creating Rule."
-            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $BoundParameters
+            $createParameters = $boundParameters
+            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $createParameters
             if ($null -ne $CreationParams.ContentContainsSensitiveInformation)
             {
                 $value = @()
@@ -630,7 +631,8 @@ class SCDLPComplianceRule : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Present')
         {
             Write-Verbose "Rule {$($CurrentRule.Name)} already exists and needs to get updated. Updating Rule."
-            $UpdateParams = Remove-M365DSCAuthenticationParameter -BoundParameters $BoundParameters
+            $updateParameters = $boundParameters
+            $UpdateParams = Remove-M365DSCAuthenticationParameter -BoundParameters $updateParameters
 
             if ($null -ne $UpdateParams.ContentContainsSensitiveInformation)
             {

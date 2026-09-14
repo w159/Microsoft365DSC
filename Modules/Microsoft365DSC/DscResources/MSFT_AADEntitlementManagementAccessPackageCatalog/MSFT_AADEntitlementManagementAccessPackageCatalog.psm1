@@ -183,14 +183,14 @@ class AADEntitlementManagementAccessPackageCatalog : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
 
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('Verbose') | Out-Null
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Verbose') | Out-Null
 
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.accessPackageCatalog')
+            $createParameters.Add('@odata.type', '#microsoft.graph.accessPackageCatalog')
 
             #region resource generator code
-            $policy = New-MgBetaEntitlementManagementAccessPackageCatalog -BodyParameter $CreateParameters
+            $policy = New-MgBetaEntitlementManagementAccessPackageCatalog -BodyParameter $createParameters
 
             #endregion
 
@@ -199,15 +199,15 @@ class AADEntitlementManagementAccessPackageCatalog : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
 
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('Verbose') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Verbose') | Out-Null
 
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.accessPackageCatalog')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.accessPackageCatalog')
 
             #region resource generator code
-            Update-MgBetaEntitlementManagementAccessPackageCatalog -BodyParameter $UpdateParameters `
+            Update-MgBetaEntitlementManagementAccessPackageCatalog -BodyParameter $updateParameters `
                 -AccessPackageCatalogId $currentInstance.Id
 
             #endregion

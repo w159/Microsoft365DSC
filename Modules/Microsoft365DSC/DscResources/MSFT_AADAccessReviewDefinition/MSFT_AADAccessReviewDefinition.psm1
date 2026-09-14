@@ -547,9 +547,9 @@ class AADAccessReviewDefinition : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        if ($BoundParameters.ContainsKey('AdditionalNotificationRecipients'))
+        if ($boundParameters.ContainsKey('AdditionalNotificationRecipients'))
         {
             $batchRequests = @()
             foreach ($currentRecipient in $this.AdditionalNotificationRecipients)
@@ -604,11 +604,11 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     $newAdditionalNotificationRecipients += $myAdditionalRecipient
                 }
             }
-            $BoundParameters.Remove('AdditionalNotificationRecipients') | Out-Null
-            $BoundParameters.Add('additionalNotificationRecipients', $newAdditionalNotificationRecipients)
+            $boundParameters.Remove('AdditionalNotificationRecipients') | Out-Null
+            $boundParameters.Add('additionalNotificationRecipients', $newAdditionalNotificationRecipients)
         }
 
-        if ($BoundParameters.ContainsKey('FallbackReviewers'))
+        if ($boundParameters.ContainsKey('FallbackReviewers'))
         {
             $batchRequests = @()
             foreach ($currentFallbackReviewer in $this.FallbackReviewers)
@@ -659,11 +659,11 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     $newFallbackReviewers += $myFallbackReviewer
                 }
             }
-            $BoundParameters.Remove('FallbackReviewers') | Out-Null
-            $BoundParameters.Add('fallbackReviewers', $newFallbackReviewers)
+            $boundParameters.Remove('FallbackReviewers') | Out-Null
+            $boundParameters.Add('fallbackReviewers', $newFallbackReviewers)
         }
 
-        if ($BoundParameters.ContainsKey('Reviewers'))
+        if ($boundParameters.ContainsKey('Reviewers'))
         {
             $batchRequests = @()
             foreach ($currentReviewer in $this.Reviewers)
@@ -753,20 +753,19 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     }
                 }
             }
-            $BoundParameters.Remove('Reviewers') | Out-Null
-            $BoundParameters.Add('reviewers', $newReviewers)
+            $boundParameters.Remove('Reviewers') | Out-Null
+            $boundParameters.Add('reviewers', $newReviewers)
         }
 
-        if ($BoundParameters.ScopeValue.odataType -eq '#microsoft.graph.accessReviewQueryScope')
+        if ($boundParameters.ScopeValue.odataType -eq '#microsoft.graph.accessReviewQueryScope')
         {
-            $BoundParameters.ScopeValue = @{
+            $boundParameters.ScopeValue = @{
                 '@odata.type' = '#microsoft.graph.accessReviewQueryScope'
-                query     = $BoundParameters.ScopeValue.Query
-                queryType = $BoundParameters.ScopeValue.QueryType
+                query     = $boundParameters.ScopeValue.Query
+                queryType = $boundParameters.ScopeValue.QueryType
             }
         }
 
-        $boundParameters = ([Hashtable]$BoundParameters.Clone())
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
         $boundParameters.Remove('Id') | Out-Null
 
@@ -797,7 +796,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
 
             Write-Verbose -Message "Creating an Azure AD Access Review Definition with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
             foreach ($hashtable in $createParameters.StageSettings)
             {
                 $propertyToRemove = 'DependsOnValue'
@@ -831,7 +830,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating an Azure AD Access Review Definition with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
             foreach ($hashtable in $createParameters.StageSettings)
             {
                 $propertyToRemove = 'DependsOnValue'
@@ -865,14 +864,14 @@ class AADAccessReviewDefinition : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Access Review Definition with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
 
             #region resource generator code
-            #$UpdateParameters.Add('@odata.type', '#microsoft.graph.AccessReviewScheduleDefinition')
-            Write-Verbose -Message "Updating Azure AD Access Review Definition {$($currentInstance.Id)} with: $(ConvertTo-Json $UpdateParameters -Depth 10)"
+            #$updateParameters.Add('@odata.type', '#microsoft.graph.AccessReviewScheduleDefinition')
+            Write-Verbose -Message "Updating Azure AD Access Review Definition {$($currentInstance.Id)} with: $(ConvertTo-Json $updateParameters -Depth 10)"
             Set-MgBetaIdentityGovernanceAccessReviewDefinition `
                 -AccessReviewScheduleDefinitionId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

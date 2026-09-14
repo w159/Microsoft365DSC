@@ -169,7 +169,7 @@ class AADHomeRealmDiscoveryPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         # to get the id parameter
         $getValue = Get-MgBetaPolicyHomeRealmDiscoveryPolicy `
@@ -201,15 +201,15 @@ class AADHomeRealmDiscoveryPolicy : M365DSCResourceBase
             $newDefinitions += ConvertTo-Json $temp -Depth 10 -Compress
         }
 
-        $BoundParameters.Definition = $newDefinitions
+        $boundParameters.Definition = $newDefinitions
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Azure AD Home Realm Discovery Policy with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
-
+            $createParameters = $boundParameters
             #region resource generator code
             $policy = New-MgBetaPolicyHomeRealmDiscoveryPolicy -BodyParameter $createParameters
             #endregion
@@ -218,13 +218,11 @@ class AADHomeRealmDiscoveryPolicy : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Home Realm Discovery Policy with DisplayName {$($currentInstance.DisplayName)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
-
+            $updateParameters = $boundParameters
             #region resource generator code
             Update-MgBetaPolicyHomeRealmDiscoveryPolicy `
                 -HomeRealmDiscoveryPolicyId $getValue.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

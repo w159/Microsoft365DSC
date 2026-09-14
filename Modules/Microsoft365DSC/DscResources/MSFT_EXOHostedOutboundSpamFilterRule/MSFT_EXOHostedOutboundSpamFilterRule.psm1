@@ -179,11 +179,12 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $CurrentValues = $this.Get().ToHashtable()
-        $BoundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $BoundParameters
+        $boundParameters = ([System.Collections.Hashtable]$this.GetBoundParameters()).Clone()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Absent')
         {
+            $createParameters = $boundParameters
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-HostedOutboundSpamFilterPolicy -Identity $this.HostedOutboundSpamFilterPolicy -ErrorAction 'SilentlyContinue'
             if ($null -eq $AssociatedPolicy)
@@ -200,13 +201,14 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
                 Remove-HostedOutboundSpamFilterRule -Identity $this.Identity -Confirm:$false
             }
             Write-Verbose -Message "Creating new HostedOutboundSpamFilterRule {$($this.Identity)}"
-            $BoundParameters.Add('Name', $this.Identity)
-            $BoundParameters.Remove('Identity') | Out-Null
-            New-HostedOutboundSpamFilterRule @BoundParameters
+            $createParameters.Add('Name', $this.Identity)
+            $createParameters.Remove('Identity') | Out-Null
+            New-HostedOutboundSpamFilterRule @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')
         {
-            $BoundParameters.Remove('Enabled') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Enabled') | Out-Null
 
             # Make sure that the associated Policy exists;
             $AssociatedPolicy = Get-HostedOutboundSpamFilterPolicy -Identity $this.HostedOutboundSpamFilterPolicy -ErrorAction 'SilentlyContinue'
@@ -216,12 +218,12 @@ class EXOHostedOutboundSpamFilterRule : M365DSCResourceBase
                     "{$($this.HostedOutboundSpamFilterPolicy)} doesn't exist. Make sure you either create it first or specify a valid policy."
             }
 
-            if ($CurrentValues.HostedOutboundSpamFilterPolicy -eq $BoundParameters.HostedOutboundSpamFilterPolicy)
+            if ($CurrentValues.HostedOutboundSpamFilterPolicy -eq $updateParameters.HostedOutboundSpamFilterPolicy)
             {
-                $BoundParameters.Remove('HostedOutboundSpamFilterPolicy') | Out-Null
+                $updateParameters.Remove('HostedOutboundSpamFilterPolicy') | Out-Null
             }
             Write-Verbose -Message "Updating HostedOutboundSpamFilterRule {$($this.Identity)}"
-            Set-HostedOutboundSpamFilterRule @BoundParameters
+            Set-HostedOutboundSpamFilterRule @updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $CurrentValues.Ensure -eq 'Present')
         {

@@ -296,7 +296,7 @@ class AADAdministrativeUnit : M365DSCResourceBase
         $memberSpecification = $null
         $scopedRoleMemberSpecification = $null
         $roleObject = $null
-        $CreateParameters = $null
+        $createParameters = $null
         if ($this.RequiresPowerShellCore())
         {
             $null = $this.InvokeInPowerShellCore('Set')
@@ -320,16 +320,16 @@ class AADAdministrativeUnit : M365DSCResourceBase
             {
                 throw "AU {$($this.DisplayName)}: Members is not allowed when MembershipType is Dynamic"
             }
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters.Remove('Id') | Out-Null
 
             $memberSpecification = $null
-            if ($CreateParameters.MembershipType -ne 'Dynamic' -and $CreateParameters.Members.Count -gt 0)
+            if ($createParameters.MembershipType -ne 'Dynamic' -and $createParameters.Members.Count -gt 0)
             {
                 $memberSpecification = @()
-                Write-Verbose -Message "AU {$($this.DisplayName)} process $($CreateParameters.Members.Count) Members"
-                foreach ($member in $CreateParameters.Members)
+                Write-Verbose -Message "AU {$($this.DisplayName)} process $($createParameters.Members.Count) Members"
+                foreach ($member in $createParameters.Members)
                 {
                     Write-Verbose -Message "AU {$($this.DisplayName)} member Type '$($member.Type)' Identity '$($member.Identity)'"
                     if ($member.Type -eq 'User')
@@ -383,14 +383,14 @@ class AADAdministrativeUnit : M365DSCResourceBase
                 }
                 # Members are added to the AU *after* it has been created
             }
-            $CreateParameters.Remove('Members') | Out-Null
+            $createParameters.Remove('Members') | Out-Null
 
             # Resolve ScopedRoleMembers Type/Identity to user, group or service principal
-            if ($CreateParameters.ScopedRoleMembers)
+            if ($createParameters.ScopedRoleMembers)
             {
-                Write-Verbose -Message "AU {$($this.DisplayName)} process $($CreateParameters.ScopedRoleMembers.Count) ScopedRoleMembers"
+                Write-Verbose -Message "AU {$($this.DisplayName)} process $($createParameters.ScopedRoleMembers.Count) ScopedRoleMembers"
                 $scopedRoleMemberSpecification = @()
-                foreach ($roleMember in $CreateParameters.ScopedRoleMembers)
+                foreach ($roleMember in $createParameters.ScopedRoleMembers)
                 {
                     Write-Verbose -Message "AU {$($this.DisplayName)} member: role '$($roleMember.RoleName)' type '$($roleMember.RoleMemberInfo.Type)' identity $($roleMember.RoleMemberInfo.Identity)"
                     try
@@ -461,7 +461,7 @@ class AADAdministrativeUnit : M365DSCResourceBase
                 }
                 # ScopedRoleMember-info is added after the AU is created
             }
-            $CreateParameters.Remove('ScopedRoleMembers') | Out-Null
+            $createParameters.Remove('ScopedRoleMembers') | Out-Null
         }
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -469,8 +469,8 @@ class AADAdministrativeUnit : M365DSCResourceBase
             Write-Verbose -Message "Creating an Azure AD Administrative Unit with DisplayName {$($this.DisplayName)}"
 
             #region resource generator code
-            Write-Verbose -Message "Creating new Administrative Unit with: $(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
-            $policy = New-MgDirectoryAdministrativeUnit -BodyParameter $CreateParameters
+            Write-Verbose -Message "Creating new Administrative Unit with: $(Convert-M365DscHashtableToString -Hashtable $createParameters)"
+            $policy = New-MgDirectoryAdministrativeUnit -BodyParameter $createParameters
             Start-Sleep -Seconds 5 # Sleep added to allow for AU to be fully available before adding members
 
             if ($this.MembershipType -ne 'Dynamic')
@@ -500,17 +500,17 @@ class AADAdministrativeUnit : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Administrative Unit with Id {$($currentInstance.Id)}"
 
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters.Remove('Id') | Out-Null
 
-            $requestedMembers = $UpdateParameters.Members
-            $UpdateParameters.Remove('Members') | Out-Null
-            $requestedScopedRoleMembers = $UpdateParameters.ScopedRoleMembers
-            $UpdateParameters.Remove('ScopedRoleMembers') | Out-Null
+            $requestedMembers = $updateParameters.Members
+            $updateParameters.Remove('Members') | Out-Null
+            $requestedScopedRoleMembers = $updateParameters.ScopedRoleMembers
+            $updateParameters.Remove('ScopedRoleMembers') | Out-Null
 
             #region resource generator code
-            Update-MgDirectoryAdministrativeUnit -AdministrativeUnitId $currentInstance.Id -BodyParameter $UpdateParameters
+            Update-MgDirectoryAdministrativeUnit -AdministrativeUnitId $currentInstance.Id -BodyParameter $updateParameters
             #endregion
 
             if ($this.MembershipType -ne 'Dynamic')

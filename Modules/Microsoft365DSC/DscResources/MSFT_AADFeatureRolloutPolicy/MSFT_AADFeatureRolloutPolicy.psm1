@@ -201,11 +201,11 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.GetBoundParameters().ContainsKey('AppliesTo'))
         {
-            $BoundParameters.Remove('AppliesTo') | Out-Null
+            $boundParameters.Remove('AppliesTo') | Out-Null
             $delta = Compare-Object -ReferenceObject $this.AppliesTo -DifferenceObject $currentInstance.AppliesTo
             $groupsToRemove = $delta | Where-Object { $_.SideIndicator -eq '=>' }
             $groupsToAdd = $delta | Where-Object { $_.SideIndicator -eq '<=' }
@@ -255,7 +255,7 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating an Azure AD Policy Feature Rollout Policy with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -266,14 +266,14 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Policy Feature Rollout Policy with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Remove('Feature') | Out-Null
 
             #region resource generator code
             Update-MgBetaPolicyFeatureRolloutPolicy `
                 -FeatureRolloutPolicyId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

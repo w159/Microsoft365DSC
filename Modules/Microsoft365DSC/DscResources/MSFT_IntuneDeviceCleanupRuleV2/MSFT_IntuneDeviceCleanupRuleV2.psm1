@@ -178,14 +178,14 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Cleanup Rule V2 with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -197,15 +197,14 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
             $updateParameters.Add('@odata.type', '#microsoft.graph.ManagedDeviceCleanupRule')
             Update-MgBetaDeviceManagementManagedDeviceCleanupRule `
                 -ManagedDeviceCleanupRuleId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             #endregion
         }

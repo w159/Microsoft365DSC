@@ -157,17 +157,17 @@ class EXOMailboxCalendarFolder : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $null = $this.Get().ToHashtable()
-        $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         # The SharedCalendarSyncStartDate needs to be used by itself in a subsequent call.
         if ($this.GetBoundParameters().ContainsKey('SharedCalendarSyncStartDate'))
         {
             Write-Verbose -Message "Updating the Mailbox Calendar Folder SharedCalendarSyncStartDate property for {$($this.Identity)}"
             Set-MailboxCalendarFolder -Identity $this.Identity -SharedCalendarSyncStartDate $this.SharedCalendarSyncStartDate
-            $UpdateParameters.Remove('SharedCalendarSyncStartDate') | Out-Null
+            $updateParameters.Remove('SharedCalendarSyncStartDate') | Out-Null
         }
         Write-Verbose -Message "Updating the Mailbox Calendar Folder for {$($this.Identity)}"
-        Set-MailboxCalendarFolder @UpdateParameters
+        Set-MailboxCalendarFolder @updateParameters
     }
 
     [bool] Test()

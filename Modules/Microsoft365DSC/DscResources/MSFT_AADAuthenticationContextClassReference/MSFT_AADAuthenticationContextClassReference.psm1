@@ -148,19 +148,21 @@ class AADAuthenticationContextClassReference : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Authentication Context with Id {$($this.Id)}"
-            New-MgBetaIdentityConditionalAccessAuthenticationContextClassReference -BodyParameter $BoundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-MgBetaIdentityConditionalAccessAuthenticationContextClassReference -BodyParameter $createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Authentication Context with Id {$($currentInstance.Id)}"
-            $BoundParameters.Add('AuthenticationContextClassReferenceId', $this.Id)
-            $BoundParameters.Remove('Id') | Out-Null
-            Update-MgBetaIdentityConditionalAccessAuthenticationContextClassReference -AuthenticationContextClassReferenceId $currentInstance.Id -BodyParameter $BoundParameters | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Add('AuthenticationContextClassReferenceId', $this.Id)
+            $updateParameters.Remove('Id') | Out-Null
+            Update-MgBetaIdentityConditionalAccessAuthenticationContextClassReference -AuthenticationContextClassReferenceId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {
