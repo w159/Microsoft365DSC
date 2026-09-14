@@ -164,14 +164,14 @@ class TeamsWorkloadPolicy : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a Teams Workload Policy with Identity {$($this.Identity)}"
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            New-CsTeamsWorkLoadPolicy @CreateParameters | Out-Null
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            New-CsTeamsWorkLoadPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Workload Policy with Identity {$($this.Identity)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            Set-CsTeamsWorkLoadPolicy @UpdateParameters | Out-Null
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            Set-CsTeamsWorkLoadPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

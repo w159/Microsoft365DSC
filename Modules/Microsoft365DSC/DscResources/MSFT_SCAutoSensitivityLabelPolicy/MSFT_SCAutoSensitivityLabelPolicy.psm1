@@ -270,7 +270,8 @@ class SCAutoSensitivityLabelPolicy : M365DSCResourceBase
         {
             Write-Verbose "Creating new Auto Sensitivity label policy $($this.Name)."
 
-            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+            $createParameters = $boundParameters
+            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $createParameters
 
             # Remove parameters not used in New-LabelPolicy
             $CreationParams.Remove('AddExchangeLocation') | Out-Null
@@ -295,7 +296,7 @@ class SCAutoSensitivityLabelPolicy : M365DSCResourceBase
             try
             {
                 Start-Sleep 5
-                $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+                $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $createParameters
 
                 #Remove unused parameters for Set-Label cmdlet
                 $SetParams.Remove('Name') | Out-Null
@@ -315,7 +316,8 @@ class SCAutoSensitivityLabelPolicy : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Present')
         {
-            $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+            $updateParameters = $boundParameters
+            $SetParams = Remove-M365DSCAuthenticationParameter -BoundParameters $updateParameters
 
             #Remove unused parameters for Set-Label cmdlet
             $SetParams.Remove('Name') | Out-Null

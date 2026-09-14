@@ -189,12 +189,14 @@ class TeamsUpdateManagementPolicy : M365DSCResourceBase
         if ($CurrentValues.Ensure -eq 'Absent' -and $this.Ensure -eq 'Present')
         {
             Write-Verbose "Creating new Teams Update Management Policy {$($this.Identity)}"
-            New-CsTeamsUpdateManagementPolicy @boundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-CsTeamsUpdateManagementPolicy @createParameters | Out-Null
         }
         elseif ($CurrentValues.Ensure -eq 'Present' -and $this.Ensure -eq 'Present')
         {
             Write-Verbose "Updating existing Teams Update Management Policy {$($this.Identity)}"
-            Set-CsTeamsUpdateManagementPolicy @boundParameters | Out-Null
+            $updateParameters = $boundParameters
+            Set-CsTeamsUpdateManagementPolicy @updateParameters | Out-Null
         }
         elseif ($CurrentValues.Ensure -eq 'Present' -and $this.Ensure -eq 'Absent')
         {

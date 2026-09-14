@@ -534,21 +534,21 @@ class AADEntitlementManagementAccessPackageAssignmentPolicy : M365DSCResourceBas
         {
             Write-Verbose -Message "Creating a new access package assignment policy {$($this.DisplayName)}"
 
-            $CreateParameters = $commonParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $commonParameters
+            $createParameters.Remove('Id') | Out-Null
 
             New-MgBetaEntitlementManagementAccessPackageAssignmentPolicy `
-                -BodyParameter $CreateParameters
+                -BodyParameter $createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the access package assignment policy {$($this.DisplayName)}"
 
-            $UpdateParameters = $commonParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $commonParameters
+            $updateParameters.Remove('Id') | Out-Null
 
             Set-MgBetaEntitlementManagementAccessPackageAssignmentPolicy `
-                -BodyParameter $UpdateParameters `
+                -BodyParameter $updateParameters `
                 -AccessPackageAssignmentPolicyId $currentInstance.Id
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

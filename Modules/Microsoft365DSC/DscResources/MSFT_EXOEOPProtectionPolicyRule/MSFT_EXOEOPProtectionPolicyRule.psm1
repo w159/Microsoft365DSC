@@ -177,7 +177,7 @@ class EXOEOPProtectionPolicyRule : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
@@ -188,8 +188,8 @@ class EXOEOPProtectionPolicyRule : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.Identity)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters.Remove('State') | Out-Null
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            $updateParameters.Remove('State') | Out-Null
 
             if ($currentInstance.State -ne $this.State)
             {
@@ -203,7 +203,7 @@ class EXOEOPProtectionPolicyRule : M365DSCResourceBase
                 }
             }
 
-            Set-EOPProtectionPolicyRule @UpdateParameters
+            Set-EOPProtectionPolicyRule @updateParameters
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

@@ -170,22 +170,22 @@ class SCUnifiedAuditLogRetentionPolicy : M365DSCResourceBase
         $GetParameters.Remove('UserIds') | Out-Null
 
         $currentInstance = $this.GetForExport($GetParameters)
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
             Write-Verbose -Message "Creating a Unified Audit Log Retention Policy with Name {$($this.Name)}"
-            New-UnifiedAuditLogRetentionPolicy @CreateParameters | Out-Null
+            New-UnifiedAuditLogRetentionPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Unified Audit Log Retention Policy with Name {$($this.Name)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters.Remove('Name') | Out-Null
-            $UpdateParameters.Add('Identity', $currentInstance.Identity) | Out-Null
-            Set-UnifiedAuditLogRetentionPolicy @UpdateParameters | Out-Null
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            $updateParameters.Remove('Name') | Out-Null
+            $updateParameters.Add('Identity', $currentInstance.Identity) | Out-Null
+            Set-UnifiedAuditLogRetentionPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

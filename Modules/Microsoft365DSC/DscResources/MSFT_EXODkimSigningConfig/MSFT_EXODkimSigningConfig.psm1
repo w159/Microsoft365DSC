@@ -153,16 +153,18 @@ class EXODkimSigningConfig : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $DkimSigningConfig.Ensure -eq 'Absent')
         {
-            $boundParameters.Add('DomainName', $this.Identity) | Out-Null
-            $boundParameters.Remove('Identity') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Add('DomainName', $this.Identity) | Out-Null
+            $createParameters.Remove('Identity') | Out-Null
             Write-Verbose -Message "Creating DkimSigningConfig $($this.Identity)."
-            New-DkimSigningConfig @boundParameters
+            New-DkimSigningConfig @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $DkimSigningConfig.Ensure -eq 'Present')
         {
-            $boundParameters.Remove('KeySize') | Out-Null
-            Write-Verbose -Message "Setting DkimSigningConfig $($this.Identity) with values: $(Convert-M365DscHashtableToString -Hashtable $boundParameters)"
-            Set-DkimSigningConfig @boundParameters -Confirm:$false
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('KeySize') | Out-Null
+            Write-Verbose -Message "Setting DkimSigningConfig $($this.Identity) with values: $(Convert-M365DscHashtableToString -Hashtable $updateParameters)"
+            Set-DkimSigningConfig @updateParameters -Confirm:$false
         }
 
         if ($this.Ensure -eq 'Absent' -and $DkimSigningConfig.Ensure -eq 'Present')

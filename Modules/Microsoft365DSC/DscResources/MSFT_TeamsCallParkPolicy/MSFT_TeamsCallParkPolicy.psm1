@@ -153,15 +153,15 @@ class TeamsCallParkPolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
             Write-Verbose -Message "Creating a Teams Call Park Policy with Identity {$($this.Identity)}"
-            New-CsTeamsCallParkPolicy @CreateParameters | Out-Null
+            New-CsTeamsCallParkPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Call Park Policy with Identity {$($this.Identity)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            Set-CsTeamsCallParkPolicy @UpdateParameters | Out-Null
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            Set-CsTeamsCallParkPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

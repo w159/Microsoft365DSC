@@ -339,29 +339,28 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Azure AD Authentication Method Policy X509 with Id {$($currentInstance.Id)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
 
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.ExcludeTargets
-            Update-M365DSCAuthenticationTargets -Targets $UpdateParameters.IncludeTargets
-            foreach ($certificateAuthorityScope in $UpdateParameters.CertificateAuthorityScopes)
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.ExcludeTargets
+            Update-M365DSCAuthenticationTargets -Targets $updateParameters.IncludeTargets
+            foreach ($certificateAuthorityScope in $updateParameters.CertificateAuthorityScopes)
             {
                 Update-M365DSCAuthenticationTargets -Targets $certificateAuthorityScope.IncludeTargets
             }
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.x509CertificateAuthenticationMethodConfiguration')
-            Write-Verbose -Message "Updating with Values: $(Convert-M365DscHashtableToString -Hashtable $UpdateParameters)"
+            $updateParameters.Add('@odata.type', '#microsoft.graph.x509CertificateAuthenticationMethodConfiguration')
+            Write-Verbose -Message "Updating with Values: $(Convert-M365DscHashtableToString -Hashtable $updateParameters)"
             Update-MgBetaPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
                 -AuthenticationMethodConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

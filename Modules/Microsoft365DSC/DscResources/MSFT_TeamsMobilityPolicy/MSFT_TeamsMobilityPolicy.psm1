@@ -157,12 +157,14 @@ class TeamsMobilityPolicy : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a Teams Mobility Policy with Identity {$($this.Identity)}"
-            New-CsTeamsMobilityPolicy @boundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-CsTeamsMobilityPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Mobility Policy with Identity {$($this.Identity)}"
-            Set-CsTeamsMobilityPolicy @boundParameters | Out-Null
+            $updateParameters = $boundParameters
+            Set-CsTeamsMobilityPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

@@ -217,14 +217,14 @@ class AADClaimsMappingPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Azure AD Claims Mapping Policy with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             $complexDefinitions = $createParameters.Definition
@@ -237,18 +237,17 @@ class AADClaimsMappingPolicy : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Azure AD Claims Mapping Policy with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$BoundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
-            $complexDefinitions = $UpdateParameters.Definition
-            $UpdateParameters.Remove('Definition') | Out-Null
-            $UpdateParameters.Definition = $complexDefinitions | ConvertTo-Json -Depth 10 -Compress:$true
+            $complexDefinitions = $updateParameters.Definition
+            $updateParameters.Remove('Definition') | Out-Null
+            $updateParameters.Definition = $complexDefinitions | ConvertTo-Json -Depth 10 -Compress:$true
 
             #region resource generator code
             Update-MgBetaPolicyClaimMappingPolicy `
                 -ClaimsMappingPolicyId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

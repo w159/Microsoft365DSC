@@ -225,23 +225,22 @@ class IntunePolicySets : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Policy Sets with DisplayName {$($this.DisplayName)}"
+            $createParameters = $boundParameters
             # remove complex values
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Items') | Out-Null
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Items') | Out-Null
             # remove unused values
-            $BoundParameters.Remove('Id') | Out-Null
-
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
+            $createParameters.Remove('Id') | Out-Null
 
             # set assignments and items to work with New-MgBetaDeviceAppManagementPolicySet command
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
-            $CreateParameters.Add('assignments', $assignmentsHash)
+            $createParameters.Add('assignments', $assignmentsHash)
 
             $itemsHash = @()
             foreach ($item in $this.items)
@@ -252,8 +251,8 @@ class IntunePolicySets : M365DSCResourceBase
                     guidedDeploymentTags = $item.guidedDeploymentTags
                 }
             }
-            $CreateParameters.Add('items', $itemsHash)
-            $policy = New-MgBetaDeviceAppManagementPolicySet -BodyParameter $CreateParameters
+            $createParameters.Add('items', $itemsHash)
+            $policy = New-MgBetaDeviceAppManagementPolicySet -BodyParameter $createParameters
 
             if ($policy.id)
             {
@@ -267,17 +266,15 @@ class IntunePolicySets : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Policy Sets with Id {$($currentInstance.Id)}"
+            $updateParameters = $boundParameters
             # remove complex values
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Items') | Out-Null
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Items') | Out-Null
             # remove unused values
-            $BoundParameters.Remove('Id') | Out-Null
-
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            Update-MgBetaDeviceAppManagementPolicySet -PolicySetId $currentInstance.Id -BodyParameter $UpdateParameters
+            Update-MgBetaDeviceAppManagementPolicySet -PolicySetId $currentInstance.Id -BodyParameter $updateParameters
 
             if ($null -ne ($itemamendments = $this.GetItemsAmendmentsObject($this.ResourceCache['itemResultCache'], $this.items)))
             {

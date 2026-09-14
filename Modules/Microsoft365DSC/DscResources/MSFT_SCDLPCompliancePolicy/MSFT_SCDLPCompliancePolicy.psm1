@@ -342,12 +342,14 @@ class SCDLPCompliancePolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Absent')
         {
-            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+            $createParameters = $boundParameters
+            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $createParameters
             New-DLPCompliancePolicy @CreationParams
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Present')
         {
-            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+            $updateParameters = $boundParameters
+            $CreationParams = Remove-M365DSCAuthenticationParameter -BoundParameters $updateParameters
             $CreationParams.Remove('Name') | Out-Null
             $CreationParams.Add('Identity', $this.Name) | Out-Null
 

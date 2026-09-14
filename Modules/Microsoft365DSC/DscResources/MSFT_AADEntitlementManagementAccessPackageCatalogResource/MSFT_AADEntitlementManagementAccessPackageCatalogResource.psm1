@@ -318,7 +318,8 @@ class AADEntitlementManagementAccessPackageCatalogResource : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating resource {$($this.DisplayName)} in catalog {$($resolvedCatalogId)}"
 
-            $resource = ([Hashtable]$boundParameters).Clone()
+            $updateParameters = $boundParameters
+            $resource = ([Hashtable]$updateParameters).Clone()
             $resource.Remove('Id') | Out-Null
             $resource.Remove('CatalogId') | Out-Null
 

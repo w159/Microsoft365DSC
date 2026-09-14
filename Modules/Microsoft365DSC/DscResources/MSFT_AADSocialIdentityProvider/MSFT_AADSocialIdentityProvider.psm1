@@ -147,19 +147,21 @@ class AADSocialIdentityProvider : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        $BoundParameters.Add('@odata.type', 'microsoft.graph.socialIdentityProvider')
+        $boundParameters.Add('@odata.type', 'microsoft.graph.socialIdentityProvider')
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Social Identity Provider with Client Id {$($this.ClientId)}"
-            New-MgBetaIdentityProvider -BodyParameter $BoundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-MgBetaIdentityProvider -BodyParameter $createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            $BoundParameters.Remove('IdentityProviderType') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('IdentityProviderType') | Out-Null
             Write-Verbose -Message "Updating the Social Identity Provider with Client Id {$($this.ClientId)}"
-            Update-MgBetaIdentityProvider -IdentityProviderBaseId $this.ClientId -BodyParameter $BoundParameters | Out-Null
+            Update-MgBetaIdentityProvider -IdentityProviderBaseId $this.ClientId -BodyParameter $updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

@@ -249,31 +249,31 @@ class TeamsAppSetupPolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters.Remove('Verbose') | Out-Null
-            Write-Verbose -Message "Creating the Teams App Setup Policy {$($this.Identity)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters.Remove('Verbose') | Out-Null
+            Write-Verbose -Message "Creating the Teams App Setup Policy {$($this.Identity)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $createParameters)"
 
-            $CreateParameters.AppPresetList = $appPresetValues
-            $CreateParameters.AppPresetMeetingList = $appPresetMeetingValues
-            $CreateParameters.PinnedAppBarApps = $pinnedAppBarAppsValue
-            $CreateParameters.PinnedCallingBarApps = $pinnedCallingBarAppsValue
-            $CreateParameters.PinnedMessageBarApps = $pinnedMessageBarAppsValue
+            $createParameters.AppPresetList = $appPresetValues
+            $createParameters.AppPresetMeetingList = $appPresetMeetingValues
+            $createParameters.PinnedAppBarApps = $pinnedAppBarAppsValue
+            $createParameters.PinnedCallingBarApps = $pinnedCallingBarAppsValue
+            $createParameters.PinnedMessageBarApps = $pinnedMessageBarAppsValue
 
-            New-CsTeamsAppSetupPolicy @CreateParameters | Out-Null
+            New-CsTeamsAppSetupPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters.Remove('Verbose') | Out-Null
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters.Remove('Verbose') | Out-Null
             Write-Verbose -Message "Updating the Teams App Setup Policy with Identity {$($this.Identity)}"
 
-            $UpdateParameters.AppPresetList = $appPresetValues
-            $UpdateParameters.AppPresetMeetingList = $appPresetMeetingValues
-            $UpdateParameters.PinnedAppBarApps = $pinnedAppBarAppsValue
-            $UpdateParameters.PinnedCallingBarApps = $pinnedCallingBarAppsValue
-            $UpdateParameters.PinnedMessageBarApps = $pinnedMessageBarAppsValue
+            $updateParameters.AppPresetList = $appPresetValues
+            $updateParameters.AppPresetMeetingList = $appPresetMeetingValues
+            $updateParameters.PinnedAppBarApps = $pinnedAppBarAppsValue
+            $updateParameters.PinnedCallingBarApps = $pinnedCallingBarAppsValue
+            $updateParameters.PinnedMessageBarApps = $pinnedMessageBarAppsValue
 
-            Set-CsTeamsAppSetupPolicy @UpdateParameters | Out-Null
+            Set-CsTeamsAppSetupPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

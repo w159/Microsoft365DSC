@@ -238,8 +238,7 @@ class IntuneWindowsHelloForBusinessGlobalPolicy : M365DSCResourceBase
         $null = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        $updateParameters = ([Hashtable]$boundParameters).Clone()
-        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         #region resource generator code
         $updateParameters.Add('@odata.type', '#microsoft.graph.deviceEnrollmentWindowsHelloForBusinessConfiguration')

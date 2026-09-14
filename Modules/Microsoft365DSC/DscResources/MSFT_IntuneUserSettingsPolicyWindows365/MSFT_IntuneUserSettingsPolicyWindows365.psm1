@@ -274,13 +274,14 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
             }
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune User Settings Policy for Windows365 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             if ($createParameters.crossRegionDisasterRecoverySetting.disasterRecoveryType -eq 'crossRegion')
@@ -309,10 +310,9 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune User Settings Policy for Windows365 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             if ($updateParameters.crossRegionDisasterRecoverySetting.disasterRecoveryType -eq 'crossRegion')

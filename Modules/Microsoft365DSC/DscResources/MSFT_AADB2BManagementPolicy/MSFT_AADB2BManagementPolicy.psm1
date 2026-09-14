@@ -130,12 +130,11 @@ class AADB2BManagementPolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         Write-Verbose -Message "Updating the Azure AD B2B Management Policy with Id {$($currentInstance.Id)}"
 
-        $updateParameters = ([Hashtable]$boundParameters).Clone()
-        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
         $updateParameters.Remove('IsSingleInstance') | Out-Null
 
         $currentInstance = Get-MgBetaPolicyB2BManagementPolicy -Filter "DisplayName eq 'B2BManagementPolicy'"

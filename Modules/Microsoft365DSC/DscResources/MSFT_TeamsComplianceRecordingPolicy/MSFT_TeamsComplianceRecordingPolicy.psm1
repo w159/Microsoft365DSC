@@ -186,27 +186,27 @@ class TeamsComplianceRecordingPolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            $keys = $CreateParameters.Keys
+            $keys = $createParameters.Keys
             foreach ($key in $keys)
             {
-                if ($null -ne $CreateParameters.$key -and $CreateParameters.$key.GetType().Name -like '*cimInstance*')
+                if ($null -ne $createParameters.$key -and $createParameters.$key.GetType().Name -like '*cimInstance*')
                 {
                     $keyName = $key.Substring(0, 1).ToLower() + $key.Substring(1, $key.Length - 1)
-                    $keyValue = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $CreateParameters.$key
-                    $CreateParameters.Remove($key) | Out-Null
-                    $CreateParameters.Add($keyName, $keyValue)
+                    $keyValue = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $createParameters.$key
+                    $createParameters.Remove($key) | Out-Null
+                    $createParameters.Add($keyName, $keyValue)
                 }
             }
 
             # Before calling Set-CsTeamsComplianceRecordingPolicy, convert IDs (strings) to ComplianceRecordingApplication objects
-            if ($CreateParameters.ContainsKey('ComplianceRecordingApplications') -and `
-                    $null -ne $CreateParameters.ComplianceRecordingApplications)
+            if ($createParameters.ContainsKey('ComplianceRecordingApplications') -and `
+                    $null -ne $createParameters.ComplianceRecordingApplications)
             {
                 # Fetch ComplianceRecordingApplication objects based on provided IDs
                 $appObjects = @()
-                foreach ($appId in $CreateParameters.ComplianceRecordingApplications)
+                foreach ($appId in $createParameters.ComplianceRecordingApplications)
                 {
                     $appObj = Get-CsTeamsComplianceRecordingApplication -Identity $appId -ErrorAction Stop
                     if ($null -ne $appObj)
@@ -219,11 +219,11 @@ class TeamsComplianceRecordingPolicy : M365DSCResourceBase
                     }
                 }
                 # Replace string IDs with actual application objects
-                $CreateParameters['ComplianceRecordingApplications'] = $appObjects
+                $createParameters['ComplianceRecordingApplications'] = $appObjects
             }
 
             Write-Verbose -Message "Creating a Teams Compliance Recording Policy with Identity {$($this.Identity)}"
-            New-CsTeamsComplianceRecordingPolicy @CreateParameters | Out-Null
+            New-CsTeamsComplianceRecordingPolicy @createParameters | Out-Null
 
             if ($this.ComplianceRecordingApplications.Count -gt 0)
             {
@@ -274,26 +274,26 @@ class TeamsComplianceRecordingPolicy : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Compliance Recording Policy with Identity {$($this.Identity)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-            $keys = $UpdateParameters.Keys
+            $keys = $updateParameters.Keys
             foreach ($key in $keys)
             {
-                if ($null -ne $UpdateParameters.$key -and $UpdateParameters.$key.GetType().Name -like '*cimInstance*')
+                if ($null -ne $updateParameters.$key -and $updateParameters.$key.GetType().Name -like '*cimInstance*')
                 {
-                    $keyValue = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $UpdateParameters.$key
-                    $UpdateParameters.Remove($key) | Out-Null
-                    $UpdateParameters.Add($keyName, $keyValue)
+                    $keyValue = Convert-M365DSCDRGComplexTypeToHashtable -ComplexObject $updateParameters.$key
+                    $updateParameters.Remove($key) | Out-Null
+                    $updateParameters.Add($keyName, $keyValue)
                 }
             }
 
             # Before calling Set-CsTeamsComplianceRecordingPolicy, convert IDs (strings) to ComplianceRecordingApplication objects
-            if ($UpdateParameters.ContainsKey('ComplianceRecordingApplications') -and `
-                    $null -ne $UpdateParameters.ComplianceRecordingApplications)
+            if ($updateParameters.ContainsKey('ComplianceRecordingApplications') -and `
+                    $null -ne $updateParameters.ComplianceRecordingApplications)
             {
                 # Fetch ComplianceRecordingApplication objects based on provided IDs
                 $appObjects = @()
-                foreach ($appId in $UpdateParameters.ComplianceRecordingApplications)
+                foreach ($appId in $updateParameters.ComplianceRecordingApplications)
                 {
                     $appObj = Get-CsTeamsComplianceRecordingApplication -Identity $appId -ErrorAction Stop
                     if ($null -ne $appObj)
@@ -306,11 +306,11 @@ class TeamsComplianceRecordingPolicy : M365DSCResourceBase
                     }
                 }
                 # Replace string IDs with actual application objects
-                $UpdateParameters['ComplianceRecordingApplications'] = $appObjects
+                $updateParameters['ComplianceRecordingApplications'] = $appObjects
             }
 
             # Now call the cmdlet with corrected parameters
-            Set-CsTeamsComplianceRecordingPolicy @UpdateParameters | Out-Null
+            Set-CsTeamsComplianceRecordingPolicy @updateParameters | Out-Null
             if ($this.ComplianceRecordingApplications.Count -gt 0)
             {
                 foreach ($CurrentComplianceRecordingApplications in $this.ComplianceRecordingApplications)

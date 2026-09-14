@@ -137,7 +137,7 @@ class EXOExternalInOutlook : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
@@ -147,8 +147,8 @@ class EXOExternalInOutlook : M365DSCResourceBase
         {
             Write-Verbose -Message 'Updating the settings for ExternalInOutlook.'
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            Set-ExternalInOutlook @UpdateParameters | Out-Null
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            Set-ExternalInOutlook @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

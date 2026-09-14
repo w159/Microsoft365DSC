@@ -155,7 +155,7 @@ class AADOrganizationCertificateBasedAuthConfiguration : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $null = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         # This GUID is ALWAYS fixed as per the documentation.
         $CertificateBasedAuthConfigurationId = '29728ade-6ae4-4ee9-9103-412912537da5'
@@ -169,8 +169,7 @@ class AADOrganizationCertificateBasedAuthConfiguration : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating an Azure AD Organization Certificate Based Auth Configuration with Id {$CertificateBasedAuthConfigurationId}"
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $createParameters.Remove('OrganizationId') | Out-Null
 
             $createCertAuthorities = @()

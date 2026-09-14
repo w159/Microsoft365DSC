@@ -223,7 +223,7 @@ class AADAgreement : M365DSCResourceBase
                 isDefault = $true
             }
 
-            $CreateParameters = @{
+            $createParameters = @{
                 displayName                       = $this.DisplayName
                 isViewingBeforeAcceptanceRequired = $this.IsViewingBeforeAcceptanceRequired
                 isPerDeviceAcceptanceRequired     = $this.IsPerDeviceAcceptanceRequired
@@ -232,10 +232,10 @@ class AADAgreement : M365DSCResourceBase
                 files                             = $fileContent
             }
 
-            $CreateParameters = Remove-NullEntriesFromHashtable -Hash $CreateParameters
-            Write-Verbose -Message "Creating Azure AD Agreement with DisplayName {$($this.DisplayName)} with:`r`n$(ConvertTo-Json $CreateParameters -Depth 5)"
+            $createParameters = Remove-NullEntriesFromHashtable -Hash $createParameters
+            Write-Verbose -Message "Creating Azure AD Agreement with DisplayName {$($this.DisplayName)} with:`r`n$(ConvertTo-Json $createParameters -Depth 5)"
 
-            New-MgBetaAgreement -BodyParameter $CreateParameters | Out-Null
+            New-MgBetaAgreement -BodyParameter $createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
@@ -254,7 +254,7 @@ class AADAgreement : M365DSCResourceBase
                 }
             }
 
-            $UpdateParameters = @{
+            $updateParameters = @{
                 displayName                       = $this.DisplayName
                 isViewingBeforeAcceptanceRequired = $this.IsViewingBeforeAcceptanceRequired
                 isPerDeviceAcceptanceRequired     = $this.IsPerDeviceAcceptanceRequired
@@ -264,13 +264,13 @@ class AADAgreement : M365DSCResourceBase
 
             if ($null -ne $fileContent)
             {
-                $UpdateParameters.files = $fileContent
+                $updateParameters.files = $fileContent
             }
 
-            $UpdateParameters = Remove-NullEntriesFromHashtable -Hash $UpdateParameters
-            Write-Verbose -Message "Updating Azure AD Agreement with ID {$($currentInstance.Id)} with:`r`n$(ConvertTo-Json $UpdateParameters -Depth 5)"
+            $updateParameters = Remove-NullEntriesFromHashtable -Hash $updateParameters
+            Write-Verbose -Message "Updating Azure AD Agreement with ID {$($currentInstance.Id)} with:`r`n$(ConvertTo-Json $updateParameters -Depth 5)"
             Update-MgBetaAgreement -AgreementId $currentInstance.Id `
-                -BodyParameter $UpdateParameters | Out-Null
+                -BodyParameter $updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

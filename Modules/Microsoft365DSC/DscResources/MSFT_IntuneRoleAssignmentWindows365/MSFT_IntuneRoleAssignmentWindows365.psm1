@@ -313,12 +313,13 @@ class IntuneRoleAssignmentWindows365 : M365DSCResourceBase
             $boundParameters.Remove('Principals') | Out-Null
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Role Assignment Windows365 with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -329,8 +330,7 @@ class IntuneRoleAssignmentWindows365 : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Role Assignment Windows365 with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Remove('RoleDefinitionId') | Out-Null
 

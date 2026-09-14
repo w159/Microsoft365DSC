@@ -345,13 +345,14 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
             type        = $managedDesktopType
         })
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Cloud Provisioning Policy for Windows365 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -370,18 +371,17 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Cloud Provisioning Policy for Windows365 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $boundParameters.Remove('ProvisioningType') | Out-Null
-            $boundParameters.Add('managedBy', 'Windows365')
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('ProvisioningType') | Out-Null
+            $updateParameters.Add('managedBy', 'Windows365')
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
             Update-MgBetaDeviceManagementVirtualEndpointProvisioningPolicy `
                 -CloudPcProvisioningPolicyId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

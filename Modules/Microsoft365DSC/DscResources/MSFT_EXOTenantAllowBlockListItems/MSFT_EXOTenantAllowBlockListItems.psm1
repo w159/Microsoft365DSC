@@ -157,37 +157,37 @@ class EXOTenantAllowBlockListItems : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
 
-            $CreateParameters.Remove('Value') | Out-Null
-            $CreateParameters.Add('Entries', @($this.Value)) | Out-Null
+            $createParameters.Remove('Value') | Out-Null
+            $createParameters.Add('Entries', @($this.Value)) | Out-Null
             if ($this.Action -eq 'Allow')
             {
-                $CreateParameters.Add('Allow', $true) | Out-Null
+                $createParameters.Add('Allow', $true) | Out-Null
             }
             elseif ($this.Action -eq 'Block')
             {
-                $CreateParameters.Add('Block', $true) | Out-Null
+                $createParameters.Add('Block', $true) | Out-Null
             }
-            $CreateParameters.Remove('Action') | Out-Null
+            $createParameters.Remove('Action') | Out-Null
 
-            Write-Verbose -Message "Creating {$($this.Value)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
-            New-TenantAllowBlockListItems @CreateParameters | Out-Null
+            Write-Verbose -Message "Creating {$($this.Value)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $createParameters)"
+            New-TenantAllowBlockListItems @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating {$($this.Value)}"
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters.Remove('Value') | Out-Null
-            $UpdateParameters.Add('Entries', @($this.Value)) | Out-Null
-            $UpdateParameters.Remove('Action') | Out-Null
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            $updateParameters.Remove('Value') | Out-Null
+            $updateParameters.Add('Entries', @($this.Value)) | Out-Null
+            $updateParameters.Remove('Action') | Out-Null
 
-            Set-TenantAllowBlockListItems @UpdateParameters | Out-Null
+            Set-TenantAllowBlockListItems @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

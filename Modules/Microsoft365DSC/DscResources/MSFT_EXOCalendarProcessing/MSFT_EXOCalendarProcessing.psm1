@@ -380,26 +380,26 @@ class EXOCalendarProcessing : M365DSCResourceBase
             return
         }
 
-        $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         # Some parameters can only be applied to Resource Mailboxes
-        if ($UpdateParameters.ContainsKey('AddNewRequestsTentatively'))
+        if ($updateParameters.ContainsKey('AddNewRequestsTentatively'))
         {
-            $mailbox = Get-Mailbox $UpdateParameters.Identity
+            $mailbox = Get-Mailbox $updateParameters.Identity
             if ($mailbox.RecipientTypeDetails -ne 'EquipmentMailbox' -and $mailbox.RecipientTypeDetails -ne 'RoomMailbox')
             {
                 Write-Verbose -Message 'Removing the AddNewRequestsTentatively parameter because the mailbox is not a resource one.'
-                $UpdateParameters.Remove('AddNewRequestsTentatively') | Out-Null
+                $updateParameters.Remove('AddNewRequestsTentatively') | Out-Null
 
                 Write-Verbose -Message 'Removing the BookingType parameter because the mailbox is not a resource one.'
-                $UpdateParameters.Remove('BookingType') | Out-Null
+                $updateParameters.Remove('BookingType') | Out-Null
 
                 Write-Verbose -Message 'Removing the ProcessExternalMeetingMessages parameter because the mailbox is not a resource one.'
-                $UpdateParameters.Remove('ProcessExternalMeetingMessages') | Out-Null
+                $updateParameters.Remove('ProcessExternalMeetingMessages') | Out-Null
             }
         }
 
-        Set-CalendarProcessing @UpdateParameters
+        Set-CalendarProcessing @updateParameters
     }
 
     [bool] Test()

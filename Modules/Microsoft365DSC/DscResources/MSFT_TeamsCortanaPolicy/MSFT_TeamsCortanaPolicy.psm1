@@ -139,15 +139,15 @@ class TeamsCortanaPolicy : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            Write-Verbose -Message "Creating a Teams Cortana Policy {$($this.Identity)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $CreateParameters)"
-            New-CsTeamsCortanaPolicy @CreateParameters | Out-Null
+            $createParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            Write-Verbose -Message "Creating a Teams Cortana Policy {$($this.Identity)} with Parameters:`r`n$(Convert-M365DscHashtableToString -Hashtable $createParameters)"
+            New-CsTeamsCortanaPolicy @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+            $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
             Write-Verbose -Message "Updating the Teams Cortana Policy with Identity {$($this.Identity)}"
-            Set-CsTeamsCortanaPolicy @UpdateParameters | Out-Null
+            Set-CsTeamsCortanaPolicy @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

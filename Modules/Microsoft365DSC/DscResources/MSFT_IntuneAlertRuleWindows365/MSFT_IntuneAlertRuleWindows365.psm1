@@ -213,8 +213,7 @@ class IntuneAlertRuleWindows365 : M365DSCResourceBase
             })
         }
 
-        $updateParameters = ([Hashtable]$boundParameters).Clone()
-        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+        $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         #region resource generator code
         if ($this.ResourceCache['currentAlertRule'].Id -eq '00000000-0000-0000-0000-000000000000')

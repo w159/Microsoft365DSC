@@ -136,11 +136,11 @@ class AADSecurityDefaults : M365DSCResourceBase
             Write-Verbose -Message 'The Description property for the AADSecurityDefaults resource is read-only and cannot be changed.'
         }
 
-        $UpdateParameters = @{
+        $updateParameters = @{
             id        = $this.DisplayName
             isEnabled = $this.IsEnabled
         }
-        Update-MgBetaPolicyIdentitySecurityDefaultEnforcementPolicy -BodyParameter $UpdateParameters | Out-Null
+        Update-MgBetaPolicyIdentitySecurityDefaultEnforcementPolicy -BodyParameter $updateParameters | Out-Null
     }
 
     [bool] Test()

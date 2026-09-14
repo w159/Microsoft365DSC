@@ -135,18 +135,19 @@ class TeamsTenantNetworkRegion : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating a Teams Tenant Network Region with Identity {$($this.Identity)}"
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            New-CsTenantNetworkRegion @CreateParameters | Out-Null
+            $createParameters = $boundParameters
+            New-CsTenantNetworkRegion @createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Teams Tenant Network Region with Identity {$($this.Identity)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            Set-CsTenantNetworkRegion @UpdateParameters | Out-Null
+            $updateParameters = $boundParameters
+            Set-CsTenantNetworkRegion @updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

@@ -143,19 +143,21 @@ class AADAttributeSet : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Attribute Set with Id {$($this.Id)}"
-            New-MgBetaDirectoryAttributeSet -BodyParameter $BoundParameters | Out-Null
+            $createParameters = $boundParameters
+            New-MgBetaDirectoryAttributeSet -BodyParameter $createParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Attribute Set with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Id') | Out-Null
-            Update-MgBetaDirectoryAttributeSet -AttributeSetId $currentInstance.Id -BodyParameter $BoundParameters | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            Update-MgBetaDirectoryAttributeSet -AttributeSetId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

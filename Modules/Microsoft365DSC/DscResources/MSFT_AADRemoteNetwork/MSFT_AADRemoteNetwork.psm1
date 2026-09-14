@@ -173,15 +173,15 @@ class AADRemoteNetwork : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
         # creating the device links property
-        $deviceLinksHashtable = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters.DeviceLinks
+        $deviceLinksHashtable = Rename-M365DSCCimInstanceParameter -Properties $boundParameters.DeviceLinks
 
         #creating the forwarding policies list by getting the ids
         $allForwardingProfiles = Get-MgBetaNetworkAccessForwardingProfile
         $forwardingProfilesList = @()
-        foreach ($profileName in $BoundParameters.ForwardingProfiles)
+        foreach ($profileName in $boundParameters.ForwardingProfiles)
         {
             $matchedProfile = $allForwardingProfiles | Where-Object { $_.Name -eq $profileName }
             $forwardingProfilesList += @{
@@ -192,9 +192,10 @@ class AADRemoteNetwork : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Azure AD Remote Network with Name {$($this.Name)}"
+            $createParameters = $boundParameters
             $params = @{
-                name               = $BoundParameters.Name
-                region             = $BoundParameters.Region
+                name               = $createParameters.Name
+                region             = $createParameters.Region
                 deviceLinks        = [Array]$deviceLinksHashtable
                 forwardingProfiles = [Array]$forwardingProfilesList
             }

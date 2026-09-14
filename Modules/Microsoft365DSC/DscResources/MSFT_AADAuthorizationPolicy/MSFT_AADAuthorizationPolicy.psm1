@@ -185,7 +185,7 @@ class AADAuthorizationPolicy : M365DSCResourceBase
         $desiredParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $desiredParameters.Remove('IsSingleInstance') | Out-Null
 
-        $UpdateParameters = @{}
+        $updateParameters = @{}
 
         foreach ($param in $desiredParameters.Keys)
         {
@@ -200,11 +200,11 @@ class AADAuthorizationPolicy : M365DSCResourceBase
             {
                 if ($param -eq 'GuestUserRole')
                 {
-                    $UpdateParameters.Add('GuestUserRoleId', $this.GetGuestUserRoleIdFromName($desiredParam))
+                    $updateParameters.Add('GuestUserRoleId', $this.GetGuestUserRoleIdFromName($desiredParam))
                 }
                 else
                 {
-                    $UpdateParameters.Add($param, $desiredParam)
+                    $updateParameters.Add($param, $desiredParam)
                 }
             }
         }
@@ -212,8 +212,8 @@ class AADAuthorizationPolicy : M365DSCResourceBase
         try
         {
             Write-Verbose -Message "Updating existing authorization policy"
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $null = Update-MgBetaPolicyAuthorizationPolicy -AuthorizationPolicyId 'authorizationPolicy' -BodyParameter $UpdateParameters -ErrorAction Stop
+            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $null = Update-MgBetaPolicyAuthorizationPolicy -AuthorizationPolicyId 'authorizationPolicy' -BodyParameter $updateParameters -ErrorAction Stop
         }
         catch
         {
