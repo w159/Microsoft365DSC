@@ -279,11 +279,9 @@ class EXORoleGroup : M365DSCResourceBase
                 }
 
                 Write-M365DSCHost -Message "    |---[$i/$($exportedInstances.Count)] $($RoleGroup.Name)" -DeferWrite
-                $roleGroupMember = Get-RoleGroupMember -Identity $RoleGroup.Name | Select-Object DisplayName
 
                 $Params = @{
                     Name                  = $RoleGroup.Name
-                    Members               = $roleGroupMember.DisplayName
                     Roles                 = $RoleGroup.Roles
                     Credential            = $this.Credential
                     ApplicationId         = $this.ApplicationId
