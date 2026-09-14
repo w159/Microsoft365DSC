@@ -244,7 +244,7 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
                 DisplayName           = $getValue.DisplayName
                 DefinitionValues      = $complexDefinitionValues
                 Id                    = $getValue.Id
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                = 'Present'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -298,18 +298,25 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
             'KeyValuePairValues' = 'values'
             'StringValues'       = 'values'
         }
+
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.Remove('Assignments') | Out-Null
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters -KeyMapping $keyToRename
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Administrative Template Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters.Remove('Assignments') | Out-Null
-
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters -KeyMapping $keyToRename
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('DefinitionValues') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('DefinitionValues') | Out-Null
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementGroupPolicyConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementGroupPolicyConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -353,19 +360,16 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Configuration Administrative Template Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters.Remove('Assignments') | Out-Null
-
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters -KeyMapping $keyToRename
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('DefinitionValues') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('DefinitionValues') | Out-Null
 
             #region resource generator code
             #Update Core policy
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.GroupPolicyConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.GroupPolicyConfiguration')
             Update-MgBetaDeviceManagementGroupPolicyConfiguration `
                 -GroupPolicyConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             #Update Assignments
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

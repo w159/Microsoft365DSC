@@ -2,7 +2,7 @@
 
 <img src="../../../images/FabienTschanz.jpg" style="width:75px;border-radius:50%;border:3px solid black;float:left;" />
 <div style="position:inherit;padding-top:15px;"><span style="float:left;padding-left:15px;"><b>by <a href="https://www.linkedin.com/in/fabien-tschanz">Fabien Tschanz</a><br />
-October 7th, 2026</b></span></div>
+September 14th, 2026</b></span></div>
 
 <br/>
 <br/>

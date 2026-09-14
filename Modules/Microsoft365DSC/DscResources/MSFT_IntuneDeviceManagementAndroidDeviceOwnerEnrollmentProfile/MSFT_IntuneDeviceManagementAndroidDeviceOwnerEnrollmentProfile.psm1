@@ -182,7 +182,7 @@ class IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile : M365DSCResourc
                 EnrollmentMode          = $androidDeviceOwnerEnrollmentProfile.EnrollmentMode.ToString()
                 EnrollmentTokenType     = $androidDeviceOwnerEnrollmentProfile.EnrollmentTokenType.ToString()
                 IsTeamsDeviceProfile    = $androidDeviceOwnerEnrollmentProfile.IsTeamsDeviceProfile
-                RoleScopeTagIds         = $androidDeviceOwnerEnrollmentProfile.RoleScopeTagIds
+                RoleScopeTagIds         = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $androidDeviceOwnerEnrollmentProfile.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TokenExpirationDateTime = $tokenExpirationDateTimeString
                 WifiHidden              = $androidDeviceOwnerEnrollmentProfile.WifiHidden
                 WifiPassword            = $androidDeviceOwnerEnrollmentProfile.WifiPassword
@@ -224,6 +224,10 @@ class IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile : M365DSCResourc
         $currentInstance = $this.Get().ToHashtable()
         $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $setParameters = Rename-M365DSCCimInstanceParameter -Properties $setParameters
+        if ($setParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $setParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')

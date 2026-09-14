@@ -355,7 +355,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 Id                                          = $devicePolicy.Id
                 DisplayName                                 = $devicePolicy.DisplayName
                 Description                                 = $devicePolicy.Description
-                RoleScopeTagIds                             = $devicePolicy.RoleScopeTagIds
+                RoleScopeTagIds                             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $devicePolicy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 PasswordRequired                            = $devicePolicy.passwordRequired
                 PasswordBlockSimple                         = $devicePolicy.passwordBlockSimple
                 PasswordRequiredToUnlockFromIdle            = $devicePolicy.passwordRequiredToUnlockFromIdle
@@ -448,11 +448,16 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentDeviceWindows10Policy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        if ($null -ne $BoundParameters.DeviceCompliancePolicyScript)
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
         {
-            $script = $BoundParameters.DeviceCompliancePolicyScript
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        if ($null -ne $boundParameters.DeviceCompliancePolicyScript)
+        {
+            $script = $boundParameters.DeviceCompliancePolicyScript
             $scriptName = $script.Displayname
             $scriptRulesContent = $script.RulesContent
 
@@ -466,8 +471,8 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 deviceComplianceScriptId = $complianceScript.id
                 rulesContent             = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($scriptRulesContent))
             }
-            $BoundParameters.Remove('DeviceCompliancePolicyScript') | Out-Null
-            $BoundParameters.Add('DeviceCompliancePolicyScript', $script)
+            $boundParameters.Remove('DeviceCompliancePolicyScript') | Out-Null
+            $boundParameters.Add('DeviceCompliancePolicyScript', $script)
         }
 
         $notificationTemplates = Get-MgBetaDeviceManagementNotificationMessageTemplate -All | Where-Object -FilterScript {
@@ -479,7 +484,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 scheduledActionConfigurations = @()
             }
         )
-        foreach ($scheduledAction in $BoundParameters.ScheduledActionsForRule)
+        foreach ($scheduledAction in $boundParameters.ScheduledActionsForRule)
         {
             $actionConfiguration = @{
                 actionType       = $scheduledAction.ActionType
@@ -514,13 +519,15 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
             $actionConfiguration.notificationTemplateId = [string]$template
             $complexScheduledActionsForRule[0].scheduledActionConfigurations += $actionConfiguration
         }
-        $BoundParameters.Remove('ScheduledActionsForRule') | Out-Null
+        $boundParameters.Remove('ScheduledActionsForRule') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentDeviceWindows10Policy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Intune Device Compliance Windows 10 Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Add('@odata.type', '#microsoft.graph.windows10CompliancePolicy')
             $createParameters.Add('scheduledActionsForRule', $complexScheduledActionsForRule)
             $policy = New-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $createParameters
@@ -536,8 +543,8 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentDeviceWindows10Policy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Intune Device Compliance Windows 10 Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Add('@odata.type', '#microsoft.graph.windows10CompliancePolicy')
             Update-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $updateParameters `
                 -DeviceCompliancePolicyId $currentDeviceWindows10Policy.Id

@@ -65,6 +65,9 @@
           },
           {
             "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "read": [
@@ -73,6 +76,9 @@
           },
           {
             "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       },
@@ -83,6 +89,9 @@
           },
           {
             "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "read": [
@@ -91,6 +100,9 @@
           },
           {
             "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       }

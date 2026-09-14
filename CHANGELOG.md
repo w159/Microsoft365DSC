@@ -548,6 +548,10 @@
   * [BREAKING CHANGE] Removed the module and its function `Get-PropertyReport`. The API surface
     checker in `Utilities/ApiSurface` replaces it and covers every workload, not only Exchange
     Online, Security and Compliance and Teams.
+* M365DSCDRGUtil
+  * [BREAKING CHANGE] Removed `Update-M365DSCSpecialCharacters`. Instance names are built with
+    the new `Remove-M365DSCSpecialCharacters`, and property values are escaped while the
+    configuration is rendered.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
 * M365DSCModuleMgmt
@@ -564,6 +568,9 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * [BREAKING CHANGE] Replaced every character that needs escaping inside an instance name
+    with an underscore. An exported instance that is named `AADGroup-Sales Team` will get
+    renamed to `AADGroup-Sales_Team`.
   * Added caching for Intune device configurations, compliance policies and enrollment
     configurations across resources.
   * Added caching for Entra groups referenced by assignments for Intune resources.
@@ -629,6 +636,12 @@
   * Updated `Get-CompareParameters` to class method and replaced all usages with class method calls.
   * Updated module to invoke PowerShell 7 for all resources if not already running under it.
   * Updated all DSC resources from script-based to class-based.
+  * Updated `RoleScopeTagIds` for Intune resources to resolve to their display name.
+    FIXES [#6444](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6444)
+  * Added the `DeviceManagementRBAC.Read.All` permission to every Intune resource that
+    resolves role scope tags.
+  * Updated the resources whose create and update paths built the same request body to
+    prepare it once, before the branch that tells the two apart.
   * Replaced the `Group.Read.All` Graph permission with `GroupMember.Read.All` in every
     resource that only resolves a group display name, id or membership and never modifies
     the group.

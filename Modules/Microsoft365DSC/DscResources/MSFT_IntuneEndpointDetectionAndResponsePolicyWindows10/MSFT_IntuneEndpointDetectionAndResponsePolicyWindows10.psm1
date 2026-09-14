@@ -171,7 +171,7 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
                 #region resource generator code
                 Description           = $policy.Description
                 DisplayName           = $policy.Name
-                RoleScopeTagIds       = $policy.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Identity              = $policy.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
@@ -221,27 +221,33 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentPolicy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         switch ($this.ConfigurationType)
         {
             'AutoFromConnector'
             {
-                $BoundParameters.Add('ClientConfigurationPackageType', 'autofromconnector')
-                $BoundParameters.Add('onboarding_fromconnector', 'autoConnectPlaceholder')
-                $BoundParameters.Remove('ConfigurationBlob') | Out-Null
+                $boundParameters.Add('ClientConfigurationPackageType', 'autofromconnector')
+                $boundParameters.Add('onboarding_fromconnector', 'autoConnectPlaceholder')
+                $boundParameters.Remove('ConfigurationBlob') | Out-Null
             }
             'Onboard'
             {
-                $BoundParameters.Add('ClientConfigurationPackageType', 'onboard')
-                $BoundParameters.Add('onboarding', $this.ConfigurationBlob)
-                $BoundParameters.Remove('ConfigurationBlob') | Out-Null
+                $boundParameters.Add('ClientConfigurationPackageType', 'onboard')
+                $boundParameters.Add('onboarding', $this.ConfigurationBlob)
+                $boundParameters.Remove('ConfigurationBlob') | Out-Null
             }
             'Offboard'
             {
-                $BoundParameters.Add('ClientConfigurationPackageType', 'offboard')
-                $BoundParameters.Add('offboarding', $this.ConfigurationBlob)
-                $BoundParameters.Remove('ConfigurationBlob') | Out-Null
+                $boundParameters.Add('ClientConfigurationPackageType', 'offboard')
+                $boundParameters.Add('offboarding', $this.ConfigurationBlob)
+                $boundParameters.Remove('ConfigurationBlob') | Out-Null
             }
         }
 
@@ -249,7 +255,7 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
         {
             throw "ConfigurationBlob is required for configurationType '$($this.ConfigurationType)'"
         }
-        $BoundParameters.Remove('ConfigurationType') | Out-Null
+        $boundParameters.Remove('ConfigurationType') | Out-Null
 
         $templateReferenceId = '0385b795-0f2f-44ac-8602-9f65bf6adede_1'
         $platforms = 'windows10'
@@ -258,10 +264,10 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Endpoint Protection And Response Policy for Windows10 with Name {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             $createParameters = @{
@@ -271,7 +277,7 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -290,10 +296,10 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Endpoint Protection And Response Policy for Windows10 {$($currentPolicy.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             Update-IntuneDeviceConfigurationPolicy `
@@ -304,7 +310,7 @@ class IntuneEndpointDetectionAndResponsePolicyWindows10 : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

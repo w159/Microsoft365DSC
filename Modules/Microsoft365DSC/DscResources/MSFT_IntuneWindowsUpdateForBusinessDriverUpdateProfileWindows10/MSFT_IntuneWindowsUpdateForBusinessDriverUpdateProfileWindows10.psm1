@@ -147,7 +147,7 @@ class IntuneWindowsUpdateForBusinessDriverUpdateProfileWindows10 : M365DSCResour
                 #region resource generator code
                 ApprovalType             = $enumApprovalType
                 DeploymentDeferralInDays = $getValue.deploymentDeferralInDays
-                RoleScopeTagIds          = $getValue.roleScopeTagIds
+                RoleScopeTagIds          = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Description              = $getValue.description
                 DisplayName              = $getValue.displayName
                 Id                       = $resolvedId
@@ -202,19 +202,25 @@ class IntuneWindowsUpdateForBusinessDriverUpdateProfileWindows10 : M365DSCResour
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Update For Business Driver Update Profile for Windows 10 with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
             $uri = '/beta/deviceManagement/windowsDriverUpdateProfiles'
-            $policy = Invoke-M365DSCGraphRequest -Method POST -Uri $uri -Body $($CreateParameters | ConvertTo-Json)
+            $policy = Invoke-M365DSCGraphRequest -Method POST -Uri $uri -Body $($createParameters | ConvertTo-Json)
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -228,15 +234,14 @@ class IntuneWindowsUpdateForBusinessDriverUpdateProfileWindows10 : M365DSCResour
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Windows Update For Business Driver Update Profile for Windows 10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('ApprovalType') | Out-Null
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('ApprovalType') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
             $uri = "/beta/deviceManagement/windowsDriverUpdateProfiles/$($currentInstance.Id)"
-            Invoke-M365DSCGraphRequest -Method PATCH -Uri $uri -Body $($UpdateParameters | ConvertTo-Json)
+            Invoke-M365DSCGraphRequest -Method PATCH -Uri $uri -Body $($updateParameters | ConvertTo-Json)
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `
                 -DeviceConfigurationPolicyId $currentInstance.Id `

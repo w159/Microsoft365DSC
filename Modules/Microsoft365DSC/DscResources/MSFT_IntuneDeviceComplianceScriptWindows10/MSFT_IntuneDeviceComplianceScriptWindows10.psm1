@@ -150,7 +150,7 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
                 Description            = $getValue.Description
                 DisplayName            = $getValue.DisplayName
                 EnforceSignatureCheck  = $getValue.EnforceSignatureCheck
-                RoleScopeTagIds        = $getValue.RoleScopeTagIds
+                RoleScopeTagIds        = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit             = $getValue.RunAs32Bit
                 RunAsAccount           = $enumRunAsAccount
                 DetectionScriptContent = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($getValue.DetectionScriptContent))
@@ -196,17 +196,24 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
         $boundParameters.DetectionScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.DetectionScriptContent))
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Compliance Script for Windows10 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Id') | Out-Null
-            $boundParameters.Add('platform', 'windows10')
-            Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/deviceComplianceScripts' -Body $($boundParameters | ConvertTo-Json)
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Add('platform', 'windows10')
+            Invoke-M365DSCGraphRequest -Method POST -Uri '/beta/deviceManagement/deviceComplianceScripts' -Body $($createParameters | ConvertTo-Json)
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Compliance Script for Windows10 with Id {$($currentInstance.Id)}"
-            Invoke-M365DSCGraphRequest -Method PATCH -Uri "/beta/deviceManagement/deviceComplianceScripts/$($currentInstance.Id)" -Body $($boundParameters | ConvertTo-Json)
+            $updateParameters = $boundParameters
+            Invoke-M365DSCGraphRequest -Method PATCH -Uri "/beta/deviceManagement/deviceComplianceScripts/$($currentInstance.Id)" -Body $($updateParameters | ConvertTo-Json)
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {

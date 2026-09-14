@@ -285,7 +285,7 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
                 PrintBlocked                            = $getValue.printBlocked
                 Description                             = $getValue.Description
                 DisplayName                             = $getValue.DisplayName
-                RoleScopeTagIds                         = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                         = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                                      = $getValue.Id
                 Ensure                                  = 'Present'
                 Credential                              = $this.Credential
@@ -332,6 +332,12 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($boundParameters.ContainsKey('Apps'))
         {
             $targetApps = @()
@@ -348,11 +354,13 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
             $boundParameters.Add('apps', $targetApps)
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune App Protection Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove("Assignments") | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove("Assignments") | Out-Null
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -372,9 +380,9 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune App Protection Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove("Assignments") | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove("Assignments") | Out-Null
 
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

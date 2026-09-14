@@ -205,7 +205,7 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
                 Id                                    = $getValue.Id
                 Description                           = $getValue.Description
                 DisplayName                           = $getValue.DisplayName
-                RoleScopeTagIds                       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 AuthenticationMethod                  = $getValue.authenticationMethod
                 ConnectAutomatically                  = $getValue.connectAutomatically
                 ConnectWhenNetworkNameIsHidden        = $getValue.connectWhenNetworkNameIsHidden
@@ -277,19 +277,24 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
 
         $currentInstance = $this.Get().ToHashtable()
 
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.Remove('Assignments') | Out-Null
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating the Intune Wifi Configuration Policy Android Enterprise Device Owner with DisplayName {$($this.DisplayName)}"
-            $boundParameters = $this.GetBoundParameters()
-            $boundParameters.Remove('Assignments') | Out-Null
-
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -303,16 +308,12 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner : M365DSCResourc
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Wifi Configuration Policy Android Enterprise Device Owner with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
-            $boundParameters = $this.GetBoundParameters()
-            $boundParameters.Remove('Assignments') | Out-Null
-
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration')
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerEnterpriseWiFiConfiguration')
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

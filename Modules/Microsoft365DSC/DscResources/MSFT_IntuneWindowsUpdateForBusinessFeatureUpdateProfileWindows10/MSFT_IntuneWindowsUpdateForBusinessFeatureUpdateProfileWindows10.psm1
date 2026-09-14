@@ -163,7 +163,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                 #region resource generator code
                 Description                                       = $getValue.Description
                 DisplayName                                       = $getValue.DisplayName
-                RoleScopeTagIds                                   = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                   = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 FeatureUpdateVersion                              = $getValue.FeatureUpdateVersion
                 InstallFeatureUpdatesOptional                     = $getValue.InstallFeatureUpdatesOptional
                 InstallLatestWindows10OnWindows11IneligibleDevice = $getValue.InstallLatestWindows10OnWindows11IneligibleDevice
@@ -243,12 +243,17 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
         }
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         if ($null -eq $this.RolloutSettings)
         {
-            $BoundParameters.rolloutSettings = @{
+            $boundParameters.rolloutSettings = @{
                 offerStartDateTimeInUTC = $null
                 offerEndDateTimeInUTC   = $null
                 offerIntervalInDays     = $null
@@ -258,7 +263,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Update For Business Feature Update Profile for Windows10 with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             if ($null -ne $this.RolloutSettings)
             {
@@ -269,7 +274,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                     if ($offerStartDate -lt $minTimeForAvailable)
                     {
                         $newOfferStartDate = $minTimeForAvailable
-                        $BoundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+                        $boundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
                     }
 
                     if (-not [string]::IsNullOrEmpty($this.RolloutSettings.OfferEndDateTimeInUTC))
@@ -280,7 +285,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                         {
                             Write-Verbose -Message 'OfferStartDateTimeInUTC must be at least the current time + 2 days, adjusting it...'
                             $newOfferStartDate = $minTimeForAvailable
-                            $BoundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+                            $boundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
                         }
 
                         if ($offerEndDate -lt $newOfferStartDate.AddDays(1))
@@ -296,11 +301,11 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                 }
             }
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
+            $createParameters = ([Hashtable]$boundParameters).Clone()
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementWindowsFeatureUpdateProfile -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementWindowsFeatureUpdateProfile -BodyParameter $createParameters
 
             if ($policy.Id)
             {
@@ -314,8 +319,8 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Windows Update For Business Feature Update Profile for Windows10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('InstallLatestWindows10OnWindows11IneligibleDevice') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('InstallLatestWindows10OnWindows11IneligibleDevice') | Out-Null
 
             if ($null -ne $this.RolloutSettings)
             {
@@ -344,7 +349,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                         {
                             $newOfferStartDate = $currentOfferDate
                         }
-                        $BoundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+                        $boundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
                     }
 
                     if (-not [string]::IsNullOrEmpty($this.RolloutSettings.OfferEndDateTimeInUTC))
@@ -356,7 +361,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                         {
                             Write-Verbose -Message 'OfferStartDateTimeInUTC must be at least the current time + 2 days, adjusting it...'
                             $newOfferStartDate = $minTimeForAvailable
-                            $BoundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+                            $boundParameters.rolloutSettings.offerStartDateTimeInUTC = $newOfferStartDate.ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
                         }
 
                         if ($offerEndDate -lt $newOfferStartDate.AddDays(1))
@@ -378,7 +383,7 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
             #region resource generator code
             Update-MgBetaDeviceManagementWindowsFeatureUpdateProfile `
                 -WindowsFeatureUpdateProfileId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `

@@ -201,7 +201,7 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
                 CertificatePassword         = $this.CertificatePassword
                 ManagedIdentity             = $this.ManagedIdentity.IsPresent
                 AccessTokens                = $this.AccessTokens
-                RoleScopeTagIds             = $configPolicy.RoleScopeTagIds
+                RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $configPolicy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TargetedAppManagementLevels = [String]$configPolicy.TargetedAppManagementLevels
                 AppGroupType                = [String]$configPolicy.AppGroupType
                 Apps                        = $complexAppsArray
@@ -245,12 +245,19 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
 
         $currentconfigPolicy = $this.Get().ToHashtable()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($null -ne $resolvedRoleScopeTagIds)
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $resolvedRoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentconfigPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Intune App Configuration Policy {$($this.DisplayName)}"
             $creationParams = @{
-                displayName = $this.DisplayName
-                description = $this.Description
+                displayName     = $this.DisplayName
+                description     = $this.Description
+                roleScopeTagIds = $resolvedRoleScopeTagIds
             }
             if ($null -ne $this.CustomSettings)
             {
@@ -316,8 +323,9 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
             Write-Verbose -Message "Updating Intune App Configuration Policy {$($this.DisplayName)}"
 
             $updateParams = @{
-                displayName                       = $this.DisplayName
-                description                       = $this.Description
+                displayName     = $this.DisplayName
+                description     = $this.Description
+                roleScopeTagIds = $resolvedRoleScopeTagIds
             }
             if ($null -ne $this.CustomSettings)
             {

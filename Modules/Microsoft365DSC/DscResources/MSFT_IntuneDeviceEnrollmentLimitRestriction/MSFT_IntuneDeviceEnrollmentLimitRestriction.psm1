@@ -141,7 +141,7 @@ class IntuneDeviceEnrollmentLimitRestriction : M365DSCResourceBase
                 Description           = $config.Description
                 Limit                 = $config.limit
                 Priority              = $config.Priority
-                RoleScopeTagIds       = $config.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $config.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                = 'Present'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -195,23 +195,29 @@ class IntuneDeviceEnrollmentLimitRestriction : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         $priorityPresent = $false
-        if ($BoundParameters.Keys.Contains('Priority'))
+        if ($boundParameters.Keys.Contains('Priority'))
         {
             $priorityPresent = $true
-            $BoundParameters.Remove('Priority') | Out-Null
+            $boundParameters.Remove('Priority') | Out-Null
         }
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Device Enrollment Limit Restriction {$($this.DisplayName)}"
 
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Add('@odata.type', '#microsoft.graph.deviceEnrollmentLimitConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceEnrollmentConfiguration -BodyParameter $BoundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Add('@odata.type', '#microsoft.graph.deviceEnrollmentLimitConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceEnrollmentConfiguration -BodyParameter $createParameters
 
             # Assignments from DefaultPolicy are not editable and will raise an alert
             if ($policy.Id -notlike '*_DefaultLimit')
@@ -237,11 +243,12 @@ class IntuneDeviceEnrollmentLimitRestriction : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Device Enrollment Limit Restriction {$($this.DisplayName)}"
 
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Add('@odata.type', '#microsoft.graph.deviceEnrollmentLimitConfiguration')
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Add('@odata.type', '#microsoft.graph.deviceEnrollmentLimitConfiguration')
             Update-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
                 -DeviceEnrollmentConfigurationId $currentInstance.Id `
-                -BodyParameter $BoundParameters
+                -BodyParameter $updateParameters
 
             # Assignments from DefaultPolicy are not editable and will raise an alert
             if ($currentInstance.Id -notlike '*_DefaultLimit')

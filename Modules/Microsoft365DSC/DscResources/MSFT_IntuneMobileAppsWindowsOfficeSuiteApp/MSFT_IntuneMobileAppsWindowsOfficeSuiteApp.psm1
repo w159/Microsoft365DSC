@@ -232,7 +232,7 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
                 PrivacyInformationUrl                = $instance.PrivacyInformationUrl
                 InformationUrl                       = $instance.InformationUrl
                 Notes                                = $instance.Notes
-                RoleScopeTagIds                      = $instance.RoleScopeTagIds
+                RoleScopeTagIds                      = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $instance.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 AutoAcceptEula                       = $instance.autoAcceptEula
                 ProductIds                           = $instance.productIds
                 UseSharedComputerActivation          = $instance.useSharedComputerActivation
@@ -305,23 +305,30 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters.Remove('Categories') | Out-Null
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters.Remove('Categories') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Office Suite App with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Add('Publisher', 'Microsoft')
-            $CreateParameters.Add('Developer', 'Microsoft')
-            $CreateParameters.Add('Owner', 'Microsoft')
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Add('Publisher', 'Microsoft')
+            $createParameters.Add('Developer', 'Microsoft')
+            $createParameters.Add('Owner', 'Microsoft')
 
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
-            $app = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
+            $app = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $createParameters
 
             foreach ($category in $this.Categories)
             {
@@ -355,15 +362,14 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Windows Office Suite App with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('OfficePlatformArchitecture') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('OfficePlatformArchitecture') | Out-Null
 
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
-            Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $UpdateParameters
+            $updateParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
+            Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters
 
             [array]$referenceObject = if ($null -ne $currentInstance.Categories.DisplayName)
             {

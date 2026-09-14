@@ -96,7 +96,7 @@ namespace Microsoft365DSC.Relations
                             dependency.TargetResourceType, dependency.TargetKey, dependency.TargetKeyProperty);
                     }
 
-                    targetReference = $"[{dependency.TargetResourceType}]{dependency.TargetResourceType}-{dependency.TargetKey}";
+                    targetReference = $"[{dependency.TargetResourceType}]{GetStubInstanceName(dependency.TargetResourceType, dependency.TargetKey)}";
                 }
 
                 string sourceReference = dependency.SourceReference;
@@ -223,7 +223,7 @@ namespace Microsoft365DSC.Relations
                 }
 
                 builder.Append('"');
-                builder.Append(EscapeReference(targets[i]));
+                builder.Append(targets[i]);
                 builder.Append('"');
             }
 
@@ -232,13 +232,29 @@ namespace Microsoft365DSC.Relations
         }
 
         /// <summary>
-        /// Applies the same escaping the previous implementation used for DependsOn entries.
+        /// Builds the instance name a stub block is declared under.
         /// </summary>
-        /// <param name="reference">The raw reference.</param>
-        /// <returns>The escaped reference.</returns>
-        private static string EscapeReference(string reference)
+        /// <param name="resourceType">The stubbed resource type.</param>
+        /// <param name="targetKey">The value identifying the target.</param>
+        /// <returns>The instance name.</returns>
+        private static string GetStubInstanceName(string resourceType, string targetKey)
         {
-            return Utilities.Utilities.UpdateSpecialCharacters(reference).Replace("\"", "``\"");
+            return resourceType + "-" + Utilities.Utilities.RemoveSpecialCharacters(targetKey);
+        }
+
+        /// <summary>
+        /// Escapes a value for a double quoted PowerShell string.
+        /// </summary>
+        /// <param name="value">The raw value.</param>
+        /// <returns>The escaped value.</returns>
+        private static string EscapeValue(string value)
+        {
+            string escaped = value
+                .Replace("`", "``")
+                .Replace("\"", "`\"")
+                .Replace("$", "`$");
+
+            return Utilities.Utilities.UpdateSpecialCharacters(escaped);
         }
 
         /// <summary>
@@ -314,9 +330,9 @@ namespace Microsoft365DSC.Relations
 
             foreach (UnresolvedTarget target in targets)
             {
-                string key = EscapeReference(target.TargetKey);
+                string key = EscapeValue(target.TargetKey);
                 builder.Append(BlockIndent).Append(target.ResourceType)
-                    .Append(" \"").Append(target.ResourceType).Append('-').Append(key).Append('"').Append(NewLine);
+                    .Append(" \"").Append(GetStubInstanceName(target.ResourceType, target.TargetKey)).Append('"').Append(NewLine);
                 builder.Append(BlockIndent).Append('{').Append(NewLine);
 
                 List<StubProperty> properties = GetMandatoryProperties(options.MandatoryPropertiesByResource, target.ResourceType);

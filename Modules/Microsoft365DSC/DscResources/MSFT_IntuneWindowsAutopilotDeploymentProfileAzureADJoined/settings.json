@@ -42,6 +42,9 @@
           },
           {
             "name": "DeviceManagementServiceConfig.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
@@ -50,6 +53,9 @@
           },
           {
             "name": "DeviceManagementServiceConfig.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       },
@@ -60,6 +66,9 @@
           },
           {
             "name": "DeviceManagementServiceConfig.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
@@ -68,6 +77,9 @@
           },
           {
             "name": "DeviceManagementServiceConfig.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       }

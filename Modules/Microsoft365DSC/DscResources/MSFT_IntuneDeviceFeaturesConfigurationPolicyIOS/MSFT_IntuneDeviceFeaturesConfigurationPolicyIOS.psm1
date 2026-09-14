@@ -275,26 +275,32 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Features Configuration Policy for iOS with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #create params need some processing to get payload in correct format
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.iosDeviceFeaturesConfiguration') #add odata type or payload will be rejected
-            if ($CreateParameters.WallpaperImage)
+            $createParameters.Add('@odata.type', '#microsoft.graph.iosDeviceFeaturesConfiguration') #add odata type or payload will be rejected
+            if ($createParameters.WallpaperImage)
             {
-                $CreateParameters['WallpaperImage'] = $CreateParameters.WallpaperImage[0] #needs the hashtable not embedded in array
-                $CreateParameters.WallpaperImage['value'] = [System.Convert]::FromBase64String($CreateParameters.WallpaperImage['value'])
+                $createParameters['WallpaperImage'] = $createParameters.WallpaperImage[0] #needs the hashtable not embedded in array
+                $createParameters.WallpaperImage['value'] = [System.Convert]::FromBase64String($createParameters.WallpaperImage['value'])
             }
-            if ($CreateParameters.HomeScreenPages)
+            if ($createParameters.HomeScreenPages)
             {
-                foreach ($homeScreenPage in $CreateParameters.HomeScreenPages)
+                foreach ($homeScreenPage in $createParameters.HomeScreenPages)
                 {
                     foreach ($icon in $homeScreenPage.icons)
                     {
@@ -307,9 +313,9 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
                     }
                 }
             }
-            if ($CreateParameters.HomeScreenDockIcons)
+            if ($createParameters.HomeScreenDockIcons)
             {
-                foreach ($homeScreenDockIcon in $CreateParameters.HomeScreenDockIcons)
+                foreach ($homeScreenDockIcon in $createParameters.HomeScreenDockIcons)
                 {
                     if ($homeScreenDockIcon.ContainsKey('pages'))
                     {
@@ -319,28 +325,28 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
                     $homeScreenDockIcon.Add('@odata.type', '#microsoft.graph.iosHomeScreenApp')
                 }
             }
-            if ($CreateParameters.ContentFilterSettings)
+            if ($createParameters.ContentFilterSettings)
             {
-                $this.ConvertDataTypeFormat($CreateParameters.ContentFilterSettings)
-                $CreateParameters['ContentFilterSettings'] = $CreateParameters.ContentFilterSettings[0] #needs the hashtable not embedded in array
+                $this.ConvertDataTypeFormat($createParameters.ContentFilterSettings)
+                $createParameters['ContentFilterSettings'] = $createParameters.ContentFilterSettings[0] #needs the hashtable not embedded in array
             }
-            if ($CreateParameters.SingleSignOnSettings)
+            if ($createParameters.SingleSignOnSettings)
             {
-                $CreateParameters['SingleSignOnSettings'] = $CreateParameters.SingleSignOnSettings[0] #needs the hashtable not embedded in array
+                $createParameters['SingleSignOnSettings'] = $createParameters.SingleSignOnSettings[0] #needs the hashtable not embedded in array
             }
-            if ($CreateParameters.IosSingleSignOnExtension)
+            if ($createParameters.IosSingleSignOnExtension)
             {
-                $this.ConvertDataTypeFormat($CreateParameters.IosSingleSignOnExtension)
-                if ($null -ne $CreateParameters.IosSingleSignOnExtension.configurations)
+                $this.ConvertDataTypeFormat($createParameters.IosSingleSignOnExtension)
+                if ($null -ne $createParameters.IosSingleSignOnExtension.configurations)
                 {
-                    $this.ConvertStringToBooleans($CreateParameters.IosSingleSignOnExtension.configurations)
+                    $this.ConvertStringToBooleans($createParameters.IosSingleSignOnExtension.configurations)
                 }
-                $CreateParameters['iosSingleSignOnExtension'] = $CreateParameters.IosSingleSignOnExtension[0] #needs the hashtable not embedded in array
+                $createParameters['iosSingleSignOnExtension'] = $createParameters.IosSingleSignOnExtension[0] #needs the hashtable not embedded in array
             }
             #finished processing create parameters
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -355,21 +361,20 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
 
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #update params need some processing to get payload in correct format
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.iosDeviceFeaturesConfiguration') #add odata type or payload will be rejected
-            if ($UpdateParameters.WallpaperImage)
+            $updateParameters.Add('@odata.type', '#microsoft.graph.iosDeviceFeaturesConfiguration') #add odata type or payload will be rejected
+            if ($updateParameters.WallpaperImage)
             {
-                $UpdateParameters['WallpaperImage'] = $UpdateParameters.WallpaperImage[0] #needs the hashtable not embedded in array
-                $UpdateParameters.WallpaperImage['value'] = [System.Convert]::FromBase64String($UpdateParameters.WallpaperImage['value'])
+                $updateParameters['WallpaperImage'] = $updateParameters.WallpaperImage[0] #needs the hashtable not embedded in array
+                $updateParameters.WallpaperImage['value'] = [System.Convert]::FromBase64String($updateParameters.WallpaperImage['value'])
             }
-            if ($UpdateParameters.HomeScreenPages)
+            if ($updateParameters.HomeScreenPages)
             {
-                foreach ($homeScreenPage in $UpdateParameters.HomeScreenPages)
+                foreach ($homeScreenPage in $updateParameters.HomeScreenPages)
                 {
                     foreach ($icon in $homeScreenPage.icons)
                     {
@@ -382,9 +387,9 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
                     }
                 }
             }
-            if ($UpdateParameters.HomeScreenDockIcons)
+            if ($updateParameters.HomeScreenDockIcons)
             {
-                foreach ($homeScreenDockIcon in $UpdateParameters.HomeScreenDockIcons)
+                foreach ($homeScreenDockIcon in $updateParameters.HomeScreenDockIcons)
                 {
                     if ($homeScreenDockIcon.ContainsKey('pages'))
                     {
@@ -394,28 +399,28 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
                     $homeScreenDockIcon.Add('@odata.type', '#microsoft.graph.iosHomeScreenApp')
                 }
             }
-            if ($UpdateParameters.ContentFilterSettings)
+            if ($updateParameters.ContentFilterSettings)
             {
-                $this.ConvertDataTypeFormat($UpdateParameters.ContentFilterSettings)
-                $UpdateParameters['ContentFilterSettings'] = $UpdateParameters.ContentFilterSettings[0] #needs the hashtable not embedded in array
+                $this.ConvertDataTypeFormat($updateParameters.ContentFilterSettings)
+                $updateParameters['ContentFilterSettings'] = $updateParameters.ContentFilterSettings[0] #needs the hashtable not embedded in array
             }
-            if ($UpdateParameters.SingleSignOnSettings)
+            if ($updateParameters.SingleSignOnSettings)
             {
-                $UpdateParameters['SingleSignOnSettings'] = $UpdateParameters.SingleSignOnSettings[0] #needs the hashtable not embedded in array
+                $updateParameters['SingleSignOnSettings'] = $updateParameters.SingleSignOnSettings[0] #needs the hashtable not embedded in array
             }
-            if ($UpdateParameters.IosSingleSignOnExtension)
+            if ($updateParameters.IosSingleSignOnExtension)
             {
-                $this.ConvertDataTypeFormat($UpdateParameters.IosSingleSignOnExtension)
-                if ($null -ne $UpdateParameters.IosSingleSignOnExtension.configurations)
+                $this.ConvertDataTypeFormat($updateParameters.IosSingleSignOnExtension)
+                if ($null -ne $updateParameters.IosSingleSignOnExtension.configurations)
                 {
-                    $this.ConvertStringToBooleans($UpdateParameters.IosSingleSignOnExtension.configurations)
+                    $this.ConvertStringToBooleans($updateParameters.IosSingleSignOnExtension.configurations)
                 }
-                $UpdateParameters['IosSingleSignOnExtension'] = $UpdateParameters.IosSingleSignOnExtension[0] #needs the hashtable not embedded in array
+                $updateParameters['IosSingleSignOnExtension'] = $updateParameters.IosSingleSignOnExtension[0] #needs the hashtable not embedded in array
             }
             #finished processing update parameters
 
             #region resource generator code
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `

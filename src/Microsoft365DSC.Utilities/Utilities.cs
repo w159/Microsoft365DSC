@@ -32,6 +32,41 @@ namespace Microsoft365DSC.Utilities
         }
 
         /// <summary>
+        /// The characters that cannot appear in a DSC instance name without escaping. The
+        /// smart quotes are listed by code point because this file is written in ASCII.
+        /// </summary>
+        private static readonly char[] UnsupportedInstanceNameCharacters =
+        [
+            '<', '>', ':', '"', '/', '\\', '|', '?', '*', '\'', '[', ']', '(', ')', '`', '$', ' ',
+            (char)0x2019, (char)0x201C, (char)0x201D, (char)0x201E, (char)0x201F
+        ];
+
+        /// <summary>
+        /// Replaces every character that would need escaping inside a DSC instance name with
+        /// an underscore.
+        /// </summary>
+        /// <param name="input">The value to turn into an instance name segment.</param>
+        /// <returns>A value that renders the same wherever it is written.</returns>
+        public static string RemoveSpecialCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input) || input.IndexOfAny(UnsupportedInstanceNameCharacters) < 0)
+            {
+                return input;
+            }
+
+            char[] characters = input.ToCharArray();
+            for (int i = 0; i < characters.Length; i++)
+            {
+                if (Array.IndexOf(UnsupportedInstanceNameCharacters, characters[i]) >= 0)
+                {
+                    characters[i] = '_';
+                }
+            }
+
+            return new string(characters);
+        }
+
+        /// <summary>
         /// Method to update special characters in strings.
         /// This method handles the conversion of special characters similar to Update-M365DSCSpecialCharacters.
         /// This function updates special characters in a string to be escaped in a DSC configuration.

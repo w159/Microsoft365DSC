@@ -140,7 +140,7 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
             $returnHashtable.Add('Identity', $policy.Id)
             $returnHashtable.Add('DisplayName', $policy.Name)
             $returnHashtable.Add('Description', $policy.Description)
-            $returnHashtable.Add('RoleScopeTagIds', $policy.RoleScopeTagIds)
+            $returnHashtable.Add('RoleScopeTagIds', (Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds))
 
             if ($null -eq $settings)
             {
@@ -239,6 +239,12 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
         $currentPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $templateReferenceId = '22968f54-45fa-486c-848e-f8224aa69772_1'
         $platforms = 'windows10'
         $technologies = 'mdm'
@@ -300,7 +306,7 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
             $createParameters.Add('templateReference', @{
                 templateId = $templateReferenceId
             })
-            $createParameters.Add('roleScopeTagIds', $this.RoleScopeTagIds)
+            $createParameters.Add('roleScopeTagIds', $resolvedRoleScopeTagIds)
             $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
 
             #region Assignments
@@ -331,7 +337,7 @@ class IntuneAccountProtectionLocalUserGroupMembershipPolicy : M365DSCResourceBas
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region Assignments
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

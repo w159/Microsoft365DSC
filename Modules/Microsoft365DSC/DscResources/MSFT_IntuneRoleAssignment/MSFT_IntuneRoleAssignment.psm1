@@ -199,7 +199,7 @@ class IntuneRoleAssignment : M365DSCResourceBase
                 MembersDisplayNames        = $membersDisplayNamesValue
                 RoleDefinition             = $currentRoleDefinitionId
                 RoleDefinitionDisplayName  = $currentRoleDefinitionDisplayName
-                RoleScopeTagIds            = $getValue.RoleScopeTagIds
+                RoleScopeTagIds            = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                     = 'Present'
                 Credential                 = $this.Credential
                 ApplicationId              = $this.ApplicationId
@@ -237,6 +237,12 @@ class IntuneRoleAssignment : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($null -ne $resolvedRoleScopeTagIds)
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $resolvedRoleScopeTagIds
+        }
 
         $roleDefinitionValue = $this.RoleDefinition
         if ($roleDefinitionValue -notmatch '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$' -or $roleDefinitionValue -eq '00000000-0000-0000-0000-000000000000')
@@ -331,9 +337,9 @@ class IntuneRoleAssignment : M365DSCResourceBase
                 $createParameters['resourceScopes'] = $resourceScopesValue
             }
 
-            if ($null -ne $this.RoleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
-                $createParameters['roleScopeTagIds'] = $this.RoleScopeTagIds
+                $createParameters['roleScopeTagIds'] = $resolvedRoleScopeTagIds
             }
 
             $null = New-MgBetaDeviceManagementRoleAssignment -BodyParameter $createParameters
@@ -356,9 +362,9 @@ class IntuneRoleAssignment : M365DSCResourceBase
                 $updateParameters['resourceScopes'] = $resourceScopesValue
             }
 
-            if ($null -ne $this.RoleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
-                $updateParameters['roleScopeTagIds'] = $this.RoleScopeTagIds
+                $updateParameters['roleScopeTagIds'] = $resolvedRoleScopeTagIds
             }
 
             $null = Update-MgBetaDeviceManagementRoleAssignment `

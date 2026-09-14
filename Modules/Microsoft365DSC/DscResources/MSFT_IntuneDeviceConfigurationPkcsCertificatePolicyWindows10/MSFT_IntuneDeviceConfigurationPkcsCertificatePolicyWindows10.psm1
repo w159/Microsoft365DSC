@@ -308,7 +308,7 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
                 DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
                 DisplayName                                 = $getValue.DisplayName
                 Id                                          = $getValue.Id
-                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                      = 'Present'
                 Credential                                  = $this.Credential
                 ApplicationId                               = $this.ApplicationId
@@ -359,20 +359,26 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Pkcs Certificate Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.windows10PkcsCertificateProfile')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.windows10PkcsCertificateProfile')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -386,17 +392,16 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Configuration Pkcs Certificate Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.windows10PkcsCertificateProfile')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.windows10PkcsCertificateProfile')
             Update-MgBetaDeviceManagementDeviceConfiguration `
                 -DeviceConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `
                 -DeviceConfigurationPolicyId $currentInstance.id `

@@ -325,7 +325,7 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
                 PrivacyUrl                                = $getValue.PrivacyUrl
                 ProfileDescription                        = $getValue.ProfileDescription
                 ProfileName                               = $getValue.ProfileName
-                RoleScopeTagIds                           = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                           = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 #SendDeviceOwnershipChangePushNotification = $getValue.SendDeviceOwnershipChangePushNotification
                 ShowAzureADEnterpriseApps                 = $getValue.ShowAzureADEnterpriseApps
                 ShowConfigurationManagerApps              = $getValue.ShowConfigurationManagerApps
@@ -381,6 +381,11 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         if ($boundParameters.ContainsKey('themeColor'))
         {

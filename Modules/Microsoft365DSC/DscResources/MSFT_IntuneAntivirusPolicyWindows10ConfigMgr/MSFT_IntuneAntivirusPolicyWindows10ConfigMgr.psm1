@@ -354,7 +354,7 @@ class IntuneAntivirusPolicyWindows10ConfigMgr : M365DSCResourceBase
                 #region resource generator code
                 Description           = $getValue.Description
                 DisplayName           = $getValue.Name
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
@@ -406,7 +406,14 @@ class IntuneAntivirusPolicyWindows10ConfigMgr : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('RandomizeScheduleTaskTimes') | Out-Null
 
         $templateReferenceId = '804339ad-1553-4478-a742-138fb5807418_1'
@@ -489,7 +496,7 @@ class IntuneAntivirusPolicyWindows10ConfigMgr : M365DSCResourceBase
                 platforms       = $platforms
                 technologies    = $technologies
                 settings        = $settings
-                roleScopeTagIds = $this.RoleScopeTagIds
+                roleScopeTagIds = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -582,7 +589,7 @@ class IntuneAntivirusPolicyWindows10ConfigMgr : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
 

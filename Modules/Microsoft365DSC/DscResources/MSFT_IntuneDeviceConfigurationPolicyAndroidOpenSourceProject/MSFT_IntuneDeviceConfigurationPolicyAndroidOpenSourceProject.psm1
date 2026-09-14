@@ -186,7 +186,7 @@ class IntuneDeviceConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceB
                 Id                                             = $getValue.Id
                 Description                                    = $getValue.Description
                 DisplayName                                    = $getValue.DisplayName
-                RoleScopeTagIds                                = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 AppsBlockInstallFromUnknownSources             = $getValue.appsBlockInstallFromUnknownSources
                 BluetoothBlockConfiguration                    = $getValue.bluetoothBlockConfiguration
                 BluetoothBlocked                               = $getValue.bluetoothBlocked
@@ -254,12 +254,19 @@ class IntuneDeviceConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceB
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Policy Android Open Source Project with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $createParameters.Remove('Id') | Out-Null
             $createParameters.Add('@odata.type', '#microsoft.graph.aospDeviceOwnerDeviceConfiguration')
 
@@ -278,9 +285,9 @@ class IntuneDeviceConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceB
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating an Intune Device Configuration Policy Android Open Source Project with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Add('@odata.type', '#microsoft.graph.aospDeviceOwnerDeviceConfiguration')
 

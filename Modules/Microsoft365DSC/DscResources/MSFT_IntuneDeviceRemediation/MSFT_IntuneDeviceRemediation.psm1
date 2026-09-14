@@ -243,7 +243,7 @@ class IntuneDeviceRemediation : M365DSCResourceBase
                 Publisher                   = $getValue.Publisher
                 RemediationScriptContent    = $getValue.RemediationScriptContent
                 RemediationScriptParameters = $complexRemediationScriptParameters
-                RoleScopeTagIds             = $getValue.RoleScopeTagIds
+                RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit                  = $getValue.RunAs32Bit
                 RunAsAccount                = $enumRunAsAccount
                 Id                          = $getValue.Id
@@ -312,20 +312,28 @@ class IntuneDeviceRemediation : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $BoundParameters.Remove('IsGlobalScript') | Out-Null
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters.Remove('IsGlobalScript') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Remediation with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementDeviceHealthScript -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementDeviceHealthScript -BodyParameter $createParameters
             $assignmentsHash = @()
             foreach ($assignment in $this.Assignments)
             {
@@ -372,19 +380,18 @@ class IntuneDeviceRemediation : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Remediation with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('DeviceHealthScriptType') | Out-Null
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('DeviceHealthScriptType') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             if ($currentInstance.IsGlobalScript)
             {
                 Write-Warning -Message "The Intune Device Remediation with Id {$($currentInstance.Id)} is a global script and only few properties can be updated."
-                $UpdateParameters = @{
+                $updateParameters = @{
                     Id              = $currentInstance.Id
-                    RoleScopeTagIds = $this.RoleScopeTagIds
+                    RoleScopeTagIds = $resolvedRoleScopeTagIds
                     RunAs32Bit      = $this.RunAs32Bit
                     RunAsAccount    = $this.RunAsAccount
                 }
@@ -393,7 +400,7 @@ class IntuneDeviceRemediation : M365DSCResourceBase
             #region resource generator code
             Update-MgBetaDeviceManagementDeviceHealthScript `
                 -DeviceHealthScriptId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             $assignmentsHash = @()
             foreach ($assignment in $this.Assignments)

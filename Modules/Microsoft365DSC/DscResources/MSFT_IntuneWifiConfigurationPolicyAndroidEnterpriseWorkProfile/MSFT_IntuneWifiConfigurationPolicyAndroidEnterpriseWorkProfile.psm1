@@ -162,7 +162,7 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
                 Id                             = $getValue.Id
                 Description                    = $getValue.Description
                 DisplayName                    = $getValue.DisplayName
-                RoleScopeTagIds                = ([Array]$getValue.RoleScopeTagIds)
+                RoleScopeTagIds                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues ([Array]$getValue.RoleScopeTagIds) -DesiredValues $this.RoleScopeTagIds
                 ConnectAutomatically           = $getValue.connectAutomatically
                 ConnectWhenNetworkNameIsHidden = $getValue.connectWhenNetworkNameIsHidden
                 NetworkName                    = $getValue.networkName
@@ -224,24 +224,29 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
 
         $currentInstance = $this.Get().ToHashtable()
 
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.Remove('Assignments') | Out-Null
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
-            $boundParameters = $this.GetBoundParameters()
-            $boundParameters.Remove('Assignments') | Out-Null
-
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
-            if ($CreateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            if ($createParameters['proxyAutomaticConfigurationUrl'] -eq '')
             {
-                $CreateParameters['proxyAutomaticConfigurationUrl'] = $null
+                $createParameters['proxyAutomaticConfigurationUrl'] = $null
             }
 
             #region resource generator code
             Write-Verbose -Message "Creating new Intune Wifi Configuration Policy Android Enterprise Work Profile with DisplayName {$($this.DisplayName)}"
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileWiFiConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileWiFiConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -255,20 +260,16 @@ class IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile : M365DSCResourc
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
-            $boundParameters = $this.GetBoundParameters()
-            $boundParameters.Remove('Assignments') | Out-Null
-
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            if ($UpdateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            if ($updateParameters['proxyAutomaticConfigurationUrl'] -eq '')
             {
-                $UpdateParameters['proxyAutomaticConfigurationUrl'] = $null
+                $updateParameters['proxyAutomaticConfigurationUrl'] = $null
             }
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileWiFiConfiguration')
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileWiFiConfiguration')
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

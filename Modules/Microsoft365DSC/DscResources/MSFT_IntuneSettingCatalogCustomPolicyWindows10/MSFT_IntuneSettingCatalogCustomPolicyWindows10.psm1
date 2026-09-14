@@ -193,7 +193,7 @@ class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
                 Description           = $getValue.Description
                 Name                  = $getValue.Name
                 Platforms             = $enumPlatforms
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Technologies          = $enumTechnologies
                 Settings              = $complexSettings
                 Id                    = $getValue.Id
@@ -250,17 +250,22 @@ class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
         }
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters -KeyMapping $keysToRename
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Setting Catalog Custom Policy for Windows10 with Name {$($this.Name)}"
             $boundParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$boundParameters).Clone()
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = ([Hashtable]$boundParameters).Clone()
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.DeviceManagementConfigurationPolicy')
-            $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.DeviceManagementConfigurationPolicy')
+            $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.Id)
@@ -276,13 +281,13 @@ class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
             Write-Verbose -Message "Updating the Intune Setting Catalog Custom Policy for Windows10 with Id {$($currentInstance.Id)}"
             $boundParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$boundParameters).Clone()
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = ([Hashtable]$boundParameters).Clone()
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
             Update-IntuneDeviceConfigurationPolicy `
                 -DeviceConfigurationPolicyId $currentInstance.Id `
-                @UpdateParameters
+                @updateParameters
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

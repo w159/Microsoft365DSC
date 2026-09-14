@@ -903,7 +903,7 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
                 Id                                                       = $getValue.Id
                 Description                                              = $getValue.Description
                 DisplayName                                              = $getValue.DisplayName
-                RoleScopeTagIds                                          = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                          = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 AccountsBlockModification                                = $getValue.accountsBlockModification
                 AndroidDeviceOwnerDelegatedScopeAppSettings              = $complexAndroidDeviceOwnerDelegatedScopeAppSettings
                 AppsAllowInstallFromUnknownSources                       = $getValue.appsAllowInstallFromUnknownSources
@@ -1097,41 +1097,48 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
-            foreach ($key in ($CreateParameters.Clone()).Keys)
+            foreach ($key in ($createParameters.Clone()).Keys)
             {
                 if ($key -eq 'DetailedHelpText' -or $key -eq 'DeviceOwnerLockScreenMessage' -or $key -eq 'ShortHelpText')
                 {
-                    if ($null -ne $CreateParameters.$key.DefaultMessage -or $null -ne $CreateParameters.$key.LocalizedMessages)
+                    if ($null -ne $createParameters.$key.DefaultMessage -or $null -ne $createParameters.$key.LocalizedMessages)
                     {
-                        $CreateParameters.$key.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerUserFacingMessage')
+                        $createParameters.$key.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerUserFacingMessage')
                     }
 
-                    if ($null -eq $CreateParameters.$key.LocalizedMessages)
+                    if ($null -eq $createParameters.$key.LocalizedMessages)
                     {
-                        $CreateParameters.$key.Add('localizedMessages', @())
+                        $createParameters.$key.Add('localizedMessages', @())
                     }
                 }
 
                 if ($key -ne '@odata.type')
                 {
                     $keyName = $key.Substring(0, 1).ToLower() + $key.Substring(1, $key.Length - 1)
-                    $keyValue = $CreateParameters.$key
-                    $CreateParameters.Remove($key) | Out-Null
-                    $CreateParameters.Add($keyName, $keyValue) | Out-Null
+                    $keyValue = $createParameters.$key
+                    $createParameters.Remove($key) | Out-Null
+                    $createParameters.Add($keyName, $keyValue) | Out-Null
                 }
             }
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerGeneralDeviceConfiguration')
+            $createParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerGeneralDeviceConfiguration')
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -1145,37 +1152,37 @@ class IntuneDeviceConfigurationPolicyAndroidDeviceOwner : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
-            foreach ($key in (($UpdateParameters.Clone()).Keys | Sort-Object))
+            foreach ($key in (($updateParameters.Clone()).Keys | Sort-Object))
             {
                 if ($key -eq 'DetailedHelpText' -or $key -eq 'DeviceOwnerLockScreenMessage' -or $key -eq 'ShortHelpText')
                 {
-                    if ($null -ne $UpdateParameters.$key.DefaultMessage -or $null -ne $UpdateParameters.$key.LocalizedMessages)
+                    if ($null -ne $updateParameters.$key.DefaultMessage -or $null -ne $updateParameters.$key.LocalizedMessages)
                     {
-                        $UpdateParameters.$key.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerUserFacingMessage')
+                        $updateParameters.$key.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerUserFacingMessage')
                     }
 
-                    if ($null -eq $UpdateParameters.$key.LocalizedMessages)
+                    if ($null -eq $updateParameters.$key.LocalizedMessages)
                     {
-                        $UpdateParameters.$key.Add('localizedMessages', @())
+                        $updateParameters.$key.Add('localizedMessages', @())
                     }
                 }
 
                 if ($key -ne '@odata.type')
                 {
                     $keyName = $key.Substring(0, 1).ToLower() + $key.Substring(1, $key.Length - 1)
-                    $keyValue = $UpdateParameters.$key
-                    $UpdateParameters.Remove($key)
-                    $UpdateParameters.Add($keyName, $keyValue)
+                    $keyValue = $updateParameters.$key
+                    $updateParameters.Remove($key)
+                    $updateParameters.Add($keyName, $keyValue)
                 }
             }
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerGeneralDeviceConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerGeneralDeviceConfiguration')
 
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

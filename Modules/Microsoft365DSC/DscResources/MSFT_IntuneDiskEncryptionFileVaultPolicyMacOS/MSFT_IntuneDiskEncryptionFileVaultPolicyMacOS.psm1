@@ -184,7 +184,7 @@ class IntuneDiskEncryptionFileVaultPolicyMacOS : M365DSCResourceBase
                 #region resource generator code
                 Description           = $getValue.Description
                 DisplayName           = $getValue.Name
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
@@ -238,6 +238,12 @@ class IntuneDiskEncryptionFileVaultPolicyMacOS : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $templateReferenceId = 'e688156f-6564-4c03-b34f-83b90fe6bb82_1'
         $platforms = 'macOS'
         $technologies = 'mdm,appleRemoteManagement'
@@ -258,7 +264,7 @@ class IntuneDiskEncryptionFileVaultPolicyMacOS : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -291,7 +297,7 @@ class IntuneDiskEncryptionFileVaultPolicyMacOS : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds `
+                -RoleScopeTagIds $resolvedRoleScopeTagIds `
                 -CreationSource $this.ResourceCache['currentCreationSource'] # Might have been migrated from another policy automatically
 
             #region resource generator code

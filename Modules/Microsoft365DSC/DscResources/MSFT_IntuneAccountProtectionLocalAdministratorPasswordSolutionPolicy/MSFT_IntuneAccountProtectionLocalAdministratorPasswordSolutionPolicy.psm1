@@ -233,7 +233,7 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
             $returnHashtable.Add('Identity', $resolvedId)
             $returnHashtable.Add('DisplayName', $policy.Name)
             $returnHashtable.Add('Description', $policy.Description)
-            $returnHashtable.Add('RoleScopeTagIds', $policy.RoleScopeTagIds)
+            $returnHashtable.Add('RoleScopeTagIds', (Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds))
 
             $returnHashtable = Export-IntuneSettingCatalogPolicySettings -Settings $settings -ReturnHashtable $returnHashtable
 
@@ -294,7 +294,13 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
         #endregion
 
         $currentPolicy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         $templateReferenceId = 'adc46e5a-f4aa-4ff6-aeff-4f27bc525796_1'
         $platforms = 'windows10'
@@ -303,11 +309,11 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Account Protection LAPS Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             $createParameters = @{
@@ -317,7 +323,7 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
             $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
 
@@ -333,12 +339,12 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing Account Protection LAPS Policy {$($currentPolicy.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
 
             #format settings from PSBoundParameters for update
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             Update-IntuneDeviceConfigurationPolicy `
@@ -349,7 +355,7 @@ class IntuneAccountProtectionLocalAdministratorPasswordSolutionPolicy : M365DSCR
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region update policy assignments
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

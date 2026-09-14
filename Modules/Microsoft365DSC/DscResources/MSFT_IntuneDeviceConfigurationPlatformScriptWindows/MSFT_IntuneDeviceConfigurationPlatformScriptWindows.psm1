@@ -160,7 +160,7 @@ class IntuneDeviceConfigurationPlatformScriptWindows : M365DSCResourceBase
                 DisplayName           = $getValue.DisplayName
                 EnforceSignatureCheck = $getValue.EnforceSignatureCheck
                 FileName              = $getValue.FileName
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit            = $getValue.RunAs32Bit
                 RunAsAccount          = $enumRunAsAccount
                 ScriptContent         = $getValue.ScriptContent
@@ -213,6 +213,11 @@ class IntuneDeviceConfigurationPlatformScriptWindows : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {

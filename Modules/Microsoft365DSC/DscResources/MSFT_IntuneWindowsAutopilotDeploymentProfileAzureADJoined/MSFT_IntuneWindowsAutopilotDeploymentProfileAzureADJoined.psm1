@@ -219,7 +219,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                 ManagementServiceAppId         = $getValue.ManagementServiceAppId
                 OutOfBoxExperienceSetting      = $complexOutOfBoxExperienceSetting
                 Id                             = $getValue.Id
-                RoleScopeTagIds                = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                         = 'Present'
                 Credential                     = $this.Credential
                 ApplicationId                  = $this.ApplicationId
@@ -268,17 +268,23 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Autopilot Deployment Profile Azure AD Joined with DisplayName {$($this.DisplayName)}"
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.azureADWindowsAutopilotDeploymentProfile')
-            $policy = New-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.azureADWindowsAutopilotDeploymentProfile')
+            $policy = New-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -BodyParameter $createParameters
             #endregion
 
             #region new Intune assignment management
@@ -298,17 +304,16 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Windows Autopilot Deployment Profile Azure AD Joined with Id {$($currentInstance.Id)}"
-            $UpdateParameters = ([Hashtable]$boundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('DeviceType') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('DeviceType') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.azureADWindowsAutopilotDeploymentProfile')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.azureADWindowsAutopilotDeploymentProfile')
             Update-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile `
                 -WindowsAutopilotDeploymentProfileId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
 
             #region new Intune assignment management

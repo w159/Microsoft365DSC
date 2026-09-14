@@ -173,7 +173,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 #region resource generator code
                 Description                       = $getValue.Description
                 DisplayName                       = $getValue.Name
-                RoleScopeTagIds                   = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                   = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                                = $getValue.Id
                 Ensure                            = 'Present'
                 Credential                        = $this.Credential
@@ -225,7 +225,13 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         $templateReferenceId = 'd3849ba8-bf95-467c-9640-aa2334eae9e3_1'
         $platforms = 'windows10'
@@ -279,7 +285,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
 

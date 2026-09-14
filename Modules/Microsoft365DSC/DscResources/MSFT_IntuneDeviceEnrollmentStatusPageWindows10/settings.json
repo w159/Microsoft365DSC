@@ -38,6 +38,9 @@
           },
           {
             "name": "DeviceManagementApps.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
@@ -52,6 +55,9 @@
           },
           {
             "name": "DeviceManagementApps.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       },
@@ -68,6 +74,9 @@
           },
           {
             "name": "DeviceManagementApps.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
@@ -82,6 +91,9 @@
           },
           {
             "name": "DeviceManagementApps.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       }

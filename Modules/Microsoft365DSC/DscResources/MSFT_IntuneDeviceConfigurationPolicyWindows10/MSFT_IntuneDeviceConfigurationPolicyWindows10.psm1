@@ -2029,7 +2029,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 Description                                           = $getValue.Description
                 DisplayName                                           = $getValue.DisplayName
                 Id                                                    = $getValue.Id
-                RoleScopeTagIds                                       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                                = 'Present'
                 Credential                                            = $this.Credential
                 ApplicationId                                         = $this.ApplicationId
@@ -2080,18 +2080,24 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
 
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.Remove('Assignments') | Out-Null
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $CreateParameters.Remove('Assignments') | Out-Null
-
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.windows10GeneralConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.windows10GeneralConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             #endregion
             #region new Intune assignment management
             if ($policy.id)
@@ -2113,17 +2119,14 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Configuration Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-            $UpdateParameters.Remove('Assignments') | Out-Null
-
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.windows10GeneralConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.windows10GeneralConfiguration')
             Update-MgBetaDeviceManagementDeviceConfiguration `
                 -DeviceConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
             #region new Intune assignment management
             $currentAssignments = @()

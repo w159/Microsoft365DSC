@@ -141,7 +141,7 @@ class IntuneManagedInstallerPolicyWindows10 : M365DSCResourceBase
                 Description              = $getValue.Description
                 DisplayName              = $getValue.DisplayName
                 IsIntuneManagedInstaller = $getValue.DetectionScriptParameters[0].defaultValue -eq 'true'
-                RoleScopeTagIds          = $getValue.RoleScopeTagIds
+                RoleScopeTagIds          = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                       = $getValue.Id
                 Ensure                   = 'Present'
                 Credential               = $this.Credential
@@ -188,6 +188,12 @@ class IntuneManagedInstallerPolicyWindows10 : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('IsIntuneManagedInstaller') | Out-Null
 
         $isIntuneManagedInstallerValue = 'false'

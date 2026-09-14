@@ -216,7 +216,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
                 ManagementServiceAppId                 = $getValue.ManagementServiceAppId
                 OutOfBoxExperienceSetting              = $complexOutOfBoxExperienceSetting
                 Id                                     = $getValue.Id
-                RoleScopeTagIds                        = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                        = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                 = 'Present'
                 Credential                             = $this.Credential
                 ApplicationId                          = $this.ApplicationId
@@ -264,17 +264,23 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Autopilot Deployment Profile Azure AD Hybrid Joined with DisplayName {$($this.DisplayName)}"
-            $CreateParameters = ([Hashtable]$boundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Assignments') | Out-Null
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.activeDirectoryWindowsAutopilotDeploymentProfile')
-            $policy = New-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.activeDirectoryWindowsAutopilotDeploymentProfile')
+            $policy = New-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile -BodyParameter $createParameters
             #endregion
             #region new Intune assignment management
             $intuneAssignments = @()
@@ -293,16 +299,15 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Windows Autopilot Deployment Profile Azure AD Hybrid Joined with Id {$($currentInstance.Id)}"
-            $UpdateParameters = ([Hashtable]$boundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.activeDirectoryWindowsAutopilotDeploymentProfile')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.activeDirectoryWindowsAutopilotDeploymentProfile')
             Update-MgBetaDeviceManagementWindowsAutopilotDeploymentProfile `
                 -WindowsAutopilotDeploymentProfileId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             #endregion
             #region new Intune assignment management
             $currentAssignments = @()

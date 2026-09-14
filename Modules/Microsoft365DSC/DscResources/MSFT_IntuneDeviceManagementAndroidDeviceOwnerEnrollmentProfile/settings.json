@@ -49,11 +49,17 @@
         "read": [
           {
             "name": "DeviceManagementConfiguration.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       },
@@ -61,11 +67,17 @@
         "read": [
           {
             "name": "DeviceManagementConfiguration.Read.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ],
         "update": [
           {
             "name": "DeviceManagementConfiguration.ReadWrite.All"
+          },
+          {
+            "name": "DeviceManagementRBAC.Read.All"
           }
         ]
       }

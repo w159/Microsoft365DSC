@@ -317,6 +317,16 @@ Describe 'Utilities' {
         [Microsoft365DSC.Utilities.Utilities]::UpdateSpecialCharacters($input) | Should -Be $expected
     }
 
+    It 'Replaces every character that would need escaping in an instance name' {
+        $value = 'Tag "A" (prod) $100' + [string][char]0x201C + 'x' + [string][char]0x201D
+
+        [Microsoft365DSC.Utilities.Utilities]::RemoveSpecialCharacters($value) | Should -Be 'Tag__A___prod___100_x_'
+    }
+
+    It 'Leaves a value that needs no escaping untouched' {
+        [Microsoft365DSC.Utilities.Utilities]::RemoveSpecialCharacters('Policy-A.1') | Should -Be 'Policy-A.1'
+    }
+
     It 'Returns a new array and leaves the caller''s array untouched' {
         $original = [object[]]@([PSCustomObject]@{ V = 1 }, 'plain')
         $result = [Microsoft365DSC.Utilities.Utilities]::UnwrapArray($original)

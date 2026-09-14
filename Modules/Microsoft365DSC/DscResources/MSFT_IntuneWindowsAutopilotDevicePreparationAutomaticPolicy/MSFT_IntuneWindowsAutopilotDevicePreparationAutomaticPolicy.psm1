@@ -183,7 +183,7 @@ class IntuneWindowsAutopilotDevicePreparationAutomaticPolicy : M365DSCResourceBa
                 #region resource generator code
                 Description           = $getValue.Description
                 DisplayName           = $getValue.Name
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                    = $getValue.Id
                 AllowedApplications   = Get-M365DSCArrayFromProperty -PropertyValue ($batchResponsesApps | ForEach-Object { $_.body.displayName }) -ElementType ([System.String])
                 AllowedScripts        = Get-M365DSCArrayFromProperty -PropertyValue ($batchResponsesScripts | ForEach-Object { $_.body.displayName }) -ElementType ([System.String])
@@ -236,6 +236,13 @@ class IntuneWindowsAutopilotDevicePreparationAutomaticPolicy : M365DSCResourceBa
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('AssignmentTarget') | Out-Null
 
         $templateReferenceId = 'a6157a7f-aa00-42d9-ac82-7d2479f545db_1'
@@ -302,7 +309,7 @@ class IntuneWindowsAutopilotDevicePreparationAutomaticPolicy : M365DSCResourceBa
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
@@ -341,7 +348,7 @@ class IntuneWindowsAutopilotDevicePreparationAutomaticPolicy : M365DSCResourceBa
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             if ($this.GetBoundParameters().ContainsKey('AssignmentTarget'))
             {
