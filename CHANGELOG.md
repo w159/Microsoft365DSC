@@ -585,7 +585,7 @@
     configuration is rendered.
 * M365DSCExportUtil
   * Added switch to `Get-M365DSCExportContentForResource` to allow skipping
-    removal of special characters.
+    removal of special characters from resource instance names.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
 * M365DSCModuleMgmt
