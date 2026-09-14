@@ -518,7 +518,7 @@ function Add-M365DSCTelemetryEvent
 
             if ([System.String]::IsNullOrEMpty($Type))
             {
-                if ((-not [System.String]::IsNullOrEmpty($dataNew.Method) -and $dataNew.Method -eq 'Export-TargetResource') -or $Global:M365DSCExportInProgress)
+                if ((-not [System.String]::IsNullOrEmpty($dataNew.Method) -and $dataNew.Method -eq 'Export') -or $Global:M365DSCExportInProgress)
                 {
                     $Type = 'Export'
                 }

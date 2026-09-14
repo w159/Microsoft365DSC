@@ -141,6 +141,9 @@
   * Reinstated deprecated property `Type`.
 * EXOPlace
   * [BREAKING CHANGE] Removed deprecated property `Desks`.
+* EXORoleGroup
+  * Removed a redundant `Get-RoleGroupMember` call per role group during export. `Get()` already
+    resolves the members and overwrote the value the export pass fetched.
 * EXOTenantAllowBlockListItems
   * [BREAKING CHANGE] Removed property `AppliationSecret`.
 * IntuneAlertRuleWindows365
@@ -564,11 +567,19 @@
     An example is `6:00 pm`. This is the standard on en-US cultures.
 * TeamsTenantNetworkSite
   * [BREAKING CHANGE] Removed deprecated property `SiteAddress`.
+* TeamsUpdateManagementPolicy
+  * Fixed an issue where the cached instance was discarded during export and re-read from the
+    service, because the identity carries a `Tag:` prefix the cached instance was compared against.
+* TeamsUpgradePolicy
+  * Fixed an issue where the cached instance was discarded during export and re-read from the
+    service, because the identity carries a `Tag:` prefix the cached instance was compared against.
 * M365DSCCheckProperties
   * [BREAKING CHANGE] Removed the module and its function `Get-PropertyReport`. The API surface
     checker in `Utilities/ApiSurface` replaces it and covers every workload, not only Exchange
     Online, Security and Compliance and Teams.
 * M365DSCDRGUtil
+  * Removed the unreferenced `Test-IsCimInstance`, `Test-IsHashtable`, `Test-IsObjectArray`
+    and `Test-IsComplexArrayCandidate` helpers left over from the script-based resources.
   * [BREAKING CHANGE] Removed `Update-M365DSCSpecialCharacters`. Instance names are built with
     the new `Remove-M365DSCSpecialCharacters`, and property values are escaped while the
     configuration is rendered.
@@ -588,6 +599,8 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed telemetry so an export is reported as such again. The event type was matched against
+    the method name `Export-TargetResource`, which the class-based resources no longer emit.
   * [BREAKING CHANGE] Replaced every character that needs escaping inside an instance name
     with an underscore. An exported instance that is named `AADGroup-Sales Team` will get
     renamed to `AADGroup-Sales_Team`.

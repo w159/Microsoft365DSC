@@ -259,7 +259,7 @@ class M365DSCGraphAPIRuleEvaluation : M365DSCResourceBase
         }
         Add-M365DSCEvent @Parameters
 
-        Write-Verbose -Message "Test-TargetResource returned $result"
+        Write-Verbose -Message "Test() returned $result"
 
         $this.ExportedInstance = $null
         return $result
