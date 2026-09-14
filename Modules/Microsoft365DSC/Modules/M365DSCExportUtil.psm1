@@ -679,6 +679,9 @@ function Get-M365DSCResourcesByExportMode
 .PARAMETER SkipAuthenticationUpdate
     Indicates that authentication fields should not be transformed.
 
+.PARAMETER SkipRemoveSpecialCharacters
+    Indicates that special characters should not be removed from the resource instance name.
+
 .PARAMETER AllowVariablesInStrings
     Indicates that variable placeholders may be preserved inside strings.
 
@@ -722,6 +725,10 @@ function Get-M365DSCExportContentForResource
         [Parameter()]
         [switch]
         $SkipAuthenticationUpdate,
+
+        [Parameter()]
+        [switch]
+        $SkipRemoveSpecialCharacters,
 
         [Parameter()]
         [switch]
@@ -823,7 +830,14 @@ function Get-M365DSCExportContentForResource
     $instanceName = $ResourceName
     if (-not [System.String]::IsNullOrEmpty($primaryKey))
     {
-        $instanceName += "-$(Remove-M365DSCSpecialCharacters -String $primaryKey)"
+        if ($SkipRemoveSpecialCharacters)
+        {
+            $instanceName += "-$primaryKey"
+        }
+        else
+        {
+            $instanceName += "-$(Remove-M365DSCSpecialCharacters -String $primaryKey)"
+        }
     }
 
     if ($Results.ContainsKey('Workload'))
