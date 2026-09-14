@@ -725,6 +725,10 @@ function Get-M365DSCExportContentForResource
 
         [Parameter()]
         [switch]
+        $SkipRemoveSpecialCharacters,
+
+        [Parameter()]
+        [switch]
         $AllowVariablesInStrings,
 
         [Parameter()]
@@ -823,7 +827,14 @@ function Get-M365DSCExportContentForResource
     $instanceName = $ResourceName
     if (-not [System.String]::IsNullOrEmpty($primaryKey))
     {
-        $instanceName += "-$(Remove-M365DSCSpecialCharacters -String $primaryKey)"
+        if ($SkipRemoveSpecialCharacters)
+        {
+            $instanceName += "-$primaryKey"
+        }
+        else
+        {
+            $instanceName += "-$(Remove-M365DSCSpecialCharacters -String $primaryKey)"
+        }
     }
 
     if ($Results.ContainsKey('Workload'))

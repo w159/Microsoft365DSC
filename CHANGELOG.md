@@ -583,6 +583,9 @@
   * [BREAKING CHANGE] Removed `Update-M365DSCSpecialCharacters`. Instance names are built with
     the new `Remove-M365DSCSpecialCharacters`, and property values are escaped while the
     configuration is rendered.
+* M365DSCExportUtil
+  * Added switch to `Get-M365DSCExportContentForResource` to allow skipping
+    removal of special characters.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
 * M365DSCModuleMgmt
