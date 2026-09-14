@@ -228,7 +228,7 @@ class IntuneDeviceCompliancePolicyiOs : M365DSCResourceBase
                 DisplayName                                    = $devicePolicy.DisplayName
                 Id                                             = $devicePolicy.Id
                 Description                                    = $devicePolicy.Description
-                RoleScopeTagIds                                = $devicePolicy.RoleScopeTagIds
+                RoleScopeTagIds                                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $devicePolicy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 PasscodeBlockSimple                            = $devicePolicy.passcodeBlockSimple
                 PasscodeExpirationDays                         = $devicePolicy.passcodeExpirationDays
                 PasscodeMinimumLength                          = $devicePolicy.passcodeMinimumLength
@@ -305,6 +305,11 @@ class IntuneDeviceCompliancePolicyiOs : M365DSCResourceBase
         $currentDeviceiOsPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $notificationTemplates = Get-MgBetaDeviceManagementNotificationMessageTemplate -All | Where-Object -FilterScript {
             $_.Id -ne '8ca486fc-bee8-4ef2-983b-21e8908d11b8' # Exclude the second, unused default template
         }
@@ -361,11 +366,13 @@ class IntuneDeviceCompliancePolicyiOs : M365DSCResourceBase
         }
         $boundParameters.Remove('ScheduledActionsForRule') | Out-Null
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentDeviceiOsPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Intune Device Compliance iOS Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Add('@odata.type', '#microsoft.graph.iosCompliancePolicy')
             $createParameters.Add('scheduledActionsForRule', $complexScheduledActionsForRule)
             $policy = New-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $createParameters
@@ -383,8 +390,8 @@ class IntuneDeviceCompliancePolicyiOs : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentDeviceiOsPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Intune Device Compliance iOS Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Add('@odata.type', '#microsoft.graph.iosCompliancePolicy')
             Update-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $updateParameters `
                 -DeviceCompliancePolicyId $currentDeviceiOsPolicy.Id

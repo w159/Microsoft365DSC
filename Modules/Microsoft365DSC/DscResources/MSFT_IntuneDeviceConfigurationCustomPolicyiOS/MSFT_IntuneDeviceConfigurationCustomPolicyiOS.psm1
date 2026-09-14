@@ -192,19 +192,25 @@ class IntuneDeviceConfigurationCustomPolicyiOS : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.iosCustomConfiguration')
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Add('@odata.type', '#microsoft.graph.iosCustomConfiguration')
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -218,14 +224,13 @@ class IntuneDeviceConfigurationCustomPolicyiOS : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.iosCustomConfiguration')
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Add('@odata.type', '#microsoft.graph.iosCustomConfiguration')
 
             #region resource generator code
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

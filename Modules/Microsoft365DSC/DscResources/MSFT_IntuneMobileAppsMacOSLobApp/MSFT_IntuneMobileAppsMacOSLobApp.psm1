@@ -254,7 +254,7 @@ class IntuneMobileAppsMacOSLobApp : M365DSCResourceBase
                 Owner                           = $instance.Owner
                 PrivacyInformationUrl           = $instance.PrivacyInformationUrl
                 Publisher                       = $instance.Publisher
-                RoleScopeTagIds                 = $instance.RoleScopeTagIds
+                RoleScopeTagIds                 = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $instance.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 VersionNumber                   = $instance.versionNumber
                 Ensure                          = 'Present'
                 Credential                      = $this.Credential
@@ -303,21 +303,27 @@ class IntuneMobileAppsMacOSLobApp : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune MacOS Lob App with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('Categories') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Categories') | Out-Null
 
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
-            $CreateParameters.Add('fileName', "$($this.DisplayName).pkg")
-            $app = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
+            $createParameters.Add('fileName', "$($this.DisplayName).pkg")
+            $app = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $createParameters
 
             Invoke-M365DSCIntuneMobileAppInitialUpload -AppId $app.Id -OdataType '#microsoft.graph.macOSLobApp' -FileExtension 'pkg'
 
@@ -337,15 +343,14 @@ class IntuneMobileAppsMacOSLobApp : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune MacOS Lob App with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('Categories') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Categories') | Out-Null
 
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
-            Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $UpdateParameters
+            $updateParameters.Add('@odata.type', '#microsoft.graph.macOSLobApp')
+            Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters
 
             if ($this.GetBoundParameters().ContainsKey('Categories'))
             {

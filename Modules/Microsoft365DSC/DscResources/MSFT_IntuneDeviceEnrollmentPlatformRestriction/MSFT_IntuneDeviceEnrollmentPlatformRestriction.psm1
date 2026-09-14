@@ -192,7 +192,7 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
                 Id                                = $config.Id
                 DisplayName                       = $config.DisplayName
                 Description                       = $config.Description
-                RoleScopeTagIds                   = $config.RoleScopeTagIds
+                RoleScopeTagIds                   = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $config.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 DeviceEnrollmentConfigurationType = $config.DeviceEnrollmentConfigurationType.ToString()
                 Priority                          = $config.Priority
                 Ensure                            = 'Present'
@@ -260,6 +260,12 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('Id') | Out-Null
         $PriorityPresent = $false
         if ($boundParameters.Keys.Contains('Priority'))
@@ -272,9 +278,10 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
         {
             Write-Verbose -Message "Creating an Intune Device Enrollment Platform Restriction with DisplayName {$($this.DisplayName)}"
 
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            if ($boundParameters.Keys.Contains('WindowsMobileRestriction'))
+            if ($createParameters.Keys.Contains('WindowsMobileRestriction'))
             {
                 if ($this.WindowsMobileRestriction.platformBlocked -eq $false)
                 {
@@ -283,18 +290,18 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
                 }
             }
 
-            $keys = (([Hashtable]$boundParameters).Clone()).Keys
+            $keys = (([Hashtable]$createParameters).Clone()).Keys
             foreach ($key in $keys)
             {
-                $keyValue = $boundParameters.$key
-                if ($null -ne $boundParameters.$key -and $this.GetBoundParameters().$key.GetType().Name -like '*cimInstance*')
+                $keyValue = $createParameters.$key
+                if ($null -ne $createParameters.$key -and $this.GetBoundParameters().$key.GetType().Name -like '*cimInstance*')
                 {
                     if ($this.DeviceEnrollmentConfigurationType -eq 'singlePlatformRestriction')
                     {
                         $keyName = 'platformRestriction'
-                        $boundParameters.Add('platformType', ($key.Replace('Restriction', '')))
-                        $boundParameters.Add($keyName, $boundParameters.$key)
-                        $boundParameters.Remove($key)
+                        $createParameters.Add('platformType', ($key.Replace('Restriction', '')))
+                        $createParameters.Add($keyName, $createParameters.$key)
+                        $createParameters.Remove($key)
                     }
                 }
             }
@@ -303,12 +310,12 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
             if ($this.DeviceEnrollmentConfigurationType -eq 'platformRestrictions' )
             {
                 $policyType = '#microsoft.graph.deviceEnrollmentPlatformRestrictionsConfiguration'
-                $boundParameters.Add('deviceEnrollmentConfigurationType', 'limit')
+                $createParameters.Add('deviceEnrollmentConfigurationType', 'limit')
             }
-            $boundParameters.Add('@odata.type', $policyType)
+            $createParameters.Add('@odata.type', $policyType)
 
             $policy = New-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
-                -BodyParameter ([hashtable]$boundParameters)
+                -BodyParameter ([hashtable]$createParameters)
 
             # Assignments from DefaultPolicy are not editable and will raise an alert
             if ($policy.Id -notlike '*_DefaultPlatformRestrictions')
@@ -334,9 +341,10 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Device Enrollment Platform Restriction with DisplayName {$($this.DisplayName)}"
 
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            if ($boundParameters.Keys.Contains('WindowsMobileRestriction'))
+            if ($updateParameters.Keys.Contains('WindowsMobileRestriction'))
             {
                 if ($this.WindowsMobileRestriction.platformBlocked -eq $false)
                 {
@@ -345,17 +353,17 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
                 }
             }
 
-            $keys = (([Hashtable]$boundParameters).Clone()).Keys
+            $keys = (([Hashtable]$updateParameters).Clone()).Keys
             foreach ($key in $keys)
             {
-                $keyValue = $boundParameters.$key
-                if ($null -ne $boundParameters.$key -and $this.GetBoundParameters().$key.GetType().Name -like '*cimInstance*')
+                $keyValue = $updateParameters.$key
+                if ($null -ne $updateParameters.$key -and $this.GetBoundParameters().$key.GetType().Name -like '*cimInstance*')
                 {
                     if ($this.DeviceEnrollmentConfigurationType -eq 'singlePlatformRestriction')
                     {
                         $keyName = 'platformRestriction'
-                        $boundParameters.Add($keyName, $boundParameters.$key)
-                        $boundParameters.Remove($key)
+                        $updateParameters.Add($keyName, $updateParameters.$key)
+                        $updateParameters.Remove($key)
                     }
                 }
             }
@@ -365,11 +373,11 @@ class IntuneDeviceEnrollmentPlatformRestriction : M365DSCResourceBase
             {
                 $policyType = '#microsoft.graph.deviceEnrollmentPlatformRestrictionsConfiguration'
             }
-            $boundParameters.Add('@odata.type', $policyType)
+            $updateParameters.Add('@odata.type', $policyType)
 
             Update-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
                 -DeviceEnrollmentConfigurationId $currentInstance.Id `
-                -BodyParameter ([hashtable]$boundParameters)
+                -BodyParameter ([hashtable]$updateParameters)
 
             # Assignments from DefaultPolicy are not editable and will raise an alert
             if ($currentInstance.Id -notlike '*_DefaultPlatformRestrictions')

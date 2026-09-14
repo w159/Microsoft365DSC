@@ -310,7 +310,7 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
                 Description                                               = $policy.Description
                 Id                                                        = $policy.Id
                 DisplayName                                               = $policy.DisplayName
-                RoleScopeTagIds                                           = $policy.RoleScopeTagIds
+                RoleScopeTagIds                                           = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 PasswordBlockFaceUnlock                                   = $policy.passwordBlockFaceUnlock
                 PasswordBlockFingerprintUnlock                            = $policy.passwordBlockFingerprintUnlock
                 PasswordBlockIrisUnlock                                   = $policy.passwordBlockIrisUnlock
@@ -410,11 +410,18 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
         $currentPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Device Configuration Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileGeneralDeviceConfiguration')
             $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
 
@@ -431,8 +438,8 @@ class IntuneDeviceConfigurationPolicyAndroidWorkProfile : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing Device Configuration Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileGeneralDeviceConfiguration')
             Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentPolicy.Id

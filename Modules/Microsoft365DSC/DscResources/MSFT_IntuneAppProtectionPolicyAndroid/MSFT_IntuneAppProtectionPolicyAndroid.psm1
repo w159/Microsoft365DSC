@@ -655,7 +655,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 RequiredAndroidSafetyNetDeviceAttestationType      = $policy.RequiredAndroidSafetyNetDeviceAttestationType
                 RequiredAndroidSafetyNetEvaluationType             = $policy.RequiredAndroidSafetyNetEvaluationType
                 RequirePinAfterBiometricChange                     = $policy.RequirePinAfterBiometricChange
-                RoleScopeTagIds                                    = $policy.RoleScopeTagIds
+                RoleScopeTagIds                                    = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 SaveAsBlocked                                      = $policy.SaveAsBlocked
                 ScreenCaptureBlocked                               = $policy.ScreenCaptureBlocked
                 SimplePinBlocked                                   = $policy.SimplePinBlocked
@@ -697,15 +697,20 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentPolicy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         # The service rejects an empty string on the maximum OS version properties.
         $emptyStringSensitiveProperties = @('MaximumRequiredOsVersion', 'MaximumWarningOsVersion', 'MaximumWipeOsVersion')
         foreach ($property in $emptyStringSensitiveProperties)
         {
-            if ([System.String]::IsNullOrEmpty($BoundParameters.$property))
+            if ([System.String]::IsNullOrEmpty($boundParameters.$property))
             {
-                $BoundParameters.Remove($property) | Out-Null
+                $boundParameters.Remove($property) | Out-Null
             }
         }
 
@@ -718,7 +723,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 value = $keyboard.Split('|')[1]
             }
         }
-        $BoundParameters.ApprovedKeyboards = $myApprovedKeyboards
+        $boundParameters.ApprovedKeyboards = $myApprovedKeyboards
 
         $myExemptedAppPackages = @()
         foreach ($exemptedAppPackage in $this.ExemptedAppPackages)
@@ -728,18 +733,20 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 value = $exemptedAppPackage.Split('|')[1]
             }
         }
-        $BoundParameters.ExemptedAppPackages = $myExemptedAppPackages
+        $boundParameters.ExemptedAppPackages = $myExemptedAppPackages
 
         # Set the managedbrowser values
-        $ManagedBrowserValuesHash = $this.SetManagedBrowserValues($BoundParameters.ManagedBrowser, $BoundParameters.ManagedBrowserToOpenLinksRequired, $BoundParameters.CustomBrowserDisplayName, $BoundParameters.CustomBrowserPackageId)
-        $BoundParameters.ManagedBrowser = $ManagedBrowserValuesHash.ManagedBrowser
-        $BoundParameters.ManagedBrowserToOpenLinksRequired = $ManagedBrowserValuesHash.ManagedBrowserToOpenLinksRequired
-        $BoundParameters.CustomBrowserDisplayName = $ManagedBrowserValuesHash.CustomBrowserDisplayName
-        $BoundParameters.CustomBrowserPackageId = $ManagedBrowserValuesHash.CustomBrowserPackageId
+        $ManagedBrowserValuesHash = $this.SetManagedBrowserValues($boundParameters.ManagedBrowser, $boundParameters.ManagedBrowserToOpenLinksRequired, $boundParameters.CustomBrowserDisplayName, $boundParameters.CustomBrowserPackageId)
+        $boundParameters.ManagedBrowser = $ManagedBrowserValuesHash.ManagedBrowser
+        $boundParameters.ManagedBrowserToOpenLinksRequired = $ManagedBrowserValuesHash.ManagedBrowserToOpenLinksRequired
+        $boundParameters.CustomBrowserDisplayName = $ManagedBrowserValuesHash.CustomBrowserDisplayName
+        $boundParameters.CustomBrowserPackageId = $ManagedBrowserValuesHash.CustomBrowserPackageId
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
             $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Remove('Apps') | Out-Null
@@ -763,7 +770,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Remove('Apps') | Out-Null

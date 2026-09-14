@@ -333,7 +333,7 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
             $returnHashtable.Add('Identity', $resolvedId)
             $returnHashtable.Add('DisplayName', $policy.name)
             $returnHashtable.Add('Description', $policy.description)
-            $returnHashtable.Add('RoleScopeTagIds', $policy.roleScopeTagIds)
+            $returnHashtable.Add('RoleScopeTagIds', (Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds))
 
             $returnHashtable = Export-IntuneSettingCatalogPolicySettings -Settings $settings -ReturnHashtable $returnHashtable
 
@@ -381,7 +381,13 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentPolicy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         $templateReferenceId = 'e8c053d6-9f95-42b1-a7f1-ebfd71c67a4b_1'
         $platforms = 'windows10'
@@ -390,11 +396,11 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Endpoint Protection Attack Surface Reduction Rules Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             $createParameters = @{
@@ -404,7 +410,7 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
             $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
 
@@ -421,11 +427,11 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing Endpoint Protection Attack Surface Reduction Rules Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             Update-IntuneDeviceConfigurationPolicy `
@@ -436,7 +442,7 @@ class IntuneSettingCatalogASRRulesPolicyWindows10 : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region Assignments
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

@@ -175,7 +175,7 @@ class IntuneEpmElevationSettingsPolicyWindows10 : M365DSCResourceBase
                 #region resource generator code
                 Description           = $getValue.Description
                 DisplayName           = $getValue.Name
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
@@ -229,6 +229,12 @@ class IntuneEpmElevationSettingsPolicyWindows10 : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $templateReferenceId = 'e7dcaba4-959b-46ed-88f0-16ba39b14fd8_1'
         $platforms = 'windows10'
         $technologies = 'mdm,endpointPrivilegeManagement'
@@ -249,7 +255,7 @@ class IntuneEpmElevationSettingsPolicyWindows10 : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -282,7 +288,7 @@ class IntuneEpmElevationSettingsPolicyWindows10 : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
 

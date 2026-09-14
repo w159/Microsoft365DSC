@@ -258,7 +258,7 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
                 Id                    = $getValue.Id
                 Description           = $getValue.Description
                 DisplayName           = $getValue.DisplayName
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 authenticationMethod  = $getValue.authenticationMethod
                 connectionName        = $getValue.connectionName
                 role                  = $getValue.role
@@ -328,11 +328,16 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         #proxy and server values need converting before new- / update- cmdlets will accept parameters
         #creating hashtables now for use later in both present/present and present/absent blocks
-        $allTargetValues = Convert-M365DscHashtableToString -Hashtable $BoundParameters
+        $allTargetValues = Convert-M365DscHashtableToString -Hashtable $boundParameters
 
         if ($allTargetValues -match '\bproxyServer=\(\{([^\)]+)\}\)')
         {
@@ -348,23 +353,24 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
                 $proxyHashtable[$key] = $value
             }
         }
-        if ($BoundParameters.ContainsKey('proxyServer'))
+        if ($boundParameters.ContainsKey('proxyServer'))
         {
-            $BoundParameters.Remove('proxyServer') | Out-Null
-            $BoundParameters.Add('proxyServer', $proxyHashtable)
+            $boundParameters.Remove('proxyServer') | Out-Null
+            $boundParameters.Add('proxyServer', $proxyHashtable)
         }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileVpnConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileVpnConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -379,14 +385,13 @@ class IntuneVPNConfigurationPolicyAndroidWork : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
 
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileVpnConfiguration')
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidWorkProfileVpnConfiguration')
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `

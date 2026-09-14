@@ -165,7 +165,7 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
                 #region resource generator code
                 Description           = $getValue.Description
                 DisplayName           = $getValue.Name
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                    = $getValue.Id
                 FirewallRuleName      = $complexFirewallRuleName
                 Ensure                = 'Present'
@@ -216,7 +216,13 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
 
         $templateReferenceId = 'a5481c22-7a2a-4f59-a33e-6eee30d02f94_1'
         $platforms = 'windows10'
@@ -225,10 +231,10 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Firewall Rules Hyper-V Policy for Windows10 with Name {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             $createParameters = @{
@@ -238,7 +244,7 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -257,10 +263,10 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Firewall Rules Hyper-V Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             Update-IntuneDeviceConfigurationPolicy `
@@ -271,7 +277,7 @@ class IntuneFirewallRulesHyperVPolicyWindows10 : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

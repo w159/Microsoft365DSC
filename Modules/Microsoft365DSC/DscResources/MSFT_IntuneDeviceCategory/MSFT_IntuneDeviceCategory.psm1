@@ -100,7 +100,7 @@ class IntuneDeviceCategory : M365DSCResourceBase
             return $this.AsResult(@{
                 DisplayName           = $category.DisplayName
                 Description           = $category.Description
-                RoleScopeTagIds       = ([Array]$category.RoleScopeTagIds)
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $category.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                = 'Present'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
@@ -137,6 +137,12 @@ class IntuneDeviceCategory : M365DSCResourceBase
 
         $currentCategory = $this.Get().ToHashtable()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($null -ne $resolvedRoleScopeTagIds)
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $resolvedRoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentCategory.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Device Category {$($this.DisplayName)}"
@@ -144,9 +150,9 @@ class IntuneDeviceCategory : M365DSCResourceBase
                 DisplayName = $this.DisplayName
                 Description = $this.Description
             }
-            if ($null -ne $this.RoleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
-                $createParameters.RoleScopeTagIds = $this.RoleScopeTagIds
+                $createParameters.RoleScopeTagIds = $resolvedRoleScopeTagIds
             }
             New-MgBetaDeviceManagementDeviceCategory @createParameters
         }
@@ -159,9 +165,9 @@ class IntuneDeviceCategory : M365DSCResourceBase
                 DisplayName      = $this.DisplayName
                 Description      = $this.Description
             }
-            if ($null -ne $this.RoleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
-                $updateParameters.RoleScopeTagIds = $this.RoleScopeTagIds
+                $updateParameters.RoleScopeTagIds = $resolvedRoleScopeTagIds
             }
             Update-MgBetaDeviceManagementDeviceCategory @updateParameters
         }

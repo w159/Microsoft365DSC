@@ -183,7 +183,7 @@ class IntuneWifiConfigurationPolicyIOS : M365DSCResourceBase
                 ProxyManualAddress             = $getValue.proxyManualAddress
                 ProxyManualPort                = $getValue.proxyManualPort
                 ProxySettings                  = $getValue.proxySettings
-                RoleScopeTagIds                = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ssid                           = $getValue.ssid
                 WiFiSecurityType               = $getValue.wiFiSecurityType
                 Ensure                         = 'Present'
@@ -242,23 +242,30 @@ class IntuneWifiConfigurationPolicyIOS : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Wifi Configuration Policy for iOS with DisplayName {$($this.DisplayName)}"
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('Assignments') | Out-Null
-            $CreateParameters.Remove('ForcePreSharedKeyUpdate') | Out-Null
-            if ($CreateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('ForcePreSharedKeyUpdate') | Out-Null
+            if ($createParameters['proxyAutomaticConfigurationUrl'] -eq '')
             {
-                $CreateParameters['proxyAutomaticConfigurationUrl'] = $null
+                $createParameters['proxyAutomaticConfigurationUrl'] = $null
             }
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.iosWiFiConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.iosWiFiConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.Id)
@@ -273,19 +280,19 @@ class IntuneWifiConfigurationPolicyIOS : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Wifi Configuration Policy for iOS with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
 
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $BoundParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters.Remove('ForcePreSharedKeyUpdate') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('ForcePreSharedKeyUpdate') | Out-Null
 
-            if ($UpdateParameters['proxyAutomaticConfigurationUrl'] -eq '')
+            if ($updateParameters['proxyAutomaticConfigurationUrl'] -eq '')
             {
-                $UpdateParameters['proxyAutomaticConfigurationUrl'] = $null
+                $updateParameters['proxyAutomaticConfigurationUrl'] = $null
             }
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.iosWiFiConfiguration')
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.iosWiFiConfiguration')
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `

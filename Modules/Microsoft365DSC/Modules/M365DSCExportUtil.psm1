@@ -823,16 +823,7 @@ function Get-M365DSCExportContentForResource
     $instanceName = $ResourceName
     if (-not [System.String]::IsNullOrEmpty($primaryKey))
     {
-        if ($AllowVariablesInStrings)
-        {
-            $primaryKey = $primaryKey.Replace('`', '``').Replace('"', '`"')
-        }
-        else
-        {
-            $primaryKey = $primaryKey.Replace('`', '``').Replace('$', '`$').Replace('"', '`"')
-        }
-        $primaryKey = Update-M365DSCSpecialCharacters -String $primaryKey
-        $instanceName += "-$primaryKey"
+        $instanceName += "-$(Remove-M365DSCSpecialCharacters -String $primaryKey)"
     }
 
     if ($Results.ContainsKey('Workload'))
@@ -1986,6 +1977,7 @@ function Initialize-M365DSCExportCollectionCache
     [Microsoft365DSC.Cache.ExportCollectionCache]::Reset()
     [Microsoft365DSC.Intune.IntuneGroupCache]::Reset()
     [Microsoft365DSC.Intune.SettingTemplateCache]::Reset()
+    [Microsoft365DSC.Intune.RoleScopeTagCache]::Reset()
     $Script:IntuneAssignmentFilters = $null
     [Microsoft365DSC.Cache.ExportCollectionCache]::Enable()
 }
@@ -2008,6 +2000,7 @@ function Reset-M365DSCExportCollectionCache
         [Microsoft365DSC.Cache.ExportCollectionCache]::Reset()
         [Microsoft365DSC.Intune.IntuneGroupCache]::Reset()
         [Microsoft365DSC.Intune.SettingTemplateCache]::Reset()
+        [Microsoft365DSC.Intune.RoleScopeTagCache]::Reset()
         [Microsoft365DSC.Intune.ConfigurationPolicyCache]::Reset()
     }
 }

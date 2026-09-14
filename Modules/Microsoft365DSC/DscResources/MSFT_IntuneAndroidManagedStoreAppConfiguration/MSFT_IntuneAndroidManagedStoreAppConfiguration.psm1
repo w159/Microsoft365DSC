@@ -184,7 +184,7 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
                 Id                          = $getValue.Id
                 Description                 = $getValue.Description
                 DisplayName                 = $getValue.DisplayName
-                RoleScopeTagIds             = ([Array]$getValue.RoleScopeTagIds)
+                RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues ([Array]$getValue.RoleScopeTagIds) -DesiredValues $this.RoleScopeTagIds
                 targetedMobileApps          = $targetedMobileAppsValue
                 packageId                   = $getValue.packageId
                 payloadJson                 = $getValue.payloadJson
@@ -240,6 +240,11 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($boundParameters.ContainsKey('TargetedMobileApps'))
         {
             $newTargetedMobileApps = @()
@@ -268,16 +273,18 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
             $boundParameters.Add('TargetedMobileApps', $newTargetedMobileApps)
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating the Intune Android Managed Store App Configuration Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $CreateParameters.Remove('id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
-            $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
+            $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -291,13 +298,13 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Android Managed Store App Configuration Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
-            Update-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
+            Update-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $updateParameters `
                 -ManagedDeviceMobileAppConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `

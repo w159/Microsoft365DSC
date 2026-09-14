@@ -483,7 +483,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                 Description                                 = $getValue.Description
                 DisplayName                                 = $getValue.DisplayName
                 Id                                          = $getValue.Id
-                RoleScopeTagIds                             = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                      = 'Present'
                 Credential                                  = $this.Credential
                 ApplicationId                               = $this.ApplicationId
@@ -534,11 +534,18 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Window Update For Business Ring Update Profile for Windows10 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -562,8 +569,8 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Window Update For Business Ring Update Profile for Windows10 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

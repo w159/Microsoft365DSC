@@ -221,7 +221,7 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
                 Description                             = $getValue.Description
                 DisplayName                             = $getValue.DisplayName
                 Id                                      = $getValue.Id
-                RoleScopeTagIds                         = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                         = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                  = 'Present'
                 Credential                              = $this.Credential
                 ApplicationId                           = $this.ApplicationId
@@ -277,6 +277,11 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($boundParameters.ContainsKey('SelectedMobileAppNames') -eq $true)
         {
             Write-Verbose -Message 'Converting SelectedMobileAppNames to SelectedMobileAppIds'
@@ -292,38 +297,39 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
             $boundParameters.Remove('SelectedMobileAppNames') | Out-Null
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Enrollment Configuration for Windows10 with DisplayName {$($this.DisplayName)}"
 
-            $CreateParameters = ([Hashtable]$boundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Remove('Assignments') | Out-Null
-            $CreateParameters.Remove('Priority') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Priority') | Out-Null
 
             #region resource generator code
-            if ($CreateParameters.showInstallationProgress -eq $false)
+            if ($createParameters.showInstallationProgress -eq $false)
             {
-                $CreateParameters.blockDeviceSetupRetryByUser = $true
-                $CreateParameters.Remove('allowLogCollectionOnInstallFailure') | Out-Null
-                $CreateParameters.Remove('allowNonBlockingAppInstallation') | Out-Null
-                $CreateParameters.Remove('customErrorMessage') | Out-Null
-                $CreateParameters.Remove('disableUserStatusTrackingAfterFirstUser') | Out-Null
-                $CreateParameters.Remove('installProgressTimeoutInMinutes') | Out-Null
-                $CreateParameters.Remove('installQualityUpdates') | Out-Null
-                $CreateParameters.Remove('trackInstallProgressForAutopilotOnly') | Out-Null
+                $createParameters.blockDeviceSetupRetryByUser = $true
+                $createParameters.Remove('allowLogCollectionOnInstallFailure') | Out-Null
+                $createParameters.Remove('allowNonBlockingAppInstallation') | Out-Null
+                $createParameters.Remove('customErrorMessage') | Out-Null
+                $createParameters.Remove('disableUserStatusTrackingAfterFirstUser') | Out-Null
+                $createParameters.Remove('installProgressTimeoutInMinutes') | Out-Null
+                $createParameters.Remove('installQualityUpdates') | Out-Null
+                $createParameters.Remove('trackInstallProgressForAutopilotOnly') | Out-Null
             }
 
-            if ($CreateParameters.blockDeviceSetupRetryByUser -eq $true)
+            if ($createParameters.blockDeviceSetupRetryByUser -eq $true)
             {
-                $CreateParameters.Remove('allowDeviceUseOnInstallFailure') | Out-Null
-                $CreateParameters.Remove('allowDeviceResetOnInstallFailure') | Out-Null
-                $CreateParameters.Remove('selectedMobileAppIds') | Out-Null
+                $createParameters.Remove('allowDeviceUseOnInstallFailure') | Out-Null
+                $createParameters.Remove('allowDeviceResetOnInstallFailure') | Out-Null
+                $createParameters.Remove('selectedMobileAppIds') | Out-Null
             }
 
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceEnrollmentConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceEnrollmentConfiguration -BodyParameter $createParameters
 
             $intuneAssignments = @()
             if ($null -ne $this.Assignments -and $this.Assignments.Count -gt 0)
@@ -334,7 +340,7 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
                 -EnrollmentConfigurationAssignments $intuneAssignments `
                 -ErrorAction Stop
 
-            if ($boundParameters.ContainsKey('Priority') -and $policy.Priority -ne $this.Priority)
+            if ($createParameters.ContainsKey('Priority') -and $policy.Priority -ne $this.Priority)
             {
                 $this.UpdateDeviceEnrollmentConfigurationPriority($policy.id, $this.Priority)
             }
@@ -344,23 +350,22 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Device Enrollment Configuration for Windows10 with Id {$($currentInstance.Id)}"
 
-            $UpdateParameters = ([Hashtable]$boundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters.Remove('Priority') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Priority') | Out-Null
 
             #region resource generator code
-            if ($UpdateParameters.blockDeviceSetupRetryByUser -eq $true)
+            if ($updateParameters.blockDeviceSetupRetryByUser -eq $true)
             {
-                $UpdateParameters.Remove('allowDeviceUseOnInstallFailure') | Out-Null
-                $UpdateParameters.Remove('allowDeviceResetOnInstallFailure') | Out-Null
-                $UpdateParameters.Remove('selectedMobileAppIds') | Out-Null
+                $updateParameters.Remove('allowDeviceUseOnInstallFailure') | Out-Null
+                $updateParameters.Remove('allowDeviceResetOnInstallFailure') | Out-Null
+                $updateParameters.Remove('selectedMobileAppIds') | Out-Null
             }
 
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.windows10EnrollmentCompletionPageConfiguration')
             Update-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
                 -DeviceEnrollmentConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             if ($currentInstance.Id -notlike '*_DefaultWindows10EnrollmentCompletionPageConfiguration')
             {
@@ -373,7 +378,7 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
                     -EnrollmentConfigurationAssignments $intuneAssignments `
                     -ErrorAction Stop
 
-                if ($boundParameters.ContainsKey('Priority') -and $this.Priority -ne $currentInstance.Priority)
+                if ($updateParameters.ContainsKey('Priority') -and $this.Priority -ne $currentInstance.Priority)
                 {
                     $this.UpdateDeviceEnrollmentConfigurationPriority($currentInstance.id, $this.Priority)
                 }

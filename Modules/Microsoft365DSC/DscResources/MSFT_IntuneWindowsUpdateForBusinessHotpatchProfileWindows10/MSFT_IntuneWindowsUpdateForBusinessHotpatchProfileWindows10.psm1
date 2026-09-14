@@ -170,7 +170,7 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
                 #region resource generator code
                 Description           = $getValue.description
                 DisplayName           = $getValue.displayName
-                RoleScopeTagIds       = $getValue.roleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 ApprovalSettings      = $complexApprovalSettings
                 HotpatchEnabled       = $getValue.hotpatchEnabled
                 Id                    = $getValue.id
@@ -223,15 +223,22 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('Assignments') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Update For Business Hotpatch Profile for Windows10 with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -252,8 +259,7 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
         {
             Write-Verbose -Message "Updating the Intune Windows Update For Business Hotpatch Profile for Windows10 with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

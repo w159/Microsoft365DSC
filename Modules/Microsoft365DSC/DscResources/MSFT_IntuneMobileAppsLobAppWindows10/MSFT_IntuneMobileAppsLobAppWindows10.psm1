@@ -247,7 +247,7 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
                 Owner                           = $getValue.Owner
                 PrivacyInformationUrl           = $getValue.PrivacyInformationUrl
                 Publisher                       = $getValue.Publisher
-                RoleScopeTagIds                 = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                 = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                              = $getValue.Id
                 Ensure                          = 'Present'
                 Credential                      = $this.Credential
@@ -295,21 +295,28 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('Categories') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Mobile Apps Lob App for Windows10 with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            if (-not $boundParameters.ContainsKey('FileName') -or [System.String]::IsNullOrEmpty($boundParameters.FileName))
+            if (-not $createParameters.ContainsKey('FileName') -or [System.String]::IsNullOrEmpty($createParameters.FileName))
             {
                 throw 'FileName is required to create an Intune Mobile Apps Lob App for Windows10.'
             }
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -361,10 +368,9 @@ class IntuneMobileAppsLobAppWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Mobile Apps Lob App for Windows10 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code

@@ -523,7 +523,7 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
             $returnHashtable.Add('Identity', $resolvedId)
             $returnHashtable.Add('DisplayName', $policy.name)
             $returnHashtable.Add('Description', $policy.description)
-            $returnHashtable.Add('RoleScopeTagIds', $policy.roleScopeTagIds)
+            $returnHashtable.Add('RoleScopeTagIds', (Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds))
             $returnHashtable.Add('TemplateId', $policy.templateReference.TemplateId)
 
             if ($null -ne $policySettings.SevereThreatDefaultAction)
@@ -601,33 +601,39 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentPolicy = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        if ($BoundParameters.ContainsKey('TamperProtection'))
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
         {
-            $BoundParameters['ControlledConfiguration'] = $BoundParameters['TamperProtection']
-            $BoundParameters.Remove('TamperProtection')
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
 
-        if ($BoundParameters.ContainsKey('SevereThreats'))
+        if ($boundParameters.ContainsKey('TamperProtection'))
         {
-            $BoundParameters.Add('SevereThreatDefaultAction', $BoundParameters['SevereThreats'])
-            $BoundParameters.Remove('SevereThreats')
+            $boundParameters['ControlledConfiguration'] = $boundParameters['TamperProtection']
+            $boundParameters.Remove('TamperProtection')
         }
-        if ($BoundParameters.ContainsKey('HighSeverityThreats'))
+
+        if ($boundParameters.ContainsKey('SevereThreats'))
         {
-            $BoundParameters.Add('HighSeverityThreatDefaultAction', $BoundParameters['HighSeverityThreats'])
-            $BoundParameters.Remove('HighSeverityThreats')
+            $boundParameters.Add('SevereThreatDefaultAction', $boundParameters['SevereThreats'])
+            $boundParameters.Remove('SevereThreats')
         }
-        if ($BoundParameters.ContainsKey('ModerateSeverityThreats'))
+        if ($boundParameters.ContainsKey('HighSeverityThreats'))
         {
-            $BoundParameters.Add('ModerateSeverityThreatDefaultAction', $BoundParameters['ModerateSeverityThreats'])
-            $BoundParameters.Remove('ModerateSeverityThreats')
+            $boundParameters.Add('HighSeverityThreatDefaultAction', $boundParameters['HighSeverityThreats'])
+            $boundParameters.Remove('HighSeverityThreats')
         }
-        if ($BoundParameters.ContainsKey('LowSeverityThreats'))
+        if ($boundParameters.ContainsKey('ModerateSeverityThreats'))
         {
-            $BoundParameters.Add('LowSeverityThreatDefaultAction', $BoundParameters['LowSeverityThreats'])
-            $BoundParameters.Remove('LowSeverityThreats')
+            $boundParameters.Add('ModerateSeverityThreatDefaultAction', $boundParameters['ModerateSeverityThreats'])
+            $boundParameters.Remove('ModerateSeverityThreats')
+        }
+        if ($boundParameters.ContainsKey('LowSeverityThreats'))
+        {
+            $boundParameters.Add('LowSeverityThreatDefaultAction', $boundParameters['LowSeverityThreats'])
+            $boundParameters.Remove('LowSeverityThreats')
         }
 
         $templateReferenceId = $this.TemplateId
@@ -637,11 +643,11 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Endpoint Protection Policy {$($this.DisplayName)}"
-            $BoundParameters.Remove('Identity') | Out-Null
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             $createParameters = @{
@@ -651,7 +657,7 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
-                roleScopeTagIds   = $this.RoleScopeTagIds
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             $policy = New-MgBetaDeviceManagementConfigurationPolicy -BodyParameter $createParameters
@@ -667,12 +673,12 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing Endpoint Protection Policy {$($currentPolicy.DisplayName)}"
-            $BoundParameters.Remove('Identity') | Out-Null
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('TemplateId') | Out-Null
+            $boundParameters.Remove('Identity') | Out-Null
+            $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('TemplateId') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
-                -DSCParams ([System.Collections.Hashtable]$BoundParameters) `
+                -DSCParams ([System.Collections.Hashtable]$boundParameters) `
                 -TemplateId $templateReferenceId
 
             Update-IntuneDeviceConfigurationPolicy `
@@ -683,7 +689,7 @@ class IntuneAntivirusPolicyWindows10SettingCatalog : M365DSCResourceBase
                 -Platforms $platforms `
                 -Technologies $technologies `
                 -Settings $settings `
-                -RoleScopeTagIds $this.RoleScopeTagIds
+                -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

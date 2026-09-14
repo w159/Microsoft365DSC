@@ -374,7 +374,7 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
                 Id                                              = $getValue.Id
                 Description                                     = $getValue.Description
                 DisplayName                                     = $getValue.DisplayName
-                RoleScopeTagIds                                 = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                 = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 ActivationLockWhenSupervisedAllowed             = $getValue.activationLockWhenSupervisedAllowed
                 AddingGameCenterFriendsBlocked                  = $getValue.addingGameCenterFriendsBlocked
                 AirDropBlocked                                  = $getValue.airDropBlocked
@@ -495,6 +495,11 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
 
         $boundParameters = $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($this.UpdateDelayPolicy.Count -gt 0)
         {
             $boundParameters.UpdateDelayPolicy = $this.UpdateDelayPolicy -join ','
@@ -504,19 +509,20 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
             $boundParameters.UpdateDelayPolicy = 'none'
         }
 
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
 
-            $CreateParameters = ([Hashtable]$boundParameters).Clone()
-            $CreateParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $CreateParameters
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.macOSGeneralDeviceConfiguration')
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
+            $createParameters.Add('@odata.type', '#microsoft.graph.macOSGeneralDeviceConfiguration')
 
             #region resource generator code
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -531,16 +537,14 @@ class IntuneDeviceConfigurationPolicyMacOS : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
 
-            $UpdateParameters = ([Hashtable]$boundParameters).Clone()
-            $UpdateParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $UpdateParameters
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.macOSGeneralDeviceConfiguration')
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Add('@odata.type', '#microsoft.graph.macOSGeneralDeviceConfiguration')
 
             #region resource generator code
             Update-MgBetaDeviceManagementDeviceConfiguration `
-                -BodyParameter $UpdateParameters `
+                -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments

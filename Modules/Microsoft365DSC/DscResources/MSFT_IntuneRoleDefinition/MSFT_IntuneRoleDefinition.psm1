@@ -136,7 +136,7 @@ class IntuneRoleDefinition : M365DSCResourceBase
                 DisplayName           = $getValue.DisplayName
                 IsBuiltIn             = $getValue.IsBuiltIn
                 Ensure                = 'Present'
-                RoleScopeTagIds       = $getValue.RoleScopeTagIds
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId
                 TenantId              = $this.TenantId
@@ -180,13 +180,19 @@ class IntuneRoleDefinition : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
 
+        $resolvedRoleScopeTagIds = $this.RoleScopeTagIds
+        if ($null -ne $resolvedRoleScopeTagIds)
+        {
+            $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $resolvedRoleScopeTagIds
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating Role Definition {$($this.DisplayName)}"
-            if ($null -ne $this.roleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
                 $ScopeRoleTags = @()
-                foreach ($roleScopeTagId in $this.roleScopeTagIds)
+                foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
                 {
                     $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
                     if ($null -ne $Tag)
@@ -211,7 +217,7 @@ class IntuneRoleDefinition : M365DSCResourceBase
                 resourceActions = @($resourceActions)
             }
             $ScopeTagIds = $ScopeRoleTags
-            $CreateParameters = @{
+            $createParameters = @{
                 '@odata.type'   = '#microsoft.graph.roleDefinition'
                 displayName     = $this.DisplayName
                 description     = $this.Description
@@ -219,15 +225,15 @@ class IntuneRoleDefinition : M365DSCResourceBase
                 roleScopeTagIds = $ScopeTagIds
             }
 
-            $policy = New-MgBetaDeviceManagementRoleDefinition -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceManagementRoleDefinition -BodyParameter $createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Role Definition {$($this.DisplayName)}"
-            if ($null -ne $this.roleScopeTagIds)
+            if ($null -ne $resolvedRoleScopeTagIds)
             {
                 $ScopeRoleTags = @()
-                foreach ($roleScopeTagId in $this.roleScopeTagIds)
+                foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
                 {
                     $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
                     if ($null -ne $Tag)
@@ -252,7 +258,7 @@ class IntuneRoleDefinition : M365DSCResourceBase
                 resourceActions = @($resourceActions)
             }
             $ScopeTagIds = $ScopeRoleTags
-            $UpdateParameters = @{
+            $updateParameters = @{
                 '@odata.type'   = '#microsoft.graph.roleDefinition'
                 displayName     = $this.DisplayName
                 description     = $this.Description
@@ -260,7 +266,7 @@ class IntuneRoleDefinition : M365DSCResourceBase
                 roleScopeTagIds = $ScopeTagIds
             }
 
-            Update-MgBetaDeviceManagementRoleDefinition -BodyParameter $UpdateParameters `
+            Update-MgBetaDeviceManagementRoleDefinition -BodyParameter $updateParameters `
                 -RoleDefinitionId $currentInstance.Id
 
         }

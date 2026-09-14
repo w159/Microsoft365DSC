@@ -255,7 +255,7 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
                 Settings                    = $complexSettings
                 Description                 = $getValue.Description
                 DisplayName                 = $getValue.DisplayName
-                RoleScopeTagIds             = $getValue.RoleScopeTagIds
+                RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TargetedMobileApps          = $targetedApps
                 Id                          = $getValue.Id
                 Ensure                      = 'Present'
@@ -306,16 +306,22 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $platform = 'android'
-        if ($BoundParameters.ContainsKey('EncodedSettingXml') -or $BoundParameters.ContainsKey('Settings'))
+        if ($boundParameters.ContainsKey('EncodedSettingXml') -or $boundParameters.ContainsKey('Settings'))
         {
             $platform = 'ios'
         }
 
-        if (-not [System.String]::IsNullOrEmpty($BoundParameters.PayloadJson))
+        if (-not [System.String]::IsNullOrEmpty($boundParameters.PayloadJson))
         {
-            $BoundParameters.PayloadJson = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($BoundParameters.PayloadJson))
+            $boundParameters.PayloadJson = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.PayloadJson))
         }
 
         $mobileApps = Get-MgBetaDeviceAppManagementMobileApp -All
@@ -333,28 +339,29 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
             }
             $targetedApps += $app.Id
         }
-        $BoundParameters.TargetedMobileApps = $targetedApps
+        $boundParameters.TargetedMobileApps = $targetedApps
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune App Configuration Device Policy with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
             if ($platform -eq 'android')
             {
-                $CreateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
-                $CreateParameters.Add('appSupportsOemConfig', $false)
+                $createParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
+                $createParameters.Add('appSupportsOemConfig', $false)
             }
             else
             {
-                $CreateParameters.Add('@odata.type', '#microsoft.graph.iosMobileAppConfiguration')
+                $createParameters.Add('@odata.type', '#microsoft.graph.iosMobileAppConfiguration')
             }
 
             #region resource generator code
-            $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $CreateParameters
+            $policy = New-MgBetaDeviceAppManagementMobileAppConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.Id)
@@ -369,25 +376,24 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune App Configuration Device Policy with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             if ($platform -eq 'android')
             {
-                $UpdateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
+                $updateParameters.Add('@odata.type', '#microsoft.graph.androidManagedStoreAppConfiguration')
             }
             else
             {
-                $UpdateParameters.Add('@odata.type', '#microsoft.graph.iosMobileAppConfiguration')
+                $updateParameters.Add('@odata.type', '#microsoft.graph.iosMobileAppConfiguration')
             }
 
             #region resource generator code
             Update-MgBetaDeviceAppManagementMobileAppConfiguration `
                 -ManagedDeviceMobileAppConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `

@@ -308,7 +308,7 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
                 Id                             = $getValue.Id
                 Description                    = $getValue.Description
                 DisplayName                    = $getValue.DisplayName
-                RoleScopeTagIds                = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 connectionName                 = $getValue.connectionName
                 connectionType                 = $getValue.connectionType
                 enableSplitTunneling           = $getValue.enableSplitTunneling
@@ -389,21 +389,26 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        if ($BoundParameters.ContainsKey('proxyServer') -and $this.proxyServer.Count -gt 0)
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
         {
-            $BoundParameters.Remove('proxyServer') | Out-Null
-            $BoundParameters.Add('proxyServer', $this.proxyServer[0])
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
-        if ($BoundParameters.ContainsKey('server') -and $this.server.Count -gt 0)
+
+        if ($boundParameters.ContainsKey('proxyServer') -and $this.proxyServer.Count -gt 0)
         {
-            $BoundParameters.Remove('server') | Out-Null
-            $BoundParameters.Add('server', $this.server[0])
+            $boundParameters.Remove('proxyServer') | Out-Null
+            $boundParameters.Add('proxyServer', $this.proxyServer[0])
         }
-        if ($BoundParameters.ContainsKey('customKeyValueData'))
+        if ($boundParameters.ContainsKey('server') -and $this.server.Count -gt 0)
         {
-            $BoundParameters.Remove('customKeyValueData') | Out-Null
+            $boundParameters.Remove('server') | Out-Null
+            $boundParameters.Add('server', $this.server[0])
+        }
+        if ($boundParameters.ContainsKey('customKeyValueData'))
+        {
+            $boundParameters.Remove('customKeyValueData') | Out-Null
             $newCustomKeyValueData = @()
             foreach ($item in $this.customKeyValueData)
             {
@@ -413,20 +418,21 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
                     value = $item.value
                 }
             }
-            $BoundParameters.Add('customKeyValueData', $newCustomKeyValueData)
+            $boundParameters.Add('customKeyValueData', $newCustomKeyValueData)
         }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $CreateParameters = Rename-M365DSCCimInstanceParameter -Properties $CreateParameters
-            $CreateParameters.Remove('Id') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.iosVpnConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.iosVpnConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -441,14 +447,13 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating {$($this.DisplayName)}"
 
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.iosVpnConfiguration')
-            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $UpdateParameters `
+            $updateParameters.Add('@odata.type', '#microsoft.graph.iosVpnConfiguration')
+            Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
                 -DeviceConfigurationId $currentInstance.Id
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.Id `

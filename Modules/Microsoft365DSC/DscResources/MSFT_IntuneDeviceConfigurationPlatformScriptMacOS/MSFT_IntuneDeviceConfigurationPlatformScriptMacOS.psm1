@@ -169,7 +169,7 @@ class IntuneDeviceConfigurationPlatformScriptMacOS : M365DSCResourceBase
                 ExecutionFrequency          = [System.Xml.XmlConvert]::ToTimeSpan($getValue.ExecutionFrequency).ToString()
                 FileName                    = $getValue.FileName
                 RetryCount                  = $getValue.RetryCount
-                RoleScopeTagIds             = $getValue.RoleScopeTagIds
+                RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAsAccount                = $enumRunAsAccount
                 ScriptContent               = $getValue.ScriptContent
                 Id                          = $getValue.Id
@@ -222,6 +222,12 @@ class IntuneDeviceConfigurationPlatformScriptMacOS : M365DSCResourceBase
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($boundParameters.ContainsKey('ExecutionFrequency'))
         {
             $boundParameters['executionFrequency'] = [System.Xml.XmlConvert]::ToString([System.TimeSpan]::Parse($boundParameters['ExecutionFrequency']))

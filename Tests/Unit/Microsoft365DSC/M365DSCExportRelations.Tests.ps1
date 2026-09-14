@@ -265,6 +265,53 @@ Describe 'DependsOn injection' {
         $result | Should -Match 'Ensure      = "Present"'
     }
 
+    It 'References a target whose key holds quotes by the name its block is declared under' {
+        $session = New-TestSession
+        $instanceName = 'AADGroup-Tag__A___prod_'
+        $session.RegisterInstance('AADGroup', $instanceName, 'Tag "A" (prod)', $null)
+        $session.ResolveRelations('IntuneDeviceConfigurationPolicyWindows10', 'Policy-A', @{
+                Assignments = @(
+                    @{ dataType = '#microsoft.graph.groupAssignmentTarget'; groupDisplayName = 'Tag "A" (prod)' }
+                )
+            })
+
+        $content = @(
+            '        AADGroup "' + $instanceName + '"'
+            '        {'
+            '            DisplayName = "Tag `"A`" (prod)"'
+            '        }'
+            '        IntuneDeviceConfigurationPolicyWindows10 "Policy-A"'
+            '        {'
+            '            DisplayName = "Policy A"'
+            '        }'
+        ) -join "`r`n"
+        $content += "`r`n"
+
+        $result = $session.InjectDependsOn($content, (New-TestStubOptions))
+
+        $result | Should -Match ([regex]::Escape("DependsOn = @(`"[AADGroup]$instanceName`")"))
+        $result | Should -Not -Match '# Dependency stubs'
+    }
+
+    It 'Declares a stub for a key holding quotes under a name the parser accepts' {
+        $session = New-TestSession
+        $session.ResolveRelations('IntuneDeviceConfigurationPolicyWindows10', 'Policy-A', @{
+                Assignments = @(
+                    @{ dataType = '#microsoft.graph.groupAssignmentTarget'; groupDisplayName = 'Tag "A" (prod)' }
+                )
+            })
+
+        $result = $session.InjectDependsOn($Script:Content, (New-TestStubOptions))
+
+        $result | Should -Match ([regex]::Escape('AADGroup "AADGroup-Tag__A___prod_"'))
+        $result | Should -Match ([regex]::Escape('DependsOn = @("[AADGroup]AADGroup-Tag__A___prod_")'))
+        $result | Should -Match ([regex]::Escape('DisplayName = "Tag `"A`" (prod)"'))
+
+        $errors = $null
+        $null = [System.Management.Automation.Language.Parser]::ParseInput($result, [ref] $null, [ref] $errors)
+        $errors | Should -BeNullOrEmpty
+    }
+
     It 'Returns the content unchanged when nothing was referenced' {
         $session = New-TestSession
         $result = $session.InjectDependsOn($Script:Content, (New-TestStubOptions))

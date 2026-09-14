@@ -158,7 +158,7 @@ class IntuneDeviceComplianceNotificationMessageTemplate : M365DSCResourceBase
                 Description                   = $getValue.Description
                 DisplayName                   = $getValue.DisplayName
                 LocalizedNotificationMessages = $messages
-                RoleScopeTagIds               = $getValue.RoleScopeTagIds
+                RoleScopeTagIds               = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                            = $getValue.Id
                 Ensure                        = 'Present'
                 Credential                    = $this.Credential
@@ -197,18 +197,25 @@ class IntuneDeviceComplianceNotificationMessageTemplate : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         if ($boundParameters.ContainsKey('BrandingOptions'))
         {
             $boundParameters.BrandingOptions = $boundParameters.BrandingOptions -join ','
         }
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Compliance Notification Message Template with DisplayName {$($this.DisplayName)}"
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
 
             $localizedNotificationMessagesConverted = $createParameters.LocalizedNotificationMessages
@@ -228,8 +235,7 @@ class IntuneDeviceComplianceNotificationMessageTemplate : M365DSCResourceBase
         {
             Write-Verbose -Message "Updating the Intune Device Compliance Notification Message Template with Id {$($currentInstance.Id)}"
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
             $localizedNotificationMessagesConverted = $updateParameters.LocalizedNotificationMessages
             $updateParameters.Remove('LocalizedNotificationMessages') | Out-Null

@@ -279,7 +279,7 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
                 StorageRequireEncryption                           = $devicePolicy.storageRequireEncryption
                 SecurityRequireIntuneAppIntegrity                  = $devicePolicy.securityRequireIntuneAppIntegrity
                 SecurityBlockJailbrokenDevices                     = $devicePolicy.securityBlockJailbrokenDevices
-                RoleScopeTagIds                                    = $devicePolicy.roleScopeTagIds
+                RoleScopeTagIds                                    = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $devicePolicy.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                             = 'Present'
                 Credential                                         = $this.Credential
                 ApplicationId                                      = $this.ApplicationId
@@ -336,6 +336,11 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
         $currentDeviceAndroidPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $notificationTemplates = Get-MgBetaDeviceManagementNotificationMessageTemplate -All | Where-Object -FilterScript {
             $_.Id -ne '8ca486fc-bee8-4ef2-983b-21e8908d11b8' # Exclude the second, unused default template
         }
@@ -382,11 +387,13 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
         }
         $boundParameters.Remove('ScheduledActionsForRule') | Out-Null
 
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentDeviceAndroidPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Intune Android Work Profile Device Compliance Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
             $createParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerCompliancePolicy')
             $createParameters.Add('scheduledActionsForRule', $complexScheduledActionsForRule)
             $policy = New-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $createParameters
@@ -405,8 +412,8 @@ class IntuneDeviceCompliancePolicyAndroidDeviceOwner : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentDeviceAndroidPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Intune Android Device Owner Device Compliance Policy {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
             $updateParameters.Add('@odata.type', '#microsoft.graph.androidDeviceOwnerCompliancePolicy')
             Update-MgBetaDeviceManagementDeviceCompliancePolicy -BodyParameter $updateParameters `
                 -DeviceCompliancePolicyId $currentDeviceAndroidPolicy.Id

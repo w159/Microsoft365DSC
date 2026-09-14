@@ -273,7 +273,7 @@ class IntuneMobileAppsWebLink : M365DSCResourceBase
                 Owner                             = $getValue.Owner
                 PrivacyInformationUrl             = $getValue.PrivacyInformationUrl
                 Publisher                         = $getValue.Publisher
-                RoleScopeTagIds                   = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                   = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Id                                = $getValue.Id
                 Ensure                            = 'Present'
                 Credential                        = $this.Credential
@@ -320,39 +320,45 @@ class IntuneMobileAppsWebLink : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
-        if ($BoundParameters.ContainsKey('LargeIcon'))
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        if ($boundParameters.ContainsKey('LargeIcon'))
         {
             $complexLargeIcon = @{
-                type  = $BoundParameters.LargeIcon.type
-                value = [System.Convert]::FromBase64String($BoundParameters.LargeIcon.value)
+                type  = $boundParameters.LargeIcon.type
+                value = [System.Convert]::FromBase64String($boundParameters.LargeIcon.value)
             }
-            $BoundParameters.Remove('LargeIcon') | Out-Null
-            $BoundParameters.Add('LargeIcon', $complexLargeIcon)
+            $boundParameters.Remove('LargeIcon') | Out-Null
+            $boundParameters.Add('LargeIcon', $complexLargeIcon)
         }
 
         foreach ($property in $this.ResourceCache['customProperties'])
         {
-            if ($BoundParameters.ContainsKey($property) -and $this.ResourceCache['odataToPropertiesMap'].($this.TargetType) -notcontains $property)
+            if ($boundParameters.ContainsKey($property) -and $this.ResourceCache['odataToPropertiesMap'].($this.TargetType) -notcontains $property)
             {
                 throw "Property '$property' is not supported for the target type '$($this.TargetType)'."
             }
         }
 
-        $BoundParameters.Remove('Categories') | Out-Null
+        $boundParameters.Remove('Categories') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Mobile Apps Web Link with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $createParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $createParameters.Add('@odata.type', '#microsoft.graph.' + $BoundParameters.TargetType)
+            $createParameters.Add('@odata.type', '#microsoft.graph.' + $createParameters.TargetType)
             $policy = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $createParameters
 
             if ($this.GetBoundParameters().ContainsKey('Categories'))
@@ -372,18 +378,17 @@ class IntuneMobileAppsWebLink : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Mobile Apps Web Link with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('AppUrl') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('AppUrl') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.' + $BoundParameters.TargetType)
+            $updateParameters.Add('@odata.type', '#microsoft.graph.' + $updateParameters.TargetType)
             Update-MgBetaDeviceAppManagementMobileApp `
                 -MobileAppId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
 
             if ($this.GetBoundParameters().ContainsKey('Categories'))
             {

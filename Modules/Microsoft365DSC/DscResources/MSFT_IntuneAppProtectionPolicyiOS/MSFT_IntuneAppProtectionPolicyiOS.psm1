@@ -508,7 +508,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 Id                                             = $policy.Id
                 DisplayName                                    = $policy.DisplayName
                 Description                                    = $policy.Description
-                RoleScopeTagIds                                = $policy.RoleScopeTagIds
+                RoleScopeTagIds                                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $policy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 AllowedDataIngestionLocations                  = $AllowedDataIngestionLocationsValue
                 AllowWidgetContentSync                         = $policy.AllowWidgetContentSync
                 AppActionIfAccountIsClockedOut                 = $policy.appActionIfAccountIsClockedOut
@@ -620,10 +620,17 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
         $currentPolicy = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
         if ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new iOS App Protection Policy {$($this.DisplayName)}"
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $createParameters = $boundParameters
             $createParameters.Remove('Id')
             $createParameters.Remove('Assignments')
             $createParameters.Remove('Apps')
@@ -672,7 +679,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing iOS App Protection Policy {$($this.DisplayName)}"
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+            $updateParameters = $boundParameters
             $updateParameters.Remove('Id')
             $updateParameters.Remove('Assignments')
             $updateParameters.Remove('Apps')

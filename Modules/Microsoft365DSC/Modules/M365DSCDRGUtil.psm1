@@ -305,14 +305,13 @@ function Get-M365DSCDRGComplexTypeToString
 
 <#
 .SYNOPSIS
-    Update special characters in a string to be escaped in a DSC configuration.
+    Replace every character that would need escaping inside a DSC instance name with an underscore.
 
 .DESCRIPTION
-    This function updates special characters in a string to be escaped in a DSC configuration.
+    This function replaces the characters that cannot appear unescaped in a DSC instance name.
     The function replaces the following characters:
-        - 0x201C = “
-        - 0x201D = ”
-        - 0x201E = „
+        - <>:"/\|?*'[]()`$ and the space
+        - 0x2019, 0x201C, 0x201D, 0x201E and 0x201F
 
 .PARAMETER String
     The string to be updated.
@@ -321,9 +320,9 @@ function Get-M365DSCDRGComplexTypeToString
     System.String
 
 .EXAMPLE
-    PS> Update-M365DSCSpecialCharacters -String 'This is a test string with special characters: „, “, ”'
+    PS> Remove-M365DSCSpecialCharacters -String 'Policy (Windows) "Baseline"'
 #>
-function Update-M365DSCSpecialCharacters
+function Remove-M365DSCSpecialCharacters
 {
     [CmdletBinding()]
     [OutputType([System.String])]
@@ -334,7 +333,7 @@ function Update-M365DSCSpecialCharacters
     )
 
     Initialize-M365DSCDllLoader -ErrorAction Stop
-    return [Microsoft365DSC.Utilities.Utilities]::UpdateSpecialCharacters($String)
+    return [Microsoft365DSC.Utilities.Utilities]::RemoveSpecialCharacters($String)
 }
 
 <#

@@ -2681,7 +2681,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 Description                                                                  = $getValue.Description
                 DisplayName                                                                  = $getValue.DisplayName
                 Id                                                                           = $getValue.Id
-                RoleScopeTagIds                                                              = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                                              = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                                                       = 'Present'
                 Credential                                                                   = $this.Credential
                 ApplicationId                                                                = $this.ApplicationId
@@ -2730,21 +2730,27 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Endpoint Protection Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
-            if ($CreateParameters.FirewallRules.Count -gt 0)
+            if ($createParameters.FirewallRules.Count -gt 0)
             {
                 $intuneFirewallRules = @()
-                foreach ($firewallRule in $CreateParameters.FirewallRules)
+                foreach ($firewallRule in $createParameters.FirewallRules)
                 {
                     if ($firewallRule.interfaceTypes -gt 1)
                     {
@@ -2752,11 +2758,11 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     }
                     $intuneFirewallRules += $firewallRule
                 }
-                $CreateParameters.FirewallRules = $intuneFirewallRules
+                $createParameters.FirewallRules = $intuneFirewallRules
             }
             #region resource generator code
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.windows10EndpointProtectionConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.windows10EndpointProtectionConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -2770,16 +2776,15 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Configuration Endpoint Protection Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $UpdateParameters = ([Hashtable]$BoundParameters).Clone()
-            $UpdateParameters = Rename-M365DSCCimInstanceParameter -Properties $UpdateParameters
-            $UpdateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('Id') | Out-Null
 
-            if ($UpdateParameters.FirewallRules.Count -gt 0)
+            if ($updateParameters.FirewallRules.Count -gt 0)
             {
                 $intuneFirewallRules = @()
-                foreach ($firewallRule in $UpdateParameters.FirewallRules)
+                foreach ($firewallRule in $updateParameters.FirewallRules)
                 {
                     if ($firewallRule.interfaceTypes -gt 1)
                     {
@@ -2787,13 +2792,13 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                     }
                     $intuneFirewallRules += $firewallRule
                 }
-                $UpdateParameters.FirewallRules = $intuneFirewallRules
+                $updateParameters.FirewallRules = $intuneFirewallRules
             }
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.windows10EndpointProtectionConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.windows10EndpointProtectionConfiguration')
             Update-MgBetaDeviceManagementDeviceConfiguration `
                 -DeviceConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment -DeviceConfigurationPolicyId $currentInstance.id `
                 -Targets $assignmentsHash `

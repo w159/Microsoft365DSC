@@ -366,7 +366,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                 DeviceManagementApplicabilityRuleOsVersion                     = $complexDeviceManagementApplicabilityRuleOsVersion
                 DisplayName                                                    = $getValue.DisplayName
                 Id                                                             = $getValue.Id
-                RoleScopeTagIds                                                = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                                                = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Ensure                                                         = 'Present'
                 Credential                                                     = $this.Credential
                 ApplicationId                                                  = $this.ApplicationId
@@ -417,25 +417,31 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $currentInstance = $this.Get().ToHashtable()
-        $BoundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Wired Network Policy for Windows10 with DisplayName {$($this.DisplayName)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('RootCertificatesForServerValidationIds') | Out-Null
-            $BoundParameters.Remove('RootCertificatesForServerValidationDisplayNames') | Out-Null
-            $BoundParameters.Remove('IdentityCertificateForClientAuthenticationId') | Out-Null
-            $BoundParameters.Remove('IdentityCertificateForClientAuthenticationDisplayName') | Out-Null
-            $BoundParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationId') | Out-Null
-            $BoundParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationDisplayName') | Out-Null
-            $BoundParameters.Remove('RootCertificateForClientValidationId') | Out-Null
-            $BoundParameters.Remove('RootCertificateForClientValidationDisplayName') | Out-Null
-            $BoundParameters.Remove('SecondaryRootCertificateForClientValidationId') | Out-Null
-            $BoundParameters.Remove('SecondaryRootCertificateForClientValidationDisplayName') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
+            $createParameters.Remove('RootCertificatesForServerValidationIds') | Out-Null
+            $createParameters.Remove('RootCertificatesForServerValidationDisplayNames') | Out-Null
+            $createParameters.Remove('IdentityCertificateForClientAuthenticationId') | Out-Null
+            $createParameters.Remove('IdentityCertificateForClientAuthenticationDisplayName') | Out-Null
+            $createParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationId') | Out-Null
+            $createParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationDisplayName') | Out-Null
+            $createParameters.Remove('RootCertificateForClientValidationId') | Out-Null
+            $createParameters.Remove('RootCertificateForClientValidationDisplayName') | Out-Null
+            $createParameters.Remove('SecondaryRootCertificateForClientValidationId') | Out-Null
+            $createParameters.Remove('SecondaryRootCertificateForClientValidationDisplayName') | Out-Null
 
-            $CreateParameters = ([Hashtable]$BoundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -457,7 +463,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                         @('#microsoft.graph.windows81TrustedRootCertificate'))
                     $rootCertificatesForServerValidation += "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
                 }
-                $CreateParameters.Add('rootCertificatesForServerValidation@odata.bind', $rootCertificatesForServerValidation)
+                $createParameters.Add('rootCertificatesForServerValidation@odata.bind', $rootCertificatesForServerValidation)
             }
 
             if (-not [String]::IsNullOrWhiteSpace($this.IdentityCertificateForClientAuthenticationId))
@@ -471,7 +477,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                         '#microsoft.graph.windows10PkcsCertificateProfile'
                     ))
                 $ref = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
-                $CreateParameters.Add('identityCertificateForClientAuthentication@odata.bind', $ref)
+                $createParameters.Add('identityCertificateForClientAuthentication@odata.bind', $ref)
             }
 
             if (-not [String]::IsNullOrWhiteSpace($this.SecondaryIdentityCertificateForClientAuthenticationId))
@@ -485,7 +491,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                         '#microsoft.graph.windows10PkcsCertificateProfile'
                     ))
                 $ref = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
-                $CreateParameters.Add('secondaryIdentityCertificateForClientAuthentication@odata.bind', $ref)
+                $createParameters.Add('secondaryIdentityCertificateForClientAuthentication@odata.bind', $ref)
             }
 
             if (-not [String]::IsNullOrWhiteSpace($this.RootCertificateForClientValidationId))
@@ -495,7 +501,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                     $this.RootCertificateForClientValidationDisplayName,
                     @('#microsoft.graph.windows81TrustedRootCertificate'))
                 $ref = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
-                $CreateParameters.Add('rootCertificateForClientValidation@odata.bind', $ref)
+                $createParameters.Add('rootCertificateForClientValidation@odata.bind', $ref)
             }
 
             if (-not [String]::IsNullOrWhiteSpace($this.SecondaryRootCertificateForClientValidationId))
@@ -505,11 +511,11 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
                     $this.SecondaryRootCertificateForClientValidationDisplayName,
                     @('#microsoft.graph.windows81TrustedRootCertificate'))
                 $ref = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/deviceConfigurations('$checkedCertId')"
-                $CreateParameters.Add('secondaryRootCertificateForClientValidation@odata.bind', $ref)
+                $createParameters.Add('secondaryRootCertificateForClientValidation@odata.bind', $ref)
             }
 
-            $CreateParameters.Add('@odata.type', '#microsoft.graph.windowsWiredNetworkConfiguration')
-            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $CreateParameters
+            $createParameters.Add('@odata.type', '#microsoft.graph.windowsWiredNetworkConfiguration')
+            $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
 
             if ($policy.id)
@@ -523,27 +529,26 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Device Configuration Wired Network Policy for Windows10 with Id {$($currentInstance.Id)}"
-            $BoundParameters.Remove('Assignments') | Out-Null
-            $BoundParameters.Remove('RootCertificatesForServerValidationIds') | Out-Null
-            $BoundParameters.Remove('RootCertificatesForServerValidationDisplayNames') | Out-Null
-            $BoundParameters.Remove('IdentityCertificateForClientAuthenticationId') | Out-Null
-            $BoundParameters.Remove('IdentityCertificateForClientAuthenticationDisplayName') | Out-Null
-            $BoundParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationId') | Out-Null
-            $BoundParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationDisplayName') | Out-Null
-            $BoundParameters.Remove('RootCertificateForClientValidationId') | Out-Null
-            $BoundParameters.Remove('RootCertificateForClientValidationDisplayName') | Out-Null
-            $BoundParameters.Remove('SecondaryRootCertificateForClientValidationId') | Out-Null
-            $BoundParameters.Remove('SecondaryRootCertificateForClientValidationDisplayName') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('Assignments') | Out-Null
+            $updateParameters.Remove('RootCertificatesForServerValidationIds') | Out-Null
+            $updateParameters.Remove('RootCertificatesForServerValidationDisplayNames') | Out-Null
+            $updateParameters.Remove('IdentityCertificateForClientAuthenticationId') | Out-Null
+            $updateParameters.Remove('IdentityCertificateForClientAuthenticationDisplayName') | Out-Null
+            $updateParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationId') | Out-Null
+            $updateParameters.Remove('SecondaryIdentityCertificateForClientAuthenticationDisplayName') | Out-Null
+            $updateParameters.Remove('RootCertificateForClientValidationId') | Out-Null
+            $updateParameters.Remove('RootCertificateForClientValidationDisplayName') | Out-Null
+            $updateParameters.Remove('SecondaryRootCertificateForClientValidationId') | Out-Null
+            $updateParameters.Remove('SecondaryRootCertificateForClientValidationDisplayName') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
-            $UpdateParameters.Add('@odata.type', '#microsoft.graph.windowsWiredNetworkConfiguration')
+            $updateParameters.Add('@odata.type', '#microsoft.graph.windowsWiredNetworkConfiguration')
             Update-MgBetaDeviceManagementDeviceConfiguration `
                 -DeviceConfigurationId $currentInstance.Id `
-                -BodyParameter $UpdateParameters
+                -BodyParameter $updateParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `
                 -DeviceConfigurationPolicyId $currentInstance.Id `

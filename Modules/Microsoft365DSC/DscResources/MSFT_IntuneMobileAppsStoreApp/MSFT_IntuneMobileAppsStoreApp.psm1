@@ -280,7 +280,7 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
                 Owner                              = $getValue.Owner
                 PrivacyInformationUrl              = $getValue.PrivacyInformationUrl
                 Publisher                          = $getValue.Publisher
-                RoleScopeTagIds                    = $getValue.RoleScopeTagIds
+                RoleScopeTagIds                    = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TargetPlatform                     = $getValue.'@odata.type'.Replace('#microsoft.graph.', '').Replace('StoreApp', '')
                 Id                                 = $getValue.Id
                 Ensure                             = 'Present'
@@ -361,16 +361,23 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
         }
 
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+
+        if ($boundParameters.ContainsKey('RoleScopeTagIds'))
+        {
+            $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
+        }
+
         $boundParameters.Remove('Categories') | Out-Null
         $boundParameters.Remove('TargetPlatform') | Out-Null
+
+        $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Mobile Apps Store App with DisplayName {$($this.DisplayName)}"
-            $boundParameters.Remove('Assignments') | Out-Null
+            $createParameters = $boundParameters
+            $createParameters.Remove('Assignments') | Out-Null
 
-            $createParameters = ([Hashtable]$boundParameters).Clone()
-            $createParameters = Rename-M365DSCCimInstanceParameter -Properties $createParameters
             $createParameters.Remove('Id') | Out-Null
 
             #region resource generator code
@@ -394,11 +401,10 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating the Intune Mobile Apps Store App with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove('AppStoreUrl') | Out-Null
-            $boundParameters.Remove('Assignments') | Out-Null
+            $updateParameters = $boundParameters
+            $updateParameters.Remove('AppStoreUrl') | Out-Null
+            $updateParameters.Remove('Assignments') | Out-Null
 
-            $updateParameters = ([Hashtable]$boundParameters).Clone()
-            $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
 
             #region resource generator code
