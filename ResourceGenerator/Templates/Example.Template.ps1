@@ -24,7 +24,7 @@ Configuration Example
 
     Node localhost
     {
-        <ResourceName> 'Example'
+        <ResourceName> '<ResourceName>-Example'
         {<FakeValues>
         }
     }

@@ -30,7 +30,18 @@ function New-M365DSCSettingsFile
         $ResourceModel.Cmdlets.NewCmdlet
         $ResourceModel.Cmdlets.UpdateCmdlet
         $ResourceModel.Cmdlets.RemoveCmdlet
-    ) | Where-Object { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique
+    )
+
+    if ($ResourceModel.Cmdlets.HasAssignments)
+    {
+        $cmdletNames += @(
+            $ResourceModel.Cmdlets.AssignmentCmdlet
+            'Get-MgBetaDeviceManagementAssignmentFilter'
+            'Get-MgGroup'
+        )
+    }
+
+    $cmdletNames = $cmdletNames | Where-Object { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique
 
     $commandGroups = [ordered]@{}
     $requiredModules = @()
@@ -73,7 +84,7 @@ function New-M365DSCSettingsFile
     $settings = [ordered]@{
         resourceName          = $ResourceModel.ResourceName
         generatedFrom         = Get-M365DSCGeneratedFromBlock -ResourceModel $ResourceModel
-        excludedProperties    = @()
+        excludedProperties    = @(Get-M365DSCExcludedPropertyBlock -ResourceModel $ResourceModel)
         description           = "This resource configures a $($ResourceModel.ResourceDescription)."
         roles                 = [ordered]@{
             read   = @()
@@ -137,7 +148,7 @@ function Get-M365DSCGraphPermission
         Write-Warning -Message "Could not read Graph permissions: $($_.Exception.Message). Fill the permissions section of settings.json manually."
     }
 
-    $readEntries = @($readPermissions | Where-Object { $_ } | ForEach-Object { [ordered]@{ name = $_ } })
+    $readEntries = @(Select-M365DSCReadPermission -Permission $readPermissions | ForEach-Object { [ordered]@{ name = $_ } })
     $updateEntries = @($updatePermissions | Where-Object { $_ } | ForEach-Object { [ordered]@{ name = $_ } })
 
     return [ordered]@{
@@ -235,6 +246,87 @@ function Get-M365DSCGeneratedFromBlock
         cmdletNoun                  = $cmdletNoun
         cmdletVerb                  = $cmdletVerb
         includeNavigationProperties = [System.Boolean] $ResourceModel.IncludeNavigationProperties
+        createOnlyProperties        = @($ResourceModel.CreateOnlyProperties | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique)
+        textPayloadProperties       = @($ResourceModel.TextPayloadProperties | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique)
         generatorVersion            = $generatorVersion
     }
+}
+
+<#
+.SYNOPSIS
+    Builds the excludedProperties block of settings.json from the skipped properties.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    One entry per skipped property, with the reason and an empty note.
+#>
+function Get-M365DSCExcludedPropertyBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $entries = @()
+    foreach ($name in @($ResourceModel.ExcludedProperties | Sort-Object -Unique))
+    {
+        if ([System.String]::IsNullOrEmpty($name))
+        {
+            continue
+        }
+
+        $entries += [ordered]@{
+            name   = $name
+            reason = 'NotConfigurable'
+            note   = ''
+        }
+    }
+
+    return [System.Object[]] $entries
+}
+
+<#
+.SYNOPSIS
+    Drops a ReadWrite permission from a read list when its Read counterpart is present.
+
+.PARAMETER Permission
+    Specifies the permission names Graph declares for the Get cmdlet.
+
+.OUTPUTS
+    The permission names that authorize the read at the lowest privilege.
+#>
+function Select-M365DSCReadPermission
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $Permission = @()
+    )
+
+    $names = @($Permission | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+    $all = [System.Collections.Generic.HashSet[System.String]]::new(
+        [System.String[]] $names, [System.StringComparer]::OrdinalIgnoreCase)
+
+    $kept = foreach ($name in $names)
+    {
+        if ($name -match '^(?<prefix>.+)\.ReadWrite(?<suffix>\..+)$' -and
+            $all.Contains("$($Matches['prefix']).Read$($Matches['suffix'])"))
+        {
+            continue
+        }
+
+        $name
+    }
+
+    return [System.String[]] @($kept)
 }

@@ -103,9 +103,9 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Not -Match 'function Get-TargetResource'
         }
 
-        It 'wraps value types in Nullable and keys the primary key' {
+        It 'wraps value types in Nullable and keys the name' {
             $script:classContent | Should -Match '\[System\.Nullable\[System\.Boolean\]\] \$IsEnabled'
-            $script:classContent | Should -Match '(?s)\[DscProperty\(Key\)\]\s*\[System\.ComponentModel\.Description\(''The unique identifier\.''\)\]\s*\[System\.String\] \$Id'
+            $script:classContent | Should -Match '(?s)\[DscProperty\(Key\)\]\s*\[System\.ComponentModel\.Description\(''The display name\.''\)\]\s*\[System\.String\] \$DisplayName'
         }
 
         It 'generates a hidden hashtable helper method for the complex type' {
@@ -155,7 +155,7 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
         }
 
         It 'branches the Get mock on All and the key parameter' {
-            $script:testContent | Should -Match '(?s)if \(\$All\).+if \(\$TestPolicyId\)'
+            $script:testContent | Should -Match '(?s)if \(\$All\).+if \(\$TestPolicyId -or \$Filter\)'
         }
     }
 
@@ -329,6 +329,21 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $settings.generatedFrom.entityType | Should -BeNullOrEmpty
             $settings.generatedFrom.cmdletNoun | Should -Be 'AcceptedDomain'
             $settings.generatedFrom.cmdletVerb | Should -Be 'Set'
+        }
+    }
+    Describe 'Select-M365DSCReadPermission' {
+        It 'Drops a ReadWrite permission whose Read counterpart is present' {
+            Select-M365DSCReadPermission -Permission @('DeviceManagementConfiguration.Read.All', 'DeviceManagementConfiguration.ReadWrite.All') |
+                Should -Be @('DeviceManagementConfiguration.Read.All')
+        }
+
+        It 'Keeps a ReadWrite permission that stands alone' {
+            Select-M365DSCReadPermission -Permission @('DeviceManagementApps.ReadWrite.All') |
+                Should -Be @('DeviceManagementApps.ReadWrite.All')
+        }
+
+        It 'Returns nothing for an empty list' {
+            @(Select-M365DSCReadPermission -Permission @()) | Should -HaveCount 0
         }
     }
 }

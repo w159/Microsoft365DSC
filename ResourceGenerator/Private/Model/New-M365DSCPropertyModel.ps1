@@ -122,6 +122,9 @@ function Resolve-M365DSCTypeInfo
 
 .PARAMETER IsFromAdditionalProperties
     Indicates that the Graph cmdlet returns this property nested under AdditionalProperties.
+
+.PARAMETER IsReadOnly
+    Indicates that the endpoint configures the value. A configuration can never set it.
 #>
 function New-M365DSCPropertyModel
 {
@@ -176,7 +179,11 @@ function New-M365DSCPropertyModel
 
         [Parameter()]
         [System.Boolean]
-        $IsFromAdditionalProperties = $false
+        $IsFromAdditionalProperties = $false,
+
+        [Parameter()]
+        [System.Boolean]
+        $IsReadOnly = $false
     )
 
     $pascalName = Get-StringFirstCharacterToUpper -Value $Name
@@ -236,6 +243,7 @@ function New-M365DSCPropertyModel
         IsEnum                     = $isEnum
         IsAuth                     = $IsAuth
         IsFromAdditionalProperties = $IsFromAdditionalProperties
+        IsReadOnly                 = $IsReadOnly
         EnumValues                 = $EnumValues
         Description                = $Description
         Members                    = $Members

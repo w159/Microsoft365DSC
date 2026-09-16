@@ -118,6 +118,15 @@ function Get-M365DSCGraphTypeProperty
             -TypeName $rawEntry.DeclaringType `
             -Index $Index
 
+        $isReadOnly = $false
+        if ($null -ne $Index -and -not [System.String]::IsNullOrEmpty($rawEntry.DeclaringType))
+        {
+            $isReadOnly = (Get-M365DSCGraphPropertyAccess -Index $Index `
+                    -NamespaceName $rawEntry.DeclaringNamespace `
+                    -TypeName $rawEntry.DeclaringType `
+                    -PropertyName ([System.String] $rawProperty.Name)).IsReadOnly
+        }
+
         if ($rawType -like 'graph.*')
         {
             $typeName = $rawType.Replace('graph.', '')
@@ -130,7 +139,8 @@ function Get-M365DSCGraphTypeProperty
                     -Description $description `
                     -IsArray $isArray `
                     -EnumValues ([System.String[]] @($enumType.Member.Name)) `
-                    -IsFromAdditionalProperties $isFromAdditionalProperties
+                    -IsFromAdditionalProperties $isFromAdditionalProperties `
+                    -IsReadOnly $isReadOnly
                 continue
             }
 
@@ -145,7 +155,8 @@ function Get-M365DSCGraphTypeProperty
                     -Entity $typeName `
                     -ExistingCimClassNames $ExistingCimClassNames `
                     -Visited $nestedVisited `
-                    -Index $Index)
+                    -Index $Index `
+                    -Qualified:($null -ne $Index))
 
             if ($members.Count -eq 0)
             {
@@ -161,7 +172,8 @@ function Get-M365DSCGraphTypeProperty
                 -IsArray $isArray `
                 -CimClassName $cimClassName `
                 -Members $members `
-                -IsFromAdditionalProperties $isFromAdditionalProperties
+                -IsFromAdditionalProperties $isFromAdditionalProperties `
+                -IsReadOnly $isReadOnly
             continue
         }
 
@@ -170,8 +182,11 @@ function Get-M365DSCGraphTypeProperty
             -Type $rawType `
             -Description $description `
             -IsArray $isArray `
-            -IsFromAdditionalProperties $isFromAdditionalProperties
+            -IsFromAdditionalProperties $isFromAdditionalProperties `
+            -IsReadOnly $isReadOnly
     }
+
+    $models = @(Merge-M365DSCPropertyModel -Model $models)
 
     # The @odata.type discriminator names the concrete subtype an instance carries.
     if ($derivedSubtypeNames.Count -gt 0)
@@ -353,4 +368,50 @@ function Get-M365DSCUniqueCimClassName
     }
 
     return $cimClassName
+}
+
+<#
+.SYNOPSIS
+    Collapses property models that share a name, unioning the members of enum properties.
+
+.PARAMETER Model
+    Specifies the property models of one type.
+
+.OUTPUTS
+    The models, one per name.
+#>
+function Merge-M365DSCPropertyModel
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param
+    (
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
+        $Model = @()
+    )
+
+    $merged = [ordered]@{}
+
+    foreach ($property in $Model)
+    {
+        $name = [System.String] $property.Name
+        if (-not $merged.Contains($name))
+        {
+            $merged[$name] = $property
+            continue
+        }
+
+        $kept = $merged[$name]
+        if (-not $kept.IsEnum -or -not $property.IsEnum)
+        {
+            continue
+        }
+
+        $values = @($kept.EnumValues) + @($property.EnumValues)
+        $kept.EnumValues = @($values | Select-Object -Unique)
+    }
+
+    return [System.Object[]] @($merged.Values)
 }

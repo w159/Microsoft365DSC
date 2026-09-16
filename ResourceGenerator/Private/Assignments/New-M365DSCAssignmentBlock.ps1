@@ -29,6 +29,23 @@ function New-M365DSCAssignmentsGetBlock
     $cmdlets = $ResourceModel.Cmdlets
     $builder = [System.Text.StringBuilder]::new()
 
+    if ($ResourceModel.AssignmentKind -eq 'MobileApp')
+    {
+        $null = $builder.AppendLine('')
+        $null = $builder.AppendLine("$indent`$assignmentsValues = $($cmdlets.AssignmentCmdlet) -$($cmdlets.AssignmentKeyParameter) `$getValue.Id -ErrorAction SilentlyContinue")
+        $null = $builder.AppendLine("$indent`$assignmentResult = @()")
+        $null = $builder.AppendLine("${indent}if (`$null -ne `$assignmentsValues -and `$assignmentsValues.Count -gt 0)")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    [array] `$assignmentsValues = `$assignmentsValues | Where-Object -FilterScript { `$_.source -eq 'direct' }")
+        $null = $builder.AppendLine("$indent    `$assignmentResult += ConvertFrom-IntuneMobileAppAssignment ``")
+        $null = $builder.AppendLine("$indent        -IncludeDeviceFilter `$true ``")
+        $null = $builder.AppendLine("$indent        -Assignments `$assignmentsValues")
+        $null = $builder.AppendLine("$indent}")
+        $null = $builder.Append("$indent`$result.Add('Assignments', `$assignmentResult)")
+
+        return $builder.ToString()
+    }
+
     $null = $builder.AppendLine('')
     $null = $builder.AppendLine("$indent`$assignmentsValues = Get-M365DSCIntuneExpandedAssignments -Instance `$getValue")
     $null = $builder.AppendLine("${indent}if (`$null -eq `$assignmentsValues)")
@@ -72,6 +89,20 @@ function New-M365DSCAssignmentsSetBlock
     $indent = ' ' * 16
     $cmdlets = $ResourceModel.Cmdlets
     $builder = [System.Text.StringBuilder]::new()
+
+    if ($ResourceModel.AssignmentKind -eq 'MobileApp')
+    {
+        $null = $builder.AppendLine('')
+        $null = $builder.AppendLine("$indent`$assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:`$true -Assignments `$this.Assignments")
+        $null = $builder.AppendLine("${indent}if ($PolicyIdExpression)")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    Update-DeviceAppManagementPolicyAssignment ``")
+        $null = $builder.AppendLine("$indent        -AppManagementPolicyId $PolicyIdExpression ``")
+        $null = $builder.AppendLine("$indent        -Assignments `$assignmentsHash")
+        $null = $builder.Append("$indent}")
+
+        return $builder.ToString()
+    }
 
     $null = $builder.AppendLine('')
     $null = $builder.AppendLine("$indent`$assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:`$true -Assignments `$this.Assignments")

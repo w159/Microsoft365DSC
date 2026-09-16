@@ -48,6 +48,14 @@
 .PARAMETER ParametersToSkip
     Specifies property names to leave out of the generated resource.
 
+.PARAMETER CreateOnlyProperties
+    Specifies property names the service accepts on create and rejects on update, such as the
+    catalog package a catalog app was created from.
+
+.PARAMETER TextPayloadProperties
+    Specifies property names Graph carries base64 encoded and a configuration carries as text, such
+    as the payload of a custom configuration profile.
+
 .PARAMETER AdditionalPropertiesType
     Specifies the concrete OData subtype for polymorphic Graph entities, bypassing the auto-pick.
 
@@ -113,6 +121,14 @@ function New-M365DSCResource
         [Parameter()]
         [System.String[]]
         $ParametersToSkip = @(),
+
+        [Parameter()]
+        [System.String[]]
+        $CreateOnlyProperties = @(),
+
+        [Parameter()]
+        [System.String[]]
+        $TextPayloadProperties = @(),
 
         [Parameter()]
         [System.String]
@@ -221,6 +237,16 @@ function New-M365DSCResource
                 -IncludeNavigationProperties $IncludeNavigationProperties `
                 -ExistingCimClassNames $existingCimClasses)
 
+        # An app assignment carries the settings of its own app type.
+        $assignmentSettings = @()
+        $settingsType = Resolve-M365DSCMobileAppAssignmentSettingsType -Schema $schema -AppType $subtypeInfo.SelectedODataType
+        if (-not [System.String]::IsNullOrEmpty($settingsType))
+        {
+            $assignmentSettings = @(Get-M365DSCGraphTypeProperty -Schema $schema `
+                    -Entity $settingsType `
+                    -ExistingCimClassNames $existingCimClasses)
+        }
+
         $resourceModel = New-M365DSCResourceModel -ResourceName $ResourceName `
             -Workload $Workload `
             -CmdletInfo $cmdletInfo `
@@ -231,7 +257,11 @@ function New-M365DSCResource
             -IsSingleInstance $IsSingleInstance.IsPresent `
             -CmdLetNoun $CmdLetNoun `
             -CmdLetVerb $CmdLetVerb `
-            -IncludeNavigationProperties $IncludeNavigationProperties
+            -IncludeNavigationProperties $IncludeNavigationProperties `
+            -AssignmentSettingsType $settingsType `
+            -AssignmentSettingsMember $assignmentSettings `
+            -CreateOnlyProperties $CreateOnlyProperties `
+            -TextPayloadProperties $TextPayloadProperties
     }
     else
     {
@@ -246,7 +276,9 @@ function New-M365DSCResource
             -ParametersToSkip $ParametersToSkip `
             -IsSingleInstance $IsSingleInstance.IsPresent `
             -CmdLetNoun $CmdLetNoun `
-            -CmdLetVerb $CmdLetVerb
+            -CmdLetVerb $CmdLetVerb `
+            -CreateOnlyProperties $CreateOnlyProperties `
+            -TextPayloadProperties $TextPayloadProperties
     }
 
     # ------------------------------------------------------------------ Emit (into staging)

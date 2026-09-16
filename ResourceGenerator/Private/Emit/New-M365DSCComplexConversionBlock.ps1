@@ -33,10 +33,10 @@ function Get-M365DSCPropertyAccessPath
     {
         if ($Property.GraphName -match '[^\w]')
         {
-            return "$ObjectVariable.AdditionalProperties.'$($Property.GraphName)'"
+            return "$ObjectVariable.'$($Property.GraphName)'"
         }
 
-        return "$ObjectVariable.AdditionalProperties.$($Property.GraphName)"
+        return "$ObjectVariable.$($Property.GraphName)"
     }
 
     return "$ObjectVariable.$($Property.Name)"
@@ -191,6 +191,14 @@ function New-M365DSCHashtableMappingBlock
         elseif ($property.FakeKind -in @('DateTime', 'Time'))
         {
             $value = "`$date$name"
+        }
+        elseif ($name -in @($ResourceModel.TextPayloadProperties))
+        {
+            $value = "`$this.DecodeTextPayload($(Get-M365DSCPropertyAccessPath -Property $property))"
+        }
+        elseif ($name -eq 'RoleScopeTagIds')
+        {
+            $value = "Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $(Get-M365DSCPropertyAccessPath -Property $property) -DesiredValues `$this.RoleScopeTagIds"
         }
         else
         {
