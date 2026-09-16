@@ -588,8 +588,6 @@
     removal of special characters from resource instance names.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
-* M365DSCModuleMgmt
-  * Added automatic dependency update for both Windows PowerShell and PowerShell 7.
 * M365DSCReport
   * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
 * DEPENDENCIES
@@ -685,6 +683,7 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
+
 
 # 1.26.909.1
 

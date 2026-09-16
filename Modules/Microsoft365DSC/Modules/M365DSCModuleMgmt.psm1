@@ -1098,9 +1098,6 @@ function Update-M365DSCDependencies
             $Script:M365DSCDevDependencies.Values.CopyTo($dependencies, $Script:M365DSCDependencies.Count)
         }
 
-        $invokeWinPS = $false
-        $invokePSCore = $false
-
         # $null comparison is correct in that way because the left-hand side is always an array and the right-hand side is a single value
         foreach ($dependency in ($dependencies -ne $null))
         {
@@ -1152,14 +1149,12 @@ function Update-M365DSCDependencies
                     {
                         if (-not $dependency.PowerShellCore -and $Script:IsPowerShellCore -and $IsWindows)
                         {
-                            Write-Warning "The dependency {$($dependency.ModuleName)} does not support PowerShell Core. It will be installed after this."
-                            $invokeWinPS = $true
+                            Write-Warning "The dependency {$($dependency.ModuleName)} does not support PowerShell Core. Please run Update-M365DSCDependencies in Windows PowerShell."
                             continue
                         }
                         elseif ($dependency.PowerShellCore -and -not $Script:IsPowerShellCore)
                         {
-                            Write-Warning "The dependency {$($dependency.ModuleName)} requires PowerShell Core. It will be installed after this."
-                            $invokePSCore = $true
+                            Write-Warning "The dependency {$($dependency.ModuleName)} requires PowerShell Core. Please run Update-M365DSCDependencies in PowerShell Core."
                             continue
                         }
 
@@ -1229,25 +1224,6 @@ function Update-M365DSCDependencies
         if ($ValidateOnly)
         {
             return $returnValue
-        }
-
-        $psSession = $null
-        if ($invokeWinPS)
-        {
-            Initialize-WindowsPowerShellSession
-            $psSession = Get-PowerShellSession -Name 'WindowsPowerShell'
-        }
-        elseif ($invokePSCore)
-        {
-            Initialize-PowerShellCoreSession
-            $psSession = Get-PowerShellSession -Name 'PowerShellCore'
-        }
-
-        if ($null -ne $psSession)
-        {
-            Invoke-Command -Session $psSession -ScriptBlock {
-                Update-M365DSCDependencies
-            }
         }
     }
     catch
