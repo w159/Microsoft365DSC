@@ -87,7 +87,13 @@ function New-M365DSCAdditionalMockBlock
     {
         $null = $builder.AppendLine('')
         $null = $builder.AppendLine("${indent}Mock -CommandName Get-M365DSCExportCachedCollection -MockWith {")
-        $null = $builder.AppendLine("$indent    return $($ResourceModel.Cmdlets.GetCmdlet)")
+        $collectionCall = $ResourceModel.Cmdlets.GetCmdlet
+        if ($ResourceModel.Cmdlets.SupportsAll)
+        {
+            $collectionCall += ' -All'
+        }
+
+        $null = $builder.AppendLine("$indent    return $collectionCall")
         $null = $builder.Append("$indent}")
     }
     if ($ResourceModel.HasAssignments)
@@ -96,7 +102,13 @@ function New-M365DSCAdditionalMockBlock
         $null = $builder.AppendLine("${indent}Mock -CommandName $($ResourceModel.Cmdlets.AssignmentCmdlet) -MockWith {")
         $null = $builder.AppendLine("$indent}")
         $null = $builder.AppendLine('')
-        $null = $builder.AppendLine("${indent}Mock -CommandName Update-DeviceConfigurationPolicyAssignment -MockWith {")
+        $assignmentUpdateCmdlet = 'Update-DeviceConfigurationPolicyAssignment'
+        if ($ResourceModel.AssignmentKind -eq 'MobileApp')
+        {
+            $assignmentUpdateCmdlet = 'Update-DeviceAppManagementPolicyAssignment'
+        }
+
+        $null = $builder.AppendLine("${indent}Mock -CommandName $assignmentUpdateCmdlet -MockWith {")
         $null = $builder.Append("$indent}")
     }
 
@@ -280,12 +292,12 @@ function New-M365DSCGetMockBody
 
     if ($ResourceModel.IsAdditionalProperty)
     {
-        $ordered = [ordered]@{ '@odata.type' = "#microsoft.graph.$($ResourceModel.SelectedODataType)" }
-        foreach ($key in $additionalProperties.Keys)
-        {
-            $ordered[$key] = $additionalProperties[$key]
-        }
-        $apiValue['AdditionalProperties'] = $ordered
+        $apiValue['@odata.type'] = "#microsoft.graph.$($ResourceModel.SelectedODataType)"
+    }
+
+    foreach ($key in $additionalProperties.Keys)
+    {
+        $apiValue[$key] = $additionalProperties[$key]
     }
 
     $literal = ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount ($IndentCount + 4)
@@ -306,7 +318,13 @@ function New-M365DSCGetMockBody
         $null = $builder.AppendLine("$indent}")
     }
 
-    $null = $builder.AppendLine("${indent}if (`$$keyVariable)")
+    $keyCondition = "`$$keyVariable"
+    if ($null -ne $ResourceModel.AlternativeKey -and $ResourceModel.Cmdlets.SupportsFilter)
+    {
+        $keyCondition += ' -or $Filter'
+    }
+
+    $null = $builder.AppendLine("${indent}if ($keyCondition)")
     $null = $builder.AppendLine("$indent{")
     $null = $builder.AppendLine("$indent    return $(ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount ($IndentCount + 4))")
     $null = $builder.AppendLine("$indent}")
@@ -352,6 +370,11 @@ function New-M365DSCTestParamsBlock
     foreach ($property in $ResourceModel.SchemaProperties)
     {
         if ($KeysOnly -and -not $property.IsKey)
+        {
+            continue
+        }
+
+        if (Test-M365DSCAssignmentProperty -Property $property)
         {
             continue
         }

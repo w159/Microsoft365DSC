@@ -89,17 +89,38 @@ function New-M365DSCResourceModel
 
         [Parameter()]
         [System.Boolean]
-        $IncludeNavigationProperties = $false
+        $IncludeNavigationProperties = $false,
+
+        [Parameter()]
+        [AllowEmptyString()]
+        [System.String]
+        $AssignmentSettingsType,
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
+        $AssignmentSettingsMember = @(),
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $CreateOnlyProperties = @(),
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $TextPayloadProperties = @()
     )
 
-    # Read-only server-side properties that never belong in a DSC schema.
+    # Exclude read-only server-side properties from the DSC schema.
     $readOnlyProperties = @(
         'createdDateTime', 'deletedDateTime', 'isAssigned', 'lastModifiedDateTime', 'priorityMetaData',
-        'retryCount', 'settingCount', 'templateReference', 'creationSource'
+        'retryCount', 'settingCount', 'templateReference', 'creationSource', 'version', 'supportsScopeTags'
     )
 
     $schemaProperties = @($Properties | Where-Object -FilterScript {
             $_.GraphName -notin $readOnlyProperties -and
+            -not $_.IsReadOnly -and
             $_.Name -notin $ParametersToSkip
         })
 
@@ -152,9 +173,15 @@ function New-M365DSCResourceModel
     }
     else
     {
+        $dscKey = $primaryKey
+        if ($null -ne $alternativeKey)
+        {
+            $dscKey = $alternativeKey
+        }
+
         foreach ($property in $schemaProperties)
         {
-            if ($property.Name -eq $primaryKey)
+            if ($property.Name -eq $dscKey)
             {
                 $property.IsKey = $true
                 $property.ClrType = $property.ClrType -replace '^System\.Nullable\[(.+)\]$', '$1'
@@ -165,9 +192,26 @@ function New-M365DSCResourceModel
     $resourceDescriptor = Get-M365DSCResourceDescriptor -ResourceName $ResourceName
 
     $hasAssignments = $CmdletInfo.ContainsKey('HasAssignments') -and $CmdletInfo.HasAssignments
+
+    $assignmentKind = 'Policy'
+    $assignmentCimClassName = ''
+    if ($hasAssignments -and ([System.String] $CmdletInfo.AssignmentRepository) -like 'deviceAppManagement/mobileApps*')
+    {
+        $assignmentKind = 'MobileApp'
+        $assignmentCimClassName = "MSFT_DeviceManagement$(Get-StringFirstCharacterToUpper -Value $SelectedODataType)Assignment"
+    }
+
     if ($hasAssignments)
     {
-        $schemaProperties = @($schemaProperties) + (Get-M365DSCAssignmentPropertyModel)
+        $assignmentModel = @{ Kind = $assignmentKind; CimClassName = $assignmentCimClassName }
+        if ($assignmentKind -eq 'MobileApp' -and @($AssignmentSettingsMember).Count -gt 0)
+        {
+            $assignmentModel['SettingsType'] = $AssignmentSettingsType
+            $assignmentModel['SettingsMember'] = $AssignmentSettingsMember
+            $assignmentModel['SettingsCimClassName'] = "MSFT_DeviceManagement$(Get-StringFirstCharacterToUpper -Value $AssignmentSettingsType)"
+        }
+
+        $schemaProperties = @($schemaProperties) + (Get-M365DSCAssignmentPropertyModel @assignmentModel)
     }
 
     # Every downstream artifact renders in model order. Alphabetical keeps it readable.
@@ -201,6 +245,10 @@ function New-M365DSCResourceModel
         SchemaProperties     = $schemaProperties
         ComplexTypeClasses   = @(Get-M365DSCComplexTypeClass -Properties $schemaProperties)
         HasAssignments       = $hasAssignments
+        AssignmentKind       = $assignmentKind
+        ExcludedProperties   = @($ParametersToSkip)
+        CreateOnlyProperties = @($CreateOnlyProperties)
+        TextPayloadProperties = @($TextPayloadProperties)
         SettingsCatalog      = $null
         CmdLetNoun           = $CmdLetNoun
         CmdLetVerb           = $CmdLetVerb

@@ -251,6 +251,11 @@ function Invoke-M365DSCApiSurfaceCheck
         -CoveragePath $coveragePath `
         -IgnorePath $coverageIgnorePath
 
+    $subtype = Get-SubtypeReport -RepositoryRoot $RepositoryRoot `
+        -Origin $origin `
+        -CoveragePath $coveragePath `
+        -IgnorePath $coverageIgnorePath
+
     . (Join-Path -Path $RepositoryRoot -ChildPath 'Utilities/Get-M365DSCIntuneTemplateBinding.ps1')
     $templateBinding = @(Get-M365DSCIntuneTemplateBinding -ResourcePath $resourcePath)
     $declaredProperty = Get-DeclaredPropertyMap -ResourcePath $resourcePath `
@@ -259,6 +264,8 @@ function Invoke-M365DSCApiSurfaceCheck
     $result = Compare-M365DSCApiSurface -Baseline $baseline `
         -CoverageCandidate $coverage.Candidate `
         -CoverageBaselineNoun $coverage.BaselineNoun `
+        -SubtypeCandidate $subtype.Candidate `
+        -SubtypeBaseline $subtype.Baseline `
         -TemplateBinding $templateBinding `
         -DeclaredProperty $declaredProperty `
         -Current $Current `
@@ -335,10 +342,18 @@ function Invoke-M365DSCApiSurfaceCheck
                             score       = $_.score
                         }
                     })
+                subtypes   = @($subtype.Candidate | ForEach-Object -Process {
+                        [ordered]@{
+                            subtype    = $_.subtype
+                            entityType = $_.entityType
+                            apiVersion = $_.apiVersion
+                            score      = $_.score
+                        }
+                    })
             }
             [System.IO.File]::WriteAllText($coveragePath, (ConvertTo-M365DSCApiSurfaceJson -Surface $stored), [System.Text.UTF8Encoding]::new($false))
 
-            $markdown = (Format-CoverageMarkdown -Candidate $coverage.Candidate -Source $coverage.Source) -replace "`r`n", "`n" -replace "`n", "`r`n"
+            $markdown = (Format-CoverageMarkdown -Candidate $coverage.Candidate -Source $coverage.Source -Subtype $subtype.Candidate) -replace "`r`n", "`n" -replace "`n", "`r`n"
             [System.IO.File]::WriteAllText(
                 (Join-Path -Path $RepositoryRoot -ChildPath 'Utilities/ApiSurface/coverage.md'),
                 $markdown, [System.Text.UTF8Encoding]::new($false))
@@ -656,5 +671,73 @@ function Get-CoverageReport
         Source       = $inventory.Source
         Candidate    = @(Find-CoverageGap -Inventory $inventory.Noun -Claim $claim -Ignore $ignore -BaselineNoun $baselineNoun)
         BaselineNoun = $baselineNoun
+    }
+}
+
+<#
+.SYNOPSIS
+    Builds the OData subtype candidates and reads the subtypes the committed file holds.
+
+.PARAMETER RepositoryRoot
+    Specifies the root of the Microsoft365DSC repository.
+
+.PARAMETER Origin
+    Specifies the resource rows from Get-ResourceOriginSurface.
+
+.PARAMETER CoveragePath
+    Specifies the committed coverage file.
+
+.PARAMETER IgnorePath
+    Specifies coverage-ignore.json.
+
+.OUTPUTS
+    An ordered dictionary with Candidate and Baseline.
+#>
+function Get-SubtypeReport
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Specialized.OrderedDictionary])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $RepositoryRoot,
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
+        $Origin = @(),
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $CoveragePath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $IgnorePath
+    )
+
+    $ignore = $null
+    if (Test-Path -Path $IgnorePath)
+    {
+        $ignore = Get-Content -Path $IgnorePath -Raw | ConvertFrom-Json
+    }
+
+    $baseline = @()
+    if (Test-Path -Path $CoveragePath)
+    {
+        $baseline = [System.String[]] @((Get-Content -Path $CoveragePath -Raw | ConvertFrom-Json).subtypes |
+                ForEach-Object -Process { [System.String] $_.subtype } |
+                Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+    }
+
+    $generator = Get-M365DSCApiSurfaceGenerator -RepositoryRoot $RepositoryRoot
+    $surface = @(Get-ODataSubtypeSurface -Generator $generator `
+            -Origin $Origin `
+            -ResourcePath (Join-Path -Path $RepositoryRoot -ChildPath 'Modules/Microsoft365DSC/DscResources'))
+
+    return [ordered]@{
+        Candidate = @(Find-SubtypeGap -Subtype $surface -Ignore $ignore -BaselineSubtype $baseline)
+        Baseline  = $baseline
     }
 }

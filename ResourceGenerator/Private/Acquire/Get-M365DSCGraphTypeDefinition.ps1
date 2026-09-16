@@ -423,7 +423,10 @@ function Get-M365DSCGraphTypeDefinition
             }
         }
 
-        if ($isComplexType -and $baseTypeName -eq $Entity -and $null -eq $typeNode.BaseType)
+        $isUnionSeed = $isComplexType -and $baseTypeName -eq $Entity -and
+            ($null -eq $typeNode.BaseType -or ([System.String] $typeNode.Abstract) -eq 'true')
+
+        if ($isUnionSeed)
         {
             $subtypes = @($currentSchema.ComplexType | Where-Object -FilterScript { $_.BaseType -eq "graph.$currentName" })
             foreach ($subtype in $subtypes)
@@ -431,14 +434,24 @@ function Get-M365DSCGraphTypeDefinition
                 $derivedSubtypeNames += $subtype.Name
                 foreach ($subtypeProperty in @($subtype.Property))
                 {
-                    if ($null -ne $subtypeProperty -and $subtypeProperty.Name -notin @($properties.Node.Name))
+                    if ($null -eq $subtypeProperty)
                     {
-                        $properties += [PSCustomObject]@{
-                            Node                 = $subtypeProperty
-                            IsRoot               = $false
-                            DeclaringNamespace   = $currentNamespace
-                            DeclaringType        = [System.String] $subtype.Name
-                        }
+                        continue
+                    }
+
+                    # One name can carry a different type on each subtype, as operationType does
+                    # on the Win32 rules.
+                    $declared = @($properties | Where-Object -FilterScript { $_.Node.Name -eq $subtypeProperty.Name })
+                    if (@($declared.Node.Type) -contains [System.String] $subtypeProperty.Type)
+                    {
+                        continue
+                    }
+
+                    $properties += [PSCustomObject]@{
+                        Node                 = $subtypeProperty
+                        IsRoot               = $false
+                        DeclaringNamespace   = $currentNamespace
+                        DeclaringType        = [System.String] $subtype.Name
                     }
                 }
             }

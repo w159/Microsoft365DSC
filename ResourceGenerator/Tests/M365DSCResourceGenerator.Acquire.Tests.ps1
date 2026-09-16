@@ -172,19 +172,20 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $model.Properties.Name | Should -Contain 'AccessTokens'
         }
 
-        It 'marks Id as the primary key' {
+        It 'keys the name and leaves the identifier to the cmdlets' {
             $model = New-M365DSCResourceModel -ResourceName 'AADTestPolicy' -Workload 'MicrosoftGraph' `
                 -CmdletInfo $script:cmdletInfo -Properties $script:properties
 
             $model.PrimaryKey | Should -Be 'Id'
-            ($model.Properties | Where-Object { $_.Name -eq 'Id' }).IsKey | Should -BeTrue
             $model.AlternativeKey | Should -Be 'DisplayName'
+            ($model.Properties | Where-Object { $_.Name -eq 'DisplayName' }).IsKey | Should -BeTrue
+            ($model.Properties | Where-Object { $_.Name -eq 'Id' }).IsKey | Should -BeFalse
         }
 
         It 'unwraps System.Nullable when a value-typed property becomes the key' {
             $valueKeyProperties = @(
                 New-M365DSCPropertyModel -Name 'Priority' -Type 'Edm.Int32' -Description 'The priority.'
-                New-M365DSCPropertyModel -Name 'DisplayName' -Type 'Edm.String' -Description 'The name.'
+                New-M365DSCPropertyModel -Name 'Comment' -Type 'Edm.String' -Description 'The comment.'
             )
             $model = New-M365DSCResourceModel -ResourceName 'AADTestPolicy' -Workload 'MicrosoftGraph' `
                 -CmdletInfo (@{} + $script:cmdletInfo + @{ PrimaryKey = 'Priority' }) -Properties $valueKeyProperties

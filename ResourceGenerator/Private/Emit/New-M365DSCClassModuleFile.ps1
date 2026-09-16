@@ -46,13 +46,14 @@ function New-M365DSCClassModuleFile
         ResourceName           = $ResourceModel.ResourceName
         ResourceDescription    = $ResourceModel.ResourceDescription
         PrimaryKey             = $ResourceModel.PrimaryKey
-        Workload               = $ResourceModel.Workload
+        Workload               = Get-M365DSCConnectionWorkload -Workload $ResourceModel.Workload
         HasEnsure              = -not $ResourceModel.IsSingleInstance
         PropertyBlock          = New-M365DSCClassPropertyBlock -Properties $ResourceModel.Properties
         ExportOnlyPropertyBlock = New-M365DSCExportOnlyPropertyBlock -ResourceModel $ResourceModel
         GetInstanceBlock       = New-M365DSCGetInstanceBlock -ResourceModel $ResourceModel
         ComplexConversionBlock = New-M365DSCComplexConversionBlock -ResourceModel $ResourceModel
         HashtableMappingBlock  = New-M365DSCHashtableMappingBlock -ResourceModel $ResourceModel
+        SetPreambleBlock       = New-M365DSCSetPreambleBlock -ResourceModel $ResourceModel
         NewInvocationBlock     = New-M365DSCSetInvocationBlock -ResourceModel $ResourceModel -Operation 'New'
         UpdateInvocationBlock  = New-M365DSCSetInvocationBlock -ResourceModel $ResourceModel -Operation 'Update'
         RemoveInvocationBlock  = New-M365DSCSetInvocationBlock -ResourceModel $ResourceModel -Operation 'Remove'
@@ -108,7 +109,11 @@ function Get-M365DSCKeyArgumentString
 
         [Parameter()]
         [System.String[]]
-        $SkipKeys = @()
+        $SkipKeys = @(),
+
+        [Parameter()]
+        [System.String]
+        $ObjectVariable = '$this'
     )
 
     $arguments = @()
@@ -131,7 +136,7 @@ function Get-M365DSCKeyArgumentString
             Write-Warning -Message "Key parameter '$key' has no matching resource property; mapping it to the primary key '$($ResourceModel.PrimaryKey)'. Review the generated code."
         }
 
-        $arguments += "-$key `$this.$propertyName"
+        $arguments += "-$key $ObjectVariable.$propertyName"
     }
 
     return ($arguments -join ' ')
@@ -234,14 +239,20 @@ function New-M365DSCSetInvocationBlock
     $isGraph = $ResourceModel.Workload -in @('MicrosoftGraph', 'Intune')
     $primaryKey = $ResourceModel.PrimaryKey
 
+    $targetVariable = '$this'
+    if ($Operation -in @('Update', 'Remove'))
+    {
+        $targetVariable = '$currentInstance'
+    }
+
     switch ($Operation)
     {
         'Remove'
         {
-            $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $cmdlets.RemoveKeyParameters
+            $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $cmdlets.RemoveKeyParameters -ObjectVariable $targetVariable
             if ([System.String]::IsNullOrEmpty($keyArguments))
             {
-                $keyArguments = "-Identity `$this.$primaryKey -Confirm:`$false"
+                $keyArguments = "-Identity $targetVariable.$primaryKey -Confirm:`$false"
             }
 
             $null = $builder.AppendLine("$indent$($cmdlets.RemoveCmdlet) $keyArguments | Out-Null")
@@ -265,24 +276,24 @@ function New-M365DSCSetInvocationBlock
         return $builder.ToString().TrimEnd()
     }
 
-    $null = $builder.AppendLine("$indent`$$variableName = Remove-M365DSCAuthenticationParameter -BoundParameters `$this.GetBoundParameters()")
+    $null = $builder.AppendLine("$indent`$$variableName = `$boundParameters")
+
+    if ($Operation -eq 'Update')
+    {
+        foreach ($createOnly in @($ResourceModel.CreateOnlyProperties | Sort-Object -Unique))
+        {
+            if ([System.String]::IsNullOrEmpty($createOnly))
+            {
+                continue
+            }
+
+            $null = $builder.AppendLine("$indent`$$variableName.Remove('$createOnly') | Out-Null")
+        }
+    }
 
     if ($isGraph)
     {
-        if ($ResourceModel.HasAssignments)
-        {
-            $null = $builder.AppendLine("$indent`$$variableName.Remove('Assignments') | Out-Null")
-        }
-
-        $null = $builder.AppendLine("$indent`$$variableName = Rename-M365DSCCimInstanceParameter -Properties `$$variableName")
-        $null = $builder.AppendLine("$indent`$$variableName.Remove('$primaryKey') | Out-Null")
-
-        if ($ResourceModel.IsAdditionalProperty)
-        {
-            $null = $builder.AppendLine("$indent`$$variableName.Add('@odata.type', '#microsoft.graph.$($ResourceModel.SelectedODataType)')")
-        }
-
-        $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $bodyKeys -SkipKeys @('BodyParameter')
+        $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $bodyKeys -SkipKeys @('BodyParameter') -ObjectVariable $targetVariable
         $argumentList = @()
         if (-not [System.String]::IsNullOrEmpty($keyArguments))
         {
@@ -301,7 +312,7 @@ function New-M365DSCSetInvocationBlock
         elseif ($ResourceModel.HasAssignments -and $Operation -eq 'Update')
         {
             $null = $builder.AppendLine("$indent$cmdletName $($argumentList -join ' ') | Out-Null")
-            $null = $builder.Append((New-M365DSCAssignmentsSetBlock -ResourceModel $ResourceModel -PolicyIdExpression "`$this.$primaryKey"))
+            $null = $builder.Append((New-M365DSCAssignmentsSetBlock -ResourceModel $ResourceModel -PolicyIdExpression "$targetVariable.$primaryKey"))
             $null = $builder.AppendLine('')
         }
         else
@@ -515,6 +526,105 @@ function New-M365DSCExportComplexToStringBlock
         $null = $builder.AppendLine("$indent    }")
         $null = $builder.AppendLine("$indent}")
         $null = $builder.AppendLine('')
+    }
+
+    return $builder.ToString().TrimEnd()
+}
+
+<#
+.SYNOPSIS
+    Maps a generator workload to the workload New-M365DSCConnection accepts.
+
+.PARAMETER Workload
+    Specifies the workload of the resource model.
+
+.OUTPUTS
+    The connection workload.
+#>
+function Get-M365DSCConnectionWorkload
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Workload
+    )
+
+    if ($Workload -eq 'Intune')
+    {
+        return 'MicrosoftGraph'
+    }
+
+    return $Workload
+}
+
+<#
+.SYNOPSIS
+    Renders the Set() lines that shape $boundParameters for both the create and the update.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The block.
+#>
+function New-M365DSCSetPreambleBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $indent = ' ' * 12
+    $builder = [System.Text.StringBuilder]::new()
+    $isGraph = $ResourceModel.Workload -in @('MicrosoftGraph', 'Intune')
+
+    $null = $builder.AppendLine("$indent`$boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters `$this.GetBoundParameters()")
+
+    foreach ($payload in @($ResourceModel.TextPayloadProperties | Sort-Object -Unique))
+    {
+        if ([System.String]::IsNullOrEmpty($payload))
+        {
+            continue
+        }
+
+        $null = $builder.AppendLine('')
+        $null = $builder.AppendLine("${indent}if (`$boundParameters.ContainsKey('$payload'))")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    `$boundParameters.$payload = `$this.EncodeTextPayload(`$this.$payload)")
+        $null = $builder.AppendLine("$indent}")
+    }
+
+    if (@($ResourceModel.SchemaProperties).Name -contains 'RoleScopeTagIds')
+    {
+        $null = $builder.AppendLine('')
+        $null = $builder.AppendLine("${indent}if (`$boundParameters.ContainsKey('RoleScopeTagIds'))")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    `$boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds `$this.RoleScopeTagIds")
+        $null = $builder.AppendLine("$indent}")
+    }
+
+    if ($isGraph)
+    {
+        $null = $builder.AppendLine('')
+        $null = $builder.AppendLine("$indent`$boundParameters = Rename-M365DSCCimInstanceParameter -Properties `$boundParameters")
+        $null = $builder.AppendLine("$indent`$boundParameters.Remove('$($ResourceModel.PrimaryKey)') | Out-Null")
+
+        if ($ResourceModel.HasAssignments)
+        {
+            $null = $builder.AppendLine("$indent`$boundParameters.Remove('Assignments') | Out-Null")
+        }
+
+        if ($ResourceModel.IsAdditionalProperty)
+        {
+            $null = $builder.AppendLine("$indent`$boundParameters.Add('@odata.type', '#microsoft.graph.$($ResourceModel.SelectedODataType)')")
+        }
     }
 
     return $builder.ToString().TrimEnd()

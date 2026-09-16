@@ -89,6 +89,8 @@ class <ResourceName> : M365DSCResourceBase
 
             $currentInstance = $this.Get().ToHashtable()
 
+<SetPreambleBlock>
+
 <#IF HasEnsure#>
             if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
             {

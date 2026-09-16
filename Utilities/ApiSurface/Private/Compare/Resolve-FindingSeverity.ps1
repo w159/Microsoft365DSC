@@ -171,6 +171,7 @@ function Resolve-FindingSeverity
         'SHIM-MISSING'          = @{ Severity = 'breaking'; AutoFixable = $false }
         'SHIM-STALE'            = @{ Severity = 'warning'; AutoFixable = $true }
         'COV-NO-RESOURCE'       = @{ Severity = 'info'; AutoFixable = $false }
+        'COV-NO-SUBTYPE'        = @{ Severity = 'info'; AutoFixable = $false }
         'COV-CMDLET-UNUSED'     = @{ Severity = 'info'; AutoFixable = $false }
         'CAT-SETTING-ADDED'     = @{ Severity = 'warning'; AutoFixable = $false }
         'CAT-SETTING-REMOVED'   = @{ Severity = 'breaking'; AutoFixable = $false }

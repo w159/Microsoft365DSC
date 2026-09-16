@@ -133,6 +133,7 @@ Describe -Name 'Every resource records what it was generated from' {
         $restWorkloads = @('Azure', 'AzureDevOPS', 'PowerPlatformREST', 'AdminAPI', 'DefenderForEndpoint', 'EngageHub', 'Fabric', 'Licensing', 'Tasks')
         $knownWorkloads = $graphWorkloads + $cmdletWorkloads + $restWorkloads
         $exclusionReasons = @('ReadOnly', 'NotConfigurable', 'Deprecated', 'OwnedByOtherResource', 'Deferred', 'Accepted')
+        $optionalOriginKeys = @('createOnlyProperties', 'textPayloadProperties')
 
         function Test-SettingsHasCrudCommand
         {
@@ -205,7 +206,8 @@ Describe -Name 'Every resource records what it was generated from' {
         $settings.PSObject.Properties.Name | Should -Contain 'generatedFrom' -Because "$ResourceName must carry a generatedFrom block, resolved or not (run Utilities/Update-ResourceOrigin.ps1)"
 
         $origin = $settings.generatedFrom
-        @($origin.PSObject.Properties.Name) | Should -Be @('workload', 'apiVersion', 'entityType', 'odataSubtype', 'cmdletNoun', 'cmdletVerb', 'includeNavigationProperties', 'generatorVersion') -Because "$ResourceName must follow the generatedFrom contract"
+        $originNames = @($origin.PSObject.Properties.Name) | Where-Object -FilterScript { $_ -notin $optionalOriginKeys }
+        @($originNames) | Should -Be @('workload', 'apiVersion', 'entityType', 'odataSubtype', 'cmdletNoun', 'cmdletVerb', 'includeNavigationProperties', 'generatorVersion') -Because "$ResourceName must follow the generatedFrom contract"
         if (-not [System.String]::IsNullOrEmpty($origin.workload))
         {
             $origin.workload | Should -BeIn $knownWorkloads -Because "$ResourceName must record a workload from the closed set"
