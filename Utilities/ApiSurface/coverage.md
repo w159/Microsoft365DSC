@@ -1,12 +1,342 @@
 # Graph coverage
 
-1470 Graph cmdlet nouns offer a create, a read, an update and a delete, and no resource covers them.
+1509 Graph cmdlet nouns offer a create, a read, an update and a delete, and no resource covers them.
 
 Ranked, never filtered on a guess. Only a claim by name and an entry in `coverage-ignore.json` remove a candidate. Everything else moves its score, and every component that fired is listed beside it.
 
-Inventory: Microsoft.Graph.Authentication 2.35.1 (pinned).
+Inventory: Microsoft.Graph.Authentication 2.39.0 (pinned).
 
 ## Highest ranked  (40)
+
+### DirectoryRecoveryJob  (score 80)
+
+`/directory/recovery/jobs`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgDirectoryRecoveryJob -APIVersion v1.0
+```
+
+Score: new since the baseline +50; module already used +20; has a Count companion +5; v1.0 as well as beta +5.
+
+### DirectoryRecoverySnapshot  (score 80)
+
+`/directory/recovery/snapshots`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgDirectoryRecoverySnapshot -APIVersion v1.0
+```
+
+Score: new since the baseline +50; module already used +20; has a Count companion +5; v1.0 as well as beta +5.
+
+### EntitlementManagementExternalOriginResourceConnector  (score 70)
+
+`/identityGovernance/entitlementManagement/externalOriginResourceConnectors`, Beta.Identity.Governance
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaEntitlementManagementExternalOriginResourceConnector -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5.
+
+### NetworkAccessCloudFirewallPolicy  (score 70)
+
+`/networkAccess/cloudFirewallPolicies`, Beta.NetworkAccess
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaNetworkAccessCloudFirewallPolicy -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5.
+
+### AdminConfigurationManagementConfigurationDrift  (score 60)
+
+`/admin/configurationManagement/configurationDrifts`, Beta.ConfigurationManagement, ConfigurationManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgAdminConfigurationManagementConfigurationDrift -APIVersion v1.0
+```
+
+Score: new since the baseline +50; has a Count companion +5; v1.0 as well as beta +5.
+
+### AdminConfigurationManagementConfigurationMonitor  (score 60)
+
+`/admin/configurationManagement/configurationMonitors`, Beta.ConfigurationManagement, ConfigurationManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgAdminConfigurationManagementConfigurationMonitor -APIVersion v1.0
+```
+
+Score: new since the baseline +50; has a Count companion +5; v1.0 as well as beta +5.
+
+### AdminConfigurationManagementConfigurationMonitoringResult  (score 60)
+
+`/admin/configurationManagement/configurationMonitoringResults`, Beta.ConfigurationManagement, ConfigurationManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgAdminConfigurationManagementConfigurationMonitoringResult -APIVersion v1.0
+```
+
+Score: new since the baseline +50; has a Count companion +5; v1.0 as well as beta +5.
+
+### AdminConfigurationManagementConfigurationSnapshot  (score 60)
+
+`/admin/configurationManagement/configurationSnapshots`, Beta.ConfigurationManagement, ConfigurationManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgAdminConfigurationManagementConfigurationSnapshot -APIVersion v1.0
+```
+
+Score: new since the baseline +50; has a Count companion +5; v1.0 as well as beta +5.
+
+### AdminConfigurationManagementConfigurationSnapshotJob  (score 60)
+
+`/admin/configurationManagement/configurationSnapshotJobs`, Beta.ConfigurationManagement, ConfigurationManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgAdminConfigurationManagementConfigurationSnapshotJob -APIVersion v1.0
+```
+
+Score: new since the baseline +50; has a Count companion +5; v1.0 as well as beta +5.
+
+### UserChatTargetedMessage  (score 60)
+
+`/users/{user-id}/chats/{chat-id}/targetedMessages`, Teams
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgUserChatTargetedMessage -APIVersion v1.0
+```
+
+Score: new since the baseline +50; module already used +20; has a Count companion +5; v1.0 as well as beta +5; extends a claimed noun -20.
+
+### UserChatTargetedMessageHostedContent  (score 60)
+
+`/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/hostedContents`, Teams
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgUserChatTargetedMessageHostedContent -APIVersion v1.0
+```
+
+Score: new since the baseline +50; module already used +20; has a Count companion +5; v1.0 as well as beta +5; extends a claimed noun -20.
+
+### UserChatTargetedMessageReply  (score 60)
+
+`/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/replies`, Teams
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgUserChatTargetedMessageReply -APIVersion v1.0
+```
+
+Score: new since the baseline +50; module already used +20; has a Count companion +5; v1.0 as well as beta +5; extends a claimed noun -20.
+
+### DirectoryTenantGovernanceInvitation  (score 55)
+
+`/directory/tenantGovernance/governanceInvitations`, Beta.Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaDirectoryTenantGovernanceInvitation -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### DirectoryTenantGovernancePolicyTemplate  (score 55)
+
+`/directory/tenantGovernance/governancePolicyTemplates`, Beta.Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaDirectoryTenantGovernancePolicyTemplate -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### DirectoryTenantGovernanceRelatedTenant  (score 55)
+
+`/directory/tenantGovernance/relatedTenants`, Beta.Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaDirectoryTenantGovernanceRelatedTenant -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### DirectoryTenantGovernanceRelationship  (score 55)
+
+`/directory/tenantGovernance/governanceRelationships`, Beta.Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaDirectoryTenantGovernanceRelationship -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### DirectoryTenantGovernanceRequest  (score 55)
+
+`/directory/tenantGovernance/governanceRequests`, Beta.Identity.DirectoryManagement
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaDirectoryTenantGovernanceRequest -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### PolicyDeletedItemCrossTenantPartnerM365Capability  (score 55)
+
+`/policies/deletedItems/crossTenantPartners/{crossTenantAccessPolicyConfigurationPartner-tenantId}/m365Capabilities`, Beta.Identity.SignIns
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaPolicyDeletedItemCrossTenantPartnerM365Capability -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreActivityLog  (score 55)
+
+`/solutions/backupRestore/activityLogs`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreActivityLog -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreDriveExclusionUnit  (score 55)
+
+`/solutions/backupRestore/driveExclusionUnits`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreDriveExclusionUnit -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreDriveExclusionUnitBulkAdditionJob  (score 55)
+
+`/solutions/backupRestore/driveExclusionUnitsBulkAdditionJobs`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreDriveExclusionUnitBulkAdditionJob -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreMailboxExclusionUnit  (score 55)
+
+`/solutions/backupRestore/mailboxExclusionUnits`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreMailboxExclusionUnit -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreMailboxExclusionUnitBulkAdditionJob  (score 55)
+
+`/solutions/backupRestore/mailboxExclusionUnitsBulkAdditionJobs`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreMailboxExclusionUnitBulkAdditionJob -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreSiteExclusionUnit  (score 55)
+
+`/solutions/backupRestore/siteExclusionUnits`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreSiteExclusionUnit -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### SolutionBackupRestoreSiteExclusionUnitBulkAdditionJob  (score 55)
+
+`/solutions/backupRestore/siteExclusionUnitsBulkAdditionJobs`, Beta.BackupRestore
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaSolutionBackupRestoreSiteExclusionUnitBulkAdditionJob -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### WindowsUpdatesUpdatePolicy  (score 55)
+
+`/admin/windows/updates/updatePolicies`, Beta.WindowsUpdates
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaWindowsUpdatesUpdatePolicy -APIVersion beta
+```
+
+Score: new since the baseline +50; has a Count companion +5.
+
+### GroupPlannerPlanHistoryItem  (score 50)
+
+`/groups/{group-id}/planner/plans/{plannerPlan-id}/historyItems`, Beta.Planner
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaGroupPlannerPlanHistoryItem -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5; extends a claimed noun -20.
+
+### PlannerPlanHistoryItem  (score 50)
+
+`/planner/plans/{plannerPlan-id}/historyItems`, Beta.Planner
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaPlannerPlanHistoryItem -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5; extends a claimed noun -20.
+
+### PlannerTaskMessage  (score 50)
+
+`/planner/tasks/{plannerTask-id}/messages`, Beta.Planner
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaPlannerTaskMessage -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5; extends a claimed noun -20.
+
+### PolicyCrossTenantAccessPolicyPartnerM365Capability  (score 50)
+
+`/policies/crossTenantAccessPolicy/partners/{crossTenantAccessPolicyConfigurationPartner-tenantId}/m365Capabilities`, Beta.Identity.SignIns
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgBetaPolicyCrossTenantAccessPolicyPartnerM365Capability -APIVersion beta
+```
+
+Score: new since the baseline +50; sibling under the same route claimed +15; has a Count companion +5; extends a claimed noun -20.
 
 ### DirectoryDeviceLocalCredential  (score 45)
 
@@ -63,6 +393,28 @@ New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
 
 Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
 
+### EntitlementManagementAvailableAccessPackage  (score 45)
+
+`/identityGovernance/entitlementManagement/availableAccessPackages`, Beta.Identity.Governance, Identity.Governance
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgEntitlementManagementAvailableAccessPackage -APIVersion v1.0
+```
+
+Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
+
+### EntitlementManagementControlConfiguration  (score 45)
+
+`/identityGovernance/entitlementManagement/controlConfigurations`, Beta.Identity.Governance, Identity.Governance
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgEntitlementManagementControlConfiguration -APIVersion v1.0
+```
+
+Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
+
 ### EntitlementManagementResourceEnvironment  (score 45)
 
 `/identityGovernance/entitlementManagement/resourceEnvironments`, Identity.Governance
@@ -70,6 +422,17 @@ Score: module already used +20; sibling under the same route claimed +15; has a 
 ```powershell
 New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
     -CmdLetNoun MgEntitlementManagementResourceEnvironment -APIVersion v1.0
+```
+
+Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
+
+### EntitlementManagementSubject  (score 45)
+
+`/identityGovernance/entitlementManagement/subjects`, Beta.Identity.Governance, Identity.Governance
+
+```powershell
+New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
+    -CmdLetNoun MgEntitlementManagementSubject -APIVersion v1.0
 ```
 
 Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
@@ -85,373 +448,53 @@ New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
 
 Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
 
-### IdentityAuthenticationEventListener  (score 45)
-
-`/identity/authenticationEventListeners`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityAuthenticationEventListener -APIVersion v1.0
-```
-
-Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernanceAccessReviewHistoryDefinition  (score 45)
-
-`/identityGovernance/accessReviews/historyDefinitions`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernanceAccessReviewHistoryDefinition -APIVersion v1.0
-```
-
-Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernancePrivilegedAccessGroupAssignmentScheduleRequest  (score 45)
-
-`/identityGovernance/privilegedAccess/group/assignmentScheduleRequests`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernancePrivilegedAccessGroupAssignmentScheduleRequest -APIVersion v1.0
-```
-
-Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
-
-### RoleManagementDirectoryResourceNamespace  (score 45)
-
-`/roleManagement/directory/resourceNamespaces`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRoleManagementDirectoryResourceNamespace -APIVersion v1.0
-```
-
-Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
-
-### RoleManagementEntitlementManagementResourceNamespace  (score 45)
-
-`/roleManagement/entitlementManagement/resourceNamespaces`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRoleManagementEntitlementManagementResourceNamespace -APIVersion v1.0
-```
-
-Score: module already used +20; sibling under the same route claimed +15; has a Count companion +5; v1.0 as well as beta +5.
-
-### AdminEdgeInternetExplorerModeSiteList  (score 30)
-
-`/admin/edge/internetExplorerMode/siteLists`, Beta.DeviceManagement, DeviceManagement
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgAdminEdgeInternetExplorerModeSiteList -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### AdminPeopleProfileCardProperty  (score 30)
-
-`/admin/people/profileCardProperties`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgAdminPeopleProfileCardProperty -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### AppCatalogTeamApp  (score 30)
-
-`/appCatalogs/teamsApps`, Beta.Teams, Teams
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgAppCatalogTeamApp -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### AppCatalogTeamAppDefinition  (score 30)
-
-`/appCatalogs/teamsApps/{teamsApp-id}/appDefinitions`, Beta.Teams, Teams
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgAppCatalogTeamAppDefinition -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### Contract  (score 30)
-
-`/contracts`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgContract -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### DataPolicyOperation  (score 30)
-
-`/dataPolicyOperations`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgDataPolicyOperation -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### DirectoryPublicKeyInfrastructureCertificateBasedAuthConfiguration  (score 30)
-
-`/directory/publicKeyInfrastructure/certificateBasedAuthConfigurations`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgDirectoryPublicKeyInfrastructureCertificateBasedAuthConfiguration -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### DirectoryPublicKeyInfrastructureCertificateBasedAuthConfigurationCertificateAuthority  (score 30)
-
-`/directory/publicKeyInfrastructure/certificateBasedAuthConfigurations/{certificateBasedAuthPki-id}/certificateAuthorities`, Beta.Identity.DirectoryManagement, Identity.DirectoryManagement
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgDirectoryPublicKeyInfrastructureCertificateBasedAuthConfigurationCertificateAuthority -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### EntitlementManagementAssignmentPolicyCustomExtensionStageSetting  (score 30)
-
-`/identityGovernance/entitlementManagement/assignmentPolicies/{accessPackageAssignmentPolicy-id}/customExtensionStageSettings`, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgEntitlementManagementAssignmentPolicyCustomExtensionStageSetting -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### EntitlementManagementAssignmentPolicyQuestion  (score 30)
-
-`/identityGovernance/entitlementManagement/assignmentPolicies/{accessPackageAssignmentPolicy-id}/questions`, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgEntitlementManagementAssignmentPolicyQuestion -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### EntitlementManagementCatalogCustomWorkflowExtension  (score 30)
-
-`/identityGovernance/entitlementManagement/catalogs/{accessPackageCatalog-id}/customWorkflowExtensions`, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgEntitlementManagementCatalogCustomWorkflowExtension -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### EntitlementManagementCatalogResourceScope  (score 30)
-
-`/identityGovernance/entitlementManagement/catalogs/{accessPackageCatalog-id}/resourceScopes`, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgEntitlementManagementCatalogResourceScope -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### EntitlementManagementResourceScope  (score 30)
-
-`/identityGovernance/entitlementManagement/resources/{accessPackageResource-id}/scopes`, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgEntitlementManagementResourceScope -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernanceAppConsentRequest  (score 30)
-
-`/identityGovernance/appConsent/appConsentRequests`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernanceAppConsentRequest -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernanceAppConsentRequestUserConsentRequest  (score 30)
-
-`/identityGovernance/appConsent/appConsentRequests/{appConsentRequest-id}/userConsentRequests`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernanceAppConsentRequestUserConsentRequest -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernanceTermsOfUseAgreementAcceptance  (score 30)
-
-`/identityGovernance/termsOfUse/agreementAcceptances`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernanceTermsOfUseAgreementAcceptance -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityGovernanceTermsOfUseAgreementFile  (score 30)
-
-`/identityGovernance/termsOfUse/agreements/{agreement-id}/file`, Beta.Identity.Governance, Identity.Governance
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityGovernanceTermsOfUseAgreementFile -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityRiskPreventionFraudProtectionProvider  (score 30)
-
-`/identity/riskPrevention/fraudProtectionProviders`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityRiskPreventionFraudProtectionProvider -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityRiskPreventionWebApplicationFirewallProvider  (score 30)
-
-`/identity/riskPrevention/webApplicationFirewallProviders`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityRiskPreventionWebApplicationFirewallProvider -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### IdentityRiskPreventionWebApplicationFirewallVerification  (score 30)
-
-`/identity/riskPrevention/webApplicationFirewallVerifications`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgIdentityRiskPreventionWebApplicationFirewallVerification -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### InformationProtectionThreatAssessmentRequest  (score 30)
-
-`/informationProtection/threatAssessmentRequests`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgInformationProtectionThreatAssessmentRequest -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### InformationProtectionThreatAssessmentRequestResult  (score 30)
-
-`/informationProtection/threatAssessmentRequests/{threatAssessmentRequest-id}/results`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgInformationProtectionThreatAssessmentRequestResult -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### Oauth2PermissionGrant  (score 30)
-
-`/oauth2PermissionGrants`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgOauth2PermissionGrant -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### RiskDetection  (score 30)
-
-`/identityProtection/riskDetections`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRiskDetection -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### RiskyServicePrincipal  (score 30)
-
-`/identityProtection/riskyServicePrincipals`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRiskyServicePrincipal -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### RiskyServicePrincipalHistory  (score 30)
-
-`/identityProtection/riskyServicePrincipals/{riskyServicePrincipal-id}/history`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRiskyServicePrincipalHistory -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### RiskyUser  (score 30)
-
-`/identityProtection/riskyUsers`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRiskyUser -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-### RiskyUserHistory  (score 30)
-
-`/identityProtection/riskyUsers/{riskyUser-id}/history`, Beta.Identity.SignIns, Identity.SignIns
-
-```powershell
-New-M365DSCResource -ResourceName <Suggested> -Workload MicrosoftGraph `
-    -CmdLetNoun MgRiskyUserHistory -APIVersion v1.0
-```
-
-Score: module already used +20; has a Count companion +5; v1.0 as well as beta +5.
-
-## The rest  (1430)
+## The rest  (1469)
 
 | Noun | Score | Modules | Route |
 | --- | --- | --- | --- |
+| IdentityAuthenticationEventListener | 45 | Beta.Identity.SignIns, Identity.SignIns | `/identity/authenticationEventListeners` |
+| IdentityGovernanceAccessReviewHistoryDefinition | 45 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/accessReviews/historyDefinitions` |
+| IdentityGovernancePrivilegedAccessGroupAssignmentScheduleRequest | 45 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/privilegedAccess/group/assignmentScheduleRequests` |
+| RoleManagementDirectoryResourceNamespace | 45 | Beta.Identity.Governance, Identity.Governance | `/roleManagement/directory/resourceNamespaces` |
+| RoleManagementEntitlementManagementResourceNamespace | 45 | Beta.Identity.Governance, Identity.Governance | `/roleManagement/entitlementManagement/resourceNamespaces` |
+| UserChatTargetedMessageReplyHostedContent | 40 | Teams | `/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/replies/{chatMessage-id}/hostedContents` |
+| PolicyCrossTenantAccessPolicyDefaultM365Capability | 35 | Beta.Identity.SignIns | `/policies/crossTenantAccessPolicy/default/m365Capabilities` |
+| SolutionBusinessScenarioPlannerTaskMessage | 35 | Beta.BusinessScenario | `/solutions/businessScenarios/{businessScenario-id}/planner/tasks/{businessScenarioTask-id}/messages` |
+| WindowsUpdatesPolicyApplicableContent | 35 | Beta.WindowsUpdates | `/admin/windows/updates/policies/{policy-id}/applicableContent` |
+| WindowsUpdatesPolicyApplicableContentMatchedDevice | 35 | Beta.WindowsUpdates | `/admin/windows/updates/policies/{policy-id}/applicableContent/{applicableContent-catalogEntryId}/matchedDevices` |
+| WindowsUpdatesPolicyRing | 35 | Beta.WindowsUpdates | `/admin/windows/updates/policies/{policy-id}/rings` |
+| AdminEdgeInternetExplorerModeSiteList | 30 | Beta.DeviceManagement, DeviceManagement | `/admin/edge/internetExplorerMode/siteLists` |
+| AdminPeopleProfileCardProperty | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/admin/people/profileCardProperties` |
+| AdminPeopleProfilePropertySetting | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/admin/people/profilePropertySettings` |
+| AdminPeopleProfileSource | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/admin/people/profileSources` |
+| AppCatalogTeamApp | 30 | Beta.Teams, Teams | `/appCatalogs/teamsApps` |
+| AppCatalogTeamAppDefinition | 30 | Beta.Teams, Teams | `/appCatalogs/teamsApps/{teamsApp-id}/appDefinitions` |
+| Contract | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/contracts` |
+| DataPolicyOperation | 30 | Beta.Identity.SignIns, Identity.SignIns | `/dataPolicyOperations` |
+| DirectoryPublicKeyInfrastructureCertificateBasedAuthConfiguration | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/directory/publicKeyInfrastructure/certificateBasedAuthConfigurations` |
+| DirectoryPublicKeyInfrastructureCertificateBasedAuthConfigurationCertificateAuthority | 30 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/directory/publicKeyInfrastructure/certificateBasedAuthConfigurations/{certificateBasedAuthPki-id}/certificateAuthorities` |
+| EntitlementManagementAssignmentPolicyCustomExtensionStageSetting | 30 | Identity.Governance | `/identityGovernance/entitlementManagement/assignmentPolicies/{accessPackageAssignmentPolicy-id}/customExtensionStageSettings` |
+| EntitlementManagementAssignmentPolicyQuestion | 30 | Identity.Governance | `/identityGovernance/entitlementManagement/assignmentPolicies/{accessPackageAssignmentPolicy-id}/questions` |
+| EntitlementManagementCatalogCustomWorkflowExtension | 30 | Identity.Governance | `/identityGovernance/entitlementManagement/catalogs/{accessPackageCatalog-id}/customWorkflowExtensions` |
+| EntitlementManagementCatalogResourceScope | 30 | Identity.Governance | `/identityGovernance/entitlementManagement/catalogs/{accessPackageCatalog-id}/resourceScopes` |
+| EntitlementManagementResourceScope | 30 | Identity.Governance | `/identityGovernance/entitlementManagement/resources/{accessPackageResource-id}/scopes` |
+| IdentityGovernanceAppConsentRequest | 30 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/appConsent/appConsentRequests` |
+| IdentityGovernanceAppConsentRequestUserConsentRequest | 30 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/appConsent/appConsentRequests/{appConsentRequest-id}/userConsentRequests` |
+| IdentityGovernanceTermsOfUseAgreementAcceptance | 30 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/termsOfUse/agreementAcceptances` |
+| IdentityGovernanceTermsOfUseAgreementFile | 30 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/termsOfUse/agreements/{agreement-id}/file` |
+| IdentityRiskPreventionFraudProtectionProvider | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identity/riskPrevention/fraudProtectionProviders` |
+| IdentityRiskPreventionWebApplicationFirewallProvider | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identity/riskPrevention/webApplicationFirewallProviders` |
+| IdentityRiskPreventionWebApplicationFirewallVerification | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identity/riskPrevention/webApplicationFirewallVerifications` |
+| IdentityVerifiedIdProfile | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identity/verifiedId/profiles` |
+| InformationProtectionThreatAssessmentRequest | 30 | Beta.Identity.SignIns, Identity.SignIns | `/informationProtection/threatAssessmentRequests` |
+| InformationProtectionThreatAssessmentRequestResult | 30 | Beta.Identity.SignIns, Identity.SignIns | `/informationProtection/threatAssessmentRequests/{threatAssessmentRequest-id}/results` |
+| NetworkAccessCloudFirewallPolicyRule | 30 | Beta.NetworkAccess | `/networkAccess/cloudFirewallPolicies/{cloudFirewallPolicy-id}/policyRules` |
+| Oauth2PermissionGrant | 30 | Beta.Identity.SignIns, Identity.SignIns | `/oauth2PermissionGrants` |
+| RiskDetection | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/riskDetections` |
+| RiskyServicePrincipal | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/riskyServicePrincipals` |
+| RiskyServicePrincipalHistory | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/riskyServicePrincipals/{riskyServicePrincipal-id}/history` |
+| RiskyUser | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/riskyUsers` |
+| RiskyUserHistory | 30 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/riskyUsers/{riskyUser-id}/history` |
 | RoleManagementDirectoryResourceNamespaceResourceAction | 30 | Beta.Identity.Governance, Identity.Governance | `/roleManagement/directory/resourceNamespaces/{unifiedRbacResourceNamespace-id}/resourceActions` |
 | RoleManagementEntitlementManagementResourceNamespaceResourceAction | 30 | Beta.Identity.Governance, Identity.Governance | `/roleManagement/entitlementManagement/resourceNamespaces/{unifiedRbacResourceNamespace-id}/resourceActions` |
 | SiteAnalyticItemActivityStat | 30 | Beta.Sites, Sites | `/sites/{site-id}/analytics/itemActivityStats` |
@@ -465,8 +508,10 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SiteListContentTypeColumn | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/contentTypes/{contentType-id}/columns` |
 | SiteListContentTypeColumnLink | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/contentTypes/{contentType-id}/columnLinks` |
 | SiteListItemDocumentSetVersion | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/items/{listItem-id}/documentSetVersions` |
+| SiteListItemPermission | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions` |
 | SiteListItemVersion | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/items/{listItem-id}/versions` |
 | SiteListOperation | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/operations` |
+| SiteListPermission | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/permissions` |
 | SiteListSubscription | 30 | Beta.Sites, Sites | `/sites/{site-id}/lists/{list-id}/subscriptions` |
 | SiteOperation | 30 | Beta.Sites, Sites | `/sites/{site-id}/operations` |
 | SitePage | 30 | Beta.Sites, Sites | `/sites/{site-id}/pages` |
@@ -512,6 +557,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | DeviceManagementVirtualEndpointDeviceImage | 25 | Beta.DeviceManagement.Administration, DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/deviceImages` |
 | DeviceManagementVirtualEndpointGalleryImage | 25 | Beta.DeviceManagement.Administration, DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/galleryImages` |
 | DeviceManagementVirtualEndpointProvisioningPolicyAssignment | 25 | Beta.DeviceManagement.Administration, DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/provisioningPolicies/{cloudPcProvisioningPolicy-id}/assignments` |
+| DeviceManagementVirtualEndpointServicePlan | 25 | Beta.DeviceManagement.Administration, DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/servicePlans` |
 | DeviceManagementVirtualEndpointUserSettingAssignment | 25 | Beta.DeviceManagement.Administration, DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/userSettings/{cloudPcUserSetting-id}/assignments` |
 | DeviceManagementWindowsInformationProtectionAppLearningSummary | 25 | Beta.DeviceManagement, DeviceManagement | `/deviceManagement/windowsInformationProtectionAppLearningSummaries` |
 | DeviceManagementWindowsInformationProtectionNetworkLearningSummary | 25 | Beta.DeviceManagement, DeviceManagement | `/deviceManagement/windowsInformationProtectionNetworkLearningSummaries` |
@@ -519,10 +565,12 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | DirectoryAdministrativeUnitExtension | 25 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/directory/administrativeUnits/{administrativeUnit-id}/extensions` |
 | DomainServiceConfigurationRecord | 25 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/domains/{domain-id}/serviceConfigurationRecords` |
 | DomainVerificationDnsRecord | 25 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/domains/{domain-id}/verificationDnsRecords` |
+| EntitlementManagementAccessPackageSuggestion | 25 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/entitlementManagement/accessPackageSuggestions` |
 | GroupExtension | 25 | Beta.Groups, Groups | `/groups/{group-id}/extensions` |
 | GroupPermissionGrant | 25 | Beta.Groups, Groups | `/groups/{group-id}/permissionGrants` |
 | GroupThread | 25 | Beta.Groups, Groups | `/groups/{group-id}/threads` |
 | IdentityB2XUserFlowLanguage | 25 | Beta.Identity.SignIns, Identity.SignIns | `/identity/b2xUserFlows/{b2xIdentityUserFlow-id}/languages` |
+| NetworkAccessLogGenerativeAiInsight | 25 | Beta.NetworkAccess | `/networkAccess/logs/generativeAIInsights` |
 | OrganizationExtension | 25 | Beta.Identity.DirectoryManagement, Identity.DirectoryManagement | `/organization/{organization-id}/extensions` |
 | PolicyAuthenticationStrengthPolicyCombinationConfiguration | 25 | Beta.Identity.SignIns, Identity.SignIns | `/policies/authenticationStrengthPolicies/{authenticationStrengthPolicy-id}/combinationConfigurations` |
 | ServicePrincipalEndpoint | 25 | Applications, Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/endpoints` |
@@ -536,6 +584,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | TeamPermissionGrant | 25 | Beta.Teams, Teams | `/teams/{team-id}/permissionGrants` |
 | TeamTag | 25 | Beta.Teams, Teams | `/teams/{team-id}/tags` |
 | UserAuthenticationEmailMethod | 25 | Beta.Identity.SignIns, Identity.SignIns | `/users/{user-id}/authentication/emailMethods` |
+| UserAuthenticationExternalAuthenticationMethod | 25 | Beta.Identity.SignIns, Identity.SignIns | `/users/{user-id}/authentication/externalAuthenticationMethods` |
 | UserAuthenticationOperation | 25 | Beta.Identity.SignIns, Identity.SignIns | `/users/{user-id}/authentication/operations` |
 | UserAuthenticationPhoneMethod | 25 | Beta.Identity.SignIns, Identity.SignIns | `/users/{user-id}/authentication/phoneMethods` |
 | UserChat | 25 | Beta.Teams, Teams | `/users/{user-id}/chats` |
@@ -552,13 +601,10 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | DirectoryRecommendation | 20 | Beta.Identity.DirectoryManagement | `/directory/recommendations` |
 | DirectorySharedEmailDomain | 20 | Beta.Identity.DirectoryManagement | `/directory/sharedEmailDomains` |
 | EntitlementManagementAssignmentPolicy | 20 | Identity.Governance | `/identityGovernance/entitlementManagement/assignmentPolicies` |
-| EntitlementManagementAvailableAccessPackage | 20 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/availableAccessPackages` |
 | EntitlementManagementCatalog | 20 | Identity.Governance | `/identityGovernance/entitlementManagement/catalogs` |
-| EntitlementManagementControlConfiguration | 20 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/controlConfigurations` |
 | EntitlementManagementResource | 20 | Identity.Governance | `/identityGovernance/entitlementManagement/resources` |
 | EntitlementManagementResourceRequest | 20 | Identity.Governance | `/identityGovernance/entitlementManagement/resourceRequests` |
 | EntitlementManagementResourceRoleScope | 20 | Identity.Governance | `/identityGovernance/entitlementManagement/resourceRoleScopes` |
-| EntitlementManagementSubject | 20 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/subjects` |
 | ExternalAuthorizationSystem | 20 | Beta.Search | `/external/authorizationSystems` |
 | IdentityB2CUserFlow | 20 | Beta.Identity.SignIns | `/identity/b2cUserFlows` |
 | IdentityGovernanceAccessReviewDecision | 20 | Beta.Identity.Governance | `/identityGovernance/accessReviews/decisions` |
@@ -697,6 +743,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | GroupSiteListColumn | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/columns` |
 | GroupSiteListContentType | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/contentTypes` |
 | GroupSiteListOperation | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/operations` |
+| GroupSiteListPermission | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/permissions` |
 | GroupSiteListSubscription | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/subscriptions` |
 | GroupSiteOnenoteNotebook | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/onenote/notebooks` |
 | GroupSiteOnenoteOperation | 10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/onenote/operations` |
@@ -774,6 +821,8 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SecurityAttackSimulationPayload | 10 | Beta.Security, Security | `/security/attackSimulation/payloads` |
 | SecurityAttackSimulationTraining | 10 | Beta.Security, Security | `/security/attackSimulation/trainings` |
 | SecurityAttackSimulationTrainingLanguageDetail | 10 | Beta.Security, Security | `/security/attackSimulation/trainings/{training-id}/languageDetails` |
+| SecurityAuditLogQuery | 10 | Beta.Security, Security | `/security/auditLog/queries` |
+| SecurityAuditLogQueryRecord | 10 | Beta.Security, Security | `/security/auditLog/queries/{auditLogQuery-id}/records` |
 | SecurityCaseEdiscoveryCase | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases` |
 | SecurityCaseEdiscoveryCaseCustodian | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/custodians` |
 | SecurityCaseEdiscoveryCaseMember | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/caseMembers` |
@@ -782,6 +831,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SecurityCaseEdiscoveryCaseReviewSet | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/reviewSets` |
 | SecurityCaseEdiscoveryCaseSearch | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/searches` |
 | SecurityCaseEdiscoveryCaseTag | 10 | Beta.Security, Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/tags` |
+| SecurityCollaborationAnalyzedEmail | 10 | Beta.Security, Security | `/security/collaboration/analyzedEmails` |
 | SecurityDataSecurityAndGovernanceSensitivityLabel | 10 | Beta.Security, Security | `/security/dataSecurityAndGovernance/sensitivityLabels` |
 | SecurityDataSecurityAndGovernanceSensitivityLabelSublabel | 10 | Beta.Security, Security | `/security/dataSecurityAndGovernance/sensitivityLabels/{sensitivityLabel-id}/sublabels` |
 | SecurityIdentityAccount | 10 | Beta.Security, Security | `/security/identities/identityAccounts` |
@@ -821,6 +871,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SecurityThreatIntelligenceWhoisRecord | 10 | Beta.Security, Security | `/security/threatIntelligence/whoisRecords` |
 | SecurityTriggerRetentionEvent | 10 | Beta.Security, Security | `/security/triggers/retentionEvents` |
 | SecurityTriggerTypeRetentionEventType | 10 | Beta.Security, Security | `/security/triggerTypes/retentionEventTypes` |
+| ServicePrincipalRemoteDesktopSecurityConfigurationApprovedClientApp | 10 | Applications, Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/remoteDesktopSecurityConfiguration/approvedClientApps` |
 | ServicePrincipalRemoteDesktopSecurityConfigurationTargetDeviceGroup | 10 | Applications, Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/remoteDesktopSecurityConfiguration/targetDeviceGroups` |
 | ServicePrincipalRiskDetection | 10 | Beta.Identity.SignIns, Identity.SignIns | `/identityProtection/servicePrincipalRiskDetections` |
 | ServicePrincipalSynchronizationJob | 10 | Applications, Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/synchronization/jobs` |
@@ -856,6 +907,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SiteTermStoreSetTermChild | 10 | Beta.Sites, Sites | `/sites/{site-id}/termStore/sets/{set-id}/terms/{term-id}/children` |
 | SiteTermStoreSetTermChildRelation | 10 | Beta.Sites, Sites | `/sites/{site-id}/termStore/sets/{set-id}/terms/{term-id}/children/{term-id1}/relations` |
 | SiteTermStoreSetTermRelation | 10 | Beta.Sites, Sites | `/sites/{site-id}/termStore/sets/{set-id}/terms/{term-id}/relations` |
+| SolutionBackupRestoreBrowseSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/browseSessions` |
 | SolutionBackupRestoreDriveInclusionRule | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/driveInclusionRules` |
 | SolutionBackupRestoreDriveProtectionUnit | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/driveProtectionUnits` |
 | SolutionBackupRestoreDriveProtectionUnitBulkAdditionJob | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/driveProtectionUnitsBulkAdditionJobs` |
@@ -867,16 +919,20 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SolutionBackupRestoreMailboxInclusionRule | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/mailboxInclusionRules` |
 | SolutionBackupRestoreMailboxProtectionUnit | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/mailboxProtectionUnits` |
 | SolutionBackupRestoreMailboxProtectionUnitBulkAdditionJob | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/mailboxProtectionUnitsBulkAdditionJobs` |
+| SolutionBackupRestoreOneDriveForBusinessBrowseSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessBrowseSessions` |
 | SolutionBackupRestoreOneDriveForBusinessProtectionPolicy | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessProtectionPolicies` |
 | SolutionBackupRestoreOneDriveForBusinessRestoreSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessRestoreSessions` |
 | SolutionBackupRestoreOneDriveForBusinessRestoreSessionDriveRestoreArtifact | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/driveRestoreArtifacts` |
 | SolutionBackupRestoreOneDriveForBusinessRestoreSessionDriveRestoreArtifactBulkAdditionRequest | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/driveRestoreArtifactsBulkAdditionRequests` |
+| SolutionBackupRestoreOneDriveForBusinessRestoreSessionGranularDriveRestoreArtifact | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/granularDriveRestoreArtifacts` |
 | SolutionBackupRestorePoint | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/restorePoints` |
 | SolutionBackupRestoreProtectionPolicy | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/protectionPolicies` |
 | SolutionBackupRestoreServiceApp | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/serviceApps` |
 | SolutionBackupRestoreSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/restoreSessions` |
+| SolutionBackupRestoreSharePointBrowseSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointBrowseSessions` |
 | SolutionBackupRestoreSharePointProtectionPolicy | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointProtectionPolicies` |
 | SolutionBackupRestoreSharePointRestoreSession | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointRestoreSessions` |
+| SolutionBackupRestoreSharePointRestoreSessionGranularSiteRestoreArtifact | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/granularSiteRestoreArtifacts` |
 | SolutionBackupRestoreSharePointRestoreSessionSiteRestoreArtifact | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/siteRestoreArtifacts` |
 | SolutionBackupRestoreSharePointRestoreSessionSiteRestoreArtifactBulkAdditionRequest | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/siteRestoreArtifactsBulkAdditionRequests` |
 | SolutionBackupRestoreSiteInclusionRule | 10 | BackupRestore, Beta.BackupRestore | `/solutions/backupRestore/siteInclusionRules` |
@@ -935,8 +991,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | AccessReviewMyDecision | 5 | Beta.Identity.Governance | `/accessReviews/{accessReview-id}/myDecisions` |
 | AccessReviewReviewer | 5 | Beta.Identity.Governance | `/accessReviews/{accessReview-id}/reviewers` |
 | AdministrativeUnitExtension | 5 | Beta.Identity.DirectoryManagement | `/administrativeUnits/{administrativeUnit-id}/extensions` |
-| AdminPeopleProfilePropertySetting | 5 | Beta.Identity.DirectoryManagement | `/admin/people/profilePropertySettings` |
-| AdminPeopleProfileSource | 5 | Beta.Identity.DirectoryManagement | `/admin/people/profileSources` |
 | AgentRiskDetection | 5 | Beta.Identity.SignIns | `/identityProtection/agentRiskDetections` |
 | AppCatalogTeamAppDefinitionDashboardCard | 5 | Beta.Teams | `/appCatalogs/teamsApps/{teamsApp-id}/appDefinitions/{teamsAppDefinition-id}/dashboardCards` |
 | BusinessFlowTemplate | 5 | Beta.Identity.Governance | `/businessFlowTemplates` |
@@ -1005,6 +1059,8 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | IdentityB2CUserFlowLanguageDefaultPage | 5 | Beta.Identity.SignIns | `/identity/b2cUserFlows/{b2cIdentityUserFlow-id}/languages/{userFlowLanguageConfiguration-id}/defaultPages` |
 | IdentityB2CUserFlowLanguageOverridePage | 5 | Beta.Identity.SignIns | `/identity/b2cUserFlows/{b2cIdentityUserFlow-id}/languages/{userFlowLanguageConfiguration-id}/overridesPages` |
 | IdentityConditionalAccessAuthenticationStrengthAuthenticationMethodMode | 5 | Beta.Identity.SignIns | `/identity/conditionalAccess/authenticationStrengths/authenticationMethodModes` |
+| IdentityConditionalAccessDeletedItemNamedLocation | 5 | Beta.Identity.SignIns, Identity.SignIns | `/identity/conditionalAccess/deletedItems/namedLocations` |
+| IdentityConditionalAccessDeletedItemPolicy | 5 | Beta.Identity.SignIns, Identity.SignIns | `/identity/conditionalAccess/deletedItems/policies` |
 | IdentityGovernanceAccessReviewInstanceContactedReviewer | 5 | Beta.Identity.Governance | `/identityGovernance/accessReviews/instances/{accessReviewInstance-id}/contactedReviewers` |
 | IdentityGovernanceAccessReviewInstanceDecision | 5 | Beta.Identity.Governance | `/identityGovernance/accessReviews/instances/{accessReviewInstance-id}/decisions` |
 | IdentityGovernanceAccessReviewInstanceStage | 5 | Beta.Identity.Governance | `/identityGovernance/accessReviews/instances/{accessReviewInstance-id}/stages` |
@@ -1027,7 +1083,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | IdentityGovernanceRoleManagementAlertIncident | 5 | Beta.Identity.Governance | `/identityGovernance/roleManagementAlerts/alerts/{unifiedRoleManagementAlert-id}/alertIncidents` |
 | IdentityGovernanceRoleManagementAlertOperation | 5 | Beta.Identity.Governance | `/identityGovernance/roleManagementAlerts/operations` |
 | IdentityGovernanceTermsOfUseAgreement | 5 | Beta.Identity.Governance, Identity.Governance | `/identityGovernance/termsOfUse/agreements` |
-| IdentityVerifiedIdProfile | 5 | Beta.Identity.SignIns | `/identity/verifiedId/profiles` |
 | InformationProtectionDataLossPreventionPolicy | 5 | Beta.Identity.SignIns | `/informationProtection/dataLossPreventionPolicies` |
 | InformationProtectionPolicyLabel | 5 | Beta.Identity.SignIns | `/informationProtection/policy/labels` |
 | NetworkAccessLogConnection | 5 | Beta.NetworkAccess | `/networkAccess/logs/connections` |
@@ -1084,11 +1139,8 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | RoleManagementExchangeResourceNamespaceResourceAction | 5 | Beta.DeviceManagement.Enrollment | `/roleManagement/exchange/resourceNamespaces/{unifiedRbacResourceNamespace-id}/resourceActions` |
 | SecurityAction | 5 | Beta.Security | `/security/securityActions` |
 | SecurityAttackSimulationTrainingCampaign | 5 | Beta.Security | `/security/attackSimulation/trainingCampaigns` |
-| SecurityAuditLogQuery | 5 | Beta.Security | `/security/auditLog/queries` |
-| SecurityAuditLogQueryRecord | 5 | Beta.Security | `/security/auditLog/queries/{auditLogQuery-id}/records` |
 | SecurityCaseEdiscoveryCaseLegalHold | 5 | Beta.Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/legalHolds` |
 | SecurityCloudAppSecurityProfile | 5 | Beta.Security | `/security/cloudAppSecurityProfiles` |
-| SecurityCollaborationAnalyzedEmail | 5 | Beta.Security | `/security/collaboration/analyzedEmails` |
 | SecurityDataDiscoveryCloudAppDiscoveryUploadedStream | 5 | Beta.Security | `/security/dataDiscovery/cloudAppDiscovery/uploadedStreams` |
 | SecurityDataSecurityAndGovernancePolicyFile | 5 | Beta.Security | `/security/dataSecurityAndGovernance/policyFiles` |
 | SecurityDomainSecurityProfile | 5 | Beta.Security | `/security/domainSecurityProfiles` |
@@ -1112,13 +1164,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | ShareListItemPermission | 5 | Beta.Files | `/shares/{sharedDriveItem-id}/list/items/{listItem-id}/permissions` |
 | ShareListPermission | 5 | Beta.Files | `/shares/{sharedDriveItem-id}/list/permissions` |
 | ShareSharedDriveItemSharedDriveItem | 5 | Beta.Files, Files | `/shares` |
-| SiteListItemPermission | 5 | Beta.Sites | `/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions` |
-| SiteListPermission | 5 | Beta.Sites | `/sites/{site-id}/lists/{list-id}/permissions` |
-| SolutionBackupRestoreBrowseSession | 5 | Beta.BackupRestore | `/solutions/backupRestore/browseSessions` |
-| SolutionBackupRestoreOneDriveForBusinessBrowseSession | 5 | Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessBrowseSessions` |
-| SolutionBackupRestoreOneDriveForBusinessRestoreSessionGranularDriveRestoreArtifact | 5 | Beta.BackupRestore | `/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/granularDriveRestoreArtifacts` |
-| SolutionBackupRestoreSharePointBrowseSession | 5 | Beta.BackupRestore | `/solutions/backupRestore/sharePointBrowseSessions` |
-| SolutionBackupRestoreSharePointRestoreSessionGranularSiteRestoreArtifact | 5 | Beta.BackupRestore | `/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/granularSiteRestoreArtifacts` |
 | SolutionBusinessScenario | 5 | Beta.BusinessScenario | `/solutions/businessScenarios` |
 | SolutionBusinessScenarioPlannerTask | 5 | Beta.BusinessScenario | `/solutions/businessScenarios/{businessScenario-id}/planner/tasks` |
 | Subscription | 5 | Beta.ChangeNotifications, ChangeNotifications | `/subscriptions` |
@@ -1172,7 +1217,8 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | UserMessage | 5 | Beta.Mail, Mail | `/users/{user-id}/messages` |
 | UserOnlineMeeting | 5 | Beta.CloudCommunications, CloudCommunications | `/users/{user-id}/onlineMeetings` |
 | WindowsUpdatesDeployment | 5 | Beta.WindowsUpdates | `/admin/windows/updates/deployments` |
-| WindowsUpdatesPolicy | 5 | Beta.WindowsUpdates | `/admin/windows/updates/updatePolicies` |
+| WindowsUpdatesPolicy | 5 | Beta.WindowsUpdates | `/admin/windows/updates/policies` |
+| WindowsUpdatesPolicyApproval | 5 | Beta.WindowsUpdates | `/admin/windows/updates/policies/{policy-id}/approvals` |
 | WindowsUpdatesProduct | 5 | Beta.WindowsUpdates | `/admin/windows/updates/products` |
 | WindowsUpdatesResourceConnection | 5 | Beta.WindowsUpdates | `/admin/windows/updates/resourceConnections` |
 | WindowsUpdatesUpdatableAsset | 5 | Beta.WindowsUpdates | `/admin/windows/updates/updatableAssets` |
@@ -1235,13 +1281,11 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | DeviceManagementVirtualEndpointBulkAction | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/bulkActions` |
 | DeviceManagementVirtualEndpointExternalPartnerSetting | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/externalPartnerSettings` |
 | DeviceManagementVirtualEndpointFrontLineServicePlan | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/frontLineServicePlans` |
-| DeviceManagementVirtualEndpointServicePlan | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/servicePlans` |
 | DeviceManagementVirtualEndpointSnapshot | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/snapshots` |
 | DeviceManagementVirtualEndpointSupportedRegion | 0 | Beta.DeviceManagement.Administration | `/deviceManagement/virtualEndpoint/supportedRegions` |
 | DeviceManagementWindowsAutopilotDeploymentProfileAssignedDevice | 0 | Beta.DeviceManagement.Enrollment | `/deviceManagement/windowsAutopilotDeploymentProfiles/{windowsAutopilotDeploymentProfile-id}/assignedDevices` |
 | DomainSharedEmailDomainInvitation | 0 | Beta.Identity.DirectoryManagement | `/domains/{domain-id}/sharedEmailDomainInvitations` |
 | EntitlementManagementAccessPackageAssignmentRequest | 0 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/accessPackageAssignmentRequests` |
-| EntitlementManagementAccessPackageSuggestion | 0 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/accessPackageSuggestions` |
 | GroupAppRoleAssignment | 0 | Applications, Beta.Applications | `/groups/{group-id}/appRoleAssignments` |
 | GroupEndpoint | 0 | Beta.Groups | `/groups/{group-id}/endpoints` |
 | GroupSetting | 0 | Beta.Groups, Groups | `/groups/{group-id}/settings` |
@@ -1252,7 +1296,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | ServicePrincipalLicenseDetail | 0 | Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/licenseDetails` |
 | SiteAnalyticItemActivityStatActivity | 0 | Beta.Sites, Sites | `/sites/{site-id}/analytics/itemActivityStats/{itemActivityStat-id}/activities` |
 | UserAppRoleAssignment | 0 | Applications, Beta.Applications | `/users/{user-id}/appRoleAssignments` |
-| UserAuthenticationExternalAuthenticationMethod | 0 | Beta.Identity.SignIns | `/users/{user-id}/authentication/externalAuthenticationMethods` |
 | UserMobileAppIntentAndState | 0 | Beta.Devices.CorporateManagement | `/users/{user-id}/mobileAppIntentAndStates` |
 | UserMobileAppTroubleshootingEvent | 0 | Beta.Devices.CorporateManagement | `/users/{user-id}/mobileAppTroubleshootingEvents` |
 | UserNotification | 0 | Beta.Users | `/users/{user-id}/notifications` |
@@ -1339,6 +1382,7 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | GroupSiteListContentTypeColumn | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/contentTypes/{contentType-id}/columns` |
 | GroupSiteListContentTypeColumnLink | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/contentTypes/{contentType-id}/columnLinks` |
 | GroupSiteListItemDocumentSetVersion | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/documentSetVersions` |
+| GroupSiteListItemPermission | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions` |
 | GroupSiteListItemVersion | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/versions` |
 | GroupSiteOnenoteNotebookSection | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/onenote/notebooks/{notebook-id}/sections` |
 | GroupSiteOnenoteNotebookSectionGroup | -10 | Beta.Sites, Sites | `/groups/{group-id}/sites/{site-id}/onenote/notebooks/{notebook-id}/sectionGroups` |
@@ -1595,7 +1639,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | GroupSiteInformationProtectionDataLossPreventionPolicy | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/dataLossPreventionPolicies` |
 | GroupSiteInformationProtectionSensitivityLabel | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/sensitivityLabels` |
 | GroupSiteInformationProtectionThreatAssessmentRequest | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/threatAssessmentRequests` |
-| GroupSiteListPermission | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/permissions` |
 | GroupSitePageTemplate | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/pageTemplates` |
 | GroupSitePageTemplateWebPart | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/pageTemplates/{pageTemplate-id}/webParts` |
 | GroupSiteRecycleBinItem | -15 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/recycleBin/items` |
@@ -1639,7 +1682,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | SecurityCaseEdiscoveryCaseLegalHoldSiteSource | -15 | Beta.Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/legalHolds/{ediscoveryHoldPolicy-id}/siteSources` |
 | SecurityCaseEdiscoveryCaseLegalHoldUserSource | -15 | Beta.Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/legalHolds/{ediscoveryHoldPolicy-id}/userSources` |
 | SecurityCaseEdiscoveryCaseReviewSetFile | -15 | Beta.Security | `/security/cases/ediscoveryCases/{ediscoveryCase-id}/reviewSets/{ediscoveryReviewSet-id}/files` |
-| ServicePrincipalRemoteDesktopSecurityConfigurationApprovedClientApp | -15 | Beta.Applications | `/servicePrincipals/{servicePrincipal-id}/remoteDesktopSecurityConfiguration/approvedClientApps` |
 | SolutionBusinessScenarioPlannerPlanConfigurationLocalization | -15 | Beta.BusinessScenario | `/solutions/businessScenarios/{businessScenario-id}/planner/planConfiguration/localizations` |
 | TeamPrimaryChannelTab | -15 | Beta.Teams, Teams | `/teams/{team-id}/primaryChannel/tabs` |
 | TeamScheduleShiftRoleDefinition | -15 | Beta.Teams | `/teams/{team-id}/schedule/shiftsRoleDefinitions` |
@@ -1717,8 +1759,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | EntitlementManagementAccessPackageResourceUploadSession | -20 | Beta.Identity.Governance | `/identityGovernance/entitlementManagement/accessPackageResources/{accessPackageResource-id}/uploadSessions` |
 | IdentityB2CUserFlowUserAttributeAssignment | -20 | Beta.Identity.SignIns | `/identity/b2cUserFlows/{b2cIdentityUserFlow-id}/userAttributeAssignments` |
 | IdentityConditionalAccessAuthenticationStrengthPolicy | -20 | Beta.Identity.SignIns | `/identity/conditionalAccess/authenticationStrengths/policies` |
-| IdentityConditionalAccessDeletedItemNamedLocation | -20 | Beta.Identity.SignIns | `/identity/conditionalAccess/deletedItems/namedLocations` |
-| IdentityConditionalAccessDeletedItemPolicy | -20 | Beta.Identity.SignIns | `/identity/conditionalAccess/deletedItems/policies` |
 | IdentityGovernanceCatalog | -20 | Beta.Identity.Governance | `/identityGovernance/catalogs` |
 | IdentityGovernanceCatalogAccessPackageResource | -20 | Beta.Identity.Governance | `/identityGovernance/catalogs/{accessPackageCatalog-id}/accessPackageResources` |
 | IdentityGovernanceCatalogAccessPackageResourceAccessPackageResourceRole | -20 | Beta.Identity.Governance | `/identityGovernance/catalogs/{accessPackageCatalog-id}/accessPackageResources/{accessPackageResource-id}/accessPackageResourceRoles` |
@@ -1818,7 +1858,6 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | GroupSiteInformationProtectionPolicyLabel | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/policy/labels` |
 | GroupSiteInformationProtectionSensitivityLabelSublabel | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/sensitivityLabels/{sensitivityLabel-id}/sublabels` |
 | GroupSiteInformationProtectionThreatAssessmentRequestResult | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/informationProtection/threatAssessmentRequests/{threatAssessmentRequest-id}/results` |
-| GroupSiteListItemPermission | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions` |
 | GroupSitePageTemplateCanvaLayoutHorizontalSection | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/pageTemplates/{pageTemplate-id}/canvasLayout/horizontalSections` |
 | GroupSitePageTemplateCanvaLayoutHorizontalSectionColumn | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/pageTemplates/{pageTemplate-id}/canvasLayout/horizontalSections/{horizontalSection-id}/columns` |
 | GroupSitePageTemplateCanvaLayoutHorizontalSectionColumnWebpart | -35 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/pageTemplates/{pageTemplate-id}/canvasLayout/horizontalSections/{horizontalSection-id}/columns/{horizontalSectionColumn-id}/webparts` |
@@ -1882,3 +1921,85 @@ Score: module already used +20; has a Count companion +5; v1.0 as well as beta +
 | TeamworkDeletedTeamChannelPlannerPlanBucketTask | -60 | Beta.Teams | `/teamwork/deletedTeams/{deletedTeam-id}/channels/{channel-id}/planner/plans/{plannerPlan-id}/buckets/{plannerBucket-id}/tasks` |
 | TeamworkDeletedTeamChannelPlannerPlanTask | -60 | Beta.Teams | `/teamwork/deletedTeams/{deletedTeam-id}/channels/{channel-id}/planner/plans/{plannerPlan-id}/tasks` |
 | GroupSiteListItemActivity | -65 | Beta.Sites | `/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/activities` |
+
+## OData subtypes  (75)
+
+Concrete subtypes of an entity type a resource already models, with one resource per subtype.
+
+| Subtype | Score | Entity type | API version |
+| --- | --- | --- | --- |
+| androidDeviceOwnerDerivedCredentialAuthenticationConfiguration | 20 | deviceConfiguration | beta |
+| androidDeviceOwnerImportedPFXCertificateProfile | 20 | deviceConfiguration | beta |
+| androidDeviceOwnerPkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| androidDeviceOwnerScepCertificateProfile | 20 | deviceConfiguration | beta |
+| androidDeviceOwnerWiFiConfiguration | 20 | deviceConfiguration | beta |
+| androidForWorkApp | 20 | mobileApp | beta |
+| androidForWorkCompliancePolicy | 20 | deviceCompliancePolicy | beta |
+| androidForWorkCustomConfiguration | 20 | deviceConfiguration | beta |
+| androidForWorkGeneralDeviceConfiguration | 20 | deviceConfiguration | beta |
+| androidForWorkGmailEasConfiguration | 20 | deviceConfiguration | beta |
+| androidForWorkImportedPFXCertificateProfile | 20 | deviceConfiguration | beta |
+| androidForWorkMobileAppConfiguration | 20 | managedDeviceMobileAppConfiguration | beta |
+| androidForWorkNineWorkEasConfiguration | 20 | deviceConfiguration | beta |
+| androidForWorkPkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| androidForWorkScepCertificateProfile | 20 | deviceConfiguration | beta |
+| androidForWorkTrustedRootCertificate | 20 | deviceConfiguration | beta |
+| androidForWorkVpnConfiguration | 20 | deviceConfiguration | beta |
+| androidManagedStoreWebApp | 20 | mobileApp | beta |
+| androidWorkProfileCustomConfiguration | 20 | deviceConfiguration | beta |
+| androidWorkProfileGmailEasConfiguration | 20 | deviceConfiguration | beta |
+| androidWorkProfileNineWorkEasConfiguration | 20 | deviceConfiguration | beta |
+| androidWorkProfilePkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| androidWorkProfileScepCertificateProfile | 20 | deviceConfiguration | beta |
+| aospDeviceOwnerCompliancePolicy | 20 | deviceCompliancePolicy | beta |
+| aospDeviceOwnerPkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| aospDeviceOwnerScepCertificateProfile | 20 | deviceConfiguration | beta |
+| aospDeviceOwnerTrustedRootCertificate | 20 | deviceConfiguration | beta |
+| appleManagedIdentityProvider | 20 | identityProviderBase | beta |
+| builtInIdentityProvider | 20 | identityProviderBase | beta |
+| defaultDeviceCompliancePolicy | 20 | deviceCompliancePolicy | beta |
+| deviceComanagementAuthorityConfiguration | 20 | deviceEnrollmentConfiguration | beta |
+| deviceEnrollmentNotificationConfiguration | 20 | deviceEnrollmentConfiguration | beta |
+| editionUpgradeConfiguration | 20 | deviceConfiguration | beta |
+| internalDomainFederation | 20 | identityProviderBase | beta |
+| iosDerivedCredentialAuthenticationConfiguration | 20 | deviceConfiguration | beta |
+| iosEasEmailProfileConfiguration | 20 | deviceConfiguration | beta |
+| iosEducationDeviceConfiguration | 20 | deviceConfiguration | beta |
+| iosEduDeviceConfiguration | 20 | deviceConfiguration | beta |
+| iosExpeditedCheckinConfiguration | 20 | deviceConfiguration | beta |
+| iosImportedPFXCertificateProfile | 20 | deviceConfiguration | beta |
+| iosPkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| iosScepCertificateProfile | 20 | deviceConfiguration | beta |
+| iosUpdateConfiguration | 20 | deviceConfiguration | beta |
+| iosVppApp | 20 | mobileApp | beta |
+| iosWiredNetworkConfiguration | 20 | deviceConfiguration | beta |
+| macOSCustomAppConfiguration | 20 | deviceConfiguration | beta |
+| macOSImportedPFXCertificateProfile | 20 | deviceConfiguration | beta |
+| macOSPkcsCertificateProfile | 20 | deviceConfiguration | beta |
+| macOSScepCertificateProfile | 20 | deviceConfiguration | beta |
+| macOSTrustedRootCertificate | 20 | deviceConfiguration | beta |
+| macOsVppApp | 20 | mobileApp | beta |
+| managedAndroidLobApp | 20 | mobileApp | beta |
+| managedIOSLobApp | 20 | mobileApp | beta |
+| oidcIdentityProvider | 20 | identityProviderBase | beta |
+| openIdConnectIdentityProvider | 20 | identityProviderBase | beta |
+| privateLinkNamedLocation | 20 | namedLocation | beta |
+| serviceTagNamedLocation | 20 | namedLocation | beta |
+| unsupportedDeviceConfiguration | 20 | deviceConfiguration | beta |
+| verifiableCredentialsAuthenticationMethodConfiguration | 20 | authenticationMethodConfiguration | beta |
+| windows10EnterpriseModernAppManagementConfiguration | 20 | deviceConfiguration | beta |
+| windows10PFXImportCertificateProfile | 20 | deviceConfiguration | beta |
+| windowsAppX | 20 | mobileApp | beta |
+| windowsDeliveryOptimizationConfiguration | 20 | deviceConfiguration | beta |
+| windowsStoreApp | 20 | mobileApp | beta |
+| windowsZtdnsConfiguration | 20 | deviceConfiguration | beta |
+| agentIdentity | 0 | servicePrincipal | beta |
+| agentIdentityBlueprint | 0 | application | beta |
+| agentIdentityBlueprintPrincipal | 0 | servicePrincipal | beta |
+| agentUser | 0 | user | v1.0 |
+| customDataProvidedResource | 0 | accessPackageResource | beta |
+| identityBuiltInUserFlowAttribute | 0 | identityUserFlowAttribute | beta |
+| identityCustomUserFlowAttribute | 0 | identityUserFlowAttribute | beta |
+| importedDeviceIdentityResult | 0 | importedDeviceIdentity | beta |
+| payloadCompatibleAssignmentFilter | 0 | deviceAndAppManagementAssignmentFilter | beta |
+| whatIfAnalysisResult | 0 | conditionalAccessPolicy | beta |

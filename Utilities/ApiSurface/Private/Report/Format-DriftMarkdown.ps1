@@ -282,6 +282,7 @@ function Get-DriftSection
         [PSCustomObject]@{ Name = 'Backlog'; Title = 'Writable vendor properties no resource declares'; Codes = @('RES-PROP-BACKLOG'); GroupByResource = $true }
         [PSCustomObject]@{ Name = 'Nested'; Title = 'Members of a container the resource already flattens'; Codes = @('RES-PROP-NESTED'); GroupByResource = $true }
         [PSCustomObject]@{ Name = 'Coverage'; Title = 'Graph nouns with full CRUD and no resource'; Codes = @('COV-NO-RESOURCE') }
+        [PSCustomObject]@{ Name = 'Subtype'; Title = 'OData subtypes of a modelled entity with no resource'; Codes = @('COV-NO-SUBTYPE') }
         [PSCustomObject]@{ Name = 'UnusedCmdlet'; Title = 'Cmdlets no resource calls any more'; Codes = @('COV-CMDLET-UNUSED') }
         [PSCustomObject]@{ Name = 'VendorChanges'; Title = $vendorTitle; Codes = @('VND-TYPE-PROP-ADDED', 'VND-PARAM-ADDED') }
         [PSCustomObject]@{ Name = 'Versions'; Title = 'Newer dependency versions available'; Codes = @('VND-NEWER-VERSION') }

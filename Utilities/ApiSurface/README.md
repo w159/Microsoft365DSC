@@ -294,6 +294,13 @@ The first section of the Issue is the approval interface:
 Tick the boxes, then comment `/apply-drift` on the Issue. Only the ticked ids are applied: the id is
 the approval token, which is why it is deterministic and must never carry a date or an index.
 
+Coverage is two lists rather than one. `COV-NO-RESOURCE` names a Graph cmdlet noun with full CRUD
+that no resource covers. `COV-NO-SUBTYPE` names a concrete OData subtype of an entity type a
+resource already models, which the noun list can never show: one noun serves every subtype of a
+polymorphic entity. Both are delta scoped against `coverage.json`, the standing roadmap that
+`-UpdateBaseline` rewrites, and both read `coverage-ignore.json`, where `modules` and `uriRoots`
+retire a noun and `odataSubtypes` retires a subtype.
+
 Everything below that first section sits in a collapsed block and is informational: what needs a
 decision, the shim, the Intune settings catalog, read-only suggestions, coverage, vendor changes,
 newer dependency versions and the unaccepted breaking findings. A finding that carries an

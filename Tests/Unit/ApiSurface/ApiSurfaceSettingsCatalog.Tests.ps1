@@ -234,15 +234,24 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             }
 
             $script:seenCount = [System.Collections.Generic.List[System.Int32]]::new()
+
+            function Get-SettingsCatalogSettingName
+            {
+                param
+                (
+                    [System.Object] $SettingDefinition,
+
+                    [System.Object] $AllSettingDefinitions
+                )
+
+                $script:seenCount.Add(@($AllSettingDefinitions).Count)
+
+                return [System.String] $SettingDefinition.name
+            }
         }
 
         BeforeEach {
             $script:seenCount.Clear()
-
-            Mock -CommandName Get-SettingsCatalogSettingName -MockWith {
-                $script:seenCount.Add(@($AllSettingDefinitions).Count)
-                return [System.String] $SettingDefinition.name
-            }
         }
 
         It 'Disambiguates against every definition of the bucket, not one setting template' {

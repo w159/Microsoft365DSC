@@ -1,10 +1,354 @@
 {
   "source": {
     "module": "Microsoft.Graph.Authentication",
-    "version": "2.35.1",
+    "version": "2.39.0",
     "versionSource": "pinned"
   },
   "candidates": [
+    {
+      "noun": "DirectoryRecoveryJob",
+      "modules": [
+        "Beta.Identity.DirectoryManagement",
+        "Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/directory/recovery/jobs",
+      "score": 80
+    },
+    {
+      "noun": "DirectoryRecoverySnapshot",
+      "modules": [
+        "Beta.Identity.DirectoryManagement",
+        "Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/directory/recovery/snapshots",
+      "score": 80
+    },
+    {
+      "noun": "EntitlementManagementExternalOriginResourceConnector",
+      "modules": [
+        "Beta.Identity.Governance"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/identityGovernance/entitlementManagement/externalOriginResourceConnectors",
+      "score": 70
+    },
+    {
+      "noun": "NetworkAccessCloudFirewallPolicy",
+      "modules": [
+        "Beta.NetworkAccess"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/networkAccess/cloudFirewallPolicies",
+      "score": 70
+    },
+    {
+      "noun": "AdminConfigurationManagementConfigurationDrift",
+      "modules": [
+        "Beta.ConfigurationManagement",
+        "ConfigurationManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/configurationManagement/configurationDrifts",
+      "score": 60
+    },
+    {
+      "noun": "AdminConfigurationManagementConfigurationMonitor",
+      "modules": [
+        "Beta.ConfigurationManagement",
+        "ConfigurationManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/configurationManagement/configurationMonitors",
+      "score": 60
+    },
+    {
+      "noun": "AdminConfigurationManagementConfigurationMonitoringResult",
+      "modules": [
+        "Beta.ConfigurationManagement",
+        "ConfigurationManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/configurationManagement/configurationMonitoringResults",
+      "score": 60
+    },
+    {
+      "noun": "AdminConfigurationManagementConfigurationSnapshot",
+      "modules": [
+        "Beta.ConfigurationManagement",
+        "ConfigurationManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/configurationManagement/configurationSnapshots",
+      "score": 60
+    },
+    {
+      "noun": "AdminConfigurationManagementConfigurationSnapshotJob",
+      "modules": [
+        "Beta.ConfigurationManagement",
+        "ConfigurationManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/configurationManagement/configurationSnapshotJobs",
+      "score": 60
+    },
+    {
+      "noun": "UserChatTargetedMessage",
+      "modules": [
+        "Teams"
+      ],
+      "apiVersions": [
+        "v1.0"
+      ],
+      "uri": "/users/{user-id}/chats/{chat-id}/targetedMessages",
+      "score": 60
+    },
+    {
+      "noun": "UserChatTargetedMessageHostedContent",
+      "modules": [
+        "Teams"
+      ],
+      "apiVersions": [
+        "v1.0"
+      ],
+      "uri": "/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/hostedContents",
+      "score": 60
+    },
+    {
+      "noun": "UserChatTargetedMessageReply",
+      "modules": [
+        "Teams"
+      ],
+      "apiVersions": [
+        "v1.0"
+      ],
+      "uri": "/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/replies",
+      "score": 60
+    },
+    {
+      "noun": "DirectoryTenantGovernanceInvitation",
+      "modules": [
+        "Beta.Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/directory/tenantGovernance/governanceInvitations",
+      "score": 55
+    },
+    {
+      "noun": "DirectoryTenantGovernancePolicyTemplate",
+      "modules": [
+        "Beta.Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/directory/tenantGovernance/governancePolicyTemplates",
+      "score": 55
+    },
+    {
+      "noun": "DirectoryTenantGovernanceRelatedTenant",
+      "modules": [
+        "Beta.Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/directory/tenantGovernance/relatedTenants",
+      "score": 55
+    },
+    {
+      "noun": "DirectoryTenantGovernanceRelationship",
+      "modules": [
+        "Beta.Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/directory/tenantGovernance/governanceRelationships",
+      "score": 55
+    },
+    {
+      "noun": "DirectoryTenantGovernanceRequest",
+      "modules": [
+        "Beta.Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/directory/tenantGovernance/governanceRequests",
+      "score": 55
+    },
+    {
+      "noun": "PolicyDeletedItemCrossTenantPartnerM365Capability",
+      "modules": [
+        "Beta.Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/policies/deletedItems/crossTenantPartners/{crossTenantAccessPolicyConfigurationPartner-tenantId}/m365Capabilities",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreActivityLog",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/activityLogs",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreDriveExclusionUnit",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/driveExclusionUnits",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreDriveExclusionUnitBulkAdditionJob",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/driveExclusionUnitsBulkAdditionJobs",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreMailboxExclusionUnit",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/mailboxExclusionUnits",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreMailboxExclusionUnitBulkAdditionJob",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/mailboxExclusionUnitsBulkAdditionJobs",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreSiteExclusionUnit",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/siteExclusionUnits",
+      "score": 55
+    },
+    {
+      "noun": "SolutionBackupRestoreSiteExclusionUnitBulkAdditionJob",
+      "modules": [
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/backupRestore/siteExclusionUnitsBulkAdditionJobs",
+      "score": 55
+    },
+    {
+      "noun": "WindowsUpdatesUpdatePolicy",
+      "modules": [
+        "Beta.WindowsUpdates"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/admin/windows/updates/updatePolicies",
+      "score": 55
+    },
+    {
+      "noun": "GroupPlannerPlanHistoryItem",
+      "modules": [
+        "Beta.Planner"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/groups/{group-id}/planner/plans/{plannerPlan-id}/historyItems",
+      "score": 50
+    },
+    {
+      "noun": "PlannerPlanHistoryItem",
+      "modules": [
+        "Beta.Planner"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/planner/plans/{plannerPlan-id}/historyItems",
+      "score": 50
+    },
+    {
+      "noun": "PlannerTaskMessage",
+      "modules": [
+        "Beta.Planner"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/planner/tasks/{plannerTask-id}/messages",
+      "score": 50
+    },
+    {
+      "noun": "PolicyCrossTenantAccessPolicyPartnerM365Capability",
+      "modules": [
+        "Beta.Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/policies/crossTenantAccessPolicy/partners/{crossTenantAccessPolicyConfigurationPartner-tenantId}/m365Capabilities",
+      "score": 50
+    },
     {
       "noun": "DirectoryDeviceLocalCredential",
       "modules": [
@@ -69,6 +413,32 @@
       "score": 45
     },
     {
+      "noun": "EntitlementManagementAvailableAccessPackage",
+      "modules": [
+        "Beta.Identity.Governance",
+        "Identity.Governance"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identityGovernance/entitlementManagement/availableAccessPackages",
+      "score": 45
+    },
+    {
+      "noun": "EntitlementManagementControlConfiguration",
+      "modules": [
+        "Beta.Identity.Governance",
+        "Identity.Governance"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identityGovernance/entitlementManagement/controlConfigurations",
+      "score": 45
+    },
+    {
       "noun": "EntitlementManagementResourceEnvironment",
       "modules": [
         "Identity.Governance"
@@ -77,6 +447,19 @@
         "v1.0"
       ],
       "uri": "/identityGovernance/entitlementManagement/resourceEnvironments",
+      "score": 45
+    },
+    {
+      "noun": "EntitlementManagementSubject",
+      "modules": [
+        "Beta.Identity.Governance",
+        "Identity.Governance"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identityGovernance/entitlementManagement/subjects",
       "score": 45
     },
     {
@@ -158,6 +541,72 @@
       "score": 45
     },
     {
+      "noun": "UserChatTargetedMessageReplyHostedContent",
+      "modules": [
+        "Teams"
+      ],
+      "apiVersions": [
+        "v1.0"
+      ],
+      "uri": "/users/{user-id}/chats/{chat-id}/targetedMessages/{targetedChatMessage-id}/replies/{chatMessage-id}/hostedContents",
+      "score": 40
+    },
+    {
+      "noun": "PolicyCrossTenantAccessPolicyDefaultM365Capability",
+      "modules": [
+        "Beta.Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/policies/crossTenantAccessPolicy/default/m365Capabilities",
+      "score": 35
+    },
+    {
+      "noun": "SolutionBusinessScenarioPlannerTaskMessage",
+      "modules": [
+        "Beta.BusinessScenario"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/solutions/businessScenarios/{businessScenario-id}/planner/tasks/{businessScenarioTask-id}/messages",
+      "score": 35
+    },
+    {
+      "noun": "WindowsUpdatesPolicyApplicableContent",
+      "modules": [
+        "Beta.WindowsUpdates"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/admin/windows/updates/policies/{policy-id}/applicableContent",
+      "score": 35
+    },
+    {
+      "noun": "WindowsUpdatesPolicyApplicableContentMatchedDevice",
+      "modules": [
+        "Beta.WindowsUpdates"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/admin/windows/updates/policies/{policy-id}/applicableContent/{applicableContent-catalogEntryId}/matchedDevices",
+      "score": 35
+    },
+    {
+      "noun": "WindowsUpdatesPolicyRing",
+      "modules": [
+        "Beta.WindowsUpdates"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/admin/windows/updates/policies/{policy-id}/rings",
+      "score": 35
+    },
+    {
       "noun": "AdminEdgeInternetExplorerModeSiteList",
       "modules": [
         "Beta.DeviceManagement",
@@ -181,6 +630,32 @@
         "v1.0"
       ],
       "uri": "/admin/people/profileCardProperties",
+      "score": 30
+    },
+    {
+      "noun": "AdminPeopleProfilePropertySetting",
+      "modules": [
+        "Beta.Identity.DirectoryManagement",
+        "Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/people/profilePropertySettings",
+      "score": 30
+    },
+    {
+      "noun": "AdminPeopleProfileSource",
+      "modules": [
+        "Beta.Identity.DirectoryManagement",
+        "Identity.DirectoryManagement"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/admin/people/profileSources",
       "score": 30
     },
     {
@@ -408,6 +883,19 @@
       "score": 30
     },
     {
+      "noun": "IdentityVerifiedIdProfile",
+      "modules": [
+        "Beta.Identity.SignIns",
+        "Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identity/verifiedId/profiles",
+      "score": 30
+    },
+    {
       "noun": "InformationProtectionThreatAssessmentRequest",
       "modules": [
         "Beta.Identity.SignIns",
@@ -431,6 +919,17 @@
         "v1.0"
       ],
       "uri": "/informationProtection/threatAssessmentRequests/{threatAssessmentRequest-id}/results",
+      "score": 30
+    },
+    {
+      "noun": "NetworkAccessCloudFirewallPolicyRule",
+      "modules": [
+        "Beta.NetworkAccess"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/networkAccess/cloudFirewallPolicies/{cloudFirewallPolicy-id}/policyRules",
       "score": 30
     },
     {
@@ -681,6 +1180,19 @@
       "score": 30
     },
     {
+      "noun": "SiteListItemPermission",
+      "modules": [
+        "Beta.Sites",
+        "Sites"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions",
+      "score": 30
+    },
+    {
       "noun": "SiteListItemVersion",
       "modules": [
         "Beta.Sites",
@@ -704,6 +1216,19 @@
         "v1.0"
       ],
       "uri": "/sites/{site-id}/lists/{list-id}/operations",
+      "score": 30
+    },
+    {
+      "noun": "SiteListPermission",
+      "modules": [
+        "Beta.Sites",
+        "Sites"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/sites/{site-id}/lists/{list-id}/permissions",
       "score": 30
     },
     {
@@ -1292,6 +1817,19 @@
       "score": 25
     },
     {
+      "noun": "DeviceManagementVirtualEndpointServicePlan",
+      "modules": [
+        "Beta.DeviceManagement.Administration",
+        "DeviceManagement.Administration"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/deviceManagement/virtualEndpoint/servicePlans",
+      "score": 25
+    },
+    {
       "noun": "DeviceManagementVirtualEndpointUserSettingAssignment",
       "modules": [
         "Beta.DeviceManagement.Administration",
@@ -1383,6 +1921,19 @@
       "score": 25
     },
     {
+      "noun": "EntitlementManagementAccessPackageSuggestion",
+      "modules": [
+        "Beta.Identity.Governance",
+        "Identity.Governance"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identityGovernance/entitlementManagement/accessPackageSuggestions",
+      "score": 25
+    },
+    {
       "noun": "GroupExtension",
       "modules": [
         "Beta.Groups",
@@ -1432,6 +1983,17 @@
         "v1.0"
       ],
       "uri": "/identity/b2xUserFlows/{b2xIdentityUserFlow-id}/languages",
+      "score": 25
+    },
+    {
+      "noun": "NetworkAccessLogGenerativeAiInsight",
+      "modules": [
+        "Beta.NetworkAccess"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/networkAccess/logs/generativeAIInsights",
       "score": 25
     },
     {
@@ -1601,6 +2163,19 @@
         "v1.0"
       ],
       "uri": "/users/{user-id}/authentication/emailMethods",
+      "score": 25
+    },
+    {
+      "noun": "UserAuthenticationExternalAuthenticationMethod",
+      "modules": [
+        "Beta.Identity.SignIns",
+        "Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/users/{user-id}/authentication/externalAuthenticationMethods",
       "score": 25
     },
     {
@@ -1794,17 +2369,6 @@
       "score": 20
     },
     {
-      "noun": "EntitlementManagementAvailableAccessPackage",
-      "modules": [
-        "Beta.Identity.Governance"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identityGovernance/entitlementManagement/availableAccessPackages",
-      "score": 20
-    },
-    {
       "noun": "EntitlementManagementCatalog",
       "modules": [
         "Identity.Governance"
@@ -1813,17 +2377,6 @@
         "v1.0"
       ],
       "uri": "/identityGovernance/entitlementManagement/catalogs",
-      "score": 20
-    },
-    {
-      "noun": "EntitlementManagementControlConfiguration",
-      "modules": [
-        "Beta.Identity.Governance"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identityGovernance/entitlementManagement/controlConfigurations",
       "score": 20
     },
     {
@@ -1857,17 +2410,6 @@
         "v1.0"
       ],
       "uri": "/identityGovernance/entitlementManagement/resourceRoleScopes",
-      "score": 20
-    },
-    {
-      "noun": "EntitlementManagementSubject",
-      "modules": [
-        "Beta.Identity.Governance"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identityGovernance/entitlementManagement/subjects",
       "score": 20
     },
     {
@@ -3595,6 +4137,19 @@
       "score": 10
     },
     {
+      "noun": "GroupSiteListPermission",
+      "modules": [
+        "Beta.Sites",
+        "Sites"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/permissions",
+      "score": 10
+    },
+    {
       "noun": "GroupSiteListSubscription",
       "modules": [
         "Beta.Sites",
@@ -4592,6 +5147,32 @@
       "score": 10
     },
     {
+      "noun": "SecurityAuditLogQuery",
+      "modules": [
+        "Beta.Security",
+        "Security"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/security/auditLog/queries",
+      "score": 10
+    },
+    {
+      "noun": "SecurityAuditLogQueryRecord",
+      "modules": [
+        "Beta.Security",
+        "Security"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/security/auditLog/queries/{auditLogQuery-id}/records",
+      "score": 10
+    },
+    {
       "noun": "SecurityCaseEdiscoveryCase",
       "modules": [
         "Beta.Security",
@@ -4693,6 +5274,19 @@
         "v1.0"
       ],
       "uri": "/security/cases/ediscoveryCases/{ediscoveryCase-id}/tags",
+      "score": 10
+    },
+    {
+      "noun": "SecurityCollaborationAnalyzedEmail",
+      "modules": [
+        "Beta.Security",
+        "Security"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/security/collaboration/analyzedEmails",
       "score": 10
     },
     {
@@ -5201,6 +5795,19 @@
       "score": 10
     },
     {
+      "noun": "ServicePrincipalRemoteDesktopSecurityConfigurationApprovedClientApp",
+      "modules": [
+        "Applications",
+        "Beta.Applications"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/servicePrincipals/{servicePrincipal-id}/remoteDesktopSecurityConfiguration/approvedClientApps",
+      "score": 10
+    },
+    {
       "noun": "ServicePrincipalRemoteDesktopSecurityConfigurationTargetDeviceGroup",
       "modules": [
         "Applications",
@@ -5656,6 +6263,19 @@
       "score": 10
     },
     {
+      "noun": "SolutionBackupRestoreBrowseSession",
+      "modules": [
+        "BackupRestore",
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/solutions/backupRestore/browseSessions",
+      "score": 10
+    },
+    {
       "noun": "SolutionBackupRestoreDriveInclusionRule",
       "modules": [
         "BackupRestore",
@@ -5799,6 +6419,19 @@
       "score": 10
     },
     {
+      "noun": "SolutionBackupRestoreOneDriveForBusinessBrowseSession",
+      "modules": [
+        "BackupRestore",
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/solutions/backupRestore/oneDriveForBusinessBrowseSessions",
+      "score": 10
+    },
+    {
       "noun": "SolutionBackupRestoreOneDriveForBusinessProtectionPolicy",
       "modules": [
         "BackupRestore",
@@ -5848,6 +6481,19 @@
         "v1.0"
       ],
       "uri": "/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/driveRestoreArtifactsBulkAdditionRequests",
+      "score": 10
+    },
+    {
+      "noun": "SolutionBackupRestoreOneDriveForBusinessRestoreSessionGranularDriveRestoreArtifact",
+      "modules": [
+        "BackupRestore",
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/granularDriveRestoreArtifacts",
       "score": 10
     },
     {
@@ -5903,6 +6549,19 @@
       "score": 10
     },
     {
+      "noun": "SolutionBackupRestoreSharePointBrowseSession",
+      "modules": [
+        "BackupRestore",
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/solutions/backupRestore/sharePointBrowseSessions",
+      "score": 10
+    },
+    {
       "noun": "SolutionBackupRestoreSharePointProtectionPolicy",
       "modules": [
         "BackupRestore",
@@ -5926,6 +6585,19 @@
         "v1.0"
       ],
       "uri": "/solutions/backupRestore/sharePointRestoreSessions",
+      "score": 10
+    },
+    {
+      "noun": "SolutionBackupRestoreSharePointRestoreSessionGranularSiteRestoreArtifact",
+      "modules": [
+        "BackupRestore",
+        "Beta.BackupRestore"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/granularSiteRestoreArtifacts",
       "score": 10
     },
     {
@@ -6664,28 +7336,6 @@
         "beta"
       ],
       "uri": "/administrativeUnits/{administrativeUnit-id}/extensions",
-      "score": 5
-    },
-    {
-      "noun": "AdminPeopleProfilePropertySetting",
-      "modules": [
-        "Beta.Identity.DirectoryManagement"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/admin/people/profilePropertySettings",
-      "score": 5
-    },
-    {
-      "noun": "AdminPeopleProfileSource",
-      "modules": [
-        "Beta.Identity.DirectoryManagement"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/admin/people/profileSources",
       "score": 5
     },
     {
@@ -7449,6 +8099,32 @@
       "score": 5
     },
     {
+      "noun": "IdentityConditionalAccessDeletedItemNamedLocation",
+      "modules": [
+        "Beta.Identity.SignIns",
+        "Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identity/conditionalAccess/deletedItems/namedLocations",
+      "score": 5
+    },
+    {
+      "noun": "IdentityConditionalAccessDeletedItemPolicy",
+      "modules": [
+        "Beta.Identity.SignIns",
+        "Identity.SignIns"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/identity/conditionalAccess/deletedItems/policies",
+      "score": 5
+    },
+    {
       "noun": "IdentityGovernanceAccessReviewInstanceContactedReviewer",
       "modules": [
         "Beta.Identity.Governance"
@@ -7690,17 +8366,6 @@
         "v1.0"
       ],
       "uri": "/identityGovernance/termsOfUse/agreements",
-      "score": 5
-    },
-    {
-      "noun": "IdentityVerifiedIdProfile",
-      "modules": [
-        "Beta.Identity.SignIns"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identity/verifiedId/profiles",
       "score": 5
     },
     {
@@ -8340,28 +9005,6 @@
       "score": 5
     },
     {
-      "noun": "SecurityAuditLogQuery",
-      "modules": [
-        "Beta.Security"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/security/auditLog/queries",
-      "score": 5
-    },
-    {
-      "noun": "SecurityAuditLogQueryRecord",
-      "modules": [
-        "Beta.Security"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/security/auditLog/queries/{auditLogQuery-id}/records",
-      "score": 5
-    },
-    {
       "noun": "SecurityCaseEdiscoveryCaseLegalHold",
       "modules": [
         "Beta.Security"
@@ -8381,17 +9024,6 @@
         "beta"
       ],
       "uri": "/security/cloudAppSecurityProfiles",
-      "score": 5
-    },
-    {
-      "noun": "SecurityCollaborationAnalyzedEmail",
-      "modules": [
-        "Beta.Security"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/security/collaboration/analyzedEmails",
       "score": 5
     },
     {
@@ -8649,83 +9281,6 @@
         "v1.0"
       ],
       "uri": "/shares",
-      "score": 5
-    },
-    {
-      "noun": "SiteListItemPermission",
-      "modules": [
-        "Beta.Sites"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions",
-      "score": 5
-    },
-    {
-      "noun": "SiteListPermission",
-      "modules": [
-        "Beta.Sites"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/sites/{site-id}/lists/{list-id}/permissions",
-      "score": 5
-    },
-    {
-      "noun": "SolutionBackupRestoreBrowseSession",
-      "modules": [
-        "Beta.BackupRestore"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/solutions/backupRestore/browseSessions",
-      "score": 5
-    },
-    {
-      "noun": "SolutionBackupRestoreOneDriveForBusinessBrowseSession",
-      "modules": [
-        "Beta.BackupRestore"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/solutions/backupRestore/oneDriveForBusinessBrowseSessions",
-      "score": 5
-    },
-    {
-      "noun": "SolutionBackupRestoreOneDriveForBusinessRestoreSessionGranularDriveRestoreArtifact",
-      "modules": [
-        "Beta.BackupRestore"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/solutions/backupRestore/oneDriveForBusinessRestoreSessions/{oneDriveForBusinessRestoreSession-id}/granularDriveRestoreArtifacts",
-      "score": 5
-    },
-    {
-      "noun": "SolutionBackupRestoreSharePointBrowseSession",
-      "modules": [
-        "Beta.BackupRestore"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/solutions/backupRestore/sharePointBrowseSessions",
-      "score": 5
-    },
-    {
-      "noun": "SolutionBackupRestoreSharePointRestoreSessionGranularSiteRestoreArtifact",
-      "modules": [
-        "Beta.BackupRestore"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/solutions/backupRestore/sharePointRestoreSessions/{sharePointRestoreSession-id}/granularSiteRestoreArtifacts",
       "score": 5
     },
     {
@@ -9339,7 +9894,18 @@
       "apiVersions": [
         "beta"
       ],
-      "uri": "/admin/windows/updates/updatePolicies",
+      "uri": "/admin/windows/updates/policies",
+      "score": 5
+    },
+    {
+      "noun": "WindowsUpdatesPolicyApproval",
+      "modules": [
+        "Beta.WindowsUpdates"
+      ],
+      "apiVersions": [
+        "beta"
+      ],
+      "uri": "/admin/windows/updates/policies/{policy-id}/approvals",
       "score": 5
     },
     {
@@ -10025,17 +10591,6 @@
       "score": 0
     },
     {
-      "noun": "DeviceManagementVirtualEndpointServicePlan",
-      "modules": [
-        "Beta.DeviceManagement.Administration"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/deviceManagement/virtualEndpoint/servicePlans",
-      "score": 0
-    },
-    {
       "noun": "DeviceManagementVirtualEndpointSnapshot",
       "modules": [
         "Beta.DeviceManagement.Administration"
@@ -10088,17 +10643,6 @@
         "beta"
       ],
       "uri": "/identityGovernance/entitlementManagement/accessPackageAssignmentRequests",
-      "score": 0
-    },
-    {
-      "noun": "EntitlementManagementAccessPackageSuggestion",
-      "modules": [
-        "Beta.Identity.Governance"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identityGovernance/entitlementManagement/accessPackageSuggestions",
       "score": 0
     },
     {
@@ -10225,17 +10769,6 @@
         "v1.0"
       ],
       "uri": "/users/{user-id}/appRoleAssignments",
-      "score": 0
-    },
-    {
-      "noun": "UserAuthenticationExternalAuthenticationMethod",
-      "modules": [
-        "Beta.Identity.SignIns"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/users/{user-id}/authentication/externalAuthenticationMethods",
       "score": 0
     },
     {
@@ -11334,6 +11867,19 @@
         "v1.0"
       ],
       "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/documentSetVersions",
+      "score": -10
+    },
+    {
+      "noun": "GroupSiteListItemPermission",
+      "modules": [
+        "Beta.Sites",
+        "Sites"
+      ],
+      "apiVersions": [
+        "beta",
+        "v1.0"
+      ],
+      "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions",
       "score": -10
     },
     {
@@ -14417,17 +14963,6 @@
       "score": -15
     },
     {
-      "noun": "GroupSiteListPermission",
-      "modules": [
-        "Beta.Sites"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/permissions",
-      "score": -15
-    },
-    {
       "noun": "GroupSitePageTemplate",
       "modules": [
         "Beta.Sites"
@@ -14908,17 +15443,6 @@
         "beta"
       ],
       "uri": "/security/cases/ediscoveryCases/{ediscoveryCase-id}/reviewSets/{ediscoveryReviewSet-id}/files",
-      "score": -15
-    },
-    {
-      "noun": "ServicePrincipalRemoteDesktopSecurityConfigurationApprovedClientApp",
-      "modules": [
-        "Beta.Applications"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/servicePrincipals/{servicePrincipal-id}/remoteDesktopSecurityConfiguration/approvedClientApps",
       "score": -15
     },
     {
@@ -15778,28 +16302,6 @@
         "beta"
       ],
       "uri": "/identity/conditionalAccess/authenticationStrengths/policies",
-      "score": -20
-    },
-    {
-      "noun": "IdentityConditionalAccessDeletedItemNamedLocation",
-      "modules": [
-        "Beta.Identity.SignIns"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identity/conditionalAccess/deletedItems/namedLocations",
-      "score": -20
-    },
-    {
-      "noun": "IdentityConditionalAccessDeletedItemPolicy",
-      "modules": [
-        "Beta.Identity.SignIns"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/identity/conditionalAccess/deletedItems/policies",
       "score": -20
     },
     {
@@ -16952,17 +17454,6 @@
       "score": -35
     },
     {
-      "noun": "GroupSiteListItemPermission",
-      "modules": [
-        "Beta.Sites"
-      ],
-      "apiVersions": [
-        "beta"
-      ],
-      "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/permissions",
-      "score": -35
-    },
-    {
       "noun": "GroupSitePageTemplateCanvaLayoutHorizontalSection",
       "modules": [
         "Beta.Sites"
@@ -17666,6 +18157,458 @@
       ],
       "uri": "/groups/{group-id}/sites/{site-id}/lists/{list-id}/items/{listItem-id}/activities",
       "score": -65
+    }
+  ],
+  "subtypes": [
+    {
+      "subtype": "androidDeviceOwnerDerivedCredentialAuthenticationConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidDeviceOwnerImportedPFXCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidDeviceOwnerPkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidDeviceOwnerScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidDeviceOwnerWiFiConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkCompliancePolicy",
+      "entityType": "deviceCompliancePolicy",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkCustomConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkGeneralDeviceConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkGmailEasConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkImportedPFXCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkMobileAppConfiguration",
+      "entityType": "managedDeviceMobileAppConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkNineWorkEasConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkPkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkTrustedRootCertificate",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidForWorkVpnConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidManagedStoreWebApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidWorkProfileCustomConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidWorkProfileGmailEasConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidWorkProfileNineWorkEasConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidWorkProfilePkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "androidWorkProfileScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "aospDeviceOwnerCompliancePolicy",
+      "entityType": "deviceCompliancePolicy",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "aospDeviceOwnerPkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "aospDeviceOwnerScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "aospDeviceOwnerTrustedRootCertificate",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "appleManagedIdentityProvider",
+      "entityType": "identityProviderBase",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "builtInIdentityProvider",
+      "entityType": "identityProviderBase",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "defaultDeviceCompliancePolicy",
+      "entityType": "deviceCompliancePolicy",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "deviceComanagementAuthorityConfiguration",
+      "entityType": "deviceEnrollmentConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "deviceEnrollmentNotificationConfiguration",
+      "entityType": "deviceEnrollmentConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "editionUpgradeConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "internalDomainFederation",
+      "entityType": "identityProviderBase",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosDerivedCredentialAuthenticationConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosEasEmailProfileConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosEducationDeviceConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosEduDeviceConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosExpeditedCheckinConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosImportedPFXCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosPkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosUpdateConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosVppApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "iosWiredNetworkConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOSCustomAppConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOSImportedPFXCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOSPkcsCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOSScepCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOSTrustedRootCertificate",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "macOsVppApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "managedAndroidLobApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "managedIOSLobApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "oidcIdentityProvider",
+      "entityType": "identityProviderBase",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "openIdConnectIdentityProvider",
+      "entityType": "identityProviderBase",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "privateLinkNamedLocation",
+      "entityType": "namedLocation",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "serviceTagNamedLocation",
+      "entityType": "namedLocation",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "unsupportedDeviceConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "verifiableCredentialsAuthenticationMethodConfiguration",
+      "entityType": "authenticationMethodConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windows10EnterpriseModernAppManagementConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windows10PFXImportCertificateProfile",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windowsAppX",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windowsDeliveryOptimizationConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windowsStoreApp",
+      "entityType": "mobileApp",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "windowsZtdnsConfiguration",
+      "entityType": "deviceConfiguration",
+      "apiVersion": "beta",
+      "score": 20
+    },
+    {
+      "subtype": "agentIdentity",
+      "entityType": "servicePrincipal",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "agentIdentityBlueprint",
+      "entityType": "application",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "agentIdentityBlueprintPrincipal",
+      "entityType": "servicePrincipal",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "agentUser",
+      "entityType": "user",
+      "apiVersion": "v1.0",
+      "score": 0
+    },
+    {
+      "subtype": "customDataProvidedResource",
+      "entityType": "accessPackageResource",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "identityBuiltInUserFlowAttribute",
+      "entityType": "identityUserFlowAttribute",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "identityCustomUserFlowAttribute",
+      "entityType": "identityUserFlowAttribute",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "importedDeviceIdentityResult",
+      "entityType": "importedDeviceIdentity",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "payloadCompatibleAssignmentFilter",
+      "entityType": "deviceAndAppManagementAssignmentFilter",
+      "apiVersion": "beta",
+      "score": 0
+    },
+    {
+      "subtype": "whatIfAnalysisResult",
+      "entityType": "conditionalAccessPolicy",
+      "apiVersion": "beta",
+      "score": 0
     }
   ]
 }
