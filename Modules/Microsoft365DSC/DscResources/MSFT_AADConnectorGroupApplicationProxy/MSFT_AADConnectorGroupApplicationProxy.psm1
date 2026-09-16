@@ -114,17 +114,12 @@ class AADConnectorGroupApplicationProxy : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Azure AD Connector Group Application Proxy with Id {$($resolvedId)} and Name {$($this.Name)} was found"
 
-            $enumRegion = $null
-            if ($null -ne $getValue.Region)
-            {
-                $enumRegion = $getValue.Region.ToString()
-            }
             #endregion
 
             $results = @{
                 #region resource generator code
                 Name                  = $getValue.Name
-                Region                = $enumRegion
+                Region                = $getValue.Region
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential

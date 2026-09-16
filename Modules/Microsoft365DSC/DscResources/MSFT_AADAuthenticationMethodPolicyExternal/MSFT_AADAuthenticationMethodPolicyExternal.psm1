@@ -136,7 +136,7 @@ class AADAuthenticationMethodPolicyExternal : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -166,7 +166,7 @@ class AADAuthenticationMethodPolicyExternal : M365DSCResourceBase
 
                 if ($null -ne $currentincludeTargets.targetType)
                 {
-                    $myincludeTargets.Add('TargetType', $currentincludeTargets.targetType.ToString())
+                    $myincludeTargets.Add('TargetType', $currentincludeTargets.targetType)
                 }
 
                 if ($myincludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -180,20 +180,12 @@ class AADAuthenticationMethodPolicyExternal : M365DSCResourceBase
                 discoveryUrl = $getValue.OpenIdConnectSetting.DiscoveryUrl
             }
 
-            #region resource generator code
-            $enumState = $null
-            if ($null -ne $getValue.State)
-            {
-                $enumState = $getValue.State.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 ExcludeTargets        = $complexExcludeTargets
                 IncludeTargets        = $complexincludeTargets
                 OpenIdConnectSetting  = $complexOpenIdConnectSetting
-                State                 = $enumState
+                State                 = $getValue.State
                 AppId                 = $getValue.appId
                 DisplayName           = $getValue.displayName
                 Ensure                = 'Present'

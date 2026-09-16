@@ -128,7 +128,7 @@ class AADAuthenticationMethodPolicyQRCodeImage : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -158,7 +158,7 @@ class AADAuthenticationMethodPolicyQRCodeImage : M365DSCResourceBase
 
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
 
                 if ($myIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)

@@ -157,7 +157,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
 
             if ($null -ne $getValue.Scope.'@odata.type')
             {
-                $complexScope.Add('odataType', $getValue.Scope.'@odata.type'.ToString())
+                $complexScope.Add('odataType', $getValue.Scope.'@odata.type')
             }
 
             if ($complexScope.odataType -ne '#microsoft.graph.accessReviewQueryScope')
@@ -172,7 +172,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     $myPrincipalScopes.Add('ScopeType', $currentPrincipalScopes.scopeType)
                     if ($null -ne $currentPrincipalScopes.'@odata.type')
                     {
-                        $myPrincipalScopes.Add('odataType', $currentPrincipalScopes.'@odata.type'.ToString())
+                        $myPrincipalScopes.Add('odataType', $currentPrincipalScopes.'@odata.type')
                     }
                     if ($myPrincipalScopes.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -192,7 +192,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     $myResourceScopes.Add('ScopeType', $currentResourceScopes.scopeType)
                     if ($null -ne $currentResourceScopes.'@odata.type')
                     {
-                        $myResourceScopes.Add('odataType', $currentResourceScopes.'@odata.type'.ToString())
+                        $myResourceScopes.Add('odataType', $currentResourceScopes.'@odata.type')
                     }
                     if ($myResourceScopes.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -222,7 +222,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                 $myApplyActions = [ordered]@{}
                 if ($null -ne $currentApplyActions.'@odata.type')
                 {
-                    $myApplyActions.Add('odataType', $currentApplyActions.'@odata.type'.ToString())
+                    $myApplyActions.Add('odataType', $currentApplyActions.'@odata.type')
                 }
                 if ($myApplyActions.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -244,11 +244,11 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                 $myRecommendationInsightSettings.Add('RecommendationLookBackDuration', $currentRecommendationInsightSettings.recommendationLookBackDuration)
                 if ($null -ne $currentRecommendationInsightSettings.signInScope)
                 {
-                    $myRecommendationInsightSettings.Add('SignInScope', $currentRecommendationInsightSettings.signInScope.ToString())
+                    $myRecommendationInsightSettings.Add('SignInScope', $currentRecommendationInsightSettings.signInScope)
                 }
                 if ($null -ne $currentRecommendationInsightSettings.'@odata.type')
                 {
-                    $myRecommendationInsightSettings.Add('odataType', $currentRecommendationInsightSettings.'@odata.type'.ToString())
+                    $myRecommendationInsightSettings.Add('odataType', $currentRecommendationInsightSettings.'@odata.type')
                 }
                 if ($myRecommendationInsightSettings.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -279,7 +279,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
             }
             if ($null -ne $getValue.settings.recurrence.pattern.index -and $getValue.settings.recurrence.pattern.type -in @('relativeMonthly', 'relativeYearly'))
             {
-                $complexPattern.Add('Index', $getValue.settings.recurrence.pattern.index.ToString())
+                $complexPattern.Add('Index', $getValue.settings.recurrence.pattern.index)
             }
             $complexPattern.Add('Interval', $getValue.settings.recurrence.pattern.interval)
             if ($getValue.settings.recurrence.pattern.month -gt 0)
@@ -288,7 +288,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
             }
             if ($null -ne $getValue.settings.recurrence.pattern.type)
             {
-                $complexPattern.Add('Type', $getValue.settings.recurrence.pattern.type.ToString())
+                $complexPattern.Add('Type', $getValue.settings.recurrence.pattern.type)
             }
             if ($complexPattern.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -308,7 +308,7 @@ class AADAccessReviewDefinition : M365DSCResourceBase
             }
             if ($null -ne $getValue.settings.recurrence.range.type)
             {
-                $complexRange.Add('Type', $getValue.settings.recurrence.range.type.ToString())
+                $complexRange.Add('Type', $getValue.settings.recurrence.range.type)
             }
             if ($complexRange.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -343,11 +343,11 @@ class AADAccessReviewDefinition : M365DSCResourceBase
                     }
                     if ($null -ne $currentRecommendationInsightSettings.signInScope)
                     {
-                        $myRecommendationInsightSettings.Add('SignInScope', $currentRecommendationInsightSettings.signInScope.ToString())
+                        $myRecommendationInsightSettings.Add('SignInScope', $currentRecommendationInsightSettings.signInScope)
                     }
                     if ($null -ne $currentRecommendationInsightSettings.'@odata.type')
                     {
-                        $myRecommendationInsightSettings.Add('odataType', $currentRecommendationInsightSettings.'@odata.type'.ToString())
+                        $myRecommendationInsightSettings.Add('odataType', $currentRecommendationInsightSettings.'@odata.type')
                     }
                     if ($myRecommendationInsightSettings.values.Where({ $null -ne $_ }).Count -gt 0)
                     {

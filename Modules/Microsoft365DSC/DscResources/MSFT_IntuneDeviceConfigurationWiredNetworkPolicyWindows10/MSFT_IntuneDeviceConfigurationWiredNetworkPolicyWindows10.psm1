@@ -258,34 +258,10 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
             Write-Verbose -Message "An Intune Device Configuration Wired Network Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
             #region resource generator code
-            $enumAuthenticationMethod = $null
-            if ($null -ne $getValue.authenticationMethod)
-            {
-                $enumAuthenticationMethod = $getValue.authenticationMethod.ToString()
-            }
-
-            $enumAuthenticationType = $null
-            if ($null -ne $getValue.authenticationType)
-            {
-                $enumAuthenticationType = $getValue.authenticationType.ToString()
-            }
-
-            $enumEapType = $null
-            if ($null -ne $getValue.eapType)
-            {
-                $enumEapType = $getValue.eapType.ToString()
-            }
-
-            $enumInnerAuthenticationProtocolForEAPTTLS = $null
-            if ($null -ne $getValue.innerAuthenticationProtocolForEAPTTLS)
-            {
-                $enumInnerAuthenticationProtocolForEAPTTLS = $getValue.innerAuthenticationProtocolForEAPTTLS.ToString()
-            }
-
             $enumSecondaryAuthenticationMethod = $null
             if ($null -ne $getValue.secondaryAuthenticationMethod)
             {
-                $enumSecondaryAuthenticationMethod = $getValue.secondaryAuthenticationMethod.ToString()
+                $enumSecondaryAuthenticationMethod = $getValue.secondaryAuthenticationMethod
             }
             #endregion
 
@@ -332,17 +308,17 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
             $results = @{
                 #region resource generator code
                 AuthenticationBlockPeriodInMinutes                             = $getValue.authenticationBlockPeriodInMinutes
-                AuthenticationMethod                                           = $enumAuthenticationMethod
+                AuthenticationMethod                                           = $getValue.authenticationMethod
                 AuthenticationPeriodInSeconds                                  = $getValue.authenticationPeriodInSeconds
                 AuthenticationRetryDelayPeriodInSeconds                        = $getValue.authenticationRetryDelayPeriodInSeconds
-                AuthenticationType                                             = $enumAuthenticationType
+                AuthenticationType                                             = $getValue.authenticationType
                 CacheCredentials                                               = $getValue.cacheCredentials
                 DisableUserPromptForServerValidation                           = $getValue.disableUserPromptForServerValidation
                 EapolStartPeriodInSeconds                                      = $getValue.eapolStartPeriodInSeconds
-                EapType                                                        = $enumEapType
+                EapType                                                        = $getValue.eapType
                 Enforce8021X                                                   = $getValue.enforce8021X
                 ForceFIPSCompliance                                            = $getValue.forceFIPSCompliance
-                InnerAuthenticationProtocolForEAPTTLS                          = $enumInnerAuthenticationProtocolForEAPTTLS
+                InnerAuthenticationProtocolForEAPTTLS                          = $getValue.innerAuthenticationProtocolForEAPTTLS
                 MaximumAuthenticationFailures                                  = $getValue.maximumAuthenticationFailures
                 MaximumEAPOLStartMessages                                      = $getValue.maximumEAPOLStartMessages
                 OuterIdentityPrivacyTemporaryValue                             = $getValue.outerIdentityPrivacyTemporaryValue

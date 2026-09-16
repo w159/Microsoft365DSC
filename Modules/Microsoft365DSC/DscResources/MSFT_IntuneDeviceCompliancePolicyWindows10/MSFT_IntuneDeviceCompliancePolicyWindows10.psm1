@@ -271,11 +271,11 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 $myValidOperatingSystemBuildRanges = [ordered]@{}
                 if ($null -ne $currentValidOperatingSystemBuildRanges.lowestVersion)
                 {
-                    $myValidOperatingSystemBuildRanges.Add('LowestVersion', $currentValidOperatingSystemBuildRanges.lowestVersion.ToString())
+                    $myValidOperatingSystemBuildRanges.Add('LowestVersion', $currentValidOperatingSystemBuildRanges.lowestVersion)
                 }
                 if ($null -ne $currentValidOperatingSystemBuildRanges.highestVersion)
                 {
-                    $myValidOperatingSystemBuildRanges.Add('HighestVersion', $currentValidOperatingSystemBuildRanges.highestVersion.ToString())
+                    $myValidOperatingSystemBuildRanges.Add('HighestVersion', $currentValidOperatingSystemBuildRanges.highestVersion)
                 }
                 if ($null -ne $currentValidOperatingSystemBuildRanges.description)
                 {

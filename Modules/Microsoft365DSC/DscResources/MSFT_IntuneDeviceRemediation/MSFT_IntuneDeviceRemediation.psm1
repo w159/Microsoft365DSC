@@ -189,7 +189,7 @@ class IntuneDeviceRemediation : M365DSCResourceBase
                 $myDetectionScriptParameters.Add('DefaultValue', $currentDetectionScriptParameters.defaultValue)
                 if ($null -ne $currentDetectionScriptParameters.'@odata.type')
                 {
-                    $myDetectionScriptParameters.Add('odataType', $currentDetectionScriptParameters.'@odata.type'.ToString())
+                    $myDetectionScriptParameters.Add('odataType', $currentDetectionScriptParameters.'@odata.type')
                 }
                 if ($myDetectionScriptParameters.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -208,7 +208,7 @@ class IntuneDeviceRemediation : M365DSCResourceBase
                 $myRemediationScriptParameters.Add('DefaultValue', $currentRemediationScriptParameters.defaultValue)
                 if ($null -ne $currentRemediationScriptParameters.'@odata.type')
                 {
-                    $myRemediationScriptParameters.Add('odataType', $currentRemediationScriptParameters.'@odata.type'.ToString())
+                    $myRemediationScriptParameters.Add('odataType', $currentRemediationScriptParameters.'@odata.type')
                 }
                 if ($myRemediationScriptParameters.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -217,26 +217,12 @@ class IntuneDeviceRemediation : M365DSCResourceBase
             }
             #endregion
 
-            #region resource generator code
-            $enumDeviceHealthScriptType = $null
-            if ($null -ne $getValue.DeviceHealthScriptType)
-            {
-                $enumDeviceHealthScriptType = $getValue.DeviceHealthScriptType.ToString()
-            }
-
-            $enumRunAsAccount = $null
-            if ($null -ne $getValue.RunAsAccount)
-            {
-                $enumRunAsAccount = $getValue.RunAsAccount.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Description                 = $getValue.Description
                 DetectionScriptContent      = $getValue.DetectionScriptContent
                 DetectionScriptParameters   = $complexDetectionScriptParameters
-                DeviceHealthScriptType      = $enumDeviceHealthScriptType
+                DeviceHealthScriptType      = $getValue.DeviceHealthScriptType
                 DisplayName                 = $getValue.DisplayName
                 EnforceSignatureCheck       = $getValue.EnforceSignatureCheck
                 IsGlobalScript              = $getValue.IsGlobalScript
@@ -245,7 +231,7 @@ class IntuneDeviceRemediation : M365DSCResourceBase
                 RemediationScriptParameters = $complexRemediationScriptParameters
                 RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit                  = $getValue.RunAs32Bit
-                RunAsAccount                = $enumRunAsAccount
+                RunAsAccount                = $getValue.RunAsAccount
                 Id                          = $getValue.Id
                 Ensure                      = 'Present'
                 Credential                  = $this.Credential

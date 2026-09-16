@@ -178,7 +178,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
             $complexOutOfBoxExperienceSetting = [ordered]@{}
             if ($null -ne $getValue.OutOfBoxExperienceSetting.deviceUsageType)
             {
-                $complexOutOfBoxExperienceSetting.Add('DeviceUsageType', $getValue.OutOfBoxExperienceSetting.deviceUsageType.ToString())
+                $complexOutOfBoxExperienceSetting.Add('DeviceUsageType', $getValue.OutOfBoxExperienceSetting.deviceUsageType)
             }
             $complexOutOfBoxExperienceSetting.Add('EscapeLinkHidden', $getValue.OutOfBoxExperienceSetting.escapeLinkHidden)
             $complexOutOfBoxExperienceSetting.Add('EulaHidden', $getValue.OutOfBoxExperienceSetting.eulaHidden)
@@ -186,19 +186,11 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
             $complexOutOfBoxExperienceSetting.Add('PrivacySettingsHidden', $getValue.OutOfBoxExperienceSetting.privacySettingsHidden)
             if ($null -ne $getValue.OutOfBoxExperienceSetting.userType)
             {
-                $complexOutOfBoxExperienceSetting.Add('UserType', $getValue.OutOfBoxExperienceSetting.userType.ToString())
+                $complexOutOfBoxExperienceSetting.Add('UserType', $getValue.OutOfBoxExperienceSetting.userType)
             }
             if ($complexOutOfBoxExperienceSetting.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexOutOfBoxExperienceSetting = $null
-            }
-            #endregion
-
-            #region resource generator code
-            $enumDeviceType = $null
-            if ($null -ne $getValue.DeviceType)
-            {
-                $enumDeviceType = $getValue.DeviceType.ToString()
             }
             #endregion
 
@@ -207,7 +199,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADHybridJoined : M365DSCResour
                 HybridAzureADJoinSkipConnectivityCheck = $getValue.hybridAzureADJoinSkipConnectivityCheck
                 Description                            = $getValue.Description
                 DeviceNameTemplate                     = $getValue.DeviceNameTemplate
-                DeviceType                             = $enumDeviceType
+                DeviceType                             = $getValue.DeviceType
                 DisplayName                            = $getValue.DisplayName
                 PreprovisioningAllowed                 = $getValue.PreprovisioningAllowed
                 EnrollmentStatusScreenSettings         = $complexEnrollmentStatusScreenSettings

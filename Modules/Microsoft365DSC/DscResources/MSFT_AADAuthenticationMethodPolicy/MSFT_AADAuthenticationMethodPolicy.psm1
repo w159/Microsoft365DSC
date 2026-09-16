@@ -99,7 +99,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
                 $myExcludeTargets = [ordered]@{}
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                     if ($myExcludeTargets.TargetType -eq 'Group')
                     {
                         $myExcludeTargetsDisplayName = Get-M365DSCGroupDisplayNameById -GroupId $currentExcludeTargets.Id
@@ -152,7 +152,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
                 $myIncludeTargets.Add('TargetedAuthenticationMethod', $currentIncludeTargets.targetedAuthenticationMethod)
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
                 if ($myIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -163,7 +163,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
             $complexAuthenticationMethodsRegistrationCampaign.Add('SnoozeDurationInDays', $getValue.registrationEnforcement.authenticationMethodsRegistrationCampaign.snoozeDurationInDays)
             if ($null -ne $getValue.registrationEnforcement.authenticationMethodsRegistrationCampaign.state)
             {
-                $complexAuthenticationMethodsRegistrationCampaign.Add('State', $getValue.registrationEnforcement.authenticationMethodsRegistrationCampaign.state.ToString())
+                $complexAuthenticationMethodsRegistrationCampaign.Add('State', $getValue.registrationEnforcement.authenticationMethodsRegistrationCampaign.state)
             }
             if ($complexAuthenticationMethodsRegistrationCampaign.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -195,13 +195,13 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
             }
             if ($null -ne $getValue.ReportSuspiciousActivitySettings.IncludeTarget.targetType)
             {
-                $newComplexIncludeTarget.Add('TargetType', $getValue.ReportSuspiciousActivitySettings.IncludeTarget.targetType.ToString())
+                $newComplexIncludeTarget.Add('TargetType', $getValue.ReportSuspiciousActivitySettings.IncludeTarget.targetType)
             }
             $complexReportSuspiciousActivitySettings.Add('IncludeTarget', $newComplexIncludeTarget)
 
             if ($null -ne $getValue.ReportSuspiciousActivitySettings.state)
             {
-                $complexReportSuspiciousActivitySettings.Add('State', $getValue.ReportSuspiciousActivitySettings.state.ToString())
+                $complexReportSuspiciousActivitySettings.Add('State', $getValue.ReportSuspiciousActivitySettings.state)
             }
             if ($null -ne $getValue.ReportSuspiciousActivitySettings.VoiceReportingCode)
             {
@@ -235,7 +235,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
                 }
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -265,7 +265,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
                 }
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
                 if ($myIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -275,7 +275,7 @@ class AADAuthenticationMethodPolicy : M365DSCResourceBase
             $complexSystemCredentialPreferences.Add('IncludeTargets', $complexIncludeTargets)
             if ($null -ne $getValue.SystemCredentialPreferences.state)
             {
-                $complexSystemCredentialPreferences.Add('State', $getValue.SystemCredentialPreferences.state.ToString())
+                $complexSystemCredentialPreferences.Add('State', $getValue.SystemCredentialPreferences.state)
             }
             if ($complexSystemCredentialPreferences.values.Where({ $null -ne $_ }).Count -eq 0)
             {

@@ -199,44 +199,6 @@ class IntuneDeviceConfigurationEmailProfilePolicyWindows10 : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Email Profile Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumDurationOfEmailToSync = $null
-            if ($null -ne $getValue.durationOfEmailToSync)
-            {
-                $enumDurationOfEmailToSync = $getValue.durationOfEmailToSync.ToString()
-            }
-
-            $enumEmailAddressSource = $null
-            if ($null -ne $getValue.emailAddressSource)
-            {
-                $enumEmailAddressSource = $getValue.emailAddressSource.ToString()
-            }
-
-            $enumEmailSyncSchedule = $null
-            if ($null -ne $getValue.emailSyncSchedule)
-            {
-                $enumEmailSyncSchedule = $getValue.emailSyncSchedule.ToString()
-            }
-
-            $enumUserDomainNameSource = $null
-            if ($null -ne $getValue.userDomainNameSource)
-            {
-                $enumUserDomainNameSource = $getValue.userDomainNameSource.ToString()
-            }
-
-            $enumUsernameAADSource = $null
-            if ($null -ne $getValue.usernameAADSource)
-            {
-                $enumUsernameAADSource = $getValue.usernameAADSource.ToString()
-            }
-
-            $enumUsernameSource = $null
-            if ($null -ne $getValue.usernameSource)
-            {
-                $enumUsernameSource = $getValue.usernameSource.ToString()
-            }
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -268,18 +230,18 @@ class IntuneDeviceConfigurationEmailProfilePolicyWindows10 : M365DSCResourceBase
             $results = @{
                 #region resource generator code
                 AccountName                                 = $getValue.accountName
-                DurationOfEmailToSync                       = $enumDurationOfEmailToSync
-                EmailAddressSource                          = $enumEmailAddressSource
-                EmailSyncSchedule                           = $enumEmailSyncSchedule
+                DurationOfEmailToSync                       = $getValue.durationOfEmailToSync
+                EmailAddressSource                          = $getValue.emailAddressSource
+                EmailSyncSchedule                           = $getValue.emailSyncSchedule
                 HostName                                    = $getValue.hostName
                 RequireSsl                                  = $getValue.requireSsl
                 SyncCalendar                                = $getValue.syncCalendar
                 SyncContacts                                = $getValue.syncContacts
                 SyncTasks                                   = $getValue.syncTasks
                 CustomDomainName                            = $getValue.customDomainName
-                UserDomainNameSource                        = $enumUserDomainNameSource
-                UsernameAADSource                           = $enumUsernameAADSource
-                UsernameSource                              = $enumUsernameSource
+                UserDomainNameSource                        = $getValue.userDomainNameSource
+                UsernameAADSource                           = $getValue.usernameAADSource
+                UsernameSource                              = $getValue.usernameSource
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition

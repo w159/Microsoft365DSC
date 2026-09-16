@@ -199,17 +199,12 @@ class IntuneMobileAppsMicrosoftEdge : M365DSCResourceBase
                 $complexLargeIcon.Add('Type', $getValue.LargeIcon.Type)
                 $complexLargeIcon.Add('Value', $getValue.LargeIcon.Value)
             }
-            $enumChannel = $null
-            if ($null -ne $getValue.channel)
-            {
-                $enumChannel = $getValue.channel.ToString()
-            }
             #endregion
 
             $results = @{
                 #region resource generator code
                 Categories            = $complexCategories
-                Channel               = $enumChannel
+                Channel               = $getValue.channel
                 DisplayLanguageLocale = $getValue.displayLanguageLocale
                 Description           = $getValue.Description
                 Developer             = $getValue.Developer

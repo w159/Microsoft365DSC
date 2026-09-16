@@ -179,7 +179,7 @@ class IntuneDeviceConfigurationCustomPolicyWindows10 : M365DSCResourceBase
                 }
                 if ($null -ne $currentomaSettings.'@odata.type')
                 {
-                    $myomaSettings.Add('odataType', $currentomaSettings.'@odata.type'.ToString())
+                    $myomaSettings.Add('odataType', $currentomaSettings.'@odata.type')
                 }
                 if ($myomaSettings.values.Where({ $null -ne $_ }).Count -gt 0)
                 {

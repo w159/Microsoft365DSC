@@ -1894,6 +1894,7 @@ function Get-M365DSCExportCollectionConsumerMap
 
     return @{
         deviceConfigurations           = @(
+            'IntuneDeviceConfigurationCustomPolicyMacOS',
             'IntuneDeviceConfigurationCustomPolicyWindows10',
             'IntuneDeviceConfigurationCustomPolicyiOS',
             'IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10',
@@ -1919,14 +1920,17 @@ function Get-M365DSCExportCollectionConsumerMap
             'IntuneDeviceConfigurationTrustedCertificatePolicyWindows10',
             'IntuneDeviceConfigurationVpnPolicyWindows10',
             'IntuneDeviceConfigurationWindowsTeamPolicyWindows10',
+            'IntuneDeviceConfigurationWiredNetworkPolicyMacOS',
             'IntuneDeviceConfigurationWiredNetworkPolicyWindows10',
             'IntuneDeviceFeaturesConfigurationPolicyIOS',
+            'IntuneDeviceFeaturesConfigurationPolicyMacOS',
             'IntuneTrustedRootCertificateAndroidDeviceOwner',
             'IntuneTrustedRootCertificateAndroidWork',
             'IntuneTrustedRootCertificateIOS',
             'IntuneVPNConfigurationPolicyAndroidDeviceOwner',
             'IntuneVPNConfigurationPolicyAndroidWork',
             'IntuneVPNConfigurationPolicyIOS',
+            'IntuneVPNConfigurationPolicyMacOS',
             'IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner',
             'IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile',
             'IntuneWifiConfigurationPolicyAndroidForWork',

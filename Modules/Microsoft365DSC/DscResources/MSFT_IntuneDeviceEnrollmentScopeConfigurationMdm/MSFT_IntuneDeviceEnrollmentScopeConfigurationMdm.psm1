@@ -79,7 +79,7 @@ class IntuneDeviceEnrollmentScopeConfigurationMdm : M365DSCResourceBase
             $enumAppliesTo = $null
             if ($null -ne $getValue.AppliesTo)
             {
-                $enumAppliesTo = $getValue.AppliesTo.ToString()
+                $enumAppliesTo = $getValue.AppliesTo
             }
             #endregion
 

@@ -171,7 +171,7 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
             }
             if ($null -ne $getValue.scheduleInfo.expiration.type)
             {
-                $complexExpiration.Add('Type', $getValue.scheduleInfo.expiration.type.ToString())
+                $complexExpiration.Add('Type', $getValue.scheduleInfo.expiration.type)
             }
             if ($complexExpiration.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -183,21 +183,21 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
             $complexPattern.Add('DayOfMonth', $getValue.scheduleInfo.recurrence.pattern.dayOfMonth)
             if ($null -ne $getValue.scheduleInfo.recurrence.pattern.daysOfWeek)
             {
-                $complexPattern.Add('DaysOfWeek', $getValue.scheduleInfo.recurrence.pattern.daysOfWeek.ToString())
+                $complexPattern.Add('DaysOfWeek', $getValue.scheduleInfo.recurrence.pattern.daysOfWeek)
             }
             if ($null -ne $getValue.scheduleInfo.recurrence.pattern.firstDayOfWeek)
             {
-                $complexPattern.Add('FirstDayOfWeek', $getValue.scheduleInfo.recurrence.pattern.firstDayOfWeek.ToString())
+                $complexPattern.Add('FirstDayOfWeek', $getValue.scheduleInfo.recurrence.pattern.firstDayOfWeek)
             }
             if ($null -ne $getValue.scheduleInfo.recurrence.pattern.index)
             {
-                $complexPattern.Add('Index', $getValue.scheduleInfo.recurrence.pattern.index.ToString())
+                $complexPattern.Add('Index', $getValue.scheduleInfo.recurrence.pattern.index)
             }
             $complexPattern.Add('Interval', $getValue.scheduleInfo.recurrence.pattern.interval)
             $complexPattern.Add('Month', $getValue.scheduleInfo.recurrence.pattern.month)
             if ($null -ne $getValue.scheduleInfo.recurrence.pattern.type)
             {
-                $complexPattern.Add('Type', $getValue.scheduleInfo.recurrence.pattern.type.ToString())
+                $complexPattern.Add('Type', $getValue.scheduleInfo.recurrence.pattern.type)
             }
             if ($complexPattern.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -217,7 +217,7 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
             }
             if ($null -ne $getValue.scheduleInfo.recurrence.range.type)
             {
-                $complexRange.Add('Type', $getValue.scheduleInfo.recurrence.range.type.ToString())
+                $complexRange.Add('Type', $getValue.scheduleInfo.recurrence.range.type)
             }
             if ($complexRange.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -236,20 +236,6 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
             if ($complexScheduleInfo.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexScheduleInfo = $null
-            }
-            #endregion
-
-            #region resource generator code
-            $enumAccessId = $null
-            if ($null -ne $getValue.accessId)
-            {
-                $enumAccessId = $getValue.accessId.ToString()
-            }
-
-            $enumMemberType = $null
-            if ($null -ne $getValue.memberType)
-            {
-                $enumMemberType = $getValue.memberType.ToString()
             }
             #endregion
 
@@ -280,9 +266,9 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
             Write-Verbose "PrincipalValue = $PrincipalValue"
             $results = @{
                 #region resource generator code
-                AccessId              = $enumAccessId
+                AccessId              = $getValue.accessId
                 GroupDisplayName      = $this.ResourceCache['CurrentGroup'].DisplayName
-                MemberType            = $enumMemberType
+                MemberType            = $getValue.memberType
                 PrincipalType         = $getValue.PrincipalType
                 Principal             = $PrincipalValue
                 ScheduleInfo          = $complexScheduleInfo

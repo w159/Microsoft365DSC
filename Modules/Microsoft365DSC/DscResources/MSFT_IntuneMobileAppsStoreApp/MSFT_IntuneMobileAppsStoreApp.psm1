@@ -255,16 +255,11 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
                 $complexLargeIcon.Add('Type', $getValue.LargeIcon.Type)
                 $complexLargeIcon.Add('Value', $getValue.LargeIcon.Value)
             }
-            $enumAppleDeviceAppDeliveryProtocolType = $null
-            if ($null -ne $getValue.appleDeviceAppDeliveryProtocolType)
-            {
-                $enumAppleDeviceAppDeliveryProtocolType = $getValue.appleDeviceAppDeliveryProtocolType.ToString()
-            }
             #endregion
 
             $results = @{
                 #region resource generator code
-                AppleDeviceAppDeliveryProtocolType = $enumAppleDeviceAppDeliveryProtocolType
+                AppleDeviceAppDeliveryProtocolType = $getValue.appleDeviceAppDeliveryProtocolType
                 ApplicableDeviceType               = $complexApplicableDeviceType
                 AppStoreUrl                        = $getValue.appStoreUrl
                 BundleId                           = $getValue.bundleId

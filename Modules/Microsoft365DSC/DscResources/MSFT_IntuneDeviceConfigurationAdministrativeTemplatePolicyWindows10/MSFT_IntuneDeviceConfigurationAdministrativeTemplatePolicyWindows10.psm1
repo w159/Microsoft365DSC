@@ -149,29 +149,18 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
                 $definitionValue.Add('Id', $setting.Id)
                 if ($null -ne $setting.ConfigurationType)
                 {
-                    $definitionValue.Add('ConfigurationType', $setting.ConfigurationType.ToString())
+                    $definitionValue.Add('ConfigurationType', $setting.ConfigurationType)
                 }
                 $definitionValue.Add('Enabled', $setting.Enabled)
                 $definition = Get-MgBetaDeviceManagementGroupPolicyConfigurationDefinitionValueDefinition `
                     -GroupPolicyConfigurationId $resolvedId `
                     -GroupPolicyDefinitionValueId $setting.Id
 
-                $enumClassType = $null
-                if ($null -ne $definition.ClassType)
-                {
-                    $enumClassType = $definition.ClassType.ToString()
-                }
-
-                $enumPolicyType = $null
-                if ($null -ne $definition.PolicyType)
-                {
-                    $enumPolicyType = $definition.PolicyType.ToString()
-                }
                 $complexDefinition = @{
                     CategoryPath = $definition.CategoryPath
-                    ClassType    = $enumClassType
+                    ClassType    = $definition.ClassType
                     DisplayName  = $definition.DisplayName
-                    PolicyType   = $enumPolicyType
+                    PolicyType   = $definition.PolicyType
                     SupportedOn  = $definition.SupportedOn
                     Id           = $definition.Id
                 }

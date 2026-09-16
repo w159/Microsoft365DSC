@@ -219,20 +219,6 @@ class IntuneDeviceConfigurationWindowsTeamPolicyWindows10 : M365DSCResourceBase
             Write-Verbose -Message "An Intune Device Configuration Windows Team Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
             #region resource generator code
-            $enumMiracastChannel = $null
-            if ($null -ne $getValue.miracastChannel)
-            {
-                $enumMiracastChannel = $getValue.miracastChannel.ToString()
-            }
-
-            $enumWelcomeScreenMeetingInformation = $null
-            if ($null -ne $getValue.welcomeScreenMeetingInformation)
-            {
-                $enumWelcomeScreenMeetingInformation = $getValue.welcomeScreenMeetingInformation.ToString()
-            }
-            #endregion
-
-            #region resource generator code
             $timeMaintenanceWindowStartTime = $null
             if ($null -ne $getValue.maintenanceWindowStartTime)
             {
@@ -281,7 +267,7 @@ class IntuneDeviceConfigurationWindowsTeamPolicyWindows10 : M365DSCResourceBase
                 MaintenanceWindowDurationInHours            = $getValue.maintenanceWindowDurationInHours
                 MaintenanceWindowStartTime                  = $timeMaintenanceWindowStartTime
                 MiracastBlocked                             = $getValue.miracastBlocked
-                MiracastChannel                             = $enumMiracastChannel
+                MiracastChannel                             = $getValue.miracastChannel
                 MiracastRequirePin                          = $getValue.miracastRequirePin
                 SettingsBlockMyMeetingsAndFiles             = $getValue.settingsBlockMyMeetingsAndFiles
                 SettingsBlockSessionResume                  = $getValue.settingsBlockSessionResume
@@ -292,7 +278,7 @@ class IntuneDeviceConfigurationWindowsTeamPolicyWindows10 : M365DSCResourceBase
                 SettingsSleepTimeoutInMinutes               = $getValue.settingsSleepTimeoutInMinutes
                 WelcomeScreenBackgroundImageUrl             = $getValue.welcomeScreenBackgroundImageUrl
                 WelcomeScreenBlockAutomaticWakeUp           = $getValue.welcomeScreenBlockAutomaticWakeUp
-                WelcomeScreenMeetingInformation             = $enumWelcomeScreenMeetingInformation
+                WelcomeScreenMeetingInformation             = $getValue.welcomeScreenMeetingInformation
                 Description                                 = $getValue.Description
                 DisplayName                                 = $getValue.DisplayName
                 RoleScopeTagIds                             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds

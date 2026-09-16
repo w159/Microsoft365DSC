@@ -174,27 +174,13 @@ class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
                 }
             }
 
-            #region resource generator code
-            $enumPlatforms = $null
-            if ($null -ne $getValue.Platforms)
-            {
-                $enumPlatforms = $getValue.Platforms.ToString()
-            }
-
-            $enumTechnologies = $null
-            if ($null -ne $getValue.Technologies)
-            {
-                $enumTechnologies = $getValue.Technologies.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Description           = $getValue.Description
                 Name                  = $getValue.Name
-                Platforms             = $enumPlatforms
+                Platforms             = $getValue.Platforms
                 RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
-                Technologies          = $enumTechnologies
+                Technologies          = $getValue.Technologies
                 Settings              = $complexSettings
                 Id                    = $getValue.Id
                 Ensure                = 'Present'

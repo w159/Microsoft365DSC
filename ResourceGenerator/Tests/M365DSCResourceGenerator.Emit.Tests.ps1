@@ -108,14 +108,12 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Match '(?s)\[DscProperty\(Key\)\]\s*\[System\.ComponentModel\.Description\(''The display name\.''\)\]\s*\[System\.String\] \$DisplayName'
         }
 
-        It 'generates a hidden hashtable helper method for the complex type' {
-            $script:classContent | Should -Match 'hidden \[System\.Collections\.Hashtable\] GetTestRuleAsHashtable\(\[System\.Object\] \$ComplexObject\)'
-            $script:classContent | Should -Match '\$complexRules \+= \$this\.GetTestRuleAsHashtable\(\$currentRules\)'
+        It 'declares no conversion helper method' {
+            $script:classContent | Should -Not -Match 'hidden \[System\.Collections\.Hashtable\]'
             $script:classContent | Should -Not -Match '(?m)^function '
         }
 
-        It 'converts enums and dates before the result hashtable' {
-            $script:classContent | Should -Match '\$enumLevel = \$getValue\.Level\.ToString\(\)'
+        It 'converts dates before the result hashtable' {
             $script:classContent | Should -Match '\$dateStartDate = \$getValue\.StartDate\.ToUniversalTime\(\)\.ToString\(''o''\)'
         }
 
@@ -124,64 +122,38 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Match "-NoEscape @\('Rules'\)"
         }
     }
-    Describe 'Get-M365DSCAssignmentCimClassName' {
-        BeforeAll {
-            $script:assignmentModel = [PSCustomObject] @{
-                SchemaProperties = @(
-                    [PSCustomObject] @{
-                        Name          = 'Assignments'
-                        IsAssignments = $true
-                        IsComplex     = $true
-                        CimClassName  = 'MSFT_DeviceManagementWin32CatalogAppAssignment'
-                        Members       = @(
-                            [PSCustomObject] @{
-                                Name         = 'assignmentSettings'
-                                IsComplex    = $true
-                                CimClassName = 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'
-                                Members      = @(
-                                    [PSCustomObject] @{
-                                        Name         = 'InstallTimeSettings'
-                                        IsComplex    = $true
-                                        CimClassName = 'MSFT_MicrosoftGraphMobileAppInstallTimeSettings'
-                                        Members      = @()
-                                    }
-                                )
-                            }
-                        )
-                    }
-                    [PSCustomObject] @{
-                        Name         = 'LargeIcon'
-                        IsComplex    = $true
-                        CimClassName = 'MSFT_MicrosoftGraphMimeContent2'
-                        Members      = @()
-                    }
-                )
+    Describe 'New-M365DSCComplexConversionBlock' {
+        It 'converts a complex property inline instead of calling a helper method' {
+            $script:classContent | Should -Not -Match 'AsHashtable'
+            $script:classContent | Should -Match '\$complexRules = @\(\)'
+            $script:classContent | Should -Match 'foreach \(\$currentRules in \$getValue\.Rules\)'
+            $script:classContent | Should -Match "\`$myRules\.Add\('Name', \`$currentRules\.name\)"
+            $script:classContent | Should -Match "\`$myRules\.values\.Where\(\{ \`$null -ne \`$_ \}\)\.Count -gt 0"
+        }
+
+        It 'maps a Graph enum straight from the returned value' {
+            $script:classContent | Should -Not -Match '\$enumLevel'
+            $script:classContent | Should -Not -Match '\$getValue\.\w+\.ToString\(\)'
+            $script:classContent | Should -Match 'Level\s+= \$getValue\.Level'
+        }
+
+        It 'keeps the ToString conversion for a workload without the shim' {
+            $exoInfo = @{
+                GetCmdlet    = 'Get-AcceptedDomain'
+                NewCmdlet    = 'New-AcceptedDomain'
+                UpdateCmdlet = 'Set-AcceptedDomain'
+                RemoveCmdlet = 'Remove-AcceptedDomain'
             }
-        }
+            $exoProperties = @(
+                New-M365DSCPropertyModel -Name 'Identity' -Type 'Edm.String' -Description 'The identity.'
+                New-M365DSCPropertyModel -Name 'DomainType' -EnumValues @('authoritative', 'internalRelay') -Description 'The domain type.'
+            )
+            $exoModel = New-M365DSCResourceModel -ResourceName 'EXOAcceptedDomain' -Workload 'ExchangeOnline' `
+                -CmdletInfo $exoInfo -Properties $exoProperties -CmdLetNoun 'AcceptedDomain' -CmdLetVerb 'Set'
 
-        It 'collects every class the assignment reaches' {
-            $names = @(Get-M365DSCAssignmentCimClassName -ResourceModel $script:assignmentModel)
+            $block = New-M365DSCComplexConversionBlock -ResourceModel $exoModel
 
-            $names | Should -Contain 'MSFT_DeviceManagementWin32CatalogAppAssignment'
-            $names | Should -Contain 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'
-            $names | Should -Contain 'MSFT_MicrosoftGraphMobileAppInstallTimeSettings'
-        }
-
-        It 'keeps a class another property also reaches' {
-            @(Get-M365DSCAssignmentCimClassName -ResourceModel $script:assignmentModel) |
-                Should -Not -Contain 'MSFT_MicrosoftGraphMimeContent2'
-        }
-
-        It 'emits no helper for the assignment classes' {
-            $script:assignmentModel | Add-Member -NotePropertyName 'ComplexTypeClasses' -NotePropertyValue @(
-                [PSCustomObject] @{ CimClassName = 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'; Members = @() }
-                [PSCustomObject] @{ CimClassName = 'MSFT_MicrosoftGraphMimeContent2'; Members = @() }
-            ) -Force
-
-            $block = New-M365DSCHelperFunctionBlock -ResourceModel $script:assignmentModel
-
-            $block | Should -Not -Match 'GetDeviceManagementWin32CatalogAppAssignmentSettingsAsHashtable'
-            $block | Should -Match 'GetMimeContent2AsHashtable'
+            $block | Should -Match '\$enumDomainType = \$getValue\.DomainType\.ToString\(\)'
         }
     }
 

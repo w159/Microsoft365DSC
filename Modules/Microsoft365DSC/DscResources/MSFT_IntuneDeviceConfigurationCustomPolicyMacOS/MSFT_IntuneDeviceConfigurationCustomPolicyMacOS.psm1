@@ -138,13 +138,8 @@ class IntuneDeviceConfigurationCustomPolicyMacOS : M365DSCResourceBase
 
             Write-Verbose -Message "Found Intune Device Configuration Custom Policy for macOS with Id {$($this.Id)}"
 
-            $enumDeploymentChannel = $null
-            if ($null -ne $getValue.deploymentChannel)
-            {
-                $enumDeploymentChannel = $getValue.deploymentChannel.ToString()
-            }
             $result = @{
-                DeploymentChannel     = $enumDeploymentChannel
+                DeploymentChannel     = $getValue.deploymentChannel
                 Description           = $getValue.Description
                 DisplayName           = $getValue.DisplayName
                 Id                    = $getValue.Id

@@ -53,7 +53,10 @@ class <ResourceName> : M365DSCResourceBase
 
             Write-Verbose -Message "Found <ResourceDescription> with <PrimaryKey> {$($this.<PrimaryKey>)}"
 
+<#IF ComplexConversionBlock#>
 <ComplexConversionBlock>
+
+<#ENDIF ComplexConversionBlock#>
             $result = @{
 <HashtableMappingBlock>
             }
@@ -220,10 +223,6 @@ class <ResourceName> : M365DSCResourceBase
 
         return $result
     }
-<#IF HelperFunctionBlock#>
-
-<HelperFunctionBlock>
-<#ENDIF HelperFunctionBlock#>
 }
 <#IF CimInstanceClassBlock#>
 

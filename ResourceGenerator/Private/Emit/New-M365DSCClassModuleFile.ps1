@@ -36,12 +36,6 @@ function New-M365DSCClassModuleFile
         "`r`n}"
     }
 
-    $helperFunctionBlock = ''
-    if ($ResourceModel.ComplexTypeClasses.Count -gt 0)
-    {
-        $helperFunctionBlock = New-M365DSCHelperFunctionBlock -ResourceModel $ResourceModel
-    }
-
     $tokens = @{
         ResourceName           = $ResourceModel.ResourceName
         ResourceDescription    = $ResourceModel.ResourceDescription
@@ -65,7 +59,6 @@ function New-M365DSCClassModuleFile
         CompareParametersBlock = New-M365DSCCompareParametersBlock -ResourceModel $ResourceModel
         NoEscapeArgument       = ''
         CimInstanceClassBlock  = ($cimClassBlocks -join "`r`n`r`n")
-        HelperFunctionBlock    = $helperFunctionBlock
     }
 
     if ($null -ne $ResourceModel.AlternativeKey)

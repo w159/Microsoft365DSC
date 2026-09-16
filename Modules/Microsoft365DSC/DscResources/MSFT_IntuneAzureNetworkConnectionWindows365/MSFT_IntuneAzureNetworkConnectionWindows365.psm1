@@ -158,7 +158,7 @@ class IntuneAzureNetworkConnectionWindows365 : M365DSCResourceBase
             $enumConnectionType = $null
             if ($null -ne $getValue.ConnectionType)
             {
-                $enumConnectionType = $getValue.ConnectionType.ToString()
+                $enumConnectionType = $getValue.ConnectionType
             }
             #endregion
 

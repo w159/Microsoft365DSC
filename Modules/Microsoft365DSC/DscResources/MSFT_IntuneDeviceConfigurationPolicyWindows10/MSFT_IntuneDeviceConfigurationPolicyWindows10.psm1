@@ -1319,19 +1319,19 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             $complexDefenderDetectedMalwareActions = [ordered]@{}
             if ($null -ne $getValue.defenderDetectedMalwareActions.highSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('HighSeverity', $getValue.defenderDetectedMalwareActions.highSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('HighSeverity', $getValue.defenderDetectedMalwareActions.highSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.lowSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('LowSeverity', $getValue.defenderDetectedMalwareActions.lowSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('LowSeverity', $getValue.defenderDetectedMalwareActions.lowSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.moderateSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('ModerateSeverity', $getValue.defenderDetectedMalwareActions.moderateSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('ModerateSeverity', $getValue.defenderDetectedMalwareActions.moderateSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.severeSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('SevereSeverity', $getValue.defenderDetectedMalwareActions.severeSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('SevereSeverity', $getValue.defenderDetectedMalwareActions.severeSeverity)
             }
             if ($complexDefenderDetectedMalwareActions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1370,7 +1370,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             $complexEdgeHomeButtonConfiguration.Add('HomeButtonCustomURL', $getValue.edgeHomeButtonConfiguration.homeButtonCustomURL)
             if ($null -ne $getValue.edgeHomeButtonConfiguration.'@odata.type')
             {
-                $complexEdgeHomeButtonConfiguration.Add('odataType', $getValue.edgeHomeButtonConfiguration.'@odata.type'.ToString())
+                $complexEdgeHomeButtonConfiguration.Add('odataType', $getValue.edgeHomeButtonConfiguration.'@odata.type')
             }
             if ($complexEdgeHomeButtonConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1380,12 +1380,12 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             $complexEdgeSearchEngine = [ordered]@{}
             if ($null -ne $getValue.edgeSearchEngine.edgeSearchEngineType)
             {
-                $complexEdgeSearchEngine.Add('EdgeSearchEngineType', $getValue.edgeSearchEngine.edgeSearchEngineType.ToString())
+                $complexEdgeSearchEngine.Add('EdgeSearchEngineType', $getValue.edgeSearchEngine.edgeSearchEngineType)
             }
             $complexEdgeSearchEngine.Add('EdgeSearchEngineOpenSearchXmlUrl', $getValue.edgeSearchEngine.edgeSearchEngineOpenSearchXmlUrl)
             if ($null -ne $getValue.edgeSearchEngine.'@odata.type')
             {
-                $complexEdgeSearchEngine.Add('odataType', $getValue.edgeSearchEngine.'@odata.type'.ToString())
+                $complexEdgeSearchEngine.Add('odataType', $getValue.edgeSearchEngine.'@odata.type')
             }
             if ($complexEdgeSearchEngine.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1404,7 +1404,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             $complexWindows10AppsForceUpdateSchedule = [ordered]@{}
             if ($null -ne $getValue.windows10AppsForceUpdateSchedule.recurrence)
             {
-                $complexWindows10AppsForceUpdateSchedule.Add('Recurrence', $getValue.windows10AppsForceUpdateSchedule.recurrence.ToString())
+                $complexWindows10AppsForceUpdateSchedule.Add('Recurrence', $getValue.windows10AppsForceUpdateSchedule.recurrence)
             }
             $complexWindows10AppsForceUpdateSchedule.Add('RunImmediatelyIfAfterStartDateTime', $getValue.windows10AppsForceUpdateSchedule.runImmediatelyIfAfterStartDateTime)
             if ($null -ne $getValue.windows10AppsForceUpdateSchedule.startDateTime)
@@ -1414,314 +1414,6 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             if ($complexWindows10AppsForceUpdateSchedule.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexWindows10AppsForceUpdateSchedule = $null
-            }
-            #endregion
-
-            #region resource generator code
-            $enumActivateAppsWithVoice = $null
-            if ($null -ne $getValue.activateAppsWithVoice)
-            {
-                $enumActivateAppsWithVoice = $getValue.activateAppsWithVoice.ToString()
-            }
-
-            $enumAppsAllowTrustedAppsSideloading = $null
-            if ($null -ne $getValue.appsAllowTrustedAppsSideloading)
-            {
-                $enumAppsAllowTrustedAppsSideloading = $getValue.appsAllowTrustedAppsSideloading.ToString()
-            }
-
-            $enumAuthenticationWebSignIn = $null
-            if ($null -ne $getValue.authenticationWebSignIn)
-            {
-                $enumAuthenticationWebSignIn = $getValue.authenticationWebSignIn.ToString()
-            }
-
-            $enumCellularData = $null
-            if ($null -ne $getValue.cellularData)
-            {
-                $enumCellularData = $getValue.cellularData.ToString()
-            }
-
-            $enumDefenderCloudBlockLevel = $null
-            if ($null -ne $getValue.defenderCloudBlockLevel)
-            {
-                $enumDefenderCloudBlockLevel = $getValue.defenderCloudBlockLevel.ToString()
-            }
-
-            $enumDefenderMonitorFileActivity = $null
-            if ($null -ne $getValue.defenderMonitorFileActivity)
-            {
-                $enumDefenderMonitorFileActivity = $getValue.defenderMonitorFileActivity.ToString()
-            }
-
-            $enumDefenderPotentiallyUnwantedAppAction = $null
-            if ($null -ne $getValue.defenderPotentiallyUnwantedAppAction)
-            {
-                $enumDefenderPotentiallyUnwantedAppAction = $getValue.defenderPotentiallyUnwantedAppAction.ToString()
-            }
-
-            $enumDefenderPotentiallyUnwantedAppActionSetting = $null
-            if ($null -ne $getValue.defenderPotentiallyUnwantedAppActionSetting)
-            {
-                $enumDefenderPotentiallyUnwantedAppActionSetting = $getValue.defenderPotentiallyUnwantedAppActionSetting.ToString()
-            }
-
-            $enumDefenderPromptForSampleSubmission = $null
-            if ($null -ne $getValue.defenderPromptForSampleSubmission)
-            {
-                $enumDefenderPromptForSampleSubmission = $getValue.defenderPromptForSampleSubmission.ToString()
-            }
-
-            $enumDefenderScanType = $null
-            if ($null -ne $getValue.defenderScanType)
-            {
-                $enumDefenderScanType = $getValue.defenderScanType.ToString()
-            }
-
-            $enumDefenderSubmitSamplesConsentType = $null
-            if ($null -ne $getValue.defenderSubmitSamplesConsentType)
-            {
-                $enumDefenderSubmitSamplesConsentType = $getValue.defenderSubmitSamplesConsentType.ToString()
-            }
-
-            $enumDefenderSystemScanSchedule = $null
-            if ($null -ne $getValue.defenderSystemScanSchedule)
-            {
-                $enumDefenderSystemScanSchedule = $getValue.defenderSystemScanSchedule.ToString()
-            }
-
-            $enumDeveloperUnlockSetting = $null
-            if ($null -ne $getValue.developerUnlockSetting)
-            {
-                $enumDeveloperUnlockSetting = $getValue.developerUnlockSetting.ToString()
-            }
-
-            $enumDiagnosticsDataSubmissionMode = $null
-            if ($null -ne $getValue.diagnosticsDataSubmissionMode)
-            {
-                $enumDiagnosticsDataSubmissionMode = $getValue.diagnosticsDataSubmissionMode.ToString()
-            }
-
-            $enumEdgeCookiePolicy = $null
-            if ($null -ne $getValue.edgeCookiePolicy)
-            {
-                $enumEdgeCookiePolicy = $getValue.edgeCookiePolicy.ToString()
-            }
-
-            $enumEdgeFavoritesBarVisibility = $null
-            if ($null -ne $getValue.edgeFavoritesBarVisibility)
-            {
-                $enumEdgeFavoritesBarVisibility = $getValue.edgeFavoritesBarVisibility.ToString()
-            }
-
-            $enumEdgeKioskModeRestriction = $null
-            if ($null -ne $getValue.edgeKioskModeRestriction)
-            {
-                $enumEdgeKioskModeRestriction = $getValue.edgeKioskModeRestriction.ToString()
-            }
-
-            $enumEdgeOpensWith = $null
-            if ($null -ne $getValue.edgeOpensWith)
-            {
-                $enumEdgeOpensWith = $getValue.edgeOpensWith.ToString()
-            }
-
-            $enumEdgeShowMessageWhenOpeningInternetExplorerSites = $null
-            if ($null -ne $getValue.edgeShowMessageWhenOpeningInternetExplorerSites)
-            {
-                $enumEdgeShowMessageWhenOpeningInternetExplorerSites = $getValue.edgeShowMessageWhenOpeningInternetExplorerSites.ToString()
-            }
-
-            $enumEdgeTelemetryForMicrosoft365Analytics = $null
-            if ($null -ne $getValue.edgeTelemetryForMicrosoft365Analytics)
-            {
-                $enumEdgeTelemetryForMicrosoft365Analytics = $getValue.edgeTelemetryForMicrosoft365Analytics.ToString()
-            }
-
-            $enumExperienceDoNotSyncBrowserSettings = $null
-            if ($null -ne $getValue.experienceDoNotSyncBrowserSettings)
-            {
-                $enumExperienceDoNotSyncBrowserSettings = $getValue.experienceDoNotSyncBrowserSettings.ToString()
-            }
-
-            $enumFindMyFiles = $null
-            if ($null -ne $getValue.findMyFiles)
-            {
-                $enumFindMyFiles = $getValue.findMyFiles.ToString()
-            }
-
-            $enumInkWorkspaceAccess = $null
-            if ($null -ne $getValue.inkWorkspaceAccess)
-            {
-                $enumInkWorkspaceAccess = $getValue.inkWorkspaceAccess.ToString()
-            }
-
-            $enumInkWorkspaceAccessState = $null
-            if ($null -ne $getValue.inkWorkspaceAccessState)
-            {
-                $enumInkWorkspaceAccessState = $getValue.inkWorkspaceAccessState.ToString()
-            }
-
-            $enumLockScreenActivateAppsWithVoice = $null
-            if ($null -ne $getValue.lockScreenActivateAppsWithVoice)
-            {
-                $enumLockScreenActivateAppsWithVoice = $getValue.lockScreenActivateAppsWithVoice.ToString()
-            }
-
-            $enumMicrosoftAccountSignInAssistantSettings = $null
-            if ($null -ne $getValue.microsoftAccountSignInAssistantSettings)
-            {
-                $enumMicrosoftAccountSignInAssistantSettings = $getValue.microsoftAccountSignInAssistantSettings.ToString()
-            }
-
-            $enumPasswordRequiredType = $null
-            if ($null -ne $getValue.passwordRequiredType)
-            {
-                $enumPasswordRequiredType = $getValue.passwordRequiredType.ToString()
-            }
-
-            $enumPowerButtonActionOnBattery = $null
-            if ($null -ne $getValue.powerButtonActionOnBattery)
-            {
-                $enumPowerButtonActionOnBattery = $getValue.powerButtonActionOnBattery.ToString()
-            }
-
-            $enumPowerButtonActionPluggedIn = $null
-            if ($null -ne $getValue.powerButtonActionPluggedIn)
-            {
-                $enumPowerButtonActionPluggedIn = $getValue.powerButtonActionPluggedIn.ToString()
-            }
-
-            $enumPowerHybridSleepOnBattery = $null
-            if ($null -ne $getValue.powerHybridSleepOnBattery)
-            {
-                $enumPowerHybridSleepOnBattery = $getValue.powerHybridSleepOnBattery.ToString()
-            }
-
-            $enumPowerHybridSleepPluggedIn = $null
-            if ($null -ne $getValue.powerHybridSleepPluggedIn)
-            {
-                $enumPowerHybridSleepPluggedIn = $getValue.powerHybridSleepPluggedIn.ToString()
-            }
-
-            $enumPowerLidCloseActionOnBattery = $null
-            if ($null -ne $getValue.powerLidCloseActionOnBattery)
-            {
-                $enumPowerLidCloseActionOnBattery = $getValue.powerLidCloseActionOnBattery.ToString()
-            }
-
-            $enumPowerLidCloseActionPluggedIn = $null
-            if ($null -ne $getValue.powerLidCloseActionPluggedIn)
-            {
-                $enumPowerLidCloseActionPluggedIn = $getValue.powerLidCloseActionPluggedIn.ToString()
-            }
-
-            $enumPowerSleepButtonActionOnBattery = $null
-            if ($null -ne $getValue.powerSleepButtonActionOnBattery)
-            {
-                $enumPowerSleepButtonActionOnBattery = $getValue.powerSleepButtonActionOnBattery.ToString()
-            }
-
-            $enumPowerSleepButtonActionPluggedIn = $null
-            if ($null -ne $getValue.powerSleepButtonActionPluggedIn)
-            {
-                $enumPowerSleepButtonActionPluggedIn = $getValue.powerSleepButtonActionPluggedIn.ToString()
-            }
-
-            $enumPrivacyAdvertisingId = $null
-            if ($null -ne $getValue.privacyAdvertisingId)
-            {
-                $enumPrivacyAdvertisingId = $getValue.privacyAdvertisingId.ToString()
-            }
-
-            $enumSafeSearchFilter = $null
-            if ($null -ne $getValue.safeSearchFilter)
-            {
-                $enumSafeSearchFilter = $getValue.safeSearchFilter.ToString()
-            }
-
-            $enumSmartScreenAppInstallControl = $null
-            if ($null -ne $getValue.smartScreenAppInstallControl)
-            {
-                $enumSmartScreenAppInstallControl = $getValue.smartScreenAppInstallControl.ToString()
-            }
-
-            $enumStartMenuAppListVisibility = $null
-            if ($null -ne $getValue.startMenuAppListVisibility)
-            {
-                $enumStartMenuAppListVisibility = $getValue.startMenuAppListVisibility.ToString()
-            }
-
-            $enumStartMenuMode = $null
-            if ($null -ne $getValue.startMenuMode)
-            {
-                $enumStartMenuMode = $getValue.startMenuMode.ToString()
-            }
-
-            $enumStartMenuPinnedFolderDocuments = $null
-            if ($null -ne $getValue.startMenuPinnedFolderDocuments)
-            {
-                $enumStartMenuPinnedFolderDocuments = $getValue.startMenuPinnedFolderDocuments.ToString()
-            }
-
-            $enumStartMenuPinnedFolderDownloads = $null
-            if ($null -ne $getValue.startMenuPinnedFolderDownloads)
-            {
-                $enumStartMenuPinnedFolderDownloads = $getValue.startMenuPinnedFolderDownloads.ToString()
-            }
-
-            $enumStartMenuPinnedFolderFileExplorer = $null
-            if ($null -ne $getValue.startMenuPinnedFolderFileExplorer)
-            {
-                $enumStartMenuPinnedFolderFileExplorer = $getValue.startMenuPinnedFolderFileExplorer.ToString()
-            }
-
-            $enumStartMenuPinnedFolderHomeGroup = $null
-            if ($null -ne $getValue.startMenuPinnedFolderHomeGroup)
-            {
-                $enumStartMenuPinnedFolderHomeGroup = $getValue.startMenuPinnedFolderHomeGroup.ToString()
-            }
-
-            $enumStartMenuPinnedFolderMusic = $null
-            if ($null -ne $getValue.startMenuPinnedFolderMusic)
-            {
-                $enumStartMenuPinnedFolderMusic = $getValue.startMenuPinnedFolderMusic.ToString()
-            }
-
-            $enumStartMenuPinnedFolderNetwork = $null
-            if ($null -ne $getValue.startMenuPinnedFolderNetwork)
-            {
-                $enumStartMenuPinnedFolderNetwork = $getValue.startMenuPinnedFolderNetwork.ToString()
-            }
-
-            $enumStartMenuPinnedFolderPersonalFolder = $null
-            if ($null -ne $getValue.startMenuPinnedFolderPersonalFolder)
-            {
-                $enumStartMenuPinnedFolderPersonalFolder = $getValue.startMenuPinnedFolderPersonalFolder.ToString()
-            }
-
-            $enumStartMenuPinnedFolderPictures = $null
-            if ($null -ne $getValue.startMenuPinnedFolderPictures)
-            {
-                $enumStartMenuPinnedFolderPictures = $getValue.startMenuPinnedFolderPictures.ToString()
-            }
-
-            $enumStartMenuPinnedFolderSettings = $null
-            if ($null -ne $getValue.startMenuPinnedFolderSettings)
-            {
-                $enumStartMenuPinnedFolderSettings = $getValue.startMenuPinnedFolderSettings.ToString()
-            }
-
-            $enumStartMenuPinnedFolderVideos = $null
-            if ($null -ne $getValue.startMenuPinnedFolderVideos)
-            {
-                $enumStartMenuPinnedFolderVideos = $getValue.startMenuPinnedFolderVideos.ToString()
-            }
-
-            $enumWindowsSpotlightConfigureOnLockScreen = $null
-            if ($null -ne $getValue.windowsSpotlightConfigureOnLockScreen)
-            {
-                $enumWindowsSpotlightConfigureOnLockScreen = $getValue.windowsSpotlightConfigureOnLockScreen.ToString()
             }
             #endregion
 
@@ -1742,16 +1434,16 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
             $results = @{
                 #region resource generator code
                 AccountsBlockAddingNonMicrosoftAccountEmail           = $getValue.accountsBlockAddingNonMicrosoftAccountEmail
-                ActivateAppsWithVoice                                 = $enumActivateAppsWithVoice
+                ActivateAppsWithVoice                                 = $getValue.activateAppsWithVoice
                 AntiTheftModeBlocked                                  = $getValue.antiTheftModeBlocked
                 AppManagementMSIAllowUserControlOverInstall           = $getValue.appManagementMSIAllowUserControlOverInstall
                 AppManagementMSIAlwaysInstallWithElevatedPrivileges   = $getValue.appManagementMSIAlwaysInstallWithElevatedPrivileges
                 AppManagementPackageFamilyNamesToLaunchAfterLogOn     = $getValue.appManagementPackageFamilyNamesToLaunchAfterLogOn
-                AppsAllowTrustedAppsSideloading                       = $enumAppsAllowTrustedAppsSideloading
+                AppsAllowTrustedAppsSideloading                       = $getValue.appsAllowTrustedAppsSideloading
                 AppsBlockWindowsStoreOriginatedApps                   = $getValue.appsBlockWindowsStoreOriginatedApps
                 AuthenticationAllowSecondaryDevice                    = $getValue.authenticationAllowSecondaryDevice
                 AuthenticationPreferredAzureADTenantDomainName        = $getValue.authenticationPreferredAzureADTenantDomainName
-                AuthenticationWebSignIn                               = $enumAuthenticationWebSignIn
+                AuthenticationWebSignIn                               = $getValue.authenticationWebSignIn
                 BluetoothAllowedServices                              = $getValue.bluetoothAllowedServices
                 BluetoothBlockAdvertising                             = $getValue.bluetoothBlockAdvertising
                 BluetoothBlockDiscoverableMode                        = $getValue.bluetoothBlockDiscoverableMode
@@ -1762,7 +1454,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 CellularBlockDataWhenRoaming                          = $getValue.cellularBlockDataWhenRoaming
                 CellularBlockVpn                                      = $getValue.cellularBlockVpn
                 CellularBlockVpnWhenRoaming                           = $getValue.cellularBlockVpnWhenRoaming
-                CellularData                                          = $enumCellularData
+                CellularData                                          = $getValue.cellularData
                 CertificatesBlockManualRootCertificateInstallation    = $getValue.certificatesBlockManualRootCertificateInstallation
                 ConfigureTimeZone                                     = $getValue.configureTimeZone
                 ConnectedDevicesServiceBlocked                        = $getValue.connectedDevicesServiceBlocked
@@ -1772,7 +1464,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 DataProtectionBlockDirectMemoryAccess                 = $getValue.dataProtectionBlockDirectMemoryAccess
                 DefenderBlockEndUserAccess                            = $getValue.defenderBlockEndUserAccess
                 DefenderBlockOnAccessProtection                       = $getValue.defenderBlockOnAccessProtection
-                DefenderCloudBlockLevel                               = $enumDefenderCloudBlockLevel
+                DefenderCloudBlockLevel                               = $getValue.defenderCloudBlockLevel
                 DefenderCloudExtendedTimeout                          = $getValue.defenderCloudExtendedTimeout
                 DefenderCloudExtendedTimeoutInSeconds                 = $getValue.defenderCloudExtendedTimeoutInSeconds
                 DefenderDaysBeforeDeletingQuarantinedMalware          = $getValue.defenderDaysBeforeDeletingQuarantinedMalware
@@ -1781,11 +1473,11 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 DefenderDisableCatchupQuickScan                       = $getValue.defenderDisableCatchupQuickScan
                 DefenderFileExtensionsToExclude                       = $getValue.defenderFileExtensionsToExclude
                 DefenderFilesAndFoldersToExclude                      = $getValue.defenderFilesAndFoldersToExclude
-                DefenderMonitorFileActivity                           = $enumDefenderMonitorFileActivity
-                DefenderPotentiallyUnwantedAppAction                  = $enumDefenderPotentiallyUnwantedAppAction
-                DefenderPotentiallyUnwantedAppActionSetting           = $enumDefenderPotentiallyUnwantedAppActionSetting
+                DefenderMonitorFileActivity                           = $getValue.defenderMonitorFileActivity
+                DefenderPotentiallyUnwantedAppAction                  = $getValue.defenderPotentiallyUnwantedAppAction
+                DefenderPotentiallyUnwantedAppActionSetting           = $getValue.defenderPotentiallyUnwantedAppActionSetting
                 DefenderProcessesToExclude                            = $getValue.defenderProcessesToExclude
-                DefenderPromptForSampleSubmission                     = $enumDefenderPromptForSampleSubmission
+                DefenderPromptForSampleSubmission                     = $getValue.defenderPromptForSampleSubmission
                 DefenderRequireBehaviorMonitoring                     = $getValue.defenderRequireBehaviorMonitoring
                 DefenderRequireCloudProtection                        = $getValue.defenderRequireCloudProtection
                 DefenderRequireNetworkInspectionSystem                = $getValue.defenderRequireNetworkInspectionSystem
@@ -1798,20 +1490,20 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 DefenderScanNetworkFiles                              = $getValue.defenderScanNetworkFiles
                 DefenderScanRemovableDrivesDuringFullScan             = $getValue.defenderScanRemovableDrivesDuringFullScan
                 DefenderScanScriptsLoadedInInternetExplorer           = $getValue.defenderScanScriptsLoadedInInternetExplorer
-                DefenderScanType                                      = $enumDefenderScanType
+                DefenderScanType                                      = $getValue.defenderScanType
                 DefenderScheduledQuickScanTime                        = $timeDefenderScheduledQuickScanTime
                 DefenderScheduledScanTime                             = $timeDefenderScheduledScanTime
                 DefenderScheduleScanEnableLowCpuPriority              = $getValue.defenderScheduleScanEnableLowCpuPriority
                 DefenderSignatureUpdateIntervalInHours                = $getValue.defenderSignatureUpdateIntervalInHours
-                DefenderSubmitSamplesConsentType                      = $enumDefenderSubmitSamplesConsentType
-                DefenderSystemScanSchedule                            = $enumDefenderSystemScanSchedule
-                DeveloperUnlockSetting                                = $enumDeveloperUnlockSetting
+                DefenderSubmitSamplesConsentType                      = $getValue.defenderSubmitSamplesConsentType
+                DefenderSystemScanSchedule                            = $getValue.defenderSystemScanSchedule
+                DeveloperUnlockSetting                                = $getValue.developerUnlockSetting
                 DeviceManagementApplicabilityRuleDeviceMode           = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition            = $complexDeviceManagementApplicabilityRuleOsEdition
                 DeviceManagementApplicabilityRuleOsVersion            = $complexDeviceManagementApplicabilityRuleOsVersion
                 DeviceManagementBlockFactoryResetOnMobile             = $getValue.deviceManagementBlockFactoryResetOnMobile
                 DeviceManagementBlockManualUnenroll                   = $getValue.deviceManagementBlockManualUnenroll
-                DiagnosticsDataSubmissionMode                         = $enumDiagnosticsDataSubmissionMode
+                DiagnosticsDataSubmissionMode                         = $getValue.diagnosticsDataSubmissionMode
                 DisplayAppListWithGdiDPIScalingTurnedOff              = $getValue.displayAppListWithGdiDPIScalingTurnedOff
                 DisplayAppListWithGdiDPIScalingTurnedOn               = $getValue.displayAppListWithGdiDPIScalingTurnedOn
                 EdgeAllowStartPagesModification                       = $getValue.edgeAllowStartPagesModification
@@ -1840,27 +1532,27 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 EdgeBlockTabPreloading                                = $getValue.edgeBlockTabPreloading
                 EdgeBlockWebContentOnNewTabPage                       = $getValue.edgeBlockWebContentOnNewTabPage
                 EdgeClearBrowsingDataOnExit                           = $getValue.edgeClearBrowsingDataOnExit
-                EdgeCookiePolicy                                      = $enumEdgeCookiePolicy
+                EdgeCookiePolicy                                      = $getValue.edgeCookiePolicy
                 EdgeDisableFirstRunPage                               = $getValue.edgeDisableFirstRunPage
                 EdgeEnterpriseModeSiteListLocation                    = $getValue.edgeEnterpriseModeSiteListLocation
-                EdgeFavoritesBarVisibility                            = $enumEdgeFavoritesBarVisibility
+                EdgeFavoritesBarVisibility                            = $getValue.edgeFavoritesBarVisibility
                 EdgeFavoritesListLocation                             = $getValue.edgeFavoritesListLocation
                 EdgeFirstRunUrl                                       = $getValue.edgeFirstRunUrl
                 EdgeHomeButtonConfiguration                           = $complexEdgeHomeButtonConfiguration
                 EdgeHomeButtonConfigurationEnabled                    = $getValue.edgeHomeButtonConfigurationEnabled
                 EdgeHomepageUrls                                      = $getValue.edgeHomepageUrls
-                EdgeKioskModeRestriction                              = $enumEdgeKioskModeRestriction
+                EdgeKioskModeRestriction                              = $getValue.edgeKioskModeRestriction
                 EdgeKioskResetAfterIdleTimeInMinutes                  = $getValue.edgeKioskResetAfterIdleTimeInMinutes
                 EdgeNewTabPageURL                                     = $getValue.edgeNewTabPageURL
-                EdgeOpensWith                                         = $enumEdgeOpensWith
+                EdgeOpensWith                                         = $getValue.edgeOpensWith
                 EdgePreventCertificateErrorOverride                   = $getValue.edgePreventCertificateErrorOverride
                 EdgeRequiredExtensionPackageFamilyNames               = $getValue.edgeRequiredExtensionPackageFamilyNames
                 EdgeRequireSmartScreen                                = $getValue.edgeRequireSmartScreen
                 EdgeSearchEngine                                      = $complexEdgeSearchEngine
                 EdgeSendIntranetTrafficToInternetExplorer             = $getValue.edgeSendIntranetTrafficToInternetExplorer
-                EdgeShowMessageWhenOpeningInternetExplorerSites       = $enumEdgeShowMessageWhenOpeningInternetExplorerSites
+                EdgeShowMessageWhenOpeningInternetExplorerSites       = $getValue.edgeShowMessageWhenOpeningInternetExplorerSites
                 EdgeSyncFavoritesWithInternetExplorer                 = $getValue.edgeSyncFavoritesWithInternetExplorer
-                EdgeTelemetryForMicrosoft365Analytics                 = $enumEdgeTelemetryForMicrosoft365Analytics
+                EdgeTelemetryForMicrosoft365Analytics                 = $getValue.edgeTelemetryForMicrosoft365Analytics
                 EnableAutomaticRedeployment                           = $getValue.enableAutomaticRedeployment
                 EnergySaverOnBatteryThresholdPercentage               = $getValue.energySaverOnBatteryThresholdPercentage
                 EnergySaverPluggedInThresholdPercentage               = $getValue.energySaverPluggedInThresholdPercentage
@@ -1873,15 +1565,15 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 ExperienceBlockDeviceDiscovery                        = $getValue.experienceBlockDeviceDiscovery
                 ExperienceBlockErrorDialogWhenNoSIM                   = $getValue.experienceBlockErrorDialogWhenNoSIM
                 ExperienceBlockTaskSwitcher                           = $getValue.experienceBlockTaskSwitcher
-                ExperienceDoNotSyncBrowserSettings                    = $enumExperienceDoNotSyncBrowserSettings
-                FindMyFiles                                           = $enumFindMyFiles
+                ExperienceDoNotSyncBrowserSettings                    = $getValue.experienceDoNotSyncBrowserSettings
+                FindMyFiles                                           = $getValue.findMyFiles
                 GameDvrBlocked                                        = $getValue.gameDvrBlocked
-                InkWorkspaceAccess                                    = $enumInkWorkspaceAccess
-                InkWorkspaceAccessState                               = $enumInkWorkspaceAccessState
+                InkWorkspaceAccess                                    = $getValue.inkWorkspaceAccess
+                InkWorkspaceAccessState                               = $getValue.inkWorkspaceAccessState
                 InkWorkspaceBlockSuggestedApps                        = $getValue.inkWorkspaceBlockSuggestedApps
                 InternetSharingBlocked                                = $getValue.internetSharingBlocked
                 LocationServicesBlocked                               = $getValue.locationServicesBlocked
-                LockScreenActivateAppsWithVoice                       = $enumLockScreenActivateAppsWithVoice
+                LockScreenActivateAppsWithVoice                       = $getValue.lockScreenActivateAppsWithVoice
                 LockScreenAllowTimeoutConfiguration                   = $getValue.lockScreenAllowTimeoutConfiguration
                 LockScreenBlockActionCenterNotifications              = $getValue.lockScreenBlockActionCenterNotifications
                 LockScreenBlockCortana                                = $getValue.lockScreenBlockCortana
@@ -1893,7 +1585,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 MessagingBlockSync                                    = $getValue.messagingBlockSync
                 MicrosoftAccountBlocked                               = $getValue.microsoftAccountBlocked
                 MicrosoftAccountBlockSettingsSync                     = $getValue.microsoftAccountBlockSettingsSync
-                MicrosoftAccountSignInAssistantSettings               = $enumMicrosoftAccountSignInAssistantSettings
+                MicrosoftAccountSignInAssistantSettings               = $getValue.microsoftAccountSignInAssistantSettings
                 NetworkProxyApplySettingsDeviceWide                   = $getValue.networkProxyApplySettingsDeviceWide
                 NetworkProxyAutomaticConfigurationUrl                 = $getValue.networkProxyAutomaticConfigurationUrl
                 NetworkProxyDisableAutoDetect                         = $getValue.networkProxyDisableAutoDetect
@@ -1908,30 +1600,30 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 PasswordMinutesOfInactivityBeforeScreenTimeout        = $getValue.passwordMinutesOfInactivityBeforeScreenTimeout
                 PasswordPreviousPasswordBlockCount                    = $getValue.passwordPreviousPasswordBlockCount
                 PasswordRequired                                      = $getValue.passwordRequired
-                PasswordRequiredType                                  = $enumPasswordRequiredType
+                PasswordRequiredType                                  = $getValue.passwordRequiredType
                 PasswordRequireWhenResumeFromIdleState                = $getValue.passwordRequireWhenResumeFromIdleState
                 PasswordSignInFailureCountBeforeFactoryReset          = $getValue.passwordSignInFailureCountBeforeFactoryReset
                 PersonalizationDesktopImageUrl                        = $getValue.personalizationDesktopImageUrl
                 PersonalizationLockScreenImageUrl                     = $getValue.personalizationLockScreenImageUrl
-                PowerButtonActionOnBattery                            = $enumPowerButtonActionOnBattery
-                PowerButtonActionPluggedIn                            = $enumPowerButtonActionPluggedIn
-                PowerHybridSleepOnBattery                             = $enumPowerHybridSleepOnBattery
-                PowerHybridSleepPluggedIn                             = $enumPowerHybridSleepPluggedIn
-                PowerLidCloseActionOnBattery                          = $enumPowerLidCloseActionOnBattery
-                PowerLidCloseActionPluggedIn                          = $enumPowerLidCloseActionPluggedIn
-                PowerSleepButtonActionOnBattery                       = $enumPowerSleepButtonActionOnBattery
-                PowerSleepButtonActionPluggedIn                       = $enumPowerSleepButtonActionPluggedIn
+                PowerButtonActionOnBattery                            = $getValue.powerButtonActionOnBattery
+                PowerButtonActionPluggedIn                            = $getValue.powerButtonActionPluggedIn
+                PowerHybridSleepOnBattery                             = $getValue.powerHybridSleepOnBattery
+                PowerHybridSleepPluggedIn                             = $getValue.powerHybridSleepPluggedIn
+                PowerLidCloseActionOnBattery                          = $getValue.powerLidCloseActionOnBattery
+                PowerLidCloseActionPluggedIn                          = $getValue.powerLidCloseActionPluggedIn
+                PowerSleepButtonActionOnBattery                       = $getValue.powerSleepButtonActionOnBattery
+                PowerSleepButtonActionPluggedIn                       = $getValue.powerSleepButtonActionPluggedIn
                 PrinterBlockAddition                                  = $getValue.printerBlockAddition
                 PrinterDefaultName                                    = $getValue.printerDefaultName
                 PrinterNames                                          = $getValue.printerNames
-                PrivacyAdvertisingId                                  = $enumPrivacyAdvertisingId
+                PrivacyAdvertisingId                                  = $getValue.privacyAdvertisingId
                 PrivacyAutoAcceptPairingAndConsentPrompts             = $getValue.privacyAutoAcceptPairingAndConsentPrompts
                 PrivacyBlockActivityFeed                              = $getValue.privacyBlockActivityFeed
                 PrivacyBlockInputPersonalization                      = $getValue.privacyBlockInputPersonalization
                 PrivacyBlockPublishUserActivities                     = $getValue.privacyBlockPublishUserActivities
                 PrivacyDisableLaunchExperience                        = $getValue.privacyDisableLaunchExperience
                 ResetProtectionModeBlocked                            = $getValue.resetProtectionModeBlocked
-                SafeSearchFilter                                      = $enumSafeSearchFilter
+                SafeSearchFilter                                      = $getValue.safeSearchFilter
                 ScreenCaptureBlocked                                  = $getValue.screenCaptureBlocked
                 SearchBlockDiacritics                                 = $getValue.searchBlockDiacritics
                 SearchBlockWebResults                                 = $getValue.searchBlockWebResults
@@ -1964,12 +1656,12 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 SettingsBlockTimeLanguagePage                         = $getValue.settingsBlockTimeLanguagePage
                 SettingsBlockUpdateSecurityPage                       = $getValue.settingsBlockUpdateSecurityPage
                 SharedUserAppDataAllowed                              = $getValue.sharedUserAppDataAllowed
-                SmartScreenAppInstallControl                          = $enumSmartScreenAppInstallControl
+                SmartScreenAppInstallControl                          = $getValue.smartScreenAppInstallControl
                 SmartScreenBlockPromptOverride                        = $getValue.smartScreenBlockPromptOverride
                 SmartScreenBlockPromptOverrideForFiles                = $getValue.smartScreenBlockPromptOverrideForFiles
                 SmartScreenEnableAppInstallControl                    = $getValue.smartScreenEnableAppInstallControl
                 StartBlockUnpinningAppsFromTaskbar                    = $getValue.startBlockUnpinningAppsFromTaskbar
-                StartMenuAppListVisibility                            = $enumStartMenuAppListVisibility
+                StartMenuAppListVisibility                            = $getValue.startMenuAppListVisibility
                 StartMenuHideChangeAccountSettings                    = $getValue.startMenuHideChangeAccountSettings
                 StartMenuHideFrequentlyUsedApps                       = $getValue.startMenuHideFrequentlyUsedApps
                 StartMenuHideHibernate                                = $getValue.startMenuHideHibernate
@@ -1985,17 +1677,17 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 StartMenuHideUserTile                                 = $getValue.startMenuHideUserTile
                 StartMenuLayoutEdgeAssetsXml                          = $getValue.startMenuLayoutEdgeAssetsXml
                 StartMenuLayoutXml                                    = $getValue.startMenuLayoutXml
-                StartMenuMode                                         = $enumStartMenuMode
-                StartMenuPinnedFolderDocuments                        = $enumStartMenuPinnedFolderDocuments
-                StartMenuPinnedFolderDownloads                        = $enumStartMenuPinnedFolderDownloads
-                StartMenuPinnedFolderFileExplorer                     = $enumStartMenuPinnedFolderFileExplorer
-                StartMenuPinnedFolderHomeGroup                        = $enumStartMenuPinnedFolderHomeGroup
-                StartMenuPinnedFolderMusic                            = $enumStartMenuPinnedFolderMusic
-                StartMenuPinnedFolderNetwork                          = $enumStartMenuPinnedFolderNetwork
-                StartMenuPinnedFolderPersonalFolder                   = $enumStartMenuPinnedFolderPersonalFolder
-                StartMenuPinnedFolderPictures                         = $enumStartMenuPinnedFolderPictures
-                StartMenuPinnedFolderSettings                         = $enumStartMenuPinnedFolderSettings
-                StartMenuPinnedFolderVideos                           = $enumStartMenuPinnedFolderVideos
+                StartMenuMode                                         = $getValue.startMenuMode
+                StartMenuPinnedFolderDocuments                        = $getValue.startMenuPinnedFolderDocuments
+                StartMenuPinnedFolderDownloads                        = $getValue.startMenuPinnedFolderDownloads
+                StartMenuPinnedFolderFileExplorer                     = $getValue.startMenuPinnedFolderFileExplorer
+                StartMenuPinnedFolderHomeGroup                        = $getValue.startMenuPinnedFolderHomeGroup
+                StartMenuPinnedFolderMusic                            = $getValue.startMenuPinnedFolderMusic
+                StartMenuPinnedFolderNetwork                          = $getValue.startMenuPinnedFolderNetwork
+                StartMenuPinnedFolderPersonalFolder                   = $getValue.startMenuPinnedFolderPersonalFolder
+                StartMenuPinnedFolderPictures                         = $getValue.startMenuPinnedFolderPictures
+                StartMenuPinnedFolderSettings                         = $getValue.startMenuPinnedFolderSettings
+                StartMenuPinnedFolderVideos                           = $getValue.startMenuPinnedFolderVideos
                 StorageBlockRemovableStorage                          = $getValue.storageBlockRemovableStorage
                 StorageRequireMobileDeviceEncryption                  = $getValue.storageRequireMobileDeviceEncryption
                 StorageRestrictAppDataToSystemVolume                  = $getValue.storageRestrictAppDataToSystemVolume
@@ -2019,7 +1711,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 WindowsSpotlightBlockThirdPartyNotifications          = $getValue.windowsSpotlightBlockThirdPartyNotifications
                 WindowsSpotlightBlockWelcomeExperience                = $getValue.windowsSpotlightBlockWelcomeExperience
                 WindowsSpotlightBlockWindowsTips                      = $getValue.windowsSpotlightBlockWindowsTips
-                WindowsSpotlightConfigureOnLockScreen                 = $enumWindowsSpotlightConfigureOnLockScreen
+                WindowsSpotlightConfigureOnLockScreen                 = $getValue.windowsSpotlightConfigureOnLockScreen
                 WindowsStoreBlockAutoUpdate                           = $getValue.windowsStoreBlockAutoUpdate
                 WindowsStoreBlocked                                   = $getValue.windowsStoreBlocked
                 WindowsStoreEnablePrivateStoreOnly                    = $getValue.windowsStoreEnablePrivateStoreOnly
