@@ -324,6 +324,8 @@
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationWiredNetworkPolicyMacOS
+  * Initial release.
 * IntuneDeviceConfigurationWiredNetworkPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and

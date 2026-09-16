@@ -419,6 +419,7 @@
     'IntuneDeviceConfigurationTrustedCertificatePolicyWindows10',
     'IntuneDeviceConfigurationVpnPolicyWindows10',
     'IntuneDeviceConfigurationWindowsTeamPolicyWindows10',
+    'IntuneDeviceConfigurationWiredNetworkPolicyMacOS',
     'IntuneDeviceConfigurationWiredNetworkPolicyWindows10',
     'IntuneDeviceControlPolicySetting',
     'IntuneDeviceControlPolicyWindows10',
