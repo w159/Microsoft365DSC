@@ -1894,6 +1894,7 @@ function Get-M365DSCExportCollectionConsumerMap
 
     return @{
         deviceConfigurations           = @(
+            'IntuneDeviceConfigurationCustomPolicyMacOS',
             'IntuneDeviceConfigurationCustomPolicyWindows10',
             'IntuneDeviceConfigurationCustomPolicyiOS',
             'IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10',

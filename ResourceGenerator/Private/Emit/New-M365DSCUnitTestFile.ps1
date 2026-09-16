@@ -3,10 +3,9 @@
     Emits the resource's unit test file in the class-based test pattern.
 
 .DESCRIPTION
-    The generated test mirrors the hand-written tests of converted resources: it instantiates the
-    resource through New-M365DSCResourceInstance, asserts every scalar property value returned by
-    Get() against the expected fake value, and drives the drift context with a mock returning
-    genuinely different values - both things the old generator never did. The same emitter serves
+    It instantiates the resource through New-M365DSCResourceInstance, asserts every scalar property
+    value returned by Get() against the expected fake value, and drives the drift context with a
+    desired state that differs from the single Get mock in one property. The same emitter serves
     Graph and non-Graph workloads.
 
 .PARAMETER ResourceModel
@@ -38,9 +37,9 @@ function New-M365DSCUnitTestFile
         SetCmdletName       = $ResourceModel.Cmdlets.UpdateCmdlet
         RemoveCmdletName    = $ResourceModel.Cmdlets.RemoveCmdlet
         GetMockBody         = New-M365DSCGetMockBody -ResourceModel $ResourceModel
-        DriftGetMockBody    = New-M365DSCGetMockBody -ResourceModel $ResourceModel -Drift -IndentCount 20
         AdditionalMockBlock = New-M365DSCAdditionalMockBlock -ResourceModel $ResourceModel
         TestParamsBlock     = New-M365DSCTestParamsBlock -ResourceModel $ResourceModel
+        DriftParamsBlock    = New-M365DSCTestParamsBlock -ResourceModel $ResourceModel -Drift
         KeysOnlyParamsBlock = New-M365DSCTestParamsBlock -ResourceModel $ResourceModel -KeysOnly
         PropertyAssertions  = New-M365DSCPropertyAssertionBlock -ResourceModel $ResourceModel
     }
@@ -87,13 +86,7 @@ function New-M365DSCAdditionalMockBlock
     {
         $null = $builder.AppendLine('')
         $null = $builder.AppendLine("${indent}Mock -CommandName Get-M365DSCExportCachedCollection -MockWith {")
-        $collectionCall = $ResourceModel.Cmdlets.GetCmdlet
-        if ($ResourceModel.Cmdlets.SupportsAll)
-        {
-            $collectionCall += ' -All'
-        }
-
-        $null = $builder.AppendLine("$indent    return $collectionCall")
+        $null = $builder.AppendLine("$indent    return $($ResourceModel.Cmdlets.GetCmdlet)")
         $null = $builder.Append("$indent}")
     }
     if ($ResourceModel.HasAssignments)
@@ -127,23 +120,10 @@ function ConvertTo-M365DSCApiShapeValue
     (
         [Parameter(Mandatory = $true)]
         [System.Object]
-        $Property,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Drift
+        $Property
     )
 
     $value = $Property.FakeValue
-    if ($Drift)
-    {
-        $driftValue = $Property.DriftValue
-        if ($null -ne $driftValue -and -not $Property.IsKey)
-        {
-            $value = $driftValue
-        }
-    }
-
     if ($null -eq $value)
     {
         return $null
@@ -245,7 +225,13 @@ function ConvertTo-M365DSCApiShapeMemberValue
 
 <#
 .SYNOPSIS
-    Renders the body of the Get cmdlet mock: branch on -All and on the key parameter.
+    Renders the body of the Get cmdlet mock, which returns one instance for every call.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the returned block.
 #>
 function New-M365DSCGetMockBody
 {
@@ -258,23 +244,18 @@ function New-M365DSCGetMockBody
         $ResourceModel,
 
         [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Drift,
-
-        [Parameter()]
         [System.Int32]
         $IndentCount = 16
     )
 
     $indent = ' ' * $IndentCount
-    $builder = [System.Text.StringBuilder]::new()
 
     $apiValue = [ordered]@{}
     $additionalProperties = [ordered]@{}
 
     foreach ($property in $ResourceModel.SchemaProperties)
     {
-        $value = ConvertTo-M365DSCApiShapeValue -Property $property -Drift:$Drift
+        $value = ConvertTo-M365DSCApiShapeValue -Property $property
         if ($null -eq $value)
         {
             continue
@@ -300,50 +281,26 @@ function New-M365DSCGetMockBody
         $apiValue[$key] = $additionalProperties[$key]
     }
 
-    $literal = ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount ($IndentCount + 4)
+    $literal = ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount $IndentCount
 
-    $keyVariable = $ResourceModel.PrimaryKey
-    if ($ResourceModel.Cmdlets.GetKeyParameters.Count -gt 0)
-    {
-        $keyVariable = $ResourceModel.Cmdlets.GetKeyParameters[0]
-    }
-
-    if ($ResourceModel.Cmdlets.SupportsAll)
-    {
-        $null = $builder.AppendLine("${indent}if (`$All)")
-        $null = $builder.AppendLine("$indent{")
-        $null = $builder.AppendLine("$indent    return @(")
-        $null = $builder.AppendLine("$indent        $(ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount ($IndentCount + 8))")
-        $null = $builder.AppendLine("$indent    )")
-        $null = $builder.AppendLine("$indent}")
-    }
-
-    $keyCondition = "`$$keyVariable"
-    if ($null -ne $ResourceModel.AlternativeKey -and $ResourceModel.Cmdlets.SupportsFilter)
-    {
-        $keyCondition += ' -or $Filter'
-    }
-
-    $null = $builder.AppendLine("${indent}if ($keyCondition)")
-    $null = $builder.AppendLine("$indent{")
-    $null = $builder.AppendLine("$indent    return $(ConvertTo-M365DSCPSLiteral -Value $apiValue -IndentCount ($IndentCount + 4))")
-    $null = $builder.AppendLine("$indent}")
-
-    if ($ResourceModel.Cmdlets.SupportsAll -or -not [System.String]::IsNullOrEmpty($keyVariable))
-    {
-        $null = $builder.AppendLine("${indent}return `$null")
-    }
-    else
-    {
-        $null = $builder.AppendLine("${indent}return $literal")
-    }
-
-    return $builder.ToString().TrimEnd()
+    return "${indent}return $literal"
 }
 
 <#
 .SYNOPSIS
     Renders the $testParams hashtable body (DSC-shaped desired state).
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.PARAMETER KeysOnly
+    Renders the key properties only, for the context that removes the instance.
+
+.PARAMETER Drift
+    Renders one property with its drift value, so the desired state differs from the Get mock.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the rendered entries.
 #>
 function New-M365DSCTestParamsBlock
 {
@@ -360,12 +317,23 @@ function New-M365DSCTestParamsBlock
         $KeysOnly,
 
         [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Drift,
+
+        [Parameter()]
         [System.Int32]
         $IndentCount = 20
     )
 
     $indent = ' ' * $IndentCount
     $entries = [ordered]@{}
+    $comments = @{}
+
+    $driftedName = $null
+    if ($Drift)
+    {
+        $driftedName = Get-M365DSCDriftPropertyName -ResourceModel $ResourceModel
+    }
 
     foreach ($property in $ResourceModel.SchemaProperties)
     {
@@ -380,6 +348,12 @@ function New-M365DSCTestParamsBlock
         }
 
         $value = $property.FakeValue
+        if ($property.Name -eq $driftedName)
+        {
+            $value = $property.DriftValue
+            $comments[$property.Name] = ' # Updated property'
+        }
+
         if ($null -eq $value)
         {
             continue
@@ -411,10 +385,56 @@ function New-M365DSCTestParamsBlock
     foreach ($entryName in $entries.Keys)
     {
         $padding = ' ' * ($longestName - $entryName.Length)
-        $null = $builder.AppendLine("$indent$entryName$padding = $($entries[$entryName])")
+        $null = $builder.AppendLine("$indent$entryName$padding = $($entries[$entryName])$($comments[$entryName])")
     }
 
     return $builder.ToString().TrimEnd()
+}
+
+<#
+.SYNOPSIS
+    Picks the property whose desired state drives the drift context.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The property name, or $null when no property carries a drift value.
+#>
+function Get-M365DSCDriftPropertyName
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $candidates = @($ResourceModel.SchemaProperties | Where-Object -FilterScript {
+            -not $_.IsKey -and -not $_.IsComplex -and $_.Name -ne $ResourceModel.AlternativeKey -and
+            $_.Name -ne $ResourceModel.PrimaryKey -and
+            $null -ne $_.FakeValue -and $null -ne $_.DriftValue -and
+            -not (Test-M365DSCAssignmentProperty -Property $_)
+        })
+
+    $drifted = $candidates | Where-Object -FilterScript { $_.FakeKind -eq 'String' -and -not $_.IsArray } | Select-Object -First 1
+    if ($null -eq $drifted)
+    {
+        $drifted = $candidates | Where-Object -FilterScript { -not $_.IsArray } | Select-Object -First 1
+    }
+    if ($null -eq $drifted)
+    {
+        $drifted = $candidates | Select-Object -First 1
+    }
+
+    if ($null -eq $drifted)
+    {
+        return $null
+    }
+
+    return $drifted.Name
 }
 
 <#

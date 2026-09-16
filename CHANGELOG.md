@@ -228,6 +228,8 @@
   * Added support for the `FirmwareProtectionEnabled`, `KernelDmaProtectionEnabled`,
     `MemoryIntegrityEnabled`, `VirtualizationBasedSecurityEnabled` and
     `WslDistributions` properties.
+* IntuneDeviceConfigurationCustomPolicyMacOS
+  * Initial release.
 * IntuneDeviceConfigurationCustomPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
@@ -331,6 +333,8 @@
 * IntuneDeviceEnrollmentPlatformRestriction
   * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
     Microsoft Graph uses.
+* IntuneDeviceFeaturesConfigurationPolicyIOS
+  * Removed null-valued `displayName` properties from nested home screen page instances.
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Added support for the `DeviceNameTemplate` property.
 * IntuneDeviceManagementEnrollmentAndroidGooglePlay
@@ -339,8 +343,6 @@
 * IntuneDiskEncryptionMacOS
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
-* IntuneDeviceFeaturesConfigurationPolicyIOS
-  * Removed null-valued `displayName` properties from nested home screen page instances.
 * IntuneMobileAppsBundleMacOS
   * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
     that carry a type discriminator. Intune rejected a configuration that omitted it.

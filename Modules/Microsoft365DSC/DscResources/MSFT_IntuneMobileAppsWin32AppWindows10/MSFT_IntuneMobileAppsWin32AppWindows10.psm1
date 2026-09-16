@@ -290,7 +290,7 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                     'PowerShellScript'
                     {
                         $baseRule.Add('DisplayName', $rule.displayName)
-                        $baseRule.Add('Script', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($rule.scriptContent)))
+                        $baseRule.Add('Script', $this.DecodeTextPayload($rule.scriptContent))
                         $baseRule.Add('RunAs32Bit', $rule.runAs32Bit)
                         $baseRule.Add('EnforceSignatureCheck', $rule.enforceSignatureCheck)
                         $baseRule.Add('RunAsAccount', $rule.runAsAccount)
@@ -515,7 +515,7 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                         }
                         'PowerShellScript'
                         {
-                            $rule.Add('scriptContent', [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($rule.script)))
+                            $rule.Add('scriptContent', $this.EncodeTextPayload($rule.script))
                             $rule.Remove('script') | Out-Null
                             $rule.Add('operationType', $rule.powerShellScriptOperationType)
                             $rule.Remove('powerShellScriptOperationType') | Out-Null
@@ -581,7 +581,7 @@ class IntuneMobileAppsWin32AppWindows10 : M365DSCResourceBase
                         }
                         'PowerShellScript'
                         {
-                            $rule.Add('scriptContent', [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($rule.script)))
+                            $rule.Add('scriptContent', $this.EncodeTextPayload($rule.script))
                             $rule.Remove('script') | Out-Null
                             $rule.Add('operationType', $rule.powerShellScriptOperationType)
                             $rule.Remove('powerShellScriptOperationType') | Out-Null
