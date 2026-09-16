@@ -153,7 +153,7 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
                 RoleScopeTagIds        = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit             = $getValue.RunAs32Bit
                 RunAsAccount           = $enumRunAsAccount
-                DetectionScriptContent = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($getValue.DetectionScriptContent))
+                DetectionScriptContent = $this.DecodeTextPayload($getValue.DetectionScriptContent)
                 Publisher              = $getValue.Publisher
                 Id                     = $getValue.Id
                 Ensure                 = 'Present'
@@ -193,7 +193,7 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $boundParameters.DetectionScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.DetectionScriptContent))
+        $boundParameters.DetectionScriptContent = $this.EncodeTextPayload($boundParameters.DetectionScriptContent)
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($boundParameters.ContainsKey('RoleScopeTagIds'))

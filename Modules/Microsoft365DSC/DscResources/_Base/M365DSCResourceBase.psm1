@@ -897,6 +897,33 @@ class M365DSCResourceBase
         }
     }
 
+    [System.String] DecodeTextPayload([System.Object] $Value)
+    {
+        if ($null -eq $Value -or $Value -isnot [System.String] -or [System.String]::IsNullOrEmpty($Value))
+        {
+            return [System.String] $Value
+        }
+
+        try
+        {
+            return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Value))
+        }
+        catch
+        {
+            return [System.String] $Value
+        }
+    }
+
+    [System.String] EncodeTextPayload([System.Object] $Value)
+    {
+        if ($null -eq $Value -or $Value -isnot [System.String] -or [System.String]::IsNullOrEmpty($Value))
+        {
+            return [System.String] $Value
+        }
+
+        return [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($Value))
+    }
+
     # Serialises a nullable boolean into a JSON literal
     [System.String] BoolToJson([System.Object] $Value)
     {

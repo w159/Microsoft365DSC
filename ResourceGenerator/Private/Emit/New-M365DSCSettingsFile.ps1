@@ -148,8 +148,11 @@ function Get-M365DSCGraphPermission
         Write-Warning -Message "Could not read Graph permissions: $($_.Exception.Message). Fill the permissions section of settings.json manually."
     }
 
-    $readEntries = @(Select-M365DSCReadPermission -Permission $readPermissions | ForEach-Object { [ordered]@{ name = $_ } })
-    $updateEntries = @($updatePermissions | Where-Object { $_ } | ForEach-Object { [ordered]@{ name = $_ } })
+    $readNames = @(Add-M365DSCLookupPermission -Permission (Select-M365DSCReadPermission -Permission $readPermissions) -ResourceModel $ResourceModel)
+    $updateNames = @(Add-M365DSCLookupPermission -Permission $updatePermissions -ResourceModel $ResourceModel)
+
+    $readEntries = @($readNames | ForEach-Object { [ordered]@{ name = $_ } })
+    $updateEntries = @($updateNames | ForEach-Object { [ordered]@{ name = $_ } })
 
     return [ordered]@{
         delegated   = [ordered]@{
@@ -289,6 +292,55 @@ function Get-M365DSCExcludedPropertyBlock
     }
 
     return [System.Object[]] $entries
+}
+
+<#
+.SYNOPSIS
+    Adds the permissions the assignment and role scope tag lookups need.
+
+.PARAMETER Permission
+    Specifies the permission names of the resource's own cmdlets.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The permission names, with GroupMember.Read.All first and DeviceManagementRBAC.Read.All last.
+#>
+function Add-M365DSCLookupPermission
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $Permission = @(),
+
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $names = [System.Collections.Generic.List[System.String]]::new()
+    foreach ($name in @($Permission | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) }))
+    {
+        $names.Add($name)
+    }
+
+    if ($ResourceModel.HasAssignments -and $names -notcontains 'GroupMember.Read.All')
+    {
+        $names.Insert(0, 'GroupMember.Read.All')
+    }
+
+    if (@($ResourceModel.SchemaProperties).Name -contains 'RoleScopeTagIds' -and
+        $names -notcontains 'DeviceManagementRBAC.Read.All')
+    {
+        $names.Add('DeviceManagementRBAC.Read.All')
+    }
+
+    return [System.String[]] @($names)
 }
 
 <#

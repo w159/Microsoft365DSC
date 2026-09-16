@@ -151,12 +151,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The instance exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-<TestParamsBlock>
-                }
-
-                # This mock returns genuinely drifted values.
-                Mock -CommandName <GetCmdletName> -MockWith {
-<DriftGetMockBody>
+<DriftParamsBlock>
                 }
             }
 

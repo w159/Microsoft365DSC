@@ -149,13 +149,14 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:testContent | Should -Match "\`$result\.Tags \| Should -Be @\('FakeStringArrayValue1', 'FakeStringArrayValue2'\)"
         }
 
-        It 'drives the drift context with genuinely different values' {
-            $script:testContent | Should -Match 'FakeStringValueDrift'
-            $script:testContent | Should -Match "'medium'"
+        It 'drives the drift context through one changed desired state property' {
+            $script:testContent | Should -Match "FakeStringValueDrift' # Updated property"
         }
 
-        It 'branches the Get mock on All and the key parameter' {
-            $script:testContent | Should -Match '(?s)if \(\$All\).+if \(\$TestPolicyId -or \$Filter\)'
+        It 'defines the Get mock return value once, without branching' {
+            $script:testContent | Should -Not -Match 'if \(\$All\)'
+            $script:testContent | Should -Not -Match 'This mock returns genuinely drifted values'
+            @([regex]::Matches($script:testContent, 'Mock -CommandName Get-MgBetaTestPolicy -MockWith')).Count | Should -Be 2
         }
     }
 
@@ -344,6 +345,51 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
 
         It 'Returns nothing for an empty list' {
             @(Select-M365DSCReadPermission -Permission @()) | Should -HaveCount 0
+        }
+    }
+    Describe 'Add-M365DSCLookupPermission' {
+        It 'Puts GroupMember.Read.All first when the resource handles assignments' {
+            $model = [PSCustomObject] @{ HasAssignments = $true; SchemaProperties = @() }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.Read.All') -ResourceModel $model |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementConfiguration.Read.All')
+        }
+
+        It 'Puts DeviceManagementRBAC.Read.All last when the resource carries RoleScopeTagIds' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $false
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.Read.All') -ResourceModel $model |
+                Should -Be @('DeviceManagementConfiguration.Read.All', 'DeviceManagementRBAC.Read.All')
+        }
+
+        It 'Adds both lookups around the resource permissions' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $true
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.ReadWrite.All') -ResourceModel $model |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementConfiguration.ReadWrite.All', 'DeviceManagementRBAC.Read.All')
+        }
+
+        It 'Leaves the permissions untouched without assignments and without RoleScopeTagIds' {
+            $model = [PSCustomObject] @{ HasAssignments = $false; SchemaProperties = @() }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementApps.Read.All') -ResourceModel $model |
+                Should -Be @('DeviceManagementApps.Read.All')
+        }
+
+        It 'Adds no duplicate when the permission is already declared' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $true
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            @(Add-M365DSCLookupPermission -Permission @('GroupMember.Read.All', 'DeviceManagementRBAC.Read.All') -ResourceModel $model) |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementRBAC.Read.All')
         }
     }
 }

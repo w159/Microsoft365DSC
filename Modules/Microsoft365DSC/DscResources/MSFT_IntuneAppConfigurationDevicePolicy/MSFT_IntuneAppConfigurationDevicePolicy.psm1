@@ -240,7 +240,7 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
             $payloadJsonValue = $null
             if (-not [System.String]::IsNullOrEmpty($getValue.payloadJson))
             {
-                $payloadJsonValue = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($getValue.payloadJson))
+                $payloadJsonValue = $this.DecodeTextPayload($getValue.payloadJson)
             }
 
             $results = @{
@@ -321,7 +321,7 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
 
         if (-not [System.String]::IsNullOrEmpty($boundParameters.PayloadJson))
         {
-            $boundParameters.PayloadJson = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.PayloadJson))
+            $boundParameters.PayloadJson = $this.EncodeTextPayload($boundParameters.PayloadJson)
         }
 
         $mobileApps = Get-MgBetaDeviceAppManagementMobileApp -All

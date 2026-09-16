@@ -276,8 +276,8 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
             }
             if ($results.PackageFileType -eq 'Pkg')
             {
-                $results.PreInstallScript = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($getValue.preInstallScript.scriptContent))
-                $results.PostInstallScript = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($getValue.postInstallScript.scriptContent))
+                $results.PreInstallScript = $this.DecodeTextPayload($getValue.preInstallScript.scriptContent)
+                $results.PostInstallScript = $this.DecodeTextPayload($getValue.postInstallScript.scriptContent)
             }
             $assignmentsValues = Get-MgBetaDeviceAppManagementMobileAppAssignment -MobileAppId $resolvedId
             $assignmentResult = @()
@@ -327,7 +327,7 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
 
         if ($boundParameters.ContainsKey('PreInstallScript'))
         {
-            $convertedPreInstallScript = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($boundParameters.PreInstallScript))
+            $convertedPreInstallScript = $this.EncodeTextPayload($boundParameters.PreInstallScript)
             $boundParameters.Remove('PreInstallScript') | Out-Null
             $boundParameters.Add('PreInstallScript', @{
                 scriptContent = $convertedPreInstallScript
@@ -335,7 +335,7 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
         }
         if ($boundParameters.ContainsKey('PostInstallScript'))
         {
-            $convertedPostInstallScript = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($boundParameters.PostInstallScript))
+            $convertedPostInstallScript = $this.EncodeTextPayload($boundParameters.PostInstallScript)
             $boundParameters.Remove('PostInstallScript') | Out-Null
             $boundParameters.Add('PostInstallScript', @{
                 scriptContent = $convertedPostInstallScript

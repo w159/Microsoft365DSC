@@ -140,7 +140,7 @@ class IntuneDeviceComplianceScriptLinux : M365DSCResourceBase
             $results = @{
                 #region resource generator code
                 Description           = $getValue.description
-                DiscoveryScript       = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($getValue.settingInstance.simpleSettingValue.value))
+                DiscoveryScript       = $this.DecodeTextPayload($getValue.settingInstance.simpleSettingValue.value)
                 DisplayName           = $getValue.displayName
                 Id                    = $getValue.id
                 Ensure                = 'Present'
@@ -188,7 +188,7 @@ class IntuneDeviceComplianceScriptLinux : M365DSCResourceBase
                 settingDefinitionId = 'linux_customcompliance_discoveryscript_reusablesetting'
                 simpleSettingValue  = @{
                     '@odata.type' = '#microsoft.graph.deviceManagementConfigurationStringSettingValue'
-                    value         = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($this.DiscoveryScript))
+                    value         = $this.EncodeTextPayload($this.DiscoveryScript)
                 }
             })
 
