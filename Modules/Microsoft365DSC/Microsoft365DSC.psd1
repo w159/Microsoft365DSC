@@ -429,6 +429,7 @@
     'IntuneDeviceEnrollmentScopeConfigurationMdm',
     'IntuneDeviceEnrollmentStatusPageWindows10',
     'IntuneDeviceFeaturesConfigurationPolicyIOS',
+    'IntuneDeviceFeaturesConfigurationPolicyMacOS',
     'IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile',
     'IntuneDeviceManagementComplianceSettings',
     'IntuneDeviceManagementDeviceDiagnosticSettings',
