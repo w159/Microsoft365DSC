@@ -684,7 +684,9 @@
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
   * Fixed build of Docker linux dev image by updating one of the installation
-    paths to PS 7.6.6
+    paths to PS 7.6.6.
+  * Updated script `Install-M365DSCAndDependencies` to work with a new PS
+    version, new modules, etc.
 
 # 1.26.909.1
 
