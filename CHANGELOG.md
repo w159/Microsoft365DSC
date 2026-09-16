@@ -683,7 +683,8 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
-
+  * Fixed build of Docker linux dev image by updating one of the installation
+    paths to PS 7.6.6
 
 # 1.26.909.1
 
