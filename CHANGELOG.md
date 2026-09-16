@@ -347,6 +347,8 @@
 * IntuneDiskEncryptionMacOS
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
+* IntuneMobileAppsAutoUpdateCatalogAppWindows10
+  * Initial release.
 * IntuneMobileAppsBundleMacOS
   * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
     that carry a type discriminator. Intune rejected a configuration that omitted it.

@@ -124,6 +124,86 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Match "-NoEscape @\('Rules'\)"
         }
     }
+    Describe 'Get-M365DSCAssignmentCimClassName' {
+        BeforeAll {
+            $script:assignmentModel = [PSCustomObject] @{
+                SchemaProperties = @(
+                    [PSCustomObject] @{
+                        Name          = 'Assignments'
+                        IsAssignments = $true
+                        IsComplex     = $true
+                        CimClassName  = 'MSFT_DeviceManagementWin32CatalogAppAssignment'
+                        Members       = @(
+                            [PSCustomObject] @{
+                                Name         = 'assignmentSettings'
+                                IsComplex    = $true
+                                CimClassName = 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'
+                                Members      = @(
+                                    [PSCustomObject] @{
+                                        Name         = 'InstallTimeSettings'
+                                        IsComplex    = $true
+                                        CimClassName = 'MSFT_MicrosoftGraphMobileAppInstallTimeSettings'
+                                        Members      = @()
+                                    }
+                                )
+                            }
+                        )
+                    }
+                    [PSCustomObject] @{
+                        Name         = 'LargeIcon'
+                        IsComplex    = $true
+                        CimClassName = 'MSFT_MicrosoftGraphMimeContent2'
+                        Members      = @()
+                    }
+                )
+            }
+        }
+
+        It 'collects every class the assignment reaches' {
+            $names = @(Get-M365DSCAssignmentCimClassName -ResourceModel $script:assignmentModel)
+
+            $names | Should -Contain 'MSFT_DeviceManagementWin32CatalogAppAssignment'
+            $names | Should -Contain 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'
+            $names | Should -Contain 'MSFT_MicrosoftGraphMobileAppInstallTimeSettings'
+        }
+
+        It 'keeps a class another property also reaches' {
+            @(Get-M365DSCAssignmentCimClassName -ResourceModel $script:assignmentModel) |
+                Should -Not -Contain 'MSFT_MicrosoftGraphMimeContent2'
+        }
+
+        It 'emits no helper for the assignment classes' {
+            $script:assignmentModel | Add-Member -NotePropertyName 'ComplexTypeClasses' -NotePropertyValue @(
+                [PSCustomObject] @{ CimClassName = 'MSFT_DeviceManagementWin32CatalogAppAssignmentSettings'; Members = @() }
+                [PSCustomObject] @{ CimClassName = 'MSFT_MicrosoftGraphMimeContent2'; Members = @() }
+            ) -Force
+
+            $block = New-M365DSCHelperFunctionBlock -ResourceModel $script:assignmentModel
+
+            $block | Should -Not -Match 'GetDeviceManagementWin32CatalogAppAssignmentSettingsAsHashtable'
+            $block | Should -Match 'GetMimeContent2AsHashtable'
+        }
+    }
+
+    Describe 'New-M365DSCCompareParametersBlock' {
+        It 'excludes the create-only properties from Test' {
+            $model = [PSCustomObject] @{ CreateOnlyProperties = @('MobileAppCatalogPackageBranchId') }
+
+            $block = New-M365DSCCompareParametersBlock -ResourceModel $model
+
+            $block | Should -Match '\[System\.Collections\.Hashtable\] GetCompareParameters\(\)'
+            $block | Should -Match "ExcludedProperties = @\('MobileAppCatalogPackageBranchId'\)"
+        }
+
+        It 'renders nothing without a create-only property' {
+            New-M365DSCCompareParametersBlock -ResourceModel ([PSCustomObject] @{ CreateOnlyProperties = @() }) | Should -Be ''
+        }
+
+        It 'leaves the class module without the override when nothing is create-only' {
+            $script:classContent | Should -Not -Match 'GetCompareParameters'
+        }
+    }
+
 
     Describe 'New-M365DSCUnitTestFile' {
         It 'produces parseable PowerShell' {
