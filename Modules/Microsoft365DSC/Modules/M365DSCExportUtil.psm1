@@ -1921,6 +1921,7 @@ function Get-M365DSCExportCollectionConsumerMap
             'IntuneDeviceConfigurationWindowsTeamPolicyWindows10',
             'IntuneDeviceConfigurationWiredNetworkPolicyWindows10',
             'IntuneDeviceFeaturesConfigurationPolicyIOS',
+            'IntuneDeviceFeaturesConfigurationPolicyMacOS',
             'IntuneTrustedRootCertificateAndroidDeviceOwner',
             'IntuneTrustedRootCertificateAndroidWork',
             'IntuneTrustedRootCertificateIOS',
