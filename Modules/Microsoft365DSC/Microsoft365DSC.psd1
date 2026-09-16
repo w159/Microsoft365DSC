@@ -469,6 +469,7 @@
     'IntuneMobileAppsSystemAppAndroid',
     'IntuneMobileAppsWebLink',
     'IntuneMobileAppsWin32AppWindows10',
+    'IntuneMobileAppsWin32CatalogAppWindows10',
     'IntuneMobileAppsWindowsOfficeSuiteApp',
     'IntuneMobileThreatDefenseConnector',
     'IntunePolicySets',
