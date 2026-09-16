@@ -59,9 +59,6 @@ try
         $null = New-Item @Parameters
     }
 
-    Write-Output "Installing Microsoft365DSC module dependencies"
-    Update-M365DSCDependencies
-
     if ($isWindowsPlatform)
     {
         Write-Output "Testing if PowerShell 7 is installed"
@@ -70,19 +67,32 @@ try
         {
             $ProgressPreference = 'SilentlyContinue'
             Write-Output "PowerShell 7 not found, installing it now"
-            Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/PowerShell-7.6.5-win-x64.zip" -OutFile "PowerShell-7.6.5-win-x64.zip"
-            Unblock-File "PowerShell-7.6.5-win-x64.zip"
+            Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.6.6/PowerShell-7.6.6-win-x64.zip" -OutFile "PowerShell-7.6.6-win-x64.zip"
+            Unblock-File "PowerShell-7.6.6-win-x64.zip"
             $null = New-Item -ItemType Directory -Path "C:\Program Files\PowerShell\7" -Force
-            Expand-Archive "PowerShell-7.6.5-win-x64.zip" -DestinationPath "C:\Program Files\PowerShell\7"
-            Remove-Item "PowerShell-7.6.5-win-x64.zip" -Force
+            Expand-Archive "PowerShell-7.6.6-win-x64.zip" -DestinationPath "C:\Program Files\PowerShell\7"
+            Remove-Item "PowerShell-7.6.6-win-x64.zip" -Force
             [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH + ";C:\Program Files\PowerShell\7", [System.EnvironmentVariableTarget]::Machine)
             $env:PATH += ";C:\Program Files\PowerShell\7"
         }
 
         Write-Output "Installing Microsoft365DSC module dependencies in PowerShell 7"
         & pwsh -Command {
-            Update-M365DSCDependencies
-        }
+                param(
+                [Parameter()]
+                [System.Boolean]
+                $IsSDK
+            )
+
+            if ($IsSDK.IsPresent)
+            {
+                Update-M365DSCDependencies -Development
+            }
+            else
+            {
+                Update-M365DSCDependencies
+            }
+        } -args $IsSDK.IsPresent
         if ($LASTEXITCODE -ne 0)
         {
             throw "Could not install Microsoft365DSC module dependencies in PowerShell 7"
@@ -112,7 +122,8 @@ try
                 [System.Boolean]
                 $IsSDK
             )
-            if ($IsSDK)
+
+            if ($IsSDK.IsPresent)
             {
                 Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
                 $PSVersion = [System.String]$PSVersionTable.PSVersion
@@ -182,6 +193,16 @@ Import-Module PSDesiredStateConfiguration -Force
                 Rename-Item -Path $DSCResourcesPath -NewName "DscResources" -Force
             }
         }
+    }
+
+    Write-Output "Installing Microsoft365DSC module dependencies"
+    if ($IsSDK.IsPresent)
+    {
+        Update-M365DSCDependencies -Development
+    }
+    else
+    {
+        Update-M365DSCDependencies
     }
 }
 catch
