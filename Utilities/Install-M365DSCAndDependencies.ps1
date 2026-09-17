@@ -184,15 +184,6 @@ Import-Module PSDesiredStateConfiguration -Force
                 throw "Could not build DLL files"
             }
         }
-        else
-        {
-            $moduleBasePath = (Get-Module -Name Microsoft365DSC).ModuleBase
-            $DSCResourcesPath = Join-Path -Path $moduleBasePath -ChildPath "DSCResources"
-            if (Test-Path -Path $DSCResourcesPath)
-            {
-                Rename-Item -Path $DSCResourcesPath -NewName "DscResources" -Force
-            }
-        }
     }
 
     Write-Output "Installing Microsoft365DSC module dependencies"
