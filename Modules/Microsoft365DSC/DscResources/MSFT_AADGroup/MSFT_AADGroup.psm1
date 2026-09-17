@@ -606,18 +606,11 @@ class AADGroup : M365DSCResourceBase
 
                 if (($licensesToAdd.Length -gt 0 -or $licensesToRemove.Length -gt 0) -and $this.GetBoundParameters().ContainsKey('AssignedLicenses'))
                 {
-                    try
-                    {
-                        Write-Verbose -Message "Setting Group Licenses with:`r`nLicensesToAdd: $(ConvertTo-Json $licensesToAdd)`r`nLicensesToRemove: $(ConvertTo-Json $licensesToRemove)"
-                        Set-MgGroupLicense -GroupId $currentGroup.Id `
-                            -AddLicenses $licensesToAdd `
-                            -RemoveLicenses $licensesToRemove `
-                            -ErrorAction Stop | Out-Null
-                    }
-                    catch
-                    {
-                        Write-Verbose -Message $_
-                    }
+                    Write-Verbose -Message "Setting Group Licenses with:`r`nLicensesToAdd: $(ConvertTo-Json $licensesToAdd)`r`nLicensesToRemove: $(ConvertTo-Json $licensesToRemove)"
+                    Set-MgGroupLicense -GroupId $currentGroup.Id `
+                        -AddLicenses $licensesToAdd `
+                        -RemoveLicenses $licensesToRemove `
+                        -ErrorAction Stop | Out-Null
                 }
             }
             catch

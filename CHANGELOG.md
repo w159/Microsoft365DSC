@@ -66,6 +66,8 @@
     integer to match the type Microsoft Graph defines.
 * AADGroup
   * Added support for the `Theme` and `WritebackConfiguration` properties.
+  * Fixed a failed license assignment only being written to verbose output instead of
+    failing the operation.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
@@ -513,6 +515,9 @@
 * SCDLPComplianceRule
   * Fixed an issue where the module failed to build because a variable was assigned
     inside a conditional block and read outside it.
+* SCFilePlanPropertyAuthority
+  * Fixed the property never being removed, because the check for a pending deletion
+    always evaluated to false.
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings
