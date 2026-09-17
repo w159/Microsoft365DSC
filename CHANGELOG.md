@@ -645,6 +645,8 @@
     FIXES [#6120](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6120)
   * Fixed telemetry so an export is reported as such again. The event type was matched against
     the method name `Export-TargetResource`, which the class-based resources no longer emit.
+  * Fixed a blueprint annotation written with spaces around the separator, such as
+    `### L2 | Some text`, showing its text in the delta report but no severity colour or icon.
   * [BREAKING CHANGE] Replaced every character that needs escaping inside an instance name
     with an underscore. An exported instance that is named `AADGroup-Sales Team` will get
     renamed to `AADGroup-Sales_Team`.
