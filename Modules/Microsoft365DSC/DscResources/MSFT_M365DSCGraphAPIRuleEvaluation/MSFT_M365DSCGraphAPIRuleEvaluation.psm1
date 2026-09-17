@@ -65,7 +65,7 @@ class M365DSCGraphAPIRuleEvaluation : M365DSCResourceBase
 
     M365DSCGraphAPIRuleEvaluation() : base()
     {
-        $this.InstancesProperty = 'value'
+        $this._SetProperty('InstancesProperty', 'value')
     }
 
     [M365DSCGraphAPIRuleEvaluation] Get()

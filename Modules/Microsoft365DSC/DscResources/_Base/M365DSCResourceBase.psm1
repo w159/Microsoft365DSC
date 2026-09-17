@@ -1,4 +1,4 @@
-using namespace System
+﻿using namespace System
 using namespace System.Collections
 using namespace System.Collections.Generic
 using namespace System.Management.Automation
@@ -119,9 +119,6 @@ class M365DSCResourceInfo
 
     [String[]] $RequiredProperties
 
-    hidden static [Dictionary[String, ScriptBlock[]]] $_accessors = `
-        [Dictionary[String, ScriptBlock[]]]::new([StringComparer]::OrdinalIgnoreCase)
-
     hidden static [System.UInt32] $SerializationDepth = 25
 
     hidden static [HashSet[Type]] $_depthRegistered = [HashSet[Type]]::new()
@@ -154,21 +151,6 @@ class M365DSCResourceInfo
         }
     }
 
-    hidden static [ScriptBlock[]] GetAccessors([String] $Name)
-    {
-        $accessors = $null
-        if (-not [M365DSCResourceInfo]::_accessors.TryGetValue($Name, [ref] $accessors))
-        {
-            $accessors = [ScriptBlock[]] @(
-                [ScriptBlock]::Create(('$value = $this._GetProperty(''{0}''); if ($value -is [System.Array]) {{ , $value }} else {{ $value }}' -f $Name))
-                [ScriptBlock]::Create(('$this._SetProperty(''{0}'', $args[0])' -f $Name))
-            )
-            [M365DSCResourceInfo]::_accessors[$Name] = $accessors
-        }
-
-        return $accessors
-    }
-
     M365DSCResourceInfo([Type] $Type)
     {
         $this.Type = $Type
@@ -180,10 +162,6 @@ class M365DSCResourceInfo
         # Members declared on the base class are infrastructure, not resource schema.
         $baseMembers = [HashSet[String]]::new([String[]] [M365DSCResourceBase].GetProperties().Name, [StringComparer]::OrdinalIgnoreCase)
         $typeData = [TypeData]::new($Type.Name)
-
-        # A ScriptProperty getter needs a runspace, and the LCM reads the instance returned by Get()
-        # on a thread that no longer has one.
-        $registerAccessors = $global:PSVersionTable.PSEdition -eq 'Core'
 
         foreach ($property in $Type.GetProperties())
         {
@@ -208,12 +186,6 @@ class M365DSCResourceInfo
             }
 
             [M365DSCResourceInfo]::RegisterSerializationDepth($property.PropertyType)
-
-            if ($registerAccessors)
-            {
-                $accessors = [M365DSCResourceInfo]::GetAccessors($property.Name)
-                $typeData.Members.Add($property.Name, [ScriptPropertyData]::new($property.Name, $accessors[0], $accessors[1]))
-            }
         }
 
         $this.RequiredProperties = $required.ToArray()
@@ -231,15 +203,11 @@ class M365DSCResourceBase
     #region Infrastructure state
 
     <#
-        DSC marshals class-resource properties by REFLECTION, in both directions: it writes the CLR
-        backing fields when it populates an instance, and reads the CLR backing fields off whatever
-        a method returns. An ETS ScriptProperty that stored values elsewhere meant DSC wrote where
-        the class never looked and the class wrote where DSC never looked. Measured on 7.6.4: a
-        resource built this way returned Id='' and DisplayName='' through Invoke-DscResource, while
-        an otherwise identical class without the ETS layer round-tripped correctly.
+        Property state lives in the CLR properties, because that is where DSC reads and writes it.
+        There is no extended type system layer over them: the LCM reads the instance returned by
+        Get() after disposing the pipeline that ran it, and a ScriptProperty getter needs a runspace.
 
-        So the ScriptProperty writes THROUGH to the real property (see _SetProperty) and this class
-        keeps no property state of its own.
+        Assignment therefore does not validate. _SetProperty and FromHashtable do.
     #>
     # Underscore-prefixed on purpose. A derived class cannot redeclare a member the base already
     # defines, and resource schemas do use ordinary words as property names - the schema scan found

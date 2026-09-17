@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
 )
 
@@ -273,24 +273,15 @@ Describe 'M365DSCResourceBase type data registration' {
         $Script:Group = New-M365DSCResourceInstance -ResourceName 'AADGroup'
     }
 
-    It 'Registers one ScriptProperty per schema property and nothing else' {
+    It 'Registers a serialization depth and no extended type system members' {
         $typeData = Get-TypeData -TypeName 'AADGroup'
         $typeData | Should -Not -BeNullOrEmpty
-        $expected = @($Script:Group.GetSchemaPropertyNames() | Sort-Object)
-        @($typeData.Members.Keys | Sort-Object) | Should -Be $expected
-        foreach ($member in $typeData.Members.Values)
-        {
-            $member | Should -BeOfType ([System.Management.Automation.Runspaces.ScriptPropertyData])
-            $member.GetScriptBlock | Should -Not -BeNullOrEmpty
-            $member.SetScriptBlock | Should -Not -BeNullOrEmpty
-        }
-        foreach ($name in @('Filter', 'ExportedInstance', 'ResourceCache', '_info', '_snapshot'))
-        {
-            $typeData.Members.ContainsKey($name) | Should -BeFalse -Because "$name is not a schema property"
-        }
+        $typeData.SerializationDepth | Should -Be 25
+        @($Script:Group.GetSchemaPropertyNames()).Count | Should -BeGreaterThan 0
+        $typeData.Members.Count | Should -Be 0
     }
 
-    It 'Wraps array values on read' {
+    It 'Returns array values as arrays' {
         $instance = New-M365DSCResourceInstance -ResourceName 'AADGroup' -Property @{ Members = @('a') }
         $instance.Members -is [System.Array] | Should -BeTrue
         $instance.Members.Count | Should -Be 1
@@ -326,15 +317,15 @@ Describe 'M365DSCResourceBase bound parameter snapshot' {
         Assert-SnapshotMatchesOracle -Instance $instance
         $instance.GetBoundParameters().Visibility | Should -Be 'Public'
 
-        $instance.Visibility = ''
+        $instance.FromHashtable(@{ Visibility = '' })
         Assert-SnapshotMatchesOracle -Instance $instance
         $instance.GetBoundParameters().ContainsKey('Visibility') | Should -BeFalse
 
-        $instance.Description = $null
+        $instance.FromHashtable(@{ Description = $null })
         Assert-SnapshotMatchesOracle -Instance $instance
         $instance.GetBoundParameters().ContainsKey('Description') | Should -BeFalse
 
-        $instance.Members = @()
+        $instance.FromHashtable(@{ Members = @() })
         Assert-SnapshotMatchesOracle -Instance $instance
         $instance.GetBoundParameters().ContainsKey('Members') | Should -BeTrue
     }
@@ -381,7 +372,7 @@ Describe 'M365DSCResourceBase bound parameter snapshot' {
         @($bound.Members) | Should -Be @('a@contoso.com')
         Assert-SnapshotMatchesOracle -Instance $instance
 
-        $instance.Description = 'later'
+        $instance.FromHashtable(@{ Description = 'later' })
         $instance.GetBoundParameters().Description | Should -Be 'later'
         Assert-SnapshotMatchesOracle -Instance $instance
     }
@@ -392,8 +383,7 @@ Describe 'M365DSCResourceBase bound parameter snapshot' {
         Set-PropertyByReflection -Instance $instance -Name 'MailNickname' -Value 'contoso'
         Set-PropertyByReflection -Instance $instance -Name 'Description' -Value 'from dsc'
 
-        $instance.DisplayName = 'Renamed'
-        $instance.MailNickname = 'renamed'
+        $instance.FromHashtable(@{ DisplayName = 'Renamed'; MailNickname = 'renamed' })
 
         $bound = $instance.GetBoundParameters()
         $bound.DisplayName | Should -Be 'Renamed'
@@ -407,7 +397,7 @@ Describe 'M365DSCResourceBase bound parameter snapshot' {
         Set-PropertyByReflection -Instance $instance -Name 'DisplayName' -Value 'Contoso'
         Set-PropertyByReflection -Instance $instance -Name 'MailNickname' -Value 'contoso'
 
-        $instance.Description = 'script'
+        $instance.FromHashtable(@{ Description = 'script' })
 
         $bound = $instance.GetBoundParameters()
         $bound.DisplayName | Should -Be 'Contoso'
@@ -483,7 +473,7 @@ Describe 'M365DSCResourceBase property validation' {
     It 'Nulls an empty collection on a property with enumerated validation' {
         $instance = New-M365DSCResourceInstance -ResourceName 'AADConditionalAccessPolicy' -Property @{ IncludeGuestOrExternalUserTypes = @() }
         $instance.GetBoundParameters().ContainsKey('IncludeGuestOrExternalUserTypes') | Should -BeFalse
-        $instance.IncludeGuestOrExternalUserTypes = @('none')
+        $instance.FromHashtable(@{ IncludeGuestOrExternalUserTypes = @('none') })
         @($instance.GetBoundParameters().IncludeGuestOrExternalUserTypes) | Should -Be @('none')
     }
 
@@ -492,7 +482,7 @@ Describe 'M365DSCResourceBase property validation' {
             Should -Throw -ExpectedMessage '*length must be between 1 and 64*'
         $instance = New-M365DSCResourceInstance -ResourceName 'EXORoleGroup' -Property @{ Name = ('n' * 64) }
         $instance.Name.Length | Should -Be 64
-        $instance.Name = ''
+        $instance.FromHashtable(@{ Name = '' })
         $instance.Name | Should -BeNullOrEmpty
         $instance.GetBoundParameters().ContainsKey('Name') | Should -BeFalse
     }
@@ -502,7 +492,7 @@ Describe 'M365DSCResourceBase property validation' {
             Should -Throw -ExpectedMessage '*does not match the pattern*'
         $instance = New-M365DSCResourceInstance -ResourceName 'EXOAcceptedDomain' -Property @{ Identity = 'contoso.com' }
         $instance.Identity | Should -Be 'contoso.com'
-        $instance.Identity = ''
+        $instance.FromHashtable(@{ Identity = '' })
         $instance.Identity | Should -BeNullOrEmpty
         $instance.GetBoundParameters().ContainsKey('Identity') | Should -BeFalse
     }
@@ -519,8 +509,8 @@ Import-Module -Name '$manifestPath' -Global -Force
 [PSCustomObject]@{
     DisplayName         = `$instance.DisplayName
     BoundDisplayName    = `$instance.GetBoundParameters().DisplayName
-    TypeDataMembers     = @((Get-TypeData -TypeName 'AADGroup').Members.Keys | Sort-Object)
-    SchemaPropertyNames = @(`$instance.GetSchemaPropertyNames() | Sort-Object)
+    TypeDataMemberCount = @((Get-TypeData -TypeName 'AADGroup').Members.Keys).Count
+    SerializationDepth  = (Get-TypeData -TypeName 'AADGroup').SerializationDepth
 } | ConvertTo-Json -Depth 4 -Compress
 "@
         $isolatedOutput = & (Get-Process -Id $PID).Path -NoProfile -NonInteractive -Command $isolatedCommand
@@ -529,6 +519,7 @@ Import-Module -Name '$manifestPath' -Global -Force
         $result | Should -Not -BeNullOrEmpty
         $result.DisplayName | Should -Be 'after'
         $result.BoundDisplayName | Should -Be 'after'
-        $result.TypeDataMembers | Should -Be $result.SchemaPropertyNames
+        $result.TypeDataMemberCount | Should -Be 0
+        $result.SerializationDepth | Should -Be 25
     }
 }
