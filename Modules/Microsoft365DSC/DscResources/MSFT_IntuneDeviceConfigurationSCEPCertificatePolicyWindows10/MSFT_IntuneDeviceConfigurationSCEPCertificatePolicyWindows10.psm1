@@ -488,31 +488,35 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
                 -Repository 'deviceManagement/deviceConfigurations'
             #endregion
 
+            $rootCertificate = $null
             $rootCertificateIdValue = $this.RootCertificateId
-            $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
-                -DeviceConfigurationId $rootCertificateIdValue `
-                -ErrorAction SilentlyContinue | Where-Object -FilterScript {
-                    $_.'@odata.type' -eq '#microsoft.graph.windows81TrustedRootCertificate'
-                }
+            if (-not [System.String]::IsNullOrEmpty($rootCertificateIdValue))
+            {
+                $rootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    -DeviceConfigurationId $rootCertificateIdValue `
+                    -ErrorAction SilentlyContinue | Where-Object -FilterScript {
+                        $_.'@odata.type' -eq '#microsoft.graph.windows81TrustedRootCertificate'
+                    }
+            }
 
-            if ($null -eq $RootCertificate)
+            if ($null -eq $rootCertificate)
             {
                 Write-Verbose -Message "Could not find trusted root certificate with Id {$rootCertificateIdValue}, searching by display name {$($this.RootCertificateDisplayName)}"
 
-                $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+                $rootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
                     -Filter "DisplayName eq '$($this.RootCertificateDisplayName -replace "'", "''")'" `
                     -ErrorAction SilentlyContinue | `
                         Where-Object -FilterScript {
                         $_.'@odata.type' -eq '#microsoft.graph.windows81TrustedRootCertificate'
                     }
 
-                if ($null -eq $RootCertificate)
+                if ($null -eq $rootCertificate)
                 {
                     throw "Could not find trusted root certificate with Id {$rootCertificateIdValue} or display name {$($this.RootCertificateDisplayName)}"
                 }
-                $rootCertificateIdValue = $RootCertificate.Id
+                $rootCertificateIdValue = $rootCertificate.Id
 
-                Write-Verbose -Message "Found trusted root certificate with Id {$($RootCertificate.Id)} and DisplayName {$($RootCertificate.DisplayName)}"
+                Write-Verbose -Message "Found trusted root certificate with Id {$($rootCertificate.Id)} and DisplayName {$($rootCertificate.DisplayName)}"
             }
             else
             {
