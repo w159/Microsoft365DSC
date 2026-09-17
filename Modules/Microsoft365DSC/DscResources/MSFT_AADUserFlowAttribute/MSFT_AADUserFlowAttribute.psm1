@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADUserFlowAttribute : M365DSCResourceBase
@@ -163,7 +163,7 @@ class AADUserFlowAttribute : M365DSCResourceBase
             }
             catch
             {
-                Write-Error -ErrorRecord $_
+                throw
             }
         }
         #exists but shouldn't

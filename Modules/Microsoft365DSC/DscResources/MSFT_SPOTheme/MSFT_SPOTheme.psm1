@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SPOTheme : M365DSCResourceBase
@@ -182,7 +182,7 @@ class SPOTheme : M365DSCResourceBase
             {
                 $Message = "The SPOTheme $($this.Name) does not exist and for that cannot be removed."
                 $this.LogError($_, $Message)
-                Write-Error $Message
+                throw
             }
         }
     }

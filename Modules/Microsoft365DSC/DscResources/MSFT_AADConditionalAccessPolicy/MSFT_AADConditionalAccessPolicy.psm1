@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADConditionalAccessPolicy : M365DSCResourceBase
@@ -1697,7 +1697,7 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
             {
                 $this.LogError($_, 'Error updating data:')
 
-                Write-Error -Message "Set(): Failed changing policy $($this.DisplayName)"
+                throw
             }
         }
         elseif ($this.Ensure -eq 'Present' -and $currentPolicy.Ensure -eq 'Absent')
@@ -1716,14 +1716,12 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
                 {
                     $this.LogError($_, 'Error creating new policy:')
 
-                    Write-Error -Message 'Set(): Failed creating new policy'
+                    throw
                 }
             }
             else
             {
-                $this.LogError($_, 'Error creating new policy:')
-
-                Write-Error -Message 'Set(): Failed creating new policy. At least a user rule, application rule and grant or session control is required'
+                throw 'Set(): Failed creating new policy. At least a user rule, application rule and grant or session control is required'
             }
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentPolicy.Ensure -eq 'Present')
@@ -1737,7 +1735,7 @@ class AADConditionalAccessPolicy : M365DSCResourceBase
             {
                 $this.LogError($_, 'Error updating data:')
 
-                Write-Error -Message "Set(): Failed deleting policy $($this.DisplayName)"
+                throw
             }
         }
         Write-Verbose -Message "Set(): Finished processing Policy $($this.Displayname)"
