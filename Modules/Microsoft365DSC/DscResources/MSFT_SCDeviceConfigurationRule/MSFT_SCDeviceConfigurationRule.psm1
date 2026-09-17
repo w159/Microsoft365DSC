@@ -307,7 +307,7 @@ class SCDeviceConfigurationRule : M365DSCResourceBase
 
                 if ($null -eq $entry)
                 {
-                    Write-Error -Message "Could not find group or user identified with id {$group}"
+                    Write-Warning -Message "Could not find group or user identified with id {$group}. Skipping it."
                 }
                 else
                 {

@@ -224,6 +224,7 @@
     Microsoft Graph uses.
   * Added value `windowsMobileApplicationManagement` to property `Platform`.
   * Added support for the `RoleScopeTags` property.
+  * Fixed the lookup by display name not failing when more than one filter matched it.
 * IntuneDeviceCategory
   * Added support for the `RoleScopeTagIds` property.
 * IntuneDeviceCompliancePolicyAndroidDeviceOwner
@@ -510,6 +511,9 @@
     drift, because the labels were read back as color names.
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
+* SCDeviceConfigurationRule
+  * Fixed a target group or user that cannot be resolved failing the operation
+    instead of being skipped.
 * SCDLPComplianceRule
   * Fixed an issue where the module failed to build because a variable was assigned
     inside a conditional block and read outside it.
