@@ -640,6 +640,9 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed `Get-DscConfiguration` failing under Windows PowerShell with `There is no
+    Runspace available to run scripts in this thread`.
+    FIXES [#6120](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6120)
   * Fixed telemetry so an export is reported as such again. The event type was matched against
     the method name `Export-TargetResource`, which the class-based resources no longer emit.
   * [BREAKING CHANGE] Replaced every character that needs escaping inside an instance name
