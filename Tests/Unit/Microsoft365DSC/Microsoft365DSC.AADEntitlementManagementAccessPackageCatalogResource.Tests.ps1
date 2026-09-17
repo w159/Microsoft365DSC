@@ -208,6 +208,61 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'The AADEntitlementManagementAccessPackageCatalogResource is identified by object id and Values are already in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    AddedBy             = 'myAdmin'
+                    AddedOn             = '25/10/2022 18:47:28'
+                    CatalogId           = 'MyCatalog'
+                    Description         = 'Marketing Team'
+                    DisplayName         = 'Marketing Team'
+                    Ensure              = 'Present'
+                    Id                  = '6a636d76-5025-44d4-9a80-78618f00c16d'
+                    IsPendingOnboarding = $false
+                    ManagedIdentity     = $false
+                    OriginId            = '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d'
+                    OriginSystem        = 'AadGroup'
+                    ResourceType        = 'Security group'
+                    Url                 = 'https://myaccess.microsoft.com/'
+                    Credential          = $Credential
+                }
+
+                Mock -CommandName Get-M365DSCAccessPackageResourceOriginDisplayName -MockWith {
+                    if ($OriginId -eq '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d' -and $OriginSystem -eq 'AadGroup')
+                    {
+                        return 'Marketing Team'
+                    }
+
+                    return $OriginId
+                }
+
+                Mock -CommandName Get-MgBetaEntitlementManagementAccessPackageCatalogAccessPackageResource -MockWith {
+                    return @{
+                        AddedBy             = 'myAdmin'
+                        AddedOn             = '25/10/2022 18:47:28'
+                        CatalogId           = 'f34c2d92-9e9d-4703-ba9b-955b6ac8dcb3'
+                        Description         = 'Marketing Team'
+                        DisplayName         = 'Marketing Team'
+                        Id                  = '6a636d76-5025-44d4-9a80-78618f00c16d'
+                        IsPendingOnboarding = $false
+                        ManagedIdentity     = $false
+                        OriginId            = '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d'
+                        OriginSystem        = 'AadGroup'
+                        ResourceType        = 'Security group'
+                        Url                 = 'https://myaccess.microsoft.com/'
+                    }
+                }
+            }
+
+            It 'Should return the group display name from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Get().ToHashtable()).OriginId | Should -Be 'Marketing Team'
+            }
+
+            It 'Should return true from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackageCatalogResource' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
         Context -Name 'The AADEntitlementManagementAccessPackageCatalogResource exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{

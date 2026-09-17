@@ -3202,6 +3202,67 @@ function Get-M365DSCResourceComparisonParameters
 
 <#
 .SYNOPSIS
+    Resolves an access package resource origin id to the display name of the object behind it.
+
+.DESCRIPTION
+    Entitlement management stores the origin id of an AadGroup or AadApplication resource as the object's
+    GUID, but the resources report and accept an object's display name as well. This function turns a GUID
+    into that display name for the origin systems that have one. An origin id that is not a GUID, an origin
+    system without a directory object, and a GUID with no resolved object are returned unchanged.
+
+.PARAMETER OriginId
+    Specifies the origin id to resolve.
+
+.PARAMETER OriginSystem
+    Specifies the origin system the resource belongs to, such as AadGroup or AadApplication.
+
+.OUTPUTS
+    System.String
+#>
+function Get-M365DSCAccessPackageResourceOriginDisplayName
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $OriginId,
+
+        [Parameter()]
+        [System.String]
+        $OriginSystem
+    )
+
+    if (-not [System.Guid]::TryParse($OriginId, [ref][System.Guid]::Empty))
+    {
+        return $OriginId
+    }
+
+    $displayName = $null
+    switch ($OriginSystem)
+    {
+        'AadApplication'
+        {
+            $displayName = (Get-MgServicePrincipal -ServicePrincipalId $OriginId -ErrorAction SilentlyContinue).DisplayName
+        }
+        'AadGroup'
+        {
+            $displayName = (Get-MgGroup -GroupId $OriginId -ErrorAction SilentlyContinue).DisplayName
+        }
+    }
+
+    if ([System.String]::IsNullOrEmpty($displayName))
+    {
+        Write-Verbose -Message "The origin id {$OriginId} of origin system {$OriginSystem} could not be resolved to a display name. Returning the id instead."
+        return $OriginId
+    }
+
+    return $displayName
+}
+
+<#
+.SYNOPSIS
     Resolves a group display name from its group id.
 
 .DESCRIPTION
@@ -3731,6 +3792,7 @@ Export-ModuleMember -Function @(
     'Confirm-ImportedCmdletIsAvailable',
     'Convert-M365DscHashtableToString',
     'Get-AllSPOPackages',
+    'Get-M365DSCAccessPackageResourceOriginDisplayName',
     'Get-M365DSCAllResources',
     'Get-M365DSCResourcesDictionary',
     'Get-M365DSCArrayFromProperty',
