@@ -130,6 +130,8 @@ Import-Module PSDesiredStateConfiguration -Force
         $quotaConfiguration.MemoryAllHosts = $totalPhysicalMemory # Adjust the memory for all processes combined
         $quotaConfiguration.MemoryPerHost  = $totalPhysicalMemory # Adjust the memory for a single wmiprvse.exe process
         Set-CimInstance -InputObject $quotaConfiguration
+        # WSMan caps each remote shell below the working set the Microsoft365DSC modules reach during import. A higher cap keeps the remote Test host responsive
+        Set-Item -Path WSMan:\localhost\Plugin\PowerShell.7\Quotas\MaxMemoryPerShellMB -Value 2048 -Force
 
         [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine)
         Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage" -Name "ACP" -Value 65001 -Force
