@@ -818,6 +818,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Apps and Services Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -853,6 +855,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Forms Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -957,6 +961,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings To Do Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -1020,6 +1026,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Dynamics Customer Voice Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 

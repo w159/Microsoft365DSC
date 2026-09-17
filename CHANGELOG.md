@@ -26,8 +26,6 @@
 * AADAuthenticationMethodPolicyX509
   * Added support for the `CertificateAuthorityScopes` and `IssuerHintsConfiguration`
     properties.
-* AADAuthenticationStrengthPolicy
-  * Fixed trying to update a built-in policy being reported without failing the operation.
 * AADAuthorizationPolicy
   * [BREAKING CHANGE] Moved all `DefaultUserRole*` properties to the new
     `DefaultUserRolePermissions` complex property type for separation.
@@ -41,7 +39,6 @@
   * Added value `hidden` to property `ServicePrincipalRiskLevels`.
   * An agreement that cannot be found in the tenant is now reported with a warning and
     left out of the policy.
-  * Fixed a failed create, update or delete being reported without failing the operation.
 * AADCrossTenantAccessPolicyConfigurationDefault
   * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
@@ -75,8 +72,6 @@
     member carries the odata subtype and `CertificateList` carries the certificates.
   * Excluded `Password` and `Pkcs12Value` from the comparison, because Microsoft Graph
     returns neither the password nor the certificate material on a read.
-  * Fixed not having exactly one active certificate failing with `ScriptHalted` instead of
-    the actual reason.
 * AADEntitlementManagementAccessPackage
   * Fixed an issue where a resource role scope naming its resource by object id reported
     drift on every run and re-applied the access package.
@@ -144,8 +139,6 @@
     `LicenseAssignment` was emptied to strip every license.
   * Added support for the `AgeGroup`, `EmployeeHireDate`, `EmployeeLeaveDateTime`
     and `EmployeeType` properties.
-* AADUserFlowAttribute
-  * Fixed a failed create being reported without failing the operation.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.
@@ -231,7 +224,6 @@
     Microsoft Graph uses.
   * Added value `windowsMobileApplicationManagement` to property `Platform`.
   * Added support for the `RoleScopeTags` property.
-  * Fixed the lookup by display name not failing when more than one filter matched it.
 * IntuneDeviceCategory
   * Added support for the `RoleScopeTagIds` property.
 * IntuneDeviceCompliancePolicyAndroidDeviceOwner
@@ -502,8 +494,6 @@
   * Added support for the `Theme` property.
 * O365OrgCustomizationSetting
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
-* O365OrgSettings
-  * Fixed a failed update of the Apps installation options not failing the operation.
 * PlannerBucket
   * [BREAKING CHANGE] Renamed the property `BucketId` to `Id`.
 * PlannerPlan
@@ -518,25 +508,13 @@
     were dropped when a task was created rather than updated.
   * Fixed an issue where a task on a plan with custom category labels always reported
     drift, because the labels were read back as color names.
-* PPPowerAppsEnvironment
-  * Fixed a Developer environment without Dataverse parameters failing with `ScriptHalted`
-    instead of the actual reason.
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
-* SCDeviceConfigurationRule
-  * Fixed a target group or user that cannot be resolved failing the operation
-    instead of being skipped.
-  * Fixed a target group or user that cannot be resolved being dropped from the policy
-    when it is applied, instead of failing.
 * SCDLPComplianceRule
   * Fixed an issue where the module failed to build because a variable was assigned
     inside a conditional block and read outside it.
-* SCLabelPolicy
-  * Fixed a missing sensitivity label being reported without failing, which applied an
-    empty default label.
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
-  * Fixed a failed update being reported without failing the operation.
 * SPOSharingSettings
   * Added properties `AllowGuestUserShareToUsersNotInSiteCollection`,
     `CoreDefaultShareLinkRole`, `CoreDefaultShareLinkScope`,
@@ -595,8 +573,6 @@
     `TlsTokenBindingPolicyValue`, `ViewersCanCommentOnMediaDisabled`, `Workflow2010Disabled`.
   * [BREAKING CHANGE] Removed property `OneDriveSharingCapability`. Is is replaced
     with `MySiteSharingCapability` in the `SPOSharingSettings` resource.
-* SPOTheme
-  * Fixed a failed removal being reported without failing the operation.
 * SPOUserProfileProperty
   * Updated fetching of user profile properties.
 * TeamsAudioConferencingPolicy
@@ -624,8 +600,6 @@
 * TeamsUpgradePolicy
   * Fixed an issue where the cached instance was discarded during export and re-read from the
     service, because the identity carries a `Tag:` prefix the cached instance was compared against.
-* VivaEngagementRoleMember
-  * Fixed a user that cannot be found being skipped instead of failing the operation.
 * M365DSCCheckProperties
   * [BREAKING CHANGE] Removed the module and its function `Get-PropertyReport`. The API surface
     checker in `Utilities/ApiSurface` replaces it and covers every workload, not only Exchange
@@ -666,6 +640,8 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Changed resources to throw instead of only logging or writing to the error stream when
+    an operation fails, so a failed apply is no longer reported as successful.
   * Fixed a failed telemetry submission failing the resource operation that triggered it,
     by no longer reporting it on the error stream.
   * Fixed `Get-DscConfiguration` failing under Windows PowerShell with `There is no
@@ -756,6 +732,8 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
+  * Corrected the Windows PowerShell warning, which did not mention that
+    `Get-DscConfiguration` is supported.
 
 # 1.26.909.1
 

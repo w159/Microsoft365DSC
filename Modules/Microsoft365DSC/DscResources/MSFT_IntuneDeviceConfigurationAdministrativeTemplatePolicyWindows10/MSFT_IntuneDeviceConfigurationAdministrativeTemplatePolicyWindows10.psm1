@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCResourceBase
@@ -670,6 +670,8 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
         catch
         {
             $this.LogError($_, 'Error updating data:')
+
+            throw
         }
     }
 

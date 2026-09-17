@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
@@ -189,6 +189,8 @@ class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, 'Error retrieving data getting group')
+
+                throw
             }
             $ItemInsightsUpdateParams.Add('DisabledForGroup', $disabledForGroupValue)
         }
@@ -211,6 +213,8 @@ class O365SearchAndIntelligenceConfigurations : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, 'Error retrieving data getting group')
+
+                throw
             }
             $PersonInsightsUpdateParams.Add('DisabledForGroup', $disabledForGroupValue)
         }
