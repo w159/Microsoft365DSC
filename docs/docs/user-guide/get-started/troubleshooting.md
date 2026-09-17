@@ -158,7 +158,7 @@ The `wsmprovhost.exe` process hosting the DSC resource runs out of memory while 
 
 ### RESOLUTION
 
-Raise the WSMan per-shell memory quot:
+Raise the WSMan per-shell memory quota:
 
 ```powershell
 Set-Item -Path WSMan:\localhost\Plugin\PowerShell.7\Quotas\MaxMemoryPerShellMB -Value 2048
