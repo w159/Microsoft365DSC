@@ -102,7 +102,7 @@ try
         Set-ExecutionPolicy Unrestricted -Force
 
         Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules" -Recurse | Unblock-File
-        $null = New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client' -Name MaxEnvelopeSizekb -Value 1039440 -PropertyType DWORD -Force
+        Set-Item -Path WSMan:\localhost\MaxEnvelopeSizekb -Value 1039440 -Force
 
         $computerSystem = Get-CimInstance -ClassName "Win32_ComputerSystem"
         $totalPhysicalMemory = $computerSystem.TotalPhysicalMemory
