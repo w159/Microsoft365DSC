@@ -7,6 +7,9 @@
     name Microsoft Graph uses.
 * AADActivityBasedTimeoutPolicy
   * Added support for the `Description` property.
+* AADAdministrativeUnit
+  * Fixed an issue where resolving a scoped role member could throw an error.
+    FIXES [#7457](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7457)
 * AADAgreement
   * [BREAKING CHANGE] Removed property `AcceptanceStatement`. It was not part of the
     Graph Schema definition for the resource.
@@ -40,12 +43,14 @@
   * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
     `M365CollaborationInbound` properties.
+    FIXES [#7436](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7436)
   * Fixed an issue where the loop resolving user and group targets walked one entry past
     the end of the collection.
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Added support for the `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationInbound`, `TenantRestrictions`
     and `M365CollaborationOutbound` properties.
+    FIXES [#7436](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7436)
 * AADCrossTenantIdentitySyncPolicyPartner
   * Added support for the `ExternalCloudAuthorizedApplicationId` and
     `IsRoleEnabledGroupSyncAllowed` properties.
@@ -67,6 +72,10 @@
     member carries the odata subtype and `CertificateList` carries the certificates.
   * Excluded `Password` and `Pkcs12Value` from the comparison, because Microsoft Graph
     returns neither the password nor the certificate material on a read.
+* AADEntitlementManagementAccessPackage
+  * Fixed an issue where a resource role scope naming its resource by object id reported
+    drift on every run and re-applied the access package.
+    FIXES [#7412](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7412)
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
@@ -77,6 +86,9 @@
     avoid a conflict with a reserved PowerShell keyword.
   * Fixed an issue where naming the catalog by its identifier reported drift on every
     run and never converged.
+  * Fixed an issue where naming an `AadGroup` or `AadApplication` resource by object id
+    reported drift on every run and never converged.
+    FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
 * AADIdentityGovernanceLifecycleWorkflow
   * Added support for the `AdministrationScopeTargets` property.
 * AADIdentityGovernanceProgram
@@ -605,8 +617,19 @@
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
 * M365DSCModuleMgmt
   * Added automatic dependency update for both Windows PowerShell and PowerShell 7.
+* M365DSCPermissions
+  * Fixed an issue where `Get-M365DSCCompiledPermissionList` skips any that is not one of the
+    default `graph`, `sharepoint`, `exchange` and `purview`.
+    FIXES [#7424](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7424)
+  * Fixed an issue where `Get-M365DSCCompiledPermissionList -GroupByResourceName` accumulated
+    administrative roles, required roles and required role groups across resources.
+  * Updated `Update-M365DSCAzureAdApplication` to resolve the service principal of any API name
+    a settings file uses rather than accepting only `Graph`, `SharePoint` and `Exchange`.
 * M365DSCReport
   * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
+* M365DSCUtil
+  * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
+    resource origin id to the display name of the object behind it.
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.1.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.

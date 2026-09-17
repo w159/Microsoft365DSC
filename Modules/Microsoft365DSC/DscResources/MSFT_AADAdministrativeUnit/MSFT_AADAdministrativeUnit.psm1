@@ -620,17 +620,17 @@ class AADAdministrativeUnit : M365DSCResourceBase
                 {
                     if ($diff.Type -eq 'User')
                     {
-                        $memberObject = Get-MgUser -Filter "UserPrincipalName eq '$($diff.Identity -replace "'", "''")'"
+                        [array]$memberObject = Get-MgUser -Filter "UserPrincipalName eq '$($diff.Identity -replace "'", "''")'"
                         #$memberType = 'users'
                     }
                     elseif ($diff.Type -eq 'Group')
                     {
-                        $memberObject = Get-MgGroup -Filter "DisplayName eq '$($diff.Identity -replace "'", "''")'"
+                        [array]$memberObject = Get-MgGroup -Filter "DisplayName eq '$($diff.Identity -replace "'", "''")'"
                         #$membertype = 'groups'
                     }
                     elseif ($diff.Type -eq 'ServicePrincipal')
                     {
-                        $memberObject = Get-MgServicePrincipal -Filter "DisplayName eq '$($diff.Identity -replace "'", "''")'"
+                        [array]$memberObject = Get-MgServicePrincipal -Filter "DisplayName eq '$($diff.Identity -replace "'", "''")'"
                         #$memberType = "servicePrincipals"
                     }
                     else
