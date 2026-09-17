@@ -84,7 +84,7 @@ try
                 $IsSDK
             )
 
-            if ($IsSDK.IsPresent)
+            if ($IsSDK)
             {
                 Update-M365DSCDependencies -Development
             }
@@ -123,7 +123,7 @@ try
                 $IsSDK
             )
 
-            if ($IsSDK.IsPresent)
+            if ($IsSDK)
             {
                 Write-Output "Copying pwrshplugin.dll to PowerShell 7 module path"
                 $PSVersion = [System.String]$PSVersionTable.PSVersion
