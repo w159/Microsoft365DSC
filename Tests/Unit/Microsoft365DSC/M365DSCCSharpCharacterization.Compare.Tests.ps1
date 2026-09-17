@@ -406,6 +406,26 @@ Describe 'ConfigurationComparer.Compare' {
             @($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq '_metadata_DisplayName' }).Count | Should -Be 1
         }
 
+        It 'Copies a blueprint annotation written with spaces around the separator' {
+            $source = @(New-Resource -ResourceName 'TestResource' -InstanceName 'S' -Values @{ Identity = 'a'; DisplayName = 'x' })
+            $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; DisplayName = 'y'; _metadata_DisplayName = '### L2 | Must match' })
+            $deltas = Invoke-ConfigurationCompare -Source $source -Destination $destination
+
+            $displayName = ($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq 'DisplayName' })['Properties'][0]
+            $displayName['_Metadata_Level'] | Should -Be 'L2'
+            $displayName['_Metadata_Info'] | Should -Be 'Must match'
+        }
+
+        It 'Keeps a separator that is part of the annotation information' {
+            $source = @(New-Resource -ResourceName 'TestResource' -InstanceName 'S' -Values @{ Identity = 'a'; DisplayName = 'x' })
+            $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; DisplayName = 'y'; _metadata_DisplayName = '### L3|Either a|b is allowed' })
+            $deltas = Invoke-ConfigurationCompare -Source $source -Destination $destination
+
+            $displayName = ($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq 'DisplayName' })['Properties'][0]
+            $displayName['_Metadata_Level'] | Should -Be 'L3'
+            $displayName['_Metadata_Info'] | Should -Be 'Either a|b is allowed'
+        }
+
         It 'Ignores a malformed blueprint annotation' {
             $source = @(New-Resource -ResourceName 'TestResource' -InstanceName 'S' -Values @{ Identity = 'a'; DisplayName = 'x' })
             $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; DisplayName = 'y'; _metadata_DisplayName = 'no separator' })

@@ -200,6 +200,67 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'The AADEntitlementManagementAccessPackage identifies a resource role scope by object id and Values are already in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    CatalogId                       = 'FakeStringValue'
+                    Description                     = 'FakeStringValue'
+                    DisplayName                     = 'FakeStringValue'
+                    Id                              = 'FakeStringValue'
+                    IsHidden                        = $True
+                    IsRoleScopesVisible             = $True
+                    IncompatibleAccessPackages      = @('packageId1', 'packageId2')
+                    IncompatibleGroups              = @('groupId1', 'groupId2')
+                    AccessPackageResourceRoleScopes = ([MSFT_AccessPackageResourceRoleScope] @{
+                            Id                                     = 'FakeStringValue'
+                            AccessPackageResourceOriginId          = '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d'
+                            AccessPackageResourceRoleDisplayName   = 'TestRole'
+                            AccessPackageResourceScopeOriginSystem = 'AadGroup'
+                        })
+                    Ensure                          = 'Present'
+                    Credential                      = $Credential
+                }
+
+                Mock -CommandName Get-M365DSCAccessPackageResourceOriginDisplayName -MockWith {
+                    if ($OriginId -eq '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d' -and $OriginSystem -eq 'AadGroup')
+                    {
+                        return 'Marketing Team'
+                    }
+
+                    return $OriginId
+                }
+
+                Mock -CommandName Get-MgBetaEntitlementManagementAccessPackage -MockWith {
+                    return @{
+                        CatalogId                       = 'FakeStringValue'
+                        Description                     = 'FakeStringValue'
+                        DisplayName                     = 'FakeStringValue'
+                        Id                              = 'FakeStringValue'
+                        IsHidden                        = $True
+                        IsRoleScopesVisible             = $True
+                        AccessPackageResourceRoleScopes = @{
+                            Id                         = 'FakeStringValue'
+                            AccessPackageResourceScope = @{
+                                OriginId     = '9ba7bd2f-8d0f-4c3a-96f5-9e5eab7b7a1d'
+                                OriginSystem = 'AadGroup'
+                            }
+                            AccessPackageResourceRole  = @{
+                                DisplayName = 'TestRole'
+                            }
+                        }
+                    }
+                }
+            }
+
+            It 'Should return the group display name from the Get method' {
+                ((New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackage' -Property $testParams).Get().ToHashtable()).AccessPackageResourceRoleScopes[0].AccessPackageResourceOriginId | Should -Be 'Marketing Team'
+            }
+
+            It 'Should return true from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADEntitlementManagementAccessPackage' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
         Context -Name 'The AADEntitlementManagementAccessPackage exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{

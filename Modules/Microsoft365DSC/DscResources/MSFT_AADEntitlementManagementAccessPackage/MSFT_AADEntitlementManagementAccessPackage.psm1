@@ -154,7 +154,8 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
             $getAccessPackageResourceRoleScopes = @()
             foreach ($accessPackageResourceRoleScope in $getValue.AccessPackageResourceRoleScopes)
             {
-                $originId = $this.GetAccessPackageResourceOriginKey($accessPackageResourceRoleScope.AccessPackageResourceScope.OriginId, $accessPackageResourceRoleScope.AccessPackageResourceScope.OriginSystem)
+                $originId = Get-M365DSCAccessPackageResourceOriginDisplayName -OriginId $accessPackageResourceRoleScope.AccessPackageResourceScope.OriginId `
+                    -OriginSystem $accessPackageResourceRoleScope.AccessPackageResourceScope.OriginSystem
                 $getAccessPackageResourceRoleScopes += @{
                     Id                                     = $accessPackageResourceRoleScope.Id
                     AccessPackageResourceOriginId          = $originId
@@ -478,10 +479,10 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
             $currentAccessPackageResourceOriginIds = $currentInstance.AccessPackageResourceRoleScopes.AccessPackageResourceOriginId
             foreach ($accessPackageResourceRoleScope in $this.AccessPackageResourceRoleScopes)
             {
-                # Match against the same value Get() returns (display name for AadGroup/AadApplication).
-                # Comparing the raw GUID OriginId here made a GUID-specified scope look absent every run.
-                # This resulted in a removal and re-add on every Set, leaving the package with no resource roles.
-                $originKey = $this.GetAccessPackageResourceOriginKey($accessPackageResourceRoleScope.AccessPackageResourceOriginId, $accessPackageResourceRoleScope.AccessPackageResourceScopeOriginSystem)
+                # Get() reports an AadGroup or AadApplication origin id as the object's display name,
+                # so a desired origin id only matches once it is resolved the same way.
+                $originKey = Get-M365DSCAccessPackageResourceOriginDisplayName -OriginId $accessPackageResourceRoleScope.AccessPackageResourceOriginId `
+                    -OriginSystem $accessPackageResourceRoleScope.AccessPackageResourceScopeOriginSystem
 
                 if ($originKey -notin ($currentAccessPackageResourceOriginIds))
                 {
@@ -640,7 +641,8 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
 
             #region remove roleScope
             $desiredAccessPackageResourceOriginKeys = @($this.AccessPackageResourceRoleScopes | ForEach-Object {
-                    $this.GetAccessPackageResourceOriginKey($_.AccessPackageResourceOriginId, $_.AccessPackageResourceScopeOriginSystem)
+                    Get-M365DSCAccessPackageResourceOriginDisplayName -OriginId $_.AccessPackageResourceOriginId `
+                        -OriginSystem $_.AccessPackageResourceScopeOriginSystem
                 })
             $currentAccessPackageResourceOriginIdsToRemove = $currentAccessPackageResourceOriginIds | Where-Object `
                 -FilterScript { $_ -notin $desiredAccessPackageResourceOriginKeys }
@@ -672,6 +674,36 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
     [bool] Test()
     {
         return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            PostProcessing = {
+                param($DesiredValues, $CurrentValues, $ValuesToCheck, $PostProcessingArgs)
+                if ([M365DSCResourceBase]::IsReportContext($PostProcessingArgs) -or
+                    $null -eq $DesiredValues.AccessPackageResourceRoleScopes)
+                {
+                    return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+                }
+
+                $normalizedRoleScopes = @()
+                foreach ($roleScope in $DesiredValues.AccessPackageResourceRoleScopes)
+                {
+                    $normalizedRoleScope = [MSFT_AccessPackageResourceRoleScope]::new()
+                    $normalizedRoleScope.Id = $roleScope.Id
+                    $normalizedRoleScope.AccessPackageResourceRoleDisplayName = $roleScope.AccessPackageResourceRoleDisplayName
+                    $normalizedRoleScope.AccessPackageResourceScopeOriginSystem = $roleScope.AccessPackageResourceScopeOriginSystem
+                    $normalizedRoleScope.AccessPackageResourceOriginId = Get-M365DSCAccessPackageResourceOriginDisplayName `
+                        -OriginId $roleScope.AccessPackageResourceOriginId `
+                        -OriginSystem $roleScope.AccessPackageResourceScopeOriginSystem
+                    $normalizedRoleScopes += $normalizedRoleScope
+                }
+                $DesiredValues.AccessPackageResourceRoleScopes = $normalizedRoleScopes
+
+                return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+            }
+        }
     }
 
     [string] Export()
@@ -783,27 +815,6 @@ class AADEntitlementManagementAccessPackage : M365DSCResourceBase
                 throw
             }
         }
-    }
-
-    # Resolves a resource role scope OriginId to the value Get() reports for it. For an
-    # AadGroup or AadApplication, Get() replaces the GUID OriginId with the object's display
-    # name, so any code that compares a desired OriginId against the current value has to resolve it the
-    # same way. A value that is not a GUID (already a display name) is returned unchanged.
-    hidden [System.String] GetAccessPackageResourceOriginKey([System.String] $OriginId, [System.String] $OriginSystem)
-    {
-        $guid = [System.Guid]::Empty
-        if (-not [System.Guid]::TryParse($OriginId, [ref] $guid))
-        {
-            return $OriginId
-        }
-
-        switch ($OriginSystem)
-        {
-            'AadApplication' { return (Get-MgServicePrincipal -ServicePrincipalId $OriginId).DisplayName }
-            'AadGroup' { return (Get-MgGroup -GroupId $OriginId).DisplayName }
-        }
-
-        return $OriginId
     }
 
     hidden [AADEntitlementManagementAccessPackage] AsResult([System.Object] $Values)

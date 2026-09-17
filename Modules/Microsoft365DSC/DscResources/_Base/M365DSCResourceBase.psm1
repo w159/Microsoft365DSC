@@ -181,6 +181,10 @@ class M365DSCResourceInfo
         $baseMembers = [HashSet[String]]::new([String[]] [M365DSCResourceBase].GetProperties().Name, [StringComparer]::OrdinalIgnoreCase)
         $typeData = [TypeData]::new($Type.Name)
 
+        # A ScriptProperty getter needs a runspace, and the LCM reads the instance returned by Get()
+        # on a thread that no longer has one.
+        $registerAccessors = $global:PSVersionTable.PSEdition -eq 'Core'
+
         foreach ($property in $Type.GetProperties())
         {
             if ($baseMembers.Contains($property.Name) -or -not $property.CanWrite)
@@ -205,13 +209,16 @@ class M365DSCResourceInfo
 
             [M365DSCResourceInfo]::RegisterSerializationDepth($property.PropertyType)
 
-            $accessors = [M365DSCResourceInfo]::GetAccessors($property.Name)
-            $typeData.Members.Add($property.Name, [ScriptPropertyData]::new($property.Name, $accessors[0], $accessors[1]))
+            if ($registerAccessors)
+            {
+                $accessors = [M365DSCResourceInfo]::GetAccessors($property.Name)
+                $typeData.Members.Add($property.Name, [ScriptPropertyData]::new($property.Name, $accessors[0], $accessors[1]))
+            }
         }
 
         $this.RequiredProperties = $required.ToArray()
 
-        if ($typeData.Members.Count -gt 0)
+        if ($this.Properties.Count -gt 0)
         {
             $typeData.SerializationDepth = [M365DSCResourceInfo]::SerializationDepth
             Update-TypeData -TypeData $typeData -Force -ErrorAction Stop
