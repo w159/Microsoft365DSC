@@ -2264,8 +2264,9 @@ function Invoke-M365DSCClassResourceInPowerShellCore
         [System.Collections.Hashtable]$Parameters
     )
 
-    if (-not $script:PSCoreSessionInitialized)
+    if (-not (Test-M365DSCPowerShellSession -Session $script:PSCoreSession))
     {
+        $script:PSCoreSessionInitialized = $false
         Initialize-PowerShellCoreSession
     }
 
@@ -2289,6 +2290,127 @@ function Invoke-M365DSCClassResourceInPowerShellCore
     }
 
     return $output
+}
+
+# The endpoint's own idle timeout is two hours, and it allows 25 concurrent shells per user.
+$script:M365DSCSessionIdleTimeoutMilliseconds = 600000
+$script:PSCoreSession = $null
+$script:PSCoreSessionInitialized = $false
+$script:WinPSSession = $null
+$script:WinPSSessionInitialized = $false
+
+<#
+.SYNOPSIS
+    Indicates whether a cached remote session is still usable.
+
+.DESCRIPTION
+    A session from an earlier run, or one whose idle timeout expired, is still held in the script
+    scope but can no longer run anything.
+
+.PARAMETER Session
+    Specifies the session to check.
+
+.EXAMPLE
+    Test-M365DSCPowerShellSession -Session $script:PSCoreSession
+
+.FUNCTIONALITY
+    Internal
+
+.OUTPUTS
+    System.Boolean
+#>
+function Test-M365DSCPowerShellSession
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter()]
+        [AllowNull()]
+        [System.Management.Automation.Runspaces.PSSession]
+        $Session
+    )
+
+    return ($null -ne $Session -and $Session.State -eq 'Opened')
+}
+
+<#
+.SYNOPSIS
+    Closes a cached remote session and clears the reference to it.
+
+.DESCRIPTION
+    Closing the session terminates the wsmprovhost process behind it. Left open, it survives until
+    the endpoint's idle timeout expires and the per-user shell limit is reached.
+
+.PARAMETER Session
+    Specifies the session to close. Nothing happens when it is null.
+
+.EXAMPLE
+    Remove-M365DSCPowerShellSession -Session $script:PSCoreSession
+
+.FUNCTIONALITY
+    Internal
+
+.OUTPUTS
+    None
+#>
+function Remove-M365DSCPowerShellSession
+{
+    [CmdletBinding(SupportsShouldProcess)]
+    param
+    (
+        [Parameter()]
+        [AllowNull()]
+        [System.Management.Automation.Runspaces.PSSession]
+        $Session
+    )
+
+    if ($null -eq $Session)
+    {
+        return
+    }
+
+    if ($PSCmdlet.ShouldProcess($Session.Name, 'Remove-PSSession'))
+    {
+        try
+        {
+            Remove-PSSession -Session $Session -ErrorAction Stop
+        }
+        catch
+        {
+            Write-Verbose -Message "Could not close the remote session: $($_.Exception.Message)"
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+    Closes every remote session this module opened.
+
+.DESCRIPTION
+    Called when the module is removed.
+
+.EXAMPLE
+    Close-M365DSCPowerShellSessions
+
+.FUNCTIONALITY
+    Internal
+
+.OUTPUTS
+    None
+#>
+function Close-M365DSCPowerShellSessions
+{
+    [CmdletBinding(SupportsShouldProcess)]
+    param ()
+
+    Remove-M365DSCPowerShellSession -Session $script:PSCoreSession
+    $script:PSCoreSession = $null
+    $script:PSCoreSessionInitialized = $false
+
+    Remove-M365DSCPowerShellSession -Session $script:WinPSSession
+    $script:WinPSSession = $null
+    $script:WinPSSessionInitialized = $false
 }
 
 function Get-PowerShellSession
@@ -2328,10 +2450,13 @@ function Initialize-PowerShellCoreSession
     [CmdletBinding()]
     param ()
 
-    if ($script:PSCoreSessionInitialized)
+    if ($script:PSCoreSessionInitialized -and (Test-M365DSCPowerShellSession -Session $script:PSCoreSession))
     {
         return
     }
+
+    Remove-M365DSCPowerShellSession -Session $script:PSCoreSession
+    $script:PSCoreSession = $null
 
     if ($PSEdition -eq 'Core' -and -not $IsWindows)
     {
@@ -2345,7 +2470,8 @@ function Initialize-PowerShellCoreSession
 
     try
     {
-        $script:PSCoreSession = New-PSSession -ComputerName localhost -ConfigurationName PowerShell.7 -EnableNetworkAccess -ErrorAction Stop
+        $script:PSCoreSession = New-PSSession -ComputerName localhost -ConfigurationName PowerShell.7 -EnableNetworkAccess `
+            -SessionOption (New-PSSessionOption -IdleTimeout $script:M365DSCSessionIdleTimeoutMilliseconds) -ErrorAction Stop
         $lcmConfig = Get-DscLocalConfigurationManager
         Invoke-Command -Session $script:PSCoreSession -ScriptBlock {
             $previousVerbosePreference = $global:VerbosePreference
@@ -2387,10 +2513,13 @@ function Initialize-WindowsPowerShellSession
     [CmdletBinding()]
     param ()
 
-    if ($script:WinPSSessionInitialized)
+    if ($script:WinPSSessionInitialized -and (Test-M365DSCPowerShellSession -Session $script:WinPSSession))
     {
         return
     }
+
+    Remove-M365DSCPowerShellSession -Session $script:WinPSSession
+    $script:WinPSSession = $null
 
     if ($PSEdition -eq 'Core' -and -not $IsWindows)
     {
@@ -2404,7 +2533,8 @@ function Initialize-WindowsPowerShellSession
 
     try
     {
-        $script:WinPSSession = New-PSSession -ComputerName localhost -ConfigurationName PowerShell.7 -EnableNetworkAccess -ErrorAction Stop
+        $script:WinPSSession = New-PSSession -ComputerName localhost -ConfigurationName PowerShell.7 -EnableNetworkAccess `
+            -SessionOption (New-PSSessionOption -IdleTimeout $script:M365DSCSessionIdleTimeoutMilliseconds) -ErrorAction Stop
         Invoke-Command -Session $script:WinPSSession -ScriptBlock {
             $previousVerbosePreference = $global:VerbosePreference
             $global:VerbosePreference = 'SilentlyContinue'
@@ -3811,6 +3941,7 @@ Export-ModuleMember -Function @(
     'Get-TeamByName',
     'Initialize-M365DSCResourcesDictionary',
     'Initialize-M365DSCSchemaCache',
+    'Close-M365DSCPowerShellSessions',
     'Initialize-PowerShellCoreSession',
     'Initialize-WindowsPowerShellSession',
     'Install-M365DSCDevBranch',
@@ -3831,3 +3962,7 @@ Export-ModuleMember -Function @(
     'Update-M365DSCAuthenticationTargets',
     'Write-M365DSCHost'
 )
+
+$ExecutionContext.SessionState.Module.OnRemove = {
+    Close-M365DSCPowerShellSessions
+}
