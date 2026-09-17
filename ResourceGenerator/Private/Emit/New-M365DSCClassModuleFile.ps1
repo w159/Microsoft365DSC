@@ -594,7 +594,6 @@ function New-M365DSCCompareParametersBlock
 
     $null = $builder.AppendLine("$indent[System.Collections.Hashtable] GetCompareParameters()")
     $null = $builder.AppendLine("$indent{")
-    $null = $builder.AppendLine("$indent    # The service sets these on create and refuses to patch them.")
     $null = $builder.AppendLine("$indent    return @{")
     $null = $builder.AppendLine("$indent        ExcludedProperties = @($quoted)")
     $null = $builder.AppendLine("$indent    }")

@@ -372,6 +372,8 @@
   * Added values `arm` and `neutral` to property `AllowedArchitectures`.
   * Added support for the `Relationships` property, which carries the dependency and
     supersedence relationships of the app.
+* IntuneMobileAppsWin32CatalogAppWindows10
+  * Initial release.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
 * IntuneMobileThreatDefenseConnector
