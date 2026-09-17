@@ -419,6 +419,8 @@
   * Added support for the `fingerprint` and `lockdownExclusionList` properties.
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
+* IntuneVPNConfigurationPolicyMacOS
+  * Initial release.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
   * Added support for the `AuthenticationMethod`, `EapType`,
     `TrustedServerCertificateNames`, `InnerAuthenticationProtocolForEapTtls`,

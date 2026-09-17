@@ -1930,6 +1930,7 @@ function Get-M365DSCExportCollectionConsumerMap
             'IntuneVPNConfigurationPolicyAndroidDeviceOwner',
             'IntuneVPNConfigurationPolicyAndroidWork',
             'IntuneVPNConfigurationPolicyIOS',
+            'IntuneVPNConfigurationPolicyMacOS',
             'IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner',
             'IntuneWifiConfigurationPolicyAndroidEnterpriseWorkProfile',
             'IntuneWifiConfigurationPolicyAndroidForWork',
