@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class VivaEngagementRoleMember : M365DSCResourceBase
@@ -159,7 +159,7 @@ class VivaEngagementRoleMember : M365DSCResourceBase
             }
             else
             {
-                Write-Error -Message "Could not find user {$($member.InputObject)}"
+                throw "Could not find user {$($member.InputObject)}"
             }
         }
     }

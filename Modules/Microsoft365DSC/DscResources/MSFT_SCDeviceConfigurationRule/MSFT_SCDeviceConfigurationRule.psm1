@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SCDeviceConfigurationRule : M365DSCResourceBase
@@ -307,7 +307,7 @@ class SCDeviceConfigurationRule : M365DSCResourceBase
 
                 if ($null -eq $entry)
                 {
-                    Write-Error -Message "Could not find group or user identified with id {$group}"
+                    Write-Warning -Message "Could not find group or user identified with id {$group}. Skipping it."
                 }
                 else
                 {
@@ -423,7 +423,7 @@ class SCDeviceConfigurationRule : M365DSCResourceBase
 
                 if ($null -eq $entry)
                 {
-                    Write-Error -Message "Could not find group or user identified with id {$group}"
+                    throw "Could not find group or user identified with id {$group}"
                 }
                 else
                 {

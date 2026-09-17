@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SCDLPCompliancePolicy : M365DSCResourceBase
@@ -683,7 +683,11 @@ class SCDLPCompliancePolicy : M365DSCResourceBase
             try
             {
                 $policy = Get-DlpCompliancePolicy -Identity $this.Name -ErrorAction SilentlyContinue
-                if ($policy.Mode.ToString() -ne 'PendingDeletion')
+                if ($null -eq $policy)
+                {
+                    Write-Verbose -Message "Policy $($this.Name) was not found."
+                }
+                elseif ("$($policy.Mode)" -ne 'PendingDeletion')
                 {
                     Remove-DLPCompliancePolicy -Identity $this.Name
                 }
@@ -694,7 +698,9 @@ class SCDLPCompliancePolicy : M365DSCResourceBase
             }
             catch
             {
-                $this.LogError($_, $_)
+                $this.LogError($_, "Error removing the DLP compliance policy $($this.Name)")
+
+                throw
             }
         }
     }

@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SPOSiteScript : M365DSCResourceBase
@@ -224,6 +224,8 @@ class SPOSiteScript : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, 'Error removing Site Script:')
+
+                throw
             }
         }
         if ($this.Ensure -ne 'Absent')
@@ -258,6 +260,8 @@ class SPOSiteScript : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, 'Error updating Site Script:')
+
+                throw
             }
         }
     }

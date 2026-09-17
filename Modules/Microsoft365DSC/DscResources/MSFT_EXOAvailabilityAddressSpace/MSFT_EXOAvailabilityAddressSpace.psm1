@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOAvailabilityAddressSpace : M365DSCResourceBase
@@ -179,6 +179,8 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, "Couldn't add new AvailabilityAddressSpace")
+
+                throw
             }
         }
         elseif ('Present' -eq $this.Ensure -and $currentInstance.Ensure -eq 'Present')
@@ -192,6 +194,8 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, "Couldn't remove AvailabilityAddressSpace")
+
+                throw
             }
 
             try
@@ -202,6 +206,8 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, "Couldn't add new AvailabilityAddressSpace")
+
+                throw
             }
         }
         elseif ('Absent' -eq $this.Ensure -and $currentInstance.Ensure -eq 'Present')
@@ -214,6 +220,8 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
             catch
             {
                 $this.LogError($_, "Couldn't remove AvailabilityAddressSpace")
+
+                throw
             }
         }
     }

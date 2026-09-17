@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADIdentityAPIConnector : M365DSCResourceBase
@@ -290,8 +290,7 @@ class AADIdentityAPIConnector : M365DSCResourceBase
             # Only one certificate can be active
             if ($activeCertificates.Count -ne 1)
             {
-                Write-Error 'There should be one active certificate'
-                throw
+                throw 'There should be one active certificate'
             }
 
             if ($inactiveCertificates.Count -eq 0)

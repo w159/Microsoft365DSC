@@ -534,7 +534,7 @@ function Add-M365DSCTelemetryEvent
             }
             catch
             {
-                Write-Error $_
+                Write-Verbose -Message "Could not send telemetry: $($_.Exception.Message)"
             }
         }
     }

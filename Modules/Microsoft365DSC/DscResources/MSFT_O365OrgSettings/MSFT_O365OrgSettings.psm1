@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class O365OrgSettings : M365DSCResourceBase
@@ -818,6 +818,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Apps and Services Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -853,6 +855,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Forms Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -932,16 +936,15 @@ class O365OrgSettings : M365DSCResourceBase
         }
         catch
         {
-            if ($_.Exception.ToString().Contains('Forbidden (Forbidden)'))
+            if ($_.Exception.ToString().Contains('Forbidden (Forbidden)') -and $AuthenticationOption -eq 'Credentials')
             {
-                if ($AuthenticationOption -eq 'Credentials')
-                {
-                    $errorMessage = "You don't have the proper permissions to update the Office 365 Apps Installation Options." `
-                        + ' When using Credentials to authenticate, you need to grant permissions to the Microsoft Graph PowerShell SDK by running' `
-                        + ' Connect-MgGraph -Scopes OrgSettings-Microsoft365Install.ReadWrite.All'
-                    Write-Error -Message $errorMessage
-                }
+                $errorMessage = "You don't have the proper permissions to update the Office 365 Apps Installation Options." `
+                    + ' When using Credentials to authenticate, you need to grant permissions to the Microsoft Graph PowerShell SDK by running' `
+                    + ' Connect-MgGraph -Scopes OrgSettings-Microsoft365Install.ReadWrite.All'
+                throw $errorMessage
             }
+
+            throw
         }
     }
 
@@ -958,6 +961,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings To Do Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 
@@ -1021,6 +1026,8 @@ class O365OrgSettings : M365DSCResourceBase
             New-M365DSCLogEntry -Message 'Error updating O365OrgSettings Dynamics Customer Voice Settings' `
                 -Exception $_ `
                 -Source 'O365OrgSettings'
+
+            throw
         }
     }
 

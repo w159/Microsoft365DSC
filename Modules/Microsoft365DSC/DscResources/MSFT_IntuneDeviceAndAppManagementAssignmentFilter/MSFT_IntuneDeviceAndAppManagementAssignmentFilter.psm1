@@ -115,11 +115,11 @@ class IntuneDeviceAndAppManagementAssignmentFilter : M365DSCResourceBase
 
                     Write-Verbose -Message "Checking if filter exists with DisplayName {$($this.DisplayName)}."
                     [array]$assignmentFilter = Get-MgBetaDeviceManagementAssignmentFilter -All | Where-Object -FilterScript { $_.DisplayName -eq $this.DisplayName }
-                    if ($assignmentFilter.Length -gt 2)
+                    if ($assignmentFilter.Count -gt 1)
                     {
-                        Write-Error -Message "More than one Assignment Filter found with name {$($this.DisplayName)}"
+                        throw "More than one Assignment Filter with name {$($this.DisplayName)} was found. Please provide the Id parameter."
                     }
-                    elseif ($assignmentFilter.Length -eq 0)
+                    elseif ($assignmentFilter.Count -eq 0)
                     {
                         Write-Verbose -Message "No assignment filter with name {$($this.DisplayName)} was found."
                         return $this.AsResult($nullResult)

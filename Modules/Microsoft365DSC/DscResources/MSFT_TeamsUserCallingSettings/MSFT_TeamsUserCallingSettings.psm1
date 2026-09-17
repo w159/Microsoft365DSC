@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class TeamsUserCallingSettings : M365DSCResourceBase
@@ -188,6 +188,8 @@ class TeamsUserCallingSettings : M365DSCResourceBase
         catch
         {
             $this.LogError($_, 'Error updating data:')
+
+            throw
         }
     }
 

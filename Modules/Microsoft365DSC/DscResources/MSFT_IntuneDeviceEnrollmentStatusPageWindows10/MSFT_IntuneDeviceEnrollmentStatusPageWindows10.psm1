@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
@@ -546,6 +546,8 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
         catch
         {
             $this.LogError($_, 'Error updating data:')
+
+            throw
         }
     }
 

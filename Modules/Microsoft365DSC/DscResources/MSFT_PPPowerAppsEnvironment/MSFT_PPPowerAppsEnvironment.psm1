@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class PPPowerAppsEnvironment : M365DSCResourceBase
@@ -223,8 +223,7 @@ class PPPowerAppsEnvironment : M365DSCResourceBase
                 }
                 if ($this.EnvironmentSku -eq 'Developer' -and -not $this.ProvisionDatabase)
                 {
-                    Write-Error 'Developer environments must always include Dataverse provisioning parameters.'
-                    throw $_
+                    throw 'Developer environments must always include Dataverse provisioning parameters.'
                 }
                 Invoke-M365DSCPowerPlatformRESTWebRequest -Uri $uri -Method 'POST' -Body $newParameters
             }

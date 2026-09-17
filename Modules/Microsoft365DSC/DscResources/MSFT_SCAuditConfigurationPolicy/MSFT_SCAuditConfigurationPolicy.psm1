@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SCAuditConfigurationPolicy : M365DSCResourceBase
@@ -161,7 +161,7 @@ class SCAuditConfigurationPolicy : M365DSCResourceBase
             catch
             {
                 Write-Verbose -Message "Policy for $($this.Workload) is already in the process of being deleted."
-                $this.LogError($_, $_)
+                $this.LogError($_, "Error removing the audit configuration policy for $($this.Workload)")
             }
         }
     }

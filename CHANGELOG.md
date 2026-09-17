@@ -66,6 +66,8 @@
     integer to match the type Microsoft Graph defines.
 * AADGroup
   * Added support for the `Theme` and `WritebackConfiguration` properties.
+  * Fixed a failed license assignment only being written to verbose output instead of
+    failing the operation.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
@@ -513,6 +515,9 @@
 * SCDLPComplianceRule
   * Fixed an issue where the module failed to build because a variable was assigned
     inside a conditional block and read outside it.
+* SCFilePlanPropertyAuthority
+  * Fixed the property never being removed, because the check for a pending deletion
+    always evaluated to false.
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings
@@ -633,13 +638,17 @@
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.1.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
-  * Updated `DSCParser` to version 3.1.0.4.
+  * Updated `DSCParser` to version 3.1.0.5.
   * Updated `Microsoft.Graph.*` to version 2.39.0.
   * Updated `MSCloudLoginAssistant` to version 1.2.6.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Changed resources to throw instead of only logging or writing to the error stream when
+    an operation fails, so a failed apply is no longer reported as successful.
+  * Fixed a failed telemetry submission failing the resource operation that triggered it,
+    by no longer reporting it on the error stream.
   * Fixed `Get-DscConfiguration` failing under Windows PowerShell with `There is no
     Runspace available to run scripts in this thread`.
     FIXES [#6120](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6120)
@@ -728,6 +737,8 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
+  * Corrected the Windows PowerShell warning, which did not mention that
+    `Get-DscConfiguration` is supported.
 
 # 1.26.909.1
 

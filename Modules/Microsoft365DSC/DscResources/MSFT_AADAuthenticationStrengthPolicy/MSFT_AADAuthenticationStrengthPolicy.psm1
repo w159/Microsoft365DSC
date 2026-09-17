@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADAuthenticationStrengthPolicy : M365DSCResourceBase
@@ -172,7 +172,7 @@ class AADAuthenticationStrengthPolicy : M365DSCResourceBase
             $policyObject = Get-MgBetaPolicyAuthenticationStrengthPolicy -AuthenticationStrengthPolicyId $currentInstance.Id
             if ($policyObject.PolicyType -eq 'builtIn')
             {
-                Write-Error -Message "Authentication Strength Policy {$($this.DisplayName)} is a built-in and cannot be updated."
+                throw "Authentication Strength Policy {$($this.DisplayName)} is a built-in and cannot be updated."
             }
             else
             {

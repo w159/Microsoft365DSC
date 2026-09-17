@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOSafeAttachmentPolicy : M365DSCResourceBase
@@ -209,6 +209,8 @@ class EXOSafeAttachmentPolicy : M365DSCResourceBase
                     {
                         Write-Verbose -Message $_
                     }
+
+                    throw
                 }
             }
             else
@@ -228,6 +230,8 @@ class EXOSafeAttachmentPolicy : M365DSCResourceBase
                     {
                         Write-Verbose -Message $_
                     }
+
+                    throw
                 }
             }
         }
