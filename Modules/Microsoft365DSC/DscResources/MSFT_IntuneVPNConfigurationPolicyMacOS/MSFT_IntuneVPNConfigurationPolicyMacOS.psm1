@@ -225,59 +225,81 @@ class IntuneVPNConfigurationPolicyMacOS : M365DSCResourceBase
 
             Write-Verbose -Message "Found Intune V P N Configuration Policy for macOS with Id {$($this.Id)}"
 
-            $enumAuthenticationMethod = $null
-            if ($null -ne $getValue.authenticationMethod)
-            {
-                $enumAuthenticationMethod = $getValue.authenticationMethod.ToString()
-            }
-
-            $enumConnectionType = $null
-            if ($null -ne $getValue.connectionType)
-            {
-                $enumConnectionType = $getValue.connectionType.ToString()
-            }
-
             $complexCustomData = @()
             foreach ($currentCustomData in $getValue.customData)
             {
-                $complexCustomData += $this.GetKeyValueAsHashtable($currentCustomData)
+                $myCustomData = [ordered]@{}
+                $myCustomData.Add('Key', $currentCustomData.key)
+                $myCustomData.Add('Value', $currentCustomData.value)
+                if ($myCustomData.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexCustomData += $myCustomData
+                }
             }
 
             $complexCustomKeyValueData = @()
             foreach ($currentCustomKeyValueData in $getValue.customKeyValueData)
             {
-                $complexCustomKeyValueData += $this.GetKeyValuePair2AsHashtable($currentCustomKeyValueData)
-            }
-
-            $enumDeploymentChannel = $null
-            if ($null -ne $getValue.deploymentChannel)
-            {
-                $enumDeploymentChannel = $getValue.deploymentChannel.ToString()
+                $myCustomKeyValueData = [ordered]@{}
+                $myCustomKeyValueData.Add('Name', $currentCustomKeyValueData.name)
+                $myCustomKeyValueData.Add('Value', $currentCustomKeyValueData.value)
+                if ($myCustomKeyValueData.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexCustomKeyValueData += $myCustomKeyValueData
+                }
             }
 
             $complexOnDemandRules = @()
             foreach ($currentOnDemandRules in $getValue.onDemandRules)
             {
-                $complexOnDemandRules += $this.GetVpnOnDemandRuleAsHashtable($currentOnDemandRules)
+                $myOnDemandRules = [ordered]@{}
+                $myOnDemandRules.Add('Action', $currentOnDemandRules.action)
+                $myOnDemandRules.Add('DnsSearchDomains', [Array]$currentOnDemandRules.dnsSearchDomains)
+                $myOnDemandRules.Add('DnsServerAddressMatch', [Array]$currentOnDemandRules.dnsServerAddressMatch)
+                $myOnDemandRules.Add('DomainAction', $currentOnDemandRules.domainAction)
+                $myOnDemandRules.Add('Domains', [Array]$currentOnDemandRules.domains)
+                $myOnDemandRules.Add('InterfaceTypeMatch', $currentOnDemandRules.interfaceTypeMatch)
+                $myOnDemandRules.Add('ProbeRequiredUrl', $currentOnDemandRules.probeRequiredUrl)
+                $myOnDemandRules.Add('ProbeUrl', $currentOnDemandRules.probeUrl)
+                $myOnDemandRules.Add('Ssids', [Array]$currentOnDemandRules.ssids)
+                if ($myOnDemandRules.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexOnDemandRules += $myOnDemandRules
+                }
             }
 
-            $enumProviderType = $null
-            if ($null -ne $getValue.providerType)
+            $complexProxyServer = [ordered]@{}
+            $complexProxyServer.Add('Address', $getValue.proxyServer.address)
+            $complexProxyServer.Add('AutomaticallyDetectProxySettings', $getValue.proxyServer.automaticallyDetectProxySettings)
+            $complexProxyServer.Add('AutomaticConfigurationScriptUrl', $getValue.proxyServer.automaticConfigurationScriptUrl)
+            $complexProxyServer.Add('BypassProxyServerForLocalAddress', $getValue.proxyServer.bypassProxyServerForLocalAddress)
+            if ($null -ne $getValue.proxyServer.'@odata.type')
             {
-                $enumProviderType = $getValue.providerType.ToString()
+                $complexProxyServer.Add('ODataType', $getValue.proxyServer.'@odata.type')
+            }
+            $complexProxyServer.Add('Port', $getValue.proxyServer.port)
+            if ($complexProxyServer.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexProxyServer = $null
             }
 
-            $complexProxyServer = $this.GetVpnProxyServerAsHashtable($getValue.proxyServer)
+            $complexServer = [ordered]@{}
+            $complexServer.Add('Address', $getValue.server.address)
+            $complexServer.Add('Description', $getValue.server.description)
+            $complexServer.Add('IsDefaultServer', $getValue.server.isDefaultServer)
+            if ($complexServer.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexServer = $null
+            }
 
-            $complexServer = $this.GetVpnServer1AsHashtable($getValue.server)
             $result = @{
                 AssociatedDomains              = $getValue.associatedDomains
-                AuthenticationMethod           = $enumAuthenticationMethod
+                AuthenticationMethod           = $getValue.authenticationMethod
                 ConnectionName                 = $getValue.connectionName
-                ConnectionType                 = $enumConnectionType
+                ConnectionType                 = $getValue.connectionType
                 CustomData                     = [Array]$complexCustomData
                 CustomKeyValueData             = [Array]$complexCustomKeyValueData
-                DeploymentChannel              = $enumDeploymentChannel
+                DeploymentChannel              = $getValue.deploymentChannel
                 Description                    = $getValue.Description
                 DisableOnDemandUserOverride    = $getValue.disableOnDemandUserOverride
                 DisconnectOnIdle               = $getValue.disconnectOnIdle
@@ -293,7 +315,7 @@ class IntuneVPNConfigurationPolicyMacOS : M365DSCResourceBase
                 LoginGroupOrDomain             = $getValue.loginGroupOrDomain
                 OnDemandRules                  = [Array]$complexOnDemandRules
                 OptInToDeviceIdSharing         = $getValue.optInToDeviceIdSharing
-                ProviderType                   = $enumProviderType
+                ProviderType                   = $getValue.providerType
                 ProxyServer                    = $complexProxyServer
                 Realm                          = $getValue.realm
                 Role                           = $getValue.role
@@ -603,206 +625,6 @@ class IntuneVPNConfigurationPolicyMacOS : M365DSCResourceBase
         if ($Values -is [System.Collections.Hashtable])
         {
             $result.FromHashtable($Values)
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetKeyValueAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.key)
-        {
-            $result.Add('Key', $ComplexObject.key)
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetKeyValuePair2AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.name)
-        {
-            $result.Add('Name', $ComplexObject.name)
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetVpnOnDemandRuleAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.action)
-        {
-            $result.Add('Action', $ComplexObject.action.ToString())
-        }
-
-        if ($null -ne $ComplexObject.dnsSearchDomains)
-        {
-            $result.Add('DnsSearchDomains', [Array]$ComplexObject.dnsSearchDomains)
-        }
-
-        if ($null -ne $ComplexObject.dnsServerAddressMatch)
-        {
-            $result.Add('DnsServerAddressMatch', [Array]$ComplexObject.dnsServerAddressMatch)
-        }
-
-        if ($null -ne $ComplexObject.domainAction)
-        {
-            $result.Add('DomainAction', $ComplexObject.domainAction.ToString())
-        }
-
-        if ($null -ne $ComplexObject.domains)
-        {
-            $result.Add('Domains', [Array]$ComplexObject.domains)
-        }
-
-        if ($null -ne $ComplexObject.interfaceTypeMatch)
-        {
-            $result.Add('InterfaceTypeMatch', $ComplexObject.interfaceTypeMatch.ToString())
-        }
-
-        if ($null -ne $ComplexObject.probeRequiredUrl)
-        {
-            $result.Add('ProbeRequiredUrl', $ComplexObject.probeRequiredUrl)
-        }
-
-        if ($null -ne $ComplexObject.probeUrl)
-        {
-            $result.Add('ProbeUrl', $ComplexObject.probeUrl)
-        }
-
-        if ($null -ne $ComplexObject.ssids)
-        {
-            $result.Add('Ssids', [Array]$ComplexObject.ssids)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetVpnProxyServerAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.address)
-        {
-            $result.Add('Address', $ComplexObject.address)
-        }
-
-        if ($null -ne $ComplexObject.automaticallyDetectProxySettings)
-        {
-            $result.Add('AutomaticallyDetectProxySettings', $ComplexObject.automaticallyDetectProxySettings)
-        }
-
-        if ($null -ne $ComplexObject.automaticConfigurationScriptUrl)
-        {
-            $result.Add('AutomaticConfigurationScriptUrl', $ComplexObject.automaticConfigurationScriptUrl)
-        }
-
-        if ($null -ne $ComplexObject.bypassProxyServerForLocalAddress)
-        {
-            $result.Add('BypassProxyServerForLocalAddress', $ComplexObject.bypassProxyServerForLocalAddress)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.port)
-        {
-            $result.Add('Port', $ComplexObject.port)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetVpnServer1AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.address)
-        {
-            $result.Add('Address', $ComplexObject.address)
-        }
-
-        if ($null -ne $ComplexObject.description)
-        {
-            $result.Add('Description', $ComplexObject.description)
-        }
-
-        if ($null -ne $ComplexObject.isDefaultServer)
-        {
-            $result.Add('IsDefaultServer', $ComplexObject.isDefaultServer)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
         }
 
         return $result

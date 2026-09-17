@@ -126,18 +126,10 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Cleanup Rule V2 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
-            #region resource generator code
-            $enumDeviceCleanupRulePlatformType = $null
-            if ($null -ne $getValue.DeviceCleanupRulePlatformType)
-            {
-                $enumDeviceCleanupRulePlatformType = $getValue.DeviceCleanupRulePlatformType.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Description                            = $getValue.Description
-                DeviceCleanupRulePlatformType          = $enumDeviceCleanupRulePlatformType
+                DeviceCleanupRulePlatformType          = $getValue.DeviceCleanupRulePlatformType
                 DeviceInactivityBeforeRetirementInDays = $getValue.DeviceInactivityBeforeRetirementInDays
                 DisplayName                            = $getValue.DisplayName
                 Id                                     = $getValue.Id

@@ -189,13 +189,13 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                     $myApps = [ordered]@{}
                     if ($null -ne $currentApps.appType)
                     {
-                        $myApps.Add('AppType', $currentApps.appType.ToString())
+                        $myApps.Add('AppType', $currentApps.appType)
                     }
                     $myApps.Add('AutoLaunch', $currentApps.autoLaunch)
                     $myApps.Add('Name', $currentApps.name)
                     if ($null -ne $currentApps.startLayoutTileSize)
                     {
-                        $myApps.Add('StartLayoutTileSize', $currentApps.startLayoutTileSize.ToString())
+                        $myApps.Add('StartLayoutTileSize', $currentApps.startLayoutTileSize)
                     }
                     $myApps.Add('DesktopApplicationId', $currentApps.desktopApplicationId)
                     $myApps.Add('DesktopApplicationLinkPath', $currentApps.desktopApplicationLinkPath)
@@ -208,12 +208,12 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                     $myApps.Add('EdgeKioskIdleTimeoutMinutes', $currentApps.edgeKioskIdleTimeoutMinutes)
                     if ($null -ne $currentApps.edgeKioskType)
                     {
-                        $myApps.Add('EdgeKioskType', $currentApps.edgeKioskType.ToString())
+                        $myApps.Add('EdgeKioskType', $currentApps.edgeKioskType)
                     }
                     $myApps.Add('EdgeNoFirstRun', $currentApps.edgeNoFirstRun)
                     if ($null -ne $currentApps.'@odata.type')
                     {
-                        $myApps.Add('odataType', $currentApps.'@odata.type'.ToString())
+                        $myApps.Add('odataType', $currentApps.'@odata.type')
                     }
                     if ($myApps.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -230,13 +230,13 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                 $complexUwpApp.Add('ContainedAppId', $currentkioskProfiles.appConfiguration.uwpApp.containedAppId)
                 if ($null -ne $currentkioskProfiles.appConfiguration.uwpApp.appType)
                 {
-                    $complexUwpApp.Add('AppType', $currentkioskProfiles.appConfiguration.uwpApp.appType.ToString())
+                    $complexUwpApp.Add('AppType', $currentkioskProfiles.appConfiguration.uwpApp.appType)
                 }
                 $complexUwpApp.Add('AutoLaunch', $currentkioskProfiles.appConfiguration.uwpApp.autoLaunch)
                 $complexUwpApp.Add('Name', $currentkioskProfiles.appConfiguration.uwpApp.name)
                 if ($null -ne $currentkioskProfiles.appConfiguration.uwpApp.startLayoutTileSize)
                 {
-                    $complexUwpApp.Add('StartLayoutTileSize', $currentkioskProfiles.appConfiguration.uwpApp.startLayoutTileSize.ToString())
+                    $complexUwpApp.Add('StartLayoutTileSize', $currentkioskProfiles.appConfiguration.uwpApp.startLayoutTileSize)
                 }
                 $complexUwpApp.Add('DesktopApplicationId', $currentkioskProfiles.appConfiguration.uwpApp.desktopApplicationId)
                 $complexUwpApp.Add('DesktopApplicationLinkPath', $currentkioskProfiles.appConfiguration.uwpApp.desktopApplicationLinkPath)
@@ -246,12 +246,12 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                 $complexUwpApp.Add('EdgeKioskIdleTimeoutMinutes', $currentkioskProfiles.appConfiguration.uwpApp.edgeKioskIdleTimeoutMinutes)
                 if ($null -ne $currentkioskProfiles.appConfiguration.uwpApp.edgeKioskType)
                 {
-                    $complexUwpApp.Add('EdgeKioskType', $currentkioskProfiles.appConfiguration.uwpApp.edgeKioskType.ToString())
+                    $complexUwpApp.Add('EdgeKioskType', $currentkioskProfiles.appConfiguration.uwpApp.edgeKioskType)
                 }
                 $complexUwpApp.Add('EdgeNoFirstRun', $currentkioskProfiles.appConfiguration.uwpApp.edgeNoFirstRun)
                 if ($null -ne $currentkioskProfiles.appConfiguration.uwpApp.'@odata.type')
                 {
-                    $complexUwpApp.Add('odataType', $currentkioskProfiles.appConfiguration.uwpApp.'@odata.type'.ToString())
+                    $complexUwpApp.Add('odataType', $currentkioskProfiles.appConfiguration.uwpApp.'@odata.type')
                 }
                 if ($complexUwpApp.values.Where({ $null -ne $_ }).Count -eq 0)
                 {
@@ -264,18 +264,18 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                 $complexWin32App.Add('EdgeKioskIdleTimeoutMinutes', $currentkioskProfiles.appConfiguration.win32App.edgeKioskIdleTimeoutMinutes)
                 if ($null -ne $currentkioskProfiles.appConfiguration.win32App.edgeKioskType)
                 {
-                    $complexWin32App.Add('EdgeKioskType', $currentkioskProfiles.appConfiguration.win32App.edgeKioskType.ToString())
+                    $complexWin32App.Add('EdgeKioskType', $currentkioskProfiles.appConfiguration.win32App.edgeKioskType)
                 }
                 $complexWin32App.Add('EdgeNoFirstRun', $currentkioskProfiles.appConfiguration.win32App.edgeNoFirstRun)
                 if ($null -ne $currentkioskProfiles.appConfiguration.win32App.appType)
                 {
-                    $complexWin32App.Add('AppType', $currentkioskProfiles.appConfiguration.win32App.appType.ToString())
+                    $complexWin32App.Add('AppType', $currentkioskProfiles.appConfiguration.win32App.appType)
                 }
                 $complexWin32App.Add('AutoLaunch', $currentkioskProfiles.appConfiguration.win32App.autoLaunch)
                 $complexWin32App.Add('Name', $currentkioskProfiles.appConfiguration.win32App.name)
                 if ($null -ne $currentkioskProfiles.appConfiguration.win32App.startLayoutTileSize)
                 {
-                    $complexWin32App.Add('StartLayoutTileSize', $currentkioskProfiles.appConfiguration.win32App.startLayoutTileSize.ToString())
+                    $complexWin32App.Add('StartLayoutTileSize', $currentkioskProfiles.appConfiguration.win32App.startLayoutTileSize)
                 }
                 $complexWin32App.Add('DesktopApplicationId', $currentkioskProfiles.appConfiguration.win32App.desktopApplicationId)
                 $complexWin32App.Add('DesktopApplicationLinkPath', $currentkioskProfiles.appConfiguration.win32App.desktopApplicationLinkPath)
@@ -285,7 +285,7 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                 $complexWin32App.Add('ContainedAppId', $currentkioskProfiles.appConfiguration.win32App.containedAppId)
                 if ($null -ne $currentkioskProfiles.appConfiguration.win32App.'@odata.type')
                 {
-                    $complexWin32App.Add('odataType', $currentkioskProfiles.appConfiguration.win32App.'@odata.type'.ToString())
+                    $complexWin32App.Add('odataType', $currentkioskProfiles.appConfiguration.win32App.'@odata.type')
                 }
                 if ($complexWin32App.values.Where({ $null -ne $_ }).Count -eq 0)
                 {
@@ -294,7 +294,7 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                 $complexAppConfiguration.Add('Win32App', $complexWin32App)
                 if ($null -ne $currentkioskProfiles.appConfiguration.'@odata.type')
                 {
-                    $complexAppConfiguration.Add('odataType', $currentkioskProfiles.appConfiguration.'@odata.type'.ToString())
+                    $complexAppConfiguration.Add('odataType', $currentkioskProfiles.appConfiguration.'@odata.type')
                 }
                 if ($complexAppConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
                 {
@@ -314,7 +314,7 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
                     $myUserAccountsConfiguration.Add('UserName', $currentUserAccountsConfiguration.userName)
                     if ($null -ne $currentUserAccountsConfiguration.'@odata.type')
                     {
-                        $myUserAccountsConfiguration.Add('odataType', $currentUserAccountsConfiguration.'@odata.type'.ToString())
+                        $myUserAccountsConfiguration.Add('odataType', $currentUserAccountsConfiguration.'@odata.type')
                     }
                     if ($myUserAccountsConfiguration.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -332,11 +332,11 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
             $complexWindowsKioskForceUpdateSchedule.Add('DayofMonth', $getValue.windowsKioskForceUpdateSchedule.dayofMonth)
             if ($null -ne $getValue.windowsKioskForceUpdateSchedule.dayofWeek)
             {
-                $complexWindowsKioskForceUpdateSchedule.Add('DayofWeek', $getValue.windowsKioskForceUpdateSchedule.dayofWeek.ToString())
+                $complexWindowsKioskForceUpdateSchedule.Add('DayofWeek', $getValue.windowsKioskForceUpdateSchedule.dayofWeek)
             }
             if ($null -ne $getValue.windowsKioskForceUpdateSchedule.recurrence)
             {
-                $complexWindowsKioskForceUpdateSchedule.Add('Recurrence', $getValue.windowsKioskForceUpdateSchedule.recurrence.ToString())
+                $complexWindowsKioskForceUpdateSchedule.Add('Recurrence', $getValue.windowsKioskForceUpdateSchedule.recurrence)
             }
             $complexWindowsKioskForceUpdateSchedule.Add('RunImmediatelyIfAfterStartDateTime', $getValue.windowsKioskForceUpdateSchedule.runImmediatelyIfAfterStartDateTime)
             if ($null -ne $getValue.windowsKioskForceUpdateSchedule.startDateTime)

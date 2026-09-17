@@ -145,60 +145,22 @@ class IntuneWindowsHelloForBusinessGlobalPolicy : M365DSCResourceBase
 
             Write-Verbose -Message 'An Intune Windows Hello For Business Global Policy was found'
 
-            #region resource generator code
-            $enumEnhancedBiometricsState = $null
-            if ($null -ne $getValue.enhancedBiometricsState)
-            {
-                $enumEnhancedBiometricsState = $getValue.enhancedBiometricsState.ToString()
-            }
-
-            $enumPinLowercaseCharactersUsage = $null
-            if ($null -ne $getValue.pinLowercaseCharactersUsage)
-            {
-                $enumPinLowercaseCharactersUsage = $getValue.pinLowercaseCharactersUsage.ToString()
-            }
-
-            $enumPinSpecialCharactersUsage = $null
-            if ($null -ne $getValue.pinSpecialCharactersUsage)
-            {
-                $enumPinSpecialCharactersUsage = $getValue.pinSpecialCharactersUsage.ToString()
-            }
-
-            $enumPinUppercaseCharactersUsage = $null
-            if ($null -ne $getValue.pinUppercaseCharactersUsage)
-            {
-                $enumPinUppercaseCharactersUsage = $getValue.pinUppercaseCharactersUsage.ToString()
-            }
-
-            $enumSecurityKeyForSignIn = $null
-            if ($null -ne $getValue.securityKeyForSignIn)
-            {
-                $enumSecurityKeyForSignIn = $getValue.securityKeyForSignIn.ToString()
-            }
-
-            $enumState = $null
-            if ($null -ne $getValue.state)
-            {
-                $enumState = $getValue.state.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 IsSingleInstance            = 'Yes'
-                EnhancedBiometricsState     = $enumEnhancedBiometricsState
+                EnhancedBiometricsState     = $getValue.enhancedBiometricsState
                 EnhancedSignInSecurity      = $getValue.enhancedSignInSecurity
                 PinExpirationInDays         = $getValue.pinExpirationInDays
-                PinLowercaseCharactersUsage = $enumPinLowercaseCharactersUsage
+                PinLowercaseCharactersUsage = $getValue.pinLowercaseCharactersUsage
                 PinMaximumLength            = $getValue.pinMaximumLength
                 PinMinimumLength            = $getValue.pinMinimumLength
                 PinPreviousBlockCount       = $getValue.pinPreviousBlockCount
-                PinSpecialCharactersUsage   = $enumPinSpecialCharactersUsage
-                PinUppercaseCharactersUsage = $enumPinUppercaseCharactersUsage
+                PinSpecialCharactersUsage   = $getValue.pinSpecialCharactersUsage
+                PinUppercaseCharactersUsage = $getValue.pinUppercaseCharactersUsage
                 RemotePassportEnabled       = $getValue.remotePassportEnabled
                 SecurityDeviceRequired      = $getValue.securityDeviceRequired
-                SecurityKeyForSignIn        = $enumSecurityKeyForSignIn
-                State                       = $enumState
+                SecurityKeyForSignIn        = $getValue.securityKeyForSignIn
+                State                       = $getValue.state
                 UnlockWithBiometricsEnabled = $getValue.unlockWithBiometricsEnabled
                 Credential                  = $this.Credential
                 ApplicationId               = $this.ApplicationId

@@ -149,14 +149,6 @@ class IntuneDeviceConfigurationTrustedCertificatePolicyWindows10 : M365DSCResour
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Trusted Certificate Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumDestinationStore = $null
-            if ($null -ne $getValue.destinationStore)
-            {
-                $enumDestinationStore = $getValue.destinationStore.ToString()
-            }
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -188,7 +180,7 @@ class IntuneDeviceConfigurationTrustedCertificatePolicyWindows10 : M365DSCResour
             $results = @{
                 #region resource generator code
                 CertFileName                                = $getValue.certFileName
-                DestinationStore                            = $enumDestinationStore
+                DestinationStore                            = $getValue.destinationStore
                 TrustedRootCertificate                      = $getValue.trustedRootCertificate
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode

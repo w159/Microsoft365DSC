@@ -253,7 +253,7 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
                     $myRanges.Add('UpperAddress', $currentRanges.upperAddress)
                     if ($null -ne $currentRanges.'@odata.type')
                     {
-                        $myRanges.Add('odataType', $currentRanges.'@odata.type'.ToString())
+                        $myRanges.Add('odataType', $currentRanges.'@odata.type')
                     }
                     if ($myRanges.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -340,7 +340,7 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
                 $myExemptApps.Add('BinaryVersionLow', $currentExemptApps.binaryVersionLow)
                 if ($null -ne $currentExemptApps.'@odata.type')
                 {
-                    $myExemptApps.Add('odataType', $currentExemptApps.'@odata.type'.ToString())
+                    $myExemptApps.Add('odataType', $currentExemptApps.'@odata.type')
                 }
                 if ($myExemptApps.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -374,7 +374,7 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
                 $myProtectedApps.Add('BinaryVersionLow', $currentProtectedApps.binaryVersionLow)
                 if ($null -ne $currentProtectedApps.'@odata.type')
                 {
-                    $myProtectedApps.Add('odataType', $currentProtectedApps.'@odata.type'.ToString())
+                    $myProtectedApps.Add('odataType', $currentProtectedApps.'@odata.type')
                 }
                 if ($myProtectedApps.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -395,19 +395,11 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
             }
             #endregion
 
-            #region resource generator code
-            $enumEnforcementLevel = $null
-            if ($null -ne $getValue.EnforcementLevel)
-            {
-                $enumEnforcementLevel = $getValue.EnforcementLevel.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 AzureRightsManagementServicesAllowed   = $getValue.AzureRightsManagementServicesAllowed
                 DataRecoveryCertificate                = $complexDataRecoveryCertificate
-                EnforcementLevel                       = $enumEnforcementLevel
+                EnforcementLevel                       = $getValue.EnforcementLevel
                 EnterpriseDomain                       = $getValue.EnterpriseDomain
                 EnterpriseInternalProxyServers         = $complexEnterpriseInternalProxyServers
                 EnterpriseIPRanges                     = $complexEnterpriseIPRanges

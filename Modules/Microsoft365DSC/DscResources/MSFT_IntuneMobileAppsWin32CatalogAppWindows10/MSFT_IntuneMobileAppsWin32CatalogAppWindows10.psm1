@@ -222,32 +222,85 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
             Write-Verbose -Message "Found Intune Mobile Apps Win32 Catalog App for Windows10 with Id {$($this.Id)}"
 
-            $enumAllowedArchitectures = $null
-            if ($null -ne $getValue.allowedArchitectures)
+            $complexInstallExperience = [ordered]@{}
+            $complexInstallExperience.Add('DeviceRestartBehavior', $getValue.installExperience.deviceRestartBehavior)
+            $complexInstallExperience.Add('InUseBehavior', $getValue.installExperience.inUseBehavior)
+            $complexInstallExperience.Add('MaxRunTimeInMinutes', $getValue.installExperience.maxRunTimeInMinutes)
+            $complexInstallExperience.Add('RunAsAccount', $getValue.installExperience.runAsAccount)
+            if ($complexInstallExperience.values.Where({ $null -ne $_ }).Count -eq 0)
             {
-                $enumAllowedArchitectures = $getValue.allowedArchitectures.ToString()
+                $complexInstallExperience = $null
             }
 
-            $complexInstallExperience = $this.GetWin32LobAppInstallExperience1AsHashtable($getValue.installExperience)
+            $complexLargeIcon = [ordered]@{}
+            $complexLargeIcon.Add('Type', $getValue.LargeIcon.type)
+            $complexLargeIcon.Add('Value', $getValue.LargeIcon.value)
+            if ($complexLargeIcon.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexLargeIcon = $null
+            }
 
-            $complexLargeIcon = $this.GetMimeContent2AsHashtable($getValue.LargeIcon)
-
-            $complexMsiInformation = $this.GetWin32LobAppMsiInformation1AsHashtable($getValue.msiInformation)
+            $complexMsiInformation = [ordered]@{}
+            $complexMsiInformation.Add('PackageType', $getValue.msiInformation.packageType)
+            $complexMsiInformation.Add('ProductCode', $getValue.msiInformation.productCode)
+            $complexMsiInformation.Add('ProductName', $getValue.msiInformation.productName)
+            $complexMsiInformation.Add('ProductVersion', $getValue.msiInformation.productVersion)
+            $complexMsiInformation.Add('Publisher', $getValue.msiInformation.publisher)
+            $complexMsiInformation.Add('RequiresReboot', $getValue.msiInformation.requiresReboot)
+            $complexMsiInformation.Add('UpgradeCode', $getValue.msiInformation.upgradeCode)
+            if ($complexMsiInformation.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexMsiInformation = $null
+            }
 
             $complexReturnCodes = @()
             foreach ($currentReturnCodes in $getValue.returnCodes)
             {
-                $complexReturnCodes += $this.GetWin32LobAppReturnCode1AsHashtable($currentReturnCodes)
+                $myReturnCodes = [ordered]@{}
+                $myReturnCodes.Add('ReturnCode', $currentReturnCodes.returnCode)
+                $myReturnCodes.Add('Type', $currentReturnCodes.type)
+                if ($myReturnCodes.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexReturnCodes += $myReturnCodes
+                }
             }
 
             $complexRules = @()
             foreach ($currentRules in $getValue.rules)
             {
-                $complexRules += $this.GetWin32LobAppRule1AsHashtable($currentRules)
+                $myRules = [ordered]@{}
+                $myRules.Add('Check32BitOn64System', $currentRules.check32BitOn64System)
+                $myRules.Add('ComparisonValue', $currentRules.comparisonValue)
+                $myRules.Add('DisplayName', $currentRules.displayName)
+                $myRules.Add('EnforceSignatureCheck', $currentRules.enforceSignatureCheck)
+                $myRules.Add('FileOrFolderName', $currentRules.fileOrFolderName)
+                $myRules.Add('KeyPath', $currentRules.keyPath)
+                if ($null -ne $currentRules.'@odata.type')
+                {
+                    $myRules.Add('ODataType', $currentRules.'@odata.type')
+                }
+                $myRules.Add('OperationType', $currentRules.operationType)
+                $myRules.Add('Operator', $currentRules.operator)
+                $myRules.Add('Path', $currentRules.path)
+                $myRules.Add('ProcessDisplayName', $currentRules.processDisplayName)
+                $myRules.Add('ProcessName', $currentRules.processName)
+                $myRules.Add('ProductCode', $currentRules.productCode)
+                $myRules.Add('ProductVersion', $currentRules.productVersion)
+                $myRules.Add('ProductVersionOperator', $currentRules.productVersionOperator)
+                $myRules.Add('RuleType', $currentRules.ruleType)
+                $myRules.Add('RunAs32Bit', $currentRules.runAs32Bit)
+                $myRules.Add('RunAsAccount', $currentRules.runAsAccount)
+                $myRules.Add('ScriptContent', $currentRules.scriptContent)
+                $myRules.Add('ValueName', $currentRules.valueName)
+                if ($myRules.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexRules += $myRules
+                }
             }
+
             $result = @{
                 AllowAvailableUninstall        = $getValue.allowAvailableUninstall
-                AllowedArchitectures           = $enumAllowedArchitectures
+                AllowedArchitectures           = $getValue.allowedArchitectures
                 Description                    = $getValue.Description
                 Developer                      = $getValue.Developer
                 DisplayName                    = $getValue.DisplayName
@@ -361,7 +414,6 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
                 $updateParameters = $boundParameters
                 $updateParameters.Remove('MobileAppCatalogPackageId') | Out-Null
-
                 Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
 
                 $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -587,271 +639,6 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
         if ($Values -is [System.Collections.Hashtable])
         {
             $result.FromHashtable($Values)
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetWin32LobAppInstallExperience1AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.deviceRestartBehavior)
-        {
-            $result.Add('DeviceRestartBehavior', $ComplexObject.deviceRestartBehavior.ToString())
-        }
-
-        if ($null -ne $ComplexObject.inUseBehavior)
-        {
-            $result.Add('InUseBehavior', $ComplexObject.inUseBehavior.ToString())
-        }
-
-        if ($null -ne $ComplexObject.maxRunTimeInMinutes)
-        {
-            $result.Add('MaxRunTimeInMinutes', $ComplexObject.maxRunTimeInMinutes)
-        }
-
-        if ($null -ne $ComplexObject.runAsAccount)
-        {
-            $result.Add('RunAsAccount', $ComplexObject.runAsAccount.ToString())
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetMimeContent2AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.type)
-        {
-            $result.Add('Type', $ComplexObject.type)
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetWin32LobAppMsiInformation1AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.packageType)
-        {
-            $result.Add('PackageType', $ComplexObject.packageType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.productCode)
-        {
-            $result.Add('ProductCode', $ComplexObject.productCode)
-        }
-
-        if ($null -ne $ComplexObject.productName)
-        {
-            $result.Add('ProductName', $ComplexObject.productName)
-        }
-
-        if ($null -ne $ComplexObject.productVersion)
-        {
-            $result.Add('ProductVersion', $ComplexObject.productVersion)
-        }
-
-        if ($null -ne $ComplexObject.publisher)
-        {
-            $result.Add('Publisher', $ComplexObject.publisher)
-        }
-
-        if ($null -ne $ComplexObject.requiresReboot)
-        {
-            $result.Add('RequiresReboot', $ComplexObject.requiresReboot)
-        }
-
-        if ($null -ne $ComplexObject.upgradeCode)
-        {
-            $result.Add('UpgradeCode', $ComplexObject.upgradeCode)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetWin32LobAppReturnCode1AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.returnCode)
-        {
-            $result.Add('ReturnCode', $ComplexObject.returnCode)
-        }
-
-        if ($null -ne $ComplexObject.type)
-        {
-            $result.Add('Type', $ComplexObject.type.ToString())
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetWin32LobAppRule1AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.check32BitOn64System)
-        {
-            $result.Add('Check32BitOn64System', $ComplexObject.check32BitOn64System)
-        }
-
-        if ($null -ne $ComplexObject.comparisonValue)
-        {
-            $result.Add('ComparisonValue', $ComplexObject.comparisonValue)
-        }
-
-        if ($null -ne $ComplexObject.displayName)
-        {
-            $result.Add('DisplayName', $ComplexObject.displayName)
-        }
-
-        if ($null -ne $ComplexObject.enforceSignatureCheck)
-        {
-            $result.Add('EnforceSignatureCheck', $ComplexObject.enforceSignatureCheck)
-        }
-
-        if ($null -ne $ComplexObject.fileOrFolderName)
-        {
-            $result.Add('FileOrFolderName', $ComplexObject.fileOrFolderName)
-        }
-
-        if ($null -ne $ComplexObject.keyPath)
-        {
-            $result.Add('KeyPath', $ComplexObject.keyPath)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.operationType)
-        {
-            $result.Add('OperationType', $ComplexObject.operationType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.operator)
-        {
-            $result.Add('Operator', $ComplexObject.operator.ToString())
-        }
-
-        if ($null -ne $ComplexObject.path)
-        {
-            $result.Add('Path', $ComplexObject.path)
-        }
-
-        if ($null -ne $ComplexObject.processDisplayName)
-        {
-            $result.Add('ProcessDisplayName', $ComplexObject.processDisplayName)
-        }
-
-        if ($null -ne $ComplexObject.processName)
-        {
-            $result.Add('ProcessName', $ComplexObject.processName)
-        }
-
-        if ($null -ne $ComplexObject.productCode)
-        {
-            $result.Add('ProductCode', $ComplexObject.productCode)
-        }
-
-        if ($null -ne $ComplexObject.productVersion)
-        {
-            $result.Add('ProductVersion', $ComplexObject.productVersion)
-        }
-
-        if ($null -ne $ComplexObject.productVersionOperator)
-        {
-            $result.Add('ProductVersionOperator', $ComplexObject.productVersionOperator.ToString())
-        }
-
-        if ($null -ne $ComplexObject.ruleType)
-        {
-            $result.Add('RuleType', $ComplexObject.ruleType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.runAs32Bit)
-        {
-            $result.Add('RunAs32Bit', $ComplexObject.runAs32Bit)
-        }
-
-        if ($null -ne $ComplexObject.runAsAccount)
-        {
-            $result.Add('RunAsAccount', $ComplexObject.runAsAccount.ToString())
-        }
-
-        if ($null -ne $ComplexObject.scriptContent)
-        {
-            $result.Add('ScriptContent', $ComplexObject.scriptContent)
-        }
-
-        if ($null -ne $ComplexObject.valueName)
-        {
-            $result.Add('ValueName', $ComplexObject.valueName)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
         }
 
         return $result

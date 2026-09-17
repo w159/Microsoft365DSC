@@ -296,78 +296,233 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
             $complexAirPrintDestinations = @()
             foreach ($currentAirPrintDestinations in $getValue.airPrintDestinations)
             {
-                $complexAirPrintDestinations += $this.GetAirPrintDestinationAsHashtable($currentAirPrintDestinations)
+                $myAirPrintDestinations = [ordered]@{}
+                $myAirPrintDestinations.Add('ForceTls', $currentAirPrintDestinations.forceTls)
+                $myAirPrintDestinations.Add('IpAddress', $currentAirPrintDestinations.ipAddress)
+                $myAirPrintDestinations.Add('Port', $currentAirPrintDestinations.port)
+                $myAirPrintDestinations.Add('ResourcePath', $currentAirPrintDestinations.resourcePath)
+                if ($myAirPrintDestinations.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexAirPrintDestinations += $myAirPrintDestinations
+                }
             }
 
             $complexAppAssociatedDomains = @()
             foreach ($currentAppAssociatedDomains in $getValue.appAssociatedDomains)
             {
-                $complexAppAssociatedDomains += $this.GetMacOSAssociatedDomainsItemAsHashtable($currentAppAssociatedDomains)
+                $myAppAssociatedDomains = [ordered]@{}
+                $myAppAssociatedDomains.Add('ApplicationIdentifier', $currentAppAssociatedDomains.applicationIdentifier)
+                $myAppAssociatedDomains.Add('DirectDownloadsEnabled', $currentAppAssociatedDomains.directDownloadsEnabled)
+                $myAppAssociatedDomains.Add('Domains', [Array]$currentAppAssociatedDomains.domains)
+                if ($myAppAssociatedDomains.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexAppAssociatedDomains += $myAppAssociatedDomains
+                }
             }
 
             $complexAssociatedDomains = @()
             foreach ($currentAssociatedDomains in $getValue.associatedDomains)
             {
-                $complexAssociatedDomains += $this.GetKeyValuePair2AsHashtable($currentAssociatedDomains)
+                $myAssociatedDomains = [ordered]@{}
+                $myAssociatedDomains.Add('Name', $currentAssociatedDomains.name)
+                $myAssociatedDomains.Add('Value', $currentAssociatedDomains.value)
+                if ($myAssociatedDomains.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexAssociatedDomains += $myAssociatedDomains
+                }
             }
 
             $complexAutoLaunchItems = @()
             foreach ($currentAutoLaunchItems in $getValue.autoLaunchItems)
             {
-                $complexAutoLaunchItems += $this.GetMacOSLaunchItemAsHashtable($currentAutoLaunchItems)
+                $myAutoLaunchItems = [ordered]@{}
+                $myAutoLaunchItems.Add('Hide', $currentAutoLaunchItems.hide)
+                $myAutoLaunchItems.Add('Path', $currentAutoLaunchItems.path)
+                if ($myAutoLaunchItems.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexAutoLaunchItems += $myAutoLaunchItems
+                }
             }
 
             $complexContentCachingClientListenRanges = @()
             foreach ($currentContentCachingClientListenRanges in $getValue.contentCachingClientListenRanges)
             {
-                $complexContentCachingClientListenRanges += $this.GetIpRange2AsHashtable($currentContentCachingClientListenRanges)
-            }
-
-            $enumContentCachingClientPolicy = $null
-            if ($null -ne $getValue.contentCachingClientPolicy)
-            {
-                $enumContentCachingClientPolicy = $getValue.contentCachingClientPolicy.ToString()
-            }
-
-            $enumContentCachingParentSelectionPolicy = $null
-            if ($null -ne $getValue.contentCachingParentSelectionPolicy)
-            {
-                $enumContentCachingParentSelectionPolicy = $getValue.contentCachingParentSelectionPolicy.ToString()
+                $myContentCachingClientListenRanges = [ordered]@{}
+                $myContentCachingClientListenRanges.Add('CidrAddress', $currentContentCachingClientListenRanges.cidrAddress)
+                $myContentCachingClientListenRanges.Add('LowerAddress', $currentContentCachingClientListenRanges.lowerAddress)
+                if ($null -ne $currentContentCachingClientListenRanges.'@odata.type')
+                {
+                    $myContentCachingClientListenRanges.Add('ODataType', $currentContentCachingClientListenRanges.'@odata.type')
+                }
+                $myContentCachingClientListenRanges.Add('UpperAddress', $currentContentCachingClientListenRanges.upperAddress)
+                if ($myContentCachingClientListenRanges.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexContentCachingClientListenRanges += $myContentCachingClientListenRanges
+                }
             }
 
             $complexContentCachingPeerFilterRanges = @()
             foreach ($currentContentCachingPeerFilterRanges in $getValue.contentCachingPeerFilterRanges)
             {
-                $complexContentCachingPeerFilterRanges += $this.GetIpRange2AsHashtable($currentContentCachingPeerFilterRanges)
+                $myContentCachingPeerFilterRanges = [ordered]@{}
+                $myContentCachingPeerFilterRanges.Add('CidrAddress', $currentContentCachingPeerFilterRanges.cidrAddress)
+                $myContentCachingPeerFilterRanges.Add('LowerAddress', $currentContentCachingPeerFilterRanges.lowerAddress)
+                if ($null -ne $currentContentCachingPeerFilterRanges.'@odata.type')
+                {
+                    $myContentCachingPeerFilterRanges.Add('ODataType', $currentContentCachingPeerFilterRanges.'@odata.type')
+                }
+                $myContentCachingPeerFilterRanges.Add('UpperAddress', $currentContentCachingPeerFilterRanges.upperAddress)
+                if ($myContentCachingPeerFilterRanges.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexContentCachingPeerFilterRanges += $myContentCachingPeerFilterRanges
+                }
             }
 
             $complexContentCachingPeerListenRanges = @()
             foreach ($currentContentCachingPeerListenRanges in $getValue.contentCachingPeerListenRanges)
             {
-                $complexContentCachingPeerListenRanges += $this.GetIpRange2AsHashtable($currentContentCachingPeerListenRanges)
-            }
-
-            $enumContentCachingPeerPolicy = $null
-            if ($null -ne $getValue.contentCachingPeerPolicy)
-            {
-                $enumContentCachingPeerPolicy = $getValue.contentCachingPeerPolicy.ToString()
+                $myContentCachingPeerListenRanges = [ordered]@{}
+                $myContentCachingPeerListenRanges.Add('CidrAddress', $currentContentCachingPeerListenRanges.cidrAddress)
+                $myContentCachingPeerListenRanges.Add('LowerAddress', $currentContentCachingPeerListenRanges.lowerAddress)
+                if ($null -ne $currentContentCachingPeerListenRanges.'@odata.type')
+                {
+                    $myContentCachingPeerListenRanges.Add('ODataType', $currentContentCachingPeerListenRanges.'@odata.type')
+                }
+                $myContentCachingPeerListenRanges.Add('UpperAddress', $currentContentCachingPeerListenRanges.upperAddress)
+                if ($myContentCachingPeerListenRanges.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexContentCachingPeerListenRanges += $myContentCachingPeerListenRanges
+                }
             }
 
             $complexContentCachingPublicRanges = @()
             foreach ($currentContentCachingPublicRanges in $getValue.contentCachingPublicRanges)
             {
-                $complexContentCachingPublicRanges += $this.GetIpRange2AsHashtable($currentContentCachingPublicRanges)
+                $myContentCachingPublicRanges = [ordered]@{}
+                $myContentCachingPublicRanges.Add('CidrAddress', $currentContentCachingPublicRanges.cidrAddress)
+                $myContentCachingPublicRanges.Add('LowerAddress', $currentContentCachingPublicRanges.lowerAddress)
+                if ($null -ne $currentContentCachingPublicRanges.'@odata.type')
+                {
+                    $myContentCachingPublicRanges.Add('ODataType', $currentContentCachingPublicRanges.'@odata.type')
+                }
+                $myContentCachingPublicRanges.Add('UpperAddress', $currentContentCachingPublicRanges.upperAddress)
+                if ($myContentCachingPublicRanges.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexContentCachingPublicRanges += $myContentCachingPublicRanges
+                }
             }
 
-            $enumContentCachingType = $null
-            if ($null -ne $getValue.contentCachingType)
+            $complexMacOSSingleSignOnExtension = [ordered]@{}
+            $complexMacOSSingleSignOnExtension.Add('ActiveDirectorySiteCode', $getValue.macOSSingleSignOnExtension.activeDirectorySiteCode)
+            $complexMacOSSingleSignOnExtension.Add('BlockActiveDirectorySiteAutoDiscovery', $getValue.macOSSingleSignOnExtension.blockActiveDirectorySiteAutoDiscovery)
+            $complexMacOSSingleSignOnExtension.Add('BlockAutomaticLogin', $getValue.macOSSingleSignOnExtension.blockAutomaticLogin)
+            $complexMacOSSingleSignOnExtension.Add('BundleIdAccessControlList', [Array]$getValue.macOSSingleSignOnExtension.bundleIdAccessControlList)
+            $complexMacOSSingleSignOnExtension.Add('CacheName', $getValue.macOSSingleSignOnExtension.cacheName)
+            $complexConfigurations = @()
+            foreach ($currentConfigurations in $getValue.macOSSingleSignOnExtension.configurations)
             {
-                $enumContentCachingType = $getValue.contentCachingType.ToString()
+                $myConfigurations = [ordered]@{}
+                $myConfigurations.Add('Key', $currentConfigurations.key)
+                if ($null -ne $currentConfigurations.'@odata.type')
+                {
+                    $myConfigurations.Add('ODataType', $currentConfigurations.'@odata.type')
+                }
+                $myConfigurations.Add('Value', $currentConfigurations.value)
+                if ($myConfigurations.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexConfigurations += $myConfigurations
+                }
+            }
+            $complexMacOSSingleSignOnExtension.Add('Configurations', $complexConfigurations)
+            $complexMacOSSingleSignOnExtension.Add('CredentialBundleIdAccessControlList', [Array]$getValue.macOSSingleSignOnExtension.credentialBundleIdAccessControlList)
+            $complexMacOSSingleSignOnExtension.Add('CredentialsCacheMonitored', $getValue.macOSSingleSignOnExtension.credentialsCacheMonitored)
+            $complexMacOSSingleSignOnExtension.Add('DomainRealms', [Array]$getValue.macOSSingleSignOnExtension.domainRealms)
+            $complexMacOSSingleSignOnExtension.Add('Domains', [Array]$getValue.macOSSingleSignOnExtension.domains)
+            $complexMacOSSingleSignOnExtension.Add('EnableSharedDeviceMode', $getValue.macOSSingleSignOnExtension.enableSharedDeviceMode)
+            $complexMacOSSingleSignOnExtension.Add('ExtensionIdentifier', $getValue.macOSSingleSignOnExtension.extensionIdentifier)
+            $complexMacOSSingleSignOnExtension.Add('IsDefaultRealm', $getValue.macOSSingleSignOnExtension.isDefaultRealm)
+            $complexMacOSSingleSignOnExtension.Add('KerberosAppsInBundleIdACLIncluded', $getValue.macOSSingleSignOnExtension.kerberosAppsInBundleIdACLIncluded)
+            $complexMacOSSingleSignOnExtension.Add('ManagedAppsInBundleIdACLIncluded', $getValue.macOSSingleSignOnExtension.managedAppsInBundleIdACLIncluded)
+            $complexMacOSSingleSignOnExtension.Add('ModeCredentialUsed', $getValue.macOSSingleSignOnExtension.modeCredentialUsed)
+            if ($null -ne $getValue.macOSSingleSignOnExtension.'@odata.type')
+            {
+                $complexMacOSSingleSignOnExtension.Add('ODataType', $getValue.macOSSingleSignOnExtension.'@odata.type')
+            }
+            $complexMacOSSingleSignOnExtension.Add('PasswordBlockModification', $getValue.macOSSingleSignOnExtension.passwordBlockModification)
+            $complexMacOSSingleSignOnExtension.Add('PasswordChangeUrl', $getValue.macOSSingleSignOnExtension.passwordChangeUrl)
+            $complexMacOSSingleSignOnExtension.Add('PasswordEnableLocalSync', $getValue.macOSSingleSignOnExtension.passwordEnableLocalSync)
+            $complexMacOSSingleSignOnExtension.Add('PasswordExpirationDays', $getValue.macOSSingleSignOnExtension.passwordExpirationDays)
+            $complexMacOSSingleSignOnExtension.Add('PasswordExpirationNotificationDays', $getValue.macOSSingleSignOnExtension.passwordExpirationNotificationDays)
+            $complexMacOSSingleSignOnExtension.Add('PasswordMinimumAgeDays', $getValue.macOSSingleSignOnExtension.passwordMinimumAgeDays)
+            $complexMacOSSingleSignOnExtension.Add('PasswordMinimumLength', $getValue.macOSSingleSignOnExtension.passwordMinimumLength)
+            $complexMacOSSingleSignOnExtension.Add('PasswordPreviousPasswordBlockCount', $getValue.macOSSingleSignOnExtension.passwordPreviousPasswordBlockCount)
+            $complexMacOSSingleSignOnExtension.Add('PasswordRequireActiveDirectoryComplexity', $getValue.macOSSingleSignOnExtension.passwordRequireActiveDirectoryComplexity)
+            $complexMacOSSingleSignOnExtension.Add('PasswordRequirementsDescription', $getValue.macOSSingleSignOnExtension.passwordRequirementsDescription)
+            $complexMacOSSingleSignOnExtension.Add('PreferredKDCs', [Array]$getValue.macOSSingleSignOnExtension.preferredKDCs)
+            $complexMacOSSingleSignOnExtension.Add('Realm', $getValue.macOSSingleSignOnExtension.realm)
+            $complexMacOSSingleSignOnExtension.Add('RequireUserPresence', $getValue.macOSSingleSignOnExtension.requireUserPresence)
+            $complexMacOSSingleSignOnExtension.Add('SignInHelpText', $getValue.macOSSingleSignOnExtension.signInHelpText)
+            $complexMacOSSingleSignOnExtension.Add('TeamIdentifier', $getValue.macOSSingleSignOnExtension.teamIdentifier)
+            $complexMacOSSingleSignOnExtension.Add('TlsForLDAPRequired', $getValue.macOSSingleSignOnExtension.tlsForLDAPRequired)
+            $complexMacOSSingleSignOnExtension.Add('UrlPrefixes', [Array]$getValue.macOSSingleSignOnExtension.urlPrefixes)
+            $complexMacOSSingleSignOnExtension.Add('UsernameLabelCustom', $getValue.macOSSingleSignOnExtension.usernameLabelCustom)
+            $complexMacOSSingleSignOnExtension.Add('UserPrincipalName', $getValue.macOSSingleSignOnExtension.userPrincipalName)
+            $complexMacOSSingleSignOnExtension.Add('UserSetupDelayed', $getValue.macOSSingleSignOnExtension.userSetupDelayed)
+            if ($complexMacOSSingleSignOnExtension.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexMacOSSingleSignOnExtension = $null
             }
 
-            $complexMacOSSingleSignOnExtension = $this.GetMacOSSingleSignOnExtensionAsHashtable($getValue.macOSSingleSignOnExtension)
+            $complexSingleSignOnExtension = [ordered]@{}
+            $complexSingleSignOnExtension.Add('ActiveDirectorySiteCode', $getValue.singleSignOnExtension.activeDirectorySiteCode)
+            $complexSingleSignOnExtension.Add('BlockActiveDirectorySiteAutoDiscovery', $getValue.singleSignOnExtension.blockActiveDirectorySiteAutoDiscovery)
+            $complexSingleSignOnExtension.Add('BlockAutomaticLogin', $getValue.singleSignOnExtension.blockAutomaticLogin)
+            $complexSingleSignOnExtension.Add('CacheName', $getValue.singleSignOnExtension.cacheName)
+            $complexConfigurations = @()
+            foreach ($currentConfigurations in $getValue.singleSignOnExtension.configurations)
+            {
+                $myConfigurations = [ordered]@{}
+                $myConfigurations.Add('Key', $currentConfigurations.key)
+                if ($null -ne $currentConfigurations.'@odata.type')
+                {
+                    $myConfigurations.Add('ODataType', $currentConfigurations.'@odata.type')
+                }
+                $myConfigurations.Add('Value', $currentConfigurations.value)
+                if ($myConfigurations.values.Where({ $null -ne $_ }).Count -gt 0)
+                {
+                    $complexConfigurations += $myConfigurations
+                }
+            }
+            $complexSingleSignOnExtension.Add('Configurations', $complexConfigurations)
+            $complexSingleSignOnExtension.Add('CredentialBundleIdAccessControlList', [Array]$getValue.singleSignOnExtension.credentialBundleIdAccessControlList)
+            $complexSingleSignOnExtension.Add('DomainRealms', [Array]$getValue.singleSignOnExtension.domainRealms)
+            $complexSingleSignOnExtension.Add('Domains', [Array]$getValue.singleSignOnExtension.domains)
+            $complexSingleSignOnExtension.Add('ExtensionIdentifier', $getValue.singleSignOnExtension.extensionIdentifier)
+            $complexSingleSignOnExtension.Add('IsDefaultRealm', $getValue.singleSignOnExtension.isDefaultRealm)
+            if ($null -ne $getValue.singleSignOnExtension.'@odata.type')
+            {
+                $complexSingleSignOnExtension.Add('ODataType', $getValue.singleSignOnExtension.'@odata.type')
+            }
+            $complexSingleSignOnExtension.Add('PasswordBlockModification', $getValue.singleSignOnExtension.passwordBlockModification)
+            $complexSingleSignOnExtension.Add('PasswordChangeUrl', $getValue.singleSignOnExtension.passwordChangeUrl)
+            $complexSingleSignOnExtension.Add('PasswordEnableLocalSync', $getValue.singleSignOnExtension.passwordEnableLocalSync)
+            $complexSingleSignOnExtension.Add('PasswordExpirationDays', $getValue.singleSignOnExtension.passwordExpirationDays)
+            $complexSingleSignOnExtension.Add('PasswordExpirationNotificationDays', $getValue.singleSignOnExtension.passwordExpirationNotificationDays)
+            $complexSingleSignOnExtension.Add('PasswordMinimumAgeDays', $getValue.singleSignOnExtension.passwordMinimumAgeDays)
+            $complexSingleSignOnExtension.Add('PasswordMinimumLength', $getValue.singleSignOnExtension.passwordMinimumLength)
+            $complexSingleSignOnExtension.Add('PasswordPreviousPasswordBlockCount', $getValue.singleSignOnExtension.passwordPreviousPasswordBlockCount)
+            $complexSingleSignOnExtension.Add('PasswordRequireActiveDirectoryComplexity', $getValue.singleSignOnExtension.passwordRequireActiveDirectoryComplexity)
+            $complexSingleSignOnExtension.Add('PasswordRequirementsDescription', $getValue.singleSignOnExtension.passwordRequirementsDescription)
+            $complexSingleSignOnExtension.Add('Realm', $getValue.singleSignOnExtension.realm)
+            $complexSingleSignOnExtension.Add('RequireUserPresence', $getValue.singleSignOnExtension.requireUserPresence)
+            $complexSingleSignOnExtension.Add('TeamIdentifier', $getValue.singleSignOnExtension.teamIdentifier)
+            $complexSingleSignOnExtension.Add('UrlPrefixes', [Array]$getValue.singleSignOnExtension.urlPrefixes)
+            $complexSingleSignOnExtension.Add('UserPrincipalName', $getValue.singleSignOnExtension.userPrincipalName)
+            if ($complexSingleSignOnExtension.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexSingleSignOnExtension = $null
+            }
 
-            $complexSingleSignOnExtension = $this.GetSingleSignOnExtensionAsHashtable($getValue.singleSignOnExtension)
             $result = @{
                 AdminShowHostInfo                        = $getValue.adminShowHostInfo
                 AirPrintDestinations                     = [Array]$complexAirPrintDestinations
@@ -383,7 +538,7 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
                 ConsoleAccessDisabled                    = $getValue.consoleAccessDisabled
                 ContentCachingBlockDeletion              = $getValue.contentCachingBlockDeletion
                 ContentCachingClientListenRanges         = [Array]$complexContentCachingClientListenRanges
-                ContentCachingClientPolicy               = $enumContentCachingClientPolicy
+                ContentCachingClientPolicy               = $getValue.contentCachingClientPolicy
                 ContentCachingDataPath                   = $getValue.contentCachingDataPath
                 ContentCachingDisableConnectionSharing   = $getValue.contentCachingDisableConnectionSharing
                 ContentCachingEnabled                    = $getValue.contentCachingEnabled
@@ -392,14 +547,14 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
                 ContentCachingLogClientIdentities        = $getValue.contentCachingLogClientIdentities
                 ContentCachingMaxSizeBytes               = $getValue.contentCachingMaxSizeBytes
                 ContentCachingParents                    = $getValue.contentCachingParents
-                ContentCachingParentSelectionPolicy      = $enumContentCachingParentSelectionPolicy
+                ContentCachingParentSelectionPolicy      = $getValue.contentCachingParentSelectionPolicy
                 ContentCachingPeerFilterRanges           = [Array]$complexContentCachingPeerFilterRanges
                 ContentCachingPeerListenRanges           = [Array]$complexContentCachingPeerListenRanges
-                ContentCachingPeerPolicy                 = $enumContentCachingPeerPolicy
+                ContentCachingPeerPolicy                 = $getValue.contentCachingPeerPolicy
                 ContentCachingPort                       = $getValue.contentCachingPort
                 ContentCachingPublicRanges               = [Array]$complexContentCachingPublicRanges
                 ContentCachingShowAlerts                 = $getValue.contentCachingShowAlerts
-                ContentCachingType                       = $enumContentCachingType
+                ContentCachingType                       = $getValue.contentCachingType
                 Description                              = $getValue.Description
                 DisplayName                              = $getValue.DisplayName
                 Id                                       = $getValue.Id
@@ -488,7 +643,6 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
                 Write-Verbose -Message "Creating new Intune Device Features Configuration Policy for macOS {$($this.Id)}"
 
                 $createParameters = $boundParameters
-
                 $createdInstance = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
 
                 $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -505,7 +659,6 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
                 Write-Verbose -Message "Updating Intune Device Features Configuration Policy for macOS {$($this.Id)}"
 
                 $updateParameters = $boundParameters
-
                 Update-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
 
                 $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -520,7 +673,6 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
             elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
             {
                 Write-Verbose -Message "Removing Intune Device Features Configuration Policy for macOS {$($this.Id)}"
-
                 Remove-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $currentInstance.Id | Out-Null
             }
         }
@@ -796,577 +948,6 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
         if ($Values -is [System.Collections.Hashtable])
         {
             $result.FromHashtable($Values)
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetAirPrintDestinationAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.forceTls)
-        {
-            $result.Add('ForceTls', $ComplexObject.forceTls)
-        }
-
-        if ($null -ne $ComplexObject.ipAddress)
-        {
-            $result.Add('IpAddress', $ComplexObject.ipAddress)
-        }
-
-        if ($null -ne $ComplexObject.port)
-        {
-            $result.Add('Port', $ComplexObject.port)
-        }
-
-        if ($null -ne $ComplexObject.resourcePath)
-        {
-            $result.Add('ResourcePath', $ComplexObject.resourcePath)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetMacOSAssociatedDomainsItemAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.applicationIdentifier)
-        {
-            $result.Add('ApplicationIdentifier', $ComplexObject.applicationIdentifier)
-        }
-
-        if ($null -ne $ComplexObject.directDownloadsEnabled)
-        {
-            $result.Add('DirectDownloadsEnabled', $ComplexObject.directDownloadsEnabled)
-        }
-
-        if ($null -ne $ComplexObject.domains)
-        {
-            $result.Add('Domains', [Array]$ComplexObject.domains)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetKeyValuePair2AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.name)
-        {
-            $result.Add('Name', $ComplexObject.name)
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetMacOSLaunchItemAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.hide)
-        {
-            $result.Add('Hide', $ComplexObject.hide)
-        }
-
-        if ($null -ne $ComplexObject.path)
-        {
-            $result.Add('Path', $ComplexObject.path)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetIpRange2AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.cidrAddress)
-        {
-            $result.Add('CidrAddress', $ComplexObject.cidrAddress)
-        }
-
-        if ($null -ne $ComplexObject.lowerAddress)
-        {
-            $result.Add('LowerAddress', $ComplexObject.lowerAddress)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.upperAddress)
-        {
-            $result.Add('UpperAddress', $ComplexObject.upperAddress)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetKeyTypedValuePairAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.key)
-        {
-            $result.Add('Key', $ComplexObject.key)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetMacOSSingleSignOnExtensionAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.activeDirectorySiteCode)
-        {
-            $result.Add('ActiveDirectorySiteCode', $ComplexObject.activeDirectorySiteCode)
-        }
-
-        if ($null -ne $ComplexObject.blockActiveDirectorySiteAutoDiscovery)
-        {
-            $result.Add('BlockActiveDirectorySiteAutoDiscovery', $ComplexObject.blockActiveDirectorySiteAutoDiscovery)
-        }
-
-        if ($null -ne $ComplexObject.blockAutomaticLogin)
-        {
-            $result.Add('BlockAutomaticLogin', $ComplexObject.blockAutomaticLogin)
-        }
-
-        if ($null -ne $ComplexObject.bundleIdAccessControlList)
-        {
-            $result.Add('BundleIdAccessControlList', [Array]$ComplexObject.bundleIdAccessControlList)
-        }
-
-        if ($null -ne $ComplexObject.cacheName)
-        {
-            $result.Add('CacheName', $ComplexObject.cacheName)
-        }
-
-        $nestedConfigurations = @()
-        foreach ($currentConfigurations in $ComplexObject.configurations)
-        {
-            $nestedConfigurations += $this.GetKeyTypedValuePairAsHashtable($currentConfigurations)
-        }
-        if ($nestedConfigurations.Count -gt 0)
-        {
-            $result.Add('Configurations', [Array]$nestedConfigurations)
-        }
-
-        if ($null -ne $ComplexObject.credentialBundleIdAccessControlList)
-        {
-            $result.Add('CredentialBundleIdAccessControlList', [Array]$ComplexObject.credentialBundleIdAccessControlList)
-        }
-
-        if ($null -ne $ComplexObject.credentialsCacheMonitored)
-        {
-            $result.Add('CredentialsCacheMonitored', $ComplexObject.credentialsCacheMonitored)
-        }
-
-        if ($null -ne $ComplexObject.domainRealms)
-        {
-            $result.Add('DomainRealms', [Array]$ComplexObject.domainRealms)
-        }
-
-        if ($null -ne $ComplexObject.domains)
-        {
-            $result.Add('Domains', [Array]$ComplexObject.domains)
-        }
-
-        if ($null -ne $ComplexObject.enableSharedDeviceMode)
-        {
-            $result.Add('EnableSharedDeviceMode', $ComplexObject.enableSharedDeviceMode)
-        }
-
-        if ($null -ne $ComplexObject.extensionIdentifier)
-        {
-            $result.Add('ExtensionIdentifier', $ComplexObject.extensionIdentifier)
-        }
-
-        if ($null -ne $ComplexObject.isDefaultRealm)
-        {
-            $result.Add('IsDefaultRealm', $ComplexObject.isDefaultRealm)
-        }
-
-        if ($null -ne $ComplexObject.kerberosAppsInBundleIdACLIncluded)
-        {
-            $result.Add('KerberosAppsInBundleIdACLIncluded', $ComplexObject.kerberosAppsInBundleIdACLIncluded)
-        }
-
-        if ($null -ne $ComplexObject.managedAppsInBundleIdACLIncluded)
-        {
-            $result.Add('ManagedAppsInBundleIdACLIncluded', $ComplexObject.managedAppsInBundleIdACLIncluded)
-        }
-
-        if ($null -ne $ComplexObject.modeCredentialUsed)
-        {
-            $result.Add('ModeCredentialUsed', $ComplexObject.modeCredentialUsed)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.passwordBlockModification)
-        {
-            $result.Add('PasswordBlockModification', $ComplexObject.passwordBlockModification)
-        }
-
-        if ($null -ne $ComplexObject.passwordChangeUrl)
-        {
-            $result.Add('PasswordChangeUrl', $ComplexObject.passwordChangeUrl)
-        }
-
-        if ($null -ne $ComplexObject.passwordEnableLocalSync)
-        {
-            $result.Add('PasswordEnableLocalSync', $ComplexObject.passwordEnableLocalSync)
-        }
-
-        if ($null -ne $ComplexObject.passwordExpirationDays)
-        {
-            $result.Add('PasswordExpirationDays', $ComplexObject.passwordExpirationDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordExpirationNotificationDays)
-        {
-            $result.Add('PasswordExpirationNotificationDays', $ComplexObject.passwordExpirationNotificationDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordMinimumAgeDays)
-        {
-            $result.Add('PasswordMinimumAgeDays', $ComplexObject.passwordMinimumAgeDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordMinimumLength)
-        {
-            $result.Add('PasswordMinimumLength', $ComplexObject.passwordMinimumLength)
-        }
-
-        if ($null -ne $ComplexObject.passwordPreviousPasswordBlockCount)
-        {
-            $result.Add('PasswordPreviousPasswordBlockCount', $ComplexObject.passwordPreviousPasswordBlockCount)
-        }
-
-        if ($null -ne $ComplexObject.passwordRequireActiveDirectoryComplexity)
-        {
-            $result.Add('PasswordRequireActiveDirectoryComplexity', $ComplexObject.passwordRequireActiveDirectoryComplexity)
-        }
-
-        if ($null -ne $ComplexObject.passwordRequirementsDescription)
-        {
-            $result.Add('PasswordRequirementsDescription', $ComplexObject.passwordRequirementsDescription)
-        }
-
-        if ($null -ne $ComplexObject.preferredKDCs)
-        {
-            $result.Add('PreferredKDCs', [Array]$ComplexObject.preferredKDCs)
-        }
-
-        if ($null -ne $ComplexObject.realm)
-        {
-            $result.Add('Realm', $ComplexObject.realm)
-        }
-
-        if ($null -ne $ComplexObject.requireUserPresence)
-        {
-            $result.Add('RequireUserPresence', $ComplexObject.requireUserPresence)
-        }
-
-        if ($null -ne $ComplexObject.signInHelpText)
-        {
-            $result.Add('SignInHelpText', $ComplexObject.signInHelpText)
-        }
-
-        if ($null -ne $ComplexObject.teamIdentifier)
-        {
-            $result.Add('TeamIdentifier', $ComplexObject.teamIdentifier)
-        }
-
-        if ($null -ne $ComplexObject.tlsForLDAPRequired)
-        {
-            $result.Add('TlsForLDAPRequired', $ComplexObject.tlsForLDAPRequired)
-        }
-
-        if ($null -ne $ComplexObject.urlPrefixes)
-        {
-            $result.Add('UrlPrefixes', [Array]$ComplexObject.urlPrefixes)
-        }
-
-        if ($null -ne $ComplexObject.usernameLabelCustom)
-        {
-            $result.Add('UsernameLabelCustom', $ComplexObject.usernameLabelCustom)
-        }
-
-        if ($null -ne $ComplexObject.userPrincipalName)
-        {
-            $result.Add('UserPrincipalName', $ComplexObject.userPrincipalName)
-        }
-
-        if ($null -ne $ComplexObject.userSetupDelayed)
-        {
-            $result.Add('UserSetupDelayed', $ComplexObject.userSetupDelayed)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetSingleSignOnExtensionAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.activeDirectorySiteCode)
-        {
-            $result.Add('ActiveDirectorySiteCode', $ComplexObject.activeDirectorySiteCode)
-        }
-
-        if ($null -ne $ComplexObject.blockActiveDirectorySiteAutoDiscovery)
-        {
-            $result.Add('BlockActiveDirectorySiteAutoDiscovery', $ComplexObject.blockActiveDirectorySiteAutoDiscovery)
-        }
-
-        if ($null -ne $ComplexObject.blockAutomaticLogin)
-        {
-            $result.Add('BlockAutomaticLogin', $ComplexObject.blockAutomaticLogin)
-        }
-
-        if ($null -ne $ComplexObject.cacheName)
-        {
-            $result.Add('CacheName', $ComplexObject.cacheName)
-        }
-
-        $nestedConfigurations = @()
-        foreach ($currentConfigurations in $ComplexObject.configurations)
-        {
-            $nestedConfigurations += $this.GetKeyTypedValuePairAsHashtable($currentConfigurations)
-        }
-        if ($nestedConfigurations.Count -gt 0)
-        {
-            $result.Add('Configurations', [Array]$nestedConfigurations)
-        }
-
-        if ($null -ne $ComplexObject.credentialBundleIdAccessControlList)
-        {
-            $result.Add('CredentialBundleIdAccessControlList', [Array]$ComplexObject.credentialBundleIdAccessControlList)
-        }
-
-        if ($null -ne $ComplexObject.domainRealms)
-        {
-            $result.Add('DomainRealms', [Array]$ComplexObject.domainRealms)
-        }
-
-        if ($null -ne $ComplexObject.domains)
-        {
-            $result.Add('Domains', [Array]$ComplexObject.domains)
-        }
-
-        if ($null -ne $ComplexObject.extensionIdentifier)
-        {
-            $result.Add('ExtensionIdentifier', $ComplexObject.extensionIdentifier)
-        }
-
-        if ($null -ne $ComplexObject.isDefaultRealm)
-        {
-            $result.Add('IsDefaultRealm', $ComplexObject.isDefaultRealm)
-        }
-
-        $odataType = $ComplexObject.AdditionalProperties.'@odata.type'
-        if ($null -eq $odataType)
-        {
-            $odataType = $ComplexObject.'@odata.type'
-        }
-        if ($null -ne $odataType)
-        {
-            $result.Add('ODataType', $odataType.ToString())
-        }
-
-        if ($null -ne $ComplexObject.passwordBlockModification)
-        {
-            $result.Add('PasswordBlockModification', $ComplexObject.passwordBlockModification)
-        }
-
-        if ($null -ne $ComplexObject.passwordChangeUrl)
-        {
-            $result.Add('PasswordChangeUrl', $ComplexObject.passwordChangeUrl)
-        }
-
-        if ($null -ne $ComplexObject.passwordEnableLocalSync)
-        {
-            $result.Add('PasswordEnableLocalSync', $ComplexObject.passwordEnableLocalSync)
-        }
-
-        if ($null -ne $ComplexObject.passwordExpirationDays)
-        {
-            $result.Add('PasswordExpirationDays', $ComplexObject.passwordExpirationDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordExpirationNotificationDays)
-        {
-            $result.Add('PasswordExpirationNotificationDays', $ComplexObject.passwordExpirationNotificationDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordMinimumAgeDays)
-        {
-            $result.Add('PasswordMinimumAgeDays', $ComplexObject.passwordMinimumAgeDays)
-        }
-
-        if ($null -ne $ComplexObject.passwordMinimumLength)
-        {
-            $result.Add('PasswordMinimumLength', $ComplexObject.passwordMinimumLength)
-        }
-
-        if ($null -ne $ComplexObject.passwordPreviousPasswordBlockCount)
-        {
-            $result.Add('PasswordPreviousPasswordBlockCount', $ComplexObject.passwordPreviousPasswordBlockCount)
-        }
-
-        if ($null -ne $ComplexObject.passwordRequireActiveDirectoryComplexity)
-        {
-            $result.Add('PasswordRequireActiveDirectoryComplexity', $ComplexObject.passwordRequireActiveDirectoryComplexity)
-        }
-
-        if ($null -ne $ComplexObject.passwordRequirementsDescription)
-        {
-            $result.Add('PasswordRequirementsDescription', $ComplexObject.passwordRequirementsDescription)
-        }
-
-        if ($null -ne $ComplexObject.realm)
-        {
-            $result.Add('Realm', $ComplexObject.realm)
-        }
-
-        if ($null -ne $ComplexObject.requireUserPresence)
-        {
-            $result.Add('RequireUserPresence', $ComplexObject.requireUserPresence)
-        }
-
-        if ($null -ne $ComplexObject.teamIdentifier)
-        {
-            $result.Add('TeamIdentifier', $ComplexObject.teamIdentifier)
-        }
-
-        if ($null -ne $ComplexObject.urlPrefixes)
-        {
-            $result.Add('UrlPrefixes', [Array]$ComplexObject.urlPrefixes)
-        }
-
-        if ($null -ne $ComplexObject.userPrincipalName)
-        {
-            $result.Add('UserPrincipalName', $ComplexObject.userPrincipalName)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
         }
 
         return $result

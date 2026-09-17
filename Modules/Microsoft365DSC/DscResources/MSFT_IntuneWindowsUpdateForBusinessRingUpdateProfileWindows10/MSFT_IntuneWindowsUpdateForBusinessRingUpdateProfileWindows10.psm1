@@ -301,7 +301,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
             }
             if ($null -ne $getValue.installationSchedule.scheduledInstallDay)
             {
-                $complexInstallationSchedule.Add('ScheduledInstallDay', $getValue.installationSchedule.scheduledInstallDay.ToString())
+                $complexInstallationSchedule.Add('ScheduledInstallDay', $getValue.installationSchedule.scheduledInstallDay)
             }
             if ($null -ne $getValue.installationSchedule.scheduledInstallTime)
             {
@@ -309,7 +309,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
             }
             if ($null -ne $getValue.installationSchedule.'@odata.type')
             {
-                $complexInstallationSchedule.Add('odataType', $getValue.installationSchedule.'@odata.type'.ToString())
+                $complexInstallationSchedule.Add('odataType', $getValue.installationSchedule.'@odata.type')
             }
             if ($complexInstallationSchedule.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -342,62 +342,6 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
             if ($complexDeviceManagementApplicabilityRuleOsVersion.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexDeviceManagementApplicabilityRuleOsVersion = $null
-            }
-            #endregion
-
-            #region resource generator code
-            $enumAutomaticUpdateMode = $null
-            if ($null -ne $getValue.automaticUpdateMode)
-            {
-                $enumAutomaticUpdateMode = $getValue.automaticUpdateMode.ToString()
-            }
-
-            $enumAutoRestartNotificationDismissal = $null
-            if ($null -ne $getValue.autoRestartNotificationDismissal)
-            {
-                $enumAutoRestartNotificationDismissal = $getValue.autoRestartNotificationDismissal.ToString()
-            }
-
-            $enumBusinessReadyUpdatesOnly = $null
-            if ($null -ne $getValue.businessReadyUpdatesOnly)
-            {
-                $enumBusinessReadyUpdatesOnly = $getValue.businessReadyUpdatesOnly.ToString()
-            }
-
-            $enumDeliveryOptimizationMode = $null
-            if ($null -ne $getValue.deliveryOptimizationMode)
-            {
-                $enumDeliveryOptimizationMode = $getValue.deliveryOptimizationMode.ToString()
-            }
-
-            $enumPrereleaseFeatures = $null
-            if ($null -ne $getValue.prereleaseFeatures)
-            {
-                $enumPrereleaseFeatures = $getValue.prereleaseFeatures.ToString()
-            }
-
-            $enumUpdateNotificationLevel = $null
-            if ($null -ne $getValue.updateNotificationLevel)
-            {
-                $enumUpdateNotificationLevel = $getValue.updateNotificationLevel.ToString()
-            }
-
-            $enumUpdateWeeks = $null
-            if ($null -ne $getValue.updateWeeks)
-            {
-                $enumUpdateWeeks = $getValue.updateWeeks.ToString()
-            }
-
-            $enumUserPauseAccess = $null
-            if ($null -ne $getValue.userPauseAccess)
-            {
-                $enumUserPauseAccess = $getValue.userPauseAccess.ToString()
-            }
-
-            $enumUserWindowsUpdateScanAccess = $null
-            if ($null -ne $getValue.userWindowsUpdateScanAccess)
-            {
-                $enumUserWindowsUpdateScanAccess = $getValue.userWindowsUpdateScanAccess.ToString()
             }
             #endregion
 
@@ -442,13 +386,13 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
             $results = @{
                 #region resource generator code
                 AllowWindows11Upgrade                       = $getValue.allowWindows11Upgrade
-                AutomaticUpdateMode                         = $enumAutomaticUpdateMode
-                AutoRestartNotificationDismissal            = $enumAutoRestartNotificationDismissal
-                BusinessReadyUpdatesOnly                    = $enumBusinessReadyUpdatesOnly
+                AutomaticUpdateMode                         = $getValue.automaticUpdateMode
+                AutoRestartNotificationDismissal            = $getValue.autoRestartNotificationDismissal
+                BusinessReadyUpdatesOnly                    = $getValue.businessReadyUpdatesOnly
                 DeadlineForFeatureUpdatesInDays             = $getValue.deadlineForFeatureUpdatesInDays
                 DeadlineForQualityUpdatesInDays             = $getValue.deadlineForQualityUpdatesInDays
                 DeadlineGracePeriodInDays                   = $getValue.deadlineGracePeriodInDays
-                DeliveryOptimizationMode                    = $enumDeliveryOptimizationMode
+                DeliveryOptimizationMode                    = $getValue.deliveryOptimizationMode
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition
                 DeviceManagementApplicabilityRuleOsVersion  = $complexDeviceManagementApplicabilityRuleOsVersion
@@ -466,7 +410,7 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                 InstallationSchedule                        = $complexInstallationSchedule
                 MicrosoftUpdateServiceAllowed               = $getValue.microsoftUpdateServiceAllowed
                 PostponeRebootUntilAfterDeadline            = $getValue.postponeRebootUntilAfterDeadline
-                PrereleaseFeatures                          = $enumPrereleaseFeatures
+                PrereleaseFeatures                          = $getValue.prereleaseFeatures
                 QualityUpdatesDeferralPeriodInDays          = $getValue.qualityUpdatesDeferralPeriodInDays
                 QualityUpdatesPaused                        = $getValue.qualityUpdatesPaused
                 QualityUpdatesPauseExpiryDateTime           = $dateQualityUpdatesPauseExpiryDateTime
@@ -476,10 +420,10 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
                 ScheduleImminentRestartWarningInMinutes     = $getValue.scheduleImminentRestartWarningInMinutes
                 ScheduleRestartWarningInHours               = $getValue.scheduleRestartWarningInHours
                 SkipChecksBeforeRestart                     = $getValue.skipChecksBeforeRestart
-                UpdateNotificationLevel                     = $enumUpdateNotificationLevel
-                UpdateWeeks                                 = $enumUpdateWeeks
-                UserPauseAccess                             = $enumUserPauseAccess
-                UserWindowsUpdateScanAccess                 = $enumUserWindowsUpdateScanAccess
+                UpdateNotificationLevel                     = $getValue.updateNotificationLevel
+                UpdateWeeks                                 = $getValue.updateWeeks
+                UserPauseAccess                             = $getValue.userPauseAccess
+                UserWindowsUpdateScanAccess                 = $getValue.userWindowsUpdateScanAccess
                 Description                                 = $getValue.Description
                 DisplayName                                 = $getValue.DisplayName
                 Id                                          = $getValue.Id

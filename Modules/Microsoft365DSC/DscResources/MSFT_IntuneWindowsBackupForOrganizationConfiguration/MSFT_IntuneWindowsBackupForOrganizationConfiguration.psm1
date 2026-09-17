@@ -86,17 +86,9 @@ class IntuneWindowsBackupForOrganizationConfiguration : M365DSCResourceBase
             $this.ResourceCache['IntuneWindowsBackupForOrganizationConfigurationId'] = $getValue.Id
             Write-Verbose -Message 'An Intune Windows Backup For Organization Configuration was found'
 
-            #region resource generator code
-            $enumState = $null
-            if ($null -ne $getValue.state)
-            {
-                $enumState = $getValue.state.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
-                State                 = $enumState
+                State                 = $getValue.state
                 IsSingleInstance      = 'Yes'
                 Credential            = $this.Credential
                 ApplicationId         = $this.ApplicationId

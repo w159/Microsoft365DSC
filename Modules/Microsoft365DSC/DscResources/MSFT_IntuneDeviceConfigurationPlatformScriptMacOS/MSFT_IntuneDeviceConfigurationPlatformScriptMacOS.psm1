@@ -153,14 +153,6 @@ class IntuneDeviceConfigurationPlatformScriptMacOS : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Platform Script MacOS with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumRunAsAccount = $null
-            if ($null -ne $getValue.RunAsAccount)
-            {
-                $enumRunAsAccount = $getValue.RunAsAccount.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 BlockExecutionNotifications = $getValue.BlockExecutionNotifications
@@ -170,7 +162,7 @@ class IntuneDeviceConfigurationPlatformScriptMacOS : M365DSCResourceBase
                 FileName                    = $getValue.FileName
                 RetryCount                  = $getValue.RetryCount
                 RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
-                RunAsAccount                = $enumRunAsAccount
+                RunAsAccount                = $getValue.RunAsAccount
                 ScriptContent               = $getValue.ScriptContent
                 Id                          = $getValue.Id
                 Ensure                      = 'Present'

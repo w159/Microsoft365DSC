@@ -166,17 +166,24 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 
             Write-Verbose -Message "Found Intune Mobile Apps Auto Update Catalog App for Windows10 with Id {$($this.Id)}"
 
-            $enumAllowedArchitectures = $null
-            if ($null -ne $getValue.allowedArchitectures)
+            $complexInstallExperience = [ordered]@{}
+            $complexInstallExperience.Add('DeviceRestartBehavior', $getValue.installExperience.deviceRestartBehavior)
+            $complexInstallExperience.Add('RunAsAccount', $getValue.installExperience.runAsAccount)
+            if ($complexInstallExperience.values.Where({ $null -ne $_ }).Count -eq 0)
             {
-                $enumAllowedArchitectures = $getValue.allowedArchitectures.ToString()
+                $complexInstallExperience = $null
             }
 
-            $complexInstallExperience = $this.GetWindowsAutoUpdateCatalogAppInstallExperienceAsHashtable($getValue.installExperience)
+            $complexLargeIcon = [ordered]@{}
+            $complexLargeIcon.Add('Type', $getValue.LargeIcon.type)
+            $complexLargeIcon.Add('Value', $getValue.LargeIcon.value)
+            if ($complexLargeIcon.values.Where({ $null -ne $_ }).Count -eq 0)
+            {
+                $complexLargeIcon = $null
+            }
 
-            $complexLargeIcon = $this.GetMimeContent2AsHashtable($getValue.LargeIcon)
             $result = @{
-                AllowedArchitectures            = $enumAllowedArchitectures
+                AllowedArchitectures            = $getValue.allowedArchitectures
                 Description                     = $getValue.Description
                 Developer                       = $getValue.Developer
                 DisplayName                     = $getValue.DisplayName
@@ -277,7 +284,6 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 
                 $updateParameters = $boundParameters
                 $updateParameters.Remove('MobileAppCatalogPackageBranchId') | Out-Null
-
                 Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
 
                 $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -458,60 +464,6 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
         if ($Values -is [System.Collections.Hashtable])
         {
             $result.FromHashtable($Values)
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetWindowsAutoUpdateCatalogAppInstallExperienceAsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.deviceRestartBehavior)
-        {
-            $result.Add('DeviceRestartBehavior', $ComplexObject.deviceRestartBehavior.ToString())
-        }
-
-        if ($null -ne $ComplexObject.runAsAccount)
-        {
-            $result.Add('RunAsAccount', $ComplexObject.runAsAccount.ToString())
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
-        }
-
-        return $result
-    }
-
-    hidden [System.Collections.Hashtable] GetMimeContent2AsHashtable([System.Object] $ComplexObject)
-    {
-        if ($null -eq $ComplexObject)
-        {
-            return $null
-        }
-
-        $result = @{}
-
-        if ($null -ne $ComplexObject.type)
-        {
-            $result.Add('Type', $ComplexObject.type)
-        }
-
-        if ($null -ne $ComplexObject.value)
-        {
-            $result.Add('Value', $ComplexObject.value)
-        }
-
-        if ($result.Count -eq 0)
-        {
-            return $null
         }
 
         return $result

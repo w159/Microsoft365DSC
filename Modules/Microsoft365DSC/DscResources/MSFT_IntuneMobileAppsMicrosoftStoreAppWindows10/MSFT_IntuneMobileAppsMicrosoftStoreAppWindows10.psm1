@@ -183,7 +183,7 @@ class IntuneMobileAppsMicrosoftStoreAppWindows10 : M365DSCResourceBase
             if ($null -ne $getValue.installExperience.runAsAccount)
             {
                 $complexInstallExperience = @{}
-                $complexInstallExperience.Add('RunAsAccount', $getValue.installExperience.runAsAccount.ToString())
+                $complexInstallExperience.Add('RunAsAccount', $getValue.installExperience.runAsAccount)
             }
             $complexLargeIcon = $null
             if ($null -ne $getValue.LargeIcon.Value)

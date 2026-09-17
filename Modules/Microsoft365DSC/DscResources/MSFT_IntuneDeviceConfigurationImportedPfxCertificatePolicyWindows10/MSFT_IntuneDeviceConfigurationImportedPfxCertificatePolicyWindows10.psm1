@@ -169,38 +169,6 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Imported Pfx Certificate Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumIntendedPurpose = $null
-            if ($null -ne $getValue.intendedPurpose)
-            {
-                $enumIntendedPurpose = $getValue.intendedPurpose.ToString()
-            }
-
-            $enumCertificateValidityPeriodScale = $null
-            if ($null -ne $getValue.certificateValidityPeriodScale)
-            {
-                $enumCertificateValidityPeriodScale = $getValue.certificateValidityPeriodScale.ToString()
-            }
-
-            $enumKeyStorageProvider = $null
-            if ($null -ne $getValue.keyStorageProvider)
-            {
-                $enumKeyStorageProvider = $getValue.keyStorageProvider.ToString()
-            }
-
-            $enumSubjectAlternativeNameType = $null
-            if ($null -ne $getValue.subjectAlternativeNameType)
-            {
-                $enumSubjectAlternativeNameType = $getValue.subjectAlternativeNameType.ToString()
-            }
-
-            $enumSubjectNameFormat = $null
-            if ($null -ne $getValue.subjectNameFormat)
-            {
-                $enumSubjectNameFormat = $getValue.subjectNameFormat.ToString()
-            }
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -231,13 +199,13 @@ class IntuneDeviceConfigurationImportedPfxCertificatePolicyWindows10 : M365DSCRe
 
             $results = @{
                 #region resource generator code
-                IntendedPurpose                             = $enumIntendedPurpose
-                CertificateValidityPeriodScale              = $enumCertificateValidityPeriodScale
+                IntendedPurpose                             = $getValue.intendedPurpose
+                CertificateValidityPeriodScale              = $getValue.certificateValidityPeriodScale
                 CertificateValidityPeriodValue              = $getValue.certificateValidityPeriodValue
-                KeyStorageProvider                          = $enumKeyStorageProvider
+                KeyStorageProvider                          = $getValue.keyStorageProvider
                 RenewalThresholdPercentage                  = $getValue.renewalThresholdPercentage
-                SubjectAlternativeNameType                  = $enumSubjectAlternativeNameType
-                SubjectNameFormat                           = $enumSubjectNameFormat
+                SubjectAlternativeNameType                  = $getValue.subjectAlternativeNameType
+                SubjectNameFormat                           = $getValue.subjectNameFormat
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition

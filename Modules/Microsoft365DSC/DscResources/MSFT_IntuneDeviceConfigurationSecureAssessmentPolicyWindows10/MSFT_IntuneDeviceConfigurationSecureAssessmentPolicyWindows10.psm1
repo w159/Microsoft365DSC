@@ -169,14 +169,6 @@ class IntuneDeviceConfigurationSecureAssessmentPolicyWindows10 : M365DSCResource
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Secure Assessment Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumConfigurationAccountType = $null
-            if ($null -ne $getValue.configurationAccountType)
-            {
-                $enumConfigurationAccountType = $getValue.configurationAccountType.ToString()
-            }
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -212,7 +204,7 @@ class IntuneDeviceConfigurationSecureAssessmentPolicyWindows10 : M365DSCResource
                 AllowTextSuggestion                         = $getValue.allowTextSuggestion
                 AssessmentAppUserModelId                    = $getValue.assessmentAppUserModelId
                 ConfigurationAccount                        = $getValue.configurationAccount
-                ConfigurationAccountType                    = $enumConfigurationAccountType
+                ConfigurationAccountType                    = $getValue.configurationAccountType
                 LaunchUri                                   = $getValue.launchUri
                 LocalGuestAccountName                       = $getValue.localGuestAccountName
                 Description                                 = $getValue.Description

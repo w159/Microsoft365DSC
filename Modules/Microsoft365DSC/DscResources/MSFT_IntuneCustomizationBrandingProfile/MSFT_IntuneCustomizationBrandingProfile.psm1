@@ -244,15 +244,15 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
                 $myCompanyPortalBlockedActions = [ordered]@{}
                 if ($null -ne $currentCompanyPortalBlockedActions.action)
                 {
-                    $myCompanyPortalBlockedActions.Add('Action', $currentCompanyPortalBlockedActions.action.ToString())
+                    $myCompanyPortalBlockedActions.Add('Action', $currentCompanyPortalBlockedActions.action)
                 }
                 if ($null -ne $currentCompanyPortalBlockedActions.ownerType)
                 {
-                    $myCompanyPortalBlockedActions.Add('OwnerType', $currentCompanyPortalBlockedActions.ownerType.ToString())
+                    $myCompanyPortalBlockedActions.Add('OwnerType', $currentCompanyPortalBlockedActions.ownerType)
                 }
                 if ($null -ne $currentCompanyPortalBlockedActions.platform)
                 {
-                    $myCompanyPortalBlockedActions.Add('Platform', $currentCompanyPortalBlockedActions.platform.ToString())
+                    $myCompanyPortalBlockedActions.Add('Platform', $currentCompanyPortalBlockedActions.platform)
                 }
                 if ($myCompanyPortalBlockedActions.values.Where({$null -ne $_}).Count -gt 0)
                 {
@@ -294,14 +294,6 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
             }
             #endregion
 
-            #region resource generator code
-            $enumEnrollmentAvailability = $null
-            if ($null -ne $getValue.EnrollmentAvailability)
-            {
-                $enumEnrollmentAvailability = $getValue.EnrollmentAvailability.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 CompanyPortalBlockedActions               = $complexCompanyPortalBlockedActions
@@ -315,7 +307,7 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
                 #DisableClientTelemetry                    = $getValue.DisableClientTelemetry
                 DisableDeviceCategorySelection            = $getValue.DisableDeviceCategorySelection
                 DisplayName                               = $getValue.DisplayName
-                EnrollmentAvailability                    = $enumEnrollmentAvailability
+                EnrollmentAvailability                    = $getValue.EnrollmentAvailability
                 #IsFactoryResetDisabled                    = $getValue.IsFactoryResetDisabled
                 #IsRemoveDeviceDisabled                    = $getValue.IsRemoveDeviceDisabled
                 LandingPageCustomizedImage                = $complexLandingPageCustomizedImage

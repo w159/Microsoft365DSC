@@ -222,52 +222,14 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
                 $appsArray += $app.MobileAppIdentifier.windowsAppId
             }
 
-            #region resource generator code
-            $enumAllowedInboundDataTransferSources = $null
-            if ($null -ne $getValue.allowedInboundDataTransferSources)
-            {
-                $enumAllowedInboundDataTransferSources = $getValue.allowedInboundDataTransferSources.ToString()
-            }
-
-            $enumAllowedOutboundClipboardSharingLevel = $null
-            if ($null -ne $getValue.allowedOutboundClipboardSharingLevel)
-            {
-                $enumAllowedOutboundClipboardSharingLevel = $getValue.allowedOutboundClipboardSharingLevel.ToString()
-            }
-
-            $enumAllowedOutboundDataTransferDestinations = $null
-            if ($null -ne $getValue.allowedOutboundDataTransferDestinations)
-            {
-                $enumAllowedOutboundDataTransferDestinations = $getValue.allowedOutboundDataTransferDestinations.ToString()
-            }
-
-            $enumAppActionIfUnableToAuthenticateUser = $null
-            if ($null -ne $getValue.appActionIfUnableToAuthenticateUser)
-            {
-                $enumAppActionIfUnableToAuthenticateUser = $getValue.appActionIfUnableToAuthenticateUser.ToString()
-            }
-
-            $enumMaximumAllowedDeviceThreatLevel = $null
-            if ($null -ne $getValue.maximumAllowedDeviceThreatLevel)
-            {
-                $enumMaximumAllowedDeviceThreatLevel = $getValue.maximumAllowedDeviceThreatLevel.ToString()
-            }
-
-            $enumMobileThreatDefenseRemediationAction = $null
-            if ($null -ne $getValue.mobileThreatDefenseRemediationAction)
-            {
-                $enumMobileThreatDefenseRemediationAction = $getValue.mobileThreatDefenseRemediationAction.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
-                AllowedInboundDataTransferSources       = $enumAllowedInboundDataTransferSources
-                AllowedOutboundClipboardSharingLevel    = $enumAllowedOutboundClipboardSharingLevel
-                AllowedOutboundDataTransferDestinations = $enumAllowedOutboundDataTransferDestinations
-                AppActionIfUnableToAuthenticateUser     = $enumAppActionIfUnableToAuthenticateUser
+                AllowedInboundDataTransferSources       = $getValue.allowedInboundDataTransferSources
+                AllowedOutboundClipboardSharingLevel    = $getValue.allowedOutboundClipboardSharingLevel
+                AllowedOutboundDataTransferDestinations = $getValue.allowedOutboundDataTransferDestinations
+                AppActionIfUnableToAuthenticateUser     = $getValue.appActionIfUnableToAuthenticateUser
                 Apps                                    = $appsArray
-                MaximumAllowedDeviceThreatLevel         = $enumMaximumAllowedDeviceThreatLevel
+                MaximumAllowedDeviceThreatLevel         = $getValue.maximumAllowedDeviceThreatLevel
                 MaximumRequiredOsVersion                = $getValue.maximumRequiredOsVersion
                 MaximumWarningOsVersion                 = $getValue.maximumWarningOsVersion
                 MaximumWipeOsVersion                    = $getValue.maximumWipeOsVersion
@@ -279,7 +241,7 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
                 MinimumWipeAppVersion                   = $getValue.minimumWipeAppVersion
                 MinimumWipeOsVersion                    = $getValue.minimumWipeOsVersion
                 MinimumWipeSdkVersion                   = $getValue.minimumWipeSdkVersion
-                MobileThreatDefenseRemediationAction    = $enumMobileThreatDefenseRemediationAction
+                MobileThreatDefenseRemediationAction    = $getValue.mobileThreatDefenseRemediationAction
                 PeriodOfflineBeforeAccessCheck          = $getValue.periodOfflineBeforeAccessCheck
                 PeriodOfflineBeforeWipeIsEnforced       = $getValue.periodOfflineBeforeWipeIsEnforced
                 PrintBlocked                            = $getValue.printBlocked

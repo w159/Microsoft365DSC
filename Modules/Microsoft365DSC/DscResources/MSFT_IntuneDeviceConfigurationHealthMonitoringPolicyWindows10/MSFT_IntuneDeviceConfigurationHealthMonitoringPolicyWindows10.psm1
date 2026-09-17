@@ -151,16 +151,10 @@ class IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 : M365DSCResource
             Write-Verbose -Message "An Intune Device Configuration Health Monitoring Configuration Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
             #region resource generator code
-            $enumAllowDeviceHealthMonitoring = $null
-            if ($null -ne $getValue.allowDeviceHealthMonitoring)
-            {
-                $enumAllowDeviceHealthMonitoring = $getValue.allowDeviceHealthMonitoring.ToString()
-            }
-
             $enumConfigDeviceHealthMonitoringScope = @()
             if ($null -ne $getValue.configDeviceHealthMonitoringScope)
             {
-                $enumConfigDeviceHealthMonitoringScope = $getValue.configDeviceHealthMonitoringScope.ToString().Split(',')
+                $enumConfigDeviceHealthMonitoringScope = $getValue.configDeviceHealthMonitoringScope.Split(',')
 
             }
             #endregion
@@ -195,7 +189,7 @@ class IntuneDeviceConfigurationHealthMonitoringPolicyWindows10 : M365DSCResource
 
             $results = @{
                 #region resource generator code
-                AllowDeviceHealthMonitoring                 = $enumAllowDeviceHealthMonitoring
+                AllowDeviceHealthMonitoring                 = $getValue.allowDeviceHealthMonitoring
                 ConfigDeviceHealthMonitoringCustomScope     = $getValue.configDeviceHealthMonitoringCustomScope
                 ConfigDeviceHealthMonitoringScope           = $enumConfigDeviceHealthMonitoringScope
                 Description                                 = $getValue.Description

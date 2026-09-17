@@ -241,134 +241,6 @@ class IntuneDeviceConfigurationFirmwareInterfacePolicyWindows10 : M365DSCResourc
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Firmware Interface Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumBluetooth = $null
-            if ($null -ne $getValue.bluetooth)
-            {
-                $enumBluetooth = $getValue.bluetooth.ToString()
-            }
-
-            $enumBootFromBuiltInNetworkAdapters = $null
-            if ($null -ne $getValue.bootFromBuiltInNetworkAdapters)
-            {
-                $enumBootFromBuiltInNetworkAdapters = $getValue.bootFromBuiltInNetworkAdapters.ToString()
-            }
-
-            $enumBootFromExternalMedia = $null
-            if ($null -ne $getValue.bootFromExternalMedia)
-            {
-                $enumBootFromExternalMedia = $getValue.bootFromExternalMedia.ToString()
-            }
-
-            $enumCameras = $null
-            if ($null -ne $getValue.cameras)
-            {
-                $enumCameras = $getValue.cameras.ToString()
-            }
-
-            $enumChangeUefiSettingsPermission = $null
-            if ($null -ne $getValue.changeUefiSettingsPermission)
-            {
-                $enumChangeUefiSettingsPermission = $getValue.changeUefiSettingsPermission.ToString()
-            }
-
-            $enumFrontCamera = $null
-            if ($null -ne $getValue.frontCamera)
-            {
-                $enumFrontCamera = $getValue.frontCamera.ToString()
-            }
-
-            $enumInfraredCamera = $null
-            if ($null -ne $getValue.infraredCamera)
-            {
-                $enumInfraredCamera = $getValue.infraredCamera.ToString()
-            }
-
-            $enumMicrophone = $null
-            if ($null -ne $getValue.microphone)
-            {
-                $enumMicrophone = $getValue.microphone.ToString()
-            }
-
-            $enumMicrophonesAndSpeakers = $null
-            if ($null -ne $getValue.microphonesAndSpeakers)
-            {
-                $enumMicrophonesAndSpeakers = $getValue.microphonesAndSpeakers.ToString()
-            }
-
-            $enumNearFieldCommunication = $null
-            if ($null -ne $getValue.nearFieldCommunication)
-            {
-                $enumNearFieldCommunication = $getValue.nearFieldCommunication.ToString()
-            }
-
-            $enumRadios = $null
-            if ($null -ne $getValue.radios)
-            {
-                $enumRadios = $getValue.radios.ToString()
-            }
-
-            $enumRearCamera = $null
-            if ($null -ne $getValue.rearCamera)
-            {
-                $enumRearCamera = $getValue.rearCamera.ToString()
-            }
-
-            $enumSdCard = $null
-            if ($null -ne $getValue.sdCard)
-            {
-                $enumSdCard = $getValue.sdCard.ToString()
-            }
-
-            $enumSimultaneousMultiThreading = $null
-            if ($null -ne $getValue.simultaneousMultiThreading)
-            {
-                $enumSimultaneousMultiThreading = $getValue.simultaneousMultiThreading.ToString()
-            }
-
-            $enumUsbTypeAPort = $null
-            if ($null -ne $getValue.usbTypeAPort)
-            {
-                $enumUsbTypeAPort = $getValue.usbTypeAPort.ToString()
-            }
-
-            $enumVirtualizationOfCpuAndIO = $null
-            if ($null -ne $getValue.virtualizationOfCpuAndIO)
-            {
-                $enumVirtualizationOfCpuAndIO = $getValue.virtualizationOfCpuAndIO.ToString()
-            }
-
-            $enumWakeOnLAN = $null
-            if ($null -ne $getValue.wakeOnLAN)
-            {
-                $enumWakeOnLAN = $getValue.wakeOnLAN.ToString()
-            }
-
-            $enumWakeOnPower = $null
-            if ($null -ne $getValue.wakeOnPower)
-            {
-                $enumWakeOnPower = $getValue.wakeOnPower.ToString()
-            }
-
-            $enumWiFi = $null
-            if ($null -ne $getValue.wiFi)
-            {
-                $enumWiFi = $getValue.wiFi.ToString()
-            }
-
-            $enumWindowsPlatformBinaryTable = $null
-            if ($null -ne $getValue.windowsPlatformBinaryTable)
-            {
-                $enumWindowsPlatformBinaryTable = $getValue.windowsPlatformBinaryTable.ToString()
-            }
-
-            $enumWirelessWideAreaNetwork = $null
-            if ($null -ne $getValue.wirelessWideAreaNetwork)
-            {
-                $enumWirelessWideAreaNetwork = $getValue.wirelessWideAreaNetwork.ToString()
-            }
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -399,27 +271,27 @@ class IntuneDeviceConfigurationFirmwareInterfacePolicyWindows10 : M365DSCResourc
 
             $results = @{
                 #region resource generator code
-                Bluetooth                                   = $enumBluetooth
-                BootFromBuiltInNetworkAdapters              = $enumBootFromBuiltInNetworkAdapters
-                BootFromExternalMedia                       = $enumBootFromExternalMedia
-                Cameras                                     = $enumCameras
-                ChangeUefiSettingsPermission                = $enumChangeUefiSettingsPermission
-                FrontCamera                                 = $enumFrontCamera
-                InfraredCamera                              = $enumInfraredCamera
-                Microphone                                  = $enumMicrophone
-                MicrophonesAndSpeakers                      = $enumMicrophonesAndSpeakers
-                NearFieldCommunication                      = $enumNearFieldCommunication
-                Radios                                      = $enumRadios
-                RearCamera                                  = $enumRearCamera
-                SdCard                                      = $enumSdCard
-                SimultaneousMultiThreading                  = $enumSimultaneousMultiThreading
-                UsbTypeAPort                                = $enumUsbTypeAPort
-                VirtualizationOfCpuAndIO                    = $enumVirtualizationOfCpuAndIO
-                WakeOnLAN                                   = $enumWakeOnLAN
-                WakeOnPower                                 = $enumWakeOnPower
-                WiFi                                        = $enumWiFi
-                WindowsPlatformBinaryTable                  = $enumWindowsPlatformBinaryTable
-                WirelessWideAreaNetwork                     = $enumWirelessWideAreaNetwork
+                Bluetooth                                   = $getValue.bluetooth
+                BootFromBuiltInNetworkAdapters              = $getValue.bootFromBuiltInNetworkAdapters
+                BootFromExternalMedia                       = $getValue.bootFromExternalMedia
+                Cameras                                     = $getValue.cameras
+                ChangeUefiSettingsPermission                = $getValue.changeUefiSettingsPermission
+                FrontCamera                                 = $getValue.frontCamera
+                InfraredCamera                              = $getValue.infraredCamera
+                Microphone                                  = $getValue.microphone
+                MicrophonesAndSpeakers                      = $getValue.microphonesAndSpeakers
+                NearFieldCommunication                      = $getValue.nearFieldCommunication
+                Radios                                      = $getValue.radios
+                RearCamera                                  = $getValue.rearCamera
+                SdCard                                      = $getValue.sdCard
+                SimultaneousMultiThreading                  = $getValue.simultaneousMultiThreading
+                UsbTypeAPort                                = $getValue.usbTypeAPort
+                VirtualizationOfCpuAndIO                    = $getValue.virtualizationOfCpuAndIO
+                WakeOnLAN                                   = $getValue.wakeOnLAN
+                WakeOnPower                                 = $getValue.wakeOnPower
+                WiFi                                        = $getValue.wiFi
+                WindowsPlatformBinaryTable                  = $getValue.windowsPlatformBinaryTable
+                WirelessWideAreaNetwork                     = $getValue.wirelessWideAreaNetwork
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition

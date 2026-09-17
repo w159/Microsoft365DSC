@@ -163,53 +163,18 @@ class IntuneDeviceConfigurationWiredNetworkPolicyMacOS : M365DSCResourceBase
 
             Write-Verbose -Message "Found Intune Device Configuration Wired Network Policy for macOS with Id {$($this.Id)}"
 
-            $enumAuthenticationMethod = $null
-            if ($null -ne $getValue.authenticationMethod)
-            {
-                $enumAuthenticationMethod = $getValue.authenticationMethod.ToString()
-            }
-
-            $enumDeploymentChannel = $null
-            if ($null -ne $getValue.deploymentChannel)
-            {
-                $enumDeploymentChannel = $getValue.deploymentChannel.ToString()
-            }
-
-            $enumEapFastConfiguration = $null
-            if ($null -ne $getValue.eapFastConfiguration)
-            {
-                $enumEapFastConfiguration = $getValue.eapFastConfiguration.ToString()
-            }
-
-            $enumEapType = $null
-            if ($null -ne $getValue.eapType)
-            {
-                $enumEapType = $getValue.eapType.ToString()
-            }
-
-            $enumNetworkInterface = $null
-            if ($null -ne $getValue.networkInterface)
-            {
-                $enumNetworkInterface = $getValue.networkInterface.ToString()
-            }
-
-            $enumNonEapAuthenticationMethodForEapTtls = $null
-            if ($null -ne $getValue.nonEapAuthenticationMethodForEapTtls)
-            {
-                $enumNonEapAuthenticationMethodForEapTtls = $getValue.nonEapAuthenticationMethodForEapTtls.ToString()
-            }
             $result = @{
-                AuthenticationMethod                 = $enumAuthenticationMethod
-                DeploymentChannel                    = $enumDeploymentChannel
+                AuthenticationMethod                 = $getValue.authenticationMethod
+                DeploymentChannel                    = $getValue.deploymentChannel
                 Description                          = $getValue.Description
                 DisplayName                          = $getValue.DisplayName
-                EapFastConfiguration                 = $enumEapFastConfiguration
-                EapType                              = $enumEapType
+                EapFastConfiguration                 = $getValue.eapFastConfiguration
+                EapType                              = $getValue.eapType
                 EnableOuterIdentityPrivacy           = $getValue.enableOuterIdentityPrivacy
                 Id                                   = $getValue.Id
-                NetworkInterface                     = $enumNetworkInterface
+                NetworkInterface                     = $getValue.networkInterface
                 NetworkName                          = $getValue.networkName
-                NonEapAuthenticationMethodForEapTtls = $enumNonEapAuthenticationMethodForEapTtls
+                NonEapAuthenticationMethodForEapTtls = $getValue.nonEapAuthenticationMethodForEapTtls
                 RoleScopeTagIds                      = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TrustedServerCertificateNames        = $getValue.trustedServerCertificateNames
                 Ensure                               = 'Present'
@@ -285,6 +250,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyMacOS : M365DSCResourceBase
                 Write-Verbose -Message "Creating new Intune Device Configuration Wired Network Policy for macOS {$($this.Id)}"
 
                 $createParameters = $boundParameters
+
                 $createdInstance = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
 
                 $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -301,6 +267,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyMacOS : M365DSCResourceBase
                 Write-Verbose -Message "Updating Intune Device Configuration Wired Network Policy for macOS {$($this.Id)}"
 
                 $updateParameters = $boundParameters
+
                 Update-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
 
                 $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -315,6 +282,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyMacOS : M365DSCResourceBase
             elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
             {
                 Write-Verbose -Message "Removing Intune Device Configuration Wired Network Policy for macOS {$($this.Id)}"
+
                 Remove-MgBetaDeviceManagementDeviceConfiguration -DeviceConfigurationId $currentInstance.Id | Out-Null
             }
         }

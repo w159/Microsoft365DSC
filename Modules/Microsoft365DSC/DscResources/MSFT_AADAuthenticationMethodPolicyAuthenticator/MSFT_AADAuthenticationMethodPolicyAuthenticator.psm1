@@ -140,7 +140,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.companionAppAllowedState.excludeTarget.targetType)
             {
-                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.companionAppAllowedState.excludeTarget.targetType.ToString())
+                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.companionAppAllowedState.excludeTarget.targetType)
             }
 
             if ($complexExcludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -174,7 +174,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.companionAppAllowedState.includeTarget.targetType)
             {
-                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.companionAppAllowedState.includeTarget.targetType.ToString())
+                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.companionAppAllowedState.includeTarget.targetType)
             }
 
             if ($complexIncludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -186,7 +186,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
             Write-Verbose 'Processing FeatureSettings > companionAppAllowedState > state'
             if ($null -ne $getValue.featureSettings.companionAppAllowedState.state)
             {
-                $complexCompanionAppAllowedState.Add('State', $getValue.featureSettings.companionAppAllowedState.state.ToString())
+                $complexCompanionAppAllowedState.Add('State', $getValue.featureSettings.companionAppAllowedState.state)
             }
 
             if ($complexCompanionAppAllowedState.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -222,7 +222,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.displayAppInformationRequiredState.excludeTarget.targetType)
             {
-                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.displayAppInformationRequiredState.excludeTarget.targetType.ToString())
+                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.displayAppInformationRequiredState.excludeTarget.targetType)
             }
             if ($complexExcludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -255,7 +255,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.displayAppInformationRequiredState.includeTarget.targetType)
             {
-                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.displayAppInformationRequiredState.includeTarget.targetType.ToString())
+                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.displayAppInformationRequiredState.includeTarget.targetType)
             }
 
             if ($complexIncludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -267,7 +267,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
             Write-Verbose 'Processing FeatureSettings > displayAppInformationRequiredState > state'
             if ($null -ne $getValue.featureSettings.displayAppInformationRequiredState.state)
             {
-                $complexDisplayAppInformationRequiredState.Add('State', $getValue.featureSettings.displayAppInformationRequiredState.state.ToString())
+                $complexDisplayAppInformationRequiredState.Add('State', $getValue.featureSettings.displayAppInformationRequiredState.state)
             }
 
             if ($complexDisplayAppInformationRequiredState.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -303,7 +303,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.displayLocationInformationRequiredState.excludeTarget.targetType)
             {
-                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.displayLocationInformationRequiredState.excludeTarget.targetType.ToString())
+                $complexExcludeTarget.Add('TargetType', $getValue.featureSettings.displayLocationInformationRequiredState.excludeTarget.targetType)
             }
 
             if ($complexExcludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -338,7 +338,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
             if ($null -ne $getValue.featureSettings.displayLocationInformationRequiredState.includeTarget.targetType)
             {
-                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.displayLocationInformationRequiredState.includeTarget.targetType.ToString())
+                $complexIncludeTarget.Add('TargetType', $getValue.featureSettings.displayLocationInformationRequiredState.includeTarget.targetType)
             }
 
             if ($complexIncludeTarget.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -351,7 +351,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
             Write-Verbose 'Processing FeatureSettings > displayLocationInformationRequiredState > state'
             if ($null -ne $getValue.featureSettings.displayLocationInformationRequiredState.state)
             {
-                $complexDisplayLocationInformationRequiredState.Add('State', $getValue.featureSettings.displayLocationInformationRequiredState.state.ToString())
+                $complexDisplayLocationInformationRequiredState.Add('State', $getValue.featureSettings.displayLocationInformationRequiredState.state)
             }
 
             if ($complexDisplayLocationInformationRequiredState.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -381,7 +381,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -411,7 +411,7 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
 
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
 
                 if ($myIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -420,21 +420,13 @@ class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
                 }
             }
 
-            #region resource generator code
-            $enumState = $null
-            if ($null -ne $getValue.State)
-            {
-                $enumState = $getValue.State.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 FeatureSettings       = $complexFeatureSettings
                 IsSoftwareOathEnabled = $getValue.isSoftwareOathEnabled
                 ExcludeTargets        = $complexExcludeTargets
                 IncludeTargets        = $complexIncludeTargets
-                State                 = $enumState
+                State                 = $getValue.State
                 Id                    = $getValue.Id
                 Ensure                = 'Present'
                 Credential            = $this.Credential
