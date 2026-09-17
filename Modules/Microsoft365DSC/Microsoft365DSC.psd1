@@ -452,6 +452,7 @@
     'IntuneFirewallRulesPolicyWindows10',
     'IntuneFirewallRulesPolicyWindows10ConfigMgr',
     'IntuneManagedInstallerPolicyWindows10',
+    'IntuneMobileAppsAutoUpdateCatalogAppWindows10',
     'IntuneMobileAppsBuiltInStoreApp',
     'IntuneMobileAppsBundleMacOS',
     'IntuneMobileAppsDefenderForEndpointMacOS',

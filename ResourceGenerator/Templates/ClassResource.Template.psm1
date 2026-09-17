@@ -128,6 +128,10 @@ class <ResourceName> : M365DSCResourceBase
     {
         return ([M365DSCResourceBase] $this).Test()
     }
+<#IF CompareParametersBlock#>
+
+<CompareParametersBlock>
+<#ENDIF CompareParametersBlock#>
 
     [string] Export()
     {

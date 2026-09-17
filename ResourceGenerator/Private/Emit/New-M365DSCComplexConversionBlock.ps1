@@ -214,6 +214,12 @@ function New-M365DSCHashtableMappingBlock
 <#
 .SYNOPSIS
     Renders one hidden Get<Type>AsHashtable method per complex class.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The methods, without the classes only the Assignments property reaches.
 #>
 function New-M365DSCHelperFunctionBlock
 {
@@ -228,10 +234,11 @@ function New-M365DSCHelperFunctionBlock
 
     $builder = [System.Text.StringBuilder]::new()
     $first = $true
+    $assignmentClassNames = @(Get-M365DSCAssignmentCimClassName -ResourceModel $ResourceModel)
 
     foreach ($complexClass in $ResourceModel.ComplexTypeClasses)
     {
-        if ($complexClass.CimClassName -eq 'MSFT_DeviceManagementConfigurationPolicyAssignments')
+        if ($assignmentClassNames -contains $complexClass.CimClassName)
         {
             # Assignments convert through ConvertFrom-IntunePolicyAssignment, not a helper.
             continue
@@ -367,4 +374,86 @@ function Get-M365DSCComplexHelperName
 
     $baseName = $CimClassName -replace '^MSFT_MicrosoftGraph', '' -replace '^MSFT_', ''
     return "Get$($baseName)AsHashtable"
+}
+
+<#
+.SYNOPSIS
+    Collects the CIM class names that only the Assignments property reaches.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The class names, case insensitive.
+#>
+function Get-M365DSCAssignmentCimClassName
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $assignment = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $other = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+
+    foreach ($property in $ResourceModel.SchemaProperties)
+    {
+        $target = $other
+        if (Test-M365DSCAssignmentProperty -Property $property)
+        {
+            $target = $assignment
+        }
+
+        Add-M365DSCComplexCimClassName -Property $property -Name $target
+    }
+
+    $assignment.ExceptWith($other)
+
+    return [System.String[]] @($assignment)
+}
+
+<#
+.SYNOPSIS
+    Adds the CIM class names a property reaches to a set.
+
+.PARAMETER Property
+    Specifies the property model to walk.
+
+.PARAMETER Name
+    Specifies the set that collects the class names.
+#>
+function Add-M365DSCComplexCimClassName
+{
+    [CmdletBinding()]
+    [OutputType([System.Void])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $Property,
+
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [System.Collections.Generic.HashSet[System.String]]
+        $Name
+    )
+
+    if (-not $Property.IsComplex -or [System.String]::IsNullOrEmpty($Property.CimClassName))
+    {
+        return
+    }
+
+    if (-not $Name.Add($Property.CimClassName))
+    {
+        return
+    }
+
+    foreach ($member in @($Property.Members))
+    {
+        Add-M365DSCComplexCimClassName -Property $member -Name $Name
+    }
 }

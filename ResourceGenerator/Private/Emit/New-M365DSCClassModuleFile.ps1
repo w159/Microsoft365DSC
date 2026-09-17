@@ -62,6 +62,7 @@ function New-M365DSCClassModuleFile
         ExportComplexToStringBlock = New-M365DSCExportComplexToStringBlock -ResourceModel $ResourceModel
         ExportedInstanceLabel  = $ResourceModel.PrimaryKey
         AssignmentsGetBlock    = New-M365DSCAssignmentsGetBlock -ResourceModel $ResourceModel
+        CompareParametersBlock = New-M365DSCCompareParametersBlock -ResourceModel $ResourceModel
         NoEscapeArgument       = ''
         CimInstanceClassBlock  = ($cimClassBlocks -join "`r`n`r`n")
         HelperFunctionBlock    = $helperFunctionBlock
@@ -558,6 +559,48 @@ function Get-M365DSCConnectionWorkload
     }
 
     return $Workload
+}
+
+<#
+.SYNOPSIS
+    Renders the GetCompareParameters() override that keeps the create-only properties out of Test().
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    The block, or an empty string when the resource has no create-only property.
+#>
+function New-M365DSCCompareParametersBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    $names = @($ResourceModel.CreateOnlyProperties | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique)
+    if ($names.Count -eq 0)
+    {
+        return ''
+    }
+
+    $quoted = "'" + ($names -join "', '") + "'"
+    $indent = ' ' * 4
+    $builder = [System.Text.StringBuilder]::new()
+
+    $null = $builder.AppendLine("$indent[System.Collections.Hashtable] GetCompareParameters()")
+    $null = $builder.AppendLine("$indent{")
+    $null = $builder.AppendLine("$indent    # The service sets these on create and refuses to patch them.")
+    $null = $builder.AppendLine("$indent    return @{")
+    $null = $builder.AppendLine("$indent        ExcludedProperties = @($quoted)")
+    $null = $builder.AppendLine("$indent    }")
+    $null = $builder.Append("$indent}")
+
+    return $builder.ToString()
 }
 
 <#
