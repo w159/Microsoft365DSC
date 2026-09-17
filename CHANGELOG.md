@@ -633,13 +633,15 @@
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.1.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
-  * Updated `DSCParser` to version 3.1.0.4.
+  * Updated `DSCParser` to version 3.1.0.5.
   * Updated `Microsoft.Graph.*` to version 2.39.0.
   * Updated `MSCloudLoginAssistant` to version 1.2.6.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed a failed telemetry submission failing the resource operation that triggered it,
+    by no longer reporting it on the error stream.
   * Fixed `Get-DscConfiguration` failing under Windows PowerShell with `There is no
     Runspace available to run scripts in this thread`.
     FIXES [#6120](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6120)
