@@ -337,6 +337,8 @@
     Microsoft Graph uses.
 * IntuneDeviceFeaturesConfigurationPolicyIOS
   * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneDeviceFeaturesConfigurationPolicyMacOS
+  * Initial release.
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Added support for the `DeviceNameTemplate` property.
 * IntuneDeviceManagementEnrollmentAndroidGooglePlay
