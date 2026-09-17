@@ -302,6 +302,9 @@
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
   * Fixed an issue where creating a policy failed when the configuration named the root
     certificate by its display name.
+  * Fixed an issue where certificate lookup would fail if the `RootCertificateId`
+    parameter was not provided.
+    FIXES [#4753](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7453)
 * IntuneDeviceConfigurationSecureAssessmentPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
