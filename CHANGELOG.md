@@ -620,8 +620,6 @@
     removal of special characters from resource instance names.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
-* M365DSCModuleMgmt
-  * Added automatic dependency update for both Windows PowerShell and PowerShell 7.
 * M365DSCPermissions
   * Fixed an issue where `Get-M365DSCCompiledPermissionList` skips any that is not one of the
     default `graph`, `sharepoint`, `exchange` and `purview`.
@@ -744,6 +742,11 @@
     modules and the resource base classes.
   * Corrected the Windows PowerShell warning, which did not mention that
     `Get-DscConfiguration` is supported.
+  * Fixed build of Docker linux dev image by updating one of the installation
+    paths to PS 7.6.6.
+  * Updated script `Install-M365DSCAndDependencies` to work with a new PS
+    version, new modules, etc.
+  * Added new ancillary script `Install-PowerShell` to be used by the Docker Windows images.
 
 # 1.26.909.1
 
