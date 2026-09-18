@@ -30,35 +30,6 @@ try
     }
     Write-Output $message
 
-    if ($IsSDK.IsPresent)
-    {
-        Write-Output "Adding symbolic link from repository folder to module path"
-        $Parameters = @{
-            ItemType = "SymbolicLink"
-            Force    = [Switch]$true
-        }
-        if ($isWindowsPlatform)
-        {
-            $Parameters.Add("Path", "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC")
-            $Parameters.Add("Target", "C:\DSC\Modules\Microsoft365DSC")
-        }
-        else
-        {
-            $PSVersion = [System.String]$PSVersionTable.PSVersion
-            $SDK = dotnet --list-sdks
-            if ($LASTEXITCODE -ne 0)
-            {
-                throw "Could not get .NET SDK version"
-            }
-            $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-            $destinationPath = "/usr/share/powershell/.store/powershell.linux.x64/{0}/powershell.linux.x64/{1}/tools/net{2}/any/Modules/Microsoft365DSC" `
-                -f $PSVersion, $PSVersion, $SDKVersion
-            $Parameters.Add("Path", $destinationPath)
-            $Parameters.Add("Target", "/DSC/Modules/Microsoft365DSC")
-        }
-        $null = New-Item @Parameters
-    }
-
     if ($isWindowsPlatform)
     {
         Write-Output "Installing Microsoft365DSC module dependencies in PowerShell 7"
