@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Converts the first character of a string to uppercase.
 
@@ -393,6 +393,76 @@ function Compare-M365DSCComplexObject
 
 <#
 .SYNOPSIS
+    Renders a drift value as readable text.
+
+.DESCRIPTION
+    A drift on a complex property carries the object itself. String interpolation renders such an
+    object as its type name. This function expands its members instead.
+
+.PARAMETER Value
+    The value to render.
+
+.PARAMETER Depth
+    How many levels of nesting to expand before falling back to the type name.
+
+.FUNCTIONALITY
+    Internal
+#>
+function Convert-M365DSCDriftValueToString
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter()]
+        $Value,
+
+        [Parameter()]
+        [System.Int32]
+        $Depth = 3
+    )
+
+    if ($null -eq $Value)
+    {
+        return [System.String]::Empty
+    }
+
+    if ($Value -is [System.String] -or $Value -is [System.ValueType])
+    {
+        return $Value.ToString()
+    }
+
+    if ($Depth -le 0)
+    {
+        return $Value.ToString()
+    }
+
+    if ($Value -is [System.Collections.IDictionary])
+    {
+        $entries = @()
+        foreach ($key in ($Value.Keys | Sort-Object))
+        {
+            $entries += "$key=$(Convert-M365DSCDriftValueToString -Value $Value[$key] -Depth ($Depth - 1))"
+        }
+
+        return '{' + ($entries -join ', ') + '}'
+    }
+
+    if ($Value -is [System.Collections.IEnumerable])
+    {
+        $entries = @()
+        foreach ($item in $Value)
+        {
+            $entries += Convert-M365DSCDriftValueToString -Value $item -Depth ($Depth - 1)
+        }
+
+        return $entries -join ', '
+    }
+
+    return $Value.ToString()
+}
+
+<#
+.SYNOPSIS
     Writes detected configuration drifts to the event log.
 
 .DESCRIPTION
@@ -498,7 +568,9 @@ function Write-M365DSCDriftsToEventLog
         $EventMessage.Append("        <ParametersNotInDesiredState>`r`n") | Out-Null
         foreach ($drift in $Drifts.DriftInfo)
         {
-            $EventMessage.Append("            <Param Name=`"$($drift.PropertyName.Replace('..', '.'))`"><CurrentValue>$($drift.CurrentValue)</CurrentValue><DesiredValue>$($drift.DesiredValue)</DesiredValue></Param>`r`n") | Out-Null
+            $currentText = Convert-M365DSCDriftValueToString -Value $drift.CurrentValue
+            $desiredText = Convert-M365DSCDriftValueToString -Value $drift.DesiredValue
+            $EventMessage.Append("            <Param Name=`"$($drift.PropertyName.Replace('..', '.'))`"><CurrentValue>$currentText</CurrentValue><DesiredValue>$desiredText</DesiredValue></Param>`r`n") | Out-Null
         }
         $EventMessage.Append("        </ParametersNotInDesiredState>`r`n") | Out-Null
         $EventMessage.Append("    </ConfigurationDrift>`r`n") | Out-Null

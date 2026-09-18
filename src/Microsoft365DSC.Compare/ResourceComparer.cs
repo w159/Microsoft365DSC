@@ -181,8 +181,8 @@ namespace Microsoft365DSC.Compare
 
                     if (primaryKeyNames.Count > 0)
                     {
-                        var (pairs, extras) = PairByPrimaryKeys(desiredArray, currentArray, primaryKeyNames);
-                        HashSet<string> skippedKeys = SkippedPrimaryKeys(primaryKeyNames, includedSet, isIntunePolicyAssignment);
+                        var (pairs, extras) = PrimaryKeyPairing.Pair(desiredArray, currentArray, primaryKeyNames);
+                        HashSet<string> skippedKeys = PrimaryKeyPairing.SkippedKeys(primaryKeyNames, includedSet, isIntunePolicyAssignment);
 
                         foreach (var (desiredItem, currentItem, idx) in pairs)
                         {
@@ -193,7 +193,7 @@ namespace Microsoft365DSC.Compare
                                 continue;
                             }
 
-                            if (!ComplexObjectComparer.CompareInto(desiredItem, currentItem, $"{key}[{idx}]", nestedExcludedSet, result.DriftInfo, skippedKeys))
+                            if (!ComplexObjectComparer.CompareInto(desiredItem, currentItem, $"{key}[{idx}]", nestedExcludedSet, result.DriftInfo, skippedKeys, schema, cimName))
                             {
                                 result.TestResult = false;
                             }
@@ -205,14 +205,21 @@ namespace Microsoft365DSC.Compare
                             result.TestResult = false;
                         }
                     }
-                    else if (!ComplexObjectComparer.CompareInto(desiredArray, currentArray, key, nestedExcludedSet, result.DriftInfo, null))
+                    else if (!ComplexObjectComparer.CompareInto(desiredArray, currentArray, key, nestedExcludedSet, result.DriftInfo, null, schema, cimName))
                     {
                         result.TestResult = false;
                     }
                 }
-                else if (!ComplexObjectComparer.CompareInto(normalizedDesired, normalizedCurrent, key, nestedExcludedSet, result.DriftInfo, null))
+                else
                 {
-                    result.TestResult = false;
+                    string singleClassName = resourceDef.TryGetParameter(key, out ParameterDefinition singleDef)
+                        ? singleDef.ElementClassName
+                        : string.Empty;
+
+                    if (!ComplexObjectComparer.CompareInto(normalizedDesired, normalizedCurrent, key, nestedExcludedSet, result.DriftInfo, null, schema, singleClassName))
+                    {
+                        result.TestResult = false;
+                    }
                 }
             }
 
@@ -316,113 +323,6 @@ namespace Microsoft365DSC.Compare
             }
 
             return keys;
-        }
-
-        private const char KeySeparator = (char)31;
-        private static readonly string NullKeyMarker = ((char)1).ToString();
-
-        private static (
-            List<(Hashtable desired, Hashtable? matched, int desiredIndex)> pairs,
-            List<(Hashtable extra, int currentIndex)> extras)
-            PairByPrimaryKeys(
-                object[] desired,
-                object[] current,
-                List<string> primaryKeyNames)
-        {
-            Dictionary<string, Queue<int>> currentByKey = new(StringComparer.OrdinalIgnoreCase);
-            for (int j = 0; j < current.Length; j++)
-            {
-                if (current[j] is not Hashtable currentHash)
-                {
-                    continue;
-                }
-
-                string key = PrimaryKeyOf(currentHash, primaryKeyNames);
-                if (!currentByKey.TryGetValue(key, out Queue<int> indexes))
-                {
-                    indexes = new Queue<int>();
-                    currentByKey[key] = indexes;
-                }
-
-                indexes.Enqueue(j);
-            }
-
-            List<(Hashtable desired, Hashtable? matched, int desiredIndex)> pairs = [];
-            bool[] consumed = new bool[current.Length];
-
-            for (int i = 0; i < desired.Length; i++)
-            {
-                if (desired[i] is not Hashtable desiredHash)
-                {
-                    continue;
-                }
-
-                Hashtable? match = null;
-                if (currentByKey.TryGetValue(PrimaryKeyOf(desiredHash, primaryKeyNames), out Queue<int> candidates) && candidates.Count > 0)
-                {
-                    int j = candidates.Dequeue();
-                    consumed[j] = true;
-                    match = (Hashtable)current[j];
-                }
-
-                pairs.Add((desiredHash, match, i));
-            }
-
-            List<(Hashtable extra, int currentIndex)> extras = [];
-            for (int j = 0; j < current.Length; j++)
-            {
-                if (!consumed[j] && current[j] is Hashtable extraHash)
-                {
-                    extras.Add((extraHash, j));
-                }
-            }
-
-            return (pairs, extras);
-        }
-
-        private static string PrimaryKeyOf(Hashtable hash, List<string> primaryKeyNames)
-        {
-            if (primaryKeyNames.Count == 1)
-            {
-                return GetStringValue(hash, primaryKeyNames[0]) ?? NullKeyMarker;
-            }
-
-            StringBuilder builder = new();
-            foreach (string primaryKey in primaryKeyNames)
-            {
-                if (builder.Length > 0)
-                {
-                    builder.Append(KeySeparator);
-                }
-
-                builder.Append(GetStringValue(hash, primaryKey) ?? NullKeyMarker);
-            }
-
-            return builder.ToString();
-        }
-
-        private static HashSet<string> SkippedPrimaryKeys(
-            List<string> primaryKeyNames,
-            HashSet<string> includedSet,
-            bool isIntunePolicyAssignment)
-        {
-            HashSet<string> skipped = new(StringComparer.OrdinalIgnoreCase);
-            foreach (string primaryKey in primaryKeyNames)
-            {
-                if (isIntunePolicyAssignment && string.Equals(primaryKey, "dataType", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                if (includedSet.Contains(primaryKey))
-                {
-                    continue;
-                }
-
-                skipped.Add(primaryKey);
-            }
-
-            return skipped;
         }
 
         private static bool IsIntunePolicyAssignmentType(string cimName)

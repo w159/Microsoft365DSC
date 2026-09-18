@@ -33,6 +33,14 @@
                 @{ Name = 'State'; CIMType = 'String'; Option = 'Write' }
                 @{ Name = 'Target'; CIMType = 'MSFT_TestTarget'; Option = 'Write' }
                 @{ Name = 'Targets'; CIMType = 'MSFT_TestTarget[]'; Option = 'Write' }
+                @{ Name = 'KeyedTargets'; CIMType = 'MSFT_TestKeyedTarget[]'; Option = 'Write' }
+            )
+        }
+        @{
+            ClassName  = 'MSFT_TestKeyedTarget'
+            Parameters = @(
+                @{ Name = 'Id'; CIMType = 'String'; Option = 'Key' }
+                @{ Name = 'Value'; CIMType = 'String'; Option = 'Write' }
             )
         }
         @{
@@ -653,6 +661,36 @@ Describe 'ResourceComparer.Compare complex properties' {
 
     It 'Reports no drift when a nested Id matches' {
         $desired = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Targets = @(@{ Id = 'group-a'; TargetType = 'group' }) } }
+
+        (Invoke-ResourceCompare -Desired $desired -Current $desired).TestResult | Should -BeTrue
+    }
+
+    It 'Aligns the elements of a nested array by primary key' {
+        $desired = @{ Identity = 'a'; Nesting = @{ KeyedTargets = @(@{ Id = '1'; Value = 'a' }, @{ Id = '2'; Value = 'b' }) } }
+        $current = @{ Identity = 'a'; Nesting = @{ KeyedTargets = @(@{ Id = '2'; Value = 'Y' }, @{ Id = '1'; Value = 'X' }) } }
+        $result = Invoke-ResourceCompare -Desired $desired -Current $current
+
+        $result.TestResult | Should -BeFalse
+        Get-DriftNames -Result $result | Should -Be @('Nesting.KeyedTargets[0].Value', 'Nesting.KeyedTargets[1].Value')
+        $result.DriftInfo[0]['CurrentValue'] | Should -Be 'X'
+        $result.DriftInfo[0]['DesiredValue'] | Should -Be 'a'
+        $result.DriftInfo[1]['CurrentValue'] | Should -Be 'Y'
+        $result.DriftInfo[1]['DesiredValue'] | Should -Be 'b'
+    }
+
+    It 'Reports a missing and an extra element of a nested array when a primary key changes' {
+        $desired = @{ Identity = 'a'; Nesting = @{ KeyedTargets = @(@{ Id = '1'; Value = 'a' }) } }
+        $current = @{ Identity = 'a'; Nesting = @{ KeyedTargets = @(@{ Id = '9'; Value = 'a' }) } }
+        $result = Invoke-ResourceCompare -Desired $desired -Current $current
+
+        $result.TestResult | Should -BeFalse
+        Get-DriftNames -Result $result | Should -Be @('Nesting.KeyedTargets[0]', 'Nesting.KeyedTargets[extra:0]')
+        $result.DriftInfo[0]['DesiredValue']['Id'] | Should -Be '1'
+        $result.DriftInfo[1]['CurrentValue']['Id'] | Should -Be '9'
+    }
+
+    It 'Does not report the primary key of a paired nested element' {
+        $desired = @{ Identity = 'a'; Nesting = @{ KeyedTargets = @(@{ Id = '1'; Value = 'a' }) } }
 
         (Invoke-ResourceCompare -Desired $desired -Current $desired).TestResult | Should -BeTrue
     }
