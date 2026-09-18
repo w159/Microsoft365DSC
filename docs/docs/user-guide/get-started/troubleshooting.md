@@ -129,20 +129,11 @@ WARNING: The code page of the current session is not set to UTF-8. This may caus
          After that, you need to restart the PowerShell session.
 ```
 
-## Error "WSManPluginReceiveResult error 14 / OutOfMemoryException" when running Start-DscConfiguration or Test-DscConfiguration
+## Error "WSManPluginReceiveResult error 14 / OutOfMemoryException" when running Start, Test, or Get-DscConfiguration
 
 ### ISSUE
 
-When running a Local Configuration Manager (LCM) related cmdlet `Start-DscConfiguration` or `Test-DscConfiguration` e.g. `Test-DscConfiguration -ReferenceConfiguration <path>\localhost.mof -Verbose`, especially inside a container, you might receive the following errors and the DSC Operational log shows an `OutOfMemoryException`:
-
-```powershell
-OperationStopped: Processing data for a remote command failed with the following error message:
-Error with error code 14 occurred while calling method WSManPluginReceiveResult.
-OperationStopped: Starting a command on the remote server failed with the following error message :
-The I/O operation has been aborted because of either a thread exit or an application request.
-InvalidOperation: The PowerShell DSC resource '[AADUser]AADUser...' threw one or more
-non-terminating errors while running the Test functionality.
-```
+When running a Local Configuration Manager (LCM) related cmdlet, Start, Test, or Get-DscConfiguration e.g. `Test-DscConfiguration -ReferenceConfiguration <path>\localhost.mof -Verbose`, especially inside a container, you might receive the following errors and the DSC Operational log shows an `OutOfMemoryException`:
 
 ```powershell
 OperationStopped: Processing data for a remote command failed with the following error message: Error with error code 14 occurred while calling method WSManPluginReceiveResult. For more information, see the about_Remote_Troubleshooting Help topic.
