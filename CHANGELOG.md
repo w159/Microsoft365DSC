@@ -582,6 +582,9 @@
   * Updated fetching of user profile properties.
 * TeamsAudioConferencingPolicy
   * [BREAKING CHANGE] Changed type of `MeetingInvitePhoneNumbers` from ``String`` to ``String[]``.
+* TeamsAutoAttendant
+  * Initial release.
+    FIXES [#5379](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5379)
 * TeamsCallQueue
   * Added GUID resolution to `AuthorizedUsers` and `Users`.
 * TeamsChannelTab
@@ -593,6 +596,9 @@
 * TeamsGuestMessagingConfiguration
   * [BREAKING CHANGE] Removed deprecated property `UsersCanDeleteBotMessages`. It is available
     on the `TeamsMessagingPolicy` resource instead.
+* TeamsOnlineSchedule
+  * Initial release.
+    FIXES [#5379](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5379)
 * TeamsOnlineVoicemailUserSettings
   * [BREAKING CHANGE] Removed deprecated property `OofGreetingFollowCalendarEnabled`.
   * Updated `UpdateTimeOfDay` to use the format `h:mm tt` with invariant culture.
