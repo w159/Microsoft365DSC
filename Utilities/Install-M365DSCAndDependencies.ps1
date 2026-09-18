@@ -75,7 +75,7 @@ try
                 throw "Could not get .NET SDK version"
             }
             $SDKVersion = $SDK.Split(' ')[0].SubString(0, 4)
-            $destinationPath = "C:\Program Files\powershell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
+            $destinationPath = "C:\Program Files\PowerShell\.store\powershell.windows.x64\{0}\powershell.windows.x64\{1}\tools\net{2}\any" `
                 -f $PSVersion, $PSVersion, $SDKVersion
             $path = Join-Path -Path $destinationPath -ChildPath "runtimes\win-x64\native\pwrshplugin.dll"
             Copy-Item -Path $path -Destination $destinationPath -Force
@@ -83,8 +83,8 @@ try
             $null = Enable-PSRemoting -Force -SkipNetworkProfileCheck
 
             $remotePowerShellConfig = @"
-PSHOMEDIR=C:\Program Files\powershell\7
-CORECLRDIR=C:\Program Files\powershell\7
+PSHOMEDIR=C:\Program Files\PowerShell\7
+CORECLRDIR=C:\Program Files\PowerShell\7
 "@
             $remotePowerShellConfigPath = "C:\Windows\System32\PowerShell\{0}\RemotePowerShellConfig.txt" -f $PSVersion
             Set-Content -Path $remotePowerShellConfigPath -Value $remotePowerShellConfig -Force
@@ -139,6 +139,16 @@ Import-Module PSDesiredStateConfiguration -Force
     }
     else
     {
+        Write-Output "Installing Microsoft365DSC module dependencies"
+        if ($IsSDK.IsPresent)
+        {
+            Update-M365DSCDependencies -Development
+        }
+        else
+        {
+            Update-M365DSCDependencies
+        }
+
         Write-Output "Configuring OS environment"
         [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Process)
     }
