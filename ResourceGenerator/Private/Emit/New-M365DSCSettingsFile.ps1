@@ -75,6 +75,15 @@ function New-M365DSCSettingsFile
         }
     }
 
+    $workloadDefaults = Get-M365DSCWorkloadDefault -Workload $ResourceModel.Workload
+    foreach ($moduleName in $workloadDefaults.RequiredModules)
+    {
+        if ($moduleName -notin $requiredModules)
+        {
+            $requiredModules += $moduleName
+        }
+    }
+
     $permissions = [ordered]@{}
     if ($isGraph)
     {
@@ -87,8 +96,8 @@ function New-M365DSCSettingsFile
         excludedProperties    = @(Get-M365DSCExcludedPropertyBlock -ResourceModel $ResourceModel)
         description           = "This resource configures a $($ResourceModel.ResourceDescription)."
         roles                 = [ordered]@{
-            read   = @()
-            update = @()
+            read   = @($workloadDefaults.ReadRoles)
+            update = @($workloadDefaults.UpdateRoles)
         }
         permissions           = $permissions
         requiredModules       = @($requiredModules | Sort-Object)
@@ -381,4 +390,68 @@ function Select-M365DSCReadPermission
     }
 
     return [System.String[]] @($kept)
+}
+
+<#
+.SYNOPSIS
+    Returns the required modules, roles and stub region shared by a workload's resources.
+
+.PARAMETER Workload
+    Specifies the workload of the resource.
+#>
+function Get-M365DSCWorkloadDefault
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Workload
+    )
+
+    $defaults = @{
+        MicrosoftTeams           = @{
+            RequiredModules = @('MicrosoftTeams')
+            ReadRoles       = @('Teams Reader')
+            UpdateRoles     = @('Teams Administrator')
+            StubRegion      = 'MicrosoftTeams'
+        }
+        ExchangeOnline           = @{
+            RequiredModules = @()
+            ReadRoles       = @('Global Reader')
+            UpdateRoles     = @('Exchange Administrator')
+            StubRegion      = 'ExchangeOnlineManagement'
+        }
+        SecurityComplianceCenter = @{
+            RequiredModules = @()
+            ReadRoles       = @('Compliance Administrator')
+            UpdateRoles     = @('Compliance Administrator')
+            StubRegion      = 'ExchangeOnlineManagement'
+        }
+        PnP                      = @{
+            RequiredModules = @()
+            ReadRoles       = @()
+            UpdateRoles     = @()
+            StubRegion      = 'PnP.PowerShell'
+        }
+        PowerPlatforms           = @{
+            RequiredModules = @()
+            ReadRoles       = @()
+            UpdateRoles     = @()
+            StubRegion      = 'Microsoft.PowerApps.Administration.PowerShell'
+        }
+    }
+
+    if ($defaults.ContainsKey($Workload))
+    {
+        return $defaults[$Workload]
+    }
+
+    return @{
+        RequiredModules = @()
+        ReadRoles       = @()
+        UpdateRoles     = @()
+        StubRegion      = $null
+    }
 }
