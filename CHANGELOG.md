@@ -746,6 +746,7 @@
     paths to PS 7.6.6.
   * Updated script `Install-M365DSCAndDependencies` to work with a new PS
     version, new modules, etc.
+  * Added new ancillary script `Install-PowerShell` to be used by the Docker Windows images.
 
 # 1.26.909.1
 
