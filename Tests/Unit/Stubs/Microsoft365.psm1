@@ -77418,6 +77418,38 @@ function Get-AllM365TeamsApps
 
     )
 }
+function Get-CsOnlineAudioFile
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId
+
+    )
+}
+
+function Get-CsOnlineSchedule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
 function Get-CsOnlineVoicemailPolicy
 {
     [CmdletBinding()]
@@ -77922,6 +77954,424 @@ function Grant-CsTeamsEventsPolicy
         $Force
     )
 }
+function New-CsAutoAttendant
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.String]
+        $LanguageId,
+
+        [Parameter()]
+        [PSObject]
+        $DefaultCallFlow,
+
+        [Parameter()]
+        [System.String]
+        $TimeZoneId,
+
+        [Parameter()]
+        [System.String]
+        $VoiceId,
+
+        [Parameter()]
+        [PSObject]
+        $Operator,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableVoiceResponse,
+
+        [Parameter()]
+        [PSObject[]]
+        $CallFlows,
+
+        [Parameter()]
+        [PSObject[]]
+        $CallHandlingAssociations,
+
+        [Parameter()]
+        [PSObject]
+        $InclusionScope,
+
+        [Parameter()]
+        [PSObject]
+        $ExclusionScope,
+
+        [Parameter()]
+        [System.Guid[]]
+        $AuthorizedUsers,
+
+        [Parameter()]
+        [System.Guid[]]
+        $HideAuthorizedUsers,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.String]
+        $UserNameExtension,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableMainlineAttendant,
+
+        [Parameter()]
+        [System.String]
+        $MainlineAttendantAgentVoiceId
+
+    )
+}
+
+function New-CsAutoAttendantCallFlow
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.PSObject]
+        $Menu,
+
+        [Parameter()]
+        [System.Management.Automation.PSObject[]]
+        $Greetings,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ForceListenMenuEnabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $RingResourceAccountDelegates,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsAutoAttendantCallHandlingAssociation
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [PSObject]
+        $Type,
+
+        [Parameter()]
+        [System.String]
+        $ScheduleId,
+
+        [Parameter()]
+        [System.String]
+        $CallFlowId,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Disable,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsAutoAttendantCallableEntity
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [PSObject]
+        $Type,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableTranscription,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableSharedVoicemailSystemPromptSuppression,
+
+        [Parameter()]
+        [System.Int16]
+        $CallPriority,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsAutoAttendantDialScope
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $GroupScope,
+
+        [Parameter()]
+        [System.String[]]
+        $GroupIds,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsAutoAttendantMenu
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.PSObject[]]
+        $Prompts,
+
+        [Parameter()]
+        [System.Management.Automation.PSObject[]]
+        $MenuOptions,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableDialByName,
+
+        [Parameter()]
+        [PSObject]
+        $DirectorySearchMethod,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsAutoAttendantMenuOption
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [PSObject]
+        $Action,
+
+        [Parameter()]
+        [PSObject]
+        $DtmfResponse,
+
+        [Parameter()]
+        [System.String[]]
+        $VoiceResponses,
+
+        [Parameter()]
+        [PSObject]
+        $CallTarget,
+
+        [Parameter()]
+        [System.Management.Automation.PSObject]
+        $Prompt,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.String]
+        $Description,
+
+        [Parameter()]
+        [System.String]
+        $MainlineAttendantTarget,
+
+        [Parameter()]
+        [PSObject]
+        $AgentTargetType,
+
+        [Parameter()]
+        [System.String]
+        $AgentTarget,
+
+        [Parameter()]
+        [System.String]
+        $AgentTargetTagTemplateId
+
+    )
+}
+
+function New-CsAutoAttendantPrompt
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $TextToSpeechPrompt,
+
+        [Parameter()]
+        [System.String]
+        $ActiveType,
+
+        [Parameter()]
+        [PSObject]
+        $AudioFilePrompt
+    )
+}
+
+function New-CsOnlineApplicationInstanceAssociation
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String[]]
+        $Identities,
+
+        [Parameter()]
+        [System.String]
+        $ConfigurationId,
+
+        [Parameter()]
+        [System.String]
+        $ConfigurationType,
+
+        [Parameter()]
+        [System.Int16]
+        $CallPriority,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsOnlineDateTimeRange
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Start,
+
+        [Parameter()]
+        [System.String]
+        $End,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function New-CsOnlineSchedule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $FixedSchedule,
+
+        [Parameter()]
+        [System.Object]
+        $DateTimeRanges,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $WeeklyRecurrentSchedule,
+
+        [Parameter()]
+        [System.Object]
+        $MondayHours,
+
+        [Parameter()]
+        [System.Object]
+        $TuesdayHours,
+
+        [Parameter()]
+        [System.Object]
+        $WednesdayHours,
+
+        [Parameter()]
+        [System.Object]
+        $ThursdayHours,
+
+        [Parameter()]
+        [System.Object]
+        $FridayHours,
+
+        [Parameter()]
+        [System.Object]
+        $SaturdayHours,
+
+        [Parameter()]
+        [System.Object]
+        $SundayHours,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Complement
+    )
+}
+
+function New-CsOnlineTimeRange
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Start,
+
+        [Parameter()]
+        [System.String]
+        $End,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
 function New-CsOnlineVoicemailPolicy
 {
     [CmdletBinding()]
@@ -79435,6 +79885,54 @@ function New-TeamChannel
     )
 }
 
+function Remove-CsAutoAttendant
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Identity,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function Remove-CsOnlineApplicationInstanceAssociation
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String[]]
+        $Identities,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function Remove-CsOnlineSchedule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
 function Remove-CsOnlineVoicemailPolicy
 {
     [CmdletBinding()]
@@ -79779,6 +80277,38 @@ function Remove-TeamUser
         [Parameter()]
         [System.String]
         $Role
+    )
+}
+
+function Set-CsAutoAttendant
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.PSObject]
+        $Instance,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
+    )
+}
+
+function Set-CsOnlineSchedule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $Instance,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+
     )
 }
 
