@@ -1,6 +1,16 @@
 name: Unit Tests
 on: pull_request
 
+concurrency:
+  group: unit-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  POWERSHELL_TELEMETRY_OPTOUT: 1
+
 jobs:
   quality-test:
     runs-on: windows-latest
@@ -14,54 +24,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
-      - name: Install Modules
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $dependencies = (Import-PowerShellDataFile ./Modules/Microsoft365DSC/Dependencies/Manifest.psd1).Dependencies
-
-          foreach ($name in @('M365DSC.PSDesiredStateConfiguration', 'DSCParser'))
-          {
-            $dependency = $dependencies | Where-Object ModuleName -EQ $name
-            if ($null -eq $dependency) {
-                throw "$name is missing from Dependencies/Manifest.psd1."
-            }
-            Install-PSResource -Name $dependency.ModuleName -Version $dependency.RequiredVersion -Scope AllUsers -TrustRepository
-          }
-
-          Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
-          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
-          # New-M365DSCAdaptedResourceManifest.ps1 requires 0.3.0 or later, which is not on the
-          # gallery yet. Until it is, a missing tool only skips the manifests.
-          try
-          {
-              Install-PSResource -Name DscResource.Authoring -Scope AllUsers -TrustRepository -ErrorAction Stop
-          }
-          catch
-          {
-              Write-Warning -Message "DscResource.Authoring could not be installed, so the adapted resource manifests are skipped: $($_.Exception.Message)"
-          }
-          [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
-
-      - name: Build Class Modules
-        shell: pwsh
-        run: |
-          & ./Utilities/Build-Microsoft365DSC.ps1 -SkipSchemaCache
-
-      - name: Build Dll Files
-        shell: pwsh
-        run: |
-          & ./Utilities/Build-DllFiles.ps1 -Configuration Release
-
-      - name: Generate Schema Cache
-        shell: pwsh
-        run: |
-          & ./Utilities/New-M365DSCDscSchemaCache.ps1
+      - name: Setup Microsoft365DSC
+        uses: ./.github/actions/setup-m365dsc
 
       - name: Run Quality Checks
         shell: pwsh
         run: |
-          New-Item -Type SymbolicLink -Path "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC" -Target (Join-Path -Path . -ChildPath 'Modules/Microsoft365DSC' -Resolve)
           Import-Module './Tests/TestHarness.psm1' -Force;
           $MaximumFunctionCount = 32767
 
@@ -88,77 +56,94 @@ jobs:
     # Only when run from the main repo
     if: github.repository == 'Microsoft365DSC/Microsoft365DSC'
 
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
-      - name: Install Modules
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $dependencies = (Import-PowerShellDataFile ./Modules/Microsoft365DSC/Dependencies/Manifest.psd1).Dependencies
-
-          foreach ($name in @('M365DSC.PSDesiredStateConfiguration', 'DSCParser'))
-          {
-            $dependency = $dependencies | Where-Object ModuleName -EQ $name
-            if ($null -eq $dependency) {
-                throw "$name is missing from Dependencies/Manifest.psd1."
-            }
-            Install-PSResource -Name $dependency.ModuleName -Version $dependency.RequiredVersion -Scope AllUsers -TrustRepository
-          }
-
-          Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
-          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
-          # New-M365DSCAdaptedResourceManifest.ps1 requires 0.3.0 or later, which is not on the
-          # gallery yet. Until it is, a missing tool only skips the manifests.
-          try
-          {
-              Install-PSResource -Name DscResource.Authoring -Scope AllUsers -TrustRepository -ErrorAction Stop
-          }
-          catch
-          {
-              Write-Warning -Message "DscResource.Authoring could not be installed, so the adapted resource manifests are skipped: $($_.Exception.Message)"
-          }
-          [System.Environment]::SetEnvironmentVariable('M365DSCTelemetryEnabled', $false, [System.EnvironmentVariableTarget]::Machine);
-
-      - name: Build Class Modules
-        shell: pwsh
-        run: |
-          & ./Utilities/Build-Microsoft365DSC.ps1 -SkipSchemaCache
-
-      - name: Build Dll Files
-        shell: pwsh
-        run: |
-          & ./Utilities/Build-DllFiles.ps1 -Configuration Release
-
-      - name: Generate Schema Cache
-        shell: pwsh
-        run: |
-          & ./Utilities/New-M365DSCDscSchemaCache.ps1
+      - name: Setup Microsoft365DSC
+        uses: ./.github/actions/setup-m365dsc
 
       - name: Run Test Harness
         shell: pwsh
         run: |
-          New-Item -Type SymbolicLink -Path "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC" -Target (Join-Path -Path . -ChildPath 'Modules/Microsoft365DSC' -Resolve)
           Import-Module './Tests/TestHarness.psm1' -Force;
           $MaximumFunctionCount = 32767
+          $harnessParameters = @{
+              IgnoreCodeCoverage = $true
+              ShardIndex         = ${{ matrix.shard }}
+              ShardCount         = ${{ strategy.job-total }}
+          }
 
           try
           {
-              $results = Invoke-TestHarness
+              $results = Invoke-TestHarness @harnessParameters
           }
           catch
           {
               $MaximumFunctionCount = 32767
               Import-Module './Tests/TestHarness.psm1' -Force;
-              $results = Invoke-TestHarness
+              $results = Invoke-TestHarness @harnessParameters
           }
           if ($results.FailedCount -gt 0)
           {
               throw "{$($results.FailedCount)} Unit Test(s) Failed"
           }
 
+  code-coverage:
+    runs-on: windows-latest
+
+    permissions: write-all
+
+    # Only when run from the main repo
+    if: github.repository == 'Microsoft365DSC/Microsoft365DSC'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Microsoft365DSC
+        uses: ./.github/actions/setup-m365dsc
+
+      - name: Run Code Coverage
+        id: coverage
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          Import-Module './Tests/TestHarness.psm1' -Force;
+          $MaximumFunctionCount = 32767
+
+          $changedFiles = gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" --paginate --jq '.[].filename'
+          $scope = Get-M365DSCTestCoverageScope -ChangedFile $changedFiles
+
+          if ($scope.CoveragePath.Count -eq 0)
+          {
+              Write-Host -Object 'No resource or module file changed, skipping code coverage.'
+              "measured=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+              exit 0
+          }
+
+          Write-Host -Object "Measuring coverage of $($scope.CoveragePath.Count) file(s) with $(if ($scope.FullSuite) { 'the full test suite' } else { "$($scope.TestPath.Count) test file(s)" })."
+
+          $results = Invoke-TestHarness -CodeCoveragePath $scope.CoveragePath -DscTestsPath $scope.TestPath
+          "measured=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+          $coverage = $results.CodeCoverage
+          "### Code coverage: {0:n2}% ({1} of {2} commands)" -f $coverage.CoveragePercent, $coverage.CommandsExecutedCount, $coverage.CommandsAnalyzedCount |
+              Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+
+          if ($results.FailedCount -gt 0)
+          {
+              throw "{$($results.FailedCount)} Unit Test(s) Failed"
+          }
+
       - name: Upload Code Coverage as Artifact
+        if: steps.coverage.outputs.measured == 'true'
         uses: actions/upload-artifact@v6
         with:
           name: Code Coverage Report
