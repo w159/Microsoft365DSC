@@ -24,10 +24,12 @@ RUN mv /etc/opt/omi/conf/dsc/configuration/baseregistration /etc/opt/omi/conf/ds
 
 RUN pwsh -Command 'Install-Module -Name "Microsoft.PowerShell.PSResourceGet" -Repository "PSGallery" -Scope "AllUsers" -Force -SkipPublisherCheck'
 RUN pwsh -Command 'Install-PSResource -Name "Pester" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'
+RUN pwsh -Command 'Install-PSResource -Name "DSCParser" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'
 RUN pwsh -Command 'Install-PSResource -Name "M365DSC.PSDesiredStateConfiguration" -Repository "PSGallery" -Scope "AllUsers" -SkipDependencyCheck -TrustRepository -AcceptLicense'
 
-RUN pwsh -Command ./Utilities/Install-M365DSCAndDependencies.ps1 -IsSDK
+RUN pwsh -Command ./Utilities/Install-PowerShell.ps1 -IsSDK
 RUN pwsh -Command ./Utilities/Build-Microsoft365DSC.ps1
 RUN pwsh -Command ./Utilities/Build-DllFiles.ps1 -Configuration Release
+RUN pwsh -Command ./Utilities/Install-M365DSCAndDependencies.ps1 -IsSDK
 
 ENTRYPOINT ["pwsh", "-NoLogo"]

@@ -1,5 +1,3 @@
-#Requires -Version 5.1
-
 <#
 .SYNOPSIS
     Builds the class-based resource files for the Microsoft365DSC module.
