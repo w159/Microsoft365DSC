@@ -645,6 +645,11 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed the unit test code coverage reporting 0%. It was measured against the resource
+    sources under `DscResources`, which are build input and never execute. It now targets the
+    generated class modules the tests load.
+  * Reduced the unit test workflow run time by sharding the test run, scoping code coverage to
+    the files a pull request touches and building the C# solution in a single `dotnet` call.
   * Changed resources to throw instead of only logging or writing to the error stream when
     an operation fails, so a failed apply is no longer reported as successful.
   * Fixed a failed telemetry submission failing the resource operation that triggered it,
