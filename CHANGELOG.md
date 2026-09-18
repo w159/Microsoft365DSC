@@ -643,6 +643,15 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed `Test-TargetResource` never reporting drift on an `Id` nested inside a complex
+    property. It was excluded at every nesting level instead of only on the resource itself.
+    FIXES [#7441](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7441)
+  * Declared `Id` and `TargetType` as keys on the authentication method policy include targets,
+    matching the exclude targets they are paired with.
+  * Changed drift detection to align the elements of a nested complex array by the primary keys
+    of their type.
+  * Fixed a drift on a complex property being logged as `System.Collections.Hashtable`. The
+    event log now renders the members of the object.
   * Fixed the unit test code coverage reporting 0%. It was measured against the resource
     sources under `DscResources`, which are build input and never execute. It now targets the
     generated class modules the tests load.

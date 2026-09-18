@@ -48,20 +48,23 @@ namespace Microsoft365DSC.Compare
             string propertyName,
             HashSet<string>? excludedSet,
             List<Hashtable> drifts,
-            HashSet<string>? rootSkippedKeys)
+            HashSet<string>? rootSkippedKeys,
+            SchemaIndex? schema = null,
+            string? className = null)
         {
-            Traversal traversal = new(excludedSet ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase), rootSkippedKeys);
-            return traversal.Run(source, target, propertyName, drifts, 0);
+            Traversal traversal = new(excludedSet ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase), schema);
+            return traversal.Run(source, target, propertyName, drifts, 0, className, rootSkippedKeys);
         }
 
         private readonly struct Frame
         {
-            public Frame(object? left, object? right, string? propName, bool isRoot)
+            public Frame(object? left, object? right, string? propName, string? className, HashSet<string>? skippedKeys)
             {
                 Left = left;
                 Right = right;
                 PropName = propName;
-                IsRoot = isRoot;
+                ClassName = className;
+                SkippedKeys = skippedKeys;
             }
 
             public object? Left { get; }
@@ -70,20 +73,22 @@ namespace Microsoft365DSC.Compare
 
             public string? PropName { get; }
 
-            public bool IsRoot { get; }
+            public string? ClassName { get; }
+
+            public HashSet<string>? SkippedKeys { get; }
         }
 
         private sealed class Traversal
         {
             private readonly HashSet<string> _excluded;
-            private readonly HashSet<string>? _rootSkippedKeys;
+            private readonly SchemaIndex? _schema;
             private readonly bool _pathExclusionsPresent;
             private readonly List<Stack<Frame>> _stacks = [];
 
-            public Traversal(HashSet<string> excluded, HashSet<string>? rootSkippedKeys)
+            public Traversal(HashSet<string> excluded, SchemaIndex? schema)
             {
                 _excluded = excluded;
-                _rootSkippedKeys = rootSkippedKeys;
+                _schema = schema;
                 foreach (string name in excluded)
                 {
                     if (name.IndexOf('.') >= 0 || name.IndexOf('[') >= 0)
@@ -94,11 +99,18 @@ namespace Microsoft365DSC.Compare
                 }
             }
 
-            public bool Run(object? left, object? right, string? propName, List<Hashtable>? drifts, int depth)
+            public bool Run(
+                object? left,
+                object? right,
+                string? propName,
+                List<Hashtable>? drifts,
+                int depth,
+                string? className = null,
+                HashSet<string>? skippedKeys = null)
             {
                 bool collecting = drifts is not null;
                 Stack<Frame> stack = GetStack(depth);
-                stack.Push(new Frame(left, right, propName, isRoot: true));
+                stack.Push(new Frame(left, right, propName, className, skippedKeys));
 
                 bool result = true;
                 while (stack.Count > 0)
@@ -129,7 +141,7 @@ namespace Microsoft365DSC.Compare
 
                     if (IsComplexArrayCandidate(frame.Left) || IsComplexArrayCandidate(frame.Right))
                     {
-                        if (!CompareComplexArray(frame.Left!, frame.Right!, frame.PropName, drifts, depth))
+                        if (!CompareComplexArray(frame.Left!, frame.Right!, frame.PropName, drifts, depth, frame.ClassName))
                         {
                             if (!collecting)
                             {
@@ -191,11 +203,20 @@ namespace Microsoft365DSC.Compare
                 return stack;
             }
 
-            private bool CompareComplexArray(object left, object right, string? propName, List<Hashtable>? drifts, int depth)
+            private bool CompareComplexArray(object left, object right, string? propName, List<Hashtable>? drifts, int depth, string? elementClassName)
             {
                 bool collecting = drifts is not null;
                 Array leftArray = ToArray(left);
                 Array rightArray = ToArray(right);
+
+                if (leftArray.Length > 0 && rightArray.Length > 0 &&
+                    !(leftArray.GetValue(0) is CimInstance firstLeft && IsIntuneAssignmentClass(firstLeft.CimSystemProperties.ClassName)) &&
+                    TryGetPrimaryKeys(elementClassName, out List<string> primaryKeyNames) &&
+                    PrimaryKeyPairing.CanPair(AsObjectArray(leftArray), primaryKeyNames) &&
+                    PrimaryKeyPairing.CanPair(AsObjectArray(rightArray), primaryKeyNames))
+                {
+                    return CompareComplexArrayByKeys(leftArray, rightArray, propName, drifts, depth, elementClassName!, primaryKeyNames);
+                }
 
                 if (leftArray.Length != rightArray.Length)
                 {
@@ -272,6 +293,81 @@ namespace Microsoft365DSC.Compare
                 return true;
             }
 
+            private bool CompareComplexArrayByKeys(
+                Array leftArray,
+                Array rightArray,
+                string? propName,
+                List<Hashtable>? drifts,
+                int depth,
+                string elementClassName,
+                List<string> primaryKeyNames)
+            {
+                bool collecting = drifts is not null;
+                var (pairs, extras) = PrimaryKeyPairing.Pair(AsObjectArray(leftArray), AsObjectArray(rightArray), primaryKeyNames);
+                HashSet<string> skippedKeys = PrimaryKeyPairing.SkippedKeys(primaryKeyNames, null, false);
+                bool result = true;
+
+                foreach (var (desiredItem, currentItem, idx) in pairs)
+                {
+                    if (currentItem is null)
+                    {
+                        if (!collecting)
+                        {
+                            return false;
+                        }
+
+                        drifts!.Add(DriftRecord.Create($"{propName}[{idx}]", null, desiredItem));
+                        result = false;
+                        continue;
+                    }
+
+                    if (!Run(desiredItem, currentItem, $"{propName}[{idx}]", drifts, depth + 1, elementClassName, skippedKeys))
+                    {
+                        if (!collecting)
+                        {
+                            return false;
+                        }
+
+                        result = false;
+                    }
+                }
+
+                foreach (var (extraItem, idx) in extras)
+                {
+                    if (!collecting)
+                    {
+                        return false;
+                    }
+
+                    drifts!.Add(DriftRecord.Create($"{propName}[extra:{idx}]", extraItem, null));
+                    result = false;
+                }
+
+                return result;
+            }
+
+            private bool TryGetPrimaryKeys(string? className, out List<string> primaryKeyNames)
+            {
+                primaryKeyNames = [];
+                if (_schema is null || string.IsNullOrEmpty(className) || !_schema.TryGetClass(className, out ClassDefinition definition))
+                {
+                    return false;
+                }
+
+                primaryKeyNames = definition.Mandatory.Names;
+                return primaryKeyNames.Count > 0;
+            }
+
+            private string? GetChildClassName(string? className, string key)
+            {
+                if (_schema is null || string.IsNullOrEmpty(className) || !_schema.TryGetClass(className, out ClassDefinition definition))
+                {
+                    return null;
+                }
+
+                return definition.TryGetParameter(key, out ParameterDefinition parameter) ? parameter.ElementClassName : null;
+            }
+
             private bool CompareSingleObject(Frame frame, List<Hashtable>? drifts, Stack<Frame> stack)
             {
                 bool collecting = drifts is not null;
@@ -286,7 +382,7 @@ namespace Microsoft365DSC.Compare
                         continue;
                     }
 
-                    if (frame.IsRoot && _rootSkippedKeys is not null && _rootSkippedKeys.Contains(key))
+                    if (frame.SkippedKeys is not null && frame.SkippedKeys.Contains(key))
                     {
                         continue;
                     }
@@ -318,7 +414,12 @@ namespace Microsoft365DSC.Compare
 
                     if (IsComplexType(sourceValue))
                     {
-                        stack.Push(new Frame(sourceValue, targetValue, nameNeeded ? $"{frame.PropName}.{key}" : null, isRoot: false));
+                        stack.Push(new Frame(
+                            sourceValue,
+                            targetValue,
+                            nameNeeded ? $"{frame.PropName}.{key}" : null,
+                            GetChildClassName(frame.ClassName, key),
+                            null));
                         continue;
                     }
 
@@ -336,6 +437,22 @@ namespace Microsoft365DSC.Compare
 
                 return returnResult;
             }
+        }
+
+        private static object[] AsObjectArray(Array source)
+        {
+            if (source is object[] typed)
+            {
+                return typed;
+            }
+
+            object[] result = new object[source.Length];
+            for (int i = 0; i < source.Length; i++)
+            {
+                result[i] = source.GetValue(i);
+            }
+
+            return result;
         }
 
         private static Hashtable NullMismatch(string propName, bool leftIsNull, bool rightIsNull)
