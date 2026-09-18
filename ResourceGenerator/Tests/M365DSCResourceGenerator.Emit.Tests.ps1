@@ -103,19 +103,17 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Not -Match 'function Get-TargetResource'
         }
 
-        It 'wraps value types in Nullable and keys the primary key' {
+        It 'wraps value types in Nullable and keys the name' {
             $script:classContent | Should -Match '\[System\.Nullable\[System\.Boolean\]\] \$IsEnabled'
-            $script:classContent | Should -Match '(?s)\[DscProperty\(Key\)\]\s*\[System\.ComponentModel\.Description\(''The unique identifier\.''\)\]\s*\[System\.String\] \$Id'
+            $script:classContent | Should -Match '(?s)\[DscProperty\(Key\)\]\s*\[System\.ComponentModel\.Description\(''The display name\.''\)\]\s*\[System\.String\] \$DisplayName'
         }
 
-        It 'generates a hidden hashtable helper method for the complex type' {
-            $script:classContent | Should -Match 'hidden \[System\.Collections\.Hashtable\] GetTestRuleAsHashtable\(\[System\.Object\] \$ComplexObject\)'
-            $script:classContent | Should -Match '\$complexRules \+= \$this\.GetTestRuleAsHashtable\(\$currentRules\)'
+        It 'declares no conversion helper method' {
+            $script:classContent | Should -Not -Match 'hidden \[System\.Collections\.Hashtable\]'
             $script:classContent | Should -Not -Match '(?m)^function '
         }
 
-        It 'converts enums and dates before the result hashtable' {
-            $script:classContent | Should -Match '\$enumLevel = \$getValue\.Level\.ToString\(\)'
+        It 'converts dates before the result hashtable' {
             $script:classContent | Should -Match '\$dateStartDate = \$getValue\.StartDate\.ToUniversalTime\(\)\.ToString\(''o''\)'
         }
 
@@ -124,6 +122,60 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:classContent | Should -Match "-NoEscape @\('Rules'\)"
         }
     }
+    Describe 'New-M365DSCComplexConversionBlock' {
+        It 'converts a complex property inline instead of calling a helper method' {
+            $script:classContent | Should -Not -Match 'AsHashtable'
+            $script:classContent | Should -Match '\$complexRules = @\(\)'
+            $script:classContent | Should -Match 'foreach \(\$currentRules in \$getValue\.Rules\)'
+            $script:classContent | Should -Match "\`$myRules\.Add\('Name', \`$currentRules\.name\)"
+            $script:classContent | Should -Match "\`$myRules\.values\.Where\(\{ \`$null -ne \`$_ \}\)\.Count -gt 0"
+        }
+
+        It 'maps a Graph enum straight from the returned value' {
+            $script:classContent | Should -Not -Match '\$enumLevel'
+            $script:classContent | Should -Not -Match '\$getValue\.\w+\.ToString\(\)'
+            $script:classContent | Should -Match 'Level\s+= \$getValue\.Level'
+        }
+
+        It 'keeps the ToString conversion for a workload without the shim' {
+            $exoInfo = @{
+                GetCmdlet    = 'Get-AcceptedDomain'
+                NewCmdlet    = 'New-AcceptedDomain'
+                UpdateCmdlet = 'Set-AcceptedDomain'
+                RemoveCmdlet = 'Remove-AcceptedDomain'
+            }
+            $exoProperties = @(
+                New-M365DSCPropertyModel -Name 'Identity' -Type 'Edm.String' -Description 'The identity.'
+                New-M365DSCPropertyModel -Name 'DomainType' -EnumValues @('authoritative', 'internalRelay') -Description 'The domain type.'
+            )
+            $exoModel = New-M365DSCResourceModel -ResourceName 'EXOAcceptedDomain' -Workload 'ExchangeOnline' `
+                -CmdletInfo $exoInfo -Properties $exoProperties -CmdLetNoun 'AcceptedDomain' -CmdLetVerb 'Set'
+
+            $block = New-M365DSCComplexConversionBlock -ResourceModel $exoModel
+
+            $block | Should -Match '\$enumDomainType = \$getValue\.DomainType\.ToString\(\)'
+        }
+    }
+
+    Describe 'New-M365DSCCompareParametersBlock' {
+        It 'excludes the create-only properties from Test' {
+            $model = [PSCustomObject] @{ CreateOnlyProperties = @('MobileAppCatalogPackageBranchId') }
+
+            $block = New-M365DSCCompareParametersBlock -ResourceModel $model
+
+            $block | Should -Match '\[System\.Collections\.Hashtable\] GetCompareParameters\(\)'
+            $block | Should -Match "ExcludedProperties = @\('MobileAppCatalogPackageBranchId'\)"
+        }
+
+        It 'renders nothing without a create-only property' {
+            New-M365DSCCompareParametersBlock -ResourceModel ([PSCustomObject] @{ CreateOnlyProperties = @() }) | Should -Be ''
+        }
+
+        It 'leaves the class module without the override when nothing is create-only' {
+            $script:classContent | Should -Not -Match 'GetCompareParameters'
+        }
+    }
+
 
     Describe 'New-M365DSCUnitTestFile' {
         It 'produces parseable PowerShell' {
@@ -149,13 +201,14 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $script:testContent | Should -Match "\`$result\.Tags \| Should -Be @\('FakeStringArrayValue1', 'FakeStringArrayValue2'\)"
         }
 
-        It 'drives the drift context with genuinely different values' {
-            $script:testContent | Should -Match 'FakeStringValueDrift'
-            $script:testContent | Should -Match "'medium'"
+        It 'drives the drift context through one changed desired state property' {
+            $script:testContent | Should -Match "FakeStringValueDrift' # Updated property"
         }
 
-        It 'branches the Get mock on All and the key parameter' {
-            $script:testContent | Should -Match '(?s)if \(\$All\).+if \(\$TestPolicyId\)'
+        It 'defines the Get mock return value once, without branching' {
+            $script:testContent | Should -Not -Match 'if \(\$All\)'
+            $script:testContent | Should -Not -Match 'This mock returns genuinely drifted values'
+            @([regex]::Matches($script:testContent, 'Mock -CommandName Get-MgBetaTestPolicy -MockWith')).Count | Should -Be 2
         }
     }
 
@@ -329,6 +382,66 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $settings.generatedFrom.entityType | Should -BeNullOrEmpty
             $settings.generatedFrom.cmdletNoun | Should -Be 'AcceptedDomain'
             $settings.generatedFrom.cmdletVerb | Should -Be 'Set'
+        }
+    }
+    Describe 'Select-M365DSCReadPermission' {
+        It 'Drops a ReadWrite permission whose Read counterpart is present' {
+            Select-M365DSCReadPermission -Permission @('DeviceManagementConfiguration.Read.All', 'DeviceManagementConfiguration.ReadWrite.All') |
+                Should -Be @('DeviceManagementConfiguration.Read.All')
+        }
+
+        It 'Keeps a ReadWrite permission that stands alone' {
+            Select-M365DSCReadPermission -Permission @('DeviceManagementApps.ReadWrite.All') |
+                Should -Be @('DeviceManagementApps.ReadWrite.All')
+        }
+
+        It 'Returns nothing for an empty list' {
+            @(Select-M365DSCReadPermission -Permission @()) | Should -HaveCount 0
+        }
+    }
+    Describe 'Add-M365DSCLookupPermission' {
+        It 'Puts GroupMember.Read.All first when the resource handles assignments' {
+            $model = [PSCustomObject] @{ HasAssignments = $true; SchemaProperties = @() }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.Read.All') -ResourceModel $model |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementConfiguration.Read.All')
+        }
+
+        It 'Puts DeviceManagementRBAC.Read.All last when the resource carries RoleScopeTagIds' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $false
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.Read.All') -ResourceModel $model |
+                Should -Be @('DeviceManagementConfiguration.Read.All', 'DeviceManagementRBAC.Read.All')
+        }
+
+        It 'Adds both lookups around the resource permissions' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $true
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementConfiguration.ReadWrite.All') -ResourceModel $model |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementConfiguration.ReadWrite.All', 'DeviceManagementRBAC.Read.All')
+        }
+
+        It 'Leaves the permissions untouched without assignments and without RoleScopeTagIds' {
+            $model = [PSCustomObject] @{ HasAssignments = $false; SchemaProperties = @() }
+
+            Add-M365DSCLookupPermission -Permission @('DeviceManagementApps.Read.All') -ResourceModel $model |
+                Should -Be @('DeviceManagementApps.Read.All')
+        }
+
+        It 'Adds no duplicate when the permission is already declared' {
+            $model = [PSCustomObject] @{
+                HasAssignments   = $true
+                SchemaProperties = @([PSCustomObject] @{ Name = 'RoleScopeTagIds' })
+            }
+
+            @(Add-M365DSCLookupPermission -Permission @('GroupMember.Read.All', 'DeviceManagementRBAC.Read.All') -ResourceModel $model) |
+                Should -Be @('GroupMember.Read.All', 'DeviceManagementRBAC.Read.All')
         }
     }
 }

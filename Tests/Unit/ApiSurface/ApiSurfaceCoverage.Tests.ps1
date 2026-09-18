@@ -517,4 +517,93 @@ InModuleScope -ModuleName 'M365DSCApiSurface' {
             $markdown | Should -Match '\| Second \| 0 \|'
         }
     }
+    Describe 'Find-SubtypeGap' {
+        BeforeAll {
+            $script:subtypeRow = @(
+                [ordered]@{ apiVersion = 'beta'; entityType = 'deviceConfiguration'; subtype = 'macOSVpnConfiguration'; isAbstract = $false; resource = ''; covered = $false }
+                [ordered]@{ apiVersion = 'beta'; entityType = 'deviceConfiguration'; subtype = 'iosVpnConfiguration'; isAbstract = $false; resource = 'IntuneVPNConfigurationPolicyIOS'; covered = $true }
+                [ordered]@{ apiVersion = 'beta'; entityType = 'deviceConfiguration'; subtype = 'macOSSingleSignOnBase'; isAbstract = $true; resource = ''; covered = $false }
+                [ordered]@{ apiVersion = 'beta'; entityType = 'deviceConfiguration'; subtype = 'windowsPhone81VpnConfiguration'; isAbstract = $false; resource = ''; covered = $false }
+            )
+        }
+
+        It 'Drops the covered, the abstract and the ignored subtype' {
+            $ignore = [PSCustomObject]@{ odataSubtypes = @([PSCustomObject]@{ odataSubtype = 'windowsPhone81VpnConfiguration' }) }
+
+            $candidates = @(Find-SubtypeGap -Subtype $script:subtypeRow -Ignore $ignore)
+
+            $candidates | Should -HaveCount 1
+            $candidates[0].subtype | Should -Be 'macOSVpnConfiguration'
+        }
+
+        It 'Weights a subtype whose entity type already has a resource' {
+            $candidates = @(Find-SubtypeGap -Subtype $script:subtypeRow -Ignore $null -BaselineSubtype @('macOSVpnConfiguration', 'windowsPhone81VpnConfiguration'))
+            $macOS = $candidates | Where-Object -FilterScript { $_.subtype -eq 'macOSVpnConfiguration' }
+
+            $macOS.score | Should -Be 20
+            $macOS.reasons | Should -Contain 'the entity type already has a resource +20'
+        }
+
+        It 'Weights a subtype the baseline does not carry' {
+            $candidates = @(Find-SubtypeGap -Subtype $script:subtypeRow -Ignore $null)
+
+            $candidates[0].score | Should -Be 70
+            $candidates[0].reasons | Should -Contain 'new since the baseline +50'
+        }
+
+        It 'Scores a retired platform below everything else' {
+            $rows = @(
+                [ordered]@{ apiVersion = 'beta'; entityType = 'deviceConfiguration'; subtype = 'windowsPhone81VpnConfiguration'; isAbstract = $false; resource = ''; covered = $false }
+            )
+
+            $candidates = @(Find-SubtypeGap -Subtype $rows -Ignore $null -BaselineSubtype @('windowsPhone81VpnConfiguration'))
+
+            $candidates[0].score | Should -Be -30
+            $candidates[0].reasons | Should -Contain 'platform is retired -30'
+        }
+    }
+
+    Describe 'Compare-Subtype' {
+        BeforeAll {
+            $script:subtypeCandidate = @(
+                [ordered]@{ subtype = 'macOSVpnConfiguration'; entityType = 'deviceConfiguration'; apiVersion = 'beta'; score = 20; reasons = @('the entity type already has a resource +20') }
+                [ordered]@{ subtype = 'iosUpdateConfiguration'; entityType = 'deviceConfiguration'; apiVersion = 'beta'; score = 20; reasons = @() }
+            )
+        }
+
+        It 'Reports only the subtype the baseline does not carry' {
+            $findings = @(Compare-Subtype -Candidate $script:subtypeCandidate -BaselineSubtype @('iosUpdateConfiguration'))
+
+            $findings | Should -HaveCount 1
+            $findings[0].code | Should -Be 'COV-NO-SUBTYPE'
+            $findings[0].id | Should -Be 'COV-NO-SUBTYPE:macOSVpnConfiguration'
+            $findings[0].severity | Should -Be 'info'
+            $findings[0].to.entityType | Should -Be 'deviceConfiguration'
+            $findings[0].evidence.source | Should -Be 'graph:beta/deviceConfiguration'
+        }
+
+        It 'Reports nothing when there is no baseline yet' {
+            Compare-Subtype -Candidate $script:subtypeCandidate -BaselineSubtype @() | Should -HaveCount 0
+        }
+    }
+
+    Describe 'Get-ODataTypeMentionedInCode' {
+        It 'Reads both the discriminator and the bare type name from a resource' {
+            $folder = Join-Path -Path $TestDrive -ChildPath 'MSFT_Sample'
+            $null = New-Item -Path $folder -ItemType Directory -Force
+            Set-Content -Path (Join-Path -Path $folder -ChildPath 'MSFT_Sample.psm1') -Value @(
+                "`$odata = '#microsoft.graph.macOSWiFiConfiguration'"
+                "-ODataType @('microsoft.graph.macOSEnterpriseWiFiConfiguration')"
+            )
+
+            $mentioned = Get-ODataTypeMentionedInCode -ResourcePath $TestDrive
+
+            $mentioned.Contains('macOSWiFiConfiguration') | Should -BeTrue
+            $mentioned.Contains('macOSEnterpriseWiFiConfiguration') | Should -BeTrue
+        }
+
+        It 'Returns an empty set when the path does not exist' {
+            (Get-ODataTypeMentionedInCode -ResourcePath (Join-Path -Path $TestDrive -ChildPath 'missing')).Count | Should -Be 0
+        }
+    }
 }

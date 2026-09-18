@@ -209,17 +209,17 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
                 $myDomainJoinConfigurations = @{}
                 if ($null -ne $currentDomainJoinConfigurations.domainJoinType)
                 {
-                    $myDomainJoinConfigurations.Add('DomainJoinType', $currentDomainJoinConfigurations.domainJoinType.ToString())
+                    $myDomainJoinConfigurations.Add('DomainJoinType', $currentDomainJoinConfigurations.domainJoinType)
                 }
                 $myDomainJoinConfigurations.Add('OnPremisesConnectionId', $currentDomainJoinConfigurations.onPremisesConnectionId)
                 if ($null -ne $currentDomainJoinConfigurations.regionGroup)
                 {
-                    $myDomainJoinConfigurations.Add('RegionGroup', $currentDomainJoinConfigurations.regionGroup.ToString())
+                    $myDomainJoinConfigurations.Add('RegionGroup', $currentDomainJoinConfigurations.regionGroup)
                 }
                 $myDomainJoinConfigurations.Add('RegionName', $currentDomainJoinConfigurations.regionName)
                 if ($null -ne $currentDomainJoinConfigurations.type)
                 {
-                    $myDomainJoinConfigurations.Add('Type', $currentDomainJoinConfigurations.type.ToString())
+                    $myDomainJoinConfigurations.Add('Type', $currentDomainJoinConfigurations.type)
                 }
                 if ($null -ne $currentDomainJoinConfigurations.geographicLocationType)
                 {
@@ -246,26 +246,6 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
             }
             #endregion
 
-            #region resource generator code
-            $enumImageType = $null
-            if ($null -ne $getValue.ImageType)
-            {
-                $enumImageType = $getValue.ImageType.ToString()
-            }
-
-            $enumProvisioningType = $null
-            if ($null -ne $getValue.ProvisioningType)
-            {
-                $enumProvisioningType = $getValue.ProvisioningType.ToString()
-            }
-
-            $enumUserExperienceType = $null
-            if ($null -ne $getValue.UserExperienceType)
-            {
-                $enumUserExperienceType = $getValue.UserExperienceType.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Autopatch                = $complexAutopatch
@@ -277,11 +257,11 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
                 EnableSingleSignOn       = $getValue.EnableSingleSignOn
                 ImageDisplayName         = $getValue.ImageDisplayName
                 ImageId                  = $getValue.ImageId
-                ImageType                = $enumImageType
+                ImageType                = $getValue.ImageType
                 LocalAdminEnabled        = $getValue.LocalAdminEnabled
-                ProvisioningType         = $enumProvisioningType
+                ProvisioningType         = $getValue.ProvisioningType
                 ScopeIds                 = $getValue.ScopeIds
-                UserExperienceType       = $enumUserExperienceType
+                UserExperienceType       = $getValue.UserExperienceType
                 WindowsSetting           = $complexWindowsSetting
                 WindowsSettings          = $complexWindowsSettings
                 Id                       = $getValue.Id

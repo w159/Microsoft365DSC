@@ -205,7 +205,7 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
                 $mycustomSubjectAlternativeNames.Add('Name', $currentcustomSubjectAlternativeNames.name)
                 if ($null -ne $currentcustomSubjectAlternativeNames.sanType)
                 {
-                    $mycustomSubjectAlternativeNames.Add('SanType', $currentcustomSubjectAlternativeNames.sanType.ToString())
+                    $mycustomSubjectAlternativeNames.Add('SanType', $currentcustomSubjectAlternativeNames.sanType)
                 }
                 if ($mycustomSubjectAlternativeNames.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -223,38 +223,6 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
                 {
                     $complexExtendedKeyUsages += $myextendedKeyUsages
                 }
-            }
-            #endregion
-
-            #region resource generator code
-            $enumCertificateStore = $null
-            if ($null -ne $getValue.certificateStore)
-            {
-                $enumCertificateStore = $getValue.certificateStore.ToString()
-            }
-
-            $enumCertificateValidityPeriodScale = $null
-            if ($null -ne $getValue.certificateValidityPeriodScale)
-            {
-                $enumCertificateValidityPeriodScale = $getValue.certificateValidityPeriodScale.ToString()
-            }
-
-            $enumKeyStorageProvider = $null
-            if ($null -ne $getValue.keyStorageProvider)
-            {
-                $enumKeyStorageProvider = $getValue.keyStorageProvider.ToString()
-            }
-
-            $enumSubjectAlternativeNameType = $null
-            if ($null -ne $getValue.subjectAlternativeNameType)
-            {
-                $enumSubjectAlternativeNameType = $getValue.subjectAlternativeNameType.ToString()
-            }
-
-            $enumSubjectNameFormat = $null
-            if ($null -ne $getValue.subjectNameFormat)
-            {
-                $enumSubjectNameFormat = $getValue.subjectNameFormat.ToString()
             }
             #endregion
 
@@ -288,7 +256,7 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
 
             $results = @{
                 #region resource generator code
-                CertificateStore                            = $enumCertificateStore
+                CertificateStore                            = $getValue.certificateStore
                 CertificateTemplateName                     = $getValue.certificateTemplateName
                 CertificationAuthority                      = $getValue.certificationAuthority
                 CertificationAuthorityName                  = $getValue.certificationAuthorityName
@@ -296,12 +264,12 @@ class IntuneDeviceConfigurationPkcsCertificatePolicyWindows10 : M365DSCResourceB
                 ExtendedKeyUsages                           = $complexExtendedKeyUsages
                 SubjectAlternativeNameFormatString          = $getValue.subjectAlternativeNameFormatString
                 SubjectNameFormatString                     = $getValue.subjectNameFormatString
-                CertificateValidityPeriodScale              = $enumCertificateValidityPeriodScale
+                CertificateValidityPeriodScale              = $getValue.certificateValidityPeriodScale
                 CertificateValidityPeriodValue              = $getValue.certificateValidityPeriodValue
-                KeyStorageProvider                          = $enumKeyStorageProvider
+                KeyStorageProvider                          = $getValue.keyStorageProvider
                 RenewalThresholdPercentage                  = $getValue.renewalThresholdPercentage
-                SubjectAlternativeNameType                  = $enumSubjectAlternativeNameType
-                SubjectNameFormat                           = $enumSubjectNameFormat
+                SubjectAlternativeNameType                  = $getValue.subjectAlternativeNameType
+                SubjectNameFormat                           = $getValue.subjectNameFormat
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition

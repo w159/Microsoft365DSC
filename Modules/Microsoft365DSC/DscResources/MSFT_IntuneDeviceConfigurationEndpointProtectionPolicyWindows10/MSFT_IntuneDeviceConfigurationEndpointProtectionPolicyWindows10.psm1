@@ -1111,7 +1111,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexBitLockerFixedDrivePolicy = [ordered]@{}
             if ($null -ne $getValue.bitLockerFixedDrivePolicy.encryptionMethod)
             {
-                $complexBitLockerFixedDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerFixedDrivePolicy.encryptionMethod.ToString())
+                $complexBitLockerFixedDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerFixedDrivePolicy.encryptionMethod)
             }
             $complexRecoveryOptions = [ordered]@{}
             $complexRecoveryOptions.Add('BlockDataRecoveryAgent', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.blockDataRecoveryAgent)
@@ -1120,15 +1120,15 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexRecoveryOptions.Add('HideRecoveryOptions', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.hideRecoveryOptions)
             if ($null -ne $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryInformationToStore)
             {
-                $complexRecoveryOptions.Add('RecoveryInformationToStore', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryInformationToStore.ToString())
+                $complexRecoveryOptions.Add('RecoveryInformationToStore', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryInformationToStore)
             }
             if ($null -ne $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryKeyUsage)
             {
-                $complexRecoveryOptions.Add('RecoveryKeyUsage', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryKeyUsage.ToString())
+                $complexRecoveryOptions.Add('RecoveryKeyUsage', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryKeyUsage)
             }
             if ($null -ne $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryPasswordUsage)
             {
-                $complexRecoveryOptions.Add('RecoveryPasswordUsage', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryPasswordUsage.ToString())
+                $complexRecoveryOptions.Add('RecoveryPasswordUsage', $getValue.bitLockerFixedDrivePolicy.recoveryOptions.recoveryPasswordUsage)
             }
             if ($complexRecoveryOptions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1145,7 +1145,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexBitLockerRemovableDrivePolicy.Add('BlockCrossOrganizationWriteAccess', $getValue.bitLockerRemovableDrivePolicy.blockCrossOrganizationWriteAccess)
             if ($null -ne $getValue.bitLockerRemovableDrivePolicy.encryptionMethod)
             {
-                $complexBitLockerRemovableDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerRemovableDrivePolicy.encryptionMethod.ToString())
+                $complexBitLockerRemovableDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerRemovableDrivePolicy.encryptionMethod)
             }
             $complexBitLockerRemovableDrivePolicy.Add('RequireEncryptionForWriteAccess', $getValue.bitLockerRemovableDrivePolicy.requireEncryptionForWriteAccess)
             if ($complexBitLockerRemovableDrivePolicy.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -1156,7 +1156,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexBitLockerSystemDrivePolicy = [ordered]@{}
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.encryptionMethod)
             {
-                $complexBitLockerSystemDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerSystemDrivePolicy.encryptionMethod.ToString())
+                $complexBitLockerSystemDrivePolicy.Add('EncryptionMethod', $getValue.bitLockerSystemDrivePolicy.encryptionMethod)
             }
             $complexBitLockerSystemDrivePolicy.Add('MinimumPinLength', $getValue.bitLockerSystemDrivePolicy.minimumPinLength)
             $complexBitLockerSystemDrivePolicy.Add('PrebootRecoveryEnableMessageAndUrl', $getValue.bitLockerSystemDrivePolicy.prebootRecoveryEnableMessageAndUrl)
@@ -1169,15 +1169,15 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexRecoveryOptions.Add('HideRecoveryOptions', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.hideRecoveryOptions)
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryInformationToStore)
             {
-                $complexRecoveryOptions.Add('RecoveryInformationToStore', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryInformationToStore.ToString())
+                $complexRecoveryOptions.Add('RecoveryInformationToStore', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryInformationToStore)
             }
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryKeyUsage)
             {
-                $complexRecoveryOptions.Add('RecoveryKeyUsage', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryKeyUsage.ToString())
+                $complexRecoveryOptions.Add('RecoveryKeyUsage', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryKeyUsage)
             }
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryPasswordUsage)
             {
-                $complexRecoveryOptions.Add('RecoveryPasswordUsage', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryPasswordUsage.ToString())
+                $complexRecoveryOptions.Add('RecoveryPasswordUsage', $getValue.bitLockerSystemDrivePolicy.recoveryOptions.recoveryPasswordUsage)
             }
             if ($complexRecoveryOptions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1188,19 +1188,19 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationRequired', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationRequired)
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmKeyUsage)
             {
-                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmKeyUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmKeyUsage.ToString())
+                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmKeyUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmKeyUsage)
             }
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinAndKeyUsage)
             {
-                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmPinAndKeyUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinAndKeyUsage.ToString())
+                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmPinAndKeyUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinAndKeyUsage)
             }
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinUsage)
             {
-                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmPinUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinUsage.ToString())
+                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmPinUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmPinUsage)
             }
             if ($null -ne $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmUsage)
             {
-                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmUsage.ToString())
+                $complexBitLockerSystemDrivePolicy.Add('StartupAuthenticationTpmUsage', $getValue.bitLockerSystemDrivePolicy.startupAuthenticationTpmUsage)
             }
             if ($complexBitLockerSystemDrivePolicy.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1210,19 +1210,19 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexDefenderDetectedMalwareActions = [ordered]@{}
             if ($null -ne $getValue.defenderDetectedMalwareActions.highSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('HighSeverity', $getValue.defenderDetectedMalwareActions.highSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('HighSeverity', $getValue.defenderDetectedMalwareActions.highSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.lowSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('LowSeverity', $getValue.defenderDetectedMalwareActions.lowSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('LowSeverity', $getValue.defenderDetectedMalwareActions.lowSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.moderateSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('ModerateSeverity', $getValue.defenderDetectedMalwareActions.moderateSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('ModerateSeverity', $getValue.defenderDetectedMalwareActions.moderateSeverity)
             }
             if ($null -ne $getValue.defenderDetectedMalwareActions.severeSeverity)
             {
-                $complexDefenderDetectedMalwareActions.Add('SevereSeverity', $getValue.defenderDetectedMalwareActions.severeSeverity.ToString())
+                $complexDefenderDetectedMalwareActions.Add('SevereSeverity', $getValue.defenderDetectedMalwareActions.severeSeverity)
             }
             if ($complexDefenderDetectedMalwareActions.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1264,7 +1264,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexFirewallProfileDomain.Add('ConnectionSecurityRulesFromGroupPolicyNotMerged', $getValue.firewallProfileDomain.connectionSecurityRulesFromGroupPolicyNotMerged)
             if ($null -ne $getValue.firewallProfileDomain.firewallEnabled)
             {
-                $complexFirewallProfileDomain.Add('FirewallEnabled', $getValue.firewallProfileDomain.firewallEnabled.ToString())
+                $complexFirewallProfileDomain.Add('FirewallEnabled', $getValue.firewallProfileDomain.firewallEnabled)
             }
             $complexFirewallProfileDomain.Add('GlobalPortRulesFromGroupPolicyMerged', $getValue.firewallProfileDomain.globalPortRulesFromGroupPolicyMerged)
             $complexFirewallProfileDomain.Add('GlobalPortRulesFromGroupPolicyNotMerged', $getValue.firewallProfileDomain.globalPortRulesFromGroupPolicyNotMerged)
@@ -1296,7 +1296,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexFirewallProfilePrivate.Add('ConnectionSecurityRulesFromGroupPolicyNotMerged', $getValue.firewallProfilePrivate.connectionSecurityRulesFromGroupPolicyNotMerged)
             if ($null -ne $getValue.firewallProfilePrivate.firewallEnabled)
             {
-                $complexFirewallProfilePrivate.Add('FirewallEnabled', $getValue.firewallProfilePrivate.firewallEnabled.ToString())
+                $complexFirewallProfilePrivate.Add('FirewallEnabled', $getValue.firewallProfilePrivate.firewallEnabled)
             }
             $complexFirewallProfilePrivate.Add('GlobalPortRulesFromGroupPolicyMerged', $getValue.firewallProfilePrivate.globalPortRulesFromGroupPolicyMerged)
             $complexFirewallProfilePrivate.Add('GlobalPortRulesFromGroupPolicyNotMerged', $getValue.firewallProfilePrivate.globalPortRulesFromGroupPolicyNotMerged)
@@ -1328,7 +1328,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexFirewallProfilePublic.Add('ConnectionSecurityRulesFromGroupPolicyNotMerged', $getValue.firewallProfilePublic.connectionSecurityRulesFromGroupPolicyNotMerged)
             if ($null -ne $getValue.firewallProfilePublic.firewallEnabled)
             {
-                $complexFirewallProfilePublic.Add('FirewallEnabled', $getValue.firewallProfilePublic.firewallEnabled.ToString())
+                $complexFirewallProfilePublic.Add('FirewallEnabled', $getValue.firewallProfilePublic.firewallEnabled)
             }
             $complexFirewallProfilePublic.Add('GlobalPortRulesFromGroupPolicyMerged', $getValue.firewallProfilePublic.globalPortRulesFromGroupPolicyMerged)
             $complexFirewallProfilePublic.Add('GlobalPortRulesFromGroupPolicyNotMerged', $getValue.firewallProfilePublic.globalPortRulesFromGroupPolicyNotMerged)
@@ -1359,13 +1359,13 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 $myfirewallRules = [ordered]@{}
                 if ($null -ne $currentfirewallRules.action)
                 {
-                    $myfirewallRules.Add('Action', $currentfirewallRules.action.ToString())
+                    $myfirewallRules.Add('Action', $currentfirewallRules.action)
                 }
                 $myfirewallRules.Add('Description', $currentfirewallRules.description)
                 $myfirewallRules.Add('DisplayName', $currentfirewallRules.displayName)
                 if ($null -ne $currentfirewallRules.edgeTraversal)
                 {
-                    $myfirewallRules.Add('EdgeTraversal', $currentfirewallRules.edgeTraversal.ToString())
+                    $myfirewallRules.Add('EdgeTraversal', $currentfirewallRules.edgeTraversal)
                 }
                 $myfirewallRules.Add('FilePath', $currentfirewallRules.filePath)
                 if ($null -ne $currentfirewallRules.interfaceTypes)
@@ -1378,7 +1378,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 $myfirewallRules.Add('PackageFamilyName', $currentfirewallRules.packageFamilyName)
                 if ($null -ne $currentfirewallRules.profileTypes)
                 {
-                    $myfirewallRules.Add('ProfileTypes', $currentfirewallRules.profileTypes.ToString())
+                    $myfirewallRules.Add('ProfileTypes', $currentfirewallRules.profileTypes)
                 }
                 $myfirewallRules.Add('Protocol', $currentfirewallRules.protocol)
                 $myfirewallRules.Add('RemoteAddressRanges', $currentfirewallRules.remoteAddressRanges)
@@ -1386,7 +1386,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 $myfirewallRules.Add('ServiceName', $currentfirewallRules.serviceName)
                 if ($null -ne $currentfirewallRules.trafficDirection)
                 {
-                    $myfirewallRules.Add('TrafficDirection', $currentfirewallRules.trafficDirection.ToString())
+                    $myfirewallRules.Add('TrafficDirection', $currentfirewallRules.trafficDirection)
                 }
                 if ($myfirewallRules.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -1410,7 +1410,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsAccessCredentialManagerAsTrustedCaller.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsAccessCredentialManagerAsTrustedCaller.state)
             {
-                $complexUserRightsAccessCredentialManagerAsTrustedCaller.Add('State', $getValue.userRightsAccessCredentialManagerAsTrustedCaller.state.ToString())
+                $complexUserRightsAccessCredentialManagerAsTrustedCaller.Add('State', $getValue.userRightsAccessCredentialManagerAsTrustedCaller.state)
             }
             if ($complexUserRightsAccessCredentialManagerAsTrustedCaller.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1433,7 +1433,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsActAsPartOfTheOperatingSystem.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsActAsPartOfTheOperatingSystem.state)
             {
-                $complexUserRightsActAsPartOfTheOperatingSystem.Add('State', $getValue.userRightsActAsPartOfTheOperatingSystem.state.ToString())
+                $complexUserRightsActAsPartOfTheOperatingSystem.Add('State', $getValue.userRightsActAsPartOfTheOperatingSystem.state)
             }
             if ($complexUserRightsActAsPartOfTheOperatingSystem.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1456,7 +1456,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsAllowAccessFromNetwork.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsAllowAccessFromNetwork.state)
             {
-                $complexUserRightsAllowAccessFromNetwork.Add('State', $getValue.userRightsAllowAccessFromNetwork.state.ToString())
+                $complexUserRightsAllowAccessFromNetwork.Add('State', $getValue.userRightsAllowAccessFromNetwork.state)
             }
             if ($complexUserRightsAllowAccessFromNetwork.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1479,7 +1479,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsBackupData.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsBackupData.state)
             {
-                $complexUserRightsBackupData.Add('State', $getValue.userRightsBackupData.state.ToString())
+                $complexUserRightsBackupData.Add('State', $getValue.userRightsBackupData.state)
             }
             if ($complexUserRightsBackupData.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1502,7 +1502,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsBlockAccessFromNetwork.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsBlockAccessFromNetwork.state)
             {
-                $complexUserRightsBlockAccessFromNetwork.Add('State', $getValue.userRightsBlockAccessFromNetwork.state.ToString())
+                $complexUserRightsBlockAccessFromNetwork.Add('State', $getValue.userRightsBlockAccessFromNetwork.state)
             }
             if ($complexUserRightsBlockAccessFromNetwork.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1525,7 +1525,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsChangeSystemTime.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsChangeSystemTime.state)
             {
-                $complexUserRightsChangeSystemTime.Add('State', $getValue.userRightsChangeSystemTime.state.ToString())
+                $complexUserRightsChangeSystemTime.Add('State', $getValue.userRightsChangeSystemTime.state)
             }
             if ($complexUserRightsChangeSystemTime.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1548,7 +1548,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsCreateGlobalObjects.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsCreateGlobalObjects.state)
             {
-                $complexUserRightsCreateGlobalObjects.Add('State', $getValue.userRightsCreateGlobalObjects.state.ToString())
+                $complexUserRightsCreateGlobalObjects.Add('State', $getValue.userRightsCreateGlobalObjects.state)
             }
             if ($complexUserRightsCreateGlobalObjects.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1571,7 +1571,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsCreatePageFile.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsCreatePageFile.state)
             {
-                $complexUserRightsCreatePageFile.Add('State', $getValue.userRightsCreatePageFile.state.ToString())
+                $complexUserRightsCreatePageFile.Add('State', $getValue.userRightsCreatePageFile.state)
             }
             if ($complexUserRightsCreatePageFile.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1594,7 +1594,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsCreatePermanentSharedObjects.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsCreatePermanentSharedObjects.state)
             {
-                $complexUserRightsCreatePermanentSharedObjects.Add('State', $getValue.userRightsCreatePermanentSharedObjects.state.ToString())
+                $complexUserRightsCreatePermanentSharedObjects.Add('State', $getValue.userRightsCreatePermanentSharedObjects.state)
             }
             if ($complexUserRightsCreatePermanentSharedObjects.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1617,7 +1617,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsCreateSymbolicLinks.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsCreateSymbolicLinks.state)
             {
-                $complexUserRightsCreateSymbolicLinks.Add('State', $getValue.userRightsCreateSymbolicLinks.state.ToString())
+                $complexUserRightsCreateSymbolicLinks.Add('State', $getValue.userRightsCreateSymbolicLinks.state)
             }
             if ($complexUserRightsCreateSymbolicLinks.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1640,7 +1640,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsCreateToken.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsCreateToken.state)
             {
-                $complexUserRightsCreateToken.Add('State', $getValue.userRightsCreateToken.state.ToString())
+                $complexUserRightsCreateToken.Add('State', $getValue.userRightsCreateToken.state)
             }
             if ($complexUserRightsCreateToken.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1663,7 +1663,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsDebugPrograms.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsDebugPrograms.state)
             {
-                $complexUserRightsDebugPrograms.Add('State', $getValue.userRightsDebugPrograms.state.ToString())
+                $complexUserRightsDebugPrograms.Add('State', $getValue.userRightsDebugPrograms.state)
             }
             if ($complexUserRightsDebugPrograms.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1686,7 +1686,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsDelegation.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsDelegation.state)
             {
-                $complexUserRightsDelegation.Add('State', $getValue.userRightsDelegation.state.ToString())
+                $complexUserRightsDelegation.Add('State', $getValue.userRightsDelegation.state)
             }
             if ($complexUserRightsDelegation.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1709,7 +1709,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsDenyLocalLogOn.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsDenyLocalLogOn.state)
             {
-                $complexUserRightsDenyLocalLogOn.Add('State', $getValue.userRightsDenyLocalLogOn.state.ToString())
+                $complexUserRightsDenyLocalLogOn.Add('State', $getValue.userRightsDenyLocalLogOn.state)
             }
             if ($complexUserRightsDenyLocalLogOn.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1732,7 +1732,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsGenerateSecurityAudits.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsGenerateSecurityAudits.state)
             {
-                $complexUserRightsGenerateSecurityAudits.Add('State', $getValue.userRightsGenerateSecurityAudits.state.ToString())
+                $complexUserRightsGenerateSecurityAudits.Add('State', $getValue.userRightsGenerateSecurityAudits.state)
             }
             if ($complexUserRightsGenerateSecurityAudits.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1755,7 +1755,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsImpersonateClient.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsImpersonateClient.state)
             {
-                $complexUserRightsImpersonateClient.Add('State', $getValue.userRightsImpersonateClient.state.ToString())
+                $complexUserRightsImpersonateClient.Add('State', $getValue.userRightsImpersonateClient.state)
             }
             if ($complexUserRightsImpersonateClient.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1778,7 +1778,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsIncreaseSchedulingPriority.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsIncreaseSchedulingPriority.state)
             {
-                $complexUserRightsIncreaseSchedulingPriority.Add('State', $getValue.userRightsIncreaseSchedulingPriority.state.ToString())
+                $complexUserRightsIncreaseSchedulingPriority.Add('State', $getValue.userRightsIncreaseSchedulingPriority.state)
             }
             if ($complexUserRightsIncreaseSchedulingPriority.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1801,7 +1801,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsLoadUnloadDrivers.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsLoadUnloadDrivers.state)
             {
-                $complexUserRightsLoadUnloadDrivers.Add('State', $getValue.userRightsLoadUnloadDrivers.state.ToString())
+                $complexUserRightsLoadUnloadDrivers.Add('State', $getValue.userRightsLoadUnloadDrivers.state)
             }
             if ($complexUserRightsLoadUnloadDrivers.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1824,7 +1824,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsLocalLogOn.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsLocalLogOn.state)
             {
-                $complexUserRightsLocalLogOn.Add('State', $getValue.userRightsLocalLogOn.state.ToString())
+                $complexUserRightsLocalLogOn.Add('State', $getValue.userRightsLocalLogOn.state)
             }
             if ($complexUserRightsLocalLogOn.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1847,7 +1847,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsLockMemory.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsLockMemory.state)
             {
-                $complexUserRightsLockMemory.Add('State', $getValue.userRightsLockMemory.state.ToString())
+                $complexUserRightsLockMemory.Add('State', $getValue.userRightsLockMemory.state)
             }
             if ($complexUserRightsLockMemory.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1870,7 +1870,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsManageAuditingAndSecurityLogs.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsManageAuditingAndSecurityLogs.state)
             {
-                $complexUserRightsManageAuditingAndSecurityLogs.Add('State', $getValue.userRightsManageAuditingAndSecurityLogs.state.ToString())
+                $complexUserRightsManageAuditingAndSecurityLogs.Add('State', $getValue.userRightsManageAuditingAndSecurityLogs.state)
             }
             if ($complexUserRightsManageAuditingAndSecurityLogs.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1893,7 +1893,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsManageVolumes.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsManageVolumes.state)
             {
-                $complexUserRightsManageVolumes.Add('State', $getValue.userRightsManageVolumes.state.ToString())
+                $complexUserRightsManageVolumes.Add('State', $getValue.userRightsManageVolumes.state)
             }
             if ($complexUserRightsManageVolumes.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1916,7 +1916,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsModifyFirmwareEnvironment.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsModifyFirmwareEnvironment.state)
             {
-                $complexUserRightsModifyFirmwareEnvironment.Add('State', $getValue.userRightsModifyFirmwareEnvironment.state.ToString())
+                $complexUserRightsModifyFirmwareEnvironment.Add('State', $getValue.userRightsModifyFirmwareEnvironment.state)
             }
             if ($complexUserRightsModifyFirmwareEnvironment.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1939,7 +1939,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsModifyObjectLabels.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsModifyObjectLabels.state)
             {
-                $complexUserRightsModifyObjectLabels.Add('State', $getValue.userRightsModifyObjectLabels.state.ToString())
+                $complexUserRightsModifyObjectLabels.Add('State', $getValue.userRightsModifyObjectLabels.state)
             }
             if ($complexUserRightsModifyObjectLabels.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1962,7 +1962,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsProfileSingleProcess.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsProfileSingleProcess.state)
             {
-                $complexUserRightsProfileSingleProcess.Add('State', $getValue.userRightsProfileSingleProcess.state.ToString())
+                $complexUserRightsProfileSingleProcess.Add('State', $getValue.userRightsProfileSingleProcess.state)
             }
             if ($complexUserRightsProfileSingleProcess.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -1985,7 +1985,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsRemoteDesktopServicesLogOn.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsRemoteDesktopServicesLogOn.state)
             {
-                $complexUserRightsRemoteDesktopServicesLogOn.Add('State', $getValue.userRightsRemoteDesktopServicesLogOn.state.ToString())
+                $complexUserRightsRemoteDesktopServicesLogOn.Add('State', $getValue.userRightsRemoteDesktopServicesLogOn.state)
             }
             if ($complexUserRightsRemoteDesktopServicesLogOn.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -2008,7 +2008,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsRemoteShutdown.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsRemoteShutdown.state)
             {
-                $complexUserRightsRemoteShutdown.Add('State', $getValue.userRightsRemoteShutdown.state.ToString())
+                $complexUserRightsRemoteShutdown.Add('State', $getValue.userRightsRemoteShutdown.state)
             }
             if ($complexUserRightsRemoteShutdown.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -2031,7 +2031,7 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsRestoreData.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsRestoreData.state)
             {
-                $complexUserRightsRestoreData.Add('State', $getValue.userRightsRestoreData.state.ToString())
+                $complexUserRightsRestoreData.Add('State', $getValue.userRightsRestoreData.state)
             }
             if ($complexUserRightsRestoreData.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -2054,380 +2054,11 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
             $complexUserRightsTakeOwnership.Add('LocalUsersOrGroups', $complexLocalUsersOrGroups)
             if ($null -ne $getValue.userRightsTakeOwnership.state)
             {
-                $complexUserRightsTakeOwnership.Add('State', $getValue.userRightsTakeOwnership.state.ToString())
+                $complexUserRightsTakeOwnership.Add('State', $getValue.userRightsTakeOwnership.state)
             }
             if ($complexUserRightsTakeOwnership.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexUserRightsTakeOwnership = $null
-            }
-
-            #endregion
-
-            #region resource generator code
-            $enumApplicationGuardBlockClipboardSharing = $null
-            if ($null -ne $getValue.applicationGuardBlockClipboardSharing)
-            {
-                $enumApplicationGuardBlockClipboardSharing = $getValue.applicationGuardBlockClipboardSharing.ToString()
-            }
-
-            $enumApplicationGuardBlockFileTransfer = $null
-            if ($null -ne $getValue.applicationGuardBlockFileTransfer)
-            {
-                $enumApplicationGuardBlockFileTransfer = $getValue.applicationGuardBlockFileTransfer.ToString()
-            }
-
-            $enumApplicationGuardEnabledOptions = $null
-            if ($null -ne $getValue.applicationGuardEnabledOptions)
-            {
-                $enumApplicationGuardEnabledOptions = $getValue.applicationGuardEnabledOptions.ToString()
-            }
-
-            $enumAppLockerApplicationControl = $null
-            if ($null -ne $getValue.appLockerApplicationControl)
-            {
-                $enumAppLockerApplicationControl = $getValue.appLockerApplicationControl.ToString()
-            }
-
-            $enumBitLockerRecoveryPasswordRotation = $null
-            if ($null -ne $getValue.bitLockerRecoveryPasswordRotation)
-            {
-                $enumBitLockerRecoveryPasswordRotation = $getValue.bitLockerRecoveryPasswordRotation.ToString()
-            }
-
-            $enumDefenderAdobeReaderLaunchChildProcess = $null
-            if ($null -ne $getValue.defenderAdobeReaderLaunchChildProcess)
-            {
-                $enumDefenderAdobeReaderLaunchChildProcess = $getValue.defenderAdobeReaderLaunchChildProcess.ToString()
-            }
-
-            $enumDefenderAdvancedRansomewareProtectionType = $null
-            if ($null -ne $getValue.defenderAdvancedRansomewareProtectionType)
-            {
-                $enumDefenderAdvancedRansomewareProtectionType = $getValue.defenderAdvancedRansomewareProtectionType.ToString()
-            }
-
-            $enumDefenderBlockPersistenceThroughWmiType = $null
-            if ($null -ne $getValue.defenderBlockPersistenceThroughWmiType)
-            {
-                $enumDefenderBlockPersistenceThroughWmiType = $getValue.defenderBlockPersistenceThroughWmiType.ToString()
-            }
-
-            $enumDefenderCloudBlockLevel = $null
-            if ($null -ne $getValue.defenderCloudBlockLevel)
-            {
-                $enumDefenderCloudBlockLevel = $getValue.defenderCloudBlockLevel.ToString()
-            }
-
-            $enumDefenderEmailContentExecution = $null
-            if ($null -ne $getValue.defenderEmailContentExecution)
-            {
-                $enumDefenderEmailContentExecution = $getValue.defenderEmailContentExecution.ToString()
-            }
-
-            $enumDefenderEmailContentExecutionType = $null
-            if ($null -ne $getValue.defenderEmailContentExecutionType)
-            {
-                $enumDefenderEmailContentExecutionType = $getValue.defenderEmailContentExecutionType.ToString()
-            }
-
-            $enumDefenderGuardMyFoldersType = $null
-            if ($null -ne $getValue.defenderGuardMyFoldersType)
-            {
-                $enumDefenderGuardMyFoldersType = $getValue.defenderGuardMyFoldersType.ToString()
-            }
-
-            $enumDefenderNetworkProtectionType = $null
-            if ($null -ne $getValue.defenderNetworkProtectionType)
-            {
-                $enumDefenderNetworkProtectionType = $getValue.defenderNetworkProtectionType.ToString()
-            }
-
-            $enumDefenderOfficeAppsExecutableContentCreationOrLaunch = $null
-            if ($null -ne $getValue.defenderOfficeAppsExecutableContentCreationOrLaunch)
-            {
-                $enumDefenderOfficeAppsExecutableContentCreationOrLaunch = $getValue.defenderOfficeAppsExecutableContentCreationOrLaunch.ToString()
-            }
-
-            $enumDefenderOfficeAppsExecutableContentCreationOrLaunchType = $null
-            if ($null -ne $getValue.defenderOfficeAppsExecutableContentCreationOrLaunchType)
-            {
-                $enumDefenderOfficeAppsExecutableContentCreationOrLaunchType = $getValue.defenderOfficeAppsExecutableContentCreationOrLaunchType.ToString()
-            }
-
-            $enumDefenderOfficeAppsLaunchChildProcess = $null
-            if ($null -ne $getValue.defenderOfficeAppsLaunchChildProcess)
-            {
-                $enumDefenderOfficeAppsLaunchChildProcess = $getValue.defenderOfficeAppsLaunchChildProcess.ToString()
-            }
-
-            $enumDefenderOfficeAppsLaunchChildProcessType = $null
-            if ($null -ne $getValue.defenderOfficeAppsLaunchChildProcessType)
-            {
-                $enumDefenderOfficeAppsLaunchChildProcessType = $getValue.defenderOfficeAppsLaunchChildProcessType.ToString()
-            }
-
-            $enumDefenderOfficeAppsOtherProcessInjection = $null
-            if ($null -ne $getValue.defenderOfficeAppsOtherProcessInjection)
-            {
-                $enumDefenderOfficeAppsOtherProcessInjection = $getValue.defenderOfficeAppsOtherProcessInjection.ToString()
-            }
-
-            $enumDefenderOfficeAppsOtherProcessInjectionType = $null
-            if ($null -ne $getValue.defenderOfficeAppsOtherProcessInjectionType)
-            {
-                $enumDefenderOfficeAppsOtherProcessInjectionType = $getValue.defenderOfficeAppsOtherProcessInjectionType.ToString()
-            }
-
-            $enumDefenderOfficeCommunicationAppsLaunchChildProcess = $null
-            if ($null -ne $getValue.defenderOfficeCommunicationAppsLaunchChildProcess)
-            {
-                $enumDefenderOfficeCommunicationAppsLaunchChildProcess = $getValue.defenderOfficeCommunicationAppsLaunchChildProcess.ToString()
-            }
-
-            $enumDefenderOfficeMacroCodeAllowWin32Imports = $null
-            if ($null -ne $getValue.defenderOfficeMacroCodeAllowWin32Imports)
-            {
-                $enumDefenderOfficeMacroCodeAllowWin32Imports = $getValue.defenderOfficeMacroCodeAllowWin32Imports.ToString()
-            }
-
-            $enumDefenderOfficeMacroCodeAllowWin32ImportsType = $null
-            if ($null -ne $getValue.defenderOfficeMacroCodeAllowWin32ImportsType)
-            {
-                $enumDefenderOfficeMacroCodeAllowWin32ImportsType = $getValue.defenderOfficeMacroCodeAllowWin32ImportsType.ToString()
-            }
-
-            $enumDefenderPotentiallyUnwantedAppAction = $null
-            if ($null -ne $getValue.defenderPotentiallyUnwantedAppAction)
-            {
-                $enumDefenderPotentiallyUnwantedAppAction = $getValue.defenderPotentiallyUnwantedAppAction.ToString()
-            }
-
-            $enumDefenderPreventCredentialStealingType = $null
-            if ($null -ne $getValue.defenderPreventCredentialStealingType)
-            {
-                $enumDefenderPreventCredentialStealingType = $getValue.defenderPreventCredentialStealingType.ToString()
-            }
-
-            $enumDefenderProcessCreation = $null
-            if ($null -ne $getValue.defenderProcessCreation)
-            {
-                $enumDefenderProcessCreation = $getValue.defenderProcessCreation.ToString()
-            }
-
-            $enumDefenderProcessCreationType = $null
-            if ($null -ne $getValue.defenderProcessCreationType)
-            {
-                $enumDefenderProcessCreationType = $getValue.defenderProcessCreationType.ToString()
-            }
-
-            $enumDefenderScanDirection = $null
-            if ($null -ne $getValue.defenderScanDirection)
-            {
-                $enumDefenderScanDirection = $getValue.defenderScanDirection.ToString()
-            }
-
-            $enumDefenderScanType = $null
-            if ($null -ne $getValue.defenderScanType)
-            {
-                $enumDefenderScanType = $getValue.defenderScanType.ToString()
-            }
-
-            $enumDefenderScheduledScanDay = $null
-            if ($null -ne $getValue.defenderScheduledScanDay)
-            {
-                $enumDefenderScheduledScanDay = $getValue.defenderScheduledScanDay.ToString()
-            }
-
-            $enumDefenderScriptDownloadedPayloadExecution = $null
-            if ($null -ne $getValue.defenderScriptDownloadedPayloadExecution)
-            {
-                $enumDefenderScriptDownloadedPayloadExecution = $getValue.defenderScriptDownloadedPayloadExecution.ToString()
-            }
-
-            $enumDefenderScriptDownloadedPayloadExecutionType = $null
-            if ($null -ne $getValue.defenderScriptDownloadedPayloadExecutionType)
-            {
-                $enumDefenderScriptDownloadedPayloadExecutionType = $getValue.defenderScriptDownloadedPayloadExecutionType.ToString()
-            }
-
-            $enumDefenderScriptObfuscatedMacroCode = $null
-            if ($null -ne $getValue.defenderScriptObfuscatedMacroCode)
-            {
-                $enumDefenderScriptObfuscatedMacroCode = $getValue.defenderScriptObfuscatedMacroCode.ToString()
-            }
-
-            $enumDefenderScriptObfuscatedMacroCodeType = $null
-            if ($null -ne $getValue.defenderScriptObfuscatedMacroCodeType)
-            {
-                $enumDefenderScriptObfuscatedMacroCodeType = $getValue.defenderScriptObfuscatedMacroCodeType.ToString()
-            }
-
-            $enumDefenderSecurityCenterITContactDisplay = $null
-            if ($null -ne $getValue.defenderSecurityCenterITContactDisplay)
-            {
-                $enumDefenderSecurityCenterITContactDisplay = $getValue.defenderSecurityCenterITContactDisplay.ToString()
-            }
-
-            $enumDefenderSecurityCenterNotificationsFromApp = $null
-            if ($null -ne $getValue.defenderSecurityCenterNotificationsFromApp)
-            {
-                $enumDefenderSecurityCenterNotificationsFromApp = $getValue.defenderSecurityCenterNotificationsFromApp.ToString()
-            }
-
-            $enumDefenderSubmitSamplesConsentType = $null
-            if ($null -ne $getValue.defenderSubmitSamplesConsentType)
-            {
-                $enumDefenderSubmitSamplesConsentType = $getValue.defenderSubmitSamplesConsentType.ToString()
-            }
-
-            $enumDefenderUntrustedExecutable = $null
-            if ($null -ne $getValue.defenderUntrustedExecutable)
-            {
-                $enumDefenderUntrustedExecutable = $getValue.defenderUntrustedExecutable.ToString()
-            }
-
-            $enumDefenderUntrustedExecutableType = $null
-            if ($null -ne $getValue.defenderUntrustedExecutableType)
-            {
-                $enumDefenderUntrustedExecutableType = $getValue.defenderUntrustedExecutableType.ToString()
-            }
-
-            $enumDefenderUntrustedUSBProcess = $null
-            if ($null -ne $getValue.defenderUntrustedUSBProcess)
-            {
-                $enumDefenderUntrustedUSBProcess = $getValue.defenderUntrustedUSBProcess.ToString()
-            }
-
-            $enumDefenderUntrustedUSBProcessType = $null
-            if ($null -ne $getValue.defenderUntrustedUSBProcessType)
-            {
-                $enumDefenderUntrustedUSBProcessType = $getValue.defenderUntrustedUSBProcessType.ToString()
-            }
-
-            $enumDeviceGuardLaunchSystemGuard = $null
-            if ($null -ne $getValue.deviceGuardLaunchSystemGuard)
-            {
-                $enumDeviceGuardLaunchSystemGuard = $getValue.deviceGuardLaunchSystemGuard.ToString()
-            }
-
-            $enumDeviceGuardLocalSystemAuthorityCredentialGuardSettings = $null
-            if ($null -ne $getValue.deviceGuardLocalSystemAuthorityCredentialGuardSettings)
-            {
-                $enumDeviceGuardLocalSystemAuthorityCredentialGuardSettings = $getValue.deviceGuardLocalSystemAuthorityCredentialGuardSettings.ToString()
-            }
-
-            $enumDeviceGuardSecureBootWithDMA = $null
-            if ($null -ne $getValue.deviceGuardSecureBootWithDMA)
-            {
-                $enumDeviceGuardSecureBootWithDMA = $getValue.deviceGuardSecureBootWithDMA.ToString()
-            }
-
-            $enumDmaGuardDeviceEnumerationPolicy = $null
-            if ($null -ne $getValue.dmaGuardDeviceEnumerationPolicy)
-            {
-                $enumDmaGuardDeviceEnumerationPolicy = $getValue.dmaGuardDeviceEnumerationPolicy.ToString()
-            }
-
-            $enumFirewallCertificateRevocationListCheckMethod = $null
-            if ($null -ne $getValue.firewallCertificateRevocationListCheckMethod)
-            {
-                $enumFirewallCertificateRevocationListCheckMethod = $getValue.firewallCertificateRevocationListCheckMethod.ToString()
-            }
-
-            $enumFirewallPacketQueueingMethod = $null
-            if ($null -ne $getValue.firewallPacketQueueingMethod)
-            {
-                $enumFirewallPacketQueueingMethod = $getValue.firewallPacketQueueingMethod.ToString()
-            }
-
-            $enumFirewallPreSharedKeyEncodingMethod = $null
-            if ($null -ne $getValue.firewallPreSharedKeyEncodingMethod)
-            {
-                $enumFirewallPreSharedKeyEncodingMethod = $getValue.firewallPreSharedKeyEncodingMethod.ToString()
-            }
-
-            $enumLanManagerAuthenticationLevel = $null
-            if ($null -ne $getValue.lanManagerAuthenticationLevel)
-            {
-                $enumLanManagerAuthenticationLevel = $getValue.lanManagerAuthenticationLevel.ToString()
-            }
-
-            $enumLocalSecurityOptionsAdministratorElevationPromptBehavior = $null
-            if ($null -ne $getValue.localSecurityOptionsAdministratorElevationPromptBehavior)
-            {
-                $enumLocalSecurityOptionsAdministratorElevationPromptBehavior = $getValue.localSecurityOptionsAdministratorElevationPromptBehavior.ToString()
-            }
-
-            $enumLocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser = $null
-            if ($null -ne $getValue.localSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser)
-            {
-                $enumLocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser = $getValue.localSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser.ToString()
-            }
-
-            $enumLocalSecurityOptionsInformationDisplayedOnLockScreen = $null
-            if ($null -ne $getValue.localSecurityOptionsInformationDisplayedOnLockScreen)
-            {
-                $enumLocalSecurityOptionsInformationDisplayedOnLockScreen = $getValue.localSecurityOptionsInformationDisplayedOnLockScreen.ToString()
-            }
-
-            $enumLocalSecurityOptionsInformationShownOnLockScreen = $null
-            if ($null -ne $getValue.localSecurityOptionsInformationShownOnLockScreen)
-            {
-                $enumLocalSecurityOptionsInformationShownOnLockScreen = $getValue.localSecurityOptionsInformationShownOnLockScreen.ToString()
-            }
-
-            $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients = $null
-            if ($null -ne $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients)
-            {
-                $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients = $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients.ToString()
-            }
-
-            $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers = $null
-            if ($null -ne $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers)
-            {
-                $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers = $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers.ToString()
-            }
-
-            $enumLocalSecurityOptionsSmartCardRemovalBehavior = $null
-            if ($null -ne $getValue.localSecurityOptionsSmartCardRemovalBehavior)
-            {
-                $enumLocalSecurityOptionsSmartCardRemovalBehavior = $getValue.localSecurityOptionsSmartCardRemovalBehavior.ToString()
-            }
-
-            $enumLocalSecurityOptionsStandardUserElevationPromptBehavior = $null
-            if ($null -ne $getValue.localSecurityOptionsStandardUserElevationPromptBehavior)
-            {
-                $enumLocalSecurityOptionsStandardUserElevationPromptBehavior = $getValue.localSecurityOptionsStandardUserElevationPromptBehavior.ToString()
-            }
-
-            $enumWindowsDefenderTamperProtection = $null
-            if ($null -ne $getValue.windowsDefenderTamperProtection)
-            {
-                $enumWindowsDefenderTamperProtection = $getValue.windowsDefenderTamperProtection.ToString()
-            }
-
-            $enumXboxServicesAccessoryManagementServiceStartupMode = $null
-            if ($null -ne $getValue.xboxServicesAccessoryManagementServiceStartupMode)
-            {
-                $enumXboxServicesAccessoryManagementServiceStartupMode = $getValue.xboxServicesAccessoryManagementServiceStartupMode.ToString()
-            }
-
-            $enumXboxServicesLiveAuthManagerServiceStartupMode = $null
-            if ($null -ne $getValue.xboxServicesLiveAuthManagerServiceStartupMode)
-            {
-                $enumXboxServicesLiveAuthManagerServiceStartupMode = $getValue.xboxServicesLiveAuthManagerServiceStartupMode.ToString()
-            }
-
-            $enumXboxServicesLiveGameSaveServiceStartupMode = $null
-            if ($null -ne $getValue.xboxServicesLiveGameSaveServiceStartupMode)
-            {
-                $enumXboxServicesLiveGameSaveServiceStartupMode = $getValue.xboxServicesLiveGameSaveServiceStartupMode.ToString()
-            }
-
-            $enumXboxServicesLiveNetworkingServiceStartupMode = $null
-            if ($null -ne $getValue.xboxServicesLiveNetworkingServiceStartupMode)
-            {
-                $enumXboxServicesLiveNetworkingServiceStartupMode = $getValue.xboxServicesLiveNetworkingServiceStartupMode.ToString()
             }
 
             #endregion
@@ -2457,25 +2088,25 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 ApplicationGuardAllowPrintToPDF                                              = $getValue.applicationGuardAllowPrintToPDF
                 ApplicationGuardAllowPrintToXPS                                              = $getValue.applicationGuardAllowPrintToXPS
                 ApplicationGuardAllowVirtualGPU                                              = $getValue.applicationGuardAllowVirtualGPU
-                ApplicationGuardBlockClipboardSharing                                        = $enumApplicationGuardBlockClipboardSharing
-                ApplicationGuardBlockFileTransfer                                            = $enumApplicationGuardBlockFileTransfer
+                ApplicationGuardBlockClipboardSharing                                        = $getValue.applicationGuardBlockClipboardSharing
+                ApplicationGuardBlockFileTransfer                                            = $getValue.applicationGuardBlockFileTransfer
                 ApplicationGuardBlockNonEnterpriseContent                                    = $getValue.applicationGuardBlockNonEnterpriseContent
                 ApplicationGuardCertificateThumbprints                                       = $getValue.applicationGuardCertificateThumbprints
                 ApplicationGuardEnabled                                                      = $getValue.applicationGuardEnabled
-                ApplicationGuardEnabledOptions                                               = $enumApplicationGuardEnabledOptions
+                ApplicationGuardEnabledOptions                                               = $getValue.applicationGuardEnabledOptions
                 ApplicationGuardForceAuditing                                                = $getValue.applicationGuardForceAuditing
-                AppLockerApplicationControl                                                  = $enumAppLockerApplicationControl
+                AppLockerApplicationControl                                                  = $getValue.appLockerApplicationControl
                 BitLockerAllowStandardUserEncryption                                         = $getValue.bitLockerAllowStandardUserEncryption
                 BitLockerDisableWarningForOtherDiskEncryption                                = $getValue.bitLockerDisableWarningForOtherDiskEncryption
                 BitLockerEnableStorageCardEncryptionOnMobile                                 = $getValue.bitLockerEnableStorageCardEncryptionOnMobile
                 BitLockerEncryptDevice                                                       = $getValue.bitLockerEncryptDevice
                 BitLockerFixedDrivePolicy                                                    = $complexBitLockerFixedDrivePolicy
-                BitLockerRecoveryPasswordRotation                                            = $enumBitLockerRecoveryPasswordRotation
+                BitLockerRecoveryPasswordRotation                                            = $getValue.bitLockerRecoveryPasswordRotation
                 BitLockerRemovableDrivePolicy                                                = $complexBitLockerRemovableDrivePolicy
                 BitLockerSystemDrivePolicy                                                   = $complexBitLockerSystemDrivePolicy
                 DefenderAdditionalGuardedFolders                                             = $getValue.defenderAdditionalGuardedFolders
-                DefenderAdobeReaderLaunchChildProcess                                        = $enumDefenderAdobeReaderLaunchChildProcess
-                DefenderAdvancedRansomewareProtectionType                                    = $enumDefenderAdvancedRansomewareProtectionType
+                DefenderAdobeReaderLaunchChildProcess                                        = $getValue.defenderAdobeReaderLaunchChildProcess
+                DefenderAdvancedRansomewareProtectionType                                    = $getValue.defenderAdvancedRansomewareProtectionType
                 DefenderAllowBehaviorMonitoring                                              = $getValue.defenderAllowBehaviorMonitoring
                 DefenderAllowCloudProtection                                                 = $getValue.defenderAllowCloudProtection
                 DefenderAllowEndUserAccess                                                   = $getValue.defenderAllowEndUserAccess
@@ -2489,9 +2120,9 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DefenderAllowScanScriptsLoadedInInternetExplorer                             = $getValue.defenderAllowScanScriptsLoadedInInternetExplorer
                 DefenderAttackSurfaceReductionExcludedPaths                                  = $getValue.defenderAttackSurfaceReductionExcludedPaths
                 DefenderBlockEndUserAccess                                                   = $getValue.defenderBlockEndUserAccess
-                DefenderBlockPersistenceThroughWmiType                                       = $enumDefenderBlockPersistenceThroughWmiType
+                DefenderBlockPersistenceThroughWmiType                                       = $getValue.defenderBlockPersistenceThroughWmiType
                 DefenderCheckForSignaturesBeforeRunningScan                                  = $getValue.defenderCheckForSignaturesBeforeRunningScan
-                DefenderCloudBlockLevel                                                      = $enumDefenderCloudBlockLevel
+                DefenderCloudBlockLevel                                                      = $getValue.defenderCloudBlockLevel
                 DefenderCloudExtendedTimeoutInSeconds                                        = $getValue.defenderCloudExtendedTimeoutInSeconds
                 DefenderDaysBeforeDeletingQuarantinedMalware                                 = $getValue.defenderDaysBeforeDeletingQuarantinedMalware
                 DefenderDetectedMalwareActions                                               = $complexDefenderDetectedMalwareActions
@@ -2507,8 +2138,8 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DefenderDisableScanNetworkFiles                                              = $getValue.defenderDisableScanNetworkFiles
                 DefenderDisableScanRemovableDrivesDuringFullScan                             = $getValue.defenderDisableScanRemovableDrivesDuringFullScan
                 DefenderDisableScanScriptsLoadedInInternetExplorer                           = $getValue.defenderDisableScanScriptsLoadedInInternetExplorer
-                DefenderEmailContentExecution                                                = $enumDefenderEmailContentExecution
-                DefenderEmailContentExecutionType                                            = $enumDefenderEmailContentExecutionType
+                DefenderEmailContentExecution                                                = $getValue.defenderEmailContentExecution
+                DefenderEmailContentExecutionType                                            = $getValue.defenderEmailContentExecutionType
                 DefenderEnableLowCpuPriority                                                 = $getValue.defenderEnableLowCpuPriority
                 DefenderEnableScanIncomingMail                                               = $getValue.defenderEnableScanIncomingMail
                 DefenderEnableScanMappedNetworkDrivesDuringFullScan                          = $getValue.defenderEnableScanMappedNetworkDrivesDuringFullScan
@@ -2517,32 +2148,32 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DefenderFileExtensionsToExclude                                              = $getValue.defenderFileExtensionsToExclude
                 DefenderFilesAndFoldersToExclude                                             = $getValue.defenderFilesAndFoldersToExclude
                 DefenderGuardedFoldersAllowedAppPaths                                        = $getValue.defenderGuardedFoldersAllowedAppPaths
-                DefenderGuardMyFoldersType                                                   = $enumDefenderGuardMyFoldersType
-                DefenderNetworkProtectionType                                                = $enumDefenderNetworkProtectionType
-                DefenderOfficeAppsExecutableContentCreationOrLaunch                          = $enumDefenderOfficeAppsExecutableContentCreationOrLaunch
-                DefenderOfficeAppsExecutableContentCreationOrLaunchType                      = $enumDefenderOfficeAppsExecutableContentCreationOrLaunchType
-                DefenderOfficeAppsLaunchChildProcess                                         = $enumDefenderOfficeAppsLaunchChildProcess
-                DefenderOfficeAppsLaunchChildProcessType                                     = $enumDefenderOfficeAppsLaunchChildProcessType
-                DefenderOfficeAppsOtherProcessInjection                                      = $enumDefenderOfficeAppsOtherProcessInjection
-                DefenderOfficeAppsOtherProcessInjectionType                                  = $enumDefenderOfficeAppsOtherProcessInjectionType
-                DefenderOfficeCommunicationAppsLaunchChildProcess                            = $enumDefenderOfficeCommunicationAppsLaunchChildProcess
-                DefenderOfficeMacroCodeAllowWin32Imports                                     = $enumDefenderOfficeMacroCodeAllowWin32Imports
-                DefenderOfficeMacroCodeAllowWin32ImportsType                                 = $enumDefenderOfficeMacroCodeAllowWin32ImportsType
-                DefenderPotentiallyUnwantedAppAction                                         = $enumDefenderPotentiallyUnwantedAppAction
-                DefenderPreventCredentialStealingType                                        = $enumDefenderPreventCredentialStealingType
-                DefenderProcessCreation                                                      = $enumDefenderProcessCreation
-                DefenderProcessCreationType                                                  = $enumDefenderProcessCreationType
+                DefenderGuardMyFoldersType                                                   = $getValue.defenderGuardMyFoldersType
+                DefenderNetworkProtectionType                                                = $getValue.defenderNetworkProtectionType
+                DefenderOfficeAppsExecutableContentCreationOrLaunch                          = $getValue.defenderOfficeAppsExecutableContentCreationOrLaunch
+                DefenderOfficeAppsExecutableContentCreationOrLaunchType                      = $getValue.defenderOfficeAppsExecutableContentCreationOrLaunchType
+                DefenderOfficeAppsLaunchChildProcess                                         = $getValue.defenderOfficeAppsLaunchChildProcess
+                DefenderOfficeAppsLaunchChildProcessType                                     = $getValue.defenderOfficeAppsLaunchChildProcessType
+                DefenderOfficeAppsOtherProcessInjection                                      = $getValue.defenderOfficeAppsOtherProcessInjection
+                DefenderOfficeAppsOtherProcessInjectionType                                  = $getValue.defenderOfficeAppsOtherProcessInjectionType
+                DefenderOfficeCommunicationAppsLaunchChildProcess                            = $getValue.defenderOfficeCommunicationAppsLaunchChildProcess
+                DefenderOfficeMacroCodeAllowWin32Imports                                     = $getValue.defenderOfficeMacroCodeAllowWin32Imports
+                DefenderOfficeMacroCodeAllowWin32ImportsType                                 = $getValue.defenderOfficeMacroCodeAllowWin32ImportsType
+                DefenderPotentiallyUnwantedAppAction                                         = $getValue.defenderPotentiallyUnwantedAppAction
+                DefenderPreventCredentialStealingType                                        = $getValue.defenderPreventCredentialStealingType
+                DefenderProcessCreation                                                      = $getValue.defenderProcessCreation
+                DefenderProcessCreationType                                                  = $getValue.defenderProcessCreationType
                 DefenderProcessesToExclude                                                   = $getValue.defenderProcessesToExclude
-                DefenderScanDirection                                                        = $enumDefenderScanDirection
+                DefenderScanDirection                                                        = $getValue.defenderScanDirection
                 DefenderScanMaxCpuPercentage                                                 = $getValue.defenderScanMaxCpuPercentage
-                DefenderScanType                                                             = $enumDefenderScanType
+                DefenderScanType                                                             = $getValue.defenderScanType
                 DefenderScheduledQuickScanTime                                               = $timeDefenderScheduledQuickScanTime
-                DefenderScheduledScanDay                                                     = $enumDefenderScheduledScanDay
+                DefenderScheduledScanDay                                                     = $getValue.defenderScheduledScanDay
                 DefenderScheduledScanTime                                                    = $timeDefenderScheduledScanTime
-                DefenderScriptDownloadedPayloadExecution                                     = $enumDefenderScriptDownloadedPayloadExecution
-                DefenderScriptDownloadedPayloadExecutionType                                 = $enumDefenderScriptDownloadedPayloadExecutionType
-                DefenderScriptObfuscatedMacroCode                                            = $enumDefenderScriptObfuscatedMacroCode
-                DefenderScriptObfuscatedMacroCodeType                                        = $enumDefenderScriptObfuscatedMacroCodeType
+                DefenderScriptDownloadedPayloadExecution                                     = $getValue.defenderScriptDownloadedPayloadExecution
+                DefenderScriptDownloadedPayloadExecutionType                                 = $getValue.defenderScriptDownloadedPayloadExecutionType
+                DefenderScriptObfuscatedMacroCode                                            = $getValue.defenderScriptObfuscatedMacroCode
+                DefenderScriptObfuscatedMacroCodeType                                        = $getValue.defenderScriptObfuscatedMacroCodeType
                 DefenderSecurityCenterBlockExploitProtectionOverride                         = $getValue.defenderSecurityCenterBlockExploitProtectionOverride
                 DefenderSecurityCenterDisableAccountUI                                       = $getValue.defenderSecurityCenterDisableAccountUI
                 DefenderSecurityCenterDisableAppBrowserUI                                    = $getValue.defenderSecurityCenterDisableAppBrowserUI
@@ -2560,26 +2191,26 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 DefenderSecurityCenterHelpEmail                                              = $getValue.defenderSecurityCenterHelpEmail
                 DefenderSecurityCenterHelpPhone                                              = $getValue.defenderSecurityCenterHelpPhone
                 DefenderSecurityCenterHelpURL                                                = $getValue.defenderSecurityCenterHelpURL
-                DefenderSecurityCenterITContactDisplay                                       = $enumDefenderSecurityCenterITContactDisplay
-                DefenderSecurityCenterNotificationsFromApp                                   = $enumDefenderSecurityCenterNotificationsFromApp
+                DefenderSecurityCenterITContactDisplay                                       = $getValue.defenderSecurityCenterITContactDisplay
+                DefenderSecurityCenterNotificationsFromApp                                   = $getValue.defenderSecurityCenterNotificationsFromApp
                 DefenderSecurityCenterOrganizationDisplayName                                = $getValue.defenderSecurityCenterOrganizationDisplayName
                 DefenderSignatureUpdateIntervalInHours                                       = $getValue.defenderSignatureUpdateIntervalInHours
-                DefenderSubmitSamplesConsentType                                             = $enumDefenderSubmitSamplesConsentType
-                DefenderUntrustedExecutable                                                  = $enumDefenderUntrustedExecutable
-                DefenderUntrustedExecutableType                                              = $enumDefenderUntrustedExecutableType
-                DefenderUntrustedUSBProcess                                                  = $enumDefenderUntrustedUSBProcess
-                DefenderUntrustedUSBProcessType                                              = $enumDefenderUntrustedUSBProcessType
+                DefenderSubmitSamplesConsentType                                             = $getValue.defenderSubmitSamplesConsentType
+                DefenderUntrustedExecutable                                                  = $getValue.defenderUntrustedExecutable
+                DefenderUntrustedExecutableType                                              = $getValue.defenderUntrustedExecutableType
+                DefenderUntrustedUSBProcess                                                  = $getValue.defenderUntrustedUSBProcess
+                DefenderUntrustedUSBProcessType                                              = $getValue.defenderUntrustedUSBProcessType
                 DeviceGuardEnableSecureBootWithDMA                                           = $getValue.deviceGuardEnableSecureBootWithDMA
                 DeviceGuardEnableVirtualizationBasedSecurity                                 = $getValue.deviceGuardEnableVirtualizationBasedSecurity
-                DeviceGuardLaunchSystemGuard                                                 = $enumDeviceGuardLaunchSystemGuard
-                DeviceGuardLocalSystemAuthorityCredentialGuardSettings                       = $enumDeviceGuardLocalSystemAuthorityCredentialGuardSettings
-                DeviceGuardSecureBootWithDMA                                                 = $enumDeviceGuardSecureBootWithDMA
+                DeviceGuardLaunchSystemGuard                                                 = $getValue.deviceGuardLaunchSystemGuard
+                DeviceGuardLocalSystemAuthorityCredentialGuardSettings                       = $getValue.deviceGuardLocalSystemAuthorityCredentialGuardSettings
+                DeviceGuardSecureBootWithDMA                                                 = $getValue.deviceGuardSecureBootWithDMA
                 DeviceManagementApplicabilityRuleDeviceMode                                  = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition                                   = $complexDeviceManagementApplicabilityRuleOsEdition
                 DeviceManagementApplicabilityRuleOsVersion                                   = $complexDeviceManagementApplicabilityRuleOsVersion
-                DmaGuardDeviceEnumerationPolicy                                              = $enumDmaGuardDeviceEnumerationPolicy
+                DmaGuardDeviceEnumerationPolicy                                              = $getValue.dmaGuardDeviceEnumerationPolicy
                 FirewallBlockStatefulFTP                                                     = $getValue.firewallBlockStatefulFTP
-                FirewallCertificateRevocationListCheckMethod                                 = $enumFirewallCertificateRevocationListCheckMethod
+                FirewallCertificateRevocationListCheckMethod                                 = $getValue.firewallCertificateRevocationListCheckMethod
                 FirewallIdleTimeoutForSecurityAssociationInSeconds                           = $getValue.firewallIdleTimeoutForSecurityAssociationInSeconds
                 FirewallIPSecExemptionsAllowDHCP                                             = $getValue.firewallIPSecExemptionsAllowDHCP
                 FirewallIPSecExemptionsAllowICMP                                             = $getValue.firewallIPSecExemptionsAllowICMP
@@ -2587,16 +2218,16 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 FirewallIPSecExemptionsAllowRouterDiscovery                                  = $getValue.firewallIPSecExemptionsAllowRouterDiscovery
                 FirewallIPSecExemptionsNone                                                  = $getValue.firewallIPSecExemptionsNone
                 FirewallMergeKeyingModuleSettings                                            = $getValue.firewallMergeKeyingModuleSettings
-                FirewallPacketQueueingMethod                                                 = $enumFirewallPacketQueueingMethod
-                FirewallPreSharedKeyEncodingMethod                                           = $enumFirewallPreSharedKeyEncodingMethod
+                FirewallPacketQueueingMethod                                                 = $getValue.firewallPacketQueueingMethod
+                FirewallPreSharedKeyEncodingMethod                                           = $getValue.firewallPreSharedKeyEncodingMethod
                 FirewallProfileDomain                                                        = $complexFirewallProfileDomain
                 FirewallProfilePrivate                                                       = $complexFirewallProfilePrivate
                 FirewallProfilePublic                                                        = $complexFirewallProfilePublic
                 FirewallRules                                                                = $complexFirewallRules
-                LanManagerAuthenticationLevel                                                = $enumLanManagerAuthenticationLevel
+                LanManagerAuthenticationLevel                                                = $getValue.lanManagerAuthenticationLevel
                 LanManagerWorkstationDisableInsecureGuestLogons                              = $getValue.lanManagerWorkstationDisableInsecureGuestLogons
                 LocalSecurityOptionsAdministratorAccountName                                 = $getValue.localSecurityOptionsAdministratorAccountName
-                LocalSecurityOptionsAdministratorElevationPromptBehavior                     = $enumLocalSecurityOptionsAdministratorElevationPromptBehavior
+                LocalSecurityOptionsAdministratorElevationPromptBehavior                     = $getValue.localSecurityOptionsAdministratorElevationPromptBehavior
                 LocalSecurityOptionsAllowAnonymousEnumerationOfSAMAccountsAndShares          = $getValue.localSecurityOptionsAllowAnonymousEnumerationOfSAMAccountsAndShares
                 LocalSecurityOptionsAllowPKU2UAuthenticationRequests                         = $getValue.localSecurityOptionsAllowPKU2UAuthenticationRequests
                 LocalSecurityOptionsAllowRemoteCallsToSecurityAccountsManager                = $getValue.localSecurityOptionsAllowRemoteCallsToSecurityAccountsManager
@@ -2621,22 +2252,22 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 LocalSecurityOptionsDoNotAllowAnonymousEnumerationOfSAMAccounts              = $getValue.localSecurityOptionsDoNotAllowAnonymousEnumerationOfSAMAccounts
                 LocalSecurityOptionsDoNotRequireCtrlAltDel                                   = $getValue.localSecurityOptionsDoNotRequireCtrlAltDel
                 LocalSecurityOptionsDoNotStoreLANManagerHashValueOnNextPasswordChange        = $getValue.localSecurityOptionsDoNotStoreLANManagerHashValueOnNextPasswordChange
-                LocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser                = $enumLocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser
+                LocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser                = $getValue.localSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUser
                 LocalSecurityOptionsGuestAccountName                                         = $getValue.localSecurityOptionsGuestAccountName
                 LocalSecurityOptionsHideLastSignedInUser                                     = $getValue.localSecurityOptionsHideLastSignedInUser
                 LocalSecurityOptionsHideUsernameAtSignIn                                     = $getValue.localSecurityOptionsHideUsernameAtSignIn
-                LocalSecurityOptionsInformationDisplayedOnLockScreen                         = $enumLocalSecurityOptionsInformationDisplayedOnLockScreen
-                LocalSecurityOptionsInformationShownOnLockScreen                             = $enumLocalSecurityOptionsInformationShownOnLockScreen
+                LocalSecurityOptionsInformationDisplayedOnLockScreen                         = $getValue.localSecurityOptionsInformationDisplayedOnLockScreen
+                LocalSecurityOptionsInformationShownOnLockScreen                             = $getValue.localSecurityOptionsInformationShownOnLockScreen
                 LocalSecurityOptionsLogOnMessageText                                         = $getValue.localSecurityOptionsLogOnMessageText
                 LocalSecurityOptionsLogOnMessageTitle                                        = $getValue.localSecurityOptionsLogOnMessageTitle
                 LocalSecurityOptionsMachineInactivityLimit                                   = $getValue.localSecurityOptionsMachineInactivityLimit
                 LocalSecurityOptionsMachineInactivityLimitInMinutes                          = $getValue.localSecurityOptionsMachineInactivityLimitInMinutes
-                LocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients             = $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients
-                LocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers             = $enumLocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers
+                LocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients             = $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedClients
+                LocalSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers             = $getValue.localSecurityOptionsMinimumSessionSecurityForNtlmSspBasedServers
                 LocalSecurityOptionsOnlyElevateSignedExecutables                             = $getValue.localSecurityOptionsOnlyElevateSignedExecutables
                 LocalSecurityOptionsRestrictAnonymousAccessToNamedPipesAndShares             = $getValue.localSecurityOptionsRestrictAnonymousAccessToNamedPipesAndShares
-                LocalSecurityOptionsSmartCardRemovalBehavior                                 = $enumLocalSecurityOptionsSmartCardRemovalBehavior
-                LocalSecurityOptionsStandardUserElevationPromptBehavior                      = $enumLocalSecurityOptionsStandardUserElevationPromptBehavior
+                LocalSecurityOptionsSmartCardRemovalBehavior                                 = $getValue.localSecurityOptionsSmartCardRemovalBehavior
+                LocalSecurityOptionsStandardUserElevationPromptBehavior                      = $getValue.localSecurityOptionsStandardUserElevationPromptBehavior
                 LocalSecurityOptionsSwitchToSecureDesktopWhenPromptingForElevation           = $getValue.localSecurityOptionsSwitchToSecureDesktopWhenPromptingForElevation
                 LocalSecurityOptionsUseAdminApprovalMode                                     = $getValue.localSecurityOptionsUseAdminApprovalMode
                 LocalSecurityOptionsUseAdminApprovalModeForAdministrators                    = $getValue.localSecurityOptionsUseAdminApprovalModeForAdministrators
@@ -2672,12 +2303,12 @@ class IntuneDeviceConfigurationEndpointProtectionPolicyWindows10 : M365DSCResour
                 UserRightsRemoteShutdown                                                     = $complexUserRightsRemoteShutdown
                 UserRightsRestoreData                                                        = $complexUserRightsRestoreData
                 UserRightsTakeOwnership                                                      = $complexUserRightsTakeOwnership
-                WindowsDefenderTamperProtection                                              = $enumWindowsDefenderTamperProtection
-                XboxServicesAccessoryManagementServiceStartupMode                            = $enumXboxServicesAccessoryManagementServiceStartupMode
+                WindowsDefenderTamperProtection                                              = $getValue.windowsDefenderTamperProtection
+                XboxServicesAccessoryManagementServiceStartupMode                            = $getValue.xboxServicesAccessoryManagementServiceStartupMode
                 XboxServicesEnableXboxGameSaveTask                                           = $getValue.xboxServicesEnableXboxGameSaveTask
-                XboxServicesLiveAuthManagerServiceStartupMode                                = $enumXboxServicesLiveAuthManagerServiceStartupMode
-                XboxServicesLiveGameSaveServiceStartupMode                                   = $enumXboxServicesLiveGameSaveServiceStartupMode
-                XboxServicesLiveNetworkingServiceStartupMode                                 = $enumXboxServicesLiveNetworkingServiceStartupMode
+                XboxServicesLiveAuthManagerServiceStartupMode                                = $getValue.xboxServicesLiveAuthManagerServiceStartupMode
+                XboxServicesLiveGameSaveServiceStartupMode                                   = $getValue.xboxServicesLiveGameSaveServiceStartupMode
+                XboxServicesLiveNetworkingServiceStartupMode                                 = $getValue.xboxServicesLiveNetworkingServiceStartupMode
                 Description                                                                  = $getValue.Description
                 DisplayName                                                                  = $getValue.DisplayName
                 Id                                                                           = $getValue.Id

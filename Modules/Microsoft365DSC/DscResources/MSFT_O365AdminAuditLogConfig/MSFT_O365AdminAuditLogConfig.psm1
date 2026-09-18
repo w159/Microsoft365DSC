@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class O365AdminAuditLogConfig : M365DSCResourceBase
@@ -140,6 +140,8 @@ class O365AdminAuditLogConfig : M365DSCResourceBase
             {
                 $Message = "Couldn't set the Audit Log Ingestion. Please run Enable-OrganizationCustomization first."
                 $this.LogError($_, $Message)
+
+                throw $Message
             }
         }
         else
@@ -152,6 +154,8 @@ class O365AdminAuditLogConfig : M365DSCResourceBase
             {
                 $Message = "Couldn't set the Audit Log Ingestion. Please run Enable-OrganizationCustomization first."
                 $this.LogError($_, $Message)
+
+                throw $Message
             }
         }
         $ErrorActionPreference = $OldErrorActionPreference

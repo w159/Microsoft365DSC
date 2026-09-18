@@ -137,7 +137,7 @@ class IntuneDeviceComplianceNotificationMessageTemplate : M365DSCResourceBase
             $enumBrandingOptions = $null
             if ($null -ne $getValue.BrandingOptions)
             {
-                $enumBrandingOptions = $getValue.BrandingOptions.ToString().Split(',')
+                $enumBrandingOptions = $getValue.BrandingOptions.Split(',')
             }
 
             $messages = @()

@@ -136,7 +136,7 @@ class AADAgreement : M365DSCResourceBase
             $fileContent = $null
             if ($null -ne $instance.File -and $null -ne $instance.File.Data)
             {
-                $fileContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($instance.File.Data))
+                $fileContent = $this.DecodeTextPayload($instance.File.Data)
             }
 
             $complexTermsExpiration = $null
@@ -216,7 +216,7 @@ class AADAgreement : M365DSCResourceBase
             $fileContent = @()
             $fileContent += @{
                 fileData  = @{
-                    data = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($this.FileData))
+                    data = $this.EncodeTextPayload($this.FileData)
                 }
                 fileName  = $this.FileName
                 language  = $this.Language
@@ -246,7 +246,7 @@ class AADAgreement : M365DSCResourceBase
                 $fileContent = @()
                 $fileContent += @{
                     fileData = @{
-                        data = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($this.FileData))
+                        data = $this.EncodeTextPayload($this.FileData)
                     }
                     fileName = $this.FileName
                     language = $this.Language

@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SCFilePlanPropertyCategory : M365DSCResourceBase
@@ -136,7 +136,11 @@ class SCFilePlanPropertyCategory : M365DSCResourceBase
             try
             {
                 $property = Get-FilePlanPropertyCategory | Where-Object -FilterScript { $_.DisplayName -eq $this.Name }
-                if ($property.Mode.ToString() -ne 'PendingDeletion')
+                if ($null -eq $property)
+                {
+                    Write-Verbose -Message "Property $($this.Name) was not found."
+                }
+                elseif ("$($property.Mode)" -ne 'PendingDeletion')
                 {
                     Remove-FilePlanPropertyCategory -Identity $this.Name -Confirm:$false -ErrorAction Stop
                 }
@@ -147,7 +151,9 @@ class SCFilePlanPropertyCategory : M365DSCResourceBase
             }
             catch
             {
-                $this.LogError($_, $_)
+                $this.LogError($_, "Error removing the file plan property $($this.Name)")
+
+                throw
             }
         }
     }

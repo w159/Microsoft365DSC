@@ -1,4 +1,4 @@
-using namespace System
+﻿using namespace System
 using namespace System.Collections
 using namespace System.Collections.Generic
 using namespace System.Management.Automation
@@ -119,9 +119,6 @@ class M365DSCResourceInfo
 
     [String[]] $RequiredProperties
 
-    hidden static [Dictionary[String, ScriptBlock[]]] $_accessors = `
-        [Dictionary[String, ScriptBlock[]]]::new([StringComparer]::OrdinalIgnoreCase)
-
     hidden static [System.UInt32] $SerializationDepth = 25
 
     hidden static [HashSet[Type]] $_depthRegistered = [HashSet[Type]]::new()
@@ -152,21 +149,6 @@ class M365DSCResourceInfo
         {
             [M365DSCResourceInfo]::RegisterSerializationDepth($property.PropertyType)
         }
-    }
-
-    hidden static [ScriptBlock[]] GetAccessors([String] $Name)
-    {
-        $accessors = $null
-        if (-not [M365DSCResourceInfo]::_accessors.TryGetValue($Name, [ref] $accessors))
-        {
-            $accessors = [ScriptBlock[]] @(
-                [ScriptBlock]::Create(('$value = $this._GetProperty(''{0}''); if ($value -is [System.Array]) {{ , $value }} else {{ $value }}' -f $Name))
-                [ScriptBlock]::Create(('$this._SetProperty(''{0}'', $args[0])' -f $Name))
-            )
-            [M365DSCResourceInfo]::_accessors[$Name] = $accessors
-        }
-
-        return $accessors
     }
 
     M365DSCResourceInfo([Type] $Type)
@@ -204,14 +186,11 @@ class M365DSCResourceInfo
             }
 
             [M365DSCResourceInfo]::RegisterSerializationDepth($property.PropertyType)
-
-            $accessors = [M365DSCResourceInfo]::GetAccessors($property.Name)
-            $typeData.Members.Add($property.Name, [ScriptPropertyData]::new($property.Name, $accessors[0], $accessors[1]))
         }
 
         $this.RequiredProperties = $required.ToArray()
 
-        if ($typeData.Members.Count -gt 0)
+        if ($this.Properties.Count -gt 0)
         {
             $typeData.SerializationDepth = [M365DSCResourceInfo]::SerializationDepth
             Update-TypeData -TypeData $typeData -Force -ErrorAction Stop
@@ -224,15 +203,11 @@ class M365DSCResourceBase
     #region Infrastructure state
 
     <#
-        DSC marshals class-resource properties by REFLECTION, in both directions: it writes the CLR
-        backing fields when it populates an instance, and reads the CLR backing fields off whatever
-        a method returns. An ETS ScriptProperty that stored values elsewhere meant DSC wrote where
-        the class never looked and the class wrote where DSC never looked. Measured on 7.6.4: a
-        resource built this way returned Id='' and DisplayName='' through Invoke-DscResource, while
-        an otherwise identical class without the ETS layer round-tripped correctly.
+        Property state lives in the CLR properties, because that is where DSC reads and writes it.
+        There is no extended type system layer over them: the LCM reads the instance returned by
+        Get() after disposing the pipeline that ran it, and a ScriptProperty getter needs a runspace.
 
-        So the ScriptProperty writes THROUGH to the real property (see _SetProperty) and this class
-        keeps no property state of its own.
+        Assignment therefore does not validate. _SetProperty and FromHashtable do.
     #>
     # Underscore-prefixed on purpose. A derived class cannot redeclare a member the base already
     # defines, and resource schemas do use ordinary words as property names - the schema scan found
@@ -895,6 +870,33 @@ class M365DSCResourceBase
                 Write-Warning -Message "The parameter '$name' is deprecated. It will be removed in the next breaking change release."
             }
         }
+    }
+
+    [System.String] DecodeTextPayload([System.Object] $Value)
+    {
+        if ($null -eq $Value -or $Value -isnot [System.String] -or [System.String]::IsNullOrEmpty($Value))
+        {
+            return [System.String] $Value
+        }
+
+        try
+        {
+            return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Value))
+        }
+        catch
+        {
+            return [System.String] $Value
+        }
+    }
+
+    [System.String] EncodeTextPayload([System.Object] $Value)
+    {
+        if ($null -eq $Value -or $Value -isnot [System.String] -or [System.String]::IsNullOrEmpty($Value))
+        {
+            return [System.String] $Value
+        }
+
+        return [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($Value))
     }
 
     # Serialises a nullable boolean into a JSON literal

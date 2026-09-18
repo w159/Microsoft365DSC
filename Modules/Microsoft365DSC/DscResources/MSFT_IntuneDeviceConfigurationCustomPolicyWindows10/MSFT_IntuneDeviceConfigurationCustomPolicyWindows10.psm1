@@ -179,7 +179,7 @@ class IntuneDeviceConfigurationCustomPolicyWindows10 : M365DSCResourceBase
                 }
                 if ($null -ne $currentomaSettings.'@odata.type')
                 {
-                    $myomaSettings.Add('odataType', $currentomaSettings.'@odata.type'.ToString())
+                    $myomaSettings.Add('odataType', $currentomaSettings.'@odata.type')
                 }
                 if ($myomaSettings.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -303,7 +303,7 @@ class IntuneDeviceConfigurationCustomPolicyWindows10 : M365DSCResourceBase
                 }
                 if ($omaSetting.'@odata.type' -eq '#microsoft.graph.omaSettingStringXml')
                 {
-                    $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($omaSetting.value))
+                    $base64 = $this.EncodeTextPayload($omaSetting.value)
                     $omaSetting.value = $base64
                 }
             }
@@ -338,7 +338,7 @@ class IntuneDeviceConfigurationCustomPolicyWindows10 : M365DSCResourceBase
                 }
                 if ($omaSetting.'@odata.type' -eq '#microsoft.graph.omaSettingStringXml')
                 {
-                    $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($omaSetting.value))
+                    $base64 = $this.EncodeTextPayload($omaSetting.value)
                     $omaSetting.value = $base64
                 }
             }

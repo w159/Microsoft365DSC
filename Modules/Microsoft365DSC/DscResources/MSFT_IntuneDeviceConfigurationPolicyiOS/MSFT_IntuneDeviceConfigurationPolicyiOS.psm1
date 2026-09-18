@@ -1128,8 +1128,8 @@ class IntuneDeviceConfigurationPolicyiOS : M365DSCResourceBase
                 $currentValue = $getValue."mediaContentRating$country"
                 if ($null -ne $currentValue)
                 {
-                    $complexMediaContentRating.Add('MovieRating', $currentValue.movieRating.ToString())
-                    $complexMediaContentRating.Add('TvRating', $currentValue.tvRating.ToString())
+                    $complexMediaContentRating.Add('MovieRating', $currentValue.movieRating)
+                    $complexMediaContentRating.Add('TvRating', $currentValue.tvRating)
                 }
                 $results.Add("MediaContentRating$country", $complexMediaContentRating)
             }

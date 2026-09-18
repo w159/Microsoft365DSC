@@ -148,7 +148,7 @@ class IntuneWindowsUpdateForBusinessHotpatchProfileWindows10 : M365DSCResourceBa
                 $myApprovalSettings = @{}
                 if ($null -ne $currentApprovalSettings.approvalMethodType)
                 {
-                    $myApprovalSettings.Add('ApprovalMethodType', $currentApprovalSettings.approvalMethodType.ToString())
+                    $myApprovalSettings.Add('ApprovalMethodType', $currentApprovalSettings.approvalMethodType)
                 }
                 $myApprovalSettings.Add('DeferredDeploymentInDay', $currentApprovalSettings.deferredDeploymentInDay)
                 if ($null -ne $currentApprovalSettings.windowsQualityUpdateCadence)

@@ -164,7 +164,7 @@ class IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 : M365DSCResourceB
                 $myEnterpriseIPRanges.Add('UpperAddress', $currentEnterpriseIPRanges.upperAddress)
                 if ($null -ne $currentEnterpriseIPRanges.'@odata.type')
                 {
-                    $myEnterpriseIPRanges.Add('odataType', $currentEnterpriseIPRanges.'@odata.type'.ToString())
+                    $myEnterpriseIPRanges.Add('odataType', $currentEnterpriseIPRanges.'@odata.type')
                 }
                 if ($myEnterpriseIPRanges.values.Where({ $null -ne $_ }).Count -gt 0)
                 {

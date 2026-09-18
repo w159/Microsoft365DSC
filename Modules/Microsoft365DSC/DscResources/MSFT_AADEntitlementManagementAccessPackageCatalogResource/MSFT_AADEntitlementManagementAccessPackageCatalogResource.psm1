@@ -179,25 +179,8 @@ class AADEntitlementManagementAccessPackageCatalogResource : M365DSCResourceBase
                 $hashAttributes += $hashAttribute
             }
 
-            $originIdValue = $null
-            switch ($getValue.OriginSystem)
-            {
-                'AadApplication' {
-                    $originIdValue = (Get-MgServicePrincipal -ServicePrincipalId $getValue.OriginId -ErrorAction SilentlyContinue).DisplayName
-                }
-                'AADGroup' {
-                    $originIdValue = (Get-MgGroup -GroupId $getValue.OriginId -ErrorAction SilentlyContinue).DisplayName
-                }
-                default {
-                    $originIdValue = $getValue.OriginId
-                }
-            }
-
-            if ($null -eq $originIdValue)
-            {
-                Write-Warning -Message "The origin id {$($getValue.OriginId)} of OriginSystem {$($getValue.OriginSystem)} could not be resolved to a display name. Returning the id instead."
-                $originIdValue = $getValue.OriginId
-            }
+            $originIdValue = Get-M365DSCAccessPackageResourceOriginDisplayName -OriginId $getValue.OriginId `
+                -OriginSystem $getValue.OriginSystem
 
             $results = @{
                 Id                    = $getValue.Id
@@ -537,6 +520,19 @@ class AADEntitlementManagementAccessPackageCatalogResource : M365DSCResourceBase
     {
         return @{
             ExcludedProperties = @('AddedBy', 'AddedOn', 'IsPendingOnboarding')
+            PostProcessing     = {
+                param($DesiredValues, $CurrentValues, $ValuesToCheck, $PostProcessingArgs)
+                if ([M365DSCResourceBase]::IsReportContext($PostProcessingArgs) -or
+                    [System.String]::IsNullOrEmpty($DesiredValues.OriginId))
+                {
+                    return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+                }
+
+                $DesiredValues.OriginId = Get-M365DSCAccessPackageResourceOriginDisplayName -OriginId $DesiredValues.OriginId `
+                    -OriginSystem $DesiredValues.OriginSystem
+
+                return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
+            }
         }
     }
 

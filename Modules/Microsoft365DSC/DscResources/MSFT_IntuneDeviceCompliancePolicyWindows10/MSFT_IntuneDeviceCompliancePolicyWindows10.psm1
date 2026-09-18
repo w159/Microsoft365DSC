@@ -271,11 +271,11 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 $myValidOperatingSystemBuildRanges = [ordered]@{}
                 if ($null -ne $currentValidOperatingSystemBuildRanges.lowestVersion)
                 {
-                    $myValidOperatingSystemBuildRanges.Add('LowestVersion', $currentValidOperatingSystemBuildRanges.lowestVersion.ToString())
+                    $myValidOperatingSystemBuildRanges.Add('LowestVersion', $currentValidOperatingSystemBuildRanges.lowestVersion)
                 }
                 if ($null -ne $currentValidOperatingSystemBuildRanges.highestVersion)
                 {
-                    $myValidOperatingSystemBuildRanges.Add('HighestVersion', $currentValidOperatingSystemBuildRanges.highestVersion.ToString())
+                    $myValidOperatingSystemBuildRanges.Add('HighestVersion', $currentValidOperatingSystemBuildRanges.highestVersion)
                 }
                 if ($null -ne $currentValidOperatingSystemBuildRanges.description)
                 {
@@ -315,7 +315,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
                 Write-Verbose -Message "Resolving Device Compliance Policy Script with Id {$($devicePolicy.deviceCompliancePolicyScript.deviceComplianceScriptId)}"
                 $policyScript = Invoke-M365DSCGraphRequest -Uri "/beta/deviceManagement/deviceComplianceScripts/$($devicePolicy.deviceCompliancePolicyScript.deviceComplianceScriptId)" -Method GET
                 $complexDeviceCompliancePolicyScript.Add('DisplayName', $policyScript.displayName)
-                $complexDeviceCompliancePolicyScript.Add('RulesContent', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($devicePolicy.deviceCompliancePolicyScript.rulesContent)))
+                $complexDeviceCompliancePolicyScript.Add('RulesContent', $this.DecodeTextPayload($devicePolicy.deviceCompliancePolicyScript.rulesContent))
             }
             if ($complexDeviceCompliancePolicyScript.Keys.Count -eq 0)
             {
@@ -469,7 +469,7 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
 
             $script = @{
                 deviceComplianceScriptId = $complianceScript.id
-                rulesContent             = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($scriptRulesContent))
+                rulesContent             = $this.EncodeTextPayload($scriptRulesContent)
             }
             $boundParameters.Remove('DeviceCompliancePolicyScript') | Out-Null
             $boundParameters.Add('DeviceCompliancePolicyScript', $script)

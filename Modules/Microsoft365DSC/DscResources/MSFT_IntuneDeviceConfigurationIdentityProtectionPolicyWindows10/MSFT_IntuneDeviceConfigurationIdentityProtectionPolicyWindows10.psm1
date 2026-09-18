@@ -195,27 +195,6 @@ class IntuneDeviceConfigurationIdentityProtectionPolicyWindows10 : M365DSCResour
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Device Configuration Identity Protection Policy for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumPinLowercaseCharactersUsage = $null
-            if ($null -ne $getValue.pinLowercaseCharactersUsage)
-            {
-                $enumPinLowercaseCharactersUsage = $getValue.pinLowercaseCharactersUsage.ToString()
-            }
-
-            $enumPinSpecialCharactersUsage = $null
-            if ($null -ne $getValue.pinSpecialCharactersUsage)
-            {
-                $enumPinSpecialCharactersUsage = $getValue.pinSpecialCharactersUsage.ToString()
-            }
-
-            $enumPinUppercaseCharactersUsage = $null
-            if ($null -ne $getValue.pinUppercaseCharactersUsage)
-            {
-                $enumPinUppercaseCharactersUsage = $getValue.pinUppercaseCharactersUsage.ToString()
-            }
-
-            #endregion
-
             $complexDeviceManagementApplicabilityRuleDeviceMode = [ordered]@{}
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('DeviceMode', $getValue.DeviceManagementApplicabilityRuleDeviceMode.DeviceMode)
             $complexDeviceManagementApplicabilityRuleDeviceMode.Add('Name', $getValue.DeviceManagementApplicabilityRuleDeviceMode.Name)
@@ -248,13 +227,13 @@ class IntuneDeviceConfigurationIdentityProtectionPolicyWindows10 : M365DSCResour
                 #region resource generator code
                 EnhancedAntiSpoofingForFacialFeaturesEnabled = $getValue.enhancedAntiSpoofingForFacialFeaturesEnabled
                 PinExpirationInDays                          = $getValue.pinExpirationInDays
-                PinLowercaseCharactersUsage                  = $enumPinLowercaseCharactersUsage
+                PinLowercaseCharactersUsage                  = $getValue.pinLowercaseCharactersUsage
                 PinMaximumLength                             = $getValue.pinMaximumLength
                 PinMinimumLength                             = $getValue.pinMinimumLength
                 PinPreviousBlockCount                        = $getValue.pinPreviousBlockCount
                 PinRecoveryEnabled                           = $getValue.pinRecoveryEnabled
-                PinSpecialCharactersUsage                    = $enumPinSpecialCharactersUsage
-                PinUppercaseCharactersUsage                  = $enumPinUppercaseCharactersUsage
+                PinSpecialCharactersUsage                    = $getValue.pinSpecialCharactersUsage
+                PinUppercaseCharactersUsage                  = $getValue.pinUppercaseCharactersUsage
                 SecurityDeviceRequired                       = $getValue.securityDeviceRequired
                 UnlockWithBiometricsEnabled                  = $getValue.unlockWithBiometricsEnabled
                 UseCertificatesForOnPremisesAuthEnabled      = $getValue.useCertificatesForOnPremisesAuthEnabled

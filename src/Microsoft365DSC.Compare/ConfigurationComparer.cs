@@ -278,14 +278,14 @@ namespace Microsoft365DSC.Compare
                 return;
             }
 
-            string[] parts = annotation.Split('|');
+            string[] parts = annotation.Split(['|'], 2);
             if (parts.Length < 2)
             {
                 return;
             }
 
-            property.MetadataLevel = parts[0].Replace("### ", string.Empty);
-            property.MetadataInfo = parts[1];
+            property.MetadataLevel = parts[0].TrimStart('#').Trim();
+            property.MetadataInfo = parts[1].Trim();
         }
 
         private static ResourceCompareParameters? Overrides(

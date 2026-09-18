@@ -137,14 +137,6 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Azure AD Policy Feature Rollout Policy with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
-            #region resource generator code
-            $enumFeature = $null
-            if ($null -ne $getValue.Feature)
-            {
-                $enumFeature = $getValue.Feature.ToString()
-            }
-            #endregion
-
             $batchRequests = @()
             foreach ($group in $getValue.AppliesTo)
             {
@@ -162,7 +154,7 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
                 AppliesTo               = $groupDisplayNames
                 Description             = $getValue.Description
                 DisplayName             = $getValue.DisplayName
-                Feature                 = $enumFeature
+                Feature                 = $getValue.Feature
                 IsAppliedToOrganization = $getValue.IsAppliedToOrganization
                 IsEnabled               = $getValue.IsEnabled
                 Id                      = $getValue.Id

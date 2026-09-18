@@ -137,15 +137,9 @@ class IntuneWindowsUpdateForBusinessDriverUpdateProfileWindows10 : M365DSCResour
             $resolvedId = $getValue.Id
             Write-Verbose -Message "An Intune Windows Update For Business Driver Update Profile for Windows 10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            $enumApprovalType = $null
-            if ($null -ne $getValue.approvalType)
-            {
-                $enumApprovalType = $getValue.approvalType.ToString()
-            }
-
             $results = @{
                 #region resource generator code
-                ApprovalType             = $enumApprovalType
+                ApprovalType             = $getValue.approvalType
                 DeploymentDeferralInDays = $getValue.deploymentDeferralInDays
                 RoleScopeTagIds          = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.roleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 Description              = $getValue.description

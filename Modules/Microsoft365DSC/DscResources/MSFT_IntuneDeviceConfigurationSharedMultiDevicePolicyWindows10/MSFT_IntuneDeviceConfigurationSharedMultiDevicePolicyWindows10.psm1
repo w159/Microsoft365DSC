@@ -219,7 +219,7 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
             $complexAccountManagerPolicy = [ordered]@{}
             if ($null -ne $getValue.accountManagerPolicy.accountDeletionPolicy)
             {
-                $complexAccountManagerPolicy.Add('AccountDeletionPolicy', $getValue.accountManagerPolicy.accountDeletionPolicy.ToString())
+                $complexAccountManagerPolicy.Add('AccountDeletionPolicy', $getValue.accountManagerPolicy.accountDeletionPolicy)
             }
             $complexAccountManagerPolicy.Add('CacheAccountsAboveDiskFreePercentage', $getValue.accountManagerPolicy.cacheAccountsAboveDiskFreePercentage)
             $complexAccountManagerPolicy.Add('InactiveThresholdDays', $getValue.accountManagerPolicy.inactiveThresholdDays)
@@ -234,48 +234,13 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
             $enumAllowedAccounts = @()
             if ($null -ne $getValue.allowedAccounts)
             {
-                $allowedAccountsList = $getValue.allowedAccounts.ToString().Split(',')
+                $allowedAccountsList = $getValue.allowedAccounts.Split(',')
                 foreach ($allowedAccount in $allowedAccountsList)
                 {
                     $enumAllowedAccounts += $allowedAccount
                 }
             }
 
-            $enumFastFirstSignIn = $null
-            if ($null -ne $getValue.fastFirstSignIn)
-            {
-                $enumFastFirstSignIn = $getValue.fastFirstSignIn.ToString()
-            }
-
-            $enumLocalStorage = $null
-            if ($null -ne $getValue.localStorage)
-            {
-                $enumLocalStorage = $getValue.localStorage.ToString()
-            }
-
-            $enumSetAccountManager = $null
-            if ($null -ne $getValue.setAccountManager)
-            {
-                $enumSetAccountManager = $getValue.setAccountManager.ToString()
-            }
-
-            $enumSetEduPolicies = $null
-            if ($null -ne $getValue.setEduPolicies)
-            {
-                $enumSetEduPolicies = $getValue.setEduPolicies.ToString()
-            }
-
-            $enumSetPowerPolicies = $null
-            if ($null -ne $getValue.setPowerPolicies)
-            {
-                $enumSetPowerPolicies = $getValue.setPowerPolicies.ToString()
-            }
-
-            $enumSignInOnResume = $null
-            if ($null -ne $getValue.signInOnResume)
-            {
-                $enumSignInOnResume = $getValue.signInOnResume.ToString()
-            }
             #endregion
 
             #region resource generator code
@@ -324,16 +289,16 @@ class IntuneDeviceConfigurationSharedMultiDevicePolicyWindows10 : M365DSCResourc
                 DisablePowerPolicies                        = $getValue.disablePowerPolicies
                 DisableSignInOnResume                       = $getValue.disableSignInOnResume
                 Enabled                                     = $getValue.enabled
-                FastFirstSignIn                             = $enumFastFirstSignIn
+                FastFirstSignIn                             = $getValue.fastFirstSignIn
                 IdleTimeBeforeSleepInSeconds                = $getValue.idleTimeBeforeSleepInSeconds
                 KioskAppDisplayName                         = $getValue.kioskAppDisplayName
                 KioskAppUserModelId                         = $getValue.kioskAppUserModelId
-                LocalStorage                                = $enumLocalStorage
+                LocalStorage                                = $getValue.localStorage
                 MaintenanceStartTime                        = $timeMaintenanceStartTime
-                SetAccountManager                           = $enumSetAccountManager
-                SetEduPolicies                              = $enumSetEduPolicies
-                SetPowerPolicies                            = $enumSetPowerPolicies
-                SignInOnResume                              = $enumSignInOnResume
+                SetAccountManager                           = $getValue.setAccountManager
+                SetEduPolicies                              = $getValue.setEduPolicies
+                SetPowerPolicies                            = $getValue.setPowerPolicies
+                SignInOnResume                              = $getValue.signInOnResume
                 Description                                 = $getValue.Description
                 DeviceManagementApplicabilityRuleDeviceMode = $complexDeviceManagementApplicabilityRuleDeviceMode
                 DeviceManagementApplicabilityRuleOsEdition  = $complexDeviceManagementApplicabilityRuleOsEdition

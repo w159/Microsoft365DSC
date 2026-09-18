@@ -7,6 +7,9 @@
     name Microsoft Graph uses.
 * AADActivityBasedTimeoutPolicy
   * Added support for the `Description` property.
+* AADAdministrativeUnit
+  * Fixed an issue where resolving a scoped role member could throw an error.
+    FIXES [#7457](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7457)
 * AADAgreement
   * [BREAKING CHANGE] Removed property `AcceptanceStatement`. It was not part of the
     Graph Schema definition for the resource.
@@ -40,12 +43,14 @@
   * Added support for the `AutomaticUserConsentSettings`, `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationOutbound` and
     `M365CollaborationInbound` properties.
+    FIXES [#7436](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7436)
   * Fixed an issue where the loop resolving user and group targets walked one entry past
     the end of the collection.
 * AADCrossTenantAccessPolicyConfigurationPartner
   * Added support for the `AppServiceConnectInbound`,
     `BlockServiceProviderOutboundAccess`, `M365CollaborationInbound`, `TenantRestrictions`
     and `M365CollaborationOutbound` properties.
+    FIXES [#7436](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7436)
 * AADCrossTenantIdentitySyncPolicyPartner
   * Added support for the `ExternalCloudAuthorizedApplicationId` and
     `IsRoleEnabledGroupSyncAllowed` properties.
@@ -61,12 +66,18 @@
     integer to match the type Microsoft Graph defines.
 * AADGroup
   * Added support for the `Theme` and `WritebackConfiguration` properties.
+  * Fixed a failed license assignment only being written to verbose output instead of
+    failing the operation.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
     member carries the odata subtype and `CertificateList` carries the certificates.
   * Excluded `Password` and `Pkcs12Value` from the comparison, because Microsoft Graph
     returns neither the password nor the certificate material on a read.
+* AADEntitlementManagementAccessPackage
+  * Fixed an issue where a resource role scope naming its resource by object id reported
+    drift on every run and re-applied the access package.
+    FIXES [#7412](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7412)
 * AADEntitlementManagementAccessPackageAssignmentPolicy
   * [BREAKING CHANGE] Renamed sub-property `Sequence` to `SequencePosition` to
     avoid a conflict with a reserved PowerShell keyword.
@@ -77,6 +88,9 @@
     avoid a conflict with a reserved PowerShell keyword.
   * Fixed an issue where naming the catalog by its identifier reported drift on every
     run and never converged.
+  * Fixed an issue where naming an `AadGroup` or `AadApplication` resource by object id
+    reported drift on every run and never converged.
+    FIXES [#7386](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7386)
 * AADIdentityGovernanceLifecycleWorkflow
   * Added support for the `AdministrationScopeTargets` property.
 * AADIdentityGovernanceProgram
@@ -228,6 +242,8 @@
   * Added support for the `FirmwareProtectionEnabled`, `KernelDmaProtectionEnabled`,
     `MemoryIntegrityEnabled`, `VirtualizationBasedSecurityEnabled` and
     `WslDistributions` properties.
+* IntuneDeviceConfigurationCustomPolicyMacOS
+  * Initial release.
 * IntuneDeviceConfigurationCustomPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
@@ -300,6 +316,9 @@
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
   * Fixed an issue where creating a policy failed when the configuration named the root
     certificate by its display name.
+  * Fixed an issue where certificate lookup would fail if the `RootCertificateId`
+    parameter was not provided.
+    FIXES [#4753](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7453)
 * IntuneDeviceConfigurationSecureAssessmentPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
@@ -322,6 +341,8 @@
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
+* IntuneDeviceConfigurationWiredNetworkPolicyMacOS
+  * Initial release.
 * IntuneDeviceConfigurationWiredNetworkPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
@@ -331,6 +352,10 @@
 * IntuneDeviceEnrollmentPlatformRestriction
   * [BREAKING CHANGE] Renamed the key property `Identity` to `Id` to match the name
     Microsoft Graph uses.
+* IntuneDeviceFeaturesConfigurationPolicyIOS
+  * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneDeviceFeaturesConfigurationPolicyMacOS
+  * Initial release.
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Added support for the `DeviceNameTemplate` property.
 * IntuneDeviceManagementEnrollmentAndroidGooglePlay
@@ -339,8 +364,8 @@
 * IntuneDiskEncryptionMacOS
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
-* IntuneDeviceFeaturesConfigurationPolicyIOS
-  * Removed null-valued `displayName` properties from nested home screen page instances.
+* IntuneMobileAppsAutoUpdateCatalogAppWindows10
+  * Initial release.
 * IntuneMobileAppsBundleMacOS
   * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
     that carry a type discriminator. Intune rejected a configuration that omitted it.
@@ -364,6 +389,8 @@
   * Added values `arm` and `neutral` to property `AllowedArchitectures`.
   * Added support for the `Relationships` property, which carries the dependency and
     supersedence relationships of the app.
+* IntuneMobileAppsWin32CatalogAppWindows10
+  * Initial release.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
 * IntuneMobileThreatDefenseConnector
@@ -409,6 +436,8 @@
   * Added support for the `fingerprint` and `lockdownExclusionList` properties.
 * IntuneVPNConfigurationPolicyIOS
   * [BREAKING CHANGE] Updated `targetedMobileApps` to use `MSFT_targetedMobileApps`.
+* IntuneVPNConfigurationPolicyMacOS
+  * Initial release.
 * IntuneWifiConfigurationPolicyAndroidEnterpriseDeviceOwner
   * Added support for the `AuthenticationMethod`, `EapType`,
     `TrustedServerCertificateNames`, `InnerAuthenticationProtocolForEapTtls`,
@@ -486,6 +515,9 @@
 * SCDLPComplianceRule
   * Fixed an issue where the module failed to build because a variable was assigned
     inside a conditional block and read outside it.
+* SCFilePlanPropertyAuthority
+  * Fixed the property never being removed, because the check for a pending deletion
+    always evaluated to false.
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings
@@ -588,20 +620,45 @@
     removal of special characters from resource instance names.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
+* M365DSCPermissions
+  * Fixed an issue where `Get-M365DSCCompiledPermissionList` skips any that is not one of the
+    default `graph`, `sharepoint`, `exchange` and `purview`.
+    FIXES [#7424](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7424)
+  * Fixed an issue where `Get-M365DSCCompiledPermissionList -GroupByResourceName` accumulated
+    administrative roles, required roles and required role groups across resources.
+  * Updated `Update-M365DSCAzureAdApplication` to resolve the service principal of any API name
+    a settings file uses rather than accepting only `Graph`, `SharePoint` and `Exchange`.
 * M365DSCReport
   * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
+* M365DSCUtil
+  * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
+    resource origin id to the display name of the object behind it.
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.1.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
-  * Updated `DSCParser` to version 3.1.0.4.
+  * Updated `DSCParser` to version 3.1.0.5.
   * Updated `Microsoft.Graph.*` to version 2.39.0.
   * Updated `MSCloudLoginAssistant` to version 1.2.6.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
+  * Fixed the unit test code coverage reporting 0%. It was measured against the resource
+    sources under `DscResources`, which are build input and never execute. It now targets the
+    generated class modules the tests load.
+  * Reduced the unit test workflow run time by sharding the test run, scoping code coverage to
+    the files a pull request touches and building the C# solution in a single `dotnet` call.
+  * Changed resources to throw instead of only logging or writing to the error stream when
+    an operation fails, so a failed apply is no longer reported as successful.
+  * Fixed a failed telemetry submission failing the resource operation that triggered it,
+    by no longer reporting it on the error stream.
+  * Fixed `Get-DscConfiguration` failing under Windows PowerShell with `There is no
+    Runspace available to run scripts in this thread`.
+    FIXES [#6120](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6120)
   * Fixed telemetry so an export is reported as such again. The event type was matched against
     the method name `Export-TargetResource`, which the class-based resources no longer emit.
+  * Fixed a blueprint annotation written with spaces around the separator, such as
+    `### L2 | Some text`, showing its text in the delta report but no severity colour or icon.
   * [BREAKING CHANGE] Replaced every character that needs escaping inside an instance name
     with an underscore. An exported instance that is named `AADGroup-Sales Team` will get
     renamed to `AADGroup-Sales_Team`.
@@ -683,6 +740,8 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
+  * Corrected the Windows PowerShell warning, which did not mention that
+    `Get-DscConfiguration` is supported.
   * Fixed build of Docker linux dev image by updating one of the installation
     paths to PS 7.6.6.
   * Updated script `Install-M365DSCAndDependencies` to work with a new PS

@@ -34,6 +34,12 @@
 .PARAMETER CoverageBaselineNoun
     Specifies the candidate nouns the committed coverage file holds.
 
+.PARAMETER SubtypeCandidate
+    Specifies the ranked OData subtype candidates from Find-SubtypeGap.
+
+.PARAMETER SubtypeBaseline
+    Specifies the candidate subtypes the committed coverage file holds.
+
 .PARAMETER TemplateBinding
     Specifies the Resource and TemplateId rows from Get-M365DSCIntuneTemplateBinding.
 
@@ -103,6 +109,16 @@ function Compare-M365DSCApiSurface
         [Parameter()]
         [AllowEmptyCollection()]
         [System.Object[]]
+        $SubtypeCandidate = @(),
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.String[]]
+        $SubtypeBaseline = @(),
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
         $TemplateBinding = @(),
 
         [Parameter()]
@@ -115,6 +131,7 @@ function Compare-M365DSCApiSurface
     $findings.AddRange([System.Object[]] @(Compare-VendorSurface -Baseline $Baseline -Current $Current -Origin $Origin))
     $findings.AddRange([System.Object[]] @(Compare-Shim -Current $Current -Origin $Origin -Exclusion $Exclusion))
     $findings.AddRange([System.Object[]] @(Compare-Coverage -Candidate $CoverageCandidate -BaselineNoun $CoverageBaselineNoun))
+    $findings.AddRange([System.Object[]] @(Compare-Subtype -Candidate $SubtypeCandidate -BaselineSubtype $SubtypeBaseline))
     $findings.AddRange([System.Object[]] @(Compare-DependencyVersion -Current $Current))
     $findings.AddRange([System.Object[]] @(Compare-SettingsCatalog -Baseline $Baseline `
                 -Current $Current `

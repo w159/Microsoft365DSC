@@ -1,6 +1,6 @@
 BeforeAll {
     Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCDllLoader.psm1" -Force -Global
-    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCExportUtil.psm1" -Force -Global
+    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Microsoft365DSC.psd1" -Global
 
     function New-TestSession
     {

@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SCLabelPolicy : M365DSCResourceBase
@@ -601,7 +601,7 @@ class SCLabelPolicy : M365DSCResourceBase
                     $label = Get-Label | Where-Object -FilterScript { $_.DisplayName -eq $obj.Value }
                     if ($null -eq $label)
                     {
-                        Write-Error -Message "Label {$($obj.value)} doesn't exist. Please define the Sensitivy label first before trying to assign it to a policy."
+                        throw "Label {$($obj.value)} doesn't exist. Please define the Sensitivy label first before trying to assign it to a policy."
                     }
                     else
                     {

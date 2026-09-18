@@ -125,7 +125,7 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
             $complexKeyRestrictions.Add('AaGuids', $getValue.keyRestrictions.aaGuids)
             if ($null -ne $getValue.keyRestrictions.enforcementType)
             {
-                $complexKeyRestrictions.Add('EnforcementType', $getValue.keyRestrictions.enforcementType.ToString())
+                $complexKeyRestrictions.Add('EnforcementType', $getValue.keyRestrictions.enforcementType)
             }
             $complexKeyRestrictions.Add('IsEnforced', $getValue.keyRestrictions.isEnforced)
             if ($complexKeyRestrictions.values.Where({ $null -ne $_ }).Count -eq 0)
@@ -154,7 +154,7 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($null -ne $currentExcludeTargets.isRegistrationRequired)
@@ -195,7 +195,7 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
 
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
 
                 if ($null -ne $currentIncludeTargets.isRegistrationRequired)
@@ -234,7 +234,7 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
                 }
                 if ($null -ne $currentPasskeyProfiles.attestationEnforcement)
                 {
-                    $myPasskeyProfiles.Add('AttestationEnforcement', $currentPasskeyProfiles.attestationEnforcement.ToString())
+                    $myPasskeyProfiles.Add('AttestationEnforcement', $currentPasskeyProfiles.attestationEnforcement)
                 }
                 if ($null -ne $currentPasskeyProfiles.keyRestrictions)
                 {
@@ -254,14 +254,6 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
                 }
             }
 
-            #region resource generator code
-            $enumState = $null
-            if ($null -ne $getValue.State)
-            {
-                $enumState = $getValue.State.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 IsAttestationEnforced            = $getValue.isAttestationEnforced
@@ -270,7 +262,7 @@ class AADAuthenticationMethodPolicyFido2 : M365DSCResourceBase
                 ExcludeTargets                   = $complexExcludeTargets
                 IncludeTargets                   = $complexIncludeTargets
                 PasskeyProfiles                  = $complexPasskeyProfiles
-                State                            = $enumState
+                State                            = $getValue.State
                 Id                               = $getValue.Id
                 Ensure                           = 'Present'
                 Credential                       = $this.Credential

@@ -137,14 +137,6 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
 
             Write-Verbose -Message "An Intune Device Compliance Script for Windows10 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found."
 
-            #region resource generator code
-            $enumRunAsAccount = $null
-            if ($null -ne $getValue.RunAsAccount)
-            {
-                $enumRunAsAccount = $getValue.RunAsAccount.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Description            = $getValue.Description
@@ -152,8 +144,8 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
                 EnforceSignatureCheck  = $getValue.EnforceSignatureCheck
                 RoleScopeTagIds        = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 RunAs32Bit             = $getValue.RunAs32Bit
-                RunAsAccount           = $enumRunAsAccount
-                DetectionScriptContent = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($getValue.DetectionScriptContent))
+                RunAsAccount           = $getValue.RunAsAccount
+                DetectionScriptContent = $this.DecodeTextPayload($getValue.DetectionScriptContent)
                 Publisher              = $getValue.Publisher
                 Id                     = $getValue.Id
                 Ensure                 = 'Present'
@@ -193,7 +185,7 @@ class IntuneDeviceComplianceScriptWindows10 : M365DSCResourceBase
 
         $currentInstance = $this.Get().ToHashtable()
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
-        $boundParameters.DetectionScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.DetectionScriptContent))
+        $boundParameters.DetectionScriptContent = $this.EncodeTextPayload($boundParameters.DetectionScriptContent)
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($boundParameters.ContainsKey('RoleScopeTagIds'))

@@ -223,20 +223,12 @@ class IntuneMobileAppsLobAppAndroid : M365DSCResourceBase
             }
             #endregion
 
-            #region resource generator code
-            $enumTargetedPlatforms = $null
-            if ($null -ne $getValue.targetedPlatforms)
-            {
-                $enumTargetedPlatforms = $getValue.targetedPlatforms.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 Categories                      = $complexCategories
                 MinimumSupportedOperatingSystem = $complexMinimumSupportedOperatingSystem
                 PackageId                       = $getValue.packageId
-                TargetedPlatforms               = $enumTargetedPlatforms
+                TargetedPlatforms               = $getValue.targetedPlatforms
                 FileName                        = $getValue.fileName
                 Description                     = $getValue.Description
                 Developer                       = $getValue.Developer

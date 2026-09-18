@@ -12,5 +12,5 @@ if ($PSVersionTable.PSEdition -eq 'Core')
 }
 
 Write-Warning -Message "Microsoft365DSC requires PowerShell $minimumVersion or higher. The current session is running Windows PowerShell $($PSVersionTable.PSVersion)."
-Write-Warning -Message 'Windows PowerShell is only supported to compile a configuration and to run Start-DscConfiguration and Test-DscConfiguration. In that case, the Local Configuration Manager relays the execution of every resource to PowerShell 7.'
+Write-Warning -Message 'Windows PowerShell is only supported to compile a configuration and to run Start-DscConfiguration, Test-DscConfiguration and Get-DscConfiguration. In that case, the Local Configuration Manager relays the execution of every resource to PowerShell 7.'
 Write-Warning -Message 'All other cmdlets, such as Export-M365DSCConfiguration and Update-M365DSCDependencies, have to be run from PowerShell 7. You can download the latest release from: https://aka.ms/powershell-release'

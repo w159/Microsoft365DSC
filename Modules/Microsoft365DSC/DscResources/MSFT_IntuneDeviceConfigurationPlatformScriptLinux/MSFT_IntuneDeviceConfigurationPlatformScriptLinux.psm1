@@ -163,7 +163,7 @@ class IntuneDeviceConfigurationPlatformScriptLinux : M365DSCResourceBase
             $policySettings = Export-IntuneSettingCatalogPolicySettings -Settings $settings -ReturnHashtable $policySettings
             if ($policySettings.ContainsKey('CustomConfig_Script'))
             {
-                $policySettings['CustomConfig_Script'] = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($policySettings['CustomConfig_Script']))
+                $policySettings['CustomConfig_Script'] = $this.DecodeTextPayload($policySettings['CustomConfig_Script'])
             }
 
             $results = @{
@@ -235,7 +235,7 @@ class IntuneDeviceConfigurationPlatformScriptLinux : M365DSCResourceBase
         $technologies = 'linuxMdm'
         if ($boundParameters.ContainsKey('CustomConfig_Script'))
         {
-            $boundParameters['CustomConfig_Script'] = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($boundParameters['CustomConfig_Script']))
+            $boundParameters['CustomConfig_Script'] = $this.EncodeTextPayload($boundParameters['CustomConfig_Script'])
         }
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')

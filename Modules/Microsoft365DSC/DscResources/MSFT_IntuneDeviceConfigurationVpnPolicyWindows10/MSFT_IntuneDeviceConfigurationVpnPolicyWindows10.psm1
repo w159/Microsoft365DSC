@@ -254,7 +254,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 $myassociatedApps = [ordered]@{}
                 if ($null -ne $currentassociatedApps.appType)
                 {
-                    $myassociatedApps.Add('AppType', $currentassociatedApps.appType.ToString())
+                    $myassociatedApps.Add('AppType', $currentassociatedApps.appType)
                 }
                 $myassociatedApps.Add('Identifier', $currentassociatedApps.identifier)
                 if ($myassociatedApps.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -266,27 +266,27 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
             $complexCryptographySuite = [ordered]@{}
             if ($null -ne $getValue.cryptographySuite.authenticationTransformConstants)
             {
-                $complexCryptographySuite.Add('AuthenticationTransformConstants', $getValue.cryptographySuite.authenticationTransformConstants.ToString())
+                $complexCryptographySuite.Add('AuthenticationTransformConstants', $getValue.cryptographySuite.authenticationTransformConstants)
             }
             if ($null -ne $getValue.cryptographySuite.cipherTransformConstants)
             {
-                $complexCryptographySuite.Add('CipherTransformConstants', $getValue.cryptographySuite.cipherTransformConstants.ToString())
+                $complexCryptographySuite.Add('CipherTransformConstants', $getValue.cryptographySuite.cipherTransformConstants)
             }
             if ($null -ne $getValue.cryptographySuite.dhGroup)
             {
-                $complexCryptographySuite.Add('DhGroup', $getValue.cryptographySuite.dhGroup.ToString())
+                $complexCryptographySuite.Add('DhGroup', $getValue.cryptographySuite.dhGroup)
             }
             if ($null -ne $getValue.cryptographySuite.encryptionMethod)
             {
-                $complexCryptographySuite.Add('EncryptionMethod', $getValue.cryptographySuite.encryptionMethod.ToString())
+                $complexCryptographySuite.Add('EncryptionMethod', $getValue.cryptographySuite.encryptionMethod)
             }
             if ($null -ne $getValue.cryptographySuite.integrityCheckMethod)
             {
-                $complexCryptographySuite.Add('IntegrityCheckMethod', $getValue.cryptographySuite.integrityCheckMethod.ToString())
+                $complexCryptographySuite.Add('IntegrityCheckMethod', $getValue.cryptographySuite.integrityCheckMethod)
             }
             if ($null -ne $getValue.cryptographySuite.pfsGroup)
             {
-                $complexCryptographySuite.Add('PfsGroup', $getValue.cryptographySuite.pfsGroup.ToString())
+                $complexCryptographySuite.Add('PfsGroup', $getValue.cryptographySuite.pfsGroup)
             }
             if ($complexCryptographySuite.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -316,7 +316,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
             $complexProxyServer.Add('AutomaticallyDetectProxySettings', $getValue.proxyServer.automaticallyDetectProxySettings)
             if ($null -ne $getValue.proxyServer.'@odata.type')
             {
-                $complexProxyServer.Add('odataType', $getValue.proxyServer.'@odata.type'.ToString())
+                $complexProxyServer.Add('odataType', $getValue.proxyServer.'@odata.type')
             }
             if ($complexProxyServer.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -350,7 +350,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 $mytrafficRules.Add('AppId', $currenttrafficRules.appId)
                 if ($null -ne $currenttrafficRules.appType)
                 {
-                    $mytrafficRules.Add('AppType', $currenttrafficRules.appType.ToString())
+                    $mytrafficRules.Add('AppType', $currenttrafficRules.appType)
                 }
                 $mytrafficRules.Add('Claims', $currenttrafficRules.claims)
                 $complexLocalAddressRanges = @()
@@ -362,7 +362,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                     $myLocalAddressRanges.Add('CidrAddress', $currentLocalAddressRanges.cidrAddress)
                     if ($null -ne $currentLocalAddressRanges.'@odata.type')
                     {
-                        $myLocalAddressRanges.Add('odataType', $currentLocalAddressRanges.'@odata.type'.ToString())
+                        $myLocalAddressRanges.Add('odataType', $currentLocalAddressRanges.'@odata.type')
                     }
                     if ($myLocalAddressRanges.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -393,7 +393,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                     $myRemoteAddressRanges.Add('CidrAddress', $currentRemoteAddressRanges.cidrAddress)
                     if ($null -ne $currentRemoteAddressRanges.'@odata.type')
                     {
-                        $myRemoteAddressRanges.Add('odataType', $currentRemoteAddressRanges.'@odata.type'.ToString())
+                        $myRemoteAddressRanges.Add('odataType', $currentRemoteAddressRanges.'@odata.type')
                     }
                     if ($myRemoteAddressRanges.values.Where({ $null -ne $_ }).Count -gt 0)
                     {
@@ -415,11 +415,11 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 $mytrafficRules.Add('RemotePortRanges', $complexRemotePortRanges)
                 if ($null -ne $currenttrafficRules.routingPolicyType)
                 {
-                    $mytrafficRules.Add('RoutingPolicyType', $currenttrafficRules.routingPolicyType.ToString())
+                    $mytrafficRules.Add('RoutingPolicyType', $currenttrafficRules.routingPolicyType)
                 }
                 if ($null -ne $currenttrafficRules.vpnTrafficDirection)
                 {
-                    $mytrafficRules.Add('VpnTrafficDirection', $currenttrafficRules.vpnTrafficDirection.ToString())
+                    $mytrafficRules.Add('VpnTrafficDirection', $currenttrafficRules.vpnTrafficDirection)
                 }
                 if ($mytrafficRules.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
@@ -469,31 +469,11 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
             }
             #endregion
 
-            #region resource generator code
-            $enumAuthenticationMethod = $null
-            if ($null -ne $getValue.authenticationMethod)
-            {
-                $enumAuthenticationMethod = $getValue.authenticationMethod.ToString()
-            }
-
-            $enumConnectionType = $null
-            if ($null -ne $getValue.connectionType)
-            {
-                $enumConnectionType = $getValue.connectionType.ToString()
-            }
-
-            $enumProfileTarget = $null
-            if ($null -ne $getValue.profileTarget)
-            {
-                $enumProfileTarget = $getValue.profileTarget.ToString()
-            }
-            #endregion
-
             $results = @{
                 #region resource generator code
                 AssociatedApps                              = $complexAssociatedApps
-                AuthenticationMethod                        = $enumAuthenticationMethod
-                ConnectionType                              = $enumConnectionType
+                AuthenticationMethod                        = $getValue.authenticationMethod
+                ConnectionType                              = $getValue.connectionType
                 CryptographySuite                           = $complexCryptographySuite
                 DnsRules                                    = $complexDnsRules
                 DnsSuffixes                                 = $getValue.dnsSuffixes
@@ -506,7 +486,7 @@ class IntuneDeviceConfigurationVpnPolicyWindows10 : M365DSCResourceBase
                 EnableSplitTunneling                        = $getValue.enableSplitTunneling
                 MicrosoftTunnelSiteId                       = $getValue.microsoftTunnelSiteId
                 OnlyAssociatedAppsCanUseConnection          = $getValue.onlyAssociatedAppsCanUseConnection
-                ProfileTarget                               = $enumProfileTarget
+                ProfileTarget                               = $getValue.profileTarget
                 ProxyServer                                 = $complexProxyServer
                 RememberUserCredentials                     = $getValue.rememberUserCredentials
                 Routes                                      = $complexRoutes

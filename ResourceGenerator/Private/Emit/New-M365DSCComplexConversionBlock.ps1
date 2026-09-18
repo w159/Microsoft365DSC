@@ -5,9 +5,8 @@
       - New-M365DSCComplexConversionBlock: the lines inside Get() that convert complex, enum and
         date properties into local variables.
       - New-M365DSCHashtableMappingBlock: the $result = @{ ... } body.
-      - New-M365DSCHelperFunctionBlock: one hidden Get<Type>AsHashtable method per complex class,
-        declared on the resource class itself so the conversion is reachable through $this rather
-        than through a module-scoped function.
+      - New-M365DSCInlineComplexBlock: the inline conversion of one complex property, nested
+        members included, so Get() carries the whole conversion.
 #>
 
 <#
@@ -33,10 +32,10 @@ function Get-M365DSCPropertyAccessPath
     {
         if ($Property.GraphName -match '[^\w]')
         {
-            return "$ObjectVariable.AdditionalProperties.'$($Property.GraphName)'"
+            return "$ObjectVariable.'$($Property.GraphName)'"
         }
 
-        return "$ObjectVariable.AdditionalProperties.$($Property.GraphName)"
+        return "$ObjectVariable.$($Property.GraphName)"
     }
 
     return "$ObjectVariable.$($Property.Name)"
@@ -45,6 +44,15 @@ function Get-M365DSCPropertyAccessPath
 <#
 .SYNOPSIS
     Renders the conversion statements that precede the $result hashtable in Get().
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the rendered statements.
+
+.OUTPUTS
+    The block, with every complex property converted inline.
 #>
 function New-M365DSCComplexConversionBlock
 {
@@ -63,6 +71,7 @@ function New-M365DSCComplexConversionBlock
 
     $indent = ' ' * $IndentCount
     $builder = [System.Text.StringBuilder]::new()
+    $isGraph = Test-M365DSCGraphWorkload -ResourceModel $ResourceModel
 
     foreach ($property in $ResourceModel.SchemaProperties)
     {
@@ -77,23 +86,14 @@ function New-M365DSCComplexConversionBlock
 
         if ($property.IsComplex)
         {
-            $methodName = Get-M365DSCComplexHelperName -CimClassName $property.CimClassName
-
-            if ($property.IsArray)
-            {
-                $null = $builder.AppendLine("$indent`$complex$name = @()")
-                $null = $builder.AppendLine("${indent}foreach (`$current$name in $path)")
-                $null = $builder.AppendLine("$indent{")
-                $null = $builder.AppendLine("$indent    `$complex$name += `$this.$methodName(`$current$name)")
-                $null = $builder.AppendLine("$indent}")
-            }
-            else
-            {
-                $null = $builder.AppendLine("$indent`$complex$name = `$this.$methodName($path)")
-            }
+            $null = $builder.AppendLine((New-M365DSCInlineComplexBlock -Property $property `
+                        -SourcePath $path `
+                        -TargetVariable "complex$name" `
+                        -IndentCount $IndentCount `
+                        -IsGraph:$isGraph))
             $null = $builder.AppendLine('')
         }
-        elseif ($property.IsEnum -and $property.Name -ne 'Ensure')
+        elseif ($property.IsEnum -and $property.Name -ne 'Ensure' -and -not $isGraph)
         {
             if ($property.IsArray)
             {
@@ -187,10 +187,22 @@ function New-M365DSCHashtableMappingBlock
         elseif ($property.IsEnum)
         {
             $value = "`$enum$name"
+            if (Test-M365DSCGraphWorkload -ResourceModel $ResourceModel)
+            {
+                $value = Get-M365DSCPropertyAccessPath -Property $property
+            }
         }
         elseif ($property.FakeKind -in @('DateTime', 'Time'))
         {
             $value = "`$date$name"
+        }
+        elseif ($name -in @($ResourceModel.TextPayloadProperties))
+        {
+            $value = "`$this.DecodeTextPayload($(Get-M365DSCPropertyAccessPath -Property $property))"
+        }
+        elseif ($name -eq 'RoleScopeTagIds')
+        {
+            $value = "Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $(Get-M365DSCPropertyAccessPath -Property $property) -DesiredValues `$this.RoleScopeTagIds"
         }
         else
         {
@@ -205,12 +217,18 @@ function New-M365DSCHashtableMappingBlock
 
 <#
 .SYNOPSIS
-    Renders one hidden Get<Type>AsHashtable method per complex class.
+    Tells whether the resource reads its data through the Graph shim.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    True for the Graph workloads, whose shim returns strings rather than typed enums.
 #>
-function New-M365DSCHelperFunctionBlock
+function Test-M365DSCGraphWorkload
 {
     [CmdletBinding()]
-    [OutputType([System.String])]
+    [OutputType([System.Boolean])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -218,145 +236,216 @@ function New-M365DSCHelperFunctionBlock
         $ResourceModel
     )
 
-    $builder = [System.Text.StringBuilder]::new()
-    $first = $true
-
-    foreach ($complexClass in $ResourceModel.ComplexTypeClasses)
-    {
-        if ($complexClass.CimClassName -eq 'MSFT_DeviceManagementConfigurationPolicyAssignments')
-        {
-            # Assignments convert through ConvertFrom-IntunePolicyAssignment, not a helper.
-            continue
-        }
-
-        if (-not $first)
-        {
-            $null = $builder.AppendLine('')
-        }
-        $first = $false
-
-        $methodName = Get-M365DSCComplexHelperName -CimClassName $complexClass.CimClassName
-
-        $null = $builder.AppendLine("    hidden [System.Collections.Hashtable] $methodName([System.Object] `$ComplexObject)")
-        $null = $builder.AppendLine('    {')
-        $null = $builder.AppendLine('        if ($null -eq $ComplexObject)')
-        $null = $builder.AppendLine('        {')
-        $null = $builder.AppendLine('            return $null')
-        $null = $builder.AppendLine('        }')
-        $null = $builder.AppendLine('')
-        $null = $builder.AppendLine('        $result = @{}')
-        $null = $builder.AppendLine('')
-
-        foreach ($member in $complexClass.Members)
-        {
-            $memberName = $member.Name
-
-            if ($member.GraphName -eq '@odata.type')
-            {
-                # Typed SDK objects keep the discriminator in AdditionalProperties; plain
-                # hashtables carry it directly.
-                $null = $builder.AppendLine("        `$odataType = `$ComplexObject.AdditionalProperties.'@odata.type'")
-                $null = $builder.AppendLine("        if (`$null -eq `$odataType)")
-                $null = $builder.AppendLine('        {')
-                $null = $builder.AppendLine("            `$odataType = `$ComplexObject.'@odata.type'")
-                $null = $builder.AppendLine('        }')
-                $null = $builder.AppendLine("        if (`$null -ne `$odataType)")
-                $null = $builder.AppendLine('        {')
-                $null = $builder.AppendLine("            `$result.Add('$memberName', `$odataType.ToString())")
-                $null = $builder.AppendLine('        }')
-                $null = $builder.AppendLine('')
-                continue
-            }
-
-            $memberPath = "`$ComplexObject.$($member.GraphName)"
-
-            if ($member.IsComplex)
-            {
-                $nestedMethodName = Get-M365DSCComplexHelperName -CimClassName $member.CimClassName
-
-                if ($member.IsArray)
-                {
-                    $null = $builder.AppendLine("        `$nested$memberName = @()")
-                    $null = $builder.AppendLine("        foreach (`$current$memberName in $memberPath)")
-                    $null = $builder.AppendLine('        {')
-                    $null = $builder.AppendLine("            `$nested$memberName += `$this.$nestedMethodName(`$current$memberName)")
-                    $null = $builder.AppendLine('        }')
-                    $null = $builder.AppendLine("        if (`$nested$memberName.Count -gt 0)")
-                    $null = $builder.AppendLine('        {')
-                    $null = $builder.AppendLine("            `$result.Add('$memberName', [Array]`$nested$memberName)")
-                    $null = $builder.AppendLine('        }')
-                }
-                else
-                {
-                    $null = $builder.AppendLine("        `$nested$memberName = `$this.$nestedMethodName($memberPath)")
-                    $null = $builder.AppendLine("        if (`$null -ne `$nested$memberName)")
-                    $null = $builder.AppendLine('        {')
-                    $null = $builder.AppendLine("            `$result.Add('$memberName', `$nested$memberName)")
-                    $null = $builder.AppendLine('        }')
-                }
-                $null = $builder.AppendLine('')
-                continue
-            }
-
-            $valueExpression = $memberPath
-            if ($member.IsEnum)
-            {
-                if ($member.IsArray)
-                {
-                    $valueExpression = "[System.String[]]@($memberPath | ForEach-Object { `$_.ToString() })"
-                }
-                else
-                {
-                    $valueExpression = "$memberPath.ToString()"
-                }
-            }
-            elseif ($member.FakeKind -eq 'DateTime')
-            {
-                $valueExpression = "$memberPath.ToUniversalTime().ToString('o')"
-            }
-            elseif ($member.FakeKind -eq 'Time')
-            {
-                $valueExpression = "$memberPath.ToString()"
-            }
-            elseif ($member.IsArray)
-            {
-                $valueExpression = "[Array]$memberPath"
-            }
-
-            $null = $builder.AppendLine("        if (`$null -ne $memberPath)")
-            $null = $builder.AppendLine('        {')
-            $null = $builder.AppendLine("            `$result.Add('$memberName', $valueExpression)")
-            $null = $builder.AppendLine('        }')
-            $null = $builder.AppendLine('')
-        }
-
-        $null = $builder.AppendLine('        if ($result.Count -eq 0)')
-        $null = $builder.AppendLine('        {')
-        $null = $builder.AppendLine('            return $null')
-        $null = $builder.AppendLine('        }')
-        $null = $builder.AppendLine('')
-        $null = $builder.AppendLine('        return $result')
-        $null = $builder.AppendLine('    }')
-    }
-
-    return $builder.ToString().TrimEnd()
+    return ($ResourceModel.Workload -in @('MicrosoftGraph', 'Intune'))
 }
 
 <#
 .SYNOPSIS
-    Builds the hidden conversion method name for a complex class.
+    Renders the inline conversion of one complex property into an ordered hashtable.
+
+.PARAMETER Property
+    Specifies the complex property model.
+
+.PARAMETER SourcePath
+    Specifies the expression that holds the value the workload returned.
+
+.PARAMETER TargetVariable
+    Specifies the variable name that receives the hashtable, without the sigil.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the rendered statements.
+
+.PARAMETER IsGraph
+    Renders enum members without a ToString call, which the Graph shim makes unnecessary.
+
+.OUTPUTS
+    The block, with every nested complex member converted in place.
 #>
-function Get-M365DSCComplexHelperName
+function New-M365DSCInlineComplexBlock
 {
     [CmdletBinding()]
     [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true)]
+        [System.Object]
+        $Property,
+
+        [Parameter(Mandatory = $true)]
         [System.String]
-        $CimClassName
+        $SourcePath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TargetVariable,
+
+        [Parameter()]
+        [System.Int32]
+        $IndentCount = 12,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsGraph
     )
 
-    $baseName = $CimClassName -replace '^MSFT_MicrosoftGraph', '' -replace '^MSFT_', ''
-    return "Get$($baseName)AsHashtable"
+    $indent = ' ' * $IndentCount
+    $builder = [System.Text.StringBuilder]::new()
+    $name = $Property.Name
+
+    if ($Property.IsArray)
+    {
+        $itemVariable = "my$name"
+        $null = $builder.AppendLine("$indent`$$TargetVariable = @()")
+        $null = $builder.AppendLine("${indent}foreach (`$current$name in $SourcePath)")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    `$$itemVariable = [ordered]@{}")
+
+        foreach ($member in $Property.Members)
+        {
+            $null = $builder.Append((New-M365DSCInlineComplexMemberBlock -Member $member `
+                        -SourcePath "`$current$name" `
+                        -TargetVariable $itemVariable `
+                        -IndentCount ($IndentCount + 4) `
+                        -IsGraph:$IsGraph))
+        }
+
+        $null = $builder.AppendLine("$indent    if (`$$itemVariable.values.Where({ `$null -ne `$_ }).Count -gt 0)")
+        $null = $builder.AppendLine("$indent    {")
+        $null = $builder.AppendLine("$indent        `$$TargetVariable += `$$itemVariable")
+        $null = $builder.AppendLine("$indent    }")
+        $null = $builder.Append("$indent}")
+
+        return $builder.ToString()
+    }
+
+    $null = $builder.AppendLine("$indent`$$TargetVariable = [ordered]@{}")
+
+    foreach ($member in $Property.Members)
+    {
+        $null = $builder.Append((New-M365DSCInlineComplexMemberBlock -Member $member `
+                    -SourcePath $SourcePath `
+                    -TargetVariable $TargetVariable `
+                    -IndentCount $IndentCount `
+                    -IsGraph:$IsGraph))
+    }
+
+    $null = $builder.AppendLine("${indent}if (`$$TargetVariable.values.Where({ `$null -ne `$_ }).Count -eq 0)")
+    $null = $builder.AppendLine("$indent{")
+    $null = $builder.AppendLine("$indent    `$$TargetVariable = `$null")
+    $null = $builder.Append("$indent}")
+
+    return $builder.ToString()
+}
+
+<#
+.SYNOPSIS
+    Renders the inline conversion of one member of a complex property.
+
+.PARAMETER Member
+    Specifies the member property model.
+
+.PARAMETER SourcePath
+    Specifies the expression that holds the complex value the workload returned.
+
+.PARAMETER TargetVariable
+    Specifies the hashtable variable that receives the member, without the sigil.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the rendered statements.
+
+.PARAMETER IsGraph
+    Renders enum members without a ToString call, which the Graph shim makes unnecessary.
+
+.OUTPUTS
+    The block.
+#>
+function New-M365DSCInlineComplexMemberBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $Member,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $SourcePath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $TargetVariable,
+
+        [Parameter()]
+        [System.Int32]
+        $IndentCount = 12,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IsGraph
+    )
+
+    $indent = ' ' * $IndentCount
+    $builder = [System.Text.StringBuilder]::new()
+    $memberName = $Member.Name
+
+    if ($Member.GraphName -eq '@odata.type')
+    {
+        $null = $builder.AppendLine("${indent}if (`$null -ne $SourcePath.'@odata.type')")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    `$$TargetVariable.Add('$memberName', $SourcePath.'@odata.type')")
+        $null = $builder.AppendLine("$indent}")
+
+        return $builder.ToString()
+    }
+
+    $memberPath = "$SourcePath.$($Member.GraphName)"
+
+    if ($Member.IsComplex)
+    {
+        $nestedVariable = "complex$memberName"
+        $null = $builder.AppendLine((New-M365DSCInlineComplexBlock -Property $Member `
+                    -SourcePath $memberPath `
+                    -TargetVariable $nestedVariable `
+                    -IndentCount $IndentCount `
+                    -IsGraph:$IsGraph))
+        $null = $builder.AppendLine("$indent`$$TargetVariable.Add('$memberName', `$$nestedVariable)")
+
+        return $builder.ToString()
+    }
+
+    if ($Member.FakeKind -in @('DateTime', 'Time'))
+    {
+        $toString = ".ToUniversalTime().ToString('o')"
+        if ($Member.FakeKind -eq 'Time')
+        {
+            $toString = '.ToString()'
+        }
+
+        $null = $builder.AppendLine("${indent}if (`$null -ne $memberPath)")
+        $null = $builder.AppendLine("$indent{")
+        $null = $builder.AppendLine("$indent    `$$TargetVariable.Add('$memberName', $memberPath$toString)")
+        $null = $builder.AppendLine("$indent}")
+
+        return $builder.ToString()
+    }
+
+    $valueExpression = $memberPath
+    if ($Member.IsEnum -and -not $IsGraph)
+    {
+        $valueExpression = "$memberPath.ToString()"
+        if ($Member.IsArray)
+        {
+            $valueExpression = "[System.String[]]@($memberPath | ForEach-Object { `$_.ToString() })"
+        }
+    }
+    elseif ($Member.IsArray)
+    {
+        $valueExpression = "[Array]$memberPath"
+    }
+
+    $null = $builder.AppendLine("$indent`$$TargetVariable.Add('$memberName', $valueExpression)")
+
+    return $builder.ToString()
 }

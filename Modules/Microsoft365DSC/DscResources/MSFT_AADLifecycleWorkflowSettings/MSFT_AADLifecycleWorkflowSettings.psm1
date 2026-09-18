@@ -103,7 +103,7 @@ class AADLifecycleWorkflowSettings : M365DSCResourceBase
                 $myQuarantineCondition.Add('Threshold', $currentQuarantineCondition.Threshold)
                 if ($null -ne $currentQuarantineCondition.'@odata.type')
                 {
-                    $myQuarantineCondition.Add('odataType', $currentQuarantineCondition.'@odata.type'.ToString())
+                    $myQuarantineCondition.Add('odataType', $currentQuarantineCondition.'@odata.type')
                 }
                 if ($myQuarantineCondition.values.Where({ $null -ne $_ }).Count -gt 0)
                 {

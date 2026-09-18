@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADApplication : M365DSCResourceBase
@@ -1138,6 +1138,8 @@ class AADApplication : M365DSCResourceBase
                     catch
                     {
                         $this.LogError($_, 'Error updating data:')
+
+                        throw
                     }
                 }
                 elseif ($diff.SideIndicator -eq '<=')
@@ -1158,6 +1160,8 @@ class AADApplication : M365DSCResourceBase
                     catch
                     {
                         $this.LogError($_, 'Error updating data:')
+
+                        throw
                     }
                 }
             }

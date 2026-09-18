@@ -130,11 +130,11 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                     $myRules.Add('Identifier', $currentRules.identifier)
                     if ($null -ne $currentRules.x509CertificateAuthenticationMode)
                     {
-                        $myRules.Add('X509CertificateAuthenticationMode', $currentRules.x509CertificateAuthenticationMode.ToString())
+                        $myRules.Add('X509CertificateAuthenticationMode', $currentRules.x509CertificateAuthenticationMode)
                     }
                     if ($null -ne $currentRules.x509CertificateRuleType)
                     {
-                        $myRules.Add('X509CertificateRuleType', $currentRules.x509CertificateRuleType.ToString())
+                        $myRules.Add('X509CertificateRuleType', $currentRules.x509CertificateRuleType)
                     }
                     if ($myRules.values.Where({ $null -ne $_ }).Count -gt 0 -and $myRules.Keys.Length -gt 0)
                     {
@@ -146,7 +146,7 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
 
             if ($null -ne $getValue.authenticationModeConfiguration.x509CertificateAuthenticationDefaultMode)
             {
-                $complexAuthenticationModeConfiguration.Add('X509CertificateAuthenticationDefaultMode', $getValue.authenticationModeConfiguration.x509CertificateAuthenticationDefaultMode.ToString())
+                $complexAuthenticationModeConfiguration.Add('X509CertificateAuthenticationDefaultMode', $getValue.authenticationModeConfiguration.x509CertificateAuthenticationDefaultMode)
             }
             if ($complexAuthenticationModeConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
             {
@@ -178,7 +178,7 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
 
                     if ($null -ne $currentScopeIncludeTargets.targetType)
                     {
-                        $myScopeIncludeTargets.Add('TargetType', $currentScopeIncludeTargets.targetType.ToString())
+                        $myScopeIncludeTargets.Add('TargetType', $currentScopeIncludeTargets.targetType)
                     }
 
                     if ($myScopeIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -229,7 +229,7 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -260,7 +260,7 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
 
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
 
                 if ($null -ne $currentIncludeTargets.isRegistrationRequired)
@@ -277,18 +277,13 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
             $complexIssuerHintsConfiguration = [ordered]@{}
             if ($null -ne $getValue.issuerHintsConfiguration.state)
             {
-                $complexIssuerHintsConfiguration.Add('State', $getValue.issuerHintsConfiguration.state.ToString())
+                $complexIssuerHintsConfiguration.Add('State', $getValue.issuerHintsConfiguration.state)
             }
             if ($complexIssuerHintsConfiguration.values.Where({ $null -ne $_ }).Count -eq 0)
             {
                 $complexIssuerHintsConfiguration = $null
             }
 
-            $enumState = $null
-            if ($null -ne $getValue.State)
-            {
-                $enumState = $getValue.State.ToString()
-            }
             #endregion
 
             $results = @{
@@ -299,7 +294,7 @@ class AADAuthenticationMethodPolicyX509 : M365DSCResourceBase
                 ExcludeTargets                  = $complexExcludeTargets
                 IncludeTargets                  = $complexIncludeTargets
                 IssuerHintsConfiguration        = $complexIssuerHintsConfiguration
-                State                           = $enumState
+                State                           = $getValue.State
                 Id                              = $getValue.Id
                 Ensure                          = 'Present'
                 Credential                      = $this.Credential

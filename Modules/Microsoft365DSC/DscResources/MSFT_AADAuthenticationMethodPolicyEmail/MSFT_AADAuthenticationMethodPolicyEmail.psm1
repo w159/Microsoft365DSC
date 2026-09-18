@@ -129,7 +129,7 @@ class AADAuthenticationMethodPolicyEmail : M365DSCResourceBase
 
                 if ($null -ne $currentExcludeTargets.targetType)
                 {
-                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType.ToString())
+                    $myExcludeTargets.Add('TargetType', $currentExcludeTargets.targetType)
                 }
 
                 if ($myExcludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -140,12 +140,6 @@ class AADAuthenticationMethodPolicyEmail : M365DSCResourceBase
             #endregion
 
             #region resource generator code
-            $enumAllowExternalIdToUseEmailOtp = $null
-            if ($null -ne $getValue.allowExternalIdToUseEmailOtp)
-            {
-                $enumAllowExternalIdToUseEmailOtp = $getValue.allowExternalIdToUseEmailOtp.ToString()
-            }
-
             $complexIncludeTargets = @()
             foreach ($currentincludeTargets in $getValue.includeTargets)
             {
@@ -166,7 +160,7 @@ class AADAuthenticationMethodPolicyEmail : M365DSCResourceBase
 
                 if ($null -ne $currentIncludeTargets.targetType)
                 {
-                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType.ToString())
+                    $myIncludeTargets.Add('TargetType', $currentIncludeTargets.targetType)
                 }
 
                 if ($myIncludeTargets.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -175,19 +169,14 @@ class AADAuthenticationMethodPolicyEmail : M365DSCResourceBase
                 }
             }
 
-            $enumState = $null
-            if ($null -ne $getValue.State)
-            {
-                $enumState = $getValue.State.ToString()
-            }
             #endregion
 
             $results = @{
                 #region resource generator code
-                AllowExternalIdToUseEmailOtp = $enumAllowExternalIdToUseEmailOtp
+                AllowExternalIdToUseEmailOtp = $getValue.allowExternalIdToUseEmailOtp
                 ExcludeTargets               = $complexExcludeTargets
                 IncludeTargets               = $complexIncludeTargets
-                State                        = $enumState
+                State                        = $getValue.State
                 Id                           = $getValue.Id
                 Ensure                       = 'Present'
                 Credential                   = $this.Credential

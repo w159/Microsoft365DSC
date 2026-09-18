@@ -160,7 +160,7 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
             }
             if ($null -ne $getValue.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.'@odata.type')
             {
-                $complexDisasterRecoveryNetworkSetting.Add('odataType', $getValue.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.'@odata.type'.ToString())
+                $complexDisasterRecoveryNetworkSetting.Add('odataType', $getValue.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.'@odata.type')
             }
             if ($complexDisasterRecoveryNetworkSetting.Values.Where({ $null -ne $_ }).Count -eq 0)
             {

@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADUser : M365DSCResourceBase
@@ -550,7 +550,7 @@ class AADUser : M365DSCResourceBase
             {
                 $this.LogError($_, 'Error updating data:')
 
-                return
+                throw
             }
             #endregion
 

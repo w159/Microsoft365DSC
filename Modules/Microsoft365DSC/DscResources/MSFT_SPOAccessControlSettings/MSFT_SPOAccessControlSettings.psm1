@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class SPOAccessControlSettings : M365DSCResourceBase
@@ -207,7 +207,7 @@ class SPOAccessControlSettings : M365DSCResourceBase
             }
             else
             {
-                Write-Error $_.ErrorDetails.Message
+                throw
             }
         }
     }

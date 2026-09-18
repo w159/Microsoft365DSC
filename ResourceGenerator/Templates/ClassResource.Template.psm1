@@ -53,7 +53,10 @@ class <ResourceName> : M365DSCResourceBase
 
             Write-Verbose -Message "Found <ResourceDescription> with <PrimaryKey> {$($this.<PrimaryKey>)}"
 
+<#IF ComplexConversionBlock#>
 <ComplexConversionBlock>
+
+<#ENDIF ComplexConversionBlock#>
             $result = @{
 <HashtableMappingBlock>
             }
@@ -88,6 +91,8 @@ class <ResourceName> : M365DSCResourceBase
             $null = $this.Connect('<Workload>')
 
             $currentInstance = $this.Get().ToHashtable()
+
+<SetPreambleBlock>
 
 <#IF HasEnsure#>
             if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -126,6 +131,10 @@ class <ResourceName> : M365DSCResourceBase
     {
         return ([M365DSCResourceBase] $this).Test()
     }
+<#IF CompareParametersBlock#>
+
+<CompareParametersBlock>
+<#ENDIF CompareParametersBlock#>
 
     [string] Export()
     {
@@ -214,10 +223,6 @@ class <ResourceName> : M365DSCResourceBase
 
         return $result
     }
-<#IF HelperFunctionBlock#>
-
-<HelperFunctionBlock>
-<#ENDIF HelperFunctionBlock#>
 }
 <#IF CimInstanceClassBlock#>
 

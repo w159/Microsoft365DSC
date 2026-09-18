@@ -68,10 +68,7 @@ function New-M365DSCResourceInstance
     }
 
     $instance = $type::new()
-    foreach ($entry in $Property.GetEnumerator())
-    {
-        $instance.($entry.Key) = $entry.Value
-    }
+    $instance.FromHashtable($Property)
 
     return $instance
 }

@@ -160,7 +160,8 @@ function New-M365DSCExampleValueBlock
     {
         $candidates = @($ResourceModel.SchemaProperties | Where-Object -FilterScript {
                 -not $_.IsKey -and -not $_.IsMandatory -and -not $_.IsComplex -and
-                $_.Name -ne $ResourceModel.AlternativeKey -and $null -ne $_.DriftValue
+                $_.Name -ne $ResourceModel.AlternativeKey -and $null -ne $_.DriftValue -and
+                -not (Test-M365DSCExampleIdentifier -Property $_ -ResourceModel $ResourceModel)
             })
 
         $drifted = $candidates | Where-Object -FilterScript { $_.FakeKind -eq 'String' -and -not $_.IsArray } | Select-Object -First 1
@@ -181,6 +182,11 @@ function New-M365DSCExampleValueBlock
 
     foreach ($property in $ResourceModel.SchemaProperties)
     {
+        if (Test-M365DSCExampleIdentifier -Property $property -ResourceModel $ResourceModel)
+        {
+            continue
+        }
+
         # Mandatory becomes Required in the MOF, but a keys-only remove example does not compile.
         if ($KeysOnly -and -not $property.IsKey -and -not $property.IsMandatory -and
             $property.Name -ne $ResourceModel.AlternativeKey)
@@ -328,4 +334,37 @@ function ConvertTo-M365DSCExampleValue
     }
 
     return $builder.ToString().TrimEnd()
+}
+
+<#
+.SYNOPSIS
+    Tells whether a property is the service generated identifier rather than a setting.
+
+.PARAMETER Property
+    Specifies the property model.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.OUTPUTS
+    True when the property is the identifier and the resource keys on something else.
+#>
+function Test-M365DSCExampleIdentifier
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $Property,
+
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel
+    )
+
+    return (-not $Property.IsKey -and
+        $Property.Name -eq $ResourceModel.PrimaryKey -and
+        $null -ne $ResourceModel.AlternativeKey)
 }

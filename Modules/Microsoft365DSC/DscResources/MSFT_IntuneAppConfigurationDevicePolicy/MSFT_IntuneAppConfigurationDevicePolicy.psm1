@@ -171,7 +171,7 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
                 $mypermissionActions = [ordered]@{}
                 if ($null -ne $currentpermissionActions.action)
                 {
-                    $mypermissionActions.Add('Action', $currentpermissionActions.action.ToString())
+                    $mypermissionActions.Add('Action', $currentpermissionActions.action)
                 }
                 $mypermissionActions.Add('Permission', $currentpermissionActions.permission)
                 if ($mypermissionActions.values.Where({ $null -ne $_ }).Count -gt 0)
@@ -187,27 +187,13 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
                 $mysettings.Add('AppConfigKey', $currentsettings.appConfigKey)
                 if ($null -ne $currentsettings.appConfigKeyType)
                 {
-                    $mysettings.Add('AppConfigKeyType', $currentsettings.appConfigKeyType.ToString())
+                    $mysettings.Add('AppConfigKeyType', $currentsettings.appConfigKeyType)
                 }
                 $mysettings.Add('AppConfigKeyValue', $currentsettings.appConfigKeyValue)
                 if ($mysettings.values.Where({ $null -ne $_ }).Count -gt 0)
                 {
                     $complexSettings += $mysettings
                 }
-            }
-            #endregion
-
-            #region resource generator code
-            $enumCredentialProviderRoleState = $null
-            if ($null -ne $getValue.credentialProviderRoleState)
-            {
-                $enumCredentialProviderRoleState = $getValue.credentialProviderRoleState.ToString()
-            }
-
-            $enumProfileApplicability = $null
-            if ($null -ne $getValue.profileApplicability)
-            {
-                $enumProfileApplicability = $getValue.profileApplicability.ToString()
             }
             #endregion
 
@@ -240,17 +226,17 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
             $payloadJsonValue = $null
             if (-not [System.String]::IsNullOrEmpty($getValue.payloadJson))
             {
-                $payloadJsonValue = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($getValue.payloadJson))
+                $payloadJsonValue = $this.DecodeTextPayload($getValue.payloadJson)
             }
 
             $results = @{
                 #region resource generator code
                 ConnectedAppsEnabled        = $getValue.connectedAppsEnabled
-                CredentialProviderRoleState = $enumCredentialProviderRoleState
+                CredentialProviderRoleState = $getValue.credentialProviderRoleState
                 PackageId                   = $getValue.packageId
                 PayloadJson                 = $payloadJsonValue
                 PermissionActions           = $complexPermissionActions
-                ProfileApplicability        = $enumProfileApplicability
+                ProfileApplicability        = $getValue.profileApplicability
                 EncodedSettingXml           = $getValue.encodedSettingXml
                 Settings                    = $complexSettings
                 Description                 = $getValue.Description
@@ -321,7 +307,7 @@ class IntuneAppConfigurationDevicePolicy : M365DSCResourceBase
 
         if (-not [System.String]::IsNullOrEmpty($boundParameters.PayloadJson))
         {
-            $boundParameters.PayloadJson = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($boundParameters.PayloadJson))
+            $boundParameters.PayloadJson = $this.EncodeTextPayload($boundParameters.PayloadJson)
         }
 
         $mobileApps = Get-MgBetaDeviceAppManagementMobileApp -All

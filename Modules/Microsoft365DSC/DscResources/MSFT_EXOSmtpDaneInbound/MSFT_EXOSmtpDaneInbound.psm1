@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOSmtpDaneInbound : M365DSCResourceBase
@@ -131,6 +131,8 @@ class EXOSmtpDaneInbound : M365DSCResourceBase
             {
                 Write-Warning -Message "Cannot enable SmtpDaneInbound for DomainName $($this.DomainName) - check that DNSSEC is enabled"
                 $this.LogError($_, "Error enabling SmtpDaneInbound for DomainName '$($this.DomainName)'")
+
+                throw
             }
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

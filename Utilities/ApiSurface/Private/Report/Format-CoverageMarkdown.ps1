@@ -12,6 +12,9 @@
 .PARAMETER Source
     Specifies the inventory source block.
 
+.PARAMETER Subtype
+    Specifies the ranked OData subtype candidates from Find-SubtypeGap.
+
 .PARAMETER RenderedCount
     Specifies how many candidates are rendered as commands.
 
@@ -33,6 +36,11 @@ function Format-CoverageMarkdown
         [AllowNull()]
         [System.Object]
         $Source,
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.Object[]]
+        $Subtype = @(),
 
         [Parameter()]
         [System.Int32]
@@ -76,7 +84,15 @@ function Format-CoverageMarkdown
         $lines.Add("    -CmdLetNoun $prefix$($item.noun) -APIVersion $version")
         $lines.Add('```')
         $lines.Add('')
-        $lines.Add("Score: $(@($item.reasons) -join '; ').")
+        $reasons = @($item.reasons | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+        if ($reasons.Count -gt 0)
+        {
+            $lines.Add("Score: $($reasons -join '; ').")
+        }
+        else
+        {
+            $lines.Add('Score: no component fired.')
+        }
         $lines.Add('')
     }
 
@@ -95,6 +111,26 @@ function Format-CoverageMarkdown
         foreach ($item in $rest)
         {
             $lines.Add("| $($item.noun) | $($item.score) | $(@($item.modules) -join ', ') | ``$($item.uri)`` |")
+        }
+    }
+
+    $lines.Add('')
+    $lines.Add("## OData subtypes  ($($Subtype.Count))")
+    $lines.Add('')
+    $lines.Add('Concrete subtypes of an entity type a resource already models, with one resource per subtype.')
+    $lines.Add('')
+
+    if ($Subtype.Count -eq 0)
+    {
+        $lines.Add('None.')
+    }
+    else
+    {
+        $lines.Add('| Subtype | Score | Entity type | API version |')
+        $lines.Add('| --- | --- | --- | --- |')
+        foreach ($item in $Subtype)
+        {
+            $lines.Add("| $($item.subtype) | $($item.score) | $($item.entityType) | $($item.apiVersion) |")
         }
     }
 
