@@ -19,6 +19,10 @@ namespace Microsoft365DSC.Compare
     {
         private const string ClassNamePrefix = "MSFT_";
 
+        /// <summary>
+        /// Names dropped from the resource's own parameter set. They carry no meaning below the top
+        /// level, where a nested Id identifies the referenced object rather than the resource.
+        /// </summary>
         private static readonly HashSet<string> AlwaysExcludedProperties =
             new(Utilities.Utilities.AuthenticationPropertyNames, StringComparer.OrdinalIgnoreCase) { "Id", "Identity", "Verbose" };
 
@@ -77,11 +81,13 @@ namespace Microsoft365DSC.Compare
 
             var result = new CompareResult();
             var excludedSet = new HashSet<string>(AlwaysExcludedProperties, StringComparer.OrdinalIgnoreCase);
+            var nestedExcludedSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (excludedProperties is not null)
             {
                 foreach (string prop in excludedProperties)
                 {
                     excludedSet.Add(prop);
+                    nestedExcludedSet.Add(prop);
                 }
             }
 
@@ -187,7 +193,7 @@ namespace Microsoft365DSC.Compare
                                 continue;
                             }
 
-                            if (!ComplexObjectComparer.CompareInto(desiredItem, currentItem, $"{key}[{idx}]", excludedSet, result.DriftInfo, skippedKeys))
+                            if (!ComplexObjectComparer.CompareInto(desiredItem, currentItem, $"{key}[{idx}]", nestedExcludedSet, result.DriftInfo, skippedKeys))
                             {
                                 result.TestResult = false;
                             }
@@ -199,12 +205,12 @@ namespace Microsoft365DSC.Compare
                             result.TestResult = false;
                         }
                     }
-                    else if (!ComplexObjectComparer.CompareInto(desiredArray, currentArray, key, excludedSet, result.DriftInfo, null))
+                    else if (!ComplexObjectComparer.CompareInto(desiredArray, currentArray, key, nestedExcludedSet, result.DriftInfo, null))
                     {
                         result.TestResult = false;
                     }
                 }
-                else if (!ComplexObjectComparer.CompareInto(normalizedDesired, normalizedCurrent, key, excludedSet, result.DriftInfo, null))
+                else if (!ComplexObjectComparer.CompareInto(normalizedDesired, normalizedCurrent, key, nestedExcludedSet, result.DriftInfo, null))
                 {
                     result.TestResult = false;
                 }

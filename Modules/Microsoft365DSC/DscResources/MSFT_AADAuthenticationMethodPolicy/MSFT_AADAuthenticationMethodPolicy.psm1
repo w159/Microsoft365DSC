@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADAuthenticationMethodPolicy : M365DSCResourceBase
@@ -613,11 +613,11 @@ class MSFT_MicrosoftGraphAuthenticationMethodsRegistrationCampaign
 
 class MSFT_AADAuthenticationMethodPolicyIncludeTarget
 {
-    [DscProperty()]
+    [DscProperty(Key)]
     [System.ComponentModel.Description('The ID of the entity targeted.')]
     [System.String] $Id
 
-    [DscProperty()]
+    [DscProperty(Key)]
     [System.ComponentModel.Description('The kind of entity targeted. Possible values are: user, group.')]
     [ValidateSet('user', 'group', 'unknownFutureValue')]
     [System.String] $TargetType

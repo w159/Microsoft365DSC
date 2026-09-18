@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADAuthenticationMethodPolicyAuthenticator : M365DSCResourceBase
@@ -742,11 +742,11 @@ class MSFT_MicrosoftGraphAuthenticationMethodFeatureConfiguration
 
 class MSFT_AADAuthenticationMethodPolicyAuthenticatorFeatureTarget
 {
-    [DscProperty()]
+    [DscProperty(Key)]
     [System.ComponentModel.Description('The ID of the entity that''s targeted in the include or exclude rule or all_users to target all users.')]
     [System.String] $Id
 
-    [DscProperty()]
+    [DscProperty(Key)]
     [System.ComponentModel.Description('The kind of entity that''s targeted. The possible values are: group, administrativeUnit, role, unknownFutureValue.')]
     [ValidateSet('group', 'administrativeUnit', 'role', 'unknownFutureValue')]
     [System.String] $TargetType

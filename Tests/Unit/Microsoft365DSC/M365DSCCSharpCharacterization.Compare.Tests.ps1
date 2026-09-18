@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCDllLoader.psm1" -Force -Global
     Initialize-M365DSCDllLoader
 
@@ -15,6 +15,24 @@ BeforeAll {
                 @{ Name = 'Items'; CIMType = 'MSFT_TestItem[]'; Option = 'Write' }
                 @{ Name = 'Plain'; CIMType = 'MSFT_TestNoKeyItem[]'; Option = 'Write' }
                 @{ Name = 'Assignments'; CIMType = 'MSFT_IntuneTestPolicyAssignments[]'; Option = 'Write' }
+                @{ Name = 'Id'; CIMType = 'String'; Option = 'Write' }
+                @{ Name = 'Targets'; CIMType = 'MSFT_TestTarget[]'; Option = 'Write' }
+                @{ Name = 'Nesting'; CIMType = 'MSFT_TestNesting'; Option = 'Write' }
+            )
+        }
+        @{
+            ClassName  = 'MSFT_TestTarget'
+            Parameters = @(
+                @{ Name = 'Id'; CIMType = 'String'; Option = 'Write' }
+                @{ Name = 'TargetType'; CIMType = 'String'; Option = 'Write' }
+            )
+        }
+        @{
+            ClassName  = 'MSFT_TestNesting'
+            Parameters = @(
+                @{ Name = 'State'; CIMType = 'String'; Option = 'Write' }
+                @{ Name = 'Target'; CIMType = 'MSFT_TestTarget'; Option = 'Write' }
+                @{ Name = 'Targets'; CIMType = 'MSFT_TestTarget[]'; Option = 'Write' }
             )
         }
         @{
@@ -597,6 +615,46 @@ Describe 'ResourceComparer.Compare complex properties' {
         $result = Invoke-ResourceCompare -Desired $desired -Current $current -ResourceName 'TestItem'
 
         Get-DriftNames -Result $result | Should -Be @('Detail.Value')
+    }
+
+    It 'Compares the Id of an element of a nested array' {
+        $desired = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Targets = @(@{ Id = 'group-a'; TargetType = 'group' }) } }
+        $current = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Targets = @(@{ Id = 'group-b'; TargetType = 'group' }) } }
+        $result = Invoke-ResourceCompare -Desired $desired -Current $current
+
+        $result.TestResult | Should -BeFalse
+        Get-DriftNames -Result $result | Should -Be @('Nesting.Targets[0].Id')
+        $result.DriftInfo[0]['CurrentValue'] | Should -Be 'group-b'
+        $result.DriftInfo[0]['DesiredValue'] | Should -Be 'group-a'
+    }
+
+    It 'Compares the Id of a nested single complex property' {
+        $desired = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Target = @{ Id = 'group-a'; TargetType = 'group' } } }
+        $current = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Target = @{ Id = 'group-b'; TargetType = 'group' } } }
+        $result = Invoke-ResourceCompare -Desired $desired -Current $current
+
+        $result.TestResult | Should -BeFalse
+        Get-DriftNames -Result $result | Should -Be @('Nesting.Target.Id')
+    }
+
+    It 'Compares the Id of an element of a top-level array without primary keys' {
+        $desired = @{ Identity = 'a'; Targets = @(@{ Id = 'group-a'; TargetType = 'group' }) }
+        $current = @{ Identity = 'a'; Targets = @(@{ Id = 'group-b'; TargetType = 'group' }) }
+
+        (Invoke-ResourceCompare -Desired $desired -Current $current).TestResult | Should -BeFalse
+    }
+
+    It 'Ignores the Id of the resource itself' {
+        $desired = @{ Identity = 'a'; Id = 'server-assigned-1'; DisplayName = 'x' }
+        $current = @{ Identity = 'a'; Id = 'server-assigned-2'; DisplayName = 'x' }
+
+        (Invoke-ResourceCompare -Desired $desired -Current $current).TestResult | Should -BeTrue
+    }
+
+    It 'Reports no drift when a nested Id matches' {
+        $desired = @{ Identity = 'a'; Nesting = @{ State = 'enabled'; Targets = @(@{ Id = 'group-a'; TargetType = 'group' }) } }
+
+        (Invoke-ResourceCompare -Desired $desired -Current $desired).TestResult | Should -BeTrue
     }
 
     It 'Reports the simple array drift text and delta' {
