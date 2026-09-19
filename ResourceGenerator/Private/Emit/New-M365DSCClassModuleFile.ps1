@@ -152,7 +152,11 @@ function New-M365DSCGetInstanceBlock
 
         [Parameter()]
         [System.Int32]
-        $IndentCount = 16
+        $IndentCount = 16,
+
+        [Parameter()]
+        [System.String]
+        $VariableName = 'getValue'
     )
 
     $indent = ' ' * $IndentCount
@@ -160,6 +164,12 @@ function New-M365DSCGetInstanceBlock
     $cmdlets = $ResourceModel.Cmdlets
     $getCmdlet = $cmdlets.GetCmdlet
     $primaryKey = $ResourceModel.PrimaryKey
+
+    $isGraph = $ResourceModel.Workload -in @('MicrosoftGraph', 'Intune')
+    if (-not $isGraph -and $cmdlets.ContainsKey('GetLookup') -and $null -ne $cmdlets.GetLookup)
+    {
+        return New-M365DSCGenericGetInstanceBlock -ResourceModel $ResourceModel -IndentCount $IndentCount -VariableName $VariableName
+    }
 
     $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $cmdlets.GetKeyParameters
     if ([System.String]::IsNullOrEmpty($keyArguments))
@@ -209,6 +219,83 @@ function New-M365DSCGetInstanceBlock
 
 <#
 .SYNOPSIS
+    Renders the Get() lookup of a non-Graph resource according to its lookup mode.
+
+.DESCRIPTION
+    Copies the key into a local, because $this does not resolve inside a Where-Object block.
+
+.PARAMETER ResourceModel
+    Specifies the resource model.
+
+.PARAMETER IndentCount
+    Specifies the indentation of the rendered lines.
+
+.PARAMETER VariableName
+    Specifies the variable receiving the service object.
+#>
+function New-M365DSCGenericGetInstanceBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $ResourceModel,
+
+        [Parameter()]
+        [System.Int32]
+        $IndentCount = 16,
+
+        [Parameter()]
+        [System.String]
+        $VariableName = 'getValue'
+    )
+
+    $indent = ' ' * $IndentCount
+    $getCmdlet = $ResourceModel.Cmdlets.GetCmdlet
+    $primaryKey = $ResourceModel.PrimaryKey
+    $lookup = $ResourceModel.Cmdlets.GetLookup
+    $keyMatch = "Where-Object -FilterScript { `$_.$primaryKey -eq `$lookupKey } | Select-Object -First 1"
+
+    $lines = @(
+        "$indent`$$VariableName = `$null"
+        "${indent}if (-not [System.String]::IsNullOrEmpty(`$this.$primaryKey))"
+        "$indent{"
+    )
+
+    switch ($lookup.Mode)
+    {
+        'Direct'
+        {
+            $lines += "$indent    `$$VariableName = $getCmdlet -$($lookup.Parameter) `$this.$primaryKey -ErrorAction SilentlyContinue"
+        }
+        'NameFilter'
+        {
+            $lines += "$indent    `$lookupKey = `$this.$primaryKey"
+            $lines += "$indent    `$$VariableName = $getCmdlet -NameFilter `$lookupKey -ErrorAction SilentlyContinue |"
+            $lines += "$indent        $keyMatch"
+        }
+        'List'
+        {
+            $lines += "$indent    `$lookupKey = `$this.$primaryKey"
+            $lines += "$indent    `$$VariableName = $getCmdlet -ErrorAction SilentlyContinue |"
+            $lines += "$indent        $keyMatch"
+        }
+        default
+        {
+            Write-Warning -Message "Cmdlet '$getCmdlet' does not exist; the generated lookup in Get() needs manual attention."
+            $lines += "$indent    `$$VariableName = $getCmdlet -ErrorAction SilentlyContinue"
+        }
+    }
+
+    $lines += "$indent}"
+
+    return ($lines -join "`r`n")
+}
+
+<#
+.SYNOPSIS
     Renders the body of one Set() branch (create, update or remove).
 #>
 function New-M365DSCSetInvocationBlock
@@ -243,6 +330,21 @@ function New-M365DSCSetInvocationBlock
     {
         'Remove'
         {
+            if (-not $isGraph -and $cmdlets.ContainsKey('RemoveKeyParameters') -and @($cmdlets.RemoveKeyParameters).Count -gt 0)
+            {
+                $null = $builder.AppendLine((New-M365DSCGetInstanceBlock -ResourceModel $ResourceModel -IndentCount 16 -VariableName 'instanceToRemove'))
+                $null = $builder.AppendLine('')
+
+                $removeArguments = @($cmdlets.RemoveKeyParameters | ForEach-Object -Process { "-$_ `$instanceToRemove.$_" })
+                if ($cmdlets.RemoveSupportsConfirm)
+                {
+                    $removeArguments += '-Confirm:$false'
+                }
+
+                $null = $builder.AppendLine("$indent$($cmdlets.RemoveCmdlet) $($removeArguments -join ' ') | Out-Null")
+                break
+            }
+
             $keyArguments = Get-M365DSCKeyArgumentString -ResourceModel $ResourceModel -Keys $cmdlets.RemoveKeyParameters -ObjectVariable $targetVariable
             if ([System.String]::IsNullOrEmpty($keyArguments))
             {
@@ -426,8 +528,23 @@ function New-M365DSCExportGetAllBlock
         }
         else
         {
-            $arguments += '-Filter $this.Filter'
+            $filterParameterName = 'Filter'
+            if ($cmdlets.ContainsKey('FilterParameterName') -and -not [System.String]::IsNullOrEmpty($cmdlets.FilterParameterName))
+            {
+                $filterParameterName = $cmdlets.FilterParameterName
+            }
+
+            if ($cmdlets.ContainsKey('SupportsPaging') -and $cmdlets.SupportsPaging)
+            {
+                return New-M365DSCExportPagedGetAllBlock -GetCmdlet $cmdlets.GetCmdlet -FilterParameterName $filterParameterName
+            }
+
+            $arguments += "-$filterParameterName `$this.Filter"
         }
+    }
+    elseif ($cmdlets.ContainsKey('SupportsPaging') -and $cmdlets.SupportsPaging)
+    {
+        return New-M365DSCExportPagedGetAllBlock -GetCmdlet $cmdlets.GetCmdlet
     }
 
     $argumentString = ''
@@ -438,6 +555,68 @@ function New-M365DSCExportGetAllBlock
 
     return $prelude + "$indent[array] `$exportedInstances = $($cmdlets.GetCmdlet)$argumentString ``" + "`r`n" +
     "$indent    -ErrorAction Stop"
+}
+
+<#
+.SYNOPSIS
+    Renders an Export() enumeration that pages through a list cmdlet with -First and -Skip.
+
+.PARAMETER GetCmdlet
+    Specifies the list cmdlet.
+
+.PARAMETER FilterParameterName
+    Specifies the list cmdlet parameter that receives $this.Filter, if any.
+#>
+function New-M365DSCExportPagedGetAllBlock
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $GetCmdlet,
+
+        [Parameter()]
+        [System.String]
+        $FilterParameterName
+    )
+
+    $indent = ' ' * 12
+    $lines = @(
+        "$indent`$getParameters = @{"
+        "$indent    First       = 100"
+        "$indent    ErrorAction = 'Stop'"
+        "$indent}"
+    )
+
+    if (-not [System.String]::IsNullOrEmpty($FilterParameterName))
+    {
+        $lines += @(
+            "$indent" + 'if (-not [System.String]::IsNullOrEmpty($this.Filter))'
+            "$indent{"
+            "$indent    `$getParameters.$FilterParameterName = `$this.Filter"
+            "$indent}"
+        )
+    }
+
+    $lines += @(
+        ''
+        "$indent[array] `$exportedInstances = @()"
+        "$indent`$currentBatch = `$null"
+        "$indent`$offset = 0"
+        "${indent}do"
+        "$indent{"
+        "$indent    [array] `$currentBatch = $GetCmdlet @getParameters -Skip `$offset"
+        "$indent    if (`$null -ne `$currentBatch)"
+        "$indent    {"
+        "$indent        `$exportedInstances += `$currentBatch"
+        "$indent        `$offset += `$currentBatch.Count"
+        "$indent    }"
+        "$indent} while (`$currentBatch.Count -eq 100)"
+    )
+
+    return ($lines -join "`r`n")
 }
 
 <#

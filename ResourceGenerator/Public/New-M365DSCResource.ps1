@@ -358,7 +358,8 @@ function New-M365DSCResource
         $stubFilePath = Join-Path -Path $repositoryRoot -ChildPath 'Tests\Unit\Stubs\Microsoft365.psm1'
         if (Test-Path -Path $stubFilePath)
         {
-            Update-M365DSCStubFile -CmdletNoun $CmdLetNoun -StubFilePath $stubFilePath
+            $stubRegion = (Get-M365DSCWorkloadDefault -Workload $Workload).StubRegion
+            Update-M365DSCStubFile -CmdletNoun $CmdLetNoun -StubFilePath $stubFilePath -RegionName $stubRegion
         }
 
         Write-M365DSCGeneratorSummary -ResourceModel $resourceModel `
@@ -409,5 +410,6 @@ function Write-M365DSCGeneratorSummary
     Write-Host 'Next steps:' -ForegroundColor Yellow
     Write-Host '  1. Review the generated Set() logic - create/update parameter shaping is resource-specific.'
     Write-Host '  2. Fill the roles section of settings.json.'
-    Write-Host '  3. Run Utilities\Build-Microsoft365DSC.ps1, then run the generated unit test.'
+    Write-Host "  3. After adding cmdlet calls, run Update-M365DSCResourceStub -ResourceName $($ResourceModel.ResourceName) to stub them."
+    Write-Host '  4. Run Utilities\Build-Microsoft365DSC.ps1, then run the generated unit test.'
 }

@@ -40,7 +40,8 @@ function Get-M365DSCGenericCmdletInfo
     $commonParameters = @(
         'Verbose', 'Debug', 'ErrorAction', 'WarningAction', 'InformationAction', 'ErrorVariable',
         'WarningVariable', 'InformationVariable', 'OutVariable', 'OutBuffer', 'PipelineVariable',
-        'WhatIf', 'Confirm', 'ProgressAction'
+        'WhatIf', 'Confirm', 'ProgressAction', 'Break', 'HttpPipelineAppend', 'HttpPipelinePrepend',
+        'Proxy', 'ProxyCredential', 'ProxyUseDefaultCredentials'
     )
 
     $cmdletName = "$CmdLetVerb-$CmdLetNoun"
@@ -64,6 +65,20 @@ function Get-M365DSCGenericCmdletInfo
         })
 
     $primaryKey = ''
+    $identityParameter = $parameters | Where-Object -FilterScript { $_.Name -eq 'Identity' } | Select-Object -First 1
+    if ($Workload -eq 'MicrosoftTeams' -and $null -ne $identityParameter)
+    {
+        $primaryKey = 'Identity'
+    }
+    else
+    {
+        $firstMandatory = $parameters | Where-Object -FilterScript { $_.IsMandatory } | Select-Object -First 1
+        if ($null -ne $firstMandatory)
+        {
+            $primaryKey = $firstMandatory.Name
+        }
+    }
+
     $models = @()
     foreach ($parameter in $parameters)
     {
@@ -102,17 +117,9 @@ function Get-M365DSCGenericCmdletInfo
         {
             $description = "The $($parameter.Name) parameter of the $CmdLetNoun."
         }
-        $description = $description.Replace('"', "'") -replace '\s+', ' '
+        $description = ConvertTo-M365DSCPlainDescription -Description $description
 
-        $isKey = $false
-        if ($parameter.IsMandatory -or ($Workload -eq 'MicrosoftTeams' -and $parameter.Name -eq 'Identity'))
-        {
-            if ([System.String]::IsNullOrEmpty($primaryKey) -or $parameter.Name -eq 'Identity')
-            {
-                $primaryKey = $parameter.Name
-            }
-            $isKey = $true
-        }
+        $isKey = $parameter.Name -eq $primaryKey
 
         $parameterType = $parameter.ParameterType
         $isArray = $parameterType.IsArray
@@ -167,11 +174,198 @@ function Get-M365DSCGenericCmdletInfo
     # Whether Export() can pass the -Filters entry the reverse engine collected. Also decides
     # whether the class declares the export-only $Filter property that the engine probes for.
     $getCommand = Get-Command -Name "Get-$CmdLetNoun" -ErrorAction SilentlyContinue
-    $result.SupportsFilter = $null -ne $getCommand -and $getCommand.Parameters.ContainsKey('Filter')
+    $result.FilterParameterName = $null
+    foreach ($filterParameterName in @('Filter', 'NameFilter'))
+    {
+        if ($null -ne $getCommand -and $getCommand.Parameters.ContainsKey($filterParameterName))
+        {
+            $result.FilterParameterName = $filterParameterName
+            break
+        }
+    }
+    $result.SupportsFilter = $null -ne $result.FilterParameterName
+
+    # Teams list cmdlets return one page per call and need -First/-Skip to enumerate everything.
+    $result.SupportsPaging = $null -ne $getCommand -and
+        $getCommand.Parameters.ContainsKey('First') -and
+        $getCommand.Parameters.ContainsKey('Skip')
 
     # Key parameter of the Get cmdlet, for the Get() lookup.
     $getKeys = @(Get-M365DSCCmdletKeyParameter -CmdletName "Get-$CmdLetNoun" -ParameterSetNames @('Identity', 'Default'))
     $result.GetKeyParameters = $getKeys
+    $result.GetLookup = Get-M365DSCGenericLookup -GetCommand $getCommand `
+        -PrimaryKey $primaryKey `
+        -Workload $Workload `
+        -FilterParameterName $result.FilterParameterName
+
+    # Remove() passes the service object's own values, so only the parameter names are needed.
+    $removeCommand = Get-Command -Name "Remove-$CmdLetNoun" -ErrorAction SilentlyContinue
+    $result.RemoveKeyParameters = @(Get-M365DSCMandatoryParameterName -Command $removeCommand)
+    $result.RemoveSupportsConfirm = $null -ne $removeCommand -and $removeCommand.Parameters.ContainsKey('Confirm')
+
+    return $result
+}
+
+<#
+.SYNOPSIS
+    Decides how Get() finds the instance of a non-Graph resource from its primary key.
+
+.DESCRIPTION
+    Returns Mode (Direct, NameFilter, List or None) and the Get parameter that receives the key.
+    Exchange and Security and Compliance pass names to Identity.
+
+.PARAMETER GetCommand
+    Specifies the Get cmdlet, or $null when it does not exist.
+
+.PARAMETER PrimaryKey
+    Specifies the primary key of the resource.
+
+.PARAMETER Workload
+    Specifies the workload of the resource.
+
+.PARAMETER FilterParameterName
+    Specifies the filter parameter of the Get cmdlet, if any.
+#>
+function Get-M365DSCGenericLookup
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.CommandInfo]
+        $GetCommand,
+
+        [Parameter()]
+        [System.String]
+        $PrimaryKey,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Workload,
+
+        [Parameter()]
+        [System.String]
+        $FilterParameterName
+    )
+
+    if ($null -eq $GetCommand)
+    {
+        return @{ Mode = 'None'; Parameter = $null }
+    }
+
+    if (-not [System.String]::IsNullOrEmpty($PrimaryKey) -and $GetCommand.Parameters.ContainsKey($PrimaryKey))
+    {
+        return @{ Mode = 'Direct'; Parameter = $PrimaryKey }
+    }
+
+    if ($FilterParameterName -eq 'NameFilter')
+    {
+        return @{ Mode = 'NameFilter'; Parameter = 'NameFilter' }
+    }
+
+    if ($Workload -in @('ExchangeOnline', 'SecurityComplianceCenter') -and $GetCommand.Parameters.ContainsKey('Identity'))
+    {
+        return @{ Mode = 'Direct'; Parameter = 'Identity' }
+    }
+
+    return @{ Mode = 'List'; Parameter = $null }
+}
+
+<#
+.SYNOPSIS
+    Returns the mandatory parameter names of a cmdlet's default parameter set.
+
+.PARAMETER Command
+    Specifies the cmdlet, or $null when it does not exist.
+#>
+function Get-M365DSCMandatoryParameterName
+{
+    [CmdletBinding()]
+    [OutputType([System.String[]])]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.CommandInfo]
+        $Command
+    )
+
+    if ($null -eq $Command)
+    {
+        return [System.String[]] @()
+    }
+
+    $parameterSet = $Command.ParameterSets | Where-Object -FilterScript { $_.IsDefault } | Select-Object -First 1
+    if ($null -eq $parameterSet)
+    {
+        $parameterSet = $Command.ParameterSets | Select-Object -First 1
+    }
+
+    return [System.String[]] @($parameterSet.Parameters | Where-Object -FilterScript { $_.IsMandatory } | ForEach-Object -Process { $_.Name })
+}
+
+<#
+.SYNOPSIS
+    Turns cmdlet help text into a plain one-line property description.
+
+.DESCRIPTION
+    Strips callouts and links, and turns PARAMVALUE and list items into sentences.
+
+.PARAMETER Description
+    Specifies the raw help text.
+#>
+function ConvertTo-M365DSCPlainDescription
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Description
+    )
+
+    if ([System.String]::IsNullOrEmpty($Description))
+    {
+        return ''
+    }
+
+    $result = $Description.Replace('"', "'")
+    $result = $result -replace '>\s*\[!(NOTE|IMPORTANT|WARNING|TIP|CAUTION)\]', ''
+    $result = $result -replace '\s*\(https?://[^)\s]*\)\s*', ' '
+    $result = [System.Text.RegularExpressions.Regex]::Replace($result, 'PARAMVALUE:\s*([^.]+?)\s*(\.|$)', {
+            param($match)
+            $values = @($match.Groups[1].Value -split '\s*\|\s*' | Where-Object -FilterScript { -not [System.String]::IsNullOrWhiteSpace($_) })
+            'Possible values are ' + ($values -join ', ') + '.'
+        })
+    $result = $result -replace '(^|\s)>\s', '$1'
+    $result = ($result -replace '\s+', ' ').Trim()
+
+    foreach ($listMarker in @('\s+\d+\.\s+(?=\S)', '\s+-\s+(?=\S)'))
+    {
+        $segments = @([System.Text.RegularExpressions.Regex]::Split($result, $listMarker))
+        if ($segments.Count -lt 3)
+        {
+            continue
+        }
+
+        $sentences = for ($index = 0; $index -lt $segments.Count; $index++)
+        {
+            $sentence = $segments[$index].Trim()
+            if ([System.String]::IsNullOrEmpty($sentence))
+            {
+                continue
+            }
+
+            if ($index -gt 0 -and $sentence -notmatch '[.!?]$')
+            {
+                $sentence += '.'
+            }
+
+            $sentence
+        }
+        $result = $sentences -join ' '
+    }
 
     return $result
 }
