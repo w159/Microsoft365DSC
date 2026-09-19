@@ -5,8 +5,9 @@
 .DESCRIPTION
     Introspects the workload cmdlet (ExchangeOnline, MicrosoftTeams, SecurityComplianceCenter,
     PnP, PowerPlatforms) through Get-Command: the default parameter set supplies the property
-    list, parameter help supplies the descriptions and the first mandatory parameter becomes the
-    primary key (Teams resources force 'Identity'). Returns cmdlet names plus ready property
+    list, or the union of all sets when the cmdlet declares no default. Parameter help supplies
+    the descriptions. A mandatory 'Identity' or 'Name', else the first mandatory parameter,
+    becomes the primary key (Teams resources force 'Identity'). Returns cmdlet names plus ready property
     models - the same shape the Graph acquisition produces, so everything downstream is shared.
 
 .PARAMETER CmdLetNoun
@@ -48,27 +49,42 @@ function Get-M365DSCGenericCmdletInfo
     $cmdlet = Get-Command -Name $cmdletName -ErrorAction Stop
 
     $defaultParameterSet = $cmdlet.ParameterSets | Where-Object -FilterScript { $_.IsDefault }
-    if ($null -eq $defaultParameterSet)
+    if ($null -eq $defaultParameterSet -and $cmdlet.ParameterSets.Count -eq 1)
     {
-        if ($cmdlet.ParameterSets.Count -eq 1)
-        {
-            $defaultParameterSet = $cmdlet.ParameterSets[0]
-        }
-        else
-        {
-            throw "Cmdlet '$cmdletName' does not have a default parameter set."
-        }
+        $defaultParameterSet = $cmdlet.ParameterSets[0]
     }
 
-    $parameters = @($defaultParameterSet.Parameters | Where-Object -FilterScript {
+    if ($null -ne $defaultParameterSet)
+    {
+        $parameters = @($defaultParameterSet.Parameters)
+    }
+    else
+    {
+        # Remote session proxies such as the Security & Compliance cmdlets declare no default set.
+        $parameterSets = @($cmdlet.ParameterSets | Sort-Object -Property { $_.Name -ne 'Default' })
+        $parameters = @($parameterSets.Parameters | Group-Object -Property Name | ForEach-Object -Process {
+                [PSCustomObject]@{
+                    Name          = $_.Name
+                    ParameterType = $_.Group[0].ParameterType
+                    IsMandatory   = $_.Count -eq $parameterSets.Count -and @($_.Group | Where-Object -FilterScript { -not $_.IsMandatory }).Count -eq 0
+                }
+            })
+    }
+
+    $parameters = @($parameters | Where-Object -FilterScript {
             $_.Name -notin $commonParameters -and -not $_.Name.StartsWith('MsftInternal')
         })
 
     $primaryKey = ''
     $identityParameter = $parameters | Where-Object -FilterScript { $_.Name -eq 'Identity' } | Select-Object -First 1
+    $nameKeyParameter = $parameters | Where-Object -FilterScript { $_.IsMandatory -and $_.Name -in @('Identity', 'Name') } | Select-Object -First 1
     if ($Workload -eq 'MicrosoftTeams' -and $null -ne $identityParameter)
     {
         $primaryKey = 'Identity'
+    }
+    elseif ($null -ne $nameKeyParameter)
+    {
+        $primaryKey = $nameKeyParameter.Name
     }
     else
     {
@@ -80,6 +96,7 @@ function Get-M365DSCGenericCmdletInfo
     }
 
     $models = @()
+    $warnings = @()
     foreach ($parameter in $parameters)
     {
         # Descriptions come back as MamlDescription object arrays; flatten them to plain text.
@@ -130,9 +147,20 @@ function Get-M365DSCGenericCmdletInfo
         }
 
         $enumValues = @()
-        if ($parameterType.IsEnum)
+        $elementType = $parameterType
+        if ($isArray)
         {
-            $enumValues = [System.String[]] [System.Enum]::GetNames($parameterType)
+            $elementType = $parameterType.GetElementType()
+        }
+        if ($elementType.IsEnum)
+        {
+            $enumValues = [System.String[]] [System.Enum]::GetNames($elementType)
+        }
+        elseif ($typeName -notlike 'System.*' -or $typeName -in @('System.Object', 'System.Management.Automation.PSObject'))
+        {
+            $message = "Parameter '$($parameter.Name)' has type '$typeName' and is generated as a string. Model it as a complex type."
+            Write-Warning -Message $message
+            $warnings += $message
         }
 
         $models += New-M365DSCPropertyModel -Name $parameter.Name `
@@ -153,6 +181,7 @@ function Get-M365DSCGenericCmdletInfo
         NewCmdlet     = "New-$CmdLetNoun"
         UpdateCmdlet  = "Set-$CmdLetNoun"
         RemoveCmdlet  = "Remove-$CmdLetNoun"
+        Warnings      = $warnings
     }
 
     foreach ($operation in @('Get', 'New', 'Update', 'Remove'))
@@ -202,6 +231,14 @@ function Get-M365DSCGenericCmdletInfo
     $removeCommand = Get-Command -Name "Remove-$CmdLetNoun" -ErrorAction SilentlyContinue
     $result.RemoveKeyParameters = @(Get-M365DSCMandatoryParameterName -Command $removeCommand)
     $result.RemoveSupportsConfirm = $null -ne $removeCommand -and $removeCommand.Parameters.ContainsKey('Confirm')
+
+    # Update() drops what the Set cmdlet does not accept, such as the key or create-only values.
+    $updateCommand = Get-Command -Name "Set-$CmdLetNoun" -ErrorAction SilentlyContinue
+    $result.UpdateParameterNames = @()
+    if ($null -ne $updateCommand)
+    {
+        $result.UpdateParameterNames = @($updateCommand.Parameters.Keys)
+    }
 
     return $result
 }

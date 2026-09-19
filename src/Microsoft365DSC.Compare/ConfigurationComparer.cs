@@ -19,6 +19,7 @@ namespace Microsoft365DSC.Compare
 
         private static readonly string[] AlwaysExcludedProperties =
             [.. Microsoft365DSC.Utilities.Utilities.AuthenticationPropertyNames.Prepend("ResourceInstanceName")];
+        private static readonly string[] first = new[] { "Ensure" };
 
         /// <summary>
         /// Compares a source configuration against a destination configuration.
@@ -104,7 +105,9 @@ namespace Microsoft365DSC.Compare
             {
                 if (destinationInstance.Key is null || !sourceKeys.Contains(destinationInstance.Key.Value))
                 {
-                    delta.Add(Presence(destinationInstance.Resource, KeyName(destinationInstance.Keys), KeyValue(destinationInstance.Resource, destinationInstance.Keys), inSource: "Absent", inDestination: "Present"));
+                    ConfigurationDelta missing = Presence(destinationInstance.Resource, KeyName(destinationInstance.Keys), KeyValue(destinationInstance.Resource, destinationInstance.Keys), inSource: "Absent", inDestination: "Present");
+                    ApplyPresenceAnnotation(missing.Properties[0], destinationInstance.Resource, destinationInstance.Keys);
+                    delta.Add(missing);
                 }
             }
 
@@ -286,6 +289,22 @@ namespace Microsoft365DSC.Compare
 
             property.MetadataLevel = parts[0].TrimStart('#').Trim();
             property.MetadataInfo = parts[1].Trim();
+        }
+
+        /// <summary>
+        /// Copies the blueprint annotation of a resource missing from the source onto its presence
+        /// delta. The annotation on Ensure wins, then the first annotated key property.
+        /// </summary>
+        private static void ApplyPresenceAnnotation(ConfigurationDeltaProperty property, Hashtable destination, string[] keys)
+        {
+            foreach (string propertyName in first.Concat(keys))
+            {
+                ApplyAnnotation(property, destination, propertyName);
+                if (property.MetadataLevel is not null)
+                {
+                    return;
+                }
+            }
         }
 
         private static ResourceCompareParameters? Overrides(

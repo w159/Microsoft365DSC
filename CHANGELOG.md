@@ -498,9 +498,13 @@
   * [BREAKING CHANGE] Renamed the property `Ensure` to `State`.
 * PlannerBucket
   * [BREAKING CHANGE] Renamed the property `BucketId` to `Id`.
+  * Fixed the delegated Graph permissions, which listed the application-only `Tasks.Read.All`
+    and `Tasks.ReadWrite.All` instead of `Tasks.Read` and `Tasks.ReadWrite`.
 * PlannerPlan
   * Fixed an issue where a configuration that named the owning group by display name
     failed to retrieve, create or update the plan.
+  * Fixed the delegated Graph permissions, which listed the application-only `Tasks.Read.All`
+    and `Tasks.ReadWrite.All` instead of `Tasks.Read` and `Tasks.ReadWrite`.
 * PlannerTask
   * [BREAKING CHANGE] Renamed the properties `AssignedUsers` to `Assignments`,
     `Bucket` to `BucketId`, `Notes` to `Description` and `TaskId` to `Id` to
@@ -510,6 +514,11 @@
     were dropped when a task was created rather than updated.
   * Fixed an issue where a task on a plan with custom category labels always reported
     drift, because the labels were read back as color names.
+  * Fixed the delegated Graph permissions, which listed the application-only `Tasks.Read.All`
+    and `Tasks.ReadWrite.All` instead of `Tasks.Read` and `Tasks.ReadWrite`.
+* SCAdaptiveScope
+  * Initial release.
+    FIXES [#6599](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6599)
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
 * SCDLPComplianceRule
@@ -640,8 +649,15 @@
     administrative roles, required roles and required role groups across resources.
   * Updated `Update-M365DSCAzureAdApplication` to resolve the service principal of any API name
     a settings file uses rather than accepting only `Graph`, `SharePoint` and `Exchange`.
+  * Added the `ManagedIdentity` type to `Update-M365DSCAzureAdApplication` to assign the
+    permissions to an existing managed identity.
+    FIXES [#4913](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4913)
 * M365DSCReport
   * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
+  * Fixed the blueprint severity missing from resources that exist in the blueprint but not in
+    the tenant. The annotation on `Ensure`, else on a key property, now carries over to the JSON
+    and the HTML report.
+    FIXES [#4638](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4638)
 * M365DSCUtil
   * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
     resource origin id to the display name of the object behind it.
@@ -718,6 +734,9 @@
     properties from the remove example - making it uncompilable, since `[DscProperty(Mandatory)]`
     becomes `Required` in the MOF - drifted every property in the update example instead of one,
     and placed `IsSingleInstance` last although it is the key.
+  * Updated the settings.json QA test to validate the delegated and the update Graph permissions.
+    They both use a custom permission list of its own type.
+    FIXES [#2912](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/2912)
   * Updated the example emitter to name string placeholders after the property they belong to,
     instead of writing `FakeStringValue` into every string property of a published example.
   * Updated many call sites of `Invoke-MgGraphRequest` to their Graph SDK cmdlet variant.

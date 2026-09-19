@@ -535,6 +535,7 @@
     'PPPowerAppsEnvironment',
     'PPTenantIsolationSettings',
     'PPTenantSettings',
+    'SCAdaptiveScope',
     'SCAuditConfigurationPolicy',
     'SCAutoSensitivityLabelPolicy',
     'SCAutoSensitivityLabelRule',

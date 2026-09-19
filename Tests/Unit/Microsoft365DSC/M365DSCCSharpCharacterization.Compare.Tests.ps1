@@ -460,6 +460,31 @@ Describe 'ConfigurationComparer.Compare' {
             $displayName = ($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq 'DisplayName' })['Properties'][0]
             $displayName.ContainsKey('_Metadata_Level') | Should -BeFalse
         }
+
+        It 'Copies the Ensure annotation of a blueprint resource missing from the source onto its presence delta' {
+            $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; Ensure = 'Present'; _metadata_Ensure = '### L3|Mandatory requirement'; _metadata_Identity = '### L1|Key annotation' })
+            $deltas = Invoke-ConfigurationCompare -Destination $destination
+
+            $presence = $deltas[0]['Properties'][0]
+            $presence['ParameterName'] | Should -Be '_IsInConfiguration_'
+            $presence['_Metadata_Level'] | Should -Be 'L3'
+            $presence['_Metadata_Info'] | Should -Be 'Mandatory requirement'
+        }
+
+        It 'Falls back to the key annotation of a blueprint resource missing from the source' {
+            $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; _metadata_Identity = '### L2|Key annotation' })
+            $deltas = Invoke-ConfigurationCompare -Destination $destination
+
+            $presence = $deltas[0]['Properties'][0]
+            $presence['_Metadata_Level'] | Should -Be 'L2'
+            $presence['_Metadata_Info'] | Should -Be 'Key annotation'
+        }
+
+        It 'Leaves the presence delta of an unannotated blueprint resource without metadata' {
+            $deltas = Invoke-ConfigurationCompare -Destination @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; DisplayName = 'y'; _metadata_DisplayName = '### L1|Not a key' })
+
+            $deltas[0]['Properties'][0].ContainsKey('_Metadata_Level') | Should -BeFalse
+        }
     }
 
     Context 'PostProcessing' {

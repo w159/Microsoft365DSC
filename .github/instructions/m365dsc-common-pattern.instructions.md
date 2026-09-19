@@ -70,7 +70,7 @@ catch
 }
 ```
 
-`LogError` fills in the source, tenant and credential from the instance. In a module-scope helper function that has no `$this`, fall back to `New-M365DSCLogEntry`.
+`LogError` fills in the source, tenant and credential from the instance. A static method has no `$this`, so let the exception reach the calling method's catch block.
 
 ## Debugging
 
@@ -106,23 +106,16 @@ if ($null -eq $this.ResourceCache['allRoleDefinitions'])
 }
 ```
 
-`ResourceCache` is a `[Hashtable]`, so keys are case-insensitive. Module-scope helper functions have no `$this` and take it as a parameter:
+`ResourceCache` is a `[Hashtable]`, so keys are case-insensitive. Static methods have no `$this` and take it as a parameter:
 
 ```powershell
-function Get-AADExampleSomething
+hidden static [System.Collections.Hashtable] GetSomethingAsHashtable([System.Collections.Hashtable] $Cache, [System.Object] $Value)
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [System.Object]
-        $Value,
-
-        [Parameter(Mandatory = $true)]
-        [System.Collections.Hashtable]
-        $Cache
-    )
     ...
 }
 ```
+
+Call it as `[AADExample]::GetSomethingAsHashtable($this.ResourceCache, $value)`, or with `$PostProcessingArgs[0]` inside a `PostProcessing` block.
 
 ## Complex Type Handling
 

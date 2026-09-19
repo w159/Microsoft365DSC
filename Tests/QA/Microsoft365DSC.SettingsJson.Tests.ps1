@@ -38,29 +38,27 @@ Describe -Name 'Successfully import Settings.json files' {
 
 Describe -Name 'Successfully validate all used permissions in Settings.json files ' {
     BeforeAll {
-        $permissionsFile = Join-Path -Path $PSScriptRoot -ChildPath '../../Tests/QA/Graph.PermissionList.txt'
-        $roles = (Get-Content $permissionsFile -Raw).Split(',')
+        $knownPermissions = @{
+            application = @(Get-Content -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Graph.ApplicationPermissionList.txt'))
+            delegated   = @(Get-Content -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Graph.DelegatedPermissionList.txt'))
+        }
     }
 
     It "Permissions used in settings.json file for '<ResourceName>' should exist" -TestCases $settingsFiles {
         $json = Get-Content -Path $FullName -Raw
         $settings = ConvertFrom-Json -InputObject $json
-        foreach ($permission in $settings.permissions.graph.application.read)
+        foreach ($permissionType in @('application', 'delegated'))
         {
-            # GUID names are hidden permissions.
-            # The portal shows Tasks.Read.All while the OAuth value is Tasks.Read.
-            if (-not [System.Guid]::TryParse($permission.Name, [ref][System.Guid]::Empty) -and
-                $permission.Name -ne 'Tasks.Read.All')
+            foreach ($accessType in @('read', 'update'))
             {
-                $permission.Name | Should -BeIn $roles -ErrorAction Continue
-            }
-        }
-        foreach ($permission in $settings.permissions.graph.application.write)
-        {
-            # GUID names are hidden permissions.
-            if (-not [System.Guid]::TryParse($permission.Name, [ref][System.Guid]::Empty))
-            {
-                $permission.Name | Should -BeIn $roles -ErrorAction Continue
+                foreach ($permission in $settings.permissions.graph.$permissionType.$accessType)
+                {
+                    # GUID names are hidden permissions.
+                    if (-not [System.Guid]::TryParse($permission.Name, [ref][System.Guid]::Empty))
+                    {
+                        $permission.Name | Should -BeIn $knownPermissions.$permissionType -Because "'$($permission.Name)' is listed as a $permissionType $accessType permission" -ErrorAction Continue
+                    }
+                }
             }
         }
     }

@@ -133,8 +133,43 @@ function New-M365DSCResourceModel
         }
     }
 
-    # Primary key precedence is the acquired value, then Id, then the first property.
+    $warnings = @($CmdletInfo.Warnings | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+    $excludedPropertyReasons = @{}
+
+    $reservedNames = @(Get-M365DSCAuthPropertySet -Workload $Workload | ForEach-Object -Process { $_.Name }) + @('Ensure', 'IsSingleInstance')
+    foreach ($property in @($schemaProperties | Where-Object -FilterScript { $_.Name -in $reservedNames }))
+    {
+        $message = "Property '$($property.Name)' collides with the authentication or engine property of the same name and is left out."
+        Write-Warning -Message $message
+        $warnings += $message
+        $excludedPropertyReasons[$property.Name] = 'CollidesWithAuthenticationProperty'
+    }
+    $schemaProperties = @($schemaProperties | Where-Object -FilterScript { $_.Name -notin $reservedNames })
+
+    # An entity without Id that is read through one path parameter, such as a partner tenant id,
+    # is identified by that parameter.
+    $pathKey = $null
+    $getKeyParameters = @($CmdletInfo.GetKeyParameters | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) -and $_ -ne 'InputObject' })
+    if (-not $IsSingleInstance -and
+        [System.String]::IsNullOrEmpty($CmdletInfo.PrimaryKey) -and
+        $schemaProperties.Name -notcontains 'Id' -and
+        $getKeyParameters.Count -eq 1 -and
+        $schemaProperties.Name -notcontains $getKeyParameters[0])
+    {
+        $pathKey = $getKeyParameters[0]
+        $pathKeyProperty = New-M365DSCPropertyModel -Name $pathKey `
+            -Description "The $pathKey that identifies the instance." `
+            -IsKey $true
+        $pathKeyProperty | Add-Member -NotePropertyName 'IsPathKey' -NotePropertyValue $true
+        $schemaProperties = @($pathKeyProperty) + $schemaProperties
+    }
+
+    # Primary key precedence is the acquired value, then the Get path parameter, then Id, then the first property.
     $primaryKey = $CmdletInfo.PrimaryKey
+    if ([System.String]::IsNullOrEmpty($primaryKey) -and $null -ne $pathKey)
+    {
+        $primaryKey = $pathKey
+    }
     if ([System.String]::IsNullOrEmpty($primaryKey))
     {
         if ($schemaProperties.Name -contains 'Id')
@@ -156,7 +191,7 @@ function New-M365DSCResourceModel
     {
         $alternativeKey = 'Name'
     }
-    if ($alternativeKey -eq $primaryKey)
+    if ($alternativeKey -eq $primaryKey -or $null -ne $pathKey)
     {
         $alternativeKey = $null
     }
@@ -246,7 +281,9 @@ function New-M365DSCResourceModel
         ComplexTypeClasses   = @(Get-M365DSCComplexTypeClass -Properties $schemaProperties)
         HasAssignments       = $hasAssignments
         AssignmentKind       = $assignmentKind
-        ExcludedProperties   = @($ParametersToSkip)
+        ExcludedProperties   = @($ParametersToSkip) + @($excludedPropertyReasons.Keys)
+        ExcludedPropertyReasons = $excludedPropertyReasons
+        Warnings             = $warnings
         CreateOnlyProperties = @($CreateOnlyProperties)
         TextPayloadProperties = @($TextPayloadProperties)
         SettingsCatalog      = $null
@@ -262,8 +299,9 @@ function New-M365DSCResourceModel
 
 .DESCRIPTION
     'IntuneDeviceCompliancePolicyWindows10' becomes 'Intune Device Compliance Policy for
-    Windows10'. The short descriptor used in the Ensure description is the last non platform
-    noun, for example 'policy'.
+    Windows10'. Acronyms stay whole, so 'SCDLPCompliancePolicy' becomes 'SC DLP Compliance
+    Policy'. The short descriptor used in the Ensure description is the last non platform noun,
+    for example 'policy'.
 
 .PARAMETER ResourceName
     Specifies the resource name.
@@ -279,24 +317,30 @@ function Get-M365DSCResourceDescriptor
         $ResourceName
     )
 
-    $platforms = @{
+    $replacements = @{
         'Windows10' = 'for Windows10'
         'Windows11' = 'for Windows11'
         'Android'   = 'for Android'
-        'Mac O S'   = 'for macOS'
-        'I O S'     = 'for iOS'
-        'A A D'     = 'Entra ID'
+        'MacOS'     = 'for macOS'
+        'iOS'       = 'for iOS'
+        'AAD'       = 'Entra ID'
         'Linux'     = 'for Linux'
     }
 
-    $description = ($ResourceName -split '_')[0] -creplace '(?<=\w)([A-Z])', ' $1'
-    foreach ($platform in $platforms.Keys)
-    {
-        if ($description -like "*$platform*")
+    # Workload prefixes run straight into the next acronym, as in 'SCDLP' or 'EXOCAS'.
+    $name = ($ResourceName -split '_')[0] -creplace '^(AAD|ADO|EXO|O365|OD|PP|SC|SH|SPO)(?=[A-Z])', '$1 '
+    $words = [regex]::Matches($name, 'Windows1[01]|[Mm]ac[Oo][Ss]|iOS|IOS(?![a-z])|[A-Z][A-Z0-9]*(?![a-z])|[A-Z]?(?:(?!iOS)[a-z0-9])+') | ForEach-Object -Process {
+        $word = $_.Value
+        if ($replacements.ContainsKey($word))
         {
-            $description = $description.Replace($platform, $platforms.$platform)
+            $replacements[$word]
+        }
+        else
+        {
+            $word
         }
     }
+    $description = $words -join ' '
 
     $descriptorWords = @(($description -split ' ') | Where-Object {
             $_ -notmatch '^(for|Windows10|Windows11|Android|macOS|iOS|Linux|Entra|ID)$' -and $_.Length -gt 1

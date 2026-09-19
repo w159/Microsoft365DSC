@@ -43,6 +43,8 @@ function New-M365DSCSettingsFile
 
     $cmdletNames = $cmdletNames | Where-Object { -not [System.String]::IsNullOrEmpty($_) } | Sort-Object -Unique
 
+    $workloadDefaults = Get-M365DSCWorkloadDefault -Workload $ResourceModel.Workload
+
     $commandGroups = [ordered]@{}
     $requiredModules = @()
     foreach ($cmdletName in $cmdletNames)
@@ -54,6 +56,11 @@ function New-M365DSCSettingsFile
         }
 
         $moduleName = $command.ModuleName
+        # Implicit remoting loads the cmdlets into a temporary proxy module such as 'tmpEXO_1a2b3c'.
+        if ($moduleName -like 'tmp*' -and -not [System.String]::IsNullOrEmpty($workloadDefaults.CommandModule))
+        {
+            $moduleName = $workloadDefaults.CommandModule
+        }
         if (-not $commandGroups.Contains($moduleName))
         {
             $commandGroups[$moduleName] = @()
@@ -75,7 +82,6 @@ function New-M365DSCSettingsFile
         }
     }
 
-    $workloadDefaults = Get-M365DSCWorkloadDefault -Workload $ResourceModel.Workload
     foreach ($moduleName in $workloadDefaults.RequiredModules)
     {
         if ($moduleName -notin $requiredModules)
@@ -88,6 +94,10 @@ function New-M365DSCSettingsFile
     if ($isGraph)
     {
         $permissions['graph'] = Get-M365DSCGraphPermission -ResourceModel $ResourceModel
+    }
+    foreach ($api in $workloadDefaults.Permissions.Keys)
+    {
+        $permissions[$api] = $workloadDefaults.Permissions[$api]
     }
 
     $settings = [ordered]@{
@@ -293,9 +303,17 @@ function Get-M365DSCExcludedPropertyBlock
             continue
         }
 
+        $reason = 'NotConfigurable'
+        if ($null -ne $ResourceModel.PSObject.Properties['ExcludedPropertyReasons'] -and
+            $null -ne $ResourceModel.ExcludedPropertyReasons -and
+            $ResourceModel.ExcludedPropertyReasons.ContainsKey($name))
+        {
+            $reason = $ResourceModel.ExcludedPropertyReasons[$name]
+        }
+
         $entries += [ordered]@{
             name   = $name
-            reason = 'NotConfigurable'
+            reason = $reason
             note   = ''
         }
     }
@@ -422,12 +440,30 @@ function Get-M365DSCWorkloadDefault
             ReadRoles       = @('Global Reader')
             UpdateRoles     = @('Exchange Administrator')
             StubRegion      = 'ExchangeOnlineManagement'
+            CommandModule   = 'ExchangeOnlineManagement'
+            Permissions     = [ordered]@{
+                'Office 365 Exchange Online' = [ordered]@{
+                    application = [ordered]@{
+                        read   = @([ordered]@{ name = 'Exchange.ManageAsApp' })
+                        update = @([ordered]@{ name = 'Exchange.ManageAsApp' })
+                    }
+                }
+            }
         }
         SecurityComplianceCenter = @{
             RequiredModules = @()
             ReadRoles       = @('Compliance Administrator')
             UpdateRoles     = @('Compliance Administrator')
             StubRegion      = 'ExchangeOnlineManagement'
+            CommandModule   = 'ExchangeOnlineManagement'
+            Permissions     = [ordered]@{
+                'Office 365 Exchange Online' = [ordered]@{
+                    application = [ordered]@{
+                        read   = @([ordered]@{ name = 'Exchange.ManageAsApp' })
+                        update = @([ordered]@{ name = 'Exchange.ManageAsApp' })
+                    }
+                }
+            }
         }
         PnP                      = @{
             RequiredModules = @()

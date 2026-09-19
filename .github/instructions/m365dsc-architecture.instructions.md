@@ -11,7 +11,7 @@ This guide gives AI agents a deep understanding of how DSC resources inside the 
 
 Each DSC resource has the following files:
 
-- `MSFT_<ResourceName>.psm1` - Resource implementation. One `[DscResource()]` class deriving from `M365DSCResourceBase`, plus any module-scope helper functions.
+- `MSFT_<ResourceName>.psm1` - Resource implementation. One `[DscResource()]` class deriving from `M365DSCResourceBase`, plus its complex type classes.
 - `MSFT_<ResourceName>/readme.md` - Short plain-language description of what the resource manages. **Must only describe what the resource does, not how to use it.** Do not include usage instructions, parameter details, examples, or configuration snippets. A single sentence or short paragraph is sufficient.
 - `Examples/Resources/<ResourceName>/` - Example DSC configuration
 - `docs/<Workload>/<ResourceName>.md` - Documentation. Auto-generated during build time.
@@ -98,13 +98,13 @@ Class methods are not script blocks, and several things that work in a function 
 - **Assign every local up front.** A variable first assigned inside an `if` branch is rejected; declare it as `$null` before the branch.
 - **Hashtables cannot be splatted inline.** Assign `$this.ResourceCache['x']` to a local, then splat the local.
 
-Module-scope helper functions live in the same file, below the class, and are emitted alongside it. They have no `$this`, so pass `$this.ResourceCache` in as a `[System.Collections.Hashtable] $Cache` parameter when they need to cache.
+Resource modules define no module-scope functions, because the build merges all resources into shared part modules and such a function would leak into every other resource. Code used once is inlined. Code used more than once becomes a `hidden` method, or a `hidden static` method called as `[ClassName]::Method()` where no `$this` exists, such as inside a `PostProcessing` block. Static methods take `$this.ResourceCache` as a `[System.Collections.Hashtable] $Cache` parameter when they need to cache.
 
 ## Naming Conventions
 
 - File names always start with `MSFT_`, e.g. `MSFT_AADAccessReviewDefinition.psm1`, except for Test files, which start with `Microsoft365DSC.`
 - The class name is the file name without the `MSFT_` prefix.
-- Helper function names are prefixed with the resource name (`Get-AADGroupM365DSCAzureADGroupLicenses`) because all resources share one module scope.
+- Hidden methods are named `VerbNoun` in PascalCase with an approved verb (`GetConditionSetAsHashtable`). The class scopes the name, no resource prefix is needed.
 - Resource names must be PascalCase and reflect the service:
   - `AADConditionalAccessPolicy`
   - `EXOAcceptedDomain`

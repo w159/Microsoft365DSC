@@ -385,6 +385,23 @@ function New-M365DSCSetInvocationBlock
 
             $null = $builder.AppendLine("$indent`$$variableName.Remove('$createOnly') | Out-Null")
         }
+
+        $updateParameterNames = @($cmdlets.UpdateParameterNames)
+        if (-not $isGraph -and $updateParameterNames.Count -gt 0)
+        {
+            foreach ($property in $ResourceModel.SchemaProperties)
+            {
+                if ($property.Name -notin $updateParameterNames -and $property.Name -notin $ResourceModel.CreateOnlyProperties)
+                {
+                    $null = $builder.AppendLine("$indent`$$variableName.Remove('$($property.Name)') | Out-Null")
+                }
+            }
+
+            if ($primaryKey -notin $updateParameterNames -and 'Identity' -in $updateParameterNames)
+            {
+                $null = $builder.AppendLine("$indent`$$variableName.Identity = `$this.$primaryKey")
+            }
+        }
     }
 
     if ($isGraph)

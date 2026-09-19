@@ -407,6 +407,21 @@ function Write-M365DSCGeneratorSummary
     Write-Host "  Unit test       : $UnitTestDestination"
     Write-Host "  Examples        : $ExampleDestination"
     Write-Host ''
+
+    $warnings = @()
+    if ($null -ne $ResourceModel.PSObject.Properties['Warnings'])
+    {
+        $warnings = @($ResourceModel.Warnings | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) })
+    }
+    if ($warnings.Count -gt 0)
+    {
+        Write-Host 'Needs manual attention:' -ForegroundColor Yellow
+        foreach ($warning in $warnings)
+        {
+            Write-Host "  - $warning"
+        }
+        Write-Host ''
+    }
     Write-Host 'Next steps:' -ForegroundColor Yellow
     Write-Host '  1. Review the generated Set() logic - create/update parameter shaping is resource-specific.'
     Write-Host '  2. Fill the roles section of settings.json.'
