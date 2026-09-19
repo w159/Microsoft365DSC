@@ -219,6 +219,14 @@ function Get-M365DSCGenericCmdletInfo
     $result.RemoveKeyParameters = @(Get-M365DSCMandatoryParameterName -Command $removeCommand)
     $result.RemoveSupportsConfirm = $null -ne $removeCommand -and $removeCommand.Parameters.ContainsKey('Confirm')
 
+    # Update() drops what the Set cmdlet does not accept, such as the key or create-only values.
+    $updateCommand = Get-Command -Name "Set-$CmdLetNoun" -ErrorAction SilentlyContinue
+    $result.UpdateParameterNames = @()
+    if ($null -ne $updateCommand)
+    {
+        $result.UpdateParameterNames = @($updateCommand.Parameters.Keys)
+    }
+
     return $result
 }
 

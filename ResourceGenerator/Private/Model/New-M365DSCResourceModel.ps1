@@ -262,8 +262,9 @@ function New-M365DSCResourceModel
 
 .DESCRIPTION
     'IntuneDeviceCompliancePolicyWindows10' becomes 'Intune Device Compliance Policy for
-    Windows10'. The short descriptor used in the Ensure description is the last non platform
-    noun, for example 'policy'.
+    Windows10'. Acronyms stay whole, so 'SCDLPCompliancePolicy' becomes 'SC DLP Compliance
+    Policy'. The short descriptor used in the Ensure description is the last non platform noun,
+    for example 'policy'.
 
 .PARAMETER ResourceName
     Specifies the resource name.
@@ -279,24 +280,30 @@ function Get-M365DSCResourceDescriptor
         $ResourceName
     )
 
-    $platforms = @{
+    $replacements = @{
         'Windows10' = 'for Windows10'
         'Windows11' = 'for Windows11'
         'Android'   = 'for Android'
-        'Mac O S'   = 'for macOS'
-        'I O S'     = 'for iOS'
-        'A A D'     = 'Entra ID'
+        'MacOS'     = 'for macOS'
+        'iOS'       = 'for iOS'
+        'AAD'       = 'Entra ID'
         'Linux'     = 'for Linux'
     }
 
-    $description = ($ResourceName -split '_')[0] -creplace '(?<=\w)([A-Z])', ' $1'
-    foreach ($platform in $platforms.Keys)
-    {
-        if ($description -like "*$platform*")
+    # Workload prefixes run straight into the next acronym, as in 'SCDLP' or 'EXOCAS'.
+    $name = ($ResourceName -split '_')[0] -creplace '^(AAD|ADO|EXO|O365|OD|PP|SC|SH|SPO)(?=[A-Z])', '$1 '
+    $words = [regex]::Matches($name, 'Windows1[01]|[Mm]ac[Oo][Ss]|iOS|IOS(?![a-z])|[A-Z][A-Z0-9]*(?![a-z])|[A-Z]?(?:(?!iOS)[a-z0-9])+') | ForEach-Object -Process {
+        $word = $_.Value
+        if ($replacements.ContainsKey($word))
         {
-            $description = $description.Replace($platform, $platforms.$platform)
+            $replacements[$word]
+        }
+        else
+        {
+            $word
         }
     }
+    $description = $words -join ' '
 
     $descriptorWords = @(($description -split ' ') | Where-Object {
             $_ -notmatch '^(for|Windows10|Windows11|Android|macOS|iOS|Linux|Entra|ID)$' -and $_.Length -gt 1
