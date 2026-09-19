@@ -421,7 +421,7 @@ Describe 'ConfigurationComparer.Compare' {
             $deltas[0]['Properties'][0]['ParameterName'] | Should -Be 'Ignored'
         }
 
-        It 'Copies a blueprint annotation onto the drift it explains and still compares the annotation key' -Tag 'CurrentBehaviour' {
+        It 'Copies a blueprint annotation onto the drift it explains and does not report the annotation itself' {
             $source = @(New-Resource -ResourceName 'TestResource' -InstanceName 'S' -Values @{ Identity = 'a'; DisplayName = 'x' })
             $destination = @(New-Resource -ResourceName 'TestResource' -InstanceName 'D' -Values @{ Identity = 'a'; DisplayName = 'y'; _metadata_DisplayName = '### L1|Must match' })
             $deltas = Invoke-ConfigurationCompare -Source $source -Destination $destination
@@ -429,7 +429,7 @@ Describe 'ConfigurationComparer.Compare' {
             $displayName = ($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq 'DisplayName' })['Properties'][0]
             $displayName['_Metadata_Level'] | Should -Be 'L1'
             $displayName['_Metadata_Info'] | Should -Be 'Must match'
-            @($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq '_metadata_DisplayName' }).Count | Should -Be 1
+            @($deltas | Where-Object -FilterScript { $_['Properties'][0]['ParameterName'] -eq '_metadata_DisplayName' }).Count | Should -Be 0
         }
 
         It 'Copies a blueprint annotation written with spaces around the separator' {
