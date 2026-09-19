@@ -685,6 +685,8 @@
     the tenant. The annotation on `Ensure`, else on a key property, now carries over to the JSON
     and the HTML report.
     FIXES [#4638](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4638)
+  * Fixed the blueprint annotations being reported as drifted properties of their own in the
+    JSON delta report.
 * M365DSCUtil
   * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
     resource origin id to the display name of the object behind it.

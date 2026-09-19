@@ -17,6 +17,8 @@ namespace Microsoft365DSC.Compare
         /// </summary>
         public const string PresenceMarker = "_IsInConfiguration_";
 
+        private const string AnnotationPrefix = "_metadata_";
+
         private static readonly string[] AlwaysExcludedProperties =
             [.. Microsoft365DSC.Utilities.Utilities.AuthenticationPropertyNames.Prepend("ResourceInstanceName")];
         private static readonly string[] first = new[] { "Ensure" };
@@ -231,6 +233,14 @@ namespace Microsoft365DSC.Compare
                 }
             }
 
+            foreach (string annotationKey in valuesToCheck.Keys.Cast<object>()
+                .Select(key => key.ToString())
+                .Where(key => key.StartsWith(AnnotationPrefix, StringComparison.OrdinalIgnoreCase))
+                .ToArray())
+            {
+                valuesToCheck.Remove(annotationKey);
+            }
+
             CompareResult result = ResourceComparer.Compare(
                 desiredValues,
                 currentValues,
@@ -276,7 +286,7 @@ namespace Microsoft365DSC.Compare
         /// </summary>
         private static void ApplyAnnotation(ConfigurationDeltaProperty property, Hashtable destination, string propertyName)
         {
-            if (destination["_metadata_" + propertyName]?.ToString() is not { } annotation)
+            if (destination[AnnotationPrefix + propertyName]?.ToString() is not { } annotation)
             {
                 return;
             }
