@@ -1611,6 +1611,17 @@ function New-M365DSCDeltaReport
                 [void]$sb.AppendLine("<h3>$($resource.ResourceName) - $($resource.Key) = $($resource.KeyValue)</h3>")
                 [void]$sb.AppendLine('</td>')
                 [void]$sb.AppendLine('</tr>')
+                $presence = $resource.Properties | Select-Object -First 1
+                if ($null -ne $presence._Metadata_Level)
+                {
+                    $emoticon = switch ($presence._Metadata_Level)
+                    {
+                        'L1' { '&#x1F7E5;' }
+                        'L2' { '&#x1F7E8;' }
+                        'L3' { '&#x1F7E6;' }
+                    }
+                    [void]$sb.AppendLine("<tr><td><span class='emoticon'>$emoticon</span> $($presence._Metadata_Info)</td></tr>")
+                }
                 [void]$sb.AppendLine('</table>')
                 return $sb.ToString()
             }
