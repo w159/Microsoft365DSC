@@ -510,6 +510,9 @@
     were dropped when a task was created rather than updated.
   * Fixed an issue where a task on a plan with custom category labels always reported
     drift, because the labels were read back as color names.
+* SCAdaptiveScope
+  * Initial release.
+    FIXES [#6599](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6599)
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
 * SCDLPComplianceRule
@@ -634,6 +637,9 @@
     administrative roles, required roles and required role groups across resources.
   * Updated `Update-M365DSCAzureAdApplication` to resolve the service principal of any API name
     a settings file uses rather than accepting only `Graph`, `SharePoint` and `Exchange`.
+  * Added the `ManagedIdentity` type to `Update-M365DSCAzureAdApplication` to assign the
+    permissions to an existing managed identity.
+    FIXES [#4913](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4913)
 * M365DSCReport
   * Moved `Get-M365DSCResourceKey` and other conversion logic entirely to C#.
 * M365DSCUtil

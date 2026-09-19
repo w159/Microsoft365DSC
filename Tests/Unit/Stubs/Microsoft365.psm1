@@ -225,6 +225,25 @@ function Enable-ATPProtectionPolicyRule
     )
 }
 
+function Get-AdaptiveScope
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $AdministrativeUnits,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Object]
+        $LocationTypes
+    )
+}
+
 function Get-TenantAllowBlockListItems
 {
     [CmdletBinding()]
@@ -270,6 +289,49 @@ function Get-TenantAllowBlockListSpoofItems
         [Parameter()]
         [System.Object]
         $Identity
+    )
+}
+
+function New-AdaptiveScope
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Guid]
+        $AdministrativeUnit,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.Object[]]
+        $EnabledStates,
+
+        [Parameter()]
+        [System.Object]
+        $FilterConditions,
+
+        [Parameter()]
+        [System.Object[]]
+        $LinkedRecipientEnabledStates,
+
+        [Parameter()]
+        [System.Object]
+        $LocationType,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.String]
+        $RawQuery,
+
+        [Parameter()]
+        [System.Object]
+        $UseKql
     )
 }
 
@@ -394,6 +456,25 @@ function New-TenantAllowBlockListSpoofItems
     )
 }
 
+function Remove-AdaptiveScope
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ForceDeletion,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
 function Remove-TenantAllowBlockListItems
 {
     [CmdletBinding()]
@@ -431,6 +512,41 @@ function Remove-TenantAllowBlockListSpoofItems
         [Parameter()]
         [System.String[]]
         $Ids
+    )
+}
+
+function Set-AdaptiveScope
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Guid]
+        $AdministrativeUnit,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.Object[]]
+        $EnabledStates,
+
+        [Parameter()]
+        [System.Object]
+        $FilterConditions,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Object[]]
+        $LinkedRecipientEnabledStates,
+
+        [Parameter()]
+        [System.String]
+        $RawQuery
     )
 }
 
