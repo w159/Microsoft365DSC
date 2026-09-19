@@ -1048,9 +1048,16 @@ class M365DSCResourceBase
         $previousVerbosePreference = Set-M365DSCVerboseScope
         try
         {
-            return (Invoke-M365DSCClassResourceInPowerShellCore -ClassName $this.GetResourceName() `
-                    -MethodName $MethodName `
-                    -Parameters $this.GetAllParameters())
+            $output = Invoke-M365DSCClassResourceInPowerShellCore -ClassName $this.GetResourceName() `
+                -MethodName $MethodName `
+                -Parameters $this.GetAllParameters()
+
+            if ($null -eq $output)
+            {
+                return $null
+            }
+
+            return $output
         }
         finally
         {

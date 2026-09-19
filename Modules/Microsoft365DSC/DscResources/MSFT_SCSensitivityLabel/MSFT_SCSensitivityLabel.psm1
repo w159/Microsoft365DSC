@@ -1272,6 +1272,13 @@ class SCSensitivityLabel : M365DSCResourceBase
         $labelParentId = "$($label.ParentId)"
         if (-not [System.String]::IsNullOrEmpty($labelParentId))
         {
+            $parent = $labels | Where-Object Guid -EQ $labelParentId | Select-Object -First 1
+            $siblingCount = @($labels | Where-Object ParentId -EQ $labelParentId).Count
+            if ($null -ne $parent -and ($DesiredPriority -le $parent.Priority -or $DesiredPriority -gt $parent.Priority + $siblingCount))
+            {
+                throw "Priority $DesiredPriority of SC Sensitivity Label {$Identity} is outside the range $($parent.Priority + 1) - $($parent.Priority + $siblingCount) its sub-labels occupy below the parent label {$($parent.Name)}."
+            }
+
             $firstSibling = $labels | Where-Object ParentId -EQ $labelParentId | Select-Object -First 1
             if ("$($firstSibling.Guid)" -eq $labelId)
             {
@@ -1295,6 +1302,14 @@ class SCSensitivityLabel : M365DSCResourceBase
 
         $movedIds = @($labelId) + @($labels | Where-Object ParentId -EQ $labelId | ForEach-Object -Process { "$($_.Guid)" })
         $remaining = @($labels | Where-Object Guid -notin $movedIds)
+        $reachable = @(0..$remaining.Count | Where-Object -FilterScript {
+                $_ -eq $remaining.Count -or [System.String]::IsNullOrEmpty("$($remaining[$_].ParentId)")
+            })
+        if ($DesiredPriority -notin $reachable)
+        {
+            throw "Priority $DesiredPriority of SC Sensitivity Label {$Identity} cannot be reached, because sub-labels always directly follow their parent label. The priorities it can take are $($reachable -join ', ')."
+        }
+
         if ($DesiredPriority -lt $remaining.Count)
         {
             Set-Label -Identity $labelId -Priority $remaining[$DesiredPriority].Priority -ErrorAction Stop

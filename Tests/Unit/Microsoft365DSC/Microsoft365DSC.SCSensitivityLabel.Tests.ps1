@@ -519,6 +519,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 [SCSensitivityLabel]::SetLabelPriority('Confidential-Partners', 3)
                 Should -Invoke -CommandName Set-Label -Exactly 0
             }
+
+            It 'Should throw when a top-level label would land between a label and its sub-labels' {
+                { [SCSensitivityLabel]::SetLabelPriority('Public', 2) } | Should -Throw '*Priority 2 of SC Sensitivity Label {Public} cannot be reached*The priorities it can take are 0, 4, 5.'
+                Should -Invoke -CommandName Set-Label -Exactly 0
+            }
+
+            It 'Should throw when a top-level label would move past the last position' {
+                { [SCSensitivityLabel]::SetLabelPriority('Secret', 7) } | Should -Throw '*Priority 7 of SC Sensitivity Label {Secret} cannot be reached*'
+                Should -Invoke -CommandName Set-Label -Exactly 0
+            }
+
+            It 'Should throw when a sub-label would leave the range of its parent' {
+                { [SCSensitivityLabel]::SetLabelPriority('Confidential-Internal', 5) } | Should -Throw '*outside the range 2 - 4*{Confidential}*'
+                Should -Invoke -CommandName Set-Label -Exactly 0
+            }
         }
 
         Context -Name 'ReverseDSC Tests' -Fixture {
