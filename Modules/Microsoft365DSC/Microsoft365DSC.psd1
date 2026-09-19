@@ -536,6 +536,8 @@
     'PPTenantIsolationSettings',
     'PPTenantSettings',
     'SCAdaptiveScope',
+    'SCAppRetentionCompliancePolicy',
+    'SCAppRetentionComplianceRule',
     'SCAuditConfigurationPolicy',
     'SCAutoSensitivityLabelPolicy',
     'SCAutoSensitivityLabelRule',

@@ -244,6 +244,44 @@ function Get-AdaptiveScope
     )
 }
 
+function Get-AppRetentionCompliancePolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $DistributionDetail,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ErrorPolicyOnly,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $RetentionRuleTypes
+    )
+}
+
+function Get-AppRetentionComplianceRule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Object]
+        $Policy
+    )
+}
+
 function Get-TenantAllowBlockListItems
 {
     [CmdletBinding()]
@@ -332,6 +370,132 @@ function New-AdaptiveScope
         [Parameter()]
         [System.Object]
         $UseKql
+    )
+}
+
+function New-AppRetentionCompliancePolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $AdaptiveScopeLocation,
+
+        [Parameter()]
+        [System.String[]]
+        $Applications,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.Boolean]
+        $Enabled,
+
+        [Parameter()]
+        [System.Object]
+        $ExchangeLocation,
+
+        [Parameter()]
+        [System.Object]
+        $ExchangeLocationException,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.String]
+        $Locations,
+
+        [Parameter()]
+        [System.Object]
+        $ModernGroupLocation,
+
+        [Parameter()]
+        [System.Object]
+        $ModernGroupLocationException,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Object]
+        $PolicyRBACScopes,
+
+        [Parameter()]
+        [System.Boolean]
+        $RestrictiveRetention,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+function New-AppRetentionComplianceRule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplyComplianceTag,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.Object[]]
+        $ContentContainsSensitiveInformation,
+
+        [Parameter()]
+        [System.String]
+        $ContentMatchQuery,
+
+        [Parameter()]
+        [System.Object]
+        $ExcludedItemClasses,
+
+        [Parameter()]
+        [System.String]
+        $ExpirationDateOption,
+
+        [Parameter()]
+        [System.Object]
+        $MachineLearningModelIDs,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Object]
+        $Policy,
+
+        [Parameter()]
+        [System.String]
+        $PublishComplianceTag,
+
+        [Parameter()]
+        [System.String]
+        $RetentionComplianceAction,
+
+        [Parameter()]
+        [System.Object]
+        $RetentionDuration,
+
+        [Parameter()]
+        [System.Object]
+        $RetentionDurationDisplayHint,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
     )
 }
 
@@ -475,6 +639,44 @@ function Remove-AdaptiveScope
     )
 }
 
+function Remove-AppRetentionCompliancePolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ForceDeletion,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+function Remove-AppRetentionComplianceRule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ForceDeletion,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
 function Remove-TenantAllowBlockListItems
 {
     [CmdletBinding()]
@@ -547,6 +749,152 @@ function Set-AdaptiveScope
         [Parameter()]
         [System.String]
         $RawQuery
+    )
+}
+
+function Set-AppRetentionCompliancePolicy
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $AddAdaptiveScopeLocation,
+
+        [Parameter()]
+        [System.Object]
+        $AddExchangeLocation,
+
+        [Parameter()]
+        [System.Object]
+        $AddExchangeLocationException,
+
+        [Parameter()]
+        [System.Object]
+        $AddModernGroupLocation,
+
+        [Parameter()]
+        [System.Object]
+        $AddModernGroupLocationException,
+
+        [Parameter()]
+        [System.String[]]
+        $Applications,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.String]
+        $DeletedResources,
+
+        [Parameter()]
+        [System.Boolean]
+        $Enabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.Object]
+        $PolicyRBACScopes,
+
+        [Parameter()]
+        [System.Object]
+        $RemoveAdaptiveScopeLocation,
+
+        [Parameter()]
+        [System.Object]
+        $RemoveExchangeLocation,
+
+        [Parameter()]
+        [System.Object]
+        $RemoveExchangeLocationException,
+
+        [Parameter()]
+        [System.Object]
+        $RemoveModernGroupLocation,
+
+        [Parameter()]
+        [System.Object]
+        $RemoveModernGroupLocationException,
+
+        [Parameter()]
+        [System.Boolean]
+        $RestrictiveRetention,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $RetryDistribution,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
+    )
+}
+
+function Set-AppRetentionComplianceRule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ApplyComplianceTag,
+
+        [Parameter()]
+        [System.String]
+        $Comment,
+
+        [Parameter()]
+        [System.Object[]]
+        $ContentContainsSensitiveInformation,
+
+        [Parameter()]
+        [System.Object]
+        $ContentDateFrom,
+
+        [Parameter()]
+        [System.Object]
+        $ContentDateTo,
+
+        [Parameter()]
+        [System.String]
+        $ContentMatchQuery,
+
+        [Parameter()]
+        [System.Object]
+        $ExcludedItemClasses,
+
+        [Parameter()]
+        [System.String]
+        $ExpirationDateOption,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $RetentionComplianceAction,
+
+        [Parameter()]
+        [System.Object]
+        $RetentionDuration,
+
+        [Parameter()]
+        [System.Object]
+        $RetentionDurationDisplayHint,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
     )
 }
 

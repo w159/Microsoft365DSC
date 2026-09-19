@@ -1305,6 +1305,31 @@
         "SCDLPComplianceRule"
       ]
     },
+    "SCAdaptiveScopeLocationRelations": {
+      "relations": [
+        {
+          "property": "AdaptiveScopeLocation",
+          "targetResource": "SCAdaptiveScope",
+          "targetKeyProperty": "Name"
+        }
+      ],
+      "resources": [
+        "SCAppRetentionCompliancePolicy",
+        "SCRetentionCompliancePolicy"
+      ]
+    },
+    "SCAppRetentionComplianceRuleRelations": {
+      "relations": [
+        {
+          "property": "Policy",
+          "targetResource": "SCAppRetentionCompliancePolicy",
+          "targetKeyProperty": "Name"
+        }
+      ],
+      "resources": [
+        "SCAppRetentionComplianceRule"
+      ]
+    },
     "SCRetentionComplianceRuleRelations": {
       "relations": [
         {

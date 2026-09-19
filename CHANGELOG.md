@@ -519,6 +519,12 @@
 * SCAdaptiveScope
   * Initial release.
     FIXES [#6599](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6599)
+* SCAppRetentionCompliancePolicy
+  * Initial release.
+    FIXES [#6598](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6598)
+* SCAppRetentionComplianceRule
+  * Initial release.
+    FIXES [#6598](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/6598)
 * SCComplianceTag
   * Fixed an issue where `EventType` was never exported.
 * SCDLPComplianceRule
@@ -527,6 +533,27 @@
 * SCFilePlanPropertyAuthority
   * Fixed the property never being removed, because the check for a pending deletion
     always evaluated to false.
+* SCRetentionCompliancePolicy
+  * [BREAKING CHANGE] Replaced the property `DynamicScopeLocation`, which was never applied,
+    with `AdaptiveScopeLocation` to target Purview adaptive scopes.
+  * Added support for the `Applications` property.
+  * Fixed the removal of Teams channel location exceptions, which was never computed.
+  * Fixed `ManagedIdentity` never being returned.
+  * Fixed the removal being skipped without an error, because the cmdlet waited for a
+    confirmation.
+  * Fixed an instance pending deletion being reported and exported as present.
+  * Fixed an update error other than a pending deployment being reported as success.
+  * Fixed a failed policy deployment being reported as a failed change, although the service
+    had stored the change.
+* SCRetentionComplianceRule
+  * Fixed the rule never being removed when `Ensure` is set to `Absent`.
+  * Fixed `ManagedIdentity` never being returned.
+  * Fixed the removal being skipped without an error, because the cmdlet waited for a
+    confirmation.
+  * Fixed an instance pending deletion being reported and exported as present.
+  * Fixed an update error other than a pending deployment being reported as success.
+  * Fixed a failed policy deployment being reported as a failed change, although the service
+    had stored the change.
 * SCSensitivityLabel
   * Fixed an issue where setting the `Priority` of a label placed it one position off
     or failed for sub-labels.
