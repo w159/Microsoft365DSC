@@ -164,7 +164,7 @@ function New-M365DSCHashtableMappingBlock
         $name = $property.Name
         $padding = ' ' * ($longestName - $name.Length)
 
-        if ($property.IsAuth)
+        if ($property.IsAuth -or ($null -ne $property.PSObject.Properties['IsPathKey'] -and $property.IsPathKey))
         {
             $value = "`$this.$name"
         }

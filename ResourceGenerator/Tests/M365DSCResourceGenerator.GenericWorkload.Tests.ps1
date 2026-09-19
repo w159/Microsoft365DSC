@@ -32,7 +32,11 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
 
                 [Parameter()]
                 [System.Management.Automation.SwitchParameter]
-                $Break
+                $Break,
+
+                [Parameter()]
+                [System.Management.Automation.PSObject]
+                $Menu
             )
         }
 
@@ -256,6 +260,119 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             $stub | Should -Match '\$Confirm'
             $stub | Should -Not -Match '\$WhatIf'
             Get-ParseError -Content $stub | Should -BeNullOrEmpty
+        }
+    }
+
+    Describe 'Parameters without a System type' {
+        It 'Warns about a parameter that is generated as a string' {
+            $info = Get-M365DSCGenericCmdletInfo -CmdLetNoun 'M365DSCFakeWidget' -Workload 'MicrosoftTeams' -WarningAction SilentlyContinue
+            @($info.Warnings | Where-Object -FilterScript { $_ -like "Parameter 'Menu'*" }).Count | Should -Be 1
+            @($info.Warnings | Where-Object -FilterScript { $_ -like "Parameter 'Name'*" }).Count | Should -Be 0
+        }
+    }
+
+    Describe 'New-M365DSCResourceModel for an entity read through a path parameter' {
+        BeforeAll {
+            $script:cmdletInfo = @{
+                APIVersion          = 'v1.0'
+                ActualType          = 'crossTenantIdentitySyncPolicyPartner'
+                GetCmdlet           = 'Get-MgFakePartnerSync'
+                NewCmdlet           = 'Set-MgFakePartnerSync'
+                UpdateCmdlet        = 'Set-MgFakePartnerSync'
+                UpdateVerb          = 'Set'
+                RemoveCmdlet        = 'Remove-MgFakePartnerSync'
+                GetKeyParameters    = @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+                NewKeyParameters    = @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+                UpdateKeyParameters = @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+                RemoveKeyParameters = @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+                SupportsAll         = $false
+                SupportsFilter      = $false
+                SupportsNew         = $false
+                HasAssignments      = $false
+                Warnings            = @("Cmdlet 'New-MgFakePartnerSync' does not exist.")
+            }
+            $properties = @(
+                New-M365DSCPropertyModel -Name 'DisplayName' -GraphName 'displayName'
+                New-M365DSCPropertyModel -Name 'TenantId' -GraphName 'tenantId'
+                New-M365DSCPropertyModel -Name 'IsSyncAllowed' -GraphName 'isSyncAllowed' -Type 'Edm.Boolean'
+            )
+            $script:model = New-M365DSCResourceModel -ResourceName 'AADFakePartnerSync' -Workload 'MicrosoftGraph' `
+                -CmdletInfo $script:cmdletInfo -Properties $properties -CmdLetNoun 'MgFakePartnerSync' -WarningAction SilentlyContinue
+        }
+
+        It 'Leaves out an entity property that collides with an authentication property' {
+            $script:model.SchemaProperties.Name | Should -Not -Contain 'TenantId'
+            $script:model.ExcludedPropertyReasons['TenantId'] | Should -Be 'CollidesWithAuthenticationProperty'
+            @($script:model.Properties | Where-Object -FilterScript { $_.Name -eq 'TenantId' }).Count | Should -Be 1
+        }
+
+        It 'Uses the Get path parameter as the key instead of DisplayName' {
+            $script:model.PrimaryKey | Should -Be 'CrossTenantAccessPolicyConfigurationPartnerTenantId'
+            $script:model.AlternativeKey | Should -BeNullOrEmpty
+            @($script:model.SchemaProperties | Where-Object -FilterScript { $_.IsKey }).Name | Should -Be @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+        }
+
+        It 'Carries the acquisition and collision warnings for the summary' {
+            @($script:model.Warnings | Where-Object -FilterScript { $_ -like "Cmdlet 'New-MgFakePartnerSync'*" }).Count | Should -Be 1
+            @($script:model.Warnings | Where-Object -FilterScript { $_ -like "Property 'TenantId'*" }).Count | Should -Be 1
+        }
+
+        It 'Records the collision reason in settings.json' {
+            $settings = New-M365DSCSettingsFile -ResourceModel $script:model -WarningAction SilentlyContinue | ConvertFrom-Json
+            ($settings.excludedProperties | Where-Object -FilterScript { $_.name -eq 'TenantId' }).reason | Should -Be 'CollidesWithAuthenticationProperty'
+        }
+
+        It 'Generates a module that reads the key from the instance and has no duplicate hashtable keys' {
+            $module = New-M365DSCClassModuleFile -ResourceModel $script:model
+            $module | Should -Match ([System.Text.RegularExpressions.Regex]::Escape('= $this.CrossTenantAccessPolicyConfigurationPartnerTenantId'))
+            $module | Should -Match ([System.Text.RegularExpressions.Regex]::Escape('Set-MgFakePartnerSync -CrossTenantAccessPolicyConfigurationPartnerTenantId $this.CrossTenantAccessPolicyConfigurationPartnerTenantId -BodyParameter $createParameters'))
+            $errors = Get-ParseError -Content $module
+            @($errors | Where-Object -FilterScript { $_.Message -notlike '*M365DSCResourceBase*' }) | Should -BeNullOrEmpty
+        }
+    }
+
+    Describe 'Get-M365DSCGraphCmdletInfo without a New cmdlet' {
+        BeforeAll {
+            if ($null -eq (Get-Command -Name 'Find-MgGraphCommand' -ErrorAction SilentlyContinue))
+            {
+                Set-Item -Path 'Function:\global:Find-MgGraphCommand' -Value ([System.Management.Automation.ScriptBlock]::Create('param($Command, $ApiVersion)'))
+            }
+            $fakeGraphModule = [System.Management.Automation.ScriptBlock]::Create(@'
+function Get-MgFakePartnerSync
+{
+    [CmdletBinding(DefaultParameterSetName = 'Get')]
+    param([Parameter(Mandatory = $true, ParameterSetName = 'Get')] [System.String] $CrossTenantAccessPolicyConfigurationPartnerTenantId)
+}
+
+function Set-MgFakePartnerSync
+{
+    [CmdletBinding(DefaultParameterSetName = 'Set')]
+    param([Parameter(Mandatory = $true, ParameterSetName = 'Set')] [System.String] $CrossTenantAccessPolicyConfigurationPartnerTenantId, [Parameter(ParameterSetName = 'Set')] [System.Collections.Hashtable] $BodyParameter)
+}
+'@)
+            New-Module -Name 'M365DSCFakeGraphModule' -ScriptBlock $fakeGraphModule | Import-Module -Global
+
+            Mock -CommandName Find-MgGraphCommand -MockWith {
+                if ($Command -like 'Get-*')
+                {
+                    return [PSCustomObject] @{ OutputType = 'IMicrosoftGraphCrossTenantIdentitySyncPolicyPartner'; URI = '/policies/fake'; Variants = @('Get') }
+                }
+                return $null
+            }
+            Mock -CommandName Import-Module -MockWith {
+            }
+        }
+
+        AfterAll {
+            Remove-Module -Name 'M365DSCFakeGraphModule' -ErrorAction SilentlyContinue
+        }
+
+        It 'Creates through the Set cmdlet and its key parameters' {
+            $info = Get-M365DSCGraphCmdletInfo -CmdLetNoun 'MgFakePartnerSync' -AllowPrompt $false -WarningAction SilentlyContinue
+            $info.SupportsNew | Should -BeFalse
+            $info.NewCmdlet | Should -Be 'Set-MgFakePartnerSync'
+            $info.NewKeyParameters | Should -Be @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
+            @($info.Warnings | Where-Object -FilterScript { $_ -like "Cmdlet 'New-MgFakePartnerSync'*" }).Count | Should -Be 1
         }
     }
 
