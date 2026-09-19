@@ -518,6 +518,10 @@
 * SCFilePlanPropertyAuthority
   * Fixed the property never being removed, because the check for a pending deletion
     always evaluated to false.
+* SCSensitivityLabel
+  * Fixed an issue where setting the `Priority` of a label placed it one position off
+    or failed for sub-labels.
+    FIXES [#5081](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5081)
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings

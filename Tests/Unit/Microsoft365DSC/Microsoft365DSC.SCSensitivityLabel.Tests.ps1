@@ -459,6 +459,68 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Label priority moves' -Fixture {
+            BeforeAll {
+                Mock -CommandName Get-Label -MockWith {
+                    return @(
+                        [PSCustomObject] @{ Name = 'Public'; Guid = 'label-public'; ParentId = $null; Priority = 0 }
+                        [PSCustomObject] @{ Name = 'Confidential'; Guid = 'label-group'; ParentId = $null; Priority = 1 }
+                        [PSCustomObject] @{ Name = 'Confidential-All'; Guid = 'label-all'; ParentId = 'label-group'; Priority = 2 }
+                        [PSCustomObject] @{ Name = 'Confidential-Partners'; Guid = 'label-partners'; ParentId = 'label-group'; Priority = 3 }
+                        [PSCustomObject] @{ Name = 'Confidential-Internal'; Guid = 'label-internal'; ParentId = 'label-group'; Priority = 4 }
+                        [PSCustomObject] @{ Name = 'Secret'; Guid = 'label-secret'; ParentId = $null; Priority = 5 }
+                    )
+                }
+
+                Mock -CommandName Get-Label -ParameterFilter { $Identity -eq 'label-public' } -MockWith {
+                    return [PSCustomObject] @{ Name = 'Public'; Guid = 'label-public'; ParentId = $null; Priority = 4 }
+                }
+            }
+
+            It 'Should insert a sub-label moving down before the label that follows its target' {
+                [SCSensitivityLabel]::SetLabelPriority('Confidential-All', 3)
+                Should -Invoke -CommandName Set-Label -Exactly 1
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-all' -and $Priority -eq 4 }
+            }
+
+            It 'Should pass the target itself for a sub-label that is not the first one' {
+                [SCSensitivityLabel]::SetLabelPriority('Confidential-Partners', 4)
+                Should -Invoke -CommandName Set-Label -Exactly 1
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-partners' -and $Priority -eq 4 }
+            }
+
+            It 'Should insert a top-level label moving down before the label that follows its target' {
+                [SCSensitivityLabel]::SetLabelPriority('Public', 4)
+                Should -Invoke -CommandName Set-Label -Exactly 1
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-public' -and $Priority -eq 5 }
+            }
+
+            It 'Should insert a sub-label moving up before the label at its target' {
+                [SCSensitivityLabel]::SetLabelPriority('Confidential-Internal', 3)
+                Should -Invoke -CommandName Set-Label -Exactly 1
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-internal' -and $Priority -eq 3 }
+            }
+
+            It 'Should reach the first sub-label position by moving the current first sub-label down' {
+                [SCSensitivityLabel]::SetLabelPriority('Confidential-Internal', 2)
+                Should -Invoke -CommandName Set-Label -Exactly 2
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-internal' -and $Priority -eq 3 }
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-all' -and $Priority -eq 4 }
+            }
+
+            It 'Should reach the last position by moving the current last label up' {
+                [SCSensitivityLabel]::SetLabelPriority('Public', 5)
+                Should -Invoke -CommandName Set-Label -Exactly 2
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-public' -and $Priority -eq 5 }
+                Should -Invoke -CommandName Set-Label -Exactly 1 -ParameterFilter { $Identity -eq 'label-secret' -and $Priority -eq 4 }
+            }
+
+            It 'Should not call Set-Label when the label already holds the priority' {
+                [SCSensitivityLabel]::SetLabelPriority('Confidential-Partners', 3)
+                Should -Invoke -CommandName Set-Label -Exactly 0
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true
