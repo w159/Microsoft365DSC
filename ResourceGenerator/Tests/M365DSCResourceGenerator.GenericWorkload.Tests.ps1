@@ -70,6 +70,33 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
             )
         }
 
+        function global:New-M365DSCFakeScope
+        {
+            [CmdletBinding()]
+            param
+            (
+                [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
+                [System.Object]
+                $FilterConditions,
+
+                [Parameter(Mandatory = $true, ParameterSetName = 'RawQuery')]
+                [System.String]
+                $RawQuery,
+
+                [Parameter(Mandatory = $true)]
+                [System.Object]
+                $LocationType,
+
+                [Parameter(Mandatory = $true)]
+                [System.String]
+                $Name,
+
+                [Parameter()]
+                [System.String]
+                $Comment
+            )
+        }
+
         function global:Get-M365DSCFakeGadget
         {
             [CmdletBinding()]
@@ -96,7 +123,7 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
     }
 
     AfterAll {
-        Remove-Item -Path 'Function:\New-M365DSCFakeWidget', 'Function:\Get-M365DSCFakeWidget', 'Function:\Remove-M365DSCFakeWidget', 'Function:\Get-M365DSCFakeGadget', 'Function:\Get-ContosoGadget', 'Function:\New-ContosoWidget' -ErrorAction SilentlyContinue
+        Remove-Item -Path 'Function:\New-M365DSCFakeWidget', 'Function:\Get-M365DSCFakeWidget', 'Function:\Remove-M365DSCFakeWidget', 'Function:\New-M365DSCFakeScope', 'Function:\Get-M365DSCFakeGadget', 'Function:\Get-ContosoGadget', 'Function:\New-ContosoWidget' -ErrorAction SilentlyContinue
     }
 
     Describe 'Get-M365DSCGenericCmdletInfo' {
@@ -128,6 +155,27 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
         It 'Records the key parameters of the Remove cmdlet and whether it supports Confirm' {
             $script:info.RemoveKeyParameters | Should -Be @('Id')
             $script:info.RemoveSupportsConfirm | Should -BeFalse
+        }
+    }
+
+    Describe 'Get-M365DSCGenericCmdletInfo for a cmdlet without a default parameter set' {
+        BeforeAll {
+            $script:scopeInfo = Get-M365DSCGenericCmdletInfo -CmdLetNoun 'M365DSCFakeScope' -Workload 'SecurityComplianceCenter' -WarningAction SilentlyContinue
+        }
+
+        It 'Takes the parameters of every parameter set' {
+            $script:scopeInfo.Properties.Name | Should -Contain 'FilterConditions'
+            $script:scopeInfo.Properties.Name | Should -Contain 'RawQuery'
+        }
+
+        It 'Marks a parameter mandatory only when every parameter set requires it' {
+            ($script:scopeInfo.Properties | Where-Object -FilterScript { $_.Name -eq 'LocationType' }).IsMandatory | Should -BeTrue
+            ($script:scopeInfo.Properties | Where-Object -FilterScript { $_.Name -eq 'FilterConditions' }).IsMandatory | Should -BeFalse
+            ($script:scopeInfo.Properties | Where-Object -FilterScript { $_.Name -eq 'RawQuery' }).IsMandatory | Should -BeFalse
+        }
+
+        It 'Prefers a mandatory Name over an earlier mandatory parameter as primary key' {
+            $script:scopeInfo.PrimaryKey | Should -Be 'Name'
         }
     }
 
