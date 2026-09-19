@@ -225,6 +225,19 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
                 Should -Be 'Intune Device Compliance Policy for Windows10'
         }
 
+        It 'keeps acronyms whole' {
+            (Get-M365DSCResourceDescriptor -ResourceName 'SCAdaptiveScope').Description | Should -Be 'SC Adaptive Scope'
+            (Get-M365DSCResourceDescriptor -ResourceName 'SCDLPCompliancePolicy').Description | Should -Be 'SC DLP Compliance Policy'
+            (Get-M365DSCResourceDescriptor -ResourceName 'EXOCASMailboxPlan').Description | Should -Be 'EXO CAS Mailbox Plan'
+            (Get-M365DSCResourceDescriptor -ResourceName 'AADB2BManagementPolicy').Description | Should -Be 'Entra ID B2B Management Policy'
+        }
+
+        It 'maps Apple platforms whatever their casing in the resource name' {
+            (Get-M365DSCResourceDescriptor -ResourceName 'IntuneDeviceConfigurationPolicyiOS').Description | Should -Be 'Intune Device Configuration Policy for iOS'
+            (Get-M365DSCResourceDescriptor -ResourceName 'IntuneVPNConfigurationPolicyIOS').Description | Should -Be 'Intune VPN Configuration Policy for iOS'
+            (Get-M365DSCResourceDescriptor -ResourceName 'IntuneVPNConfigurationPolicyMacOS').Description | Should -Be 'Intune VPN Configuration Policy for macOS'
+        }
+
         It 'derives the short descriptor' {
             (Get-M365DSCResourceDescriptor -ResourceName 'IntuneDeviceCompliancePolicyWindows10').ShortDescriptor |
                 Should -Be 'policy'

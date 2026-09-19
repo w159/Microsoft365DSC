@@ -309,7 +309,7 @@ function Get-M365DSCCommandStub
     $parametersToSkip = @(
         'Verbose', 'Debug', 'ErrorAction', 'WarningAction', 'InformationAction', 'ErrorVariable',
         'WarningVariable', 'InformationVariable', 'OutVariable', 'OutBuffer', 'PipelineVariable',
-        'WhatIf', 'Confirm', 'ProgressAction', 'IfMatch', 'Break', 'HttpPipelineAppend',
+        'WhatIf', 'ProgressAction', 'IfMatch', 'Break', 'HttpPipelineAppend',
         'HttpPipelinePrepend', 'Proxy', 'ProxyCredential', 'ProxyUseDefaultCredentials'
     )
 

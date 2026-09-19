@@ -179,6 +179,86 @@ InModuleScope -ModuleName 'M365DSCResourceGenerator' {
         }
     }
 
+    Describe 'A Security & Compliance resource generated from implicit remoting proxy cmdlets' {
+        BeforeAll {
+            New-Module -Name 'tmpEXO_m365dscfake' -ScriptBlock {
+                function Get-M365DSCFakeProxyScope
+                {
+                    [CmdletBinding()]
+                    param([System.Object] $Identity)
+                }
+
+                function New-M365DSCFakeProxyScope
+                {
+                    [CmdletBinding()]
+                    param(
+                        [Parameter(Mandatory = $true)] [System.String] $Name,
+                        [Parameter(Mandatory = $true)] [System.Object] $LocationType,
+                        [System.String] $Comment
+                    )
+                }
+
+                function Set-M365DSCFakeProxyScope
+                {
+                    [CmdletBinding()]
+                    param(
+                        [Parameter(Mandatory = $true)] [System.Object] $Identity,
+                        [System.String] $Comment
+                    )
+                }
+
+                function Remove-M365DSCFakeProxyScope
+                {
+                    [CmdletBinding(SupportsShouldProcess = $true)]
+                    param([Parameter(Mandatory = $true)] [System.Object] $Identity)
+                }
+            } | Import-Module -Global
+
+            $cmdletInfo = Get-M365DSCGenericCmdletInfo -CmdLetNoun 'M365DSCFakeProxyScope' -Workload 'SecurityComplianceCenter' -WarningAction SilentlyContinue
+            $script:proxyModel = New-M365DSCResourceModel -ResourceName 'SCFakeProxyScope' `
+                -Workload 'SecurityComplianceCenter' `
+                -CmdletInfo $cmdletInfo `
+                -Properties $cmdletInfo.Properties `
+                -CmdLetNoun 'M365DSCFakeProxyScope' `
+                -CmdLetVerb 'New'
+        }
+
+        AfterAll {
+            Remove-Module -Name 'tmpEXO_m365dscfake' -Force -ErrorAction SilentlyContinue
+        }
+
+        It 'Records the real module instead of the temporary proxy module in settings.json' {
+            $settings = (New-M365DSCSettingsFile -ResourceModel $script:proxyModel -WarningAction SilentlyContinue) | ConvertFrom-Json
+
+            @($settings.commands.module) | Should -Be @('ExchangeOnlineManagement')
+        }
+
+        It 'Declares Exchange.ManageAsApp as the application permission in settings.json' {
+            $settings = (New-M365DSCSettingsFile -ResourceModel $script:proxyModel -WarningAction SilentlyContinue) | ConvertFrom-Json
+
+            $settings.permissions.'Office 365 Exchange Online'.application.read.name | Should -Be 'Exchange.ManageAsApp'
+            $settings.permissions.'Office 365 Exchange Online'.application.update.name | Should -Be 'Exchange.ManageAsApp'
+        }
+
+        It 'Removes what the Set cmdlet does not accept and passes the key as Identity on update' {
+            $block = New-M365DSCSetInvocationBlock -ResourceModel $script:proxyModel -Operation 'Update'
+
+            $block | Should -Match ([System.Text.RegularExpressions.Regex]::Escape("`$updateParameters.Remove('Name') | Out-Null"))
+            $block | Should -Match ([System.Text.RegularExpressions.Regex]::Escape("`$updateParameters.Remove('LocationType') | Out-Null"))
+            $block | Should -Match ([System.Text.RegularExpressions.Regex]::Escape('$updateParameters.Identity = $this.Name'))
+            $block | Should -Not -Match "Remove\('Comment'\)"
+            Get-ParseError -Content $block | Should -BeNullOrEmpty
+        }
+
+        It 'Keeps Confirm in the stub of a cmdlet that supports it' {
+            $stub = Get-M365DSCCommandStub -Command (Get-Command -Name 'Remove-M365DSCFakeProxyScope')
+
+            $stub | Should -Match '\$Confirm'
+            $stub | Should -Not -Match '\$WhatIf'
+            Get-ParseError -Content $stub | Should -BeNullOrEmpty
+        }
+    }
+
     Describe 'Get-M365DSCGenericLookup' {
         It 'Passes the key directly when the Get cmdlet has a parameter of the same name' {
             $lookup = Get-M365DSCGenericLookup -GetCommand (Get-Command -Name 'Get-M365DSCFakeWidget') -PrimaryKey 'Identity' -Workload 'MicrosoftTeams'
