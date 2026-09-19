@@ -69,6 +69,7 @@ function Initialize-M365DSCDllLoader
             'Microsoft365DSC.Intune.dll'
             'Microsoft365DSC.Utilities.dll'
             'Microsoft365DSC.Relations.dll'
+            'Microsoft365DSC.Reporting.dll'
         )
 
         foreach ($dllName in $dllsToLoad)

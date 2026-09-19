@@ -250,7 +250,8 @@ function New-M365DSCWorkloadSection
 
 <#
 .DESCRIPTION
-    This function creates a new Markdown document from the specified exported configuration
+    This function creates a Markdown report from the specified exported configuration. Every
+    resource instance lands in one document, unless SplitByResource is specified.
 
 .FUNCTIONALITY
     Internal, Hidden
@@ -258,126 +259,66 @@ function New-M365DSCWorkloadSection
 function New-M365DSCConfigurationToMarkdown
 {
     [CmdletBinding()]
-    [OutputType([System.String])]
     param
     (
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
         [Array]
         $ParsedContent,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $OutputPath,
 
         [Parameter()]
         [System.String]
-        $TemplateName,
+        $OrganizationName,
+
+        [Parameter()]
+        [System.String]
+        $TenantGuid,
 
         [Parameter()]
         [Switch]
-        $SortProperties
+        $IncludeAllInformation,
+
+        [Parameter()]
+        [Switch]
+        $SplitByResource
     )
 
-    $crlf = "`r`n"
-    if ([System.String]::IsNullOrEmpty($TemplateName))
+    Initialize-M365DSCDllLoader -ErrorAction Stop
+
+    $OutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
+    if ($SplitByResource -and [System.IO.Path]::GetExtension($OutputPath) -eq '.md')
     {
-        $TemplateName = 'Configuration Report'
+        $outputFolder = Split-Path -Path $OutputPath -Parent
+        Write-Warning -Message "A split Markdown report is written to a folder. Using '$outputFolder' instead of '$OutputPath'."
+        $OutputPath = $outputFolder
     }
 
-    Write-Output 'Generating Markdown report'
-    $fullMD = '# ' + $TemplateName + $crlf
-
-    $totalCount = $parsedContent.Count
-    $currentCount = 0
-    foreach ($resource in $parsedContent)
+    $resources = [System.Collections.Generic.List[System.Collections.IDictionary]]::new()
+    foreach ($resource in $ParsedContent)
     {
-        # Create a new table for each resource
-        $percentage = [math]::Round(($currentCount / $totalCount) * 100, 2)
-        Write-Progress -Activity 'Processing generated DSC Object' -Status ("{0:N2}% completed - $($resource.ResourceName)" -f $percentage) -PercentComplete $percentage
-
-        $fullMD += '## ' + $resource.ResourceInstanceName + $crlf
-        $fullMD += "|Item|Value|`r`n"
-        $fullMD += "|:---|:---|`r`n"
-        if ($SortProperties)
+        if ($resource -isnot [System.Collections.IDictionary])
         {
-            $properties = $resource.Keys | Sort-Object
-        }
-        else
-        {
-            $properties = $resource.Keys
+            throw "ParsedContent contains a $($resource.GetType().Name). Every entry has to be a dictionary."
         }
 
-        foreach ($property in $properties)
-        {
-            if ($property -ne 'ResourceName' `
-                -and $property -ne 'ApplicationId' `
-                -and $property -ne 'CertificateThumbprint' `
-                -and $property -ne 'TenantId')
-            {
-                # Create each row in the table
-                # This first bit is the property in column 1
-                $partMD += '|**' + $property + '**|'
-                $value = "`$null"
-                # And then the value in column 2
-                if ($null -ne $resource.$property)
-                {
-                    if ($resource.$property.GetType().Name -eq 'Object[]')
-                    {
-                        if ($resource.$property -and ($resource.$property[0].GetType().Name -eq 'Hashtable' -or
-                                $resource.$property[0].GetType().Name -eq 'OrderedDictionary'))
-                        {
-                            $value = ''
-                            foreach ($entry in $resource.$property)
-                            {
-                                foreach ($key in $entry.Keys)
-                                {
-                                    $value += "$key = $($entry.$key)<br>"
-                                }
-                                $value += '<br>'
-                            }
-                        }
-                        else
-                        {
-                            $temp = $resource.$property -join ','
-                            [array]$components = $temp.Split(',')
-                            if ($components.Length -gt 0 -and
-                                -not [System.String]::IsNullOrEmpty($temp))
-                            {
-                                $Value = ''
-                                foreach ($comp in $components)
-                                {
-                                    $value += "$comp<br>"
-                                }
-                                $value += '<br>'
-                            }
-                        }
-                    }
-                    else
-                    # strings are easy
-                    {
-                        if (-not [System.String]::IsNullOrEmpty($resource.$property))
-                        {
-                            $value = ($resource.$property).ToString() + '|'
-                        }
-                    }
-                }
-                $partMD += $value + $crlf
-            }
-        }
-
-        $fullMD += $partMD + $crlf
-        $partMD = ''
-
-        $currentCount++
+        $resources.Add($resource)
     }
 
-    if (-not [System.String]::IsNullOrEmpty($OutputPath))
-    {
-        Write-Output 'Saving Markdown report'
-        $fullMD | Out-File $OutputPath
-    }
+    $request = [Microsoft365DSC.Reporting.ReportRequest]::new()
+    $request.Resources = $resources
+    $request.OutputPath = $OutputPath
+    $request.ModuleRoot = Split-Path -Path $PSScriptRoot -Parent
+    $request.OrganizationName = $OrganizationName
+    $request.TenantGuid = $TenantGuid
+    $request.IncludeAllInformation = $IncludeAllInformation.IsPresent
+    $request.SplitByResource = $SplitByResource.IsPresent
+    $request.Warn = [System.Action[System.String]] { param($Message) Write-Warning -Message $Message }
 
-    Write-Output 'Completed generating Markdown report'
+    $null = [Microsoft365DSC.Reporting.ReportConverterRegistry]::Convert('Markdown', $request)
 }
 
 <#
@@ -925,7 +866,26 @@ function New-M365DSCConfigurationToCSV
     Specifies the source DSC configuration file path.
 
 .PARAMETER OutputPath
-    Specifies the destination report file path.
+    Specifies the destination report file path. A Markdown report that is split by resource is
+    written to a folder instead of a file.
+
+.PARAMETER IncludeAllInformation
+    Specifies that the report carries the attribute, data type, allowed values, description and
+    permissions of every reported property. Without it, a report carries the property name, its
+    data type and its value. Only available when Type is Markdown.
+
+.PARAMETER SplitByResource
+    Specifies that every resource instance becomes its own document, in a folder per workload
+    below OutputPath. Without it, the whole configuration lands in a single document. Only
+    available when Type is Markdown.
+
+.PARAMETER OrganizationName
+    Specifies the tenant domain name that is replaced by a portable token in every value. Only
+    available when Type is Markdown.
+
+.PARAMETER TenantGuid
+    Specifies the tenant identifier that is replaced by a portable token in every value. Only
+    available when Type is Markdown.
 
 .EXAMPLE
     PS> New-M365DSCReportFromConfiguration -Type 'HTML' -ConfigurationPath 'C:\DSC\ConfigName.ps1' -OutputPath 'C:\Dsc\M365Report.html'
@@ -957,14 +917,33 @@ function New-M365DSCReportFromConfiguration
         [System.String]
         $OutputPath
     )
-    dynamicparam # parameter 'Delimiter' is only available when Type = 'CSV'
+
+    dynamicparam # 'Delimiter' requires Type = 'CSV', the other parameters require Type = 'Markdown'
     {
         $paramDictionary = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+        if ($Type -eq 'Markdown')
+        {
+            foreach ($markdownParam in @(
+                    @{ Name = 'IncludeAllInformation'; Type = [Switch] }
+                    @{ Name = 'SplitByResource'; Type = [Switch] }
+                    @{ Name = 'OrganizationName'; Type = [System.String] }
+                    @{ Name = 'TenantGuid'; Type = [System.String] }
+                ))
+            {
+                $markdownAttr = [System.Management.Automation.ParameterAttribute]::new()
+                $markdownAttr.Mandatory = $false
+                $markdownCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::new()
+                $markdownCollection.Add($markdownAttr)
+                $paramDictionary.Add($markdownParam.Name, [System.Management.Automation.RuntimeDefinedParameter]::New(
+                        $markdownParam.Name, $markdownParam.Type, $markdownCollection))
+            }
+        }
+
         if ($Type -eq 'CSV')
         {
-            $delimiterAttr = [System.Management.Automation.ParameterAttribute]::New()
+            $delimiterAttr = [System.Management.Automation.ParameterAttribute]::new()
             $delimiterAttr.Mandatory = $false
-            $attributeCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::New()
+            $attributeCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::new()
             $attributeCollection.Add($delimiterAttr)
             $delimiterParam = [System.Management.Automation.RuntimeDefinedParameter]::New('Delimiter', [System.String], $attributeCollection)
             $delimiterParam.Value = ';' # default value, comma makes a mess when importing a CSV-file in Excel
@@ -979,6 +958,15 @@ function New-M365DSCReportFromConfiguration
         if ($PSBoundParameters.ContainsKey('Delimiter'))
         {
             $Delimiter = $PSBoundParameters.Delimiter
+        }
+
+        $markdownParameters = @{ }
+        foreach ($markdownParam in @('IncludeAllInformation', 'SplitByResource', 'OrganizationName', 'TenantGuid'))
+        {
+            if ($PSBoundParameters.ContainsKey($markdownParam))
+            {
+                $markdownParameters.$markdownParam = $PSBoundParameters.$markdownParam
+            }
         }
     }
     process # required with DynamicParam
@@ -1009,7 +997,7 @@ function New-M365DSCReportFromConfiguration
                 'HTML'
                 {
                     $template = Get-Item $ConfigurationPath
-                    $templateName = $Template.Name.Split('.')[0]
+                    $templateName = $template.Name.Split('.')[0]
                     New-M365DSCConfigurationToHTML -ParsedContent $parsedContent -OutputPath $OutputPath -TemplateName $templateName
                 }
                 'JSON'
@@ -1018,9 +1006,7 @@ function New-M365DSCReportFromConfiguration
                 }
                 'Markdown'
                 {
-                    $template = Get-Item $ConfigurationPath
-                    $templateName = $Template.Name.Split('.')[0]
-                    New-M365DSCConfigurationToMarkdown -ParsedContent $parsedContent -OutputPath $OutputPath -TemplateName $templateName
+                    New-M365DSCConfigurationToMarkdown -ParsedContent $parsedContent -OutputPath $OutputPath @markdownParameters
                 }
                 'CSV'
                 {

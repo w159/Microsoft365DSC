@@ -135,6 +135,12 @@ function Get-M365DSCGraphCmdletInfo
     $listParameterSet = $getCommand.ParameterSets | Where-Object -FilterScript { $_.Name -eq 'List' }
     $result.SupportsAll = @($listParameterSet.Parameters.Name) -contains 'All'
     $result.SupportsFilter = @($listParameterSet.Parameters.Name) -contains 'Filter'
+    if ($null -eq $listParameterSet -and @($result.GetKeyParameters).Count -gt 0)
+    {
+        $message = "Cmdlet '$getCmdletName' cannot list instances. Write Export() to enumerate the parent collection, see AADCrossTenantIdentitySyncPolicyPartner."
+        Write-Warning -Message $message
+        $result.Warnings += $message
+    }
 
     # Intune style assignments need a Get-<Noun>Assignment cmdlet and the policy's REST repository.
     $result.HasAssignments = $false

@@ -374,6 +374,11 @@ function Set-MgFakePartnerSync
             $info.NewKeyParameters | Should -Be @('CrossTenantAccessPolicyConfigurationPartnerTenantId')
             @($info.Warnings | Where-Object -FilterScript { $_ -like "Cmdlet 'New-MgFakePartnerSync'*" }).Count | Should -Be 1
         }
+
+        It 'Warns that Export() must enumerate the parent collection when the Get cmdlet cannot list' {
+            $info = Get-M365DSCGraphCmdletInfo -CmdLetNoun 'MgFakePartnerSync' -AllowPrompt $false -WarningAction SilentlyContinue
+            @($info.Warnings | Where-Object -FilterScript { $_ -like "Cmdlet 'Get-MgFakePartnerSync' cannot list instances*" }).Count | Should -Be 1
+        }
     }
 
     Describe 'Get-M365DSCGenericLookup' {
