@@ -527,6 +527,12 @@
 * SCFilePlanPropertyAuthority
   * Fixed the property never being removed, because the check for a pending deletion
     always evaluated to false.
+* SCSensitivityLabel
+  * Fixed an issue where setting the `Priority` of a label placed it one position off
+    or failed for sub-labels.
+  * Updated `Set()` to throw a descriptive error for a `Priority` the label cannot take,
+    because sub-labels always directly follow their parent label.
+    FIXES [#5081](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5081)
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
 * SPOSharingSettings
@@ -665,9 +671,9 @@
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `ReverseDSC` to version 2.0.0.38.
 * MISC
-  * Updated the settings.json QA test to validate the delegated and the update Graph permissions.
-    They both use a custom permission list of its own type.
-    FIXES [#2912](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/2912)
+  * Fixed every class-based resource failing `Set` under the Local Configuration Manager with
+    'Index was out of range', after the change had already been applied. Windows PowerShell
+    fails a class method with a return type that writes no output, and a relayed `Set` returns none.
   * Fixed `Test-TargetResource` never reporting drift on an `Id` nested inside a complex
     property. It was excluded at every nesting level instead of only on the resource itself.
     FIXES [#7441](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7441)
@@ -728,6 +734,9 @@
     properties from the remove example - making it uncompilable, since `[DscProperty(Mandatory)]`
     becomes `Required` in the MOF - drifted every property in the update example instead of one,
     and placed `IsSingleInstance` last although it is the key.
+  * Updated the settings.json QA test to validate the delegated and the update Graph permissions.
+    They both use a custom permission list of its own type.
+    FIXES [#2912](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/2912)
   * Updated the example emitter to name string placeholders after the property they belong to,
     instead of writing `FakeStringValue` into every string property of a published example.
   * Updated many call sites of `Invoke-MgGraphRequest` to their Graph SDK cmdlet variant.

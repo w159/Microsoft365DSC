@@ -947,11 +947,11 @@ class SCSensitivityLabel : M365DSCResourceBase
                 $newLabel = New-Label @CreationParams -ErrorAction Stop
 
                 ## Can't set priority until label created
-                if ($this.GetBoundParameters().ContainsKey('Priority') -and $this.Priority -lt $newLabel.Priority)
+                if ($this.GetBoundParameters().ContainsKey('Priority') -and $this.Priority -ne $newLabel.Priority)
                 {
                     Start-Sleep 5
                     Write-Verbose -Message "Updating the priority for newly created label {$($this.Name)} and Priority {$($this.priority)})"
-                    Set-Label -Identity $this.Name -priority $this.Priority -ErrorAction Stop
+                    [SCSensitivityLabel]::SetLabelPriority($this.Name, [System.Int32] $this.Priority)
                 }
             }
             catch
@@ -998,16 +998,21 @@ class SCSensitivityLabel : M365DSCResourceBase
             #Remove unused parameters for Set-Label cmdlet
             $SetParams.Remove('Name') | Out-Null
 
-            # Only update the priority if the value is different
-            if ($SetParams.Priority -eq $label.Priority)
-            {
-                $SetParams.Remove('Priority') | Out-Null
-            }
+            $SetParams.Remove('Priority') | Out-Null
 
             try
             {
-                Write-Verbose -Message "Updating label {$($this.Name)} with:`r`n$(ConvertTo-Json $SetParams -Depth 10)"
-                Set-Label @SetParams -Identity $this.Name -ErrorAction Stop
+                if ($SetParams.Count -gt 0)
+                {
+                    Write-Verbose -Message "Updating label {$($this.Name)} with:`r`n$(ConvertTo-Json $SetParams -Depth 10)"
+                    Set-Label @SetParams -Identity $this.Name -ErrorAction Stop
+                }
+
+                if ($this.GetBoundParameters().ContainsKey('Priority') -and $this.Priority -ne $label.Priority)
+                {
+                    Write-Verbose -Message "Updating the priority of label {$($this.Name)} from {$($label.Priority)} to {$($this.Priority)}"
+                    [SCSensitivityLabel]::SetLabelPriority($this.Name, [System.Int32] $this.Priority)
+                }
             }
             catch
             {
@@ -1249,6 +1254,78 @@ class SCSensitivityLabel : M365DSCResourceBase
                 return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
             }
         }
+    }
+
+    # Set-Label -Priority is not the final priority. A top-level label is inserted before the label
+    # holding that priority. A sub-label lands on it, but the first sub-label lands one lower, so
+    # no other sub-label can take the first position directly and the end of the list needs two moves.
+    hidden static [void] SetLabelPriority([System.String] $Identity, [System.Int32] $DesiredPriority)
+    {
+        $labels = @(Get-Label -ErrorAction Stop | Sort-Object -Property Priority)
+        $label = $labels | Where-Object -FilterScript { $_.Name -eq $Identity -or "$($_.Guid)" -eq $Identity } | Select-Object -First 1
+        if ($null -eq $label -or $label.Priority -eq $DesiredPriority)
+        {
+            return
+        }
+
+        $labelId = "$($label.Guid)"
+        $labelParentId = "$($label.ParentId)"
+        if (-not [System.String]::IsNullOrEmpty($labelParentId))
+        {
+            $parent = $labels | Where-Object Guid -EQ $labelParentId | Select-Object -First 1
+            $siblingCount = @($labels | Where-Object ParentId -EQ $labelParentId).Count
+            if ($null -ne $parent -and ($DesiredPriority -le $parent.Priority -or $DesiredPriority -gt $parent.Priority + $siblingCount))
+            {
+                throw "Priority $DesiredPriority of SC Sensitivity Label {$Identity} is outside the range $($parent.Priority + 1) - $($parent.Priority + $siblingCount) its sub-labels occupy below the parent label {$($parent.Name)}."
+            }
+
+            $firstSibling = $labels | Where-Object ParentId -EQ $labelParentId | Select-Object -First 1
+            if ("$($firstSibling.Guid)" -eq $labelId)
+            {
+                Set-Label -Identity $labelId -Priority ($DesiredPriority + 1) -ErrorAction Stop
+            }
+            elseif ($DesiredPriority -le $firstSibling.Priority)
+            {
+                if ($label.Priority -ne $firstSibling.Priority + 1)
+                {
+                    Set-Label -Identity $labelId -Priority ($firstSibling.Priority + 1) -ErrorAction Stop
+                }
+                Set-Label -Identity "$($firstSibling.Guid)" -Priority ($firstSibling.Priority + 2) -ErrorAction Stop
+            }
+            else
+            {
+                Set-Label -Identity $labelId -Priority $DesiredPriority -ErrorAction Stop
+            }
+
+            return
+        }
+
+        $movedIds = @($labelId) + @($labels | Where-Object ParentId -EQ $labelId | ForEach-Object -Process { "$($_.Guid)" })
+        $remaining = @($labels | Where-Object Guid -notin $movedIds)
+        $reachable = @(0..$remaining.Count | Where-Object -FilterScript {
+                $_ -eq $remaining.Count -or [System.String]::IsNullOrEmpty("$($remaining[$_].ParentId)")
+            })
+        if ($DesiredPriority -notin $reachable)
+        {
+            throw "Priority $DesiredPriority of SC Sensitivity Label {$Identity} cannot be reached, because sub-labels always directly follow their parent label. The priorities it can take are $($reachable -join ', ')."
+        }
+
+        if ($DesiredPriority -lt $remaining.Count)
+        {
+            Set-Label -Identity $labelId -Priority $remaining[$DesiredPriority].Priority -ErrorAction Stop
+            return
+        }
+
+        $lastPeer = $remaining[-1]
+        if (-not [System.String]::IsNullOrEmpty("$($lastPeer.ParentId)"))
+        {
+            $lastPeerParentId = "$($lastPeer.ParentId)"
+            $lastPeer = $remaining | Where-Object Guid -EQ $lastPeerParentId | Select-Object -First 1
+        }
+
+        Set-Label -Identity $labelId -Priority $lastPeer.Priority -ErrorAction Stop
+        $movedLabel = Get-Label -Identity $labelId -ErrorAction Stop
+        Set-Label -Identity "$($lastPeer.Guid)" -Priority $movedLabel.Priority -ErrorAction Stop
     }
 
     hidden [System.Object] ConvertCIMToAdvancedSettings([System.Object] $AdvancedSettings)
