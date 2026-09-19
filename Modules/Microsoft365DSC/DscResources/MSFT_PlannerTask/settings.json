@@ -96,7 +96,7 @@
             "name": "Group.Read.All"
           },
           {
-            "name": "Tasks.Read.All"
+            "name": "Tasks.Read"
           },
           {
             "name": "User.Read.All"
@@ -107,7 +107,7 @@
             "name": "Group.Read.All"
           },
           {
-            "name": "Tasks.ReadWrite.All"
+            "name": "Tasks.ReadWrite"
           },
           {
             "name": "User.Read.All"
