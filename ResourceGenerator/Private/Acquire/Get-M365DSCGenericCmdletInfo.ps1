@@ -96,6 +96,7 @@ function Get-M365DSCGenericCmdletInfo
     }
 
     $models = @()
+    $warnings = @()
     foreach ($parameter in $parameters)
     {
         # Descriptions come back as MamlDescription object arrays; flatten them to plain text.
@@ -146,9 +147,20 @@ function Get-M365DSCGenericCmdletInfo
         }
 
         $enumValues = @()
-        if ($parameterType.IsEnum)
+        $elementType = $parameterType
+        if ($isArray)
         {
-            $enumValues = [System.String[]] [System.Enum]::GetNames($parameterType)
+            $elementType = $parameterType.GetElementType()
+        }
+        if ($elementType.IsEnum)
+        {
+            $enumValues = [System.String[]] [System.Enum]::GetNames($elementType)
+        }
+        elseif ($typeName -notlike 'System.*' -or $typeName -in @('System.Object', 'System.Management.Automation.PSObject'))
+        {
+            $message = "Parameter '$($parameter.Name)' has type '$typeName' and is generated as a string. Model it as a complex type."
+            Write-Warning -Message $message
+            $warnings += $message
         }
 
         $models += New-M365DSCPropertyModel -Name $parameter.Name `
@@ -169,6 +181,7 @@ function Get-M365DSCGenericCmdletInfo
         NewCmdlet     = "New-$CmdLetNoun"
         UpdateCmdlet  = "Set-$CmdLetNoun"
         RemoveCmdlet  = "Remove-$CmdLetNoun"
+        Warnings      = $warnings
     }
 
     foreach ($operation in @('Get', 'New', 'Update', 'Remove'))

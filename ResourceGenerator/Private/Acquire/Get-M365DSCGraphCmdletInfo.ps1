@@ -117,6 +117,18 @@ function Get-M365DSCGraphCmdletInfo
         NewKeyParameters    = @(Get-M365DSCCmdletKeyParameter -CmdletName "New-$CmdLetNoun" -ParameterSetNames @('Create'))
         UpdateKeyParameters = @(Get-M365DSCCmdletKeyParameter -CmdletName "$updateVerb-$CmdLetNoun" -ParameterSetNames @('Update', 'Set'))
         RemoveKeyParameters = @(Get-M365DSCCmdletKeyParameter -CmdletName "Remove-$CmdLetNoun" -ParameterSetNames @('Delete'))
+        Warnings            = @()
+    }
+
+    # Some entities have no New- cmdlet because a PUT through the Set- cmdlet creates them.
+    $result.SupportsNew = $null -ne (Get-Command -Name "New-$CmdLetNoun" -ErrorAction SilentlyContinue)
+    if (-not $result.SupportsNew)
+    {
+        $message = "Cmdlet 'New-$CmdLetNoun' does not exist. The generated create logic calls '$($result.UpdateCmdlet)' instead."
+        Write-Warning -Message $message
+        $result.Warnings += $message
+        $result.NewCmdlet = $result.UpdateCmdlet
+        $result.NewKeyParameters = $result.UpdateKeyParameters
     }
 
     # What the List parameter set supports shapes the export enumeration.

@@ -303,9 +303,17 @@ function Get-M365DSCExcludedPropertyBlock
             continue
         }
 
+        $reason = 'NotConfigurable'
+        if ($null -ne $ResourceModel.PSObject.Properties['ExcludedPropertyReasons'] -and
+            $null -ne $ResourceModel.ExcludedPropertyReasons -and
+            $ResourceModel.ExcludedPropertyReasons.ContainsKey($name))
+        {
+            $reason = $ResourceModel.ExcludedPropertyReasons[$name]
+        }
+
         $entries += [ordered]@{
             name   = $name
-            reason = 'NotConfigurable'
+            reason = $reason
             note   = ''
         }
     }

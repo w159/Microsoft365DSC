@@ -83,14 +83,13 @@ else
 
 When the API returns nested objects, `Get()` must convert them to hashtables for downstream use.
 
-### Pattern 1: Resource-specific conversion helper (AADPermissionGrantPolicy)
+### Pattern 1: Resource-specific conversion method (AADPermissionGrantPolicy)
 
 ```powershell
 $includesArray = @()
 foreach ($include in $getValue.Includes)
 {
-    $includesArray += Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsHashtable -ConditionSet $include `
-        -Cache $this.ResourceCache
+    $includesArray += [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($this.ResourceCache, $include)
 }
 $result.Add('Includes', [Array]$includesArray)
 ```
@@ -113,13 +112,12 @@ When writing back to the API, the complex instances from the DSC configuration m
 
 ### Creating and Updating Complex Types
 
-#### Pattern 1: Resource-specific parameter conversion helper (AADPermissionGrantPolicy)
+#### Pattern 1: Resource-specific parameter conversion method (AADPermissionGrantPolicy)
 
 ```powershell
 foreach ($include in $this.Includes)
 {
-    $includeParams = Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsParameters -ConditionSet $include `
-        -Cache $this.ResourceCache
+    $includeParams = $this.GetPermissionGrantConditionSetAsParameters($this.ResourceCache, $include)
     New-MgBetaPolicyPermissionGrantPolicyInclude -PermissionGrantPolicyId $this.Id @includeParams | Out-Null
 }
 ```
@@ -148,8 +146,7 @@ foreach ($desiredInclude in $this.Includes)
     foreach ($currentInclude in $currentPolicy.Includes)
     {
         if ($currentInclude.Id -notin $matchedCurrentIncludeIds -and
-            (Test-AADPermissionGrantPolicyConditionSetsEqual -ConditionSet1 $currentInclude `
-                -ConditionSet2 $desiredInclude -Cache $this.ResourceCache))
+            $this.TestConditionSetsEqual($this.ResourceCache, $desiredInclude, $currentInclude))
         {
             $matchedCurrentIncludeIds += $currentInclude.Id
             $matchFound = $true
@@ -160,8 +157,7 @@ foreach ($desiredInclude in $this.Includes)
     if (-not $matchFound)
     {
         # Add the new condition set
-        $params = Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsParameters -ConditionSet $desiredInclude `
-            -Cache $this.ResourceCache
+        $params = $this.GetPermissionGrantConditionSetAsParameters($this.ResourceCache, $desiredInclude)
         New-MgBetaPolicyPermissionGrantPolicyInclude -PermissionGrantPolicyId $this.Id @params | Out-Null
     }
 }
@@ -252,56 +248,50 @@ The block is invoked by `Test-M365DSCTargetResource` from outside the instance's
 - Wrap a single array argument as `@(, $value)` to stop PowerShell unrolling it.
 - Common use cases: date normalization, removing read-only properties, adjusting array order.
 
-### Deep Comparison Helper for Complex Arrays
+### Deep Comparison Method for Complex Arrays
 
-When resources have arrays of complex objects that must be compared regardless of order, create a resource-specific comparison function.
+When resources have arrays of complex objects that must be compared regardless of order, add a resource-specific comparison method.
 
-**Pattern (from AADPermissionGrantPolicy `Test-AADPermissionGrantPolicyConditionSetsEqual`):**
+**Pattern (from AADPermissionGrantPolicy `TestConditionSetsEqual`):**
 
 ```powershell
-function Test-AADPermissionGrantPolicyConditionSetsEqual
+hidden [System.Boolean] TestConditionSetsEqual([System.Collections.Hashtable] $Cache, [System.Object] $ConditionSet1, [System.Object] $ConditionSet2)
 {
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [System.Object]
-        $ConditionSet1,
+    $hash1 = [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($Cache, $ConditionSet1)
+    $hash2 = [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($Cache, $ConditionSet2)
 
-        [Parameter(Mandatory = $true)]
-        [System.Object]
-        $ConditionSet2,
-
-        [Parameter(Mandatory = $true)]
-        [System.Collections.Hashtable]
-        $Cache
-    )
-
-    $set1 = Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsHashtable -ConditionSet $ConditionSet1 -Cache $Cache
-    $set2 = Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsHashtable -ConditionSet $ConditionSet2 -Cache $Cache
-
-    # Compare all properties except auto-generated Id
-    foreach ($key in $set1.Keys)
+    foreach ($key in $hash1.Keys)
     {
-        if ($key -eq 'Id') { continue }
-
-        $val1 = $set1[$key]
-        $val2 = $set2[$key]
-
-        if ($val1 -is [System.Array] -and $val2 -is [System.Array])
+        if ($key -eq 'Id')
         {
-            # Sort both arrays for order-independent comparison
-            $sorted1 = $val1 | Sort-Object
-            $sorted2 = $val2 | Sort-Object
+            continue
+        }
 
-            if ($sorted1.Count -ne $sorted2.Count) { return $false }
+        if (-not $hash2.ContainsKey($key))
+        {
+            return $false
+        }
+
+        $value1 = $hash1[$key]
+        $value2 = $hash2[$key]
+        if ($value1 -is [Array] -and $value2 -is [Array])
+        {
+            if ($value1.Count -ne $value2.Count)
+            {
+                return $false
+            }
+
+            $sorted1 = $value1 | Sort-Object
+            $sorted2 = $value2 | Sort-Object
             for ($i = 0; $i -lt $sorted1.Count; $i++)
             {
-                if ($sorted1[$i] -ne $sorted2[$i]) { return $false }
+                if ($sorted1[$i] -ne $sorted2[$i])
+                {
+                    return $false
+                }
             }
         }
-        elseif ($val1 -ne $val2)
+        elseif ($value1 -ne $value2)
         {
             return $false
         }
@@ -313,7 +303,7 @@ function Test-AADPermissionGrantPolicyConditionSetsEqual
 
 **Rules:**
 
-- Deep comparison helpers must follow `Verb-Noun` naming and carry the resource-name prefix (e.g., `Test-AADPermissionGrantPolicyConditionSetsEqual`).
+- Comparison methods are `hidden` and named `Test<Context>Equal` or `Test<Context>AreEquivalent`.
 - Exclude auto-generated properties (like `Id`) from comparison.
 - Sort array properties before element-by-element comparison for order-independent matching.
 - Return `[System.Boolean]` only.
@@ -519,27 +509,25 @@ It 'Should return correct complex type values' {
 }
 ```
 
-## Resource-Specific Helper Function Conventions
+## Resource-Specific Helper Method Conventions
 
-When the generic framework functions are insufficient for a resource's complex type handling, define resource-specific helpers at module scope, below the class in the same `.psm1` file.
+When the generic framework functions are insufficient for a resource's complex type handling, add resource-specific methods to the class. Resource modules define no module-scope functions: the build merges all resources into shared part modules, so such a function would leak into every other resource.
 
-**Naming rules:**
+**Rules:**
 
-- All helpers must follow `Verb-Noun` naming with approved PowerShell verbs.
-- **Prefix the noun with the resource name.** All resources share one module scope, so `Get-PermissionGrantConditionSetAsHashtable` is a collision risk; `Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsHashtable` is not.
-- Conversion helpers: `Get-<Resource><Context>AsHashtable`, `Get-<Resource><Context>AsParameters`.
-- Comparison helpers: `Test-<Resource><Context>Equal` or `Test-<Resource><Context>AreEquivalent`.
-- Do **not** nest helper functions inside other functions or inside the class.
-- Helpers have no `$this`. Add a `[System.Collections.Hashtable] $Cache` parameter and pass `$this.ResourceCache` when they need to cache.
+- Inline code that is used only once.
+- Code used more than once becomes a `hidden` method on the class.
+- Use a `hidden static` method, called as `[ClassName]::Method()`, where no `$this` exists, such as inside a `PostProcessing` block or from another static method. Static methods take `$this.ResourceCache` as a `[System.Collections.Hashtable] $Cache` parameter when they need to cache.
+- Name methods `VerbNoun` in PascalCase with an approved verb. The class scopes the name, no resource prefix is needed.
 
-**Common helper patterns:**
+**Common method patterns:**
 
-| Helper Type | Naming Convention | Example |
+| Method Type | Naming Convention | Example |
 | ------------- | ------------------- | --------- |
-| API object → hashtable | `Get-<Resource><Context>AsHashtable` | `Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsHashtable` |
-| Complex instance → API parameters | `Get-<Resource><Context>AsParameters` | `Get-AADPermissionGrantPolicyPermissionGrantConditionSetAsParameters` |
-| Deep equality comparison | `Test-<Resource><Context>Equal` | `Test-AADPermissionGrantPolicyConditionSetsEqual` |
-| Comparison customization | `GetCompareParameters()` | Class method override, not a function |
+| API object -> hashtable | `Get<Context>AsHashtable` | `GetPermissionGrantConditionSetAsHashtable` (static) |
+| Complex instance -> API parameters | `Get<Context>AsParameters` | `GetPermissionGrantConditionSetAsParameters` |
+| Deep equality comparison | `Test<Context>Equal` | `TestConditionSetsEqual` |
+| Comparison customization | `GetCompareParameters()` | Class method override |
 
 ## Invoke-MgGraphRequest for APIs Without SDK Cmdlets
 
