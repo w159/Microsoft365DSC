@@ -159,10 +159,43 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should delete from the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'SCRetentionComplianceRule' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Remove-RetentionComplianceRule' -Exactly 1 -ParameterFilter { $Confirm -eq $false }
             }
 
             It 'Should return Present from the Get method' {
                 ((New-M365DSCResourceInstance -ResourceName 'SCRetentionComplianceRule' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
+            }
+        }
+
+        Context -Name 'The rule is created but the deployment of its policy fails' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Ensure                    = 'Present'
+                    Credential                = $Credential
+                    Name                      = 'TestRule'
+                    Policy                    = 'TestPolicy'
+                    RetentionComplianceAction = 'Keep'
+                    RetentionDuration         = '365'
+                }
+
+                Mock -CommandName Get-RetentionComplianceRule -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-RetentionCompliancePolicy -MockWith {
+                    return @{
+                        Name = 'TestPolicy'
+                    }
+                }
+
+                Mock -CommandName New-RetentionComplianceRule -MockWith {
+                    throw "Policy 'x' failed to be deployed. To fix this issue, please retry the policy operation after some time."
+                }
+            }
+
+            It 'Should warn instead of throwing from the Set method' {
+                { (New-M365DSCResourceInstance -ResourceName 'SCRetentionComplianceRule' -Property $testParams).Set() } | Should -Not -Throw
+                Should -Invoke -CommandName 'New-RetentionComplianceRule' -Exactly 1
             }
         }
 

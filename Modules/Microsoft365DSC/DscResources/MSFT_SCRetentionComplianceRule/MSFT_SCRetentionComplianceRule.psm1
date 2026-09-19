@@ -105,7 +105,7 @@ class SCRetentionComplianceRule : M365DSCResourceBase
 
                 $RuleObject = Invoke-M365DSCCommand -ScriptBlock { Get-RetentionComplianceRule -Identity $this.Name -ErrorAction Stop } -SuppressNotFoundError
 
-                if ($null -eq $RuleObject)
+                if ($null -eq $RuleObject -or $RuleObject.Mode -eq 'PendingDeletion')
                 {
                     Write-Verbose -Message "RetentionComplianceRule $($this.Name) does not exist."
                     return $this.AsResult($nullReturn)
@@ -138,7 +138,7 @@ class SCRetentionComplianceRule : M365DSCResourceBase
                 CertificateThumbprint        = $this.CertificateThumbprint
                 CertificatePath              = $this.CertificatePath
                 CertificatePassword          = $this.CertificatePassword
-                ManagedIdentity              = $this.ManagedIdentity.IsPresent
+                ManagedIdentity              = $this.ManagedIdentity
                 AccessTokens                 = $this.AccessTokens
             }
             if (-not $associatedPolicy.TeamsPolicy)
@@ -160,7 +160,6 @@ class SCRetentionComplianceRule : M365DSCResourceBase
 
     [void] Set()
     {
-        $CurrentPolicy = $null
         if ($this.RequiresPowerShellCore())
         {
             $null = $this.InvokeInPowerShellCore('Set')
@@ -218,7 +217,19 @@ class SCRetentionComplianceRule : M365DSCResourceBase
             }
 
             Write-Verbose -Message "Creating new RetentionComplianceRule with values:`r`n$(Convert-M365DscHashtableToString -Hashtable $CreationParams)"
-            New-RetentionComplianceRule @CreationParams
+            try
+            {
+                New-RetentionComplianceRule @CreationParams -ErrorAction Stop
+            }
+            catch
+            {
+                if ($_.Exception.Message -notlike '*failed to be deployed*')
+                {
+                    throw
+                }
+
+                Write-Warning -Message "The creation succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+            }
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentRule.Ensure -eq 'Present')
         {
@@ -279,23 +290,40 @@ class SCRetentionComplianceRule : M365DSCResourceBase
                 }
                 catch
                 {
-                    if ($_.Exception.Message -like '*are being deployed. Once deployed, additional actions can be performed*')
+                    if ($_.Exception.Message -like '*failed to be deployed*')
+                    {
+                        Write-Warning -Message "The update succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+                        $success = $true
+                    }
+                    elseif ($_.Exception.Message -like '*are being deployed. Once deployed, additional actions can be performed*' -and $retries -lt 10)
                     {
                         Write-Verbose -Message "The associated policy has pending changes being deployed. Waiting 30 seconds for a maximum of 300 seconds (5 minutes). Total time waited so far {$($retries * 30) seconds}"
                         Start-Sleep -Seconds 30
                     }
                     else
                     {
-                        $success = $true
+                        throw
                     }
                 }
                 $retries++
             }
         }
-        elseif ($this.Ensure -eq 'Absent' -and $CurrentPolicy.Ensure -eq 'Present')
+        elseif ($this.Ensure -eq 'Absent' -and $CurrentRule.Ensure -eq 'Present')
         {
             # If the Rule exists and it shouldn't, simply remove it;
-            Remove-RetentionComplianceRule -Identity $this.Name
+            try
+            {
+                Remove-RetentionComplianceRule -Identity $this.Name -Confirm:$false -ErrorAction Stop
+            }
+            catch
+            {
+                if ($_.Exception.Message -notlike '*failed to be deployed*')
+                {
+                    throw
+                }
+
+                Write-Warning -Message "The removal succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+            }
         }
     }
 
@@ -319,7 +347,7 @@ class SCRetentionComplianceRule : M365DSCResourceBase
 
         try
         {
-            [array]$policies = Get-RetentionCompliancePolicy -ErrorAction Stop
+            [array]$policies = @(Get-RetentionCompliancePolicy -ErrorAction Stop | Where-Object -FilterScript { $_.Mode -ne 'PendingDeletion' })
 
             $j = 1
             $dscContent = [System.Text.StringBuilder]::new()
@@ -333,7 +361,7 @@ class SCRetentionComplianceRule : M365DSCResourceBase
             }
             foreach ($policy in $policies)
             {
-                [array]$rules = Get-RetentionComplianceRule -Policy $policy.Name
+                [array]$rules = @(Get-RetentionComplianceRule -Policy $policy.Name | Where-Object -FilterScript { $_.Mode -ne 'PendingDeletion' })
                 Write-M365DSCHost -Message "    Policy [$j/$($policies.Length)] $($policy.Name)"
                 $i = 1
 

@@ -13,12 +13,16 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
     [System.String] $Ensure
 
     [DscProperty()]
-    [System.ComponentModel.Description('The Comment parameter specifies an optional comment.')]
-    [System.String] $Comment
+    [System.ComponentModel.Description('The AdaptiveScopeLocation parameter specifies the names of the adaptive scopes the policy applies to. An adaptive policy cannot use any other location, and a policy cannot switch between adaptive and static locations.')]
+    [System.String[]] $AdaptiveScopeLocation
 
     [DscProperty()]
-    [System.ComponentModel.Description('Location of the dynamic scope for this policy.')]
-    [System.String[]] $DynamicScopeLocation
+    [System.ComponentModel.Description('The Applications parameter specifies the workloads the policy applies to, in the format <LocationType>:<Workload>, for example User:Exchange. Adaptive scopes of the User or Group location type require it.')]
+    [System.String[]] $Applications
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The Comment parameter specifies an optional comment.')]
+    [System.String] $Comment
 
     [DscProperty()]
     [System.ComponentModel.Description('Determines if the policy is enabled or not.')]
@@ -146,7 +150,7 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
 
                 $PolicyObject = Invoke-M365DSCCommand -ScriptBlock { Get-RetentionCompliancePolicy -Identity $this.Name -DistributionDetail -ErrorAction Stop } -SuppressNotFoundError
 
-                if ($null -eq $PolicyObject)
+                if ($null -eq $PolicyObject -or $PolicyObject.Mode -eq 'PendingDeletion')
                 {
                     Write-Verbose -Message "RetentionCompliancePolicy $($this.Name) does not exist."
                     return $this.AsResult($nullReturn)
@@ -177,7 +181,7 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
                     CertificateThumbprint         = $this.CertificateThumbprint
                     CertificatePath               = $this.CertificatePath
                     CertificatePassword           = $this.CertificatePassword
-                    ManagedIdentity               = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity               = $this.ManagedIdentity
                     AccessTokens                  = $this.AccessTokens
                 }
 
@@ -195,7 +199,7 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
                 }
                 if ($PolicyObject.TeamsChatLocationException.Count -gt 0)
                 {
-                    $result.TeamsChatLocationException = $PolicyObject.TeamsChatLocationException.Name
+                    $result.TeamsChatLocationException = [array]$PolicyObject.TeamsChatLocationException.Name
                 }
             }
             else
@@ -203,8 +207,9 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
                 $result = @{
                     Ensure                       = 'Present'
                     Name                         = $PolicyObject.Name
+                    AdaptiveScopeLocation        = $null
+                    Applications                 = $null
                     Comment                      = $PolicyObject.Comment
-                    DynamicScopeLocation         = @()
                     Enabled                      = $PolicyObject.Enabled
                     ExchangeLocation             = @()
                     ExchangeLocationException    = @()
@@ -224,12 +229,17 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
                     CertificateThumbprint        = $this.CertificateThumbprint
                     CertificatePath              = $this.CertificatePath
                     CertificatePassword          = $this.CertificatePassword
+                    ManagedIdentity              = $this.ManagedIdentity
                     AccessTokens                 = $this.AccessTokens
                 }
 
-                if ($PolicyObject.DynamicScopeLocation.Count -gt 0)
+                if ($PolicyObject.AdaptiveScopeLocation.Count -gt 0)
                 {
-                    $result.DynamicScopeLocation = [array]$PolicyObject.DynamicScopeLocation.Name
+                    $result.AdaptiveScopeLocation = [array]$PolicyObject.AdaptiveScopeLocation.Name
+                }
+                if ($PolicyObject.Applications.Count -gt 0)
+                {
+                    $result.Applications = [System.String[]]$PolicyObject.Applications
                 }
                 if ($PolicyObject.ExchangeLocation.Count -gt 0)
                 {
@@ -296,11 +306,20 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
             return
         }
 
-        if ($null -eq $this.SharePointLocation -and $null -eq $this.ExchangeLocation -and $null -eq $this.OneDriveLocation -and `
-                $null -eq $this.SkypeLocation -and $null -eq $this.PublicFolderLocation -and $null -eq $this.ModernGroupLocation -and `
-                $null -eq $this.TeamsChannelLocation -and $null -eq $this.TeamsChatLocation -and $this.Ensure -eq 'Present')
+        $staticLocations = @(
+            $this.SharePointLocation, $this.ExchangeLocation, $this.OneDriveLocation, $this.SkypeLocation,
+            $this.PublicFolderLocation, $this.ModernGroupLocation, $this.TeamsChannelLocation, $this.TeamsChatLocation
+        ) | Where-Object -FilterScript { $null -ne $_ }
+        $isAdaptive = @($this.AdaptiveScopeLocation | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) }).Count -gt 0
+
+        if (-not $isAdaptive -and @($staticLocations).Count -eq 0 -and $this.Ensure -eq 'Present')
         {
             throw 'You need to specify at least one Location for this Policy.'
+        }
+
+        if ($isAdaptive -and @($staticLocations).Count -gt 0)
+        {
+            throw "Retention Compliance Policy {$($this.Name)} cannot combine AdaptiveScopeLocation with static locations."
         }
 
         if ($null -ne $this.SkypeLocation -and $this.SkypeLocation -eq 'all')
@@ -316,6 +335,12 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
 
         $CurrentPolicy = $this.Get().ToHashtable()
 
+        if ($this.Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Present' -and
+            $isAdaptive -ne (@($CurrentPolicy.AdaptiveScopeLocation | Where-Object -FilterScript { -not [System.String]::IsNullOrEmpty($_) }).Count -gt 0))
+        {
+            throw "Retention Compliance Policy {$($this.Name)} cannot switch between adaptive and static locations. Remove the policy and create it again instead."
+        }
+
         $isTeamsBased = $false
         if ($null -eq $this.TeamsChannelLocation -and $null -eq $this.TeamsChatLocation)
         {
@@ -326,10 +351,27 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
             $CreationParams.Remove('TeamsChannelLocationException')
             $CreationParams.Remove('TeamsChatLocation')
             $CreationParams.Remove('TeamsChatLocationException')
-            $CreationParams.Remove('DynamicScopeLocation')
 
             if ($CurrentPolicy.Ensure -eq 'Present')
             {
+                if ($isAdaptive)
+                {
+                    $ToBeRemoved = $CurrentPolicy.AdaptiveScopeLocation | `
+                            Where-Object { $this.AdaptiveScopeLocation -notcontains $_ }
+                    if ($null -ne $ToBeRemoved)
+                    {
+                        $CreationParams.Add('RemoveAdaptiveScopeLocation', $ToBeRemoved)
+                    }
+
+                    $ToBeAdded = $this.AdaptiveScopeLocation | `
+                            Where-Object { $CurrentPolicy.AdaptiveScopeLocation -notcontains $_ }
+                    if ($null -ne $ToBeAdded)
+                    {
+                        $CreationParams.Add('AddAdaptiveScopeLocation', $ToBeAdded)
+                    }
+                    $CreationParams.Remove('AdaptiveScopeLocation')
+                }
+
                 # Exchange Location is specified or already existing, we need to determine
                 # the delta.
                 if ($null -ne $CurrentPolicy.ExchangeLocation -or `
@@ -662,7 +704,7 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
             if ($null -ne $CurrentPolicy.TeamsChannelLocationException -or `
                     $null -ne $this.TeamsChannelLocationException)
             {
-                $ToBeRemoved = $CurrentPolicy.TeamsChannelChannelLocationException | `
+                $ToBeRemoved = $CurrentPolicy.TeamsChannelLocationException | `
                         Where-Object { $this.TeamsChannelLocationException -notcontains $_ }
                 if ($null -ne $ToBeRemoved)
                 {
@@ -684,7 +726,19 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
             $CreationParams.Add('Name', $this.Name)
             $CreationParams.Remove('Identity') | Out-Null
             Write-Verbose -Message "Creating new Retention Compliance Policy $($this.Name) with values: $(Convert-M365DscHashtableToString -Hashtable $CreationParams)"
-            New-RetentionCompliancePolicy @CreationParams
+            try
+            {
+                New-RetentionCompliancePolicy @CreationParams -ErrorAction Stop
+            }
+            catch
+            {
+                if ($_.Exception.Message -notlike '*failed to be deployed*')
+                {
+                    throw
+                }
+
+                Write-Warning -Message "The creation succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+            }
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentPolicy.Ensure -eq 'Present')
         {
@@ -711,14 +765,19 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
                 }
                 catch
                 {
-                    if ($_.Exception.Message -like '*are being deployed. Once deployed, additional actions can be performed*')
+                    if ($_.Exception.Message -like '*failed to be deployed*')
+                    {
+                        Write-Warning -Message "The update succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+                        $success = $true
+                    }
+                    elseif ($_.Exception.Message -like '*are being deployed. Once deployed, additional actions can be performed*' -and $retries -lt 10)
                     {
                         Write-Verbose -Message "The policy has pending changes being deployed. Waiting 30 seconds for a maximum of 300 seconds (5 minutes). Total time waited so far {$($retries * 30) seconds}"
                         Start-Sleep -Seconds 30
                     }
                     else
                     {
-                        $success = $true
+                        throw
                     }
                 }
                 $retries++
@@ -726,8 +785,34 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Absent' -and $CurrentPolicy.Ensure -eq 'Present')
         {
-            # If the Policy exists and it shouldn't, simply remove it;
-            Remove-RetentionCompliancePolicy -Identity $this.Name
+            $success = $false
+            $retries = 1
+            while (!$success -and $retries -le 10)
+            {
+                try
+                {
+                    Remove-RetentionCompliancePolicy -Identity $this.Name -Confirm:$false -ErrorAction Stop
+                    $success = $true
+                }
+                catch
+                {
+                    if ($_.Exception.Message -like '*failed to be deployed*')
+                    {
+                        Write-Warning -Message "The removal succeeded, but the policy failed to be deployed. The service retries the deployment later. $($_.Exception.Message)"
+                        $success = $true
+                    }
+                    elseif ($_.Exception.Message -like '*are being deployed. Once deployed, additional actions can be performed*' -and $retries -lt 10)
+                    {
+                        Write-Verbose -Message "The policy has pending changes being deployed. Waiting 30 seconds for a maximum of 300 seconds (5 minutes). Total time waited so far {$($retries * 30) seconds}"
+                        Start-Sleep -Seconds 30
+                    }
+                    else
+                    {
+                        throw
+                    }
+                }
+                $retries++
+            }
         }
     }
 
@@ -751,7 +836,7 @@ class SCRetentionCompliancePolicy : M365DSCResourceBase
 
         try
         {
-            [array]$policies = Get-RetentionCompliancePolicy -DistributionDetail -ErrorAction Stop
+            [array]$policies = @(Get-RetentionCompliancePolicy -DistributionDetail -ErrorAction Stop | Where-Object -FilterScript { $_.Mode -ne 'PendingDeletion' })
 
             $i = 1
             if ($policies.Length -eq 0)
