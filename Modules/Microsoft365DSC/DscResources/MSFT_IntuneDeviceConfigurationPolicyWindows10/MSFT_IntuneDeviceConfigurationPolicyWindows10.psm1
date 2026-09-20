@@ -150,7 +150,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Gets or sets Defenders actions to take on detected Malware per threat level.')]
-    [MSFT_MicrosoftGraphdefenderDetectedMalwareActions1] $DefenderDetectedMalwareActions
+    [MSFT_MicrosoftGraphdefenderDetectedMalwareActions] $DefenderDetectedMalwareActions
 
     [DscProperty()]
     [System.ComponentModel.Description('When blocked, catch-up scans for scheduled full scans will be turned off.')]
@@ -1934,7 +1934,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.DefenderDetectedMalwareActions `
-                        -CIMInstanceName 'MicrosoftGraphdefenderDetectedMalwareActions1'
+                        -CIMInstanceName 'MicrosoftGraphdefenderDetectedMalwareActions'
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.DefenderDetectedMalwareActions = $complexTypeStringResult
@@ -2110,7 +2110,7 @@ class IntuneDeviceConfigurationPolicyWindows10 : M365DSCResourceBase
     }
 }
 
-class MSFT_MicrosoftGraphdefenderDetectedMalwareActions1
+class MSFT_MicrosoftGraphdefenderDetectedMalwareActions
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates a Defender action to take for high severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block.')]

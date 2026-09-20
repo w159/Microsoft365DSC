@@ -42,7 +42,7 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('The large icon, to be displayed in the app details and used for upload of the icon.')]
-    [MSFT_MicrosoftGraphMimeContent2] $LargeIcon
+    [MSFT_MicrosoftGraphMimeContent] $LargeIcon
 
     [DscProperty()]
     [System.ComponentModel.Description('The identifier of a specific branch in a product, which is a specific subset of product functionality as defined by the publisher . This is run-time resolved to be the latest MobileAppCatalogPackage in the branch. (example:''31a4c766-f23d-8d41-4803-35e155be7389''). Read-Only')]
@@ -434,7 +434,7 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.LargeIcon `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphMimeContent2'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphMimeContent'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.LargeIcon = $complexTypeStringResult
@@ -601,13 +601,13 @@ class MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppInstallExperience
     [System.String] $RunAsAccount
 }
 
-class MSFT_MicrosoftGraphMimeContent2
+class MSFT_MicrosoftGraphMimeContent
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the content mime type.')]
     [System.String] $Type
 
     [DscProperty()]
-    [System.ComponentModel.Description('The byte array that contains the actual content.')]
+    [System.ComponentModel.Description('The Base64 encoded string content.')]
     [System.String] $Value
 }

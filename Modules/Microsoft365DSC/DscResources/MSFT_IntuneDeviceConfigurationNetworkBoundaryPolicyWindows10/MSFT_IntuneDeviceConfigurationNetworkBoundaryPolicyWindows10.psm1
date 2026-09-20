@@ -408,12 +408,12 @@ class IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 : M365DSCResourceB
                         }
                         @{
                             Name            = 'EnterpriseCloudResources'
-                            CimInstanceName = 'MicrosoftGraphProxiedDomain1'
+                            CimInstanceName = 'MicrosoftGraphProxiedDomain'
                             IsRequired      = $False
                         }
                         @{
                             Name            = 'EnterpriseIPRanges'
-                            CimInstanceName = 'MicrosoftGraphIpRange1'
+                            CimInstanceName = 'MicrosoftGraphIpRange'
                             IsRequired      = $False
                         }
                     )
@@ -536,7 +536,7 @@ class MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy
 {
     [DscProperty()]
     [System.ComponentModel.Description('Contains a list of enterprise resource domains hosted in the cloud that need to be protected. Connections to these resources are considered enterprise data. If a proxy is paired with a cloud resource, traffic to the cloud resource will be routed through the enterprise network via the denoted proxy server (on Port 80). A proxy server used for this purpose must also be configured using the EnterpriseInternalProxyServers policy. This collection can contain a maximum of 500 elements.')]
-    [MSFT_MicrosoftGraphProxiedDomain1[]] $EnterpriseCloudResources
+    [MSFT_MicrosoftGraphProxiedDomain[]] $EnterpriseCloudResources
 
     [DscProperty()]
     [System.ComponentModel.Description('This is the comma-separated list of internal proxy servers. For example, ''157.54.14.28, 157.54.11.118, 10.202.14.167, 157.53.14.163, 157.69.210.59''. These proxies have been configured by the admin to connect to specific resources on the Internet. They are considered to be enterprise network locations. The proxies are only leveraged in configuring the EnterpriseCloudResources policy to force traffic to the matched cloud resources through these proxies.')]
@@ -544,7 +544,7 @@ class MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy
 
     [DscProperty()]
     [System.ComponentModel.Description('Sets the enterprise IP ranges that define the computers in the enterprise network. Data that comes from those computers will be considered part of the enterprise and protected. These locations will be considered a safe destination for enterprise data to be shared to. This collection can contain a maximum of 500 elements.')]
-    [MSFT_MicrosoftGraphIpRange1[]] $EnterpriseIPRanges
+    [MSFT_MicrosoftGraphIpRange[]] $EnterpriseIPRanges
 
     [DscProperty()]
     [System.ComponentModel.Description('Boolean value that tells the client to accept the configured list and not to use heuristics to attempt to find other subnets. Default is false.')]
@@ -653,7 +653,7 @@ class MSFT_DeviceManagementConfigurationPolicyAssignments
     [System.String] $collectionId
 }
 
-class MSFT_MicrosoftGraphProxiedDomain1
+class MSFT_MicrosoftGraphProxiedDomain
 {
     [DscProperty(Mandatory)]
     [System.ComponentModel.Description('The IP address or FQDN')]
@@ -664,7 +664,7 @@ class MSFT_MicrosoftGraphProxiedDomain1
     [System.String] $Proxy
 }
 
-class MSFT_MicrosoftGraphIpRange1
+class MSFT_MicrosoftGraphIpRange
 {
     [DscProperty()]
     [System.ComponentModel.Description('CIDR address.')]

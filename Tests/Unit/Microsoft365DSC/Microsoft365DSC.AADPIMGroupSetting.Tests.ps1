@@ -566,13 +566,13 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should return Values from the get method' {
                 ((New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be "Present"
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
-                Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
+                Should -Invoke -CommandName Invoke-M365DSCGraphBatchRequest -Exactly 1
             }
 
             It 'Should return true from the test method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Test() | Should -Be $true
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
-                Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
+                Should -Invoke -CommandName Invoke-M365DSCGraphBatchRequest -Exactly 1
             }
         }
 
@@ -628,14 +628,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should return values from the get method' {
                 ((New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be "Present"
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
-                Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
+                Should -Invoke -CommandName Invoke-M365DSCGraphBatchRequest -Exactly 1
             }
 
             It 'Should call the set method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADPIMGroupSetting' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Update-MgBetaPolicyRoleManagementPolicyRule' -Exactly 15
                 Should -Invoke -CommandName Get-MgGroup -Exactly 1
-                Should -Invoke -CommandName Get-MgPolicyRoleManagementPolicyAssignment -Exactly 1
+                Should -Invoke -CommandName Invoke-M365DSCGraphBatchRequest -Exactly 1
             }
         }
 

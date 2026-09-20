@@ -35,7 +35,7 @@ Configuration Example
             Ensure                = "Present";
             InformationUrl        = "https://intranet.contoso.com/apps/self-service";
             IsFeatured            = $true; # Updated Property
-            LargeIcon             = MSFT_MicrosoftGraphmimeContent{
+            LargeIcon             = MSFT_MicrosoftGraphMimeContent{
                 Type  = "image/png"
                 Value = "<base64-encoded-app-icon>"
             };

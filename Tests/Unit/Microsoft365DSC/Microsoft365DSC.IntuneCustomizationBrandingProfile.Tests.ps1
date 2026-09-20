@@ -152,11 +152,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "FakeStringValue"
                     EnrollmentAvailability = "availableWithPrompts"
                     Id = "FakeStringValue"
-                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue3'
                     })
-                    LightBackgroundLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LightBackgroundLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue2'
                     })
@@ -176,7 +176,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         g = 0
                         b = 0
                     })
-                    ThemeColorLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    ThemeColorLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue1'
                     })
@@ -219,11 +219,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "FakeStringValue"
                     EnrollmentAvailability = "availableWithPrompts"
                     Id = "FakeStringValue"
-                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue3'
                     })
-                    LightBackgroundLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LightBackgroundLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue2'
                     })
@@ -243,7 +243,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         g = 0
                         b = 0
                     })
-                    ThemeColorLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    ThemeColorLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue1'
                     })
@@ -285,11 +285,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "FakeStringValue"
                     EnrollmentAvailability = "availableWithPrompts"
                     Id = "FakeStringValue"
-                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue3'
                     })
-                    LightBackgroundLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LightBackgroundLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue2'
                     })
@@ -309,7 +309,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         g = 0
                         b = 0
                     })
-                    ThemeColorLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    ThemeColorLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue1'
                     })
@@ -342,11 +342,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DisplayName = "FakeStringValue"
                     EnrollmentAvailability = "availableWithPrompts"
                     Id = "FakeStringValue"
-                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LandingPageCustomizedImage = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue2' # Drift
                     })
-                    LightBackgroundLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LightBackgroundLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue2'
                     })
@@ -366,7 +366,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         g = 0
                         b = 0
                     })
-                    ThemeColorLogo = ([MSFT_MicrosoftGraphmimeContent] @{
+                    ThemeColorLogo = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "image/png"
                         Value = 'FakeStringValue1'
                     })

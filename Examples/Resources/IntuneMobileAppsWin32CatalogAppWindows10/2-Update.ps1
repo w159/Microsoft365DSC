@@ -41,14 +41,14 @@ Configuration Example
             FileName                       = "7z2603-x64.msi";
             InformationUrl                 = "https://www.7-zip.org";
             InstallCommandLine             = "msiexec.exe /i `"7z2603-x64.msi`" /qn";
-            InstallExperience              = MSFT_MicrosoftGraphWin32CatalogAppInstallExperience{
+            InstallExperience              = MSFT_MicrosoftGraphWin32LobAppInstallExperience1{
                 DeviceRestartBehavior = "basedOnReturnCode"
                 InUseBehavior         = "notEnabled"
                 MaxRunTimeInMinutes   = 60
                 RunAsAccount          = "system"
             };
             IsFeatured                     = $false;
-            LargeIcon                      = MSFT_MicrosoftGraphMimeContent2{
+            LargeIcon                      = MSFT_MicrosoftGraphMimeContent{
                 Type  = "image/png"
                 Value = "<base64-encoded-app-icon>"
             };
@@ -58,7 +58,7 @@ Configuration Example
             MinimumNumberOfProcessors      = 1;
             MinimumSupportedWindowsRelease = "1607";
             MobileAppCatalogPackageId      = "eac00000-af3f-4678-b9a7-ca22b5db724d";
-            MsiInformation                 = MSFT_MicrosoftGraphWin32CatalogAppMsiInformation{
+            MsiInformation                 = MSFT_MicrosoftGraphWin32LobAppMsiInformation{
                 PackageType    = "perMachine"
                 ProductCode    = "{23170F69-40C1-2702-2603-000001000000}"
                 ProductName    = "7-Zip"
@@ -72,14 +72,14 @@ Configuration Example
             PrivacyInformationUrl          = "https://www.7-zip.org/faq.html";
             Publisher                      = "Igor Pavlov";
             ReturnCodes                    = @(
-                MSFT_MicrosoftGraphWin32CatalogAppReturnCode{
+                MSFT_MicrosoftGraphWin32LobAppReturnCode{
                     ReturnCode = 0
                     Type       = "success"
                 }
             );
             RoleScopeTagIds                = @("0");
             Rules                          = @(
-                MSFT_MicrosoftGraphWin32CatalogAppRule{
+                MSFT_MicrosoftGraphWin32LobAppRule1{
                     Check32BitOn64System   = $false
                     ComparisonValue        = "26.03.00.0"
                     KeyPath                = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{23170F69-40C1-2702-2603-000001000000}"

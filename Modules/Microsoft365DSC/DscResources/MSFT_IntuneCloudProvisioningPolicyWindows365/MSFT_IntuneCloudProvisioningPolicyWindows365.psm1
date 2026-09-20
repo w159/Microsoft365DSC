@@ -496,20 +496,6 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
                         $Results.Remove('DomainJoinConfigurations') | Out-Null
                     }
                 }
-                if ($null -ne $Results.MicrosoftManagedDesktop)
-                {
-                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
-                        -ComplexObject $Results.MicrosoftManagedDesktop `
-                        -CIMInstanceName 'MicrosoftGraphMicrosoftManagedDesktop'
-                    if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
-                    {
-                        $Results.MicrosoftManagedDesktop = $complexTypeStringResult
-                    }
-                    else
-                    {
-                        $Results.Remove('MicrosoftManagedDesktop') | Out-Null
-                    }
-                }
                 if ($null -ne $Results.WindowsSetting)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -557,7 +543,7 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'Autopatch', 'AutopilotConfiguration', 'DomainJoinConfigurations', 'MicrosoftManagedDesktop', 'WindowsSetting', 'WindowsSettings') `
+                    -NoEscape @('Assignments', 'Autopatch', 'AutopilotConfiguration', 'DomainJoinConfigurations', 'WindowsSetting', 'WindowsSettings') `
                     -RawResults $rawResults
 
                 [void]$dscContent.Append($currentDSCBlock)

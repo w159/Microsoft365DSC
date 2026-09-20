@@ -704,7 +704,7 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
                             }
                             @{
                                 Name            = 'Range'
-                                CimInstanceName = 'MicrosoftGraphRecurrenceRange1'
+                                CimInstanceName = 'MicrosoftGraphRecurrenceRange'
                                 IsRequired      = $False
                             }
                         )
@@ -835,7 +835,7 @@ class MSFT_MicrosoftGraphPatternedRecurrence1
 
     [DscProperty()]
     [System.ComponentModel.Description('The duration of an event.')]
-    [MSFT_MicrosoftGraphRecurrenceRange1] $Range
+    [MSFT_MicrosoftGraphRecurrenceRange] $Range
 }
 
 class MSFT_MicrosoftGraphRecurrencePattern1
@@ -873,7 +873,7 @@ class MSFT_MicrosoftGraphRecurrencePattern1
     [System.String] $Type
 }
 
-class MSFT_MicrosoftGraphRecurrenceRange1
+class MSFT_MicrosoftGraphRecurrenceRange
 {
     [DscProperty()]
     [System.ComponentModel.Description('The date to stop applying the recurrence pattern. Depending on the recurrence pattern of the event, the last occurrence of the meeting may not be this date. Required if type is endDate.')]
@@ -892,7 +892,7 @@ class MSFT_MicrosoftGraphRecurrenceRange1
     [System.String] $StartDate
 
     [DscProperty()]
-    [System.ComponentModel.Description('The recurrence range. The possible values are: endDate, noEnd, numbered. Required.')]
+    [System.ComponentModel.Description('The recurrence range. Possible values are: endDate, noEnd, numbered. Required.')]
     [ValidateSet('endDate', 'noEnd', 'numbered')]
     [System.String] $Type
 }

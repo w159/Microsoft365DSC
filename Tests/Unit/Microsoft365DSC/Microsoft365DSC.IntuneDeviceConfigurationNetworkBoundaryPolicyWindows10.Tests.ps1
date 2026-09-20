@@ -134,7 +134,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
                             EnterpriseCloudResources               = @(
-                            ([MSFT_MicrosoftGraphProxiedDomain1] @{
+                            ([MSFT_MicrosoftGraphProxiedDomain] @{
                                     Proxy           = 'FakeStringValue'
                                     IpAddressOrFQDN = 'FakeStringValue'
                                 })
@@ -142,7 +142,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseProxyServersAreAuthoritative = $True
                             EnterpriseNetworkDomainNames           = @('FakeStringValue')
                             EnterpriseIPRanges                     = @(
-                            ([MSFT_MicrosoftGraphIpRange1] @{
+                            ([MSFT_MicrosoftGraphIpRange] @{
                                     UpperAddress = 'FakeStringValue'
                                     LowerAddress = 'FakeStringValue'
                                     odataType    = '#microsoft.graph.iPv4Range'
@@ -197,7 +197,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
                             EnterpriseCloudResources               = @(
-                            ([MSFT_MicrosoftGraphProxiedDomain1] @{
+                            ([MSFT_MicrosoftGraphProxiedDomain] @{
                                     Proxy           = 'FakeStringValue'
                                     IpAddressOrFQDN = 'FakeStringValue'
                                 })
@@ -205,7 +205,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseProxyServersAreAuthoritative = $True
                             EnterpriseNetworkDomainNames           = @('FakeStringValue')
                             EnterpriseIPRanges                     = @(
-                            ([MSFT_MicrosoftGraphIpRange1] @{
+                            ([MSFT_MicrosoftGraphIpRange] @{
                                     UpperAddress = 'FakeStringValue'
                                     LowerAddress = 'FakeStringValue'
                                     odataType    = '#microsoft.graph.iPv4Range'
@@ -258,7 +258,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $True
                             EnterpriseCloudResources               = @(
-                            ([MSFT_MicrosoftGraphProxiedDomain1] @{
+                            ([MSFT_MicrosoftGraphProxiedDomain] @{
                                     Proxy           = 'FakeStringValue'
                                     IpAddressOrFQDN = 'FakeStringValue'
                                 })
@@ -266,7 +266,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseProxyServersAreAuthoritative = $True
                             EnterpriseNetworkDomainNames           = @('FakeStringValue')
                             EnterpriseIPRanges                     = @(
-                            ([MSFT_MicrosoftGraphIpRange1] @{
+                            ([MSFT_MicrosoftGraphIpRange] @{
                                     UpperAddress = 'FakeStringValue'
                                     LowerAddress = 'FakeStringValue'
                                     odataType    = '#microsoft.graph.iPv4Range'
@@ -312,7 +312,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseInternalProxyServers         = @('FakeStringValue')
                             EnterpriseIPRangesAreAuthoritative     = $False # Updated property
                             EnterpriseCloudResources               = @(
-                            ([MSFT_MicrosoftGraphProxiedDomain1] @{
+                            ([MSFT_MicrosoftGraphProxiedDomain] @{
                                     Proxy           = 'FakeStringValue'
                                     IpAddressOrFQDN = 'FakeStringValue'
                                 })
@@ -320,7 +320,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             EnterpriseProxyServersAreAuthoritative = $True
                             EnterpriseNetworkDomainNames           = @('FakeStringValue')
                             EnterpriseIPRanges                     = @(
-                            ([MSFT_MicrosoftGraphIpRange1] @{
+                            ([MSFT_MicrosoftGraphIpRange] @{
                                     UpperAddress = 'FakeStringValue'
                                     LowerAddress = 'FakeStringValue'
                                     odataType    = '#microsoft.graph.iPv4Range'

@@ -68,6 +68,16 @@
   * Added support for the `Theme` and `WritebackConfiguration` properties.
   * Fixed a failed license assignment only being written to verbose output instead of
     failing the operation.
+* AADGroupEligibilitySchedule
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphRecurrenceRange1` to
+    `MSFT_MicrosoftGraphRecurrenceRange`.
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphRecurrencePattern1`
+    to `MSFT_MicrosoftGraphPrivilegedAccessRecurrencePattern`.
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphPatternedRecurrence1`
+    to `MSFT_MicrosoftGraphPrivilegedAccessPatternedRecurrence`.
+* AADGroupEligibilitySchedule
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphRecurrenceRange1` to
+    `MSFT_MicrosoftGraphRecurrenceRange`.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
@@ -288,6 +298,14 @@
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
 * IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphIpRange1` to
+    `MSFT_MicrosoftGraphIpRange`.
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphProxiedDomain1` to
+    `MSFT_MicrosoftGraphProxiedDomain`.
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphIpRange1` to
+    `MSFT_MicrosoftGraphIpRange`.
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphProxiedDomain1` to
+    `MSFT_MicrosoftGraphProxiedDomain`.
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
@@ -307,6 +325,12 @@
 * IntuneDeviceConfigurationPolicyMacOS
   * Added support for the `ActivationLockWhenSupervisedAllowed` property.
 * IntuneDeviceConfigurationPolicyWindows10
+  * [BREAKING CHANGE] Renamed the embedded class
+    `MSFT_MicrosoftGraphdefenderDetectedMalwareActions1` to
+    `MSFT_MicrosoftGraphdefenderDetectedMalwareActions`.
+  * [BREAKING CHANGE] Renamed the embedded class
+    `MSFT_MicrosoftGraphdefenderDetectedMalwareActions1` to
+    `MSFT_MicrosoftGraphdefenderDetectedMalwareActions`.
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
@@ -355,6 +379,8 @@
 * IntuneDeviceFeaturesConfigurationPolicyIOS
   * Removed null-valued `displayName` properties from nested home screen page instances.
 * IntuneDeviceFeaturesConfigurationPolicyMacOS
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphIpRange2` to
+    `MSFT_MicrosoftGraphContentCachingIpRange`.
   * Initial release.
 * IntuneDeviceManagementAndroidDeviceOwnerEnrollmentProfile
   * Added support for the `DeviceNameTemplate` property.
@@ -365,6 +391,8 @@
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
 * IntuneMobileAppsAutoUpdateCatalogAppWindows10
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphMimeContent2` to
+    `MSFT_MicrosoftGraphMimeContent`.
   * Initial release.
 * IntuneMobileAppsBundleMacOS
   * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
@@ -390,6 +418,8 @@
   * Added support for the `Relationships` property, which carries the dependency and
     supersedence relationships of the app.
 * IntuneMobileAppsWin32CatalogAppWindows10
+  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphMimeContent2` to
+    `MSFT_MicrosoftGraphMimeContent`.
   * Initial release.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
@@ -470,6 +500,12 @@
   * [BREAKING CHANGE] Replaced the deprecated `Language` property with the `Locale`
     property.
 * IntuneWindowsAutopilotDeploymentProfileAzureADJoined
+  * [BREAKING CHANGE] Renamed the embedded class
+    `MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1` to
+    `MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings`.
+  * [BREAKING CHANGE] Renamed the embedded class
+    `MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1` to
+    `MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings`.
   * [BREAKING CHANGE] Replaced the deprecated `OutOfBoxExperienceSettings` property
     with the `OutOfBoxExperienceSetting` property. Its members now carry the names
     Microsoft Graph uses, so `HideEscapeLink` becomes `EscapeLinkHidden`, `HideEULA`
@@ -692,13 +728,14 @@
     resource origin id to the display name of the object behind it.
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.1.
-  * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.5.
+  * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.8.
   * Updated `DSCParser` to version 3.1.0.5.
   * Updated `Microsoft.Graph.*` to version 2.39.0.
-  * Updated `MSCloudLoginAssistant` to version 1.2.6.
+  * Updated `MSCloudLoginAssistant` to version 1.2.7.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
-  * Updated `ReverseDSC` to version 2.0.0.38.
+  * Updated `PSParallelPipeline` to version 1.3.0.
+  * Updated `ReverseDSC` to version 3.0.0.0.
 * MISC
   * Fixed every class-based resource failing `Set` under the Local Configuration Manager with
     'Index was out of range', after the change had already been applied. Windows PowerShell

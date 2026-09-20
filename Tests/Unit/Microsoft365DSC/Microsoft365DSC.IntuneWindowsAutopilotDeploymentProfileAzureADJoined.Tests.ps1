@@ -99,7 +99,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
                     PreprovisioningAllowed               = $True
-                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
+                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
                             AllowLogCollectionOnInstallFailure               = $True
@@ -148,7 +148,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
                     PreprovisioningAllowed               = $True
-                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
+                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
                             AllowLogCollectionOnInstallFailure               = $True
@@ -195,7 +195,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
                     PreprovisioningAllowed               = $True
-                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
+                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
                             AllowLogCollectionOnInstallFailure               = $True
@@ -234,7 +234,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DeviceType                     = 'windowsPc'
                     DisplayName                    = 'FakeStringValue'
                     PreprovisioningAllowed               = $True
-                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] @{
+                    EnrollmentStatusScreenSettings = ([MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] @{
                             HideInstallationProgress                         = $True
                             BlockDeviceSetupRetryByUser                      = $True
                             AllowLogCollectionOnInstallFailure               = $True

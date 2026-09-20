@@ -138,7 +138,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                     })
                     Notes = "FakeStringValue"
@@ -179,7 +179,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                     })
                     Notes = "FakeStringValue"
@@ -219,7 +219,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                     })
                     Notes = "FakeStringValue"
@@ -250,7 +250,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Id = "FakeStringValue"
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $False # Drift
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                     })
                     Notes = "FakeStringValue"

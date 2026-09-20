@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADPIMGroupSetting : M365DSCResourceBase
@@ -256,22 +256,14 @@ class AADPIMGroupSetting : M365DSCResourceBase
                 $groupFilter = "DisplayName eq '" + $($this.DisplayName -replace "'", "''") + "'"
                 $GroupId = (Get-MgGroup -Filter $groupFilter).Id
             }
-            if ($this.Id -notmatch '^Group_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_(owner|member)$')
-            {
-                Write-Verbose "ID was NOT match {$($this.id)}, groupid {$groupID}, RoleDefinitionId {$($this.RoleDefinitionId)}"
-                $Policy = Get-MgPolicyRoleManagementPolicyAssignment `
-                    -All `
-                    -Filter "scopeId eq '$groupId' and scopeType eq 'Group' and roleDefinitionId eq '$($this.RoleDefinitionId)'" `
-                    -ExpandProperty "policy(`$expand=rules)" `
-                    -ErrorAction SilentlyContinue
-            }
-            else
-            {
-                $Policy = Get-MgPolicyRoleManagementPolicyAssignment `
-                    -UnifiedRoleManagementPolicyAssignmentId $this.Id `
-                    -ExpandProperty "policy(`$expand=rules)" `
-                    -ErrorAction SilentlyContinue
-            }
+
+            $policyFilter = "scopeId eq '$groupId' and scopeType eq 'Group' and roleDefinitionId eq '$($this.RoleDefinitionId)'"
+            $policyResponses = Invoke-M365DSCGraphBatchRequest -AsList -Requests @(@{
+                    id     = $groupId
+                    method = 'GET'
+                    url    = "/policies/roleManagementPolicyAssignments?filter=$policyFilter&`$expand=policy(`$expand=rules)"
+                })
+            $Policy = @($policyResponses)[0].body.value | Select-Object -First 1
         }
         else
         {
@@ -288,26 +280,13 @@ class AADPIMGroupSetting : M365DSCResourceBase
         #Rules
         $role = $Policy.policy.rules
 
-        if ($this.ResourceCache['ExportMode'])
-        {
-            $ActivationMaxDurationValue = ($role | Where-Object { $_.Id -eq 'Expiration_EndUser_Assignment' }).maximumDuration
-            $ActivationReqJustificationValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Justification'
-            $ActivationReqTicketValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Ticketing'
-            $ActivationReqMFAValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'MultiFactorAuthentication'
-            $AuthenticationContextValue = ($role | Where-Object { $_.Id -eq 'AuthenticationContext_EndUser_Assignment' })
-            $ApprovaltoActivateValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.isApprovalRequired)
-            [array]$ActivateApproversValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.approvalStages.primaryApprovers)
-        }
-        else
-        {
-            $ActivationMaxDurationValue = ($role | Where-Object { $_.Id -eq 'Expiration_EndUser_Assignment' }).maximumDuration
-            $ActivationReqJustificationValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Justification'
-            $ActivationReqTicketValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Ticketing'
-            $ActivationReqMFAValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'MultiFactorAuthentication'
-            $AuthenticationContextValue = ($role | Where-Object { $_.Id -eq 'AuthenticationContext_EndUser_Assignment' })
-            $ApprovaltoActivateValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.isApprovalRequired)
-            [array]$ActivateApproversValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.approvalStages.primaryApprovers)
-        }
+        $ActivationMaxDurationValue = ($role | Where-Object { $_.Id -eq 'Expiration_EndUser_Assignment' }).maximumDuration
+        $ActivationReqJustificationValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Justification'
+        $ActivationReqTicketValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'Ticketing'
+        $ActivationReqMFAValue = (($role | Where-Object { $_.Id -eq 'Enablement_EndUser_Assignment' }).enabledRules) -contains 'MultiFactorAuthentication'
+        $AuthenticationContextValue = ($role | Where-Object { $_.Id -eq 'AuthenticationContext_EndUser_Assignment' })
+        $ApprovaltoActivateValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.isApprovalRequired)
+        [array]$ActivateApproversValue = (($role | Where-Object { $_.Id -eq 'Approval_EndUser_Assignment' }).setting.approvalStages.primaryApprovers)
         $AuthenticationContextRequiredValue = $AuthenticationContextValue.isEnabled
         if ($AuthenticationContextRequiredValue)
         {
@@ -503,21 +482,13 @@ class AADPIMGroupSetting : M365DSCResourceBase
             $GroupId = (Get-MgGroup -Filter $groupFilter).Id
         }
 
-        if ($this.Id -notmatch '^Group_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_(owner|member)$')
-        {
-            $Policy = Get-MgPolicyRoleManagementPolicyAssignment `
-                -All `
-                -Filter "scopeId eq '$groupId' and scopeType eq 'Group' and roleDefinitionId eq '$($this.RoleDefinitionId)'" `
-                -ExpandProperty "policy(`$expand=rules)" `
-                -ErrorAction SilentlyContinue
-        }
-        else
-        {
-            $Policy = Get-MgPolicyRoleManagementPolicyAssignment `
-                -UnifiedRoleManagementPolicyAssignmentId $this.Id `
-                -ExpandProperty "policy(`$expand=rules)" `
-                -ErrorAction SilentlyContinue
-        }
+        $policyFilter = "scopeId eq '$groupId' and scopeType eq 'Group' and roleDefinitionId eq '$($this.RoleDefinitionId)'"
+        $policyResponses = Invoke-M365DSCGraphBatchRequest -AsList -Requests @(@{
+                id     = $groupId
+                method = 'GET'
+                url    = "/policies/roleManagementPolicyAssignments?filter=$policyFilter&`$expand=policy(`$expand=rules)"
+            })
+        $Policy = @($policyResponses)[0].body.value | Select-Object -First 1
 
         #Rules
         $roles = $Policy.policy.rules

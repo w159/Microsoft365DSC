@@ -98,7 +98,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DefenderCloudExtendedTimeout                          = 25
                     DefenderCloudExtendedTimeoutInSeconds                 = 25
                     DefenderDaysBeforeDeletingQuarantinedMalware          = 25
-                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions1] @{
+                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions] @{
                             lowSeverity      = 'deviceDefault'
                             severeSeverity   = 'deviceDefault'
                             moderateSeverity = 'deviceDefault'
@@ -442,7 +442,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DefenderCloudExtendedTimeout                          = 25
                     DefenderCloudExtendedTimeoutInSeconds                 = 25
                     DefenderDaysBeforeDeletingQuarantinedMalware          = 25
-                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions1] @{
+                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions] @{
                             lowSeverity      = 'deviceDefault'
                             severeSeverity   = 'deviceDefault'
                             moderateSeverity = 'deviceDefault'
@@ -1111,7 +1111,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DefenderCloudExtendedTimeout                          = 25
                     DefenderCloudExtendedTimeoutInSeconds                 = 25
                     DefenderDaysBeforeDeletingQuarantinedMalware          = 25
-                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions1] @{
+                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions] @{
                             lowSeverity      = 'deviceDefault'
                             severeSeverity   = 'deviceDefault'
                             moderateSeverity = 'deviceDefault'
@@ -1773,7 +1773,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     DefenderCloudExtendedTimeout                          = 25
                     DefenderCloudExtendedTimeoutInSeconds                 = 25
                     DefenderDaysBeforeDeletingQuarantinedMalware          = 25
-                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions1] @{
+                    defenderDetectedMalwareActions                        = ([MSFT_MicrosoftGraphdefenderDetectedMalwareActions] @{
                             lowSeverity      = 'deviceDefault'
                             severeSeverity   = 'deviceDefault'
                             moderateSeverity = 'deviceDefault'
