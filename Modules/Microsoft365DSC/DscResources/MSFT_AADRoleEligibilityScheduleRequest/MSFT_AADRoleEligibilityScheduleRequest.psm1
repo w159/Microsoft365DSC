@@ -253,7 +253,7 @@ class AADRoleEligibilityScheduleRequest : M365DSCResourceBase
             }
             if ($null -ne $schedule.ScheduleInfo.StartDateTime)
             {
-                $ScheduleInfoValue.Add('StartDateTime', $schedule.ScheduleInfo.StartDateTime.ToString('yyyy-MM-ddThh:mm:ssZ'))
+                $ScheduleInfoValue.Add('StartDateTime', $schedule.ScheduleInfo.StartDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ'))
             }
 
             $results = @{
@@ -605,7 +605,7 @@ class AADRoleEligibilityScheduleRequest : M365DSCResourceBase
                     if ($parseResultDesired -and $parseResultCurrent)
                     {
                         Write-Verbose -Message "Parsed Desired StartDateTime: $parsedDesiredDate, Parsed Current StartDateTime: $parsedCurrentDate"
-                        if ($parsedDesiredDate -ne $parsedCurrentDate -and $parsedDesiredDate -lt [System.DateTime]::UtcNow)
+                        if ($parsedDesiredDate -ne $parsedCurrentDate -and $parsedDesiredDate -lt [System.DateTime]::Now)
                         {
                             Write-Verbose -Message "Ignoring StartDateTime in ScheduleInfo as it is in the past. StartDateTime cannot be set to a past date."
                             Write-Verbose -Message "Aligning the Desired and Current StartDateTime values for comparison."
