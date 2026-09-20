@@ -28,7 +28,7 @@ Configuration Example
         {
             AllowedArchitectures            = "x64";
             Assignments                     = @(
-                MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignment{
+                MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment{
                     dataType = "#microsoft.graph.allLicensedUsersAssignmentTarget"
                     intent   = "available"
                 }
