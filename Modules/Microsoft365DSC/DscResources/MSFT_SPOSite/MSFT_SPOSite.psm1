@@ -317,6 +317,12 @@ class SPOSite : M365DSCResourceBase
                 $DenyAddAndCustomizePagesValue = $false
             }
 
+            $RequestFilesLinkExpirationInDaysValue = $site.RequestFilesLinkExpirationInDays
+            if ($RequestFilesLinkExpirationInDaysValue -eq -1)
+            {
+                $RequestFilesLinkExpirationInDaysValue = $null
+            }
+
             $siteOwnerEmail = $site.OwnerEmail
             if ($null -eq $siteOwnerEmail)
             {
@@ -360,7 +366,7 @@ class SPOSite : M365DSCResourceBase
                 OverrideSharingCapability                                      = $site.OverrideSharingCapability
                 OverrideTenantOrganizationSharingLinkExpirationPolicy          = $site.OverrideTenantOrganizationSharingLinkExpirationPolicy
                 ReadOnlyForUnmanagedDevices                                    = $site.ReadOnlyForUnmanagedDevices
-                RequestFilesLinkExpirationInDays                               = $site.RequestFilesLinkExpirationInDays
+                RequestFilesLinkExpirationInDays                               = $RequestFilesLinkExpirationInDaysValue
                 RestrictContentOrgWideSearch                                   = $site.RestrictContentOrgWideSearch
                 RestrictedAccessControl                                        = $site.RestrictedAccessControl
                 # TODO: Resolve Groups
