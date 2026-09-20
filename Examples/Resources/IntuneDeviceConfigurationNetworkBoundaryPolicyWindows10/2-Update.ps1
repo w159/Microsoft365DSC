@@ -58,7 +58,7 @@ Configuration Example
             RoleScopeTagIds                             = @("0");
             WindowsNetworkIsolationPolicy               = MSFT_MicrosoftGraphwindowsNetworkIsolationPolicy{
                 EnterpriseCloudResources               = @(
-                    MSFT_MicrosoftGraphProxiedDomain1{
+                    MSFT_MicrosoftGraphProxiedDomain{
                         IpAddressOrFQDN = "contoso.sharepoint.com"
                         Proxy           = "10.20.30.41:8080"
                     }
@@ -69,7 +69,7 @@ Configuration Example
                 EnterpriseProxyServersAreAuthoritative = $True
                 EnterpriseNetworkDomainNames           = @("contoso.com", "contoso.co.uk") # Updated Property
                 EnterpriseIPRanges                     = @(
-                    MSFT_MicrosoftGraphIpRange1{
+                    MSFT_MicrosoftGraphIpRange{
                         UpperAddress = "10.10.255.255"
                         LowerAddress = "10.10.0.0"
                         odataType    = '#microsoft.graph.iPv4Range'

@@ -46,11 +46,11 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Customized image displayed in Company Portal apps landing page')]
-    [MSFT_MicrosoftGraphmimeContent] $LandingPageCustomizedImage
+    [MSFT_MicrosoftGraphMimeContent] $LandingPageCustomizedImage
 
     [DscProperty()]
     [System.ComponentModel.Description('Logo image displayed in Company Portal apps which have a light background behind the logo')]
-    [MSFT_MicrosoftGraphmimeContent] $LightBackgroundLogo
+    [MSFT_MicrosoftGraphMimeContent] $LightBackgroundLogo
 
     [DscProperty()]
     [System.ComponentModel.Description('Display name of the company/organizations IT helpdesk site')]
@@ -102,7 +102,7 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Logo image displayed in Company Portal apps which have a theme color background behind the logo')]
-    [MSFT_MicrosoftGraphmimeContent] $ThemeColorLogo
+    [MSFT_MicrosoftGraphMimeContent] $ThemeColorLogo
 
     [DscProperty()]
     [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
@@ -663,7 +663,7 @@ class MSFT_MicrosoftGraphcompanyPortalBlockedAction
     [System.String] $Platform
 }
 
-class MSFT_MicrosoftGraphmimeContent
+class MSFT_MicrosoftGraphMimeContent
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the content mime type.')]

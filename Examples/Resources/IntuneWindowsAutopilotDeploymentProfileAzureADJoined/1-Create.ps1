@@ -41,7 +41,7 @@ Configuration Example
             DeviceType                     = "windowsPc";
             DisplayName                    = "AAD";
             PreprovisioningAllowed               = $true;
-            EnrollmentStatusScreenSettings = MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1{
+            EnrollmentStatusScreenSettings = MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings{
                 AllowDeviceUseBeforeProfileAndAppInstallComplete = $false
                 AllowDeviceUseOnInstallFailure                   = $true
                 AllowLogCollectionOnInstallFailure               = $true

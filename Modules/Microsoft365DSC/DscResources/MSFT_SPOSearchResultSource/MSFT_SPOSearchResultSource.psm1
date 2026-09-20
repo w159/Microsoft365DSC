@@ -255,7 +255,7 @@ class SPOSearchResultSource : M365DSCResourceBase
         Write-Verbose -Message 'Setting CreatedDate'
         $node = $SearchConfigXML.CreateElement('d4p1:CreatedDate', `
                 'http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration.Query')
-        $node.InnerText = [DateTime]::Now.ToString('yyyy-MM-ddThh:mm:ss.00')
+        $node.InnerText = [DateTime]::Now.ToString('yyyy-MM-ddTHH:mm:ss.00')
         $newSource.AppendChild($node) | Out-Null
 
         Write-Verbose -Message 'Setting Description'

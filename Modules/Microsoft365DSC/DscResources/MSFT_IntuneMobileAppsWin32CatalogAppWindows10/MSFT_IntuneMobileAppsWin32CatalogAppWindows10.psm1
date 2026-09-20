@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
@@ -58,7 +58,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('The large icon, to be displayed in the app details and used for upload of the icon.')]
-    [MSFT_MicrosoftGraphMimeContent2] $LargeIcon
+    [MSFT_MicrosoftGraphMimeContent] $LargeIcon
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the value for the minimum CPU speed which is required to install this app. Allowed range from 0 to clock speed from WMI helper.')]
@@ -86,7 +86,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the MSI details if this Win32 app is an MSI app.')]
-    [MSFT_MicrosoftGraphWin32LobAppMsiInformation1] $MsiInformation
+    [MSFT_MicrosoftGraphWin32LobAppMsiInformation] $MsiInformation
 
     [DscProperty()]
     [System.ComponentModel.Description('Notes for the app.')]
@@ -106,7 +106,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the return codes for post installation behavior.')]
-    [MSFT_MicrosoftGraphWin32LobAppReturnCode1[]] $ReturnCodes
+    [MSFT_MicrosoftGraphWin32LobAppReturnCode[]] $ReturnCodes
 
     [DscProperty()]
     [System.ComponentModel.Description('List of scope tag ids for this mobile app.')]
@@ -211,7 +211,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
             }
             else
             {
-                $getValue = $this.ExportedInstance
+                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $this.ExportedInstance.Id -ErrorAction SilentlyContinue
             }
 
             if ($null -eq $getValue)
@@ -569,7 +569,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.LargeIcon `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphMimeContent2'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphMimeContent'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.LargeIcon = $complexTypeStringResult
@@ -584,7 +584,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.MsiInformation `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppMsiInformation1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppMsiInformation'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.MsiInformation = $complexTypeStringResult
@@ -599,7 +599,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.ReturnCodes `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppReturnCode1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppReturnCode'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.ReturnCodes = $complexTypeStringResult
@@ -802,50 +802,50 @@ class MSFT_MicrosoftGraphWin32LobAppInstallExperience1
     [System.String] $RunAsAccount
 }
 
-class MSFT_MicrosoftGraphMimeContent2
+class MSFT_MicrosoftGraphMimeContent
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the content mime type.')]
     [System.String] $Type
 
     [DscProperty()]
-    [System.ComponentModel.Description('The byte array that contains the actual content.')]
+    [System.ComponentModel.Description('The Base64 encoded string content.')]
     [System.String] $Value
 }
 
-class MSFT_MicrosoftGraphWin32LobAppMsiInformation1
+class MSFT_MicrosoftGraphWin32LobAppMsiInformation
 {
-    [DscProperty()]
-    [System.ComponentModel.Description('The MSI package type. Possible values are: perMachine, perUser, dualPurpose.')]
-    [ValidateSet('perMachine', 'perUser', 'dualPurpose')]
-    [System.String] $PackageType
-
     [DscProperty()]
     [System.ComponentModel.Description('The MSI product code.')]
     [System.String] $ProductCode
-
-    [DscProperty()]
-    [System.ComponentModel.Description('The MSI product name.')]
-    [System.String] $ProductName
 
     [DscProperty()]
     [System.ComponentModel.Description('The MSI product version.')]
     [System.String] $ProductVersion
 
     [DscProperty()]
-    [System.ComponentModel.Description('The MSI publisher.')]
-    [System.String] $Publisher
+    [System.ComponentModel.Description('The MSI upgrade code.')]
+    [System.String] $UpgradeCode
 
     [DscProperty()]
     [System.ComponentModel.Description('Whether the MSI app requires the machine to reboot to complete installation.')]
     [System.Nullable[System.Boolean]] $RequiresReboot
 
     [DscProperty()]
-    [System.ComponentModel.Description('The MSI upgrade code.')]
-    [System.String] $UpgradeCode
+    [System.ComponentModel.Description('The MSI package type. Possible values are: perMachine, perUser, dualPurpose.')]
+    [ValidateSet('perMachine', 'perUser', 'dualPurpose')]
+    [System.String] $PackageType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The MSI product name.')]
+    [System.String] $ProductName
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The MSI publisher')]
+    [System.String] $Publisher
 }
 
-class MSFT_MicrosoftGraphWin32LobAppReturnCode1
+class MSFT_MicrosoftGraphWin32LobAppReturnCode
 {
     [DscProperty()]
     [System.ComponentModel.Description('Return code.')]

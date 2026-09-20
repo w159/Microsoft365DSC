@@ -173,7 +173,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -227,7 +227,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -280,7 +280,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -324,7 +324,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     )
                     InformationUrl = "FakeStringValue"
                     IsFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })

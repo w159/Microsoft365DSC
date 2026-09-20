@@ -41,6 +41,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
 
+            Mock -CommandName Get-PnPContext -MockWith {
+                $context = @{} | Add-Member -MemberType ScriptMethod -Name ExecuteQuery -Value {
+                } -PassThru | Add-Member -MemberType ScriptMethod -Name Load -Value {
+                } -PassThru
+
+                return $context
+            }
+
             # Mock Write-M365DSCHost to hide output during the tests
             Mock -CommandName Write-M365DSCHost -MockWith {
             }

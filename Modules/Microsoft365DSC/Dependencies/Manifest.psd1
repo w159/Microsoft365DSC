@@ -39,7 +39,7 @@
         },
         @{
             ModuleName      = 'M365DSC.PSDesiredStateConfiguration'
-            RequiredVersion = '3.1.7'
+            RequiredVersion = '3.1.8'
         },
         @{
             ModuleName      = 'Microsoft.Graph.Authentication'
@@ -64,7 +64,7 @@
         },
         @{
             ModuleName      = 'PSParallelPipeline'
-            RequiredVersion = '1.2.5'
+            RequiredVersion = '1.3.0'
         }
     )
 }

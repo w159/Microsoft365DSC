@@ -376,7 +376,7 @@ class IntuneWifiConfigurationPolicyWindows10 : M365DSCResourceBase
 
     hidden [void] ValidateBoundParameters()
     {
-        if ($this.ProxySetting -ne 'automatic' -and $this.ProxyAutomaticConfigurationUrl -ne '')
+        if ($this.ProxySetting -ne 'automatic' -and -not [System.String]::IsNullOrEmpty($this.ProxyAutomaticConfigurationUrl))
         {
             throw 'ProxyAutomaticConfigurationUrl must be empty if ProxySetting is not "automatic".'
         }

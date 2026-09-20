@@ -48,7 +48,7 @@ Configuration Example
                 RunAsAccount          = "system"
             };
             IsFeatured                     = $false;
-            LargeIcon                      = MSFT_MicrosoftGraphMimeContent2{
+            LargeIcon                      = MSFT_MicrosoftGraphMimeContent{
                 Type  = "image/png"
                 Value = "<base64-encoded-app-icon>"
             };
@@ -58,7 +58,7 @@ Configuration Example
             MinimumNumberOfProcessors      = 1;
             MinimumSupportedWindowsRelease = "1607";
             MobileAppCatalogPackageId      = "eac00000-af3f-4678-b9a7-ca22b5db724d";
-            MsiInformation                 = MSFT_MicrosoftGraphWin32LobAppMsiInformation1{
+            MsiInformation                 = MSFT_MicrosoftGraphWin32LobAppMsiInformation{
                 PackageType    = "perMachine"
                 ProductCode    = "{23170F69-40C1-2702-2603-000001000000}"
                 ProductName    = "7-Zip"
@@ -72,7 +72,7 @@ Configuration Example
             PrivacyInformationUrl          = "https://www.7-zip.org/faq.html";
             Publisher                      = "Igor Pavlov";
             ReturnCodes                    = @(
-                MSFT_MicrosoftGraphWin32LobAppReturnCode1{
+                MSFT_MicrosoftGraphWin32LobAppReturnCode{
                     ReturnCode = 0
                     Type       = "success"
                 }

@@ -117,6 +117,10 @@ class SPOSiteGroup : M365DSCResourceBase
                 {
                     return $this.AsResult($nullReturn)
                 }
+
+                $ctx = Get-PnPContext
+                $ctx.Load($siteGroup.Owner)
+                $ctx.ExecuteQuery()
             }
             else
             {

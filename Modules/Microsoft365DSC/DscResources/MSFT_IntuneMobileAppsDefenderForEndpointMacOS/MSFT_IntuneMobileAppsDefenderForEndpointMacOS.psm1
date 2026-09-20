@@ -29,7 +29,7 @@ class IntuneMobileAppsDefenderForEndpointMacOS : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('The large icon, to be displayed in the app details and used for upload of the icon.')]
-    [MSFT_MicrosoftGraphmimeContent] $LargeIcon
+    [MSFT_MicrosoftGraphMimeContent] $LargeIcon
 
     [DscProperty()]
     [System.ComponentModel.Description('Notes for the app.')]
@@ -473,7 +473,7 @@ class IntuneMobileAppsDefenderForEndpointMacOS : M365DSCResourceBase
     }
 }
 
-class MSFT_MicrosoftGraphmimeContent
+class MSFT_MicrosoftGraphMimeContent
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the content mime type.')]

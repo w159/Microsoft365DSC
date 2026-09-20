@@ -142,6 +142,22 @@ class EXOMailboxAutoReplyConfiguration : M365DSCResourceBase
                 $userPrincipalName = (Get-User -Identity $this.Identity).UserPrincipalName
             }
 
+            # Exchange returns a rolling StartTime and EndTime when the state is not Scheduled
+            $startTimeValue = $null
+            $endTimeValue = $null
+            if ($config.AutoReplyState -eq 'Scheduled')
+            {
+                if ($null -ne $config.StartTime)
+                {
+                    $startTimeValue = ([System.DateTime]$config.StartTime).ToString('yyyy-MM-ddTHH:mm:ss', [System.Globalization.CultureInfo]::InvariantCulture)
+                }
+
+                if ($null -ne $config.EndTime)
+                {
+                    $endTimeValue = ([System.DateTime]$config.EndTime).ToString('yyyy-MM-ddTHH:mm:ss', [System.Globalization.CultureInfo]::InvariantCulture)
+                }
+            }
+
             $result = @{
                 Identity                         = $userPrincipalName
                 Owner                            = $userPrincipalName
@@ -151,13 +167,13 @@ class EXOMailboxAutoReplyConfiguration : M365DSCResourceBase
                 DeclineAllEventsForScheduledOOF  = [Boolean]$config.DeclineAllEventsForScheduledOOF
                 DeclineEventsForScheduledOOF     = [Boolean]$config.DeclineEventsForScheduledOOF
                 DeclineMeetingMessage            = $config.DeclineMeetingMessage
-                EndTime                          = $config.EndTime
+                EndTime                          = $endTimeValue
                 EventsToDeleteIDs                = [System.String[]]$config.EventsToDeleteIDs
                 ExternalAudience                 = $config.ExternalAudience
                 ExternalMessage                  = $config.ExternalMessage
                 InternalMessage                  = $config.InternalMessage
                 OOFEventSubject                  = $config.OOFEventSubject
-                StartTime                        = $config.StartTime
+                StartTime                        = $startTimeValue
                 Credential                       = $this.Credential
                 Ensure                           = 'Present'
                 ApplicationId                    = $this.ApplicationId

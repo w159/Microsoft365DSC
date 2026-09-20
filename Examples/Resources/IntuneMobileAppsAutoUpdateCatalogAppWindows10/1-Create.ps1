@@ -42,7 +42,7 @@ Configuration Example
                 RunAsAccount          = "system"
             };
             IsFeatured                      = $false;
-            LargeIcon                       = MSFT_MicrosoftGraphMimeContent2{
+            LargeIcon                       = MSFT_MicrosoftGraphMimeContent{
                 Type  = "image/png"
                 Value = "<base64-encoded-app-icon>"
             };

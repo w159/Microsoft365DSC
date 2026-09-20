@@ -79,7 +79,7 @@ class SPOUserProfileProperty : M365DSCResourceBase
                 Ensure   = 'Absent'
             }
 
-            $currentProperties = Get-PnPUserProfileProperty -Account $this.UserName -ErrorAction Stop
+            $currentProperties = Get-PnPUserProfileProperty -Account $this.UserName -ErrorAction SilentlyContinue
 
             if ($null -eq $currentProperties.AccountName)
             {

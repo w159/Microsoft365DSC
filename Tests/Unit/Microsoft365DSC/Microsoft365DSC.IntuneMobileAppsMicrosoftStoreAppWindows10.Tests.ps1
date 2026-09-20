@@ -157,7 +157,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         runAsAccount = "system"
                     })
                     isFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -203,7 +203,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         runAsAccount = "system"
                     })
                     isFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -248,7 +248,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         runAsAccount = "system"
                     })
                     isFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })
@@ -284,7 +284,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         runAsAccount = "user" # Drift
                     })
                     isFeatured = $True
-                    LargeIcon = ([MSFT_MicrosoftGraphmimeContent] @{
+                    LargeIcon = ([MSFT_MicrosoftGraphMimeContent] @{
                         Type = "FakeStringValue"
                         Value = "VGVzdA==" # Base64 encoded string for "Test"
                     })

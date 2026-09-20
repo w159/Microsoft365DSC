@@ -26,7 +26,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Enrollment status screen setting')]
-    [MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1] $EnrollmentStatusScreenSettings
+    [MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings] $EnrollmentStatusScreenSettings
 
     [DscProperty()]
     [System.ComponentModel.Description('Whether the profile extracts the hardware hash of the device.')]
@@ -434,7 +434,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.EnrollmentStatusScreenSettings `
-                        -CIMInstanceName 'MicrosoftGraphwindowsEnrollmentStatusScreenSettings1'
+                        -CIMInstanceName 'MicrosoftGraphwindowsEnrollmentStatusScreenSettings'
                     if (-not [String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.EnrollmentStatusScreenSettings = $complexTypeStringResult
@@ -530,7 +530,7 @@ class IntuneWindowsAutopilotDeploymentProfileAzureADJoined : M365DSCResourceBase
     }
 }
 
-class MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings1
+class MSFT_MicrosoftGraphwindowsEnrollmentStatusScreenSettings
 {
     [DscProperty()]
     [System.ComponentModel.Description('Allow or block user to use device before profile and app installation complete')]
