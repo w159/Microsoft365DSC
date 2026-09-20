@@ -100,7 +100,7 @@ function Get-TeamByName
         $loopCounter = 0
         do
         {
-            $team = Get-Team -DisplayName $TeamName | Where-Object -Property DisplayName -EQ [System.Net.WebUtility]::UrlDecode($TeamName)
+            $team = Get-Team -DisplayName $TeamName | Where-Object -Property DisplayName -EQ ([System.Net.WebUtility]::UrlDecode($TeamName))
             if ($null -eq $team)
             {
                 Start-Sleep 5
@@ -116,7 +116,7 @@ function Get-TeamByName
         {
             throw "Team with Name $TeamName doesn't exist in tenant"
         }
-        elseif ($teams.Length -gt 1)
+        elseif (@($team).Count -gt 1)
         {
             Write-Warning -Message "More than one Team with name {$TeamName} was found. This could prevent your configuration from compiling properly."
         }

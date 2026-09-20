@@ -446,7 +446,7 @@ class AADApplication : M365DSCResourceBase
             }
 
             $complexAppRoles = @()
-            foreach ($currentappRoles in $AADApp.appRoles)
+            foreach ($currentappRoles in ($AADApp.appRoles | Sort-Object -Property 'id'))
             {
                 $myappRoles = [ordered]@{}
                 $myappRoles.Add('AllowedMemberTypes', $currentappRoles.allowedMemberTypes)

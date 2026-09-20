@@ -855,7 +855,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
         try
         {
             $uri = "/beta/deviceManagement/deviceConfigurations('$DeviceConfigurationPolicyId')/microsoft.graph.windowsWiredNetworkConfiguration/$CertificateName"
-            $result = Invoke-M365DSCGraphRequest -Method Get -Uri $uri 4>$null
+            $result = Invoke-M365DSCGraphRequest -Method Get -Uri $uri -ErrorAction Stop 4>$null
 
             if ($result.value)
             {
