@@ -52,7 +52,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Name = "Custom policy internet rule"
                             ruleType = "fqdn"
                             action   = "bypass"
-                            ports    = @(80,443)
+                            ports    = @('80','443')
                             protocol = "tcp"
                             destinations = @(
                                 @{
@@ -64,7 +64,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             Name = "Custom policy internet rule"
                             ruleType = "ipSubnet"
                             action   = "bypass"
-                            ports    = @(80,443)
+                            ports    = @('80','443')
                             protocol = "tcp"
                             destinations = @(
                                 @{
@@ -93,7 +93,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             ActionValue    = 'bypass'
                             RuleType       = 'fqdn'
                             Protocol       = 'tcp'
-                            Ports          = @(80, 443)
+                            Ports          = @('80', '443')
                             Destinations   = @('www.google.com')
                         }
 
@@ -102,7 +102,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             ActionValue    = 'bypass'
                             RuleType       = 'ipSubnet'
                             Protocol       = 'tcp'
-                            Ports          = @(80, 443)
+                            Ports          = @('80', '443')
                             Destinations   = @('192.164.0.0/24')
                         }
                     )
@@ -125,7 +125,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             ActionValue    = 'bypass'
                             RuleType       = 'fqdn'
                             Protocol       = 'tcp'
-                            Ports          = @(80, 443)
+                            Ports          = @('80', '443')
                             Destinations   = @('www.google.com')
                         }
                         [MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule] @{
@@ -133,7 +133,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                             ActionValue    = 'bypass'
                             RuleType       = 'ipSubnet'
                             Protocol       = 'tcp'
-                            Ports          = @(80, 443)
+                            Ports          = @('80', '443')
                             Destinations   = @('192.164.0.0/28') # Drift
                         }
                     )

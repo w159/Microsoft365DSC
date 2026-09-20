@@ -322,7 +322,7 @@ class AADNetworkAccessForwardingPolicy : M365DSCResourceBase
                 Name         = $rule.Name
                 ActionValue  = $rule.action
                 RuleType     = $rule.ruleType
-                Ports        = [System.Int32[]]$rule.ports
+                Ports        = [System.String[]]$rule.ports
                 Protocol     = $rule.protocol
                 Destinations = $destinations
             }
@@ -365,7 +365,7 @@ class MSFT_MicrosoftGraphNetworkAccessForwardingPolicyRule
 
     [DscProperty()]
     [System.ComponentModel.Description('List of Ports.')]
-    [System.Int32[]] $Ports
+    [System.String[]] $Ports
 
     [DscProperty()]
     [System.ComponentModel.Description('Protocol Value')]

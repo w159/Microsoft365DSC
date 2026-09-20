@@ -33,7 +33,7 @@ Configuration Example
                     ActionValue  = 'bypass'
                     RuleType     = 'fqdn'
                     Protocol     = 'tcp'
-                    Ports        = @(80, 443)
+                    Ports        = @('80', '443')
                     Destinations = @('www.microsoft.com')
                 }
 
@@ -42,7 +42,7 @@ Configuration Example
                     ActionValue  = 'bypass'
                     RuleType     = 'ipAddress'
                     Protocol     = 'tcp'
-                    Ports        = @(80, 443)
+                    Ports        = @('80', '443')
                     Destinations = @('192.168.1.1')
                 }
 
@@ -51,7 +51,7 @@ Configuration Example
                     ActionValue  = 'bypass'
                     RuleType     = 'ipSubnet'
                     Protocol     = 'tcp'
-                    Ports        = @(80, 443)
+                    Ports        = @('80', '443')
                     Destinations = @('192.164.0.0/24')
                 }
             );
