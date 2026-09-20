@@ -632,7 +632,7 @@ class TeamsUserPolicyAssignment : M365DSCResourceBase
                 $results = $this.GetForExport($getParams)
                 $rawResults = $Results.Clone()
 
-                if ($null -ne $results)
+                if ($null -ne $results -and -not [System.String]::IsNullOrEmpty($results.User))
                 {
                     if ($null -ne $Global:M365DSCExportResourceInstancesCount)
                     {

@@ -318,7 +318,7 @@ class IntuneWifiConfigurationPolicyIOS : M365DSCResourceBase
 
     hidden [void] ValidateBoundParameters()
     {
-        if ($this.ProxySettings -ne 'automatic' -and $this.ProxyAutomaticConfigurationUrl -ne '')
+        if ($this.ProxySettings -ne 'automatic' -and -not [System.String]::IsNullOrEmpty($this.ProxyAutomaticConfigurationUrl))
         {
             throw 'ProxyAutomaticConfigurationUrl must be empty if ProxySettings is not "automatic".'
         }
