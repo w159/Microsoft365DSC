@@ -10,7 +10,7 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Represents the assignment to the Intune app.')]
-    [MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignment[]] $Assignments
+    [MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment[]] $Assignments
 
     [DscProperty()]
     [System.ComponentModel.Description('The description of the app.')]
@@ -384,9 +384,27 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 
                 if ($null -ne $Results.Assignments)
                 {
+                    $complexMapping = @(
+                        @{
+                            Name            = 'AssignmentSettings'
+                            CIMInstanceName = 'DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettings'
+                            IsRequired      = $false
+                        },
+                        @{
+                            Name            = 'InstallTimeSettings'
+                            CIMInstanceName = 'DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsInstallTimeSettings'
+                            IsRequired      = $false
+                        },
+                        @{
+                            Name            = 'RestartSettings'
+                            CIMInstanceName = 'DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsRestartSettings'
+                            IsRequired      = $false
+                        }
+                    )
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.Assignments `
-                        -CIMInstanceName 'MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignment'
+                        -CIMInstanceName DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment `
+                        -ComplexTypeMapping $complexMapping
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.Assignments = $complexTypeStringResult
@@ -470,63 +488,7 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
     }
 }
 
-class MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppInstallTimeSettings
-{
-    [DscProperty()]
-    [System.ComponentModel.Description('The maximum allowed date and time by which the app must be installed on the device. After this deadline, the Intune management extension enforces installation automatically. When null, there is no enforced deadline.')]
-    [System.String] $DeadlineDateTime
-
-    [DscProperty()]
-    [System.ComponentModel.Description('The time at which the app should be available for installation on the device. When null, the app is available immediately.')]
-    [System.String] $StartDateTime
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Indicates whether the startDateTime and deadlineDateTime values should be interpreted using the device''s local time zone. When false, the values are interpreted as UTC. Defaults to false if not specified.')]
-    [System.Nullable[System.Boolean]] $UseLocalTime
-}
-
-class MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppRestartSettings
-{
-    [DscProperty()]
-    [System.ComponentModel.Description('The number of minutes before the scheduled restart at which a countdown notification is displayed to the user. Must be between 1 and the value of gracePeriodInMinutes. This countdown is non-dismissible and warns the user that a restart is imminent. For example, a value of 15 means the countdown appears 15 minutes before the restart.')]
-    [System.Nullable[System.Int32]] $CountdownDisplayBeforeRestartInMinutes
-
-    [DscProperty()]
-    [System.ComponentModel.Description('The number of minutes the device waits after app installation before initiating a restart. During this period, the user can continue working and save their documents. For example, a value of 1440 means the device waits 24 hours before restarting.')]
-    [System.Nullable[System.Int32]] $GracePeriodInMinutes
-
-    [DscProperty()]
-    [System.ComponentModel.Description('The number of minutes by which the user can defer (snooze) the restart notification each time they press the snooze button. When null, the snooze option is not available and the user cannot defer the restart. For example, a value of 240 allows the user to defer the restart by 4 hours each time.')]
-    [System.Nullable[System.Int32]] $RestartNotificationSnoozeDurationInMinutes
-}
-
-class MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignmentSettings
-{
-    [DscProperty()]
-    [System.ComponentModel.Description('The odata type of the assignment settings.')]
-    [ValidateSet('#microsoft.graph.windowsAutoUpdateCatalogAppAssignmentSettings')]
-    [System.String] $odataType
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Indicates the priority level for downloading the app content using Delivery Optimization. foreground prioritizes the download over background tasks, which may result in faster installation but higher bandwidth usage. Defaults to notConfigured (background priority) if not specified. When omitted from the request, the service applies notConfigured and the device downloads app content using normal background priority. In National Cloud environments (e.g., US Government, China), Delivery Optimization is not available the service accepts and stores any value provided, but the device agent ignores it at runtime and delivers content via CDN using background priority regardless of the configured value. Possible values are: notConfigured, foreground, unknownFutureValue.')]
-    [ValidateSet('notConfigured', 'foreground', 'unknownFutureValue')]
-    [System.String] $DeliveryOptimizationPriority
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Specifies the deadline by which the app must be installed on the device. When null, the app is offered for immediate installation with no enforced deadline.')]
-    [MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppInstallTimeSettings] $InstallTimeSettings
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Indicates which notifications the Intune management extension displays to the end user during app installation and restart. Defaults to showAll if not specified. Possible values are: showAll, showReboot, hideAll, unknownFutureValue.')]
-    [ValidateSet('showAll', 'showReboot', 'hideAll', 'unknownFutureValue')]
-    [System.String] $NotificationType
-
-    [DscProperty()]
-    [System.ComponentModel.Description('Specifies the restart coordination behavior after the app is installedincluding how long to wait before restarting, when to show a countdown, and how long the user can snooze. When null, no restart coordination is applied (the device may still restart based on the app''s deviceRestartBehavior setting). Note: the service accepts restart settings regardless of the app''s deviceRestartBehavior value the device agent determines which settings are actually honored at runtime.')]
-    [MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppRestartSettings] $RestartSettings
-}
-
-class MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignment
+class MSFT_DeviceManagementMobileAppAssignment
 {
     [DscProperty()]
     [System.ComponentModel.Description('The type of the target assignment.')]
@@ -558,10 +520,72 @@ class MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignment
     [System.ComponentModel.Description('Possible values for the install intent chosen by the admin.')]
     [ValidateSet('available', 'required', 'uninstall', 'availableWithoutEnrollment')]
     [System.String] $intent
+}
 
+class MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment : MSFT_DeviceManagementMobileAppAssignment
+{
     [DscProperty()]
     [System.ComponentModel.Description('The settings of the assignment.')]
-    [MSFT_DeviceManagementWindowsAutoUpdateCatalogAppAssignmentSettings] $assignmentSettings
+    [MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettings] $assignmentSettings
+}
+
+class MSFT_DeviceManagementMobileAppAssignmentSettings
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('The odata type of the assignment type.')]
+    [ValidateSet('#microsoft.graph.androidManagedStoreAppAssignmentSettings', '#microsoft.graph.iosStoreAppAssignmentSettings', '#microsoft.graph.iosLobAppAssignmentSettings', '#microsoft.graph.macOsLobAppAssignmentSettings', '#microsoft.graph.win32CatalogAppAssignmentSettings', '#microsoft.graph.win32LobAppAssignmentSettings', '#microsoft.graph.winGetAppAssignmentSettings', '#microsoft.graph.windowsAutoUpdateCatalogAppAssignmentSettings', '#microsoft.graph.windowsUniversalAppXAppAssignmentSettings')]
+    [System.String] $odataType
+}
+
+class MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettings : MSFT_DeviceManagementMobileAppAssignmentSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates the priority level for downloading the app content using Delivery Optimization. foreground prioritizes the download over background tasks, which may result in faster installation but higher bandwidth usage. Defaults to notConfigured (background priority) if not specified. When omitted from the request, the service applies notConfigured and the device downloads app content using normal background priority. In National Cloud environments (e.g., US Government, China), Delivery Optimization is not available the service accepts and stores any value provided, but the device agent ignores it at runtime and delivers content via CDN using background priority regardless of the configured value. Possible values are: notConfigured, foreground, unknownFutureValue.')]
+    [ValidateSet('notConfigured', 'foreground', 'unknownFutureValue')]
+    [System.String] $deliveryOptimizationPriority
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the deadline by which the app must be installed on the device. When null, the app is offered for immediate installation with no enforced deadline.')]
+    [MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsInstallTimeSettings] $installTimeSettings
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates which notifications the Intune management extension displays to the end user during app installation and restart. Defaults to showAll if not specified. Possible values are: showAll, showReboot, hideAll, unknownFutureValue.')]
+    [ValidateSet('showAll', 'showReboot', 'hideAll', 'unknownFutureValue')]
+    [System.String] $notificationType
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Specifies the restart coordination behavior after the app is installedincluding how long to wait before restarting, when to show a countdown, and how long the user can snooze. When null, no restart coordination is applied (the device may still restart based on the app''s deviceRestartBehavior setting). Note: the service accepts restart settings regardless of the app''s deviceRestartBehavior value the device agent determines which settings are actually honored at runtime.')]
+    [MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsRestartSettings] $restartSettings
+}
+
+class MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsInstallTimeSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('Indicates whether the startDateTime and deadlineDateTime values should be interpreted using the device''s local time zone. When false, the values are interpreted as UTC. Defaults to false if not specified.')]
+    [System.Nullable[System.Boolean]] $useLocalTime
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The time at which the app should be available for installation on the device. When null, the app is available immediately.')]
+    [System.String] $startDateTime
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The maximum allowed date and time by which the app must be installed on the device. After this deadline, the Intune management extension enforces installation automatically. When null, there is no enforced deadline.')]
+    [System.String] $deadlineDateTime
+}
+
+class MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignmentSettingsRestartSettings
+{
+    [DscProperty()]
+    [System.ComponentModel.Description('The number of minutes before the scheduled restart at which a countdown notification is displayed to the user. Must be between 1 and the value of gracePeriodInMinutes. This countdown is non-dismissible and warns the user that a restart is imminent. For example, a value of 15 means the countdown appears 15 minutes before the restart.')]
+    [System.Nullable[System.Int32]] $countdownDisplayBeforeRestartInMinutes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The number of minutes the device waits after app installation before initiating a restart. During this period, the user can continue working and save their documents. For example, a value of 1440 means the device waits 24 hours before restarting.')]
+    [System.Nullable[System.Int32]] $gracePeriodInMinutes
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The number of minutes by which the user can defer (snooze) the restart notification each time they press the snooze button. When null, the snooze option is not available and the user cannot defer the restart. For example, a value of 240 allows the user to defer the restart by 4 hours each time.')]
+    [System.Nullable[System.Int32]] $restartNotificationSnoozeDurationInMinutes
 }
 
 class MSFT_MicrosoftGraphWindowsAutoUpdateCatalogAppInstallExperience

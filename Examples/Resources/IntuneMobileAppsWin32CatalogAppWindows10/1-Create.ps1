@@ -29,7 +29,7 @@ Configuration Example
             AllowAvailableUninstall        = $true;
             AllowedArchitectures           = "x64";
             Assignments                    = @(
-                MSFT_DeviceManagementWin32CatalogAppAssignment{
+                MSFT_DeviceManagementWin32CatalogMobileAppAssignment{
                     dataType = "#microsoft.graph.allLicensedUsersAssignmentTarget"
                     intent   = "available"
                 }
