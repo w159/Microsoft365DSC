@@ -50,7 +50,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the install experience for this app.')]
-    [MSFT_MicrosoftGraphWin32LobAppInstallExperience1] $InstallExperience
+    [MSFT_MicrosoftGraphWin32CatalogAppInstallExperience] $InstallExperience
 
     [DscProperty()]
     [System.ComponentModel.Description('The value indicating whether the app is marked as featured by the admin.')]
@@ -86,7 +86,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the MSI details if this Win32 app is an MSI app.')]
-    [MSFT_MicrosoftGraphWin32LobAppMsiInformation1] $MsiInformation
+    [MSFT_MicrosoftGraphWin32CatalogAppMsiInformation] $MsiInformation
 
     [DscProperty()]
     [System.ComponentModel.Description('Notes for the app.')]
@@ -106,7 +106,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the return codes for post installation behavior.')]
-    [MSFT_MicrosoftGraphWin32LobAppReturnCode1[]] $ReturnCodes
+    [MSFT_MicrosoftGraphWin32CatalogAppReturnCode[]] $ReturnCodes
 
     [DscProperty()]
     [System.ComponentModel.Description('List of scope tag ids for this mobile app.')]
@@ -114,7 +114,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the detection and requirement rules for this app. Possible values are: Win32LobAppFileSystemRule, Win32LobAppPowerShellScriptRule, Win32LobAppProductCodeRule, Win32LobAppRegistryRule.')]
-    [MSFT_MicrosoftGraphWin32LobAppRule1[]] $Rules
+    [MSFT_MicrosoftGraphWin32CatalogAppRule[]] $Rules
 
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the relative path of the setup file in the encrypted Win32LobApp package. Example: Intel-SA-00075 Detection and Mitigation Tool.msi.')]
@@ -211,7 +211,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
             }
             else
             {
-                $getValue = $this.ExportedInstance
+                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $this.ExportedInstance.Id -ErrorAction SilentlyContinue
             }
 
             if ($null -eq $getValue)
@@ -554,7 +554,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.InstallExperience `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppInstallExperience1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32CatalogAppInstallExperience'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.InstallExperience = $complexTypeStringResult
@@ -584,7 +584,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.MsiInformation `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppMsiInformation1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32CatalogAppMsiInformation'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.MsiInformation = $complexTypeStringResult
@@ -599,7 +599,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.ReturnCodes `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppReturnCode1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32CatalogAppReturnCode'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.ReturnCodes = $complexTypeStringResult
@@ -614,7 +614,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
                         -ComplexObject $Results.Rules `
-                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32LobAppRule1'
+                        -CIMInstanceName 'MSFT_MicrosoftGraphWin32CatalogAppRule'
                     if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
                     {
                         $Results.Rules = $complexTypeStringResult
@@ -780,7 +780,7 @@ class MSFT_DeviceManagementWin32CatalogMobileAppAssignmentSettingsRestartSetting
     [System.Nullable[System.Int32]] $restartNotificationSnoozeDurationInMinutes
 }
 
-class MSFT_MicrosoftGraphWin32LobAppInstallExperience1
+class MSFT_MicrosoftGraphWin32CatalogAppInstallExperience
 {
     [DscProperty()]
     [System.ComponentModel.Description('Device restart behavior. Possible values are: basedOnReturnCode, allow, suppress, force.')]
@@ -813,7 +813,7 @@ class MSFT_MicrosoftGraphMimeContent2
     [System.String] $Value
 }
 
-class MSFT_MicrosoftGraphWin32LobAppMsiInformation1
+class MSFT_MicrosoftGraphWin32CatalogAppMsiInformation
 {
     [DscProperty()]
     [System.ComponentModel.Description('The MSI package type. Possible values are: perMachine, perUser, dualPurpose.')]
@@ -845,7 +845,7 @@ class MSFT_MicrosoftGraphWin32LobAppMsiInformation1
     [System.String] $UpgradeCode
 }
 
-class MSFT_MicrosoftGraphWin32LobAppReturnCode1
+class MSFT_MicrosoftGraphWin32CatalogAppReturnCode
 {
     [DscProperty()]
     [System.ComponentModel.Description('Return code.')]
@@ -857,7 +857,7 @@ class MSFT_MicrosoftGraphWin32LobAppReturnCode1
     [System.String] $Type
 }
 
-class MSFT_MicrosoftGraphWin32LobAppRule1
+class MSFT_MicrosoftGraphWin32CatalogAppRule
 {
     [DscProperty()]
     [System.ComponentModel.Description('A value indicating whether to expand environment variables in the 32-bit context on 64-bit systems.')]

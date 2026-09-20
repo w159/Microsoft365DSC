@@ -155,7 +155,7 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
             }
             else
             {
-                $getValue = $this.ExportedInstance
+                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $this.ExportedInstance.Id -ErrorAction SilentlyContinue
             }
 
             if ($null -eq $getValue)
