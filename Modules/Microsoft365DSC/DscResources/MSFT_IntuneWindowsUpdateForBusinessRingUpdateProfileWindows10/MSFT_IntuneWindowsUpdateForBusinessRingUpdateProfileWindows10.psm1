@@ -485,6 +485,11 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
 
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
+        $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                '#microsoft.graph.windowsUpdateActiveHoursInstall' = @('activeHoursEnd', 'activeHoursStart')
+                '#microsoft.graph.windowsUpdateScheduledInstall'   = @('scheduledInstallDay', 'scheduledInstallTime')
+            })
+
         $boundParameters.Remove('featureUpdatesWillBeRolledBack') | Out-Null
         $boundParameters.Remove('qualityUpdatesWillBeRolledBack') | Out-Null
 

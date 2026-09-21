@@ -345,6 +345,11 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
             }
             #finished processing create parameters
 
+            $this.RemoveForeignSubtypeProperties($createParameters, @{
+                    '#microsoft.graph.iosHomeScreenFolder' = @('displayName', 'pages')
+                    '#microsoft.graph.iosHomeScreenApp'    = @('bundleID', 'displayName', 'isWebClip')
+                })
+
             #region resource generator code
             $policy = New-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $createParameters
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
@@ -418,6 +423,11 @@ class IntuneDeviceFeaturesConfigurationPolicyIOS : M365DSCResourceBase
                 $updateParameters['IosSingleSignOnExtension'] = $updateParameters.IosSingleSignOnExtension[0] #needs the hashtable not embedded in array
             }
             #finished processing update parameters
+
+            $this.RemoveForeignSubtypeProperties($updateParameters, @{
+                    '#microsoft.graph.iosHomeScreenFolder' = @('displayName', 'pages')
+                    '#microsoft.graph.iosHomeScreenApp'    = @('bundleID', 'displayName', 'isWebClip')
+                })
 
             #region resource generator code
             Update-MgBetaDeviceManagementDeviceConfiguration -BodyParameter $updateParameters `
