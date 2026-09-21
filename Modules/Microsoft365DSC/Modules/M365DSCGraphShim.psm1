@@ -157,6 +157,10 @@ function Invoke-M365DSCGraphShimRequestV76
         $Top = 0,
 
         [Parameter()]
+        [System.Int32]
+        $PageSize = 0,
+
+        [Parameter()]
         [switch]
         $All,
 
@@ -185,11 +189,16 @@ function Invoke-M365DSCGraphShimRequestV76
 
     if ($PSBoundParameters.ContainsKey('Top') -and $Top -gt 0)
     {
-        $invokeParams['PageSize'] = $Top
+        $invokeParams['Top'] = $Top
     }
     elseif ($PSBoundParameters.ContainsKey('Top') -and $Top -eq 0)
     {
         $invokeParams['NoPageSize'] = $true
+    }
+
+    if ($PSBoundParameters.ContainsKey('PageSize') -and $PageSize -gt 0)
+    {
+        $invokeParams['PageSize'] = $PageSize
     }
 
     if ($PSBoundParameters.ContainsKey('Body') -and $null -ne $Body)
@@ -260,7 +269,7 @@ function Get-M365DSCGraphShimAllPages
 
         [Parameter()]
         [System.Int32]
-        $Top = 0
+        $PageSize = 0
     )
 
     $allResults = [System.Collections.Generic.List[System.Object]]::new()
@@ -272,10 +281,10 @@ function Get-M365DSCGraphShimAllPages
         $currentUri = "$currentUri$separator`$skip=$Skip"
     }
 
-    if ($Top -gt 0 -and $currentUri -notmatch '[\?&]\$top=')
+    if ($PageSize -gt 0 -and $currentUri -notmatch '[\?&]\$top=')
     {
         $separator = if ($currentUri.Contains('?')) { '&' } else { '?' }
-        $currentUri = "$currentUri$separator`$top=$Top"
+        $currentUri = "$currentUri$separator`$top=$PageSize"
     }
 
     $requestParams = @{
@@ -337,7 +346,7 @@ function Get-M365DSCGraphShimAllPagesV76
 
         [Parameter()]
         [System.Int32]
-        $Top = 0
+        $PageSize = 0
     )
 
     $allResults = [System.Collections.Generic.List[System.Object]]::new()
@@ -359,9 +368,9 @@ function Get-M365DSCGraphShimAllPagesV76
         $requestParams['Skip'] = $Skip
     }
 
-    if ($PSBoundParameters.ContainsKey('Top'))
+    if ($PSBoundParameters.ContainsKey('PageSize'))
     {
-        $requestParams['Top'] = $Top
+        $requestParams['PageSize'] = $PageSize
     }
 
     $response = Invoke-M365DSCGraphShimRequestV76 @requestParams -PassThru
@@ -601,12 +610,32 @@ function Invoke-M365DSCGraphShimGetResource
     if ($BoundParameters['CountVariable'])  { $uriParams['CountVariable'] = $BoundParameters['CountVariable'] }
 
     $paramSplat = @{}
-    if ($BoundParameters.ContainsKey('Top'))   { $paramSplat['Top'] = $BoundParameters['Top'] }
-    if ($BoundParameters.ContainsKey('Skip')) { $paramSplat['Skip'] = $BoundParameters['Skip'] }
+    if ($BoundParameters['Top'] -gt 0)      { $paramSplat['Top'] = $BoundParameters['Top'] }
+    if ($BoundParameters['Skip'] -gt 0)     { $paramSplat['Skip'] = $BoundParameters['Skip'] }
+    if ($BoundParameters['PageSize'] -gt 0) { $paramSplat['PageSize'] = $BoundParameters['PageSize'] }
+
+    $retrieveAllPages = $BoundParameters.ContainsKey('All') -and $BoundParameters['All']
+    if ($retrieveAllPages)
+    {
+        # All reads the whole collection. In this case, the Top parameter caps a single page
+        # instead of the full collection. Otherwise, it requests 999 objects at a time.
+        if (-not $paramSplat.ContainsKey('PageSize') -and $paramSplat.ContainsKey('Top'))
+        {
+            $paramSplat['PageSize'] = $paramSplat['Top']
+        }
+        $paramSplat.Remove('Top')
+    }
+    elseif (-not $Script:IsPowerShell76OrGreater)
+    {
+        # Invoke-MgxRequest applies Top and Skip itself and rejects a URI that already carries them.
+        # Without it, a single request can only limit the collection through the query.
+        if ($paramSplat.ContainsKey('Top'))  { $uriParams['Top'] = $paramSplat['Top'] }
+        if ($paramSplat.ContainsKey('Skip')) { $uriParams['Skip'] = $paramSplat['Skip'] }
+    }
 
     $uri = ConvertTo-M365DSCGraphShimUri @uriParams
 
-    if ($BoundParameters.ContainsKey('All') -and $BoundParameters['All'])
+    if ($retrieveAllPages)
     {
         if ($Script:IsPowerShell76OrGreater)
         {
@@ -617,7 +646,7 @@ function Invoke-M365DSCGraphShimGetResource
 
     if ($Script:IsPowerShell76OrGreater)
     {
-        $response = Invoke-M365DSCGraphShimRequestV76 -Method GET -Uri $uri -Headers $requestHeaders -ErrorAction $ErrorActionPreference
+        $response = Invoke-M365DSCGraphShimRequestV76 -Method GET -Uri $uri -Headers $requestHeaders @paramSplat -ErrorAction $ErrorActionPreference
     }
     else
     {
