@@ -638,6 +638,33 @@ class IntuneDeviceFeaturesConfigurationPolicyMacOS : M365DSCResourceBase
             $boundParameters.Remove('Assignments') | Out-Null
             $boundParameters.Add('@odata.type', '#microsoft.graph.macOSDeviceFeaturesConfiguration')
 
+            foreach ($extensionProperty in @('macOSSingleSignOnExtension', 'singleSignOnExtension'))
+            {
+                $extension = $boundParameters.$extensionProperty
+                if ($null -ne $extension -and [System.String]::IsNullOrEmpty($extension['@odata.type']))
+                {
+                    $boundParameters.Remove($extensionProperty) | Out-Null
+                }
+            }
+
+            $kerberosProperties = @('activeDirectorySiteCode', 'blockActiveDirectorySiteAutoDiscovery', 'blockAutomaticLogin', 'cacheName',
+                'credentialBundleIdAccessControlList', 'domainRealms', 'domains', 'isDefaultRealm', 'passwordBlockModification',
+                'passwordChangeUrl', 'passwordEnableLocalSync', 'passwordExpirationDays', 'passwordExpirationNotificationDays',
+                'passwordMinimumAgeDays', 'passwordMinimumLength', 'passwordPreviousPasswordBlockCount',
+                'passwordRequireActiveDirectoryComplexity', 'passwordRequirementsDescription', 'realm', 'requireUserPresence',
+                'userPrincipalName')
+            $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                    '#microsoft.graph.macOSAzureAdSingleSignOnExtension'    = @('bundleIdAccessControlList', 'configurations', 'enableSharedDeviceMode')
+                    '#microsoft.graph.macOSCredentialSingleSignOnExtension' = @('configurations', 'domains', 'extensionIdentifier', 'realm', 'teamIdentifier')
+                    '#microsoft.graph.macOSRedirectSingleSignOnExtension'   = @('configurations', 'extensionIdentifier', 'teamIdentifier', 'urlPrefixes')
+                    '#microsoft.graph.macOSKerberosSingleSignOnExtension'   = $kerberosProperties + @('credentialsCacheMonitored',
+                        'kerberosAppsInBundleIdACLIncluded', 'managedAppsInBundleIdACLIncluded', 'modeCredentialUsed', 'preferredKDCs',
+                        'signInHelpText', 'tlsForLDAPRequired', 'usernameLabelCustom', 'userSetupDelayed')
+                    '#microsoft.graph.credentialSingleSignOnExtension'      = @('configurations', 'domains', 'extensionIdentifier', 'realm', 'teamIdentifier')
+                    '#microsoft.graph.redirectSingleSignOnExtension'        = @('configurations', 'extensionIdentifier', 'teamIdentifier', 'urlPrefixes')
+                    '#microsoft.graph.kerberosSingleSignOnExtension'        = $kerberosProperties
+                })
+
             if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
             {
                 Write-Verbose -Message "Creating new Intune Device Features Configuration Policy for macOS {$($this.Id)}"

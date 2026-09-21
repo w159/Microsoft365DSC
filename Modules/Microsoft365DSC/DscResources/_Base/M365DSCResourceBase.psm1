@@ -925,6 +925,42 @@ class M365DSCResourceBase
         return [System.Convert]::ToString($Value, [System.Globalization.CultureInfo]::InvariantCulture)
     }
 
+    [void] RemoveForeignSubtypeProperties([System.Object] $Node, [System.Collections.Hashtable] $AllowedByType)
+    {
+        if ($Node -is [System.Collections.IDictionary])
+        {
+            $odataType = $Node['@odata.type']
+            if ($null -ne $odataType -and $AllowedByType.ContainsKey($odataType))
+            {
+                foreach ($key in @($Node.Keys))
+                {
+                    if ($key -eq '@odata.type')
+                    {
+                        continue
+                    }
+
+                    if ($key -notin $AllowedByType.$odataType -or
+                        ($Node.$key -is [System.String] -and [System.String]::IsNullOrWhiteSpace($Node.$key)))
+                    {
+                        $Node.Remove($key)
+                    }
+                }
+            }
+
+            foreach ($value in @($Node.Values))
+            {
+                $this.RemoveForeignSubtypeProperties($value, $AllowedByType)
+            }
+        }
+        elseif ($Node -is [System.Collections.IEnumerable] -and $Node -isnot [System.String])
+        {
+            foreach ($item in $Node)
+            {
+                $this.RemoveForeignSubtypeProperties($item, $AllowedByType)
+            }
+        }
+    }
+
     #endregion
 
     #region Default DSC method implementations

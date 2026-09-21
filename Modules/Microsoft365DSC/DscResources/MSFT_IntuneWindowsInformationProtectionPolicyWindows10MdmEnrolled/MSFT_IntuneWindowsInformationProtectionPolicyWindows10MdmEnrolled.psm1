@@ -473,6 +473,15 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
             $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
 
+        $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                '#microsoft.graph.iPv4Range'                                = @('lowerAddress', 'upperAddress')
+                '#microsoft.graph.iPv6Range'                                = @('lowerAddress', 'upperAddress')
+                '#microsoft.graph.iPv4CidrRange'                            = @('cidrAddress')
+                '#microsoft.graph.iPv6CidrRange'                            = @('cidrAddress')
+                '#microsoft.graph.windowsInformationProtectionStoreApp'     = @('denied', 'description', 'displayName', 'productName', 'publisherName')
+                '#microsoft.graph.windowsInformationProtectionDesktopApp'   = @('binaryName', 'binaryVersionHigh', 'binaryVersionLow', 'denied', 'description', 'displayName', 'productName', 'publisherName')
+            })
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Information Protection Policy for Windows10 Mdm Enrolled with DisplayName {$($this.DisplayName)}"

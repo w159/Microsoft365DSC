@@ -455,6 +455,40 @@ class IntuneDeviceConfigurationKioskPolicyWindows10 : M365DSCResourceBase
 
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
+        foreach ($kioskProfile in $boundParameters.kioskProfiles)
+        {
+            $appConfiguration = $kioskProfile.appConfiguration
+            if ($null -eq $appConfiguration)
+            {
+                continue
+            }
+
+            if ($appConfiguration['@odata.type'] -eq '#microsoft.graph.windowsKioskSingleUWPApp' -and $null -ne $appConfiguration.uwpApp)
+            {
+                $appConfiguration.uwpApp['@odata.type'] = '#microsoft.graph.windowsKioskUWPApp'
+            }
+            elseif ($appConfiguration['@odata.type'] -eq '#microsoft.graph.windowsKioskSingleWin32App' -and $null -ne $appConfiguration.win32App)
+            {
+                $appConfiguration.win32App['@odata.type'] = '#microsoft.graph.windowsKioskWin32App'
+            }
+        }
+
+        $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                '#microsoft.graph.windowsKioskMultipleApps'        = @('allowAccessToDownloadsFolder', 'apps', 'disallowDesktopApps', 'showTaskBar', 'startMenuLayoutXml')
+                '#microsoft.graph.windowsKioskSingleUWPApp'        = @('uwpApp')
+                '#microsoft.graph.windowsKioskSingleWin32App'      = @('win32App')
+                '#microsoft.graph.windowsKioskDesktopApp'          = @('appType', 'autoLaunch', 'desktopApplicationId', 'desktopApplicationLinkPath', 'name', 'path', 'startLayoutTileSize')
+                '#microsoft.graph.windowsKioskUWPApp'              = @('appId', 'appType', 'appUserModelId', 'autoLaunch', 'containedAppId', 'name', 'startLayoutTileSize')
+                '#microsoft.graph.windowsKioskWin32App'            = @('appType', 'autoLaunch', 'classicAppPath', 'edgeKiosk', 'edgeKioskIdleTimeoutMinutes', 'edgeKioskType', 'edgeNoFirstRun', 'name', 'startLayoutTileSize')
+                '#microsoft.graph.windowsKioskActiveDirectoryGroup' = @('groupName')
+                '#microsoft.graph.windowsKioskAutologon'           = @()
+                '#microsoft.graph.windowsKioskAzureADGroup'        = @('displayName', 'groupId')
+                '#microsoft.graph.windowsKioskAzureADUser'         = @('userId', 'userPrincipalName')
+                '#microsoft.graph.windowsKioskLocalGroup'          = @('groupName')
+                '#microsoft.graph.windowsKioskLocalUser'           = @('userName')
+                '#microsoft.graph.windowsKioskVisitor'             = @()
+            })
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Device Configuration Kiosk Policy for Windows10 with DisplayName {$($this.DisplayName)}"
