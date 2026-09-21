@@ -5618,7 +5618,9 @@ function Get-OrganizationConfig
 {
     [CmdletBinding()]
     param(
-
+        [Parameter()]
+        [Switch]
+        $RetrieveEwsOperationAccessPolicy
     )
 }
 function Get-OrganizationRelationship
@@ -77855,7 +77857,11 @@ function Set-CsOnlineApplicationInstance
 
         [Parameter()]
         [System.String]
-        $DisplayName
+        $DisplayName,
+
+        [Parameter()]
+        [System.String]
+        $ApplicationId
     )
 }
 function Add-TeamUser

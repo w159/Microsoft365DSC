@@ -128,6 +128,8 @@ class IntuneWindowsBackupForOrganizationConfiguration : M365DSCResourceBase
 
         $this.AddTelemetry('Set')
 
+        $null = $this.Get()
+
         #region resource generator code
         $null = Update-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
             -DeviceEnrollmentConfigurationId $this.ResourceCache['IntuneWindowsBackupForOrganizationConfigurationId'] `

@@ -247,6 +247,8 @@ class EXOPlace : M365DSCResourceBase
 
         $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $boundParameters
 
+        $updateParameters.Remove('DisplayName') | Out-Null
+
         if ([System.String]::IsNullOrEmpty($this.ParentId) -and $null -ne $this.ParentType)
         {
             Write-Verbose -Message 'ParentId is $null, removing ParentType.'

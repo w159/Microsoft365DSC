@@ -410,6 +410,8 @@ class EXOActiveSyncMailboxPolicy : M365DSCResourceBase
 
         $setParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
 
+        $setParameters.Remove('IsDefaultPolicy') | Out-Null
+
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {

@@ -115,6 +115,12 @@ class O365OrgCustomizationSetting : M365DSCResourceBase
 
         Write-Verbose -Message 'Setting configuration of the O365 Org Customization Setting'
 
+        if ($this.State -eq 'Absent')
+        {
+            Write-Warning -Message 'Organization customization cannot be disabled once it has been enabled. No change will be made.'
+            return
+        }
+
         $null = $this.Connect('MicrosoftGraph')
 
         Confirm-M365DSCDependencies

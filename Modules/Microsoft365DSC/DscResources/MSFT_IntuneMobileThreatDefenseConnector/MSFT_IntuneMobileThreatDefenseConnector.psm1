@@ -13,7 +13,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates the Mobile Threat Defense partner may collect metadata about installed applications from Intune for IOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about installed applications from Intune for IOS devices. Default value is FALSE.')]
-    [System.Nullable[System.Boolean]] $AllowPartnerToCollectIosApplicationMetadata
+    [System.Nullable[System.Boolean]] $AllowPartnerToCollectIOSApplicationMetadata
 
     [DscProperty()]
     [System.ComponentModel.Description('When TRUE, allows the Mobile Threat Defense partner to request a list of installed certificates on iOS/iPadOS devices from Intune to use for threat analysis. This list of installed certificates will be sent from enrolled iOS/iPadOS devices and will include unmanaged certificates (certificates not deployed through Intune). When FALSE, indicates that metadata about installed certificates will not be collected. Default value is FALSE.')]
@@ -85,7 +85,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Get or set whether to block devices on the enabled platforms that do not meet the minimum version requirements of the Mobile Threat Defense partner.')]
-    [System.Nullable[System.Boolean]] $PartnerUnsupportedOSVersionBlocked
+    [System.Nullable[System.Boolean]] $PartnerUnsupportedOsVersionBlocked
 
     [DscProperty()]
     [System.ComponentModel.Description('When TRUE, indicates that Intune must receive data from the Mobile Threat Defense partner prior to marking a device compliant for Windows. When FALSE, indicates that Intune may make a device compliant without receiving data from the Mobile Threat Defense partner for Windows. Default value is FALSE.')]
@@ -207,7 +207,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
             $results = @{
                 Id                                                  = $instance.Id
                 DisplayName                                         = $displayNameValue
-                AllowPartnerToCollectIosApplicationMetadata         = $instance.AllowPartnerToCollectIosApplicationMetadata
+                AllowPartnerToCollectIOSApplicationMetadata         = $instance.AllowPartnerToCollectIOSApplicationMetadata
                 AllowPartnerToCollectIosCertificateMetadata         = $instance.AllowPartnerToCollectIosCertificateMetadata
                 AllowPartnerToCollectIOSPersonalApplicationMetadata = $instance.AllowPartnerToCollectIosPersonalApplicationMetadata
                 AllowPartnerToCollectIosPersonalCertificateMetadata = $instance.AllowPartnerToCollectIosPersonalCertificateMetadata
@@ -225,7 +225,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 MicrosoftDefenderForEndpointAttachEnabled           = $instance.MicrosoftDefenderForEndpointAttachEnabled
                 PartnerState                                        = $instance.PartnerState.ToString()
                 PartnerUnresponsivenessThresholdInDays              = $instance.PartnerUnresponsivenessThresholdInDays
-                PartnerUnsupportedOSVersionBlocked                  = $instance.PartnerUnsupportedOSVersionBlocked
+                PartnerUnsupportedOsVersionBlocked                  = $instance.PartnerUnsupportedOsVersionBlocked
                 WindowsDeviceBlockedOnMissingPartnerData            = $instance.WindowsDeviceBlockedOnMissingPartnerData
                 WindowsEnabled                                      = $instance.WindowsEnabled
                 WindowsMobileApplicationManagementEnabled           = $instance.WindowsMobileApplicationManagementEnabled
@@ -271,18 +271,6 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
         $SetParameters.Remove('DisplayName') | Out-Null
         $SetParameters.Remove('Id') | Out-Null
         $SetParameters.Remove('LastHeartbeatDateTime') | Out-Null
-
-
-        if ($this.GetBoundParameters().ContainsKey('PartnerUnsupportedOSVersionBlocked'))
-        {
-            $SetParameters.Remove('PartnerUnsupportedOSVersionBlocked') | Out-Null
-            $SetParameters.Add('partnerUnsupportedOsVersionBlocked', $this.PartnerUnsupportedOSVersionBlocked)
-        }
-        if ($this.GetBoundParameters().ContainsKey('AllowPartnerToCollectIosApplicationMetadata'))
-        {
-            $SetParameters.Remove('AllowPartnerToCollectIosApplicationMetadata') | Out-Null
-            $SetParameters.Add('allowPartnerToCollectIOSApplicationMetadata', $this.AllowPartnerToCollectIosApplicationMetadata)
-        }
 
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')

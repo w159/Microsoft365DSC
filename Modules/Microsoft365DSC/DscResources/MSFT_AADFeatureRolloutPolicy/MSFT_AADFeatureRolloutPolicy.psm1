@@ -261,6 +261,7 @@ class AADFeatureRolloutPolicy : M365DSCResourceBase
             $updateParameters = ([Hashtable]$boundParameters).Clone()
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Remove('Feature') | Out-Null
+            $updateParameters.Remove('IsAppliedToOrganization') | Out-Null
 
             #region resource generator code
             Update-MgBetaPolicyFeatureRolloutPolicy `

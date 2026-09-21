@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADRoleAssignmentScheduleRequest : M365DSCResourceBase
@@ -264,9 +264,16 @@ class AADRoleAssignmentScheduleRequest : M365DSCResourceBase
                 $ScheduleInfoValue.Add('StartDateTime', $schedule.ScheduleInfo.StartDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ'))
             }
 
+            $principalTypeValue = $this.PrincipalType
+            $principalObject = Get-MgBetaDirectoryObjectById -Ids $schedule.PrincipalId -ErrorAction SilentlyContinue
+            if ($null -ne $principalObject -and $null -ne $principalObject['@odata.type'])
+            {
+                $principalTypeValue = $principalObject['@odata.type'].Split('.')[2]
+            }
+
             $results = @{
                 Principal             = $PrincipalValue
-                PrincipalType         = $this.PrincipalType
+                PrincipalType         = $principalTypeValue
                 RoleDefinition        = $this.RoleDefinition
                 DirectoryScopeId      = $schedule.DirectoryScopeId
                 AppScopeId            = $schedule.AppScopeId

@@ -485,6 +485,9 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
 
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
+        $boundParameters.Remove('featureUpdatesWillBeRolledBack') | Out-Null
+        $boundParameters.Remove('qualityUpdatesWillBeRolledBack') | Out-Null
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Window Update For Business Ring Update Profile for Windows10 with DisplayName {$($this.DisplayName)}"
@@ -568,6 +571,13 @@ class IntuneWindowsUpdateForBusinessRingUpdateProfileWindows10 : M365DSCResource
     [bool] Test()
     {
         return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            ExcludedProperties = @('FeatureUpdatesWillBeRolledBack', 'QualityUpdatesWillBeRolledBack')
+        }
     }
 
     [string] Export()

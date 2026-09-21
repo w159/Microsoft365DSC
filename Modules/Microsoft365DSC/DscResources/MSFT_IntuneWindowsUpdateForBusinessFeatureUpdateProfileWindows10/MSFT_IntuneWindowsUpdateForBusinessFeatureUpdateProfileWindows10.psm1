@@ -260,6 +260,15 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
             }
         }
 
+        foreach ($dateProperty in @('offerStartDateTimeInUTC', 'offerEndDateTimeInUTC'))
+        {
+            if ($boundParameters.rolloutSettings.$dateProperty -is [System.String] -and
+                [System.String]::IsNullOrWhiteSpace($boundParameters.rolloutSettings.$dateProperty))
+            {
+                $boundParameters.rolloutSettings.$dateProperty = $null
+            }
+        }
+
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating an Intune Windows Update For Business Feature Update Profile for Windows10 with DisplayName {$($this.DisplayName)}"
@@ -373,6 +382,13 @@ class IntuneWindowsUpdateForBusinessFeatureUpdateProfileWindows10 : M365DSCResou
                         {
                             throw 'OfferIntervalInDays must be less than or equal to the difference between OfferEndDateTimeInUTC and OfferStartDateTimeInUTC in days.'
                         }
+                    }
+
+                    $payloadStartDate = [datetime]::MinValue
+                    if ([datetime]::TryParse($boundParameters.rolloutSettings.offerStartDateTimeInUTC, [ref] $payloadStartDate) -and
+                        $payloadStartDate -lt $currentTime)
+                    {
+                        $boundParameters.rolloutSettings.Remove('offerStartDateTimeInUTC') | Out-Null
                     }
                 }
             }
