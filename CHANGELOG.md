@@ -849,6 +849,7 @@
     uses the same beta endpoint and module as the other cmdlets.
   * Changed the Graph shim generation to also collect the Graph cmdlets called in the helper
     modules and the resource base classes.
+  * Fixed an issue where the Graph shim would ignore the `Top` parameter.
   * Corrected the Windows PowerShell warning, which did not mention that
     `Get-DscConfiguration` is supported.
   * Fixed build of Docker linux dev image by updating one of the installation
