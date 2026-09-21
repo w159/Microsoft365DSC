@@ -29,7 +29,7 @@ Configuration Example
             DisplayName                                        = 'Android App Protection - Corporate'
             AllowedAndroidDeviceManufacturers                  = 'Samsung;Google;Motorola'
             AllowedAndroidDeviceModels                         = @('SM-G991B', 'SM-A546B', 'Pixel 8')
-            Alloweddataingestionlocations                      = @('oneDriveForBusiness', 'sharePoint', 'camera', 'photoLibrary')
+            AllowedDataIngestionLocations                      = @('oneDriveForBusiness', 'sharePoint', 'camera', 'photoLibrary')
             AllowedDataStorageLocations                        = @('oneDriveForBusiness', 'sharePoint')
             AllowedInboundDataTransferSources                  = 'managedApps'
             AllowedOutboundClipboardSharingExceptionLength     = 0
@@ -99,11 +99,11 @@ Configuration Example
             MinimumPinLength                                   = 6
             MinimumRequiredAppVersion                          = '16.0'
             MinimumRequiredCompanyPortalVersion                = '5.0.5484.0'
-            MinimumRequiredOSVersion                           = '11.0'
+            MinimumRequiredOsVersion                           = '11.0'
             MinimumRequiredPatchVersion                        = '2023-01-01'
             MinimumWarningAppVersion                           = '16.5'
             MinimumWarningCompanyPortalVersion                 = '5.0.5545.0'
-            MinimumWarningOSVersion                            = '12.0'
+            MinimumWarningOsVersion                            = '12.0'
             MinimumWarningPatchVersion                         = '2024-01-01'
             MinimumWipeAppVersion                              = '15.0'
             MinimumWipeCompanyPortalVersion                    = '5.0.5333.0'

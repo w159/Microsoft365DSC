@@ -101,7 +101,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Sources from which data is allowed to be transferred.')]
-    [System.String[]] $Alloweddataingestionlocations
+    [System.String[]] $AllowedDataIngestionLocations
 
     [DscProperty()]
     [System.ComponentModel.Description('Defines a managed app behavior, either block or warn, if the user is clocked out (non-working time). Possible values are: block, wipe, warn, blockWhenSettingIsSupported.')]
@@ -411,7 +411,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
-    [System.String] $MinimumRequiredOSVersion
+    [System.String] $MinimumRequiredOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
@@ -427,7 +427,7 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will result in warning message on the managed app')]
-    [System.String] $MinimumWarningOSVersion
+    [System.String] $MinimumWarningOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will result in warning message on the managed app')]
@@ -625,11 +625,11 @@ class IntuneAppProtectionPolicyAndroid : M365DSCResourceBase
                 MinimumPinLength                                   = $policy.MinimumPinLength
                 MinimumRequiredAppVersion                          = $policy.MinimumRequiredAppVersion
                 MinimumRequiredCompanyPortalVersion                = $policy.MinimumRequiredCompanyPortalVersion
-                MinimumRequiredOSVersion                           = $policy.MinimumRequiredOSVersion
+                MinimumRequiredOsVersion                           = $policy.MinimumRequiredOsVersion
                 MinimumRequiredPatchVersion                        = $policy.MinimumRequiredPatchVersion
                 MinimumWarningAppVersion                           = $policy.MinimumWarningAppVersion
                 MinimumWarningCompanyPortalVersion                 = $policy.MinimumWarningCompanyPortalVersion
-                MinimumWarningOSVersion                            = $policy.MinimumWarningOSVersion
+                MinimumWarningOsVersion                            = $policy.MinimumWarningOsVersion
                 MinimumWarningPatchVersion                         = $policy.MinimumWarningPatchVersion
                 MinimumWipeAppVersion                              = $policy.MinimumWipeAppVersion
                 MinimumWipeCompanyPortalVersion                    = $policy.MinimumWipeCompanyPortalVersion
