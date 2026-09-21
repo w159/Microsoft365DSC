@@ -26,7 +26,7 @@ Configuration Example
     {
         IntuneMobileThreatDefenseConnector "IntuneMobileThreatDefenseConnector-Example"
         {
-            AllowPartnerToCollectIosApplicationMetadata         = $False;
+            AllowPartnerToCollectIOSApplicationMetadata         = $False;
             AllowPartnerToCollectIosCertificateMetadata         = $True;
             AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
             AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -46,7 +46,7 @@ Configuration Example
             MicrosoftDefenderForEndpointAttachEnabled           = $False;
             PartnerState                                        = "notSetUp";
             PartnerUnresponsivenessThresholdInDays              = 7;
-            PartnerUnsupportedOSVersionBlocked                  = $False;
+            PartnerUnsupportedOsVersionBlocked                  = $False;
             WindowsDeviceBlockedOnMissingPartnerData            = $False;
             WindowsEnabled                                      = $False;
             WindowsMobileApplicationManagementEnabled           = $True;

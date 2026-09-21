@@ -246,11 +246,11 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
-    [System.String] $MinimumRequiredOSVersion
+    [System.String] $MinimumRequiredOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will result in warning message on the managed app from accessing company data.')]
-    [System.String] $MinimumWarningOSVersion
+    [System.String] $MinimumWarningOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than the specified version will block the managed app from accessing company data.')]
@@ -258,7 +258,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than or equal to the specified version will wipe the managed app and the associated company data.')]
-    [System.String] $MinimumWipeOSVersion
+    [System.String] $MinimumWipeOsVersion
 
     [DscProperty()]
     [System.ComponentModel.Description('Versions less than or equal to the specified version will wipe the managed app and the associated company data.')]
@@ -548,7 +548,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 MinimumRequiredOsVersion                       = $policy.MinimumRequiredOsVersion
                 MinimumRequiredSdkVersion                      = $policy.MinimumRequiredSDKVersion
                 MinimumWarningAppVersion                       = $policy.MinimumWarningAppVersion
-                MinimumWarningOSVersion                        = $policy.MinimumWarningOSVersion
+                MinimumWarningOsVersion                        = $policy.MinimumWarningOsVersion
                 ManagedBrowserToOpenLinksRequired              = $policy.ManagedBrowserToOpenLinksRequired
                 SaveAsBlocked                                  = $policy.SaveAsBlocked
                 PeriodOfflineBeforeWipeIsEnforced              = $policy.PeriodOfflineBeforeWipeIsEnforced
@@ -568,7 +568,7 @@ class IntuneAppProtectionPolicyiOS : M365DSCResourceBase
                 Assignments                                    = $assignmentResult
                 CustomBrowserProtocol                          = $policy.CustomBrowserProtocol
                 Apps                                           = $appsArray
-                MinimumWipeOSVersion                           = $policy.minimumWipeOSVersion
+                MinimumWipeOsVersion                           = $policy.minimumWipeOsVersion
                 MinimumWipeAppVersion                          = $policy.MinimumWipeAppVersion
                 AppActionIfDeviceComplianceRequired            = $policy.AppActionIfDeviceComplianceRequired
                 AppActionIfMaximumPinRetriesExceeded           = $policy.AppActionIfMaximumPinRetriesExceeded

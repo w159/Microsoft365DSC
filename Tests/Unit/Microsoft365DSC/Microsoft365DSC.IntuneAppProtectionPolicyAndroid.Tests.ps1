@@ -34,7 +34,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AllowedAndroidDeviceManufacturers                 = 'Samsung;Google'
                     AllowedAndroidDeviceModels                        = @('Model1', 'Model2')
                     AllowedOutboundClipboardSharingExceptionLength    = 4
-                    Alloweddataingestionlocations                     = @('OneDrive', 'SharePoint')
+                    AllowedDataIngestionLocations                     = @('OneDrive', 'SharePoint')
                     AppActionIfAccountIsClockedOut                    = 'warn'
                     AppActionIfAndroidDeviceManufacturerNotAllowed    = 'block'
                     AppActionIfAndroidDeviceModelNotAllowed           = 'block'
@@ -132,11 +132,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ManagedBrowser                                  = 'microsoftEdge'
                     MinimumRequiredAppVersion                       = '1.2'
                     MinimumRequiredCompanyPortalVersion             = '5.0.5484.0'
-                    MinimumRequiredOSVersion                        = '1.1'
+                    MinimumRequiredOsVersion                        = '1.1'
                     MinimumRequiredPatchVersion                     = '2020-07-13'
                     MinimumWarningAppVersion                        = '1.5'
                     MinimumWarningCompanyPortalVersion              = '5.0.5545.0'
-                    MinimumWarningOSVersion                         = '1.5'
+                    MinimumWarningOsVersion                         = '1.5'
                     MinimumWarningPatchVersion                      = '2021-07-13'
                     CustomBrowserPackageId                          = ''
                     CustomBrowserDisplayName                        = ''
@@ -154,7 +154,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     AllowedAndroidDeviceManufacturers                 = 'Samsung;Google'
                     AllowedAndroidDeviceModels                        = @('Model1', 'Model2')
                     AllowedOutboundClipboardSharingExceptionLength    = 4
-                    Alloweddataingestionlocations                     = @('OneDrive', 'SharePoint')
+                    AllowedDataIngestionLocations                     = @('OneDrive', 'SharePoint')
                     AppActionIfAccountIsClockedOut                    = 'warn'
                     AppActionIfAndroidDeviceManufacturerNotAllowed    = 'block'
                     AppActionIfAndroidDeviceModelNotAllowed           = 'block'
@@ -249,11 +249,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     ManagedBrowser                                  = 'microsoftEdge'
                     MinimumRequiredAppVersion                       = '1.2'
                     MinimumRequiredCompanyPortalVersion             = '5.0.5484.0'
-                    MinimumRequiredOSVersion                        = '1.1'
+                    MinimumRequiredOsVersion                        = '1.1'
                     MinimumRequiredPatchVersion                     = '2020-07-13'
                     MinimumWarningAppVersion                        = '1.5'
                     MinimumWarningCompanyPortalVersion              = '5.0.5545.0'
-                    MinimumWarningOSVersion                         = '1.5'
+                    MinimumWarningOsVersion                         = '1.5'
                     MinimumWarningPatchVersion                      = '2021-07-13'
                     IsAssigned                                      = $True
                     CustomBrowserPackageId                          = ''

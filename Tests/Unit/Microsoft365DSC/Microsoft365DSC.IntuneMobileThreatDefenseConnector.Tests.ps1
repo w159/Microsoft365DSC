@@ -60,7 +60,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name " 1. The instance should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIOSApplicationMetadata         = $False;
                     AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                     AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -78,7 +78,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
-                    PartnerUnsupportedOSVersionBlocked                  = $False;
+                    PartnerUnsupportedOsVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
                     WindowsMobileApplicationManagementEnabled           = $False;
@@ -106,7 +106,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name " 2. The instance exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIOSApplicationMetadata         = $False;
                     AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                     AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -124,7 +124,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
-                    PartnerUnsupportedOSVersionBlocked                  = $False;
+                    PartnerUnsupportedOsVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
                     WindowsMobileApplicationManagementEnabled           = $False;
@@ -134,7 +134,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
-                        AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIOSApplicationMetadata         = $False;
                         AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                         AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -152,7 +152,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
-                        PartnerUnsupportedOSVersionBlocked                  = $False;
+                        PartnerUnsupportedOsVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
                         WindowsMobileApplicationManagementEnabled           = $False;
@@ -175,7 +175,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name " 3. The instance exists and values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIOSApplicationMetadata         = $False;
                     AllowPartnerToCollectIosCertificateMetadata         = $False;
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                     AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -193,7 +193,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "available";
                     PartnerUnresponsivenessThresholdInDays              = 0;
-                    PartnerUnsupportedOSVersionBlocked                  = $False;
+                    PartnerUnsupportedOsVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
                     WindowsMobileApplicationManagementEnabled           = $False;
@@ -203,7 +203,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
-                        AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIOSApplicationMetadata         = $False;
                         AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                         AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -221,7 +221,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
-                        PartnerUnsupportedOSVersionBlocked                  = $False;
+                        PartnerUnsupportedOsVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
                         WindowsMobileApplicationManagementEnabled           = $False;
@@ -237,7 +237,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name " 4. The instance exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowPartnerToCollectIosApplicationMetadata         = $False;
+                    AllowPartnerToCollectIOSApplicationMetadata         = $False;
                     AllowPartnerToCollectIosCertificateMetadata         = $True; #drift
                     AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                     AllowPartnerToCollectIosPersonalCertificateMetadata = $True; #drift
@@ -255,7 +255,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     MicrosoftDefenderForEndpointAttachEnabled           = $False;
                     PartnerState                                        = "notSetUp"; #drift
                     PartnerUnresponsivenessThresholdInDays              = 1; #drift
-                    PartnerUnsupportedOSVersionBlocked                  = $False;
+                    PartnerUnsupportedOsVersionBlocked                  = $False;
                     WindowsDeviceBlockedOnMissingPartnerData            = $False;
                     WindowsEnabled                                      = $False;
                     WindowsMobileApplicationManagementEnabled           = $True; #drift
@@ -265,7 +265,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
-                        AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIOSApplicationMetadata         = $False;
                         AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                         AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -283,7 +283,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
-                        PartnerUnsupportedOSVersionBlocked                  = $False;
+                        PartnerUnsupportedOsVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
                         WindowsMobileApplicationManagementEnabled           = $False;
@@ -315,7 +315,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
                 Mock -CommandName Get-MgBetaDeviceManagementMobileThreatDefenseConnector -MockWith {
                     return @{
-                        AllowPartnerToCollectIosApplicationMetadata         = $False;
+                        AllowPartnerToCollectIOSApplicationMetadata         = $False;
                         AllowPartnerToCollectIosCertificateMetadata         = $False;
                         AllowPartnerToCollectIosPersonalApplicationMetadata = $False;
                         AllowPartnerToCollectIosPersonalCertificateMetadata = $False;
@@ -333,7 +333,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                         MicrosoftDefenderForEndpointAttachEnabled           = $False;
                         PartnerState                                        = "available";
                         PartnerUnresponsivenessThresholdInDays              = 0;
-                        PartnerUnsupportedOSVersionBlocked                  = $False;
+                        PartnerUnsupportedOsVersionBlocked                  = $False;
                         WindowsDeviceBlockedOnMissingPartnerData            = $False;
                         WindowsEnabled                                      = $False;
                         WindowsMobileApplicationManagementEnabled           = $False;
