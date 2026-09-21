@@ -144,6 +144,8 @@ class TeamsApplicationInstance : M365DSCResourceBase
 
         $this.AddTelemetry('Set')
 
+        $ConnectionMode = $this.Connect('MicrosoftTeams')
+
         $currentInstance = $this.Get().ToHashtable()
 
         $params = @{
@@ -173,7 +175,21 @@ class TeamsApplicationInstance : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating application instance {$($this.DisplayName)}"
-            Set-CsOnlineApplicationInstance -Identity $this.UserPrincipalName -DisplayName $this.DisplayName
+
+            if ($ConnectionMode -ne 'Credentials')
+            {
+                throw 'Updating an existing instance of TeamsApplicationInstance requires delegated credentials. Set-CsOnlineApplicationInstance does not support application-based authentication.'
+            }
+
+            $updateParameters = @{
+                Identity    = $this.UserPrincipalName
+                DisplayName = $this.DisplayName
+            }
+            if ($params.ContainsKey('ApplicationId'))
+            {
+                $updateParameters.Add('ApplicationId', $params.ApplicationId)
+            }
+            Set-CsOnlineApplicationInstance @updateParameters
         }
         # REMOVE
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')

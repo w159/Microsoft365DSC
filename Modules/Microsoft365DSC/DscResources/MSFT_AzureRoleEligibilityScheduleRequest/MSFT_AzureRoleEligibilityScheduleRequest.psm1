@@ -290,9 +290,15 @@ class AzureRoleEligibilityScheduleRequest : M365DSCResourceBase
                 $ScheduleInfoValue.Add('StartDateTime', $schedule.StartDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ'))
             }
 
+            $principalTypeValue = $this.PrincipalType
+            if (-not [System.String]::IsNullOrEmpty($schedule.PrincipalType))
+            {
+                $principalTypeValue = $schedule.PrincipalType
+            }
+
             $results = @{
                 Principal             = $PrincipalValue
-                PrincipalType         = $this.PrincipalType
+                PrincipalType         = $principalTypeValue
                 RoleDefinition        = $this.RoleDefinition
                 DirectoryScopeId      = $schedule.Scope
                 Id                    = $schedule.Name

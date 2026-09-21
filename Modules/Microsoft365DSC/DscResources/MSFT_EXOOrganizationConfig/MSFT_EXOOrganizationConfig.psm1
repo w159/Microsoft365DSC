@@ -521,7 +521,7 @@ class EXOOrganizationConfig : M365DSCResourceBase
 
                 $this.AddTelemetry('Get')
 
-                $ConfigSettings = Get-OrganizationConfig -ErrorAction SilentlyContinue
+                $ConfigSettings = Get-OrganizationConfig -RetrieveEwsOperationAccessPolicy -ErrorAction SilentlyContinue
                 if ($null -eq $ConfigSettings)
                 {
                     throw 'There was an error retrieving values from the Get function in EXOOrganizationConfig.'
@@ -575,6 +575,12 @@ class EXOOrganizationConfig : M365DSCResourceBase
                 {
                     $TenantAdminNotificationForDelayedDelicensingEnabledValue = $false
                 }
+            }
+
+            $EwsAllowedAppIDsValue = @()
+            if (-not [System.String]::IsNullOrWhiteSpace($ConfigSettings.EwsAllowedAppIDs))
+            {
+                $EwsAllowedAppIDsValue = [System.String[]]($ConfigSettings.EwsAllowedAppIDs.Split(',').Trim())
             }
 
             $results = @{
@@ -636,7 +642,7 @@ class EXOOrganizationConfig : M365DSCResourceBase
                 EnableOutlookEvents                                       = $ConfigSettings.EnableOutlookEvents
                 EndUserDLUpgradeFlowsDisabled                             = $ConfigSettings.EndUserDLUpgradeFlowsDisabled
                 EndUserMailNotificationForDelayedDelicensingEnabled       = $EndUserMailNotificationForDelayedDelicensingEnabledValue
-                EwsAllowedAppIDs                                          = $ConfigSettings.EwsAllowedAppIDs
+                EwsAllowedAppIDs                                          = $EwsAllowedAppIDsValue
                 EwsAllowEntourage                                         = $ConfigSettings.EwsAllowEntourage
                 EwsAllowList                                              = $ConfigSettings.EwsAllowList
                 EwsAllowMacOutlook                                        = $ConfigSettings.EwsAllowMacOutlook
@@ -789,6 +795,16 @@ class EXOOrganizationConfig : M365DSCResourceBase
             $SetValues.Remove('TenantAdminNotificationForDelayedDelicensingEnabled') | Out-Null
             $SetValues.Remove('EndUserMailNotificationForDelayedDelicensingEnabled') | Out-Null
         }
+
+        if ($SetValues.ContainsKey('EwsAllowedAppIDs'))
+        {
+            $SetValues['EwsAllowedAppIDs'] = $null
+            if (@($this.EwsAllowedAppIDs).Count -gt 0)
+            {
+                $SetValues['EwsAllowedAppIDs'] = [System.String]::Join(',', $this.EwsAllowedAppIDs)
+            }
+        }
+
         Set-OrganizationConfig @SetValues
 
         if ($secondaryParameterSet.Count -gt 0)

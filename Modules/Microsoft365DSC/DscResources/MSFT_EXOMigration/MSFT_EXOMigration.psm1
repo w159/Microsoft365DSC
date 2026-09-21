@@ -175,7 +175,7 @@ class EXOMigration : M365DSCResourceBase
 
             if ($null -ne $instance.StartAfter)
             {
-                $results.Add('StartAfter', $instance.CompleteAfter.ToString('MM/dd/yyyy hh:mm tt'))
+                $results.Add('StartAfter', $instance.StartAfter.ToString('MM/dd/yyyy hh:mm tt'))
             }
 
             return $this.AsResult($results)

@@ -509,6 +509,14 @@ class SPOSharingSettings : M365DSCResourceBase
             $CurrentParameters['SharingBlockedDomainList'] = $blocked.Trim()
         }
 
+        foreach ($listParameter in @('WhoCanShareAllowListInTenant', 'WhoCanShareAllowListInTenantByPrincipalIdentity'))
+        {
+            if ($null -ne $CurrentParameters[$listParameter])
+            {
+                $CurrentParameters[$listParameter] = [System.String]::Join(',', $CurrentParameters[$listParameter])
+            }
+        }
+
         if ($this.DefaultLinkPermission -eq 'None')
         {
             Write-Verbose -Message 'Valid values to set are View and Edit. A value of None will be set to Edit as its the default value.'

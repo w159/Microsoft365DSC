@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class TeamsAudioConferencingPolicy : M365DSCResourceBase
@@ -145,7 +145,11 @@ class TeamsAudioConferencingPolicy : M365DSCResourceBase
             {
                 if ($key -eq 'MeetingInvitePhoneNumbers')
                 {
-                    $keyValue = $createParameters.$key -join ','
+                    $keyValue = $null
+                    if (@($createParameters.$key).Count -gt 0)
+                    {
+                        $keyValue = $createParameters.$key -join ','
+                    }
                     $createParameters.Remove($key) | Out-Null
                     $createParameters.Add($key, $keyValue)
                 }
@@ -164,7 +168,11 @@ class TeamsAudioConferencingPolicy : M365DSCResourceBase
             {
                 if ($key -eq 'MeetingInvitePhoneNumbers')
                 {
-                    $keyValue = $updateParameters.$key -join ','
+                    $keyValue = $null
+                    if (@($updateParameters.$key).Count -gt 0)
+                    {
+                        $keyValue = $updateParameters.$key -join ','
+                    }
                     $updateParameters.Remove($key) | Out-Null
                     $updateParameters.Add($key, $keyValue)
                 }

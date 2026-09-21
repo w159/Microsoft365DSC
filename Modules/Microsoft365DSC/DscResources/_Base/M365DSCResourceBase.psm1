@@ -782,6 +782,11 @@ class M365DSCResourceBase
 
     [void] FromHashtable([Hashtable] $Source)
     {
+        if ($null -eq $Source)
+        {
+            return
+        }
+
         foreach ($entry in $Source.GetEnumerator())
         {
             $meta = $null
@@ -908,6 +913,16 @@ class M365DSCResourceBase
         }
 
         return ([System.Boolean] $Value).ToString().ToLower()
+    }
+
+    [System.String] NumberToJson([System.Object] $Value)
+    {
+        if ($null -eq $Value)
+        {
+            return 'null'
+        }
+
+        return [System.Convert]::ToString($Value, [System.Globalization.CultureInfo]::InvariantCulture)
     }
 
     #endregion

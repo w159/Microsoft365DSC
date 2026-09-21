@@ -121,7 +121,12 @@ class IntuneWindowsDataProcessingSettings : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $boundParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
+        $boundParameters.Remove('IsSingleInstance') | Out-Null
+        $boundParameters.Remove('HasValidWindowsLicense') | Out-Null
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        $boundParameters.Add('@odata.type', '#microsoft.graph.dataProcessorServiceForWindowsFeaturesOnboarding')
+
         Invoke-M365DSCGraphRequest -Method PATCH -Uri '/beta/deviceManagement/dataProcessorServiceForWindowsFeaturesOnboarding' -Body $boundParameters
     }
 
