@@ -925,6 +925,11 @@ function Get-M365DSCExportContentForResource
     [void]$content.Append($partialContent)
     [void]$content.Append("        }`r`n")
 
+    if ($null -ne $Global:M365DSCExportInstanceTally)
+    {
+        $Global:M365DSCExportInstanceTally++
+    }
+
     return $content.ToString()
 }
 

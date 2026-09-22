@@ -75,9 +75,15 @@
     to `MSFT_MicrosoftGraphPrivilegedAccessRecurrencePattern`.
   * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphPatternedRecurrence1`
     to `MSFT_MicrosoftGraphPrivilegedAccessPatternedRecurrence`.
+  * The export now only queries groups that are enabled in PIM for Groups instead of every
+    group in the tenant. Requires the `PrivilegedAccess.Read.AzureADGroup` permission.
 * AADGroupEligibilitySchedule
   * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphRecurrenceRange1` to
     `MSFT_MicrosoftGraphRecurrenceRange`.
+* AADGroupEligibilityScheduleSettings
+  * Replaced the deprecated `/beta/privilegedAccess/aadGroups/resources` API, which stops
+    returning data on October 28, 2026, with the PIM for Groups resources API. Requires the
+    `PrivilegedAccess.Read.AzureADGroup` and `GroupMember.Read.All` permissions.
 * AADIdentityAPIConnector
   * [BREAKING CHANGE] Replaced the flattened `Username`, `Password` and `Certificates`
     properties with the `AuthenticationConfiguration` complex property. Its `dataType`
@@ -114,6 +120,9 @@
   * Added support for the `IncludeAllPreApprovedApplications` and `ResourceScopeType`
     properties.
 * AADPIMGroupSetting
+  * [BREAKING CHANGE] The export no longer includes the default policies of groups that are
+    not enabled in PIM for Groups. Only groups enabled in PIM are exported. Requires the
+    `PrivilegedAccess.Read.AzureADGroup` permission.
   * Improved performance with batch requests.
 * AADRoleAssignmentScheduleRequest
   * [BREAKING CHANGE] Removed deprecated properties `Action`, `IsValidationOnly`
@@ -771,6 +780,9 @@
   * Added caching for Intune device configurations, compliance policies and enrollment
     configurations across resources.
   * Added caching for Entra groups referenced by assignments for Intune resources.
+  * Fixed a parallel export hanging indefinitely.
+  * Fixed a parallel export always reporting 0 exported instances and occasionally miscounting
+    the successful and failed resources.
   * Added handling of a workload connection that fails during connect. It is reported
     once and skipped for the rest of the export.
   * Added `Absent` as an accepted value for `Ensure` to several resources to make them work

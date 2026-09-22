@@ -83,8 +83,7 @@ namespace Microsoft365DSC.Intune
                 OffsetUri = TryGetProperty(settingDefinition, "OffsetUri")
             };
 
-            // Extract AdditionalProperties - this is an IDictionary<string, object> on the Graph SDK objects
-            // Accessing the property is only possible through reflection with BindingFlags NonPublic and Instance
+            // Collect every property of the model that is not explicitly named
             IDictionary<string, object>? additionalProperties = null;
             List<string> defaultProperties = ["Id", "Name", "OffsetUri"];
             additionalProperties = new Dictionary<string, object>();
@@ -244,7 +243,7 @@ namespace Microsoft365DSC.Intune
         }
 
         /// <summary>
-        /// Extracts the options array from AdditionalProperties.
+        /// Extracts the options array from the properties the model does not name explicitly.
         /// Each option has an itemId, optionValue (with @odata.type and value), and dependentOn parent setting IDs.
         /// </summary>
         private static List<SettingDefinitionOption> ExtractOptions(IDictionary<string, object> additionalProperties)

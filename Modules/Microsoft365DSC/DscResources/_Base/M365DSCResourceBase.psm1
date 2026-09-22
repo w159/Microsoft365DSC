@@ -1,5 +1,6 @@
 ﻿using namespace System
 using namespace System.Collections
+using namespace System.Collections.Concurrent
 using namespace System.Collections.Generic
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Runspaces
@@ -121,7 +122,7 @@ class M365DSCResourceInfo
 
     hidden static [System.UInt32] $SerializationDepth = 25
 
-    hidden static [HashSet[Type]] $_depthRegistered = [HashSet[Type]]::new()
+    hidden static [ConcurrentDictionary[Type, bool]] $_depthRegistered = [ConcurrentDictionary[Type, bool]]::new()
 
     hidden static [void] RegisterSerializationDepth([Type] $Type)
     {
@@ -136,7 +137,7 @@ class M365DSCResourceInfo
             return
         }
 
-        if (-not [M365DSCResourceInfo]::_depthRegistered.Add($element))
+        if (-not [M365DSCResourceInfo]::_depthRegistered.TryAdd($element, $true))
         {
             return
         }
@@ -221,13 +222,13 @@ class M365DSCResourceBase
     # $Script:AllSchedules, $Script:exportedGroups, ...).
     hidden [Hashtable] $ResourceCache = @{}
 
-    hidden static [Dictionary[Type, M365DSCResourceInfo]] $_initialized = `
-        [Dictionary[Type, M365DSCResourceInfo]]::new()
+    hidden static [ConcurrentDictionary[Type, M365DSCResourceInfo]] $_initialized = `
+        [ConcurrentDictionary[Type, M365DSCResourceInfo]]::new()
 
     # Per-complex-type property metadata (ValidateSet presence, nested complex types),
     # built lazily for SanitizeComplexValue.
-    hidden static [Dictionary[Type, System.Object]] $_complexMetadata = `
-        [Dictionary[Type, System.Object]]::new()
+    hidden static [ConcurrentDictionary[Type, System.Object]] $_complexMetadata = `
+        [ConcurrentDictionary[Type, System.Object]]::new()
 
     hidden [M365DSCResourceInfo] $_info
 
@@ -236,15 +237,32 @@ class M365DSCResourceBase
     hidden [bool] $_seeded
 
     # Resource-name to type map, populated by each generated Part<NN>.psm1 at import time.
-    hidden static [Dictionary[String, Type]] $_registry = `
-        [Dictionary[String, Type]]::new([StringComparer]::OrdinalIgnoreCase)
+    hidden static [ConcurrentDictionary[String, Type]] $_registry = `
+        [ConcurrentDictionary[String, Type]]::new([StringComparer]::OrdinalIgnoreCase)
+
+    # Resolves the type registry to every runspace to prevent deadlocks because
+    # of static method calls between the different runspaces being marshalled.
+    hidden static [System.Runtime.CompilerServices.ConditionalWeakTable[Runspace, ConcurrentDictionary[String, Type]]] $_registryByRunspace = `
+        [System.Runtime.CompilerServices.ConditionalWeakTable[Runspace, ConcurrentDictionary[String, Type]]]::new()
 
     # Which part module declares each resource.
-    hidden static [Dictionary[String, String]] $_moduleByResource = `
-        [Dictionary[String, String]]::new([StringComparer]::OrdinalIgnoreCase)
+    hidden static [ConcurrentDictionary[String, String]] $_moduleByResource = `
+        [ConcurrentDictionary[String, String]]::new([StringComparer]::OrdinalIgnoreCase)
 
     static [void] Register([Type] $Type, [System.String] $ModuleName)
     {
+        $runspace = [Runspace]::DefaultRunspace
+        if ($null -ne $runspace)
+        {
+            $runspaceRegistry = $null
+            if (-not [M365DSCResourceBase]::_registryByRunspace.TryGetValue($runspace, [ref] $runspaceRegistry))
+            {
+                $runspaceRegistry = [ConcurrentDictionary[String, Type]]::new([StringComparer]::OrdinalIgnoreCase)
+                [M365DSCResourceBase]::_registryByRunspace.Add($runspace, $runspaceRegistry)
+            }
+            $runspaceRegistry[$Type.Name] = $Type
+        }
+
         [M365DSCResourceBase]::_registry[$Type.Name] = $Type
         [M365DSCResourceBase]::_moduleByResource[$Type.Name] = $ModuleName
     }
@@ -259,6 +277,15 @@ class M365DSCResourceBase
     static [Type] Resolve([System.String] $Name)
     {
         $type = $null
+        $runspaceRegistry = $null
+        $runspace = [Runspace]::DefaultRunspace
+        if ($null -ne $runspace -and
+            [M365DSCResourceBase]::_registryByRunspace.TryGetValue($runspace, [ref] $runspaceRegistry) -and
+            $runspaceRegistry.TryGetValue($Name, [ref] $type))
+        {
+            return $type
+        }
+
         [void] [M365DSCResourceBase]::_registry.TryGetValue($Name, [ref] $type)
         return $type
     }
