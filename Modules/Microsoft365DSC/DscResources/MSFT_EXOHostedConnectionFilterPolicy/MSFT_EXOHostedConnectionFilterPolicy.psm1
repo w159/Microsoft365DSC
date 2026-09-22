@@ -168,15 +168,31 @@ class EXOHostedConnectionFilterPolicy : M365DSCResourceBase
                 Name = $HostedConnectionFilterPolicyParams.Identity
             }
             $HostedConnectionFilterPolicyParams.Remove('Identity') | Out-Null
+            Write-Verbose -Message "Creating New Policy {$($this.Identity)}"
+            New-HostedConnectionFilterPolicy @HostedConnectionFilterPolicyParams
+
             if ($this.GetBoundParameters().MakeDefault)
             {
-                Write-Verbose -Message "Creating New Default Policy {$($this.Identity)}"
-                New-HostedConnectionFilterPolicy @HostedConnectionFilterPolicyParams -MakeDefault
-            }
-            else
-            {
-                Write-Verbose -Message "Creating New Policy {$($this.Identity)}"
-                New-HostedConnectionFilterPolicy @HostedConnectionFilterPolicyParams
+                Write-Verbose -Message "Making Policy {$($this.Identity)} the default one"
+                $attempt = 1
+                while ($true)
+                {
+                    try
+                    {
+                        Set-HostedConnectionFilterPolicy -Identity $this.Identity -MakeDefault -Confirm:$false -ErrorAction Stop
+                        break
+                    }
+                    catch
+                    {
+                        if ($attempt -ge 5 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                        {
+                            throw
+                        }
+
+                        $attempt++
+                        Start-Sleep -Seconds 5
+                    }
+                }
             }
 
             Write-Verbose -Message "With Parameters: $(Convert-M365DscHashtableToString -Hashtable $HostedConnectionFilterPolicyParams)"

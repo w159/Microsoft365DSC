@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
@@ -235,7 +235,6 @@ class IntuneSettingCatalogCustomPolicyWindows10 : M365DSCResourceBase
             'IntValue'    = 'value'
         }
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters -KeyMapping $keysToRename
-
         if ($boundParameters.ContainsKey('RoleScopeTagIds'))
         {
             $boundParameters.RoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds

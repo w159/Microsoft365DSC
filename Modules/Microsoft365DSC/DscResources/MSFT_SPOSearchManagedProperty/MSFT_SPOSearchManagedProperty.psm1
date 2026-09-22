@@ -509,7 +509,7 @@ class SPOSearchManagedProperty : M365DSCResourceBase
 
         # Create the Managed Property if it doesn't already exist
         Write-Verbose -Message "Updating core properties for Search Managed Property {$($this.Name)}"
-        Set-PnPSearchConfiguration -Scope 'Subscription' -Path $tempPath
+        Set-PnPSearchConfiguration -Scope 'Subscription' -Path $tempPath -ErrorAction Stop
 
         #region Aliases
         if ($null -ne $this.Aliases)

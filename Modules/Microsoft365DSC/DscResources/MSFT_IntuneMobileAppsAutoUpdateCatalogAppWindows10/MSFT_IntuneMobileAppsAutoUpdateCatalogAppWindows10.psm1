@@ -1,13 +1,8 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
 {
-    [DscProperty()]
-    [System.ComponentModel.Description('Indicates the set of CPU architectures on which this application is allowed to be installed. When null, the app is eligible for installation on all the supported architectures. Possible values are: x86, x64, arm64, or a combination of them.')]
-    [ValidateSet('none', 'x86', 'x64', 'arm', 'neutral', 'arm64')]
-    [System.String] $AllowedArchitectures
-
     [DscProperty()]
     [System.ComponentModel.Description('Represents the assignment to the Intune app.')]
     [MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment[]] $Assignments
@@ -183,7 +178,6 @@ class IntuneMobileAppsAutoUpdateCatalogAppWindows10 : M365DSCResourceBase
             }
 
             $result = @{
-                AllowedArchitectures            = $getValue.allowedArchitectures
                 Description                     = $getValue.Description
                 Developer                       = $getValue.Developer
                 DisplayName                     = $getValue.DisplayName

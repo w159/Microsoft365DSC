@@ -521,6 +521,15 @@ class IntuneDeviceCompliancePolicyWindows10 : M365DSCResourceBase
         }
         $boundParameters.Remove('ScheduledActionsForRule') | Out-Null
 
+        if (@($complexScheduledActionsForRule[0].scheduledActionConfigurations |
+                    Where-Object -FilterScript { $_.actionType -eq 'block' }).Count -eq 0)
+        {
+            $complexScheduledActionsForRule[0].scheduledActionConfigurations += @{
+                actionType       = 'block'
+                gracePeriodHours = 0
+            }
+        }
+
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
 
         if ($this.Ensure -eq 'Present' -and $currentDeviceWindows10Policy.Ensure -eq 'Absent')

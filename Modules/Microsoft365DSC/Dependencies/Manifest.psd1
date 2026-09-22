@@ -1,4 +1,4 @@
-@{
+﻿@{
     Dependencies = @(
         @{
             ModuleName      = 'Az.Accounts'
@@ -34,7 +34,7 @@
         },
         @{
             ModuleName      = 'M365DSC.mgx'
-            RequiredVersion = '2.1.1'
+            RequiredVersion = '2.1.7'
             PowerShellCore  = $true
         },
         @{

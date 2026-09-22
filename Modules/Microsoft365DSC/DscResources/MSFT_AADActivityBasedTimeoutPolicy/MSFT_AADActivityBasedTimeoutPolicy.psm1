@@ -93,7 +93,16 @@ class AADActivityBasedTimeoutPolicy : M365DSCResourceBase
 
                 $getValue = $null
                 #region resource generator code
-                $getValue = Get-MgBetaPolicyActivityBasedTimeoutPolicy -ErrorAction SilentlyContinue
+                if (-not [System.String]::IsNullOrEmpty($this.Id))
+                {
+                    $getValue = Get-MgBetaPolicyActivityBasedTimeoutPolicy -ActivityBasedTimeoutPolicyId $this.Id `
+                        -ErrorAction SilentlyContinue
+                }
+                if ($null -eq $getValue)
+                {
+                    $getValue = Get-MgBetaPolicyActivityBasedTimeoutPolicy -All -ErrorAction SilentlyContinue |
+                        Where-Object -FilterScript { $_.DisplayName -eq $this.DisplayName }
+                }
                 #endregion
                 if ($null -eq $getValue)
                 {

@@ -3,7 +3,7 @@ using module ..\_Base\M365DSCResourceBase.psm1
 [DscResource()]
 class TeamsApplicationInstance : M365DSCResourceBase
 {
-    [DscProperty(Key)]
+    [DscProperty(Mandatory)]
     [System.ComponentModel.Description('The display name of the resource instance.')]
     [System.String] $DisplayName
 

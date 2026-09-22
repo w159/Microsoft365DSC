@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 : M365DSCResourceBase
@@ -279,6 +279,11 @@ class IntuneDeviceConfigurationNetworkBoundaryPolicyWindows10 : M365DSCResourceB
         }
 
         $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+        $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                '#microsoft.graph.iPv4Range' = @('lowerAddress', 'upperAddress')
+                '#microsoft.graph.iPv6Range' = @('lowerAddress', 'upperAddress')
+            })
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {

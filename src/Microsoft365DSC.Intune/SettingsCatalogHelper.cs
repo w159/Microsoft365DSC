@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -438,7 +438,9 @@ namespace Microsoft365DSC.Intune
                 if (combinationMatchesWithParent.Count == 1)
                 {
                     // Unique with parent prefix
-                    settingName = parentSetting.Name + "_" + settingName;
+                    settingName = string.Equals(parentSetting.Name, settingName, StringComparison.OrdinalIgnoreCase)
+                        ? settingName
+                        : parentSetting.Name + "_" + settingName;
                 }
                 // If the combination of parent setting and setting name is still not unique, do it with the OffsetUri of the current setting
                 else

@@ -124,7 +124,18 @@ function Rename-M365DSCCimInstanceParameter
 
         foreach ($key in $keys)
         {
-            $keyName = $key.Substring(0, 1).ToLower() + $key.Substring(1, $key.Length - 1)
+            $keyName = if ($key -cmatch '^[A-Z0-9]+$')
+            {
+                $key.ToLower()
+            }
+            elseif ($key -cmatch '^([A-Z]+)(?=[A-Z][a-z])')
+            {
+                $Matches[1].ToLower() + $key.Substring($Matches[1].Length)
+            }
+            else
+            {
+                $key.Substring(0, 1).ToLower() + $key.Substring(1, $key.Length - 1)
+            }
             if ($key -in $KeyMapping.Keys)
             {
                 $keyName = $KeyMapping.$key

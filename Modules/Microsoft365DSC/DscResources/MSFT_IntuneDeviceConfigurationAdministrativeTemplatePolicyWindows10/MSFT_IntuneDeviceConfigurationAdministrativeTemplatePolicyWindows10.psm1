@@ -328,6 +328,14 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
                     {
                         $value = $presentationValue.Clone()
                         $value = Rename-M365DSCCimInstanceParameter -Properties $value -KeyMapping $keyToRename
+                        $this.RemoveForeignSubtypeProperties($value, @{
+                                '#microsoft.graph.groupPolicyPresentationValueBoolean'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueDecimal'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueLongDecimal' = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueText'        = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueMultiText'   = @('values')
+                                '#microsoft.graph.groupPolicyPresentationValueList'        = @('values')
+                            })
                         $value.Add('presentation@odata.bind', (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/deviceManagement/groupPolicyDefinitions('$($definitionValue.Definition.Id)')/presentations('$($presentationValue.presentationDefinitionId)')")
                         $value.Remove('PresentationDefinitionId')
                         $value.Remove('PresentationDefinitionLabel')
@@ -405,6 +413,14 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
                     {
                         $value = $presentationValue.Clone()
                         $value = Rename-M365DSCCimInstanceParameter -Properties $value -KeyMapping $keyToRename
+                        $this.RemoveForeignSubtypeProperties($value, @{
+                                '#microsoft.graph.groupPolicyPresentationValueBoolean'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueDecimal'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueLongDecimal' = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueText'        = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueMultiText'   = @('values')
+                                '#microsoft.graph.groupPolicyPresentationValueList'        = @('values')
+                            })
                         $value.Add('presentation@odata.bind', "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/groupPolicyDefinitions('$($definitionValue.Definition.Id)')/presentations('$($presentationValue.presentationDefinitionId)')")
                         $value.Remove('PresentationDefinitionId')
                         $value.Remove('PresentationDefinitionLabel')
@@ -434,6 +450,14 @@ class IntuneDeviceConfigurationAdministrativeTemplatePolicyWindows10 : M365DSCRe
                         $currentPresentationValue = $currentDefinitionValue.PresentationValues | Where-Object { $_.PresentationDefinitionId -eq $presentationValue.presentationDefinitionId }
                         $value = $presentationValue.Clone()
                         $value = Rename-M365DSCCimInstanceParameter -Properties $value -KeyMapping $keyToRename
+                        $this.RemoveForeignSubtypeProperties($value, @{
+                                '#microsoft.graph.groupPolicyPresentationValueBoolean'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueDecimal'     = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueLongDecimal' = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueText'        = @('value')
+                                '#microsoft.graph.groupPolicyPresentationValueMultiText'   = @('values')
+                                '#microsoft.graph.groupPolicyPresentationValueList'        = @('values')
+                            })
                         $value.Add('presentation@odata.bind', "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)beta/deviceManagement/groupPolicyDefinitions('$($definitionValue.Definition.Id)')/presentations('$($presentationValue.presentationDefinitionId)')")
                         $value.Remove('PresentationDefinitionId')
                         $value.Remove('PresentationDefinitionLabel')

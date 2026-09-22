@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
 )
 $M365DSCTestFolder = Join-Path -Path $PSScriptRoot `
@@ -114,7 +114,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The instance should exist but it DOES NOT' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowedArchitectures            = 'none'
                     Description                     = 'FakeStringValue'
                     Developer                       = 'FakeStringValue'
                     DisplayName                     = 'FakeStringValue'
@@ -186,7 +185,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The instance exists and values are already in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowedArchitectures            = 'none'
                     Description                     = 'FakeStringValue'
                     Developer                       = 'FakeStringValue'
                     DisplayName                     = 'FakeStringValue'
@@ -215,7 +213,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should return the expected values from the Get method' {
                 $result = (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsAutoUpdateCatalogAppWindows10' -Property $testParams).Get().ToHashtable()
                 $result.Ensure | Should -Be 'Present'
-                $result.AllowedArchitectures | Should -Be 'none'
                 $result.Description | Should -Be 'FakeStringValue'
                 $result.Developer | Should -Be 'FakeStringValue'
                 $result.DisplayName | Should -Be 'FakeStringValue'
@@ -239,7 +236,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         Context -Name 'The instance exists and values are NOT in the desired state' -Fixture {
             BeforeAll {
                 $testParams = @{
-                    AllowedArchitectures            = 'none'
                     Description                     = 'FakeStringValueDrift' # Updated property
                     Developer                       = 'FakeStringValue'
                     DisplayName                     = 'FakeStringValue'

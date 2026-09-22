@@ -1,4 +1,4 @@
-<#
+﻿<#
 This example is used to test new resources and showcase the usage of new resources being worked on.
 It is not meant to use as a production baseline.
 #>
@@ -26,7 +26,6 @@ Configuration Example
     {
         IntuneMobileAppsAutoUpdateCatalogAppWindows10 'IntuneMobileAppsAutoUpdateCatalogAppWindows10-Example'
         {
-            AllowedArchitectures            = "x64";
             Assignments                     = @(
                 MSFT_DeviceManagementWindowsAutoUpdateCatalogMobileAppAssignment{
                     dataType = "#microsoft.graph.allLicensedUsersAssignmentTarget"
