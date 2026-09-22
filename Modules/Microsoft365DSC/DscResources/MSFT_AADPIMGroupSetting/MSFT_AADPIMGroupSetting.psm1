@@ -1024,9 +1024,16 @@ class AADPIMGroupSetting : M365DSCResourceBase
         try
         {
             $this.ResourceCache['ExportMode'] = $true
+            $pimGroupIds = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+            foreach ($pimGroup in (Get-M365DSCExportCachedCollection -Collection 'pimGroups'))
+            {
+                $null = $pimGroupIds.Add($pimGroup.Id)
+            }
+
             [array] $this.ResourceCache['exportedGroups'] = Get-MgGroup @ExportParameters
             $this.ResourceCache['exportedGroups'] = $this.ResourceCache['exportedGroups'] | Where-Object -FilterScript {
-                -not ($_.MailEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Length -eq 0)) -and `
+                $pimGroupIds.Contains($_.Id) -and `
+                    -not ($_.MailEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Length -eq 0)) -and `
                     -not ($_.MailEnabled -and $_.SecurityEnabled)
             }
 

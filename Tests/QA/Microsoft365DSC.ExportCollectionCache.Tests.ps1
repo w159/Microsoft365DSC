@@ -23,7 +23,7 @@ Describe 'Export collection consumer map' {
         @($Script:Consumers.Keys | Where-Object -FilterScript { -not $Script:Map.ContainsKey($_) }) | Should -BeNullOrEmpty
     }
 
-    It 'lists exactly the resources that call Get-M365DSCExportCachedCollection for <_>' -ForEach @('deviceConfigurations', 'deviceCompliancePolicies', 'deviceEnrollmentConfigurations', 'reusablePolicySettings') {
+    It 'lists exactly the resources that call Get-M365DSCExportCachedCollection for <_>' -ForEach @('deviceConfigurations', 'deviceCompliancePolicies', 'deviceEnrollmentConfigurations', 'pimGroups', 'reusablePolicySettings') {
         $expected = @(if ($Script:Consumers.ContainsKey($_)) { $Script:Consumers[$_] } else { @() }) | Sort-Object
         $actual = @($Script:Map[$_]) | Sort-Object
         $actual | Should -Be $expected

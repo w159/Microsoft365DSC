@@ -648,6 +648,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
 
                 $isM365DSCAvailable = $null -ne (Get-Module -ListAvailable -Name Microsoft365DSC)
+
+                Mock -CommandName Get-M365DSCExportCachedCollection -ParameterFilter { $Collection -eq 'pimGroups' } -MockWith {
+                    return @(
+                        [PSCustomObject]@{
+                            Id          = '81c3d8db-c61c-4dd7-bf63-a9a184f04e50'
+                            DisplayName = 'FakeGroup'
+                        }
+                    )
+                }
             }
 
             It 'Should reverse engineer resource from the export method' {
@@ -669,6 +678,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Should -Invoke -CommandName Invoke-M365DSCGraphBatchRequest -Exactly 1
                 }
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Should skip groups that are not enabled in PIM' {
+                Mock -CommandName Get-M365DSCExportCachedCollection -ParameterFilter { $Collection -eq 'pimGroups' } -MockWith {
+                    return @()
+                }
+
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADPIMGroupSetting' -MethodName 'Export' -Parameters $testParams
+                $result | Should -BeNullOrEmpty
             }
         }
     }

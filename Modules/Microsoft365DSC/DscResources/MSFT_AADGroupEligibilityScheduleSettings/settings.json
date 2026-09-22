@@ -63,6 +63,12 @@
       "delegated": {
         "read": [
           {
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "PrivilegedAccess.Read.AzureADGroup"
+          },
+          {
             "name": "RoleManagementPolicy.Read.Directory"
           }
         ],
@@ -77,6 +83,12 @@
       },
       "application": {
         "read": [
+          {
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "PrivilegedAccess.Read.AzureADGroup"
+          },
           {
             "name": "RoleManagementPolicy.Read.Directory"
           }

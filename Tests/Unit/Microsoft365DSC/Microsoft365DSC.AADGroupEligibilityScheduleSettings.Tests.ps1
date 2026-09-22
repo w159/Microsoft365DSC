@@ -172,13 +172,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
 
-                Mock -CommandName Invoke-M365DSCGraphRequest -ParameterFilter { $Uri -like "*privilegedAccess/aadGroups/resources*" } -MockWith {
+                Mock -CommandName Get-M365DSCExportCachedCollection -ParameterFilter { $Collection -eq 'pimGroups' } -MockWith {
                     return @(
-                        @{
-                            Value = @{
-                                DisplayName = "FakeStringValue"
-                                Id = "FakeStringValue"
-                            }
+                        [PSCustomObject]@{
+                            Id          = 'FakeStringValue'
+                            DisplayName = 'FakeStringValue'
                         }
                     )
                 }

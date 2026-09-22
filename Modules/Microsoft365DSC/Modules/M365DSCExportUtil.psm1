@@ -1975,6 +1975,11 @@ function Get-M365DSCExportCollectionConsumerMap
             'EXOMailboxPermission',
             'EXORecipientPermission'
         )
+        pimGroups                      = @(
+            'AADGroupEligibilitySchedule',
+            'AADGroupEligibilityScheduleSettings',
+            'AADPIMGroupSetting'
+        )
         reusablePolicySettings         = @(
             'IntuneDeviceComplianceScriptLinux',
             'IntuneDeviceControlPolicySetting',
@@ -2133,7 +2138,7 @@ function Get-M365DSCExportCachedCollection
     [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('deviceConfigurations', 'deviceCompliancePolicies', 'deviceEnrollmentConfigurations', 'reusablePolicySettings', 'exoMailboxes', 'exoUsers')]
+        [ValidateSet('deviceConfigurations', 'deviceCompliancePolicies', 'deviceEnrollmentConfigurations', 'reusablePolicySettings', 'exoMailboxes', 'exoUsers', 'pimGroups')]
         [System.String]
         $Collection,
 
@@ -2165,6 +2170,7 @@ function Get-M365DSCExportCachedCollection
         reusablePolicySettings         = @{ Expand = @(); ServerSideTypeFilter = $false; Select = @('id', 'displayName', 'description', 'settingDefinitionId', 'settingInstance') }
         exoMailboxes                   = @{ Fetch = { Get-Mailbox -ResultSize 'Unlimited' -ErrorAction Stop } }
         exoUsers                       = @{ Fetch = { Get-User -ResultSize 'Unlimited' } }
+        pimGroups                      = @{ Fetch = { Get-M365DSCPIMEnabledGroup } }
     }
     $descriptor = $descriptors[$Collection]
 
@@ -2244,6 +2250,45 @@ function Get-M365DSCExportCachedCollection
     }
 
     return , [System.Object[]]$items
+}
+
+<#
+.SYNOPSIS
+    Lists the groups enabled in Privileged Identity Management (PIM) for Groups.
+
+.DESCRIPTION
+    Reads the group resources of PIM for Groups and resolves their display names in one batch. A group
+    is listed once a PIM operation, such as a policy change or an eligible assignment, has enabled it.
+
+.OUTPUTS
+    System.Object[]
+#>
+function Get-M365DSCPIMEnabledGroup
+{
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param ()
+
+    $resources = Get-M365DSCRawGraphCollection -Uri '/beta/identityGovernance/privilegedAccess/group/resources' -Property 'id'
+    $requests = foreach ($resource in $resources)
+    {
+        @{
+            id     = $resource.id
+            method = 'GET'
+            url    = "/groups/$($resource.id)?`$select=id,displayName"
+        }
+    }
+
+    foreach ($response in (Invoke-M365DSCGraphBatchRequest -Requests @($requests) -AsList))
+    {
+        if ($response.status -eq 200)
+        {
+            [PSCustomObject]@{
+                Id          = $response.body.id
+                DisplayName = $response.body.displayName
+            }
+        }
+    }
 }
 
 <#
@@ -2404,6 +2449,7 @@ Export-ModuleMember -Function @(
     'Register-M365DSCExportCollectionConsumers',
     'Complete-M365DSCExportCollectionConsumer',
     'Get-M365DSCExportCachedCollection',
+    'Get-M365DSCPIMEnabledGroup',
     'Get-M365DSCRawGraphCollection',
     'Invoke-M365DSCExportCollectionList',
     'Export-M365DSCConfiguration',

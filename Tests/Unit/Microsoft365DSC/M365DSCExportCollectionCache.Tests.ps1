@@ -191,6 +191,54 @@ Describe 'M365DSCExportCollectionCache' {
         }
     }
 
+    Context 'Get-M365DSCPIMEnabledGroup' {
+        BeforeEach {
+            Mock -ModuleName M365DSCExportUtil -CommandName Get-M365DSCRawGraphCollection -MockWith {
+                return @(@{ id = 'g1' }, @{ id = 'g2' })
+            }
+            Mock -ModuleName M365DSCExportUtil -CommandName Invoke-M365DSCGraphBatchRequest -MockWith {
+                return @(
+                    @{ id = 'g1'; status = 200; body = @{ id = 'g1'; displayName = 'Group 1' } },
+                    @{ id = 'g2'; status = 404; body = @{ error = @{ code = 'Request_ResourceNotFound' } } }
+                )
+            }
+        }
+
+        It 'lists the PIM group resources and resolves their display names' {
+            $result = Get-M365DSCPIMEnabledGroup
+            Should -Invoke -ModuleName M365DSCExportUtil -CommandName Get-M365DSCRawGraphCollection -Times 1 -Exactly -ParameterFilter {
+                $Uri -eq '/beta/identityGovernance/privilegedAccess/group/resources'
+            }
+            Should -Invoke -ModuleName M365DSCExportUtil -CommandName Invoke-M365DSCGraphBatchRequest -Times 1 -Exactly -ParameterFilter {
+                $Requests.Count -eq 2 -and $Requests[0].url -eq '/groups/g1?$select=id,displayName'
+            }
+            @($result).Count | Should -Be 1
+            @($result)[0].Id | Should -Be 'g1'
+            @($result)[0].DisplayName | Should -Be 'Group 1'
+        }
+
+        It 'returns an empty array when no group is enabled in PIM' {
+            Mock -ModuleName M365DSCExportUtil -CommandName Get-M365DSCRawGraphCollection -MockWith { return , [object[]] @() }
+            Mock -ModuleName M365DSCExportUtil -CommandName Invoke-M365DSCGraphBatchRequest -MockWith { }
+            @(Get-M365DSCPIMEnabledGroup).Count | Should -Be 0
+        }
+
+        It 'lists the PIM groups once per export' {
+            [Microsoft365DSC.Cache.ExportCollectionCache]::Enable()
+            Mock -ModuleName M365DSCExportUtil -CommandName Invoke-M365DSCGraphBatchRequest -MockWith {
+                return @(
+                    @{ id = 'g1'; status = 200; body = @{ id = 'g1'; displayName = 'Group 1' } },
+                    @{ id = 'g2'; status = 200; body = @{ id = 'g2'; displayName = 'Group 2' } }
+                )
+            }
+            $null = Get-M365DSCExportCachedCollection -Collection 'pimGroups'
+            $second = Get-M365DSCExportCachedCollection -Collection 'pimGroups'
+            Should -Invoke -ModuleName M365DSCExportUtil -CommandName Get-M365DSCRawGraphCollection -Times 1 -Exactly
+            $second.Count | Should -Be 2
+            $second[1].DisplayName | Should -Be 'Group 2'
+        }
+    }
+
     Context 'Get-M365DSCIntuneExpandedAssignments' {
         It 'returns $null for missing input or missing assignments' {
             Get-M365DSCIntuneExpandedAssignments -Instance $null | Should -BeNullOrEmpty
