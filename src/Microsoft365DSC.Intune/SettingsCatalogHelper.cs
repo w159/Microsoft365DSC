@@ -83,32 +83,31 @@ namespace Microsoft365DSC.Intune
                 OffsetUri = TryGetProperty(settingDefinition, "OffsetUri")
             };
 
-            // Extract AdditionalProperties - this is an IDictionary<string, object> on the Graph SDK objects
-            // Accessing the property is only possible through reflection with BindingFlags NonPublic and Instance
-            IDictionary<string, object>? additionalProperties = null;
+            // Collect every property of the model that is not explicitly named
+            IDictionary<string, object>? properties = null;
             List<string> defaultProperties = ["Id", "Name", "OffsetUri"];
-            additionalProperties = new Dictionary<string, object>();
+            properties = new Dictionary<string, object>();
             foreach (DictionaryEntry entry in settingDefinition as Hashtable)
             {
                 if (!defaultProperties.Contains(entry.Key.ToString(), StringComparer.OrdinalIgnoreCase))
                 {
-                    additionalProperties[entry.Key.ToString()] = entry.Value;
+                    properties[entry.Key.ToString()] = entry.Value;
                 }
             }
 
-            if (additionalProperties is not null)
+            if (properties is not null)
             {
-                info.DependentOnParentSettingIds = ExtractParentSettingIds(additionalProperties, "dependentOn");
-                info.OptionsDependentOnParentSettingIds = ExtractOptionsParentSettingIds(additionalProperties);
+                info.DependentOnParentSettingIds = ExtractParentSettingIds(properties, "dependentOn");
+                info.OptionsDependentOnParentSettingIds = ExtractOptionsParentSettingIds(properties);
 
                 // Extract OData type
-                if (additionalProperties.TryGetValue("@odata.type", out object? odataTypeValue))
+                if (properties.TryGetValue("@odata.type", out object? odataTypeValue))
                 {
                     info.ODataType = odataTypeValue?.ToString();
                 }
 
                 // Extract maximumCount
-                if (additionalProperties.TryGetValue("maximumCount", out object? maxCountValue))
+                if (properties.TryGetValue("maximumCount", out object? maxCountValue))
                 {
                     if (maxCountValue is int maxInt)
                         info.MaximumCount = maxInt;
@@ -117,7 +116,7 @@ namespace Microsoft365DSC.Intune
                 }
 
                 // Extract childIds
-                if (additionalProperties.TryGetValue("childIds", out object? childIdsValue) && childIdsValue is IEnumerable childIdsEnumerable)
+                if (properties.TryGetValue("childIds", out object? childIdsValue) && childIdsValue is IEnumerable childIdsEnumerable)
                 {
                     foreach (var childId in childIdsEnumerable)
                     {
@@ -127,10 +126,10 @@ namespace Microsoft365DSC.Intune
                 }
 
                 // Extract options
-                info.Options = ExtractOptions(additionalProperties);
+                info.Options = ExtractOptions(properties);
 
                 // Extract valueDefinition
-                if (additionalProperties.TryGetValue("valueDefinition", out object? valueDefValue) && valueDefValue is not null)
+                if (properties.TryGetValue("valueDefinition", out object? valueDefValue) && valueDefValue is not null)
                 {
                     info.ValueDefinition = new SettingValueDefinition
                     {
@@ -152,11 +151,11 @@ namespace Microsoft365DSC.Intune
         }
 
         /// <summary>
-        /// Extracts parentSettingId values from additionalProperties["dependentOn"][].parentSettingId.
+        /// Extracts parentSettingId values from properties["dependentOn"][].parentSettingId.
         /// </summary>
-        private static List<string> ExtractParentSettingIds(IDictionary<string, object> additionalProperties, string key)
+        private static List<string> ExtractParentSettingIds(IDictionary<string, object> properties, string key)
         {
-            if (!additionalProperties.TryGetValue(key, out object? value))
+            if (!properties.TryGetValue(key, out object? value))
                 return [];
 
             if (value is not IEnumerable dependentOnCollection)
@@ -174,11 +173,11 @@ namespace Microsoft365DSC.Intune
         }
 
         /// <summary>
-        /// Extracts parentSettingId values from additionalProperties["options"][].dependentOn[].parentSettingId.
+        /// Extracts parentSettingId values from properties["options"][].dependentOn[].parentSettingId.
         /// </summary>
-        private static List<string> ExtractOptionsParentSettingIds(IDictionary<string, object> additionalProperties)
+        private static List<string> ExtractOptionsParentSettingIds(IDictionary<string, object> properties)
         {
-            if (!additionalProperties.TryGetValue("options", out object? value))
+            if (!properties.TryGetValue("options", out object? value))
                 return [];
 
             if (value is not IEnumerable optionsCollection)
@@ -244,14 +243,14 @@ namespace Microsoft365DSC.Intune
         }
 
         /// <summary>
-        /// Extracts the options array from AdditionalProperties.
+        /// Extracts the options array from the properties the model does not name explicitly.
         /// Each option has an itemId, optionValue (with @odata.type and value), and dependentOn parent setting IDs.
         /// </summary>
-        private static List<SettingDefinitionOption> ExtractOptions(IDictionary<string, object> additionalProperties)
+        private static List<SettingDefinitionOption> ExtractOptions(IDictionary<string, object> properties)
         {
             var options = new List<SettingDefinitionOption>();
 
-            if (!additionalProperties.TryGetValue("options", out object? optionsValue))
+            if (!properties.TryGetValue("options", out object? optionsValue))
                 return options;
 
             if (optionsValue is not IEnumerable optionsCollection)

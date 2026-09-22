@@ -782,8 +782,8 @@ function Start-M365DSCConfigurationExtract
         $synchronizedHashtable = [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.Object]]::new()
         [void]$synchronizedHashtable.TryAdd('ResourceCounter', 1)
         [void]$synchronizedHashtable.TryAdd('ResourcesResult', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.String]]::new())
-        [void]$synchronizedHashtable.TryAdd('SuccessfulResources', 0)
-        [void]$synchronizedHashtable.TryAdd('FailedResources', 0)
+        [void]$synchronizedHashtable.TryAdd('ResourceStatus', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.String]]::new())
+        [void]$synchronizedHashtable.TryAdd('InstanceCounts', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.Int32]]::new())
         $resourceDictionary = Get-M365DSCResourcesDictionary
         $M365DSCStringReplacementMap = Get-M365DSCStringReplacementMap
         $m365dscModulePath = (Get-Module -Name 'Microsoft365DSC').Path
@@ -851,7 +851,16 @@ function Start-M365DSCConfigurationExtract
 
             if ($using:ComponentsToSkip -notcontains $resourceName)
             {
-                $counter = ($using:synchronizedHashtable).ResourceCounter++
+                $sharedState = $using:synchronizedHashtable
+                [System.Threading.Monitor]::Enter($sharedState)
+                try
+                {
+                    $counter = $sharedState.ResourceCounter++
+                }
+                finally
+                {
+                    [System.Threading.Monitor]::Exit($sharedState)
+                }
                 Write-M365DSCHost -Message "[$counter/$($using:resourcesToExport.Count)] Extracting [" -DeferWrite
                 Write-M365DSCHost -Message $resourceName -ForegroundColor Green -DeferWrite
                 Write-M365DSCHost -Message '] using {' -DeferWrite
@@ -892,17 +901,18 @@ function Start-M365DSCConfigurationExtract
                 $parameters.Add('ErrorAction', $using:ErrorActionPreference)
                 $Global:M365DSCExportResourceTypes += $resourceName
 
+                $Global:M365DSCExportInstanceTally = 0
                 try
                 {
                     $exportOutput = Invoke-M365DSCResourceMethod -ResourceName $resourceName -MethodName 'Export' -Parameters $parameters
                     $exportString.Append($exportOutput) | Out-Null
-                    [void]($using:synchronizedHashtable).ResourcesResult.TryAdd($resourceName, $exportString.ToString())
-                    ($using:synchronizedHashtable).SuccessfulResources++
+                    [void]$sharedState.ResourcesResult.TryAdd($resourceName, $exportString.ToString())
+                    [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Succeeded')
                 }
                 catch
                 {
                     Write-M365DSCHost -Message "$($Global:M365DSCEmojiRedX)`r`n    An error occurred while exporting resource {$resourceName}: $($_.Exception.Message)" -ForegroundColor Red -CommitWrite
-                    ($using:synchronizedHashtable).FailedResources++
+                    [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Failed')
                     if ($ErrorActionPreference -eq 'Stop')
                     {
                         throw $_
@@ -910,6 +920,8 @@ function Start-M365DSCConfigurationExtract
                 }
                 finally
                 {
+                    [void]$sharedState.InstanceCounts.TryAdd($resourceName, $Global:M365DSCExportInstanceTally)
+                    $Global:M365DSCExportInstanceTally = $null
                     Complete-M365DSCExportCollectionConsumer -ResourceName $resourceName
                 }
             }
@@ -978,6 +990,10 @@ function Start-M365DSCConfigurationExtract
             $exportScriptBlock = [ScriptBlock]::Create($exportScriptBlock.ToString().Replace('$using:', '$'))
             $resourcesToProcess | ForEach-Object -Process $exportScriptBlock
         }
+
+        $Global:M365DSCExportResourceInstancesCount = [System.Int32]($synchronizedHashtable.InstanceCounts.Values | Measure-Object -Sum).Sum
+        $synchronizedHashtable['SuccessfulResources'] = @($synchronizedHashtable.ResourceStatus.Values | Where-Object -FilterScript { $_ -eq 'Succeeded' }).Count
+        $synchronizedHashtable['FailedResources'] = @($synchronizedHashtable.ResourceStatus.Values | Where-Object -FilterScript { $_ -eq 'Failed' }).Count
 
         foreach ($resource in $($synchronizedHashtable.ResourcesResult.Keys | Sort-Object))
         {
