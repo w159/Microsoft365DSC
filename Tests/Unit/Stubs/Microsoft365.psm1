@@ -1,4 +1,4 @@
-#region Azure
+﻿#region Azure
 
 function Get-AzSentinelSetting
 {
@@ -89761,6 +89761,10 @@ function Set-PnPTenantSite
 {
     [CmdletBinding()]
     param(
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $NoScriptSite,
+
         [Parameter()]
         [System.Int32]
         $ExternalUserExpirationInDays,

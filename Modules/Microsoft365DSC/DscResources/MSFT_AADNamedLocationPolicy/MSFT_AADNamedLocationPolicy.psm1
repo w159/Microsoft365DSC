@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class AADNamedLocationPolicy : M365DSCResourceBase
@@ -258,6 +258,16 @@ class AADNamedLocationPolicy : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Absent' -and $CurrentAADNamedLocation.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Removing AAD Named Location {$($this.Displayname)} with id {$($currentAADNamedLocation.ID)}"
+
+            if ($currentAADNamedLocation.IsTrusted)
+            {
+                Update-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $currentAADNamedLocation.Id `
+                    -BodyParameter @{
+                        '@odata.type' = $currentAADNamedLocation.OdataType
+                        isTrusted     = $false
+                    } | Out-Null
+            }
+
             Remove-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $currentAADNamedLocation.ID
         }
     }

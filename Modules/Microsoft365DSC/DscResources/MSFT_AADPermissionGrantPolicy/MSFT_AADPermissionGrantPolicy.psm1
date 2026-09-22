@@ -221,6 +221,26 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
 
                 New-MgBetaPolicyPermissionGrantPolicy -BodyParameter $createParameters | Out-Null
 
+                $attempt = 1
+                while ($true)
+                {
+                    try
+                    {
+                        $null = Get-MgBetaPolicyPermissionGrantPolicy -PermissionGrantPolicyId $this.Id -ErrorAction Stop
+                        break
+                    }
+                    catch
+                    {
+                        if ($attempt -ge 5 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                        {
+                            throw
+                        }
+
+                        $attempt++
+                        Start-Sleep -Seconds 5
+                    }
+                }
+
                 # Add Includes
                 if ($null -ne $this.Includes -and $this.Includes.Count -gt 0)
                 {

@@ -428,14 +428,14 @@
     "PKInitHashAlgorithmSHA384": "3",
     "PKInitHashAlgorithmSHA512": "3",
     "POL_DriverLoadPolicy_Name": "1",
-    "Pol_HardenedPaths_Pol_HardenedPaths": [
+    "Pol_HardenedPaths": [
       {
-        "Name": "\\\\*\\SYSVOL",
-        "Value": "RequireMutualAuthentication=1,RequireIntegrity=1"
+        "key": "\\\\*\\SYSVOL",
+        "value": "RequireMutualAuthentication=1,RequireIntegrity=1"
       },
       {
-        "Name": "\\\\*\\NETLOGON",
-        "Value": "RequireMutualAuthentication=1,RequireIntegrity=1"
+        "key": "\\\\*\\NETLOGON",
+        "value": "RequireMutualAuthentication=1,RequireIntegrity=1"
       }
     ],
     "Pol_MSS_DisableIPSourceRouting": "1",

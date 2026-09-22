@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOOwaMailboxPolicy : M365DSCResourceBase
@@ -681,7 +681,25 @@ class EXOOwaMailboxPolicy : M365DSCResourceBase
             New-OwaMailboxPolicy @NewOwaMailboxPolicyParams
 
             #Configure new OWA Mailbox Policy
-            Set-OwaMailboxPolicy @SetOwaMailboxPolicyParams
+            $attempt = 1
+            while ($true)
+            {
+                try
+                {
+                    Set-OwaMailboxPolicy @SetOwaMailboxPolicyParams -ErrorAction Stop
+                    break
+                }
+                catch
+                {
+                    if ($attempt -ge 5 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                    {
+                        throw
+                    }
+
+                    $attempt++
+                    Start-Sleep -Seconds 5
+                }
+            }
 
         }
         # CASE: OWA Mailbox Policy exists but it shouldn't;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -385,6 +385,7 @@ namespace Microsoft365DSC.Intune
                         settingInstance, settingDefinition, settingDefinitions, allSettingDefinitions, returnHashtable);
                     settingValue = groupResult.Value;
                     addToParameters = groupResult.AddToParameters;
+                    settingName = SettingsCatalogHelper.WithoutDoubledParent(settingName);
                     break;
 
                 case "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance":
@@ -499,6 +500,22 @@ namespace Microsoft365DSC.Intune
             return values.Select(v => v?.ToString()).ToArray();
         }
 
+        private static string GetChildNameFromId(string parentId, string childId)
+        {
+            if (string.IsNullOrEmpty(parentId) || string.IsNullOrEmpty(childId))
+                return string.Empty;
+
+            string prefix = parentId + "_";
+            if (!childId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return string.Empty;
+
+            string suffix = childId.Substring(prefix.Length);
+            return string.Equals(suffix, "key", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(suffix, "value", StringComparison.OrdinalIgnoreCase)
+                ? suffix
+                : string.Empty;
+        }
+
         private static (object? Value, bool AddToParameters) ExportGroupSettingCollection(
             SettingInstanceInfo instance,
             SettingDefinitionInfo settingDefinition,
@@ -545,7 +562,17 @@ namespace Microsoft365DSC.Intune
                     childHashtable = new Hashtable(StringComparer.OrdinalIgnoreCase);
                     foreach (var child in group.Children)
                     {
-                        ExportSettingInstance(child, settingDefinitions, allSettingDefinitions, childHashtable);
+                        var childEntry = new Hashtable(StringComparer.OrdinalIgnoreCase);
+                        ExportSettingInstance(child, settingDefinitions, allSettingDefinitions, childEntry);
+
+                        string suffix = GetChildNameFromId(settingDefinition.Id, child.SettingDefinitionId);
+                        foreach (DictionaryEntry entry in childEntry)
+                        {
+                            string name = childEntry.Count == 1 && suffix.Length > 0
+                                ? suffix
+                                : entry.Key?.ToString() ?? string.Empty;
+                            childHashtable[name] = entry.Value;
+                        }
                     }
                     childValues.Add(childHashtable);
                 }

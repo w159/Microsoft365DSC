@@ -990,11 +990,21 @@ class AADServicePrincipal : M365DSCResourceBase
             }
             $this.ResourceCache['NavigationCache'] = $navigationCache
 
+            $duplicateDisplayNames = @($exportedInstances | Group-Object -Property 'DisplayName' |
+                Where-Object -FilterScript { $_.Count -gt 1 } |
+                Select-Object -ExpandProperty 'Name')
+
             foreach ($AADServicePrincipal in $exportedInstances)
             {
                 if ($null -ne $Global:M365DSCExportResourceInstancesCount)
                 {
                     $Global:M365DSCExportResourceInstancesCount++
+                }
+
+                $appIdValue = $AADServicePrincipal.DisplayName
+                if ($duplicateDisplayNames -contains $AADServicePrincipal.DisplayName)
+                {
+                    $appIdValue = $AADServicePrincipal.AppId
                 }
 
                 Write-M365DSCHost -Message "    |---[$i/$($exportedInstances.Count)] $($AADServicePrincipal.DisplayName)" -DeferWrite
@@ -1007,7 +1017,7 @@ class AADServicePrincipal : M365DSCResourceBase
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
                     ManagedIdentity       = $this.ManagedIdentity.IsPresent
-                    AppID                 = $AADServicePrincipal.DisplayName
+                    AppID                 = $appIdValue
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $AADServicePrincipal
@@ -1032,11 +1042,6 @@ class AADServicePrincipal : M365DSCResourceBase
                     if ($null -ne $Results.ClaimsPolicy)
                     {
                         $complexMapping = @(
-                            @{
-                                Name            = 'ClaimsMappingPolicy'
-                                CimInstanceName = 'AADServicePrincipalClaimsMappingPolicy'
-                                IsRequired      = $False
-                            },
                             @{
                                 Name            = 'claims'
                                 CimInstanceName = 'AADServicePrincipalCustomClaim'

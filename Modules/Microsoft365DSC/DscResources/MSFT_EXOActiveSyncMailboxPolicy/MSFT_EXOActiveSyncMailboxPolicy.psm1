@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOActiveSyncMailboxPolicy : M365DSCResourceBase
@@ -359,8 +359,8 @@ class EXOActiveSyncMailboxPolicy : M365DSCResourceBase
                 MaxEmailBodyTruncationSize               = [System.String]$instance.MaxEmailBodyTruncationSize
                 MaxEmailHTMLBodyTruncationSize           = [System.String]$instance.MaxEmailHTMLBodyTruncationSize
                 MaxInactivityTimeLock                    = [System.String]$instance.MaxInactivityTimeLock
-                MinPasswordComplexCharacters             = [System.Int32]$instance.MinPasswordComplexCharacters
-                MinPasswordLength                        = [System.Int32]$instance.MinPasswordLength
+                MinPasswordComplexCharacters             = $instance.MinPasswordComplexCharacters
+                MinPasswordLength                        = $instance.MinPasswordLength
                 PasswordRecoveryEnabled                  = [System.Boolean]$instance.PasswordRecoveryEnabled
                 RequireDeviceEncryption                  = [System.Boolean]$instance.RequireDeviceEncryption
                 RequireEncryptedSMIMEMessages            = [System.Boolean]$instance.RequireEncryptedSMIMEMessages
@@ -412,10 +412,22 @@ class EXOActiveSyncMailboxPolicy : M365DSCResourceBase
 
         $setParameters.Remove('IsDefaultPolicy') | Out-Null
 
+        foreach ($property in @('MinPasswordLength', 'MinPasswordComplexCharacters'))
+        {
+            if ($setParameters.ContainsKey($property) -and $setParameters.$property -eq 0)
+            {
+                $setParameters.$property = $null
+            }
+        }
+
         # CREATE
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             $setParameters.Remove('Identity')
+            if ([System.String]::IsNullOrEmpty($setParameters.Name))
+            {
+                $setParameters['Name'] = $this.Identity
+            }
             New-MobileDeviceMailboxPolicy @SetParameters
         }
         # UPDATE

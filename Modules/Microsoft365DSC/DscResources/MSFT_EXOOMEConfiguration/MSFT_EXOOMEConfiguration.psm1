@@ -1,4 +1,4 @@
-using module ..\_Base\M365DSCResourceBase.psm1
+﻿using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
 class EXOOMEConfiguration : M365DSCResourceBase
@@ -110,8 +110,15 @@ class EXOOMEConfiguration : M365DSCResourceBase
 
                 #Get-OMEConfiguration do NOT accept ErrorAction parameter
                 $OMEConfiguration = Get-OMEConfiguration -Identity $this.Identity 2>&1
-                if ($null -ne ($OMEConfiguration | Where-Object { $_.GetType().Name -like '*ErrorRecord*' }))
+                $errorRecord = @($OMEConfiguration | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] })
+                if ($errorRecord.Count -gt 0)
                 {
+                    if (Test-M365DSCNotFoundError -ErrorRecord $errorRecord[0])
+                    {
+                        Write-Verbose -Message "OMEConfiguration $($this.Identity) does not exist."
+                        return $this.AsResult($nullReturn)
+                    }
+
                     throw $OMEConfiguration
                 }
 
@@ -189,8 +196,8 @@ class EXOOMEConfiguration : M365DSCResourceBase
         }
         if ($this.Ensure -eq 'Present' -and $null -eq $OMEConfiguration)
         {
-            Write-Verbose -Message "Creating OME Configuration $($this.Identity)."
-            New-OMEConfiguration @OMEConfigurationParams
+            throw "OME Configuration {$($this.Identity)} does not exist. Exchange Online offers no " + `
+                'cmdlet to create one. Only the configuration provided by the service can be managed.'
         }
         elseif ($this.Ensure -eq 'Present' -and $null -ne $OMEConfiguration)
         {

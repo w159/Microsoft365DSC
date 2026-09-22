@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates the Microsoft365DSC Graph shim module.
 
@@ -438,6 +438,10 @@ function Invoke-M365DSCGraphShimRequestV76
 
         [Parameter()]
         [switch]
+        $NoPageSize,
+
+        [Parameter()]
+        [switch]
         $All,
 
         [Parameter()]
@@ -475,6 +479,12 @@ function Invoke-M365DSCGraphShimRequestV76
     if ($PSBoundParameters.ContainsKey('PageSize') -and $PageSize -gt 0)
     {
         $invokeParams['PageSize'] = $PageSize
+    }
+
+    if ($NoPageSize.IsPresent)
+    {
+        $invokeParams.Remove('PageSize') | Out-Null
+        $invokeParams['NoPageSize'] = $true
     }
 
     if ($PSBoundParameters.ContainsKey('Body') -and $null -ne $Body)
@@ -545,7 +555,11 @@ function Get-M365DSCGraphShimAllPages
 
         [Parameter()]
         [System.Int32]
-        $PageSize = 0
+        $PageSize = 0,
+
+        [Parameter()]
+        [switch]
+        $NoPageSize
     )
 
     $allResults = [System.Collections.Generic.List[System.Object]]::new()
@@ -622,7 +636,11 @@ function Get-M365DSCGraphShimAllPagesV76
 
         [Parameter()]
         [System.Int32]
-        $PageSize = 0
+        $PageSize = 0,
+
+        [Parameter()]
+        [switch]
+        $NoPageSize
     )
 
     $allResults = [System.Collections.Generic.List[System.Object]]::new()
@@ -632,6 +650,11 @@ function Get-M365DSCGraphShimAllPagesV76
         All    = $true
         Method = 'GET'
         Uri    = $currentUri
+    }
+
+    if ($NoPageSize.IsPresent)
+    {
+        $requestParams['NoPageSize'] = $true
     }
 
     if ($PSBoundParameters.ContainsKey('Headers') -and $Headers.Keys.Count -gt 0)
@@ -802,7 +825,18 @@ function ConvertTo-M365DSCGraphShimBody
             if ($entry.Key -notin $ExcludeParams -and $null -ne $entry.Value)
             {
                 # Convert PascalCase param name to camelCase for Graph API
-                $key = $entry.Key.Substring(0, 1).ToLower() + $entry.Key.Substring(1)
+                $key = if ($entry.Key -cmatch '^[A-Z0-9]+$')
+                {
+                    $entry.Key.ToLower()
+                }
+                elseif ($entry.Key -cmatch '^([A-Z]+)(?=[A-Z][a-z])')
+                {
+                    $Matches[1].ToLower() + $entry.Key.Substring($Matches[1].Length)
+                }
+                else
+                {
+                    $entry.Key.Substring(0, 1).ToLower() + $entry.Key.Substring(1)
+                }
                 $body[$key] = $entry.Value
             }
         }
@@ -889,6 +923,11 @@ function Invoke-M365DSCGraphShimGetResource
     if ($BoundParameters['Top'] -gt 0)      { $paramSplat['Top'] = $BoundParameters['Top'] }
     if ($BoundParameters['Skip'] -gt 0)     { $paramSplat['Skip'] = $BoundParameters['Skip'] }
     if ($BoundParameters['PageSize'] -gt 0) { $paramSplat['PageSize'] = $BoundParameters['PageSize'] }
+
+    if ($BoundParameters.ContainsKey('Top') -and $BoundParameters['Top'] -eq 0)
+    {
+        $paramSplat['NoPageSize'] = $true
+    }
 
     $retrieveAllPages = $BoundParameters.ContainsKey('All') -and $BoundParameters['All']
     if ($retrieveAllPages)

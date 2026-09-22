@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -380,6 +380,20 @@ namespace Microsoft365DSC.Intune
             var settingDefinition = SettingDefinitionMapper.FromGraphObject(settingDefinitionAsGraph);
             var allSettingDefinitions = SettingDefinitionMapper.FromGraphObjects(allSettingDefinitionsAsGraph);
             return GetSettingName(settingDefinition, allSettingDefinitions);
+        }
+
+        internal static string WithoutDoubledParent(string settingName)
+        {
+            if (string.IsNullOrEmpty(settingName) || settingName.Length % 2 == 0)
+                return settingName;
+
+            int half = settingName.Length / 2;
+            if (settingName[half] != '_')
+                return settingName;
+
+            string head = settingName.Substring(0, half);
+            string tail = settingName.Substring(half + 1);
+            return string.Equals(head, tail, StringComparison.OrdinalIgnoreCase) ? tail : settingName;
         }
 
         /// <summary>

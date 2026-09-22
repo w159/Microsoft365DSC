@@ -164,7 +164,10 @@ class SPOStorageEntity : M365DSCResourceBase
         $CurrentParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $CurrentParameters.Remove('SiteUrl') | Out-Null
         $CurrentParameters.Remove('EntityScope') | Out-Null
-        $CurrentParameters.Add('Scope', $this.EntityScope)
+        if (-not [System.String]::IsNullOrEmpty($this.EntityScope))
+        {
+            $CurrentParameters.Add('Scope', $this.EntityScope)
+        }
 
         if (($this.Ensure -eq 'Absent' -and $curStorageEntry.Ensure -eq 'Present'))
         {
@@ -183,7 +186,7 @@ class SPOStorageEntity : M365DSCResourceBase
                     Set-PnPTenantSite -Identity $this.SiteUrl -NoScriptSite:$false -ErrorAction Stop
                     $resetSecurity = $true
                 }
-                Set-PnPStorageEntity @CurrentParameters
+                Set-PnPStorageEntity @CurrentParameters -ErrorAction Stop
 
                 if ($resetSecurity)
                 {
@@ -193,12 +196,14 @@ class SPOStorageEntity : M365DSCResourceBase
             }
             catch
             {
-                if ($_.Exception -like '*Access denied*')
+                if ($_.Exception.Message -like '*Access denied*' -or $_.Exception.Message -like '*Access is denied*')
                 {
                     throw "It appears that the account doesn't have access to create an SPO Storage " + `
                         'Entity or that an App Catalog was not created for the specified location. ' + `
                         'Additionally, make sure that the site is allowed for custom scripts.'
                 }
+
+                throw
             }
         }
     }

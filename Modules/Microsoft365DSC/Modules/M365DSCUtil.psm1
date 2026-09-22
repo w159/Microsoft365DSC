@@ -3096,6 +3096,10 @@ function Invoke-M365DSCGraphRequest
             {
                 $invokeParams['All'] = $true
             }
+            elseif ($mgxCommand.Parameters.ContainsKey('Envelope'))
+            {
+                $invokeParams['Envelope'] = $true
+            }
 
             $response = & $mgxCommand @invokeParams
 

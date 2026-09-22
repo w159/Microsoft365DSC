@@ -151,6 +151,10 @@ class EXOManagementScope : M365DSCResourceBase
             {
                 $setParameters.Remove('Identity') | Out-Null
             }
+            if ([System.String]::IsNullOrEmpty($setParameters.Name))
+            {
+                $setParameters.Name = $this.Identity
+            }
             New-ManagementScope @SetParameters
         }
         # UPDATE

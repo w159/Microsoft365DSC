@@ -431,7 +431,25 @@ class EXOHostedContentFilterPolicy : M365DSCResourceBase
             if ($this.GetBoundParameters().MakeDefault)
             {
                 Write-Verbose -Message 'Updating Policy as default'
-                Set-HostedContentFilterPolicy @HostedContentFilterPolicyParams -MakeDefault -Confirm:$false
+                $attempt = 1
+                while ($true)
+                {
+                    try
+                    {
+                        Set-HostedContentFilterPolicy -Identity $this.Identity -MakeDefault -Confirm:$false -ErrorAction Stop
+                        break
+                    }
+                    catch
+                    {
+                        if ($attempt -ge 5 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                        {
+                            throw
+                        }
+
+                        $attempt++
+                        Start-Sleep -Seconds 5
+                    }
+                }
             }
         }
         elseif ($this.Ensure -eq 'Present' -and $null -ne $HostedContentFilterPolicy)

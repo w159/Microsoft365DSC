@@ -360,7 +360,7 @@ class SCSensitivityLabel : M365DSCResourceBase
 
                     if ($null -eq $label)
                     {
-                        $label = Invoke-M365DSCCommand -ScriptBlock { Get-Label -Identity $this.Name -IncludeDetailedLabelActions } -SuppressNotFoundError
+                        $label = Invoke-M365DSCCommand -ScriptBlock { Get-Label -Identity $this.Name -IncludeDetailedLabelActions -ErrorAction Stop } -SuppressNotFoundError
                     }
                 }
                 catch

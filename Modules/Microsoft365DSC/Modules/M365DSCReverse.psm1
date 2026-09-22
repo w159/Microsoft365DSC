@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Orchestrates a reverse extraction of Microsoft 365 tenant configuration.
 
@@ -786,7 +786,12 @@ function Start-M365DSCConfigurationExtract
         [void]$synchronizedHashtable.TryAdd('FailedResources', 0)
         $resourceDictionary = Get-M365DSCResourcesDictionary
         $M365DSCStringReplacementMap = Get-M365DSCStringReplacementMap
+        $m365dscModulePath = (Get-Module -Name 'Microsoft365DSC').Path
         $exportScriptBlock = {
+            if ($null -eq (Get-Module -Name 'Microsoft365DSC'))
+            {
+                Import-Module -Name $using:m365dscModulePath -DisableNameChecking -ErrorAction Stop
+            }
             $Global:MaximumFunctionCount = 32768
             $Global:PartialExportFileName = $using:partialExportName
             $Global:M365DSCSkipDependenciesValidation = $true
@@ -963,7 +968,6 @@ function Start-M365DSCConfigurationExtract
                 Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
                 $arguments = @{
                     ScriptBlock = $exportScriptBlock
-                    ModuleNames = @((Get-Module -Name 'Microsoft365DSC').Path)
                 }
                 $resourcesToProcess | Where-Object -FilterScript { $_.Name -like "$workload*" } | Invoke-Parallel @arguments -Verbose
             }

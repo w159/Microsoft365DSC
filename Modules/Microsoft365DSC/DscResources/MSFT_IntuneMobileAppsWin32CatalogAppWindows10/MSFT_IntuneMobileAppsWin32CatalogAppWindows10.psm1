@@ -389,6 +389,13 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
             }
 
             $boundParameters = Rename-M365DSCCimInstanceParameter -Properties $boundParameters
+
+            $this.RemoveForeignSubtypeProperties($boundParameters, @{
+                    '#microsoft.graph.win32LobAppFileSystemRule'      = @('ruleType', 'path', 'fileOrFolderName', 'check32BitOn64System', 'operationType', 'operator', 'comparisonValue')
+                    '#microsoft.graph.win32LobAppPowerShellScriptRule' = @('ruleType', 'displayName', 'enforceSignatureCheck', 'runAs32Bit', 'runAsAccount', 'scriptContent', 'operationType', 'operator', 'comparisonValue')
+                    '#microsoft.graph.win32LobAppProductCodeRule'     = @('ruleType', 'productCode', 'productVersionOperator', 'productVersion')
+                    '#microsoft.graph.win32LobAppRegistryRule'        = @('ruleType', 'check32BitOn64System', 'keyPath', 'valueName', 'operationType', 'operator', 'comparisonValue')
+                })
             $boundParameters.Remove('Id') | Out-Null
             $boundParameters.Remove('Assignments') | Out-Null
             $boundParameters.Add('@odata.type', '#microsoft.graph.win32CatalogApp')
