@@ -506,8 +506,13 @@ namespace Microsoft365DSC.Intune
                 return string.Empty;
 
             string prefix = parentId + "_";
-            return childId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
-                ? childId.Substring(prefix.Length)
+            if (!childId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return string.Empty;
+
+            string suffix = childId.Substring(prefix.Length);
+            return string.Equals(suffix, "key", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(suffix, "value", StringComparison.OrdinalIgnoreCase)
+                ? suffix
                 : string.Empty;
         }
 
