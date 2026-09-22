@@ -385,6 +385,7 @@ namespace Microsoft365DSC.Intune
                         settingInstance, settingDefinition, settingDefinitions, allSettingDefinitions, returnHashtable);
                     settingValue = groupResult.Value;
                     addToParameters = groupResult.AddToParameters;
+                    settingName = SettingsCatalogHelper.WithoutDoubledParent(settingName);
                     break;
 
                 case "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance":

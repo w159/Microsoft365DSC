@@ -382,6 +382,20 @@ namespace Microsoft365DSC.Intune
             return GetSettingName(settingDefinition, allSettingDefinitions);
         }
 
+        internal static string WithoutDoubledParent(string settingName)
+        {
+            if (string.IsNullOrEmpty(settingName) || settingName.Length % 2 == 0)
+                return settingName;
+
+            int half = settingName.Length / 2;
+            if (settingName[half] != '_')
+                return settingName;
+
+            string head = settingName.Substring(0, half);
+            string tail = settingName.Substring(half + 1);
+            return string.Equals(head, tail, StringComparison.OrdinalIgnoreCase) ? tail : settingName;
+        }
+
         /// <summary>
         /// Port of Get-SettingsCatalogSettingName.
         /// Resolves a unique, human-readable setting name for a given setting definition.
@@ -438,9 +452,7 @@ namespace Microsoft365DSC.Intune
                 if (combinationMatchesWithParent.Count == 1)
                 {
                     // Unique with parent prefix
-                    settingName = string.Equals(parentSetting.Name, settingName, StringComparison.OrdinalIgnoreCase)
-                        ? settingName
-                        : parentSetting.Name + "_" + settingName;
+                    settingName = parentSetting.Name + "_" + settingName;
                 }
                 // If the combination of parent setting and setting name is still not unique, do it with the OffsetUri of the current setting
                 else

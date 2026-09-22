@@ -290,7 +290,8 @@ namespace Microsoft365DSC.Intune
 
             if (isMultiInstance)
             {
-                string settingName = SettingsCatalogHelper.GetSettingName(settingDefinition, allDefinitions);
+                string settingName = SettingsCatalogHelper.WithoutDoubledParent(
+                    SettingsCatalogHelper.GetSettingName(settingDefinition, allDefinitions));
                 string fullClassName = settingInstanceName + settingName;
                 childInstanceName = fullClassName;
 
