@@ -61,6 +61,9 @@
   * [BREAKING CHANGE] Changed `MultiFactorAuthConfiguration` from a boolean to the
     values `notRequired` and `required`, matching the type Microsoft Graph defines.
   * Added support for the `AzureADRegistration` property.
+  * Properties left out of the configuration now keep their current value when
+    the policy is updated. Before, they were sent as empty, which reset them,
+    for example `UserDeviceQuota` to 0.
 * AADFilteringProfile
   * Changed `Priority`, on the profile and on its associated policies, to a 64 bit
     integer to match the type Microsoft Graph defines.
