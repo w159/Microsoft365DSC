@@ -250,6 +250,9 @@
             "name": "GroupMember.Read.All"
           },
           {
+            "name": "PrivilegedAccess.Read.AzureADGroup"
+          },
+          {
             "name": "RoleManagementPolicy.Read.Directory"
           },
           {
@@ -278,6 +281,9 @@
           },
           {
             "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "PrivilegedAccess.Read.AzureADGroup"
           },
           {
             "name": "RoleManagementPolicy.Read.Directory"

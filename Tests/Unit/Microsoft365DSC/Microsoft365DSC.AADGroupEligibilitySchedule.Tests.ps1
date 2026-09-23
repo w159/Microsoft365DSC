@@ -516,6 +516,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential
                 }
 
+                Mock -CommandName Get-M365DSCExportCachedCollection -ParameterFilter { $Collection -eq 'pimGroups' } -MockWith {
+                    return @(
+                        [PSCustomObject]@{
+                            Id          = 'GroupFakeId'
+                            DisplayName = 'FakeStringValue'
+                        }
+                    )
+                }
+
                 Mock -CommandName Invoke-M365DSCGraphBatchRequest -MockWith {
                     return @(
                         @{
@@ -588,6 +597,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Should -Invoke -CommandName Get-MgBetaDirectoryObjectById -Exactly 2
                 Should -Invoke -CommandName Get-MgUser -Exactly 0
                 Should -Invoke -CommandName Get-MgBetaIdentityGovernancePrivilegedAccessGroupEligibilitySchedule -Exactly 0
+            }
+
+            It 'Should skip groups that are not enabled in PIM' {
+                Mock -CommandName Get-M365DSCExportCachedCollection -ParameterFilter { $Collection -eq 'pimGroups' } -MockWith {
+                    return @()
+                }
+
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AADGroupEligibilitySchedule' -MethodName 'Export' -Parameters $testParams
+                $result | Should -BeNullOrEmpty
+                Should -Invoke -CommandName Get-MgBetaDirectoryObjectById -Exactly 0
             }
         }
     }

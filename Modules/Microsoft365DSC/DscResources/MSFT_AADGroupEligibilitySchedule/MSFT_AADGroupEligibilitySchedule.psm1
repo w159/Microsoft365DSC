@@ -572,14 +572,21 @@ class AADGroupEligibilitySchedule : M365DSCResourceBase
 
         try
         {
+            $pimGroupIds = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+            foreach ($pimGroup in (Get-M365DSCExportCachedCollection -Collection 'pimGroups'))
+            {
+                $null = $pimGroupIds.Add($pimGroup.Id)
+            }
+
             Write-Verbose 'Calling Get-MgGroup with Export Parameters'
             [array] $this.ResourceCache['exportedGroups'] = Get-MgGroup @ExportParameters
             Write-Verbose "Got $($this.ResourceCache['exportedGroups'].Length) total unfiltered groups"
-            Write-Verbose 'Filtering all groups to PIM compatible'
+            Write-Verbose 'Filtering all groups to PIM enabled'
             $this.ResourceCache['exportedGroups'] = $this.ResourceCache['exportedGroups'] | Where-Object -FilterScript {
-                -not ($_.MailEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Length -eq 0))
+                $pimGroupIds.Contains($_.Id) -and `
+                    -not ($_.MailEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Length -eq 0))
             }
-            Write-Verbose "Got $($this.ResourceCache['exportedGroups'].Length) PIM compatible groups"
+            Write-Verbose "Got $($this.ResourceCache['exportedGroups'].Length) PIM enabled groups"
 
             $j = 1
             if ($this.ResourceCache['exportedGroups'].Length -eq 0)
