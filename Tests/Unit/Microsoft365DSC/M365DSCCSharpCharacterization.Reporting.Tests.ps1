@@ -99,8 +99,15 @@ Describe 'Markdown report' {
         ($actual -replace "`r`n", "`n") | Should -BeExactly ($expected -replace "`r`n", "`n")
     }
 
-    It 'Reports the configured properties and the referenced types only' {
+    It 'Reports every property and every type with all information' {
         $report = Get-Content -Path (Invoke-MarkdownConverter -Resources (Get-Blueprint -Name 'IntuneSettingCatalogCustomPolicyWindows10-New') -SplitByResource)[0]
+
+        $report | Should -Contain '| **TemplateReference** | Write | MSFT_MicrosoftGraphdeviceManagementConfigurationPolicyTemplateReference | Template reference information | | |'
+        $report | Should -Contain '### MSFT_MicrosoftGraphdeviceManagementConfigurationPolicyTemplateReference'
+    }
+
+    It 'Reports the configured properties and the referenced types only without all information' {
+        $report = Get-Content -Path (Invoke-MarkdownConverter -Resources (Get-Blueprint -Name 'IntuneSettingCatalogCustomPolicyWindows10-New') -Compact -SplitByResource)[0]
 
         $report | Where-Object -FilterScript { $_.StartsWith('| **') -and $_.EndsWith('| |') } | Should -BeNullOrEmpty
         $report | Where-Object -FilterScript { $_.StartsWith('### MSFT_') } | Should -BeExactly @(

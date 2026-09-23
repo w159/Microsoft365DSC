@@ -33,8 +33,9 @@ namespace Microsoft365DSC.Reporting
         public string? TenantGuid { get; set; }
 
         /// <summary>
-        /// When false, the report carries the property name, its data type and its value. When
-        /// true, it also carries attributes, allowed values, descriptions and permissions.
+        /// When false, the report carries the name, data type and value of every property the
+        /// configuration sets. When true, it carries every property the resource supports, set or
+        /// not, with its attribute, allowed values and description, and the resource permissions.
         /// </summary>
         public bool IncludeAllInformation { get; set; }
 

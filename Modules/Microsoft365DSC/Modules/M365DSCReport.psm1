@@ -870,9 +870,10 @@ function New-M365DSCConfigurationToCSV
     written to a folder instead of a file.
 
 .PARAMETER IncludeAllInformation
-    Specifies that the report carries the attribute, data type, allowed values, description and
-    permissions of every reported property. Without it, a report carries the property name, its
-    data type and its value. Only available when Type is Markdown.
+    Specifies that the report carries every property the resource supports, set or not, with its
+    attribute, data type, allowed values and description, and the permissions of the resource.
+    Without it, a report carries the name, data type and value of every property the
+    configuration sets. Only available when Type is Markdown.
 
 .PARAMETER SplitByResource
     Specifies that every resource instance becomes its own document, in a folder per workload

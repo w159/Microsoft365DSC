@@ -42,11 +42,11 @@ Generating an HTML report works slightly differently. The **New-M365DSCReportFro
 
 ## Markdown Report
 
-The Markdown report lists every resource instance of a configuration with the properties the configuration sets and their values. Properties a resource supports but the configuration does not set are left out. By default the whole configuration lands in a single document.
+The Markdown report lists every resource instance of a configuration with the properties the configuration sets and their values. By default the whole configuration lands in a single document.
 
 Add the **-SplitByResource** parameter to write one document per resource instance instead. Those documents are placed in a folder per workload below **-OutputPath**.
 
-By default a document carries the name of every property, its data type and its value. Add the **-IncludeAllInformation** parameter to also carry the attribute, the allowed values, the description of every property and the permissions the resource requires.
+By default a document carries the name, data type and value of every property the configuration sets. Add the **-IncludeAllInformation** parameter to list every property the resource supports, set or not, together with its attribute, allowed values and description, and the permissions the resource requires.
 
 > **NOTE:** A split report deletes the Markdown files of the workload folders it writes. That keeps instances which no longer exist from lingering. Other files, and Markdown files elsewhere in the folder, are kept. Point **-OutputPath** at a folder that is used for this report only.
 

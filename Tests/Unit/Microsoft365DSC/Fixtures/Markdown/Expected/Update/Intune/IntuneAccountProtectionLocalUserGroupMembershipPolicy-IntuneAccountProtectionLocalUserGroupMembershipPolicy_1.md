@@ -20,8 +20,11 @@
 | --- | --- | --- | --- | --- | --- |
 | **dataType** | Required | String | The type of the target assignment. | `#microsoft.graph.groupAssignmentTarget`, `#microsoft.graph.allLicensedUsersAssignmentTarget`, `#microsoft.graph.allDevicesAssignmentTarget`, `#microsoft.graph.exclusionGroupAssignmentTarget`, `#microsoft.graph.configurationManagerCollectionAssignmentTarget` | #microsoft.graph.exclusionGroupAssignmentTarget |
 | **deviceAndAppManagementAssignmentFilterType** | Write | String | The type of filter of the target assignment i.e. Exclude or Include. Possible values are:none, include, exclude. | `none`, `include`, `exclude` | none |
+| **deviceAndAppManagementAssignmentFilterId** | Write | String | The Id of the filter for the target assignment. | | |
+| **deviceAndAppManagementAssignmentFilterDisplayName** | Write | String | The display name of the filter for the target assignment. | | |
 | **groupId** | Write | String | The group Id that is the target of the assignment. | | 053dc89a-be83-411a-bad3-909904b7239e |
 | **groupDisplayName** | Write | String | The group Display Name that is the target of the assignment. | | DummyGroupExclude |
+| **collectionId** | Write | String | The collection Id that is the target of the assignment.(ConfigMgr) | | |
 
 ### MSFT_IntuneAccountProtectionLocalUserGroupMembershipPolicyAssignments_2
 
@@ -31,8 +34,11 @@
 | --- | --- | --- | --- | --- | --- |
 | **dataType** | Required | String | The type of the target assignment. | `#microsoft.graph.groupAssignmentTarget`, `#microsoft.graph.allLicensedUsersAssignmentTarget`, `#microsoft.graph.allDevicesAssignmentTarget`, `#microsoft.graph.exclusionGroupAssignmentTarget`, `#microsoft.graph.configurationManagerCollectionAssignmentTarget` | #microsoft.graph.groupAssignmentTarget |
 | **deviceAndAppManagementAssignmentFilterType** | Write | String | The type of filter of the target assignment i.e. Exclude or Include. Possible values are:none, include, exclude. | `none`, `include`, `exclude` | none |
+| **deviceAndAppManagementAssignmentFilterId** | Write | String | The Id of the filter for the target assignment. | | |
+| **deviceAndAppManagementAssignmentFilterDisplayName** | Write | String | The display name of the filter for the target assignment. | | |
 | **groupId** | Write | String | The group Id that is the target of the assignment. | | b0b8fd3f-af2a-453b-be57-80182d599f02 |
 | **groupDisplayName** | Write | String | The group Display Name that is the target of the assignment. | | DummyGroupInclude |
+| **collectionId** | Write | String | The collection Id that is the target of the assignment.(ConfigMgr) | | |
 
 ### MSFT_MicrosoftGraphIntuneSettingsCatalogAccessGroup_1
 

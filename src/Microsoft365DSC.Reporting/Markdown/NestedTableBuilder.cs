@@ -20,16 +20,34 @@ namespace Microsoft365DSC.Reporting.Markdown
         private readonly Dictionary<string, int> _elementCounters = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, int> _groupCounters = new(StringComparer.OrdinalIgnoreCase);
         private readonly List<KeyValuePair<string, List<IEnumerable<string>>>> _groups = [];
+        private readonly HashSet<string> _emittedTypeNames = new(StringComparer.OrdinalIgnoreCase);
+        private readonly bool _includeUnsetProperties;
 
-        public NestedTableBuilder(MarkdownTemplate template, ValueEncoder encoder)
+        public NestedTableBuilder(MarkdownTemplate template, ValueEncoder encoder, bool includeUnsetProperties)
         {
             _template = template;
             _encoder = encoder;
+            _includeUnsetProperties = includeUnsetProperties;
         }
 
         public List<string> FillMainTable(IDictionary properties, ISet<string> ignoredProperties)
         {
             return FillRows(_template.MainTable.Rows, properties, ignoredProperties, true);
+        }
+
+        public IEnumerable<string> GetUnusedTableLines()
+        {
+            if (!_includeUnsetProperties)
+            {
+                return [];
+            }
+
+            HashSet<string> seen = new(StringComparer.OrdinalIgnoreCase);
+            return _template.ComplexTables
+                .Where(table => !_emittedTypeNames.Contains(table.TypeName)
+                    && !_emittedTypeNames.Contains(table.TypeName + "_1")
+                    && seen.Add(table.TypeName))
+                .SelectMany(table => table.Lines.Concat([string.Empty]));
         }
 
         public IEnumerable<string> GetGeneratedTableLines()
@@ -50,8 +68,18 @@ namespace Microsoft365DSC.Reporting.Markdown
             foreach (string row in rows)
             {
                 string name = TableRowFiller.GetParameterName(row);
-                if (ignoredProperties.Contains(name) || !TryFindProperty(data, name, out object? value))
+                if (ignoredProperties.Contains(name))
                 {
+                    continue;
+                }
+
+                if (!TryFindProperty(data, name, out object? value))
+                {
+                    if (_includeUnsetProperties)
+                    {
+                        filled.Add(TableRowFiller.SetValue(row, null));
+                    }
+
                     continue;
                 }
 
@@ -105,6 +133,7 @@ namespace Microsoft365DSC.Reporting.Markdown
             TemplateTable? template = _template.FindComplexTable(typeName!);
             for (int index = 0; index < elements.Count; index++)
             {
+                _emittedTypeNames.Add(elementNames[index]);
                 if (template is not null)
                 {
                     List<string> rows = FillRows(template.Rows, elements[index], EmptySet, false);

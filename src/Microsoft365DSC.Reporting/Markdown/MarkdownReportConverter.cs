@@ -77,7 +77,8 @@ namespace Microsoft365DSC.Reporting.Markdown
                 }
 
                 string title = InstanceFileNamer.Sanitize(encoder.ReplaceTenantTokens(resource.InstanceName));
-                documents.Add(new(area, title, Render(title, template, resource, encoder)));
+                string content = Render(title, template, resource, encoder, request.IncludeAllInformation);
+                documents.Add(new(area, title, content));
             }
 
             return request.SplitByResource
@@ -89,9 +90,10 @@ namespace Microsoft365DSC.Reporting.Markdown
             string title,
             MarkdownTemplate template,
             ConfigurationResource resource,
-            ValueEncoder encoder)
+            ValueEncoder encoder,
+            bool includeUnsetProperties)
         {
-            NestedTableBuilder builder = new(template, encoder);
+            NestedTableBuilder builder = new(template, encoder, includeUnsetProperties);
             List<string> mainRows = builder.FillMainTable(resource.Properties, AuthenticationProperties);
 
             IEnumerable<string> lines = new[] { "# " + title }
@@ -99,6 +101,7 @@ namespace Microsoft365DSC.Reporting.Markdown
                 .Concat(mainRows)
                 .Concat([string.Empty])
                 .Concat(builder.GetGeneratedTableLines())
+                .Concat(builder.GetUnusedTableLines())
                 .Concat(template.DescriptionLines);
 
             return string.Join(LineBreak, lines).TrimEnd() + LineBreak;
