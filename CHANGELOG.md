@@ -787,6 +787,14 @@
   * Changed a parallel export to import the module once per worker instead of once per workload.
   * Fixed a parallel export keeping workers in memory after exporting Exchange Online or
     Security & Compliance resources.
+  * Added the `ThrottleLimit` parameter to `Export-M365DSCConfiguration` to set the number of
+    parallel workers. It requires `Parallel` and defaults to 5.
+  * Fixed the resources of an export not being sorted by name.
+  * Fixed a failed workload connection being retried by every resource in a parallel export.
+  * Fixed token replacements and configuration data of a previous export being carried into the
+    next export in the same session.
+  * Fixed the cached Intune assignment filters not being cleared between exports.
+  * Fixed VIVA resources being skipped in a parallel export without `Workloads`.
   * Added handling of a workload connection that fails during connect. It is reported
     once and skipped for the rest of the export.
   * Added `Absent` as an accepted value for `Ensure` to several resources to make them work

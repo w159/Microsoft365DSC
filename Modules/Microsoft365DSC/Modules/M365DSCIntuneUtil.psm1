@@ -2159,7 +2159,24 @@ function Wait-ForFileProcessing
     $file
 }
 
+<#
+.SYNOPSIS
+    Clears the cached Intune assignment filters.
+
+.DESCRIPTION
+    Removes the assignment filters cached by the assignment conversion functions. The next
+    conversion reads them from the tenant again.
+#>
+function Clear-M365DSCIntuneAssignmentFilterCache
+{
+    [CmdletBinding()]
+    param ()
+
+    $Script:IntuneAssignmentFilters = $null
+}
+
 Export-ModuleMember -Function @(
+    'Clear-M365DSCIntuneAssignmentFilterCache',
     'Compare-M365DSCIntunePolicyAssignment',
     'ConvertFrom-IntuneMobileAppAssignment',
     'ConvertFrom-IntunePolicyAssignment',

@@ -72,6 +72,9 @@
 .PARAMETER Parallel
     Indicates whether resource extraction should run in parallel.
 
+.PARAMETER ThrottleLimit
+    Specifies the number of parallel workers. Default: 5.
+
 .PARAMETER ResourceSettings
     Specifies resource settings metadata used during extraction.
 
@@ -185,6 +188,11 @@ function Start-M365DSCConfigurationExtract
         [Parameter()]
         [Switch]
         $Parallel,
+
+        [Parameter()]
+        [ValidateRange(1, [System.Int32]::MaxValue)]
+        [System.Int32]
+        $ThrottleLimit = 5,
 
         [Parameter()]
         [System.Collections.Generic.Dictionary[System.String, System.Object]]
@@ -752,7 +760,7 @@ function Start-M365DSCConfigurationExtract
                     -Source "[M365DSCReverse]$resourceModule"
             }
         }
-        $resourcesToProcess = $resourcesToProcess | Sort-Object $_.Name
+        $resourcesToProcess = $resourcesToProcess | Sort-Object -Property Name
         Register-M365DSCExportCollectionConsumers -ResourceNames @($resourcesToProcess | ForEach-Object -Process { $_.Name })
 
         # If the tenant id is not a GUID, retrieve it based on the organization name
@@ -797,6 +805,7 @@ function Start-M365DSCConfigurationExtract
             $Global:MaximumFunctionCount = 32768
             $Global:PartialExportFileName = $using:partialExportName
             $Global:M365DSCSkipDependenciesValidation = $true
+            $Global:M365DSCExportInProgress = $true
             $Global:M365DSCStringReplacementMap = $using:M365DSCStringReplacementMap
             Set-M365DSCResourcesDictionary -DscResourceDictionary $using:resourceDictionary
             $sharedState = $using:synchronizedHashtable
@@ -1022,18 +1031,28 @@ function Start-M365DSCConfigurationExtract
                 $Workloads = Get-M365DSCWorkloadForResource -ResourceName $resourcesToExport.Name
             }
 
-            $orderedResources = foreach ($workload in $Workloads)
+            $queuedResources = [System.Collections.Generic.HashSet[System.String]]::new([System.StringComparer]::OrdinalIgnoreCase)
+            foreach ($workload in $Workloads)
             {
-                $resourcesToProcess | Where-Object -Property Name -Like "$workload*"
+                foreach ($resource in ($resourcesToProcess | Where-Object -Property Name -Like "$workload*"))
+                {
+                    if ($queuedResources.Add($resource.Name))
+                    {
+                        $workQueue.Enqueue($resource)
+                    }
+                }
             }
 
-            foreach ($resource in $orderedResources)
+            foreach ($resource in $resourcesToProcess)
             {
-                $workQueue.Enqueue($resource)
+                if ($queuedResources.Add($resource.Name))
+                {
+                    $workQueue.Enqueue($resource)
+                }
             }
 
             # Each worker imports the module once and processes resources of all workloads.
-            $workerCount = [System.Math]::Max(1, [System.Math]::Min(5, $workQueue.Count))
+            $workerCount = [System.Math]::Max(1, [System.Math]::Min($ThrottleLimit, $workQueue.Count))
             Write-M365DSCHost -Message "Starting export in parallel mode for workloads {$($Workloads -join ', ')} with $workerCount workers. Initialization may take a while..."
             1..$workerCount | Invoke-Parallel -ScriptBlock $exportScriptBlock -ThrottleLimit $workerCount -Verbose
         }

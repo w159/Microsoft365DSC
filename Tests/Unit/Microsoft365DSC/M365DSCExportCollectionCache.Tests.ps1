@@ -285,6 +285,27 @@ Describe 'M365DSCExportCollectionCache' {
         }
     }
 
+    Context 'Intune assignment filter cache' {
+        BeforeEach {
+            Mock -ModuleName M365DSCIntuneUtil -CommandName Get-MgBetaDeviceManagementAssignmentFilter -MockWith {
+                return @(@{ Id = 'f1'; DisplayName = 'Filter 1' })
+            }
+            Mock -ModuleName M365DSCIntuneUtil -CommandName Get-MgGroup -MockWith { return @{ Id = 'g1'; DisplayName = 'Group g1' } }
+            Clear-M365DSCIntuneAssignmentFilterCache
+        }
+
+        It 'reads the assignment filters again after the export cache is initialized' {
+            $assignments = @(@{ Target = @{ '@odata.type' = '#microsoft.graph.groupAssignmentTarget'; groupId = 'g1'; deviceAndAppManagementAssignmentFilterId = 'f1'; deviceAndAppManagementAssignmentFilterType = 'include' } })
+            $null = ConvertFrom-IntunePolicyAssignment -Assignments $assignments
+            $null = ConvertFrom-IntunePolicyAssignment -Assignments $assignments
+            Should -Invoke -ModuleName M365DSCIntuneUtil -CommandName Get-MgBetaDeviceManagementAssignmentFilter -Exactly -Times 1
+
+            Initialize-M365DSCExportCollectionCache
+            $null = ConvertFrom-IntunePolicyAssignment -Assignments $assignments
+            Should -Invoke -ModuleName M365DSCIntuneUtil -CommandName Get-MgBetaDeviceManagementAssignmentFilter -Exactly -Times 2
+        }
+    }
+
     Context 'Get-M365DSCIntuneGroup' {
         BeforeEach {
             Mock -ModuleName M365DSCIntuneUtil -CommandName Get-MgBetaDeviceManagementAssignmentFilter -MockWith { }

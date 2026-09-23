@@ -8,7 +8,7 @@ $Global:M365DSCPushNotificationsHeaders = $null
 $Global:M365DSCPushNotificationsBody = $null
 #endregion
 
-$Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
+$Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS', 'VIVA')
 $Script:M365DSCMgxBatchCommand = $null
 $Script:M365DSCMgxBatchCommandResolved = $false
 
