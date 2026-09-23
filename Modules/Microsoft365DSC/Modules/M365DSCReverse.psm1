@@ -784,9 +784,11 @@ function Start-M365DSCConfigurationExtract
         [void]$synchronizedHashtable.TryAdd('ResourcesResult', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.String]]::new())
         [void]$synchronizedHashtable.TryAdd('ResourceStatus', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.String]]::new())
         [void]$synchronizedHashtable.TryAdd('InstanceCounts', [System.Collections.Concurrent.ConcurrentDictionary[System.String, System.Int32]]::new())
+        [void]$synchronizedHashtable.TryAdd('BusyWorkers', 0)
         $resourceDictionary = Get-M365DSCResourcesDictionary
         $M365DSCStringReplacementMap = Get-M365DSCStringReplacementMap
         $m365dscModulePath = (Get-Module -Name 'Microsoft365DSC').Path
+        $workQueue = [System.Collections.Concurrent.ConcurrentQueue[System.Object]]::new()
         $exportScriptBlock = {
             if ($null -eq (Get-Module -Name 'Microsoft365DSC'))
             {
@@ -796,133 +798,177 @@ function Start-M365DSCConfigurationExtract
             $Global:PartialExportFileName = $using:partialExportName
             $Global:M365DSCSkipDependenciesValidation = $true
             $Global:M365DSCStringReplacementMap = $using:M365DSCStringReplacementMap
-            $resource = $_
             Set-M365DSCResourcesDictionary -DscResourceDictionary $using:resourceDictionary
-            $resourceName = $resource.Name
-            $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceName).AuthMethod
-
-            $parameters = @{}
-            switch ($mostSecureAuthMethod)
+            $sharedState = $using:synchronizedHashtable
+            $workQueue = $using:workQueue
+            [System.Threading.Monitor]::Enter($sharedState)
+            try
             {
-                { $_ -in 'CertificateThumbprint', 'CertificatePath', 'ApplicationSecret' }
+                $sharedState.BusyWorkers++
+            }
+            finally
+            {
+                [System.Threading.Monitor]::Exit($sharedState)
+            }
+            try
+            {
+                $resource = $null
+                while ($workQueue.TryDequeue([ref] $resource))
                 {
-                    $parameters.Add('ApplicationId', $using:ApplicationId)
-                    $parameters.Add('TenantId', $using:TenantId)
-                }
-                'CertificateThumbprint'
-                {
-                    $parameters.Add('CertificateThumbprint', $using:CertificateThumbprint)
-                }
-                'CertificatePath'
-                {
-                    $parameters.Add('CertificatePath', $using:CertificatePath)
-                    $parameters.Add('CertificatePassword', $using:CertificatePassword)
-                }
-                'ApplicationSecret'
-                {
-                    # TODO: Update during next breaking change, when ApplicationSecret is changed to PSCredential
-                    $applicationSecretValue = New-Object System.Management.Automation.PSCredential ('ApplicationSecret', (ConvertTo-SecureString $using:ApplicationSecret -AsPlainText -Force))
-                    $parameters.Add('ApplicationSecret', $applicationSecretValue)
-                }
-                { $_ -in 'Credentials', 'CredentialsWithApplicationId' }
-                {
-                    if ($using:AuthMethods -contains 'CredentialsWithApplicationId')
+                    $resourceName = $resource.Name
+                    $mostSecureAuthMethod = ($using:allSupportedResourcesWithMostSecureAuthMethod | Where-Object -Property Resource -EQ $resourceName).AuthMethod
+
+                    $parameters = @{}
+                    switch ($mostSecureAuthMethod)
                     {
-                        $parameters.Add('ApplicationId', $using:ApplicationId)
+                        { $_ -in 'CertificateThumbprint', 'CertificatePath', 'ApplicationSecret' }
+                        {
+                            $parameters.Add('ApplicationId', $using:ApplicationId)
+                            $parameters.Add('TenantId', $using:TenantId)
+                        }
+                        'CertificateThumbprint'
+                        {
+                            $parameters.Add('CertificateThumbprint', $using:CertificateThumbprint)
+                        }
+                        'CertificatePath'
+                        {
+                            $parameters.Add('CertificatePath', $using:CertificatePath)
+                            $parameters.Add('CertificatePassword', $using:CertificatePassword)
+                        }
+                        'ApplicationSecret'
+                        {
+                            # TODO: Update during next breaking change, when ApplicationSecret is changed to PSCredential
+                            $applicationSecretValue = New-Object System.Management.Automation.PSCredential ('ApplicationSecret', (ConvertTo-SecureString $using:ApplicationSecret -AsPlainText -Force))
+                            $parameters.Add('ApplicationSecret', $applicationSecretValue)
+                        }
+                        { $_ -in 'Credentials', 'CredentialsWithApplicationId' }
+                        {
+                            if ($using:AuthMethods -contains 'CredentialsWithApplicationId')
+                            {
+                                $parameters.Add('ApplicationId', $using:ApplicationId)
+                            }
+                            $parameters.Add('Credential', $using:Credential)
+                        }
+                        'CredentialsWithTenantId'
+                        {
+                            $parameters.Add('Credential', $using:Credential)
+                            $parameters.Add('TenantId', $using:TenantId)
+                        }
+                        'ManagedIdentity'
+                        {
+                            $parameters.Add('ManagedIdentity', $using:ManagedIdentity)
+                            $parameters.Add('TenantId', $using:TenantId)
+                        }
+                        'AccessTokens'
+                        {
+                            $parameters.Add('AccessTokens', $using:AccessTokens)
+                            $parameters.Add('TenantId', $using:TenantId)
+                        }
                     }
-                    $parameters.Add('Credential', $using:Credential)
-                }
-                'CredentialsWithTenantId'
-                {
-                    $parameters.Add('Credential', $using:Credential)
-                    $parameters.Add('TenantId', $using:TenantId)
-                }
-                'ManagedIdentity'
-                {
-                    $parameters.Add('ManagedIdentity', $using:ManagedIdentity)
-                    $parameters.Add('TenantId', $using:TenantId)
-                }
-                'AccessTokens'
-                {
-                    $parameters.Add('AccessTokens', $using:AccessTokens)
-                    $parameters.Add('TenantId', $using:TenantId)
+
+                    if ($using:ComponentsToSkip -notcontains $resourceName)
+                    {
+                        [System.Threading.Monitor]::Enter($sharedState)
+                        try
+                        {
+                            $counter = $sharedState.ResourceCounter++
+                        }
+                        finally
+                        {
+                            [System.Threading.Monitor]::Exit($sharedState)
+                        }
+                        Write-M365DSCHost -Message "[$counter/$($using:resourcesToExport.Count)] Extracting [" -DeferWrite
+                        Write-M365DSCHost -Message $resourceName -ForegroundColor Green -DeferWrite
+                        Write-M365DSCHost -Message '] using {' -DeferWrite
+                        Write-M365DSCHost -Message $mostSecureAuthMethod -ForegroundColor Cyan -DeferWrite
+                        Write-M365DSCHost -Message '}...' -DeferWrite
+                        $exportString = [System.Text.StringBuilder]::new()
+                        if ($using:GenerateInfo)
+                        {
+                            $exportString.Append("`r`n        # For information on how to use this resource, please refer to:`r`n") | Out-Null
+                            $exportString.Append("        # https://github.com/microsoft/Microsoft365DSC/wiki/$($resource.Name)`r`n") | Out-Null
+                        }
+
+                        # Check if filters for the current resource were specified.
+                        $resourceFilter = $null
+                        $filterExists = Test-M365DSCResourceProperty -ResourceName $resourceName -PropertyName 'Filter'
+                        if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Where({ $_ -eq $resourceName }))
+                        {
+                            $resourceFilter = ($using:Filters).$resourceName
+                            if ($filterExists)
+                            {
+                                $parameters.Add('Filter', $resourceFilter)
+                            }
+                            elseif ($null -ne $resourceFilter)
+                            {
+                                Write-M365DSCHost -Message "    `r`n$($Global:M365DSCEmojiYellowCircle) You specified a filter for resource {$resourceName} but it doesn't support filters. Filter will be ignored and all instances of the resource will be captured." -ForegroundColor DarkYellow -CommitWrite
+                            }
+                        }
+
+                        # Check whether the resource's export supports -SubscriptionId.
+                        $supportsSubscriptionId = Test-M365DSCResourceProperty -ResourceName $resourceName -PropertyName 'SubscriptionId'
+
+                        if ($supportsSubscriptionId -and -not [System.String]::IsNullOrEmpty($using:SubscriptionId))
+                        {
+                            $parameters.Add('SubscriptionId', $using:SubscriptionId)
+                        }
+
+                        # Check for ErrorAction Preference
+                        $parameters.Add('ErrorAction', $using:ErrorActionPreference)
+                        $Global:M365DSCExportResourceTypes += $resourceName
+
+                        $Global:M365DSCExportInstanceTally = 0
+                        try
+                        {
+                            $exportOutput = Invoke-M365DSCResourceMethod -ResourceName $resourceName -MethodName 'Export' -Parameters $parameters
+                            $exportString.Append($exportOutput) | Out-Null
+                            [void]$sharedState.ResourcesResult.TryAdd($resourceName, $exportString.ToString())
+                            [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Succeeded')
+                        }
+                        catch
+                        {
+                            Write-M365DSCHost -Message "$($Global:M365DSCEmojiRedX)`r`n    An error occurred while exporting resource {$resourceName}: $($_.Exception.Message)" -ForegroundColor Red -CommitWrite
+                            [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Failed')
+                            if ($ErrorActionPreference -eq 'Stop')
+                            {
+                                throw $_
+                            }
+                        }
+                        finally
+                        {
+                            [void]$sharedState.InstanceCounts.TryAdd($resourceName, $Global:M365DSCExportInstanceTally)
+                            $Global:M365DSCExportInstanceTally = $null
+                            Complete-M365DSCExportCollectionConsumer -ResourceName $resourceName
+                        }
+                    }
                 }
             }
-
-            if ($using:ComponentsToSkip -notcontains $resourceName)
+            finally
             {
-                $sharedState = $using:synchronizedHashtable
                 [System.Threading.Monitor]::Enter($sharedState)
                 try
                 {
-                    $counter = $sharedState.ResourceCounter++
+                    $sharedState.BusyWorkers--
                 }
                 finally
                 {
                     [System.Threading.Monitor]::Exit($sharedState)
                 }
-                Write-M365DSCHost -Message "[$counter/$($using:resourcesToExport.Count)] Extracting [" -DeferWrite
-                Write-M365DSCHost -Message $resourceName -ForegroundColor Green -DeferWrite
-                Write-M365DSCHost -Message '] using {' -DeferWrite
-                Write-M365DSCHost -Message $mostSecureAuthMethod -ForegroundColor Cyan -DeferWrite
-                Write-M365DSCHost -Message '}...' -DeferWrite
-                $exportString = [System.Text.StringBuilder]::new()
-                if ($using:GenerateInfo)
-                {
-                    $exportString.Append("`r`n        # For information on how to use this resource, please refer to:`r`n") | Out-Null
-                    $exportString.Append("        # https://github.com/microsoft/Microsoft365DSC/wiki/$($resource.Name)`r`n") | Out-Null
-                }
+            }
 
-                # Check if filters for the current resource were specified.
-                $resourceFilter = $null
-                $filterExists = Test-M365DSCResourceProperty -ResourceName $resourceName -PropertyName 'Filter'
-                if ($filterExists -and $null -ne $using:Filters -and ($using:Filters).Keys.Where({ $_ -eq $resourceName }))
+            # ExchangeOnlineManagement references each connection's runspace until it is disconnected.
+            # Disconnecting while another worker runs Exchange cmdlets breaks that worker.
+            if ($using:Parallel -and $null -ne (Get-Module -Name 'ExchangeOnlineManagement'))
+            {
+                while ($sharedState.BusyWorkers -gt 0)
                 {
-                    $resourceFilter = ($using:Filters).$resourceName
-                    if ($filterExists)
-                    {
-                        $parameters.Add('Filter', $resourceFilter)
-                    }
-                    elseif ($null -ne $resourceFilter)
-                    {
-                        Write-M365DSCHost -Message "    `r`n$($Global:M365DSCEmojiYellowCircle) You specified a filter for resource {$resourceName} but it doesn't support filters. Filter will be ignored and all instances of the resource will be captured." -ForegroundColor DarkYellow -CommitWrite
-                    }
+                    Start-Sleep -Milliseconds 250
                 }
-
-                # Check whether the resource's export supports -SubscriptionId.
-                $supportsSubscriptionId = Test-M365DSCResourceProperty -ResourceName $resourceName -PropertyName 'SubscriptionId'
-
-                if ($supportsSubscriptionId -and -not [System.String]::IsNullOrEmpty($using:SubscriptionId))
+                $loadedModuleFolders = @(Get-Module).ModuleBase
+                $ownConnections = @(Get-ConnectionInformation -ErrorAction SilentlyContinue | Where-Object -FilterScript { $loadedModuleFolders -contains $_.ModuleName })
+                foreach ($connection in $ownConnections)
                 {
-                    $parameters.Add('SubscriptionId', $using:SubscriptionId)
-                }
-
-                # Check for ErrorAction Preference
-                $parameters.Add('ErrorAction', $using:ErrorActionPreference)
-                $Global:M365DSCExportResourceTypes += $resourceName
-
-                $Global:M365DSCExportInstanceTally = 0
-                try
-                {
-                    $exportOutput = Invoke-M365DSCResourceMethod -ResourceName $resourceName -MethodName 'Export' -Parameters $parameters
-                    $exportString.Append($exportOutput) | Out-Null
-                    [void]$sharedState.ResourcesResult.TryAdd($resourceName, $exportString.ToString())
-                    [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Succeeded')
-                }
-                catch
-                {
-                    Write-M365DSCHost -Message "$($Global:M365DSCEmojiRedX)`r`n    An error occurred while exporting resource {$resourceName}: $($_.Exception.Message)" -ForegroundColor Red -CommitWrite
-                    [void]$sharedState.ResourceStatus.TryAdd($resourceName, 'Failed')
-                    if ($ErrorActionPreference -eq 'Stop')
-                    {
-                        throw $_
-                    }
-                }
-                finally
-                {
-                    [void]$sharedState.InstanceCounts.TryAdd($resourceName, $Global:M365DSCExportInstanceTally)
-                    $Global:M365DSCExportInstanceTally = $null
-                    Complete-M365DSCExportCollectionConsumer -ResourceName $resourceName
+                    Disconnect-ExchangeOnline -ConnectionId $connection.ConnectionId -Confirm:$false -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
                 }
             }
         }
@@ -975,20 +1021,31 @@ function Start-M365DSCConfigurationExtract
             {
                 $Workloads = Get-M365DSCWorkloadForResource -ResourceName $resourcesToExport.Name
             }
-            foreach ($workload in $Workloads)
+
+            $orderedResources = foreach ($workload in $Workloads)
             {
-                Write-M365DSCHost -Message "Starting export in parallel mode for workload {$workload}. Initialization may take a while..."
-                $arguments = @{
-                    ScriptBlock = $exportScriptBlock
-                }
-                $resourcesToProcess | Where-Object -FilterScript { $_.Name -like "$workload*" } | Invoke-Parallel @arguments -Verbose
+                $resourcesToProcess | Where-Object -Property Name -Like "$workload*"
             }
+
+            foreach ($resource in $orderedResources)
+            {
+                $workQueue.Enqueue($resource)
+            }
+
+            # Each worker imports the module once and processes resources of all workloads.
+            $workerCount = [System.Math]::Max(1, [System.Math]::Min(5, $workQueue.Count))
+            Write-M365DSCHost -Message "Starting export in parallel mode for workloads {$($Workloads -join ', ')} with $workerCount workers. Initialization may take a while..."
+            1..$workerCount | Invoke-Parallel -ScriptBlock $exportScriptBlock -ThrottleLimit $workerCount -Verbose
         }
         else
         {
             Write-M365DSCHost -Message 'Starting export in sequential mode...'
+            foreach ($resource in $resourcesToProcess)
+            {
+                $workQueue.Enqueue($resource)
+            }
             $exportScriptBlock = [ScriptBlock]::Create($exportScriptBlock.ToString().Replace('$using:', '$'))
-            $resourcesToProcess | ForEach-Object -Process $exportScriptBlock
+            . $exportScriptBlock
         }
 
         $Global:M365DSCExportResourceInstancesCount = [System.Int32]($synchronizedHashtable.InstanceCounts.Values | Measure-Object -Sum).Sum

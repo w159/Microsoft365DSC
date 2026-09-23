@@ -783,6 +783,10 @@
   * Fixed a parallel export hanging indefinitely.
   * Fixed a parallel export always reporting 0 exported instances and occasionally miscounting
     the successful and failed resources.
+  * Fixed a parallel export keeping every finished runspace in memory.
+  * Changed a parallel export to import the module once per worker instead of once per workload.
+  * Fixed a parallel export keeping workers in memory after exporting Exchange Online or
+    Security & Compliance resources.
   * Added handling of a workload connection that fails during connect. It is reported
     once and skipped for the rest of the export.
   * Added `Absent` as an accepted value for `Ensure` to several resources to make them work
