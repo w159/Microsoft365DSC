@@ -62,8 +62,7 @@ namespace Microsoft365DSC.Reporting.Configuration
         public string EncodeArray(IEnumerable<object?> items, bool escapeLineBreaks)
         {
             string[] encoded = items
-                .Where(item => !IsBlankItem(item))
-                .Select(item => EncodeScalar(item, escapeLineBreaks))
+                .Select(item => IsBlankItem(item) ? NullToken : EncodeScalar(item, escapeLineBreaks))
                 .ToArray();
 
             return encoded.Length switch
@@ -87,11 +86,6 @@ namespace Microsoft365DSC.Reporting.Configuration
             }
 
             string encoded = ReplaceTenantTokens(text).Replace("|", PipeToken);
-            if (encoded.Distinct().Count() > 1)
-            {
-                encoded = encoded.Replace("'", "''");
-            }
-
             return escapeLineBreaks ? LineBreak.Replace(encoded, EscapedLineBreak) : encoded;
         }
 

@@ -170,7 +170,7 @@ Describe 'Markdown report layout' {
 Describe 'Markdown report values' {
     BeforeAll {
         $moduleRoot = New-MetadataRoot -Parameters @(
-            'Identity', 'Domain', 'Tenant', 'Pipe', 'Quote', 'Repeated', 'List', 'Single', 'Empty', 'NullText',
+            'Identity', 'Domain', 'Tenant', 'Pipe', 'Quote', 'List', 'Single', 'Empty', 'NullText',
             'Flag', 'Multiline', 'LineFeed', 'Suffixed', 'TenantId'
         )
         $resource = @{
@@ -181,7 +181,6 @@ Describe 'Markdown report values' {
             Tenant               = '5aa4dce1-1234-4567-89ab-0123456789ab $TenantGuid'
             Pipe                 = 'a|b'
             Quote                = "it's"
-            Repeated             = "'''"
             List                 = [object[]] @('a,b', 'c', '')
             Single               = [object[]] @('a,b')
             Empty                = [object[]] @()
@@ -208,9 +207,8 @@ Describe 'Markdown report values' {
         @{ Parameter = 'Domain'; Expected = 'admin@%ORGANIZATIONNAME% uses %ORGANIZATIONNAME% in %DOMAINSHORTNAME%' }
         @{ Parameter = 'Tenant'; Expected = '%TENANTGUID% %TENANTGUID%' }
         @{ Parameter = 'Pipe'; Expected = 'a%PIPE%b' }
-        @{ Parameter = 'Quote'; Expected = "it''s" }
-        @{ Parameter = 'Repeated'; Expected = "'''" }
-        @{ Parameter = 'List'; Expected = 'a%COMMA%b,c' }
+        @{ Parameter = 'Quote'; Expected = "it's" }
+        @{ Parameter = 'List'; Expected = 'a%COMMA%b,c,%NULL%' }
         @{ Parameter = 'Single'; Expected = 'a,b' }
         @{ Parameter = 'Empty'; Expected = '%NULL%' }
         @{ Parameter = 'NullText'; Expected = '%NULL%' }
