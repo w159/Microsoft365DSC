@@ -13,7 +13,7 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $AzureADJoinIsAdminConfigurable
 
     [DscProperty()]
-    [System.ComponentModel.Description('Specifies the maximum number of devices that a user can have within your organization before blocking new device registrations. The default value is set to 50. If this property isn''t specified during the policy update operation, it''s automatically reset to 0 to indicate that users aren''t allowed to join any devices.')]
+    [System.ComponentModel.Description('Specifies the maximum number of devices that a user can have within your organization before blocking new device registrations. The default value is set to 50. If this property isn''t specified, the current value is kept.')]
     [System.Nullable[System.UInt32]] $UserDeviceQuota
 
     [DscProperty()]
@@ -306,6 +306,28 @@ class AADDeviceRegistrationPolicy : M365DSCResourceBase
         Confirm-M365DSCDependencies
 
         $this.AddTelemetry('Set')
+
+        $currentInstance = $this.Get().ToHashtable()
+        $boundParameters = $this.GetBoundParameters()
+        foreach ($propertyName in @(
+                'AzureADAllowedToJoin',
+                'AzureADAllowedToJoinGroups',
+                'AzureADAllowedToJoinUsers',
+                'AzureADJoinIsAdminConfigurable',
+                'AzureAdJoinLocalAdminsRegisteringGroups',
+                'AzureAdJoinLocalAdminsRegisteringMode',
+                'AzureAdJoinLocalAdminsRegisteringUsers',
+                'AzureADRegistration',
+                'LocalAdminPasswordIsEnabled',
+                'LocalAdminsEnableGlobalAdmins',
+                'MultiFactorAuthConfiguration',
+                'UserDeviceQuota'))
+        {
+            if (-not $boundParameters.ContainsKey($propertyName))
+            {
+                $this.$propertyName = $currentInstance[$propertyName]
+            }
+        }
 
         $azureADRegistrationAllowedToRegister = '#microsoft.graph.noDeviceRegistrationMembership'
         if ($this.AzureADAllowedToJoin -eq 'All')

@@ -158,6 +158,33 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Only LocalAdminPasswordIsEnabled drifts and the other properties are not specified' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    IsSingleInstance            = 'Yes'
+                    LocalAdminPasswordIsEnabled = $true
+                    Credential                  = $Credential
+                }
+            }
+
+            It 'Should return false from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'AADDeviceRegistrationPolicy' -Property $testParams).Test() | Should -Be $false
+            }
+
+            It 'Should keep the current values of the properties that are not specified' {
+                (New-M365DSCResourceInstance -ResourceName 'AADDeviceRegistrationPolicy' -Property $testParams).Set()
+                Should -Invoke -CommandName Invoke-M365DSCGraphRequest -Exactly 1 -ParameterFilter {
+                    $Body.localAdminPassword.isEnabled -eq $true -and
+                    $Body.userDeviceQuota -eq 50 -and
+                    $Body.multiFactorAuthConfiguration -eq 'notRequired' -and
+                    $Body.azureADJoin.isAdminConfigurable -eq $true -and
+                    $Body.azureADJoin.allowedToJoin.'@odata.type' -eq '#microsoft.graph.allDeviceRegistrationMembership' -and
+                    $Body.azureADJoin.localAdmins.enableGlobalAdmins -eq $true -and
+                    $Body.azureADJoin.localAdmins.registeringUsers.'@odata.type' -eq '#microsoft.graph.enumeratedDeviceRegistrationMembership'
+                }
+            }
+        }
+
         Context -Name 'ReverseDSC Tests' -Fixture {
             BeforeAll {
                 $Global:CurrentModeIsExport = $true
