@@ -68,6 +68,8 @@
   * Added support for the `Theme` and `WritebackConfiguration` properties.
   * Fixed a failed license assignment only being written to verbose output instead of
     failing the operation.
+  * Fixed an issue where specifying a filter during export would throw a Graph exception.
+    FIXES [#7489](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7489)
 * AADGroupEligibilitySchedule
   * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphRecurrenceRange1` to
     `MSFT_MicrosoftGraphRecurrenceRange`.
@@ -160,6 +162,8 @@
     `LicenseAssignment` was emptied to strip every license.
   * Added support for the `AgeGroup`, `EmployeeHireDate`, `EmployeeLeaveDateTime`
     and `EmployeeType` properties.
+* EXOAntiPhishPolicy
+  * Fixed an issue where the property description contained an invalid character.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.
@@ -179,6 +183,9 @@
     resolves the members and overwrote the value the export pass fetched.
 * EXOTenantAllowBlockListItems
   * [BREAKING CHANGE] Removed property `AppliationSecret`.
+* FabricAdminTenantSettings
+  * Added support for the `ManagedIdentity` property and authentication method.
+    FIXES [#7499](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7499)
 * IntuneAlertRuleWindows365
   * Added value `unknown` to property `Severity`.
 * IntuneAndroidManagedStoreAppConfiguration

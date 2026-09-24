@@ -982,6 +982,12 @@ class AADGroup : M365DSCResourceBase
                 Sort           = 'DisplayName'
             }
 
+            if (-not [System.String]::IsNullOrEmpty($this.Filter))
+            {
+                # Sort (OrderBy) and Expand cannot be used together
+                $ExportParameters.Remove('Sort') | Out-Null
+            }
+
             # Define the list of attributes
             $attributesToCheck = @(
                 'description',
@@ -1021,7 +1027,12 @@ class AADGroup : M365DSCResourceBase
             $this.ResourceCache['exportedGroups'] = $this.ResourceCache['exportedGroups'] | Where-Object -FilterScript {
                 -not ($_.MailEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Count -eq 0)) -and `
                     -not ($_.MailEnabled -and $_.SecurityEnabled -and ($null -eq $_.GroupTypes -or $_.GroupTypes.Count -eq 0))
-            } | Sort-Object -Property DisplayName
+            }
+
+            if (-not [System.String]::IsNullOrEmpty($this.Filter))
+            {
+                $this.ResourceCache['exportedGroups'] = $this.ResourceCache['exportedGroups'] | Sort-Object -Property DisplayName
+            }
 
             $navigationCache = @{}
             $navigationRequests = @()
