@@ -787,8 +787,8 @@
   * Changed a parallel export to import the module once per worker instead of once per workload.
   * Fixed a parallel export keeping workers in memory after exporting Exchange Online or
     Security & Compliance resources.
-  * Added the `ThrottleLimit` parameter to `Export-M365DSCConfiguration` to set the number of
-    parallel workers. It requires `Parallel` and defaults to 5.
+  * Added the `ThrottleLimit` parameter to `Export-M365DSCConfiguration` and `Assert-M365DSCBlueprint`
+    to set the number of parallel workers. It requires `Parallel` and defaults to 5.
   * Fixed the resources of an export not being sorted by name.
   * Fixed a failed workload connection being retried by every resource in a parallel export.
   * Fixed token replacements and configuration data of a previous export being carried into the
