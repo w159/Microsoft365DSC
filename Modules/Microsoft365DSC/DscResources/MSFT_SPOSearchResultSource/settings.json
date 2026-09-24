@@ -67,6 +67,7 @@
     }
   },
   "requiredModules": [
+    "MSCloudLoginAssistant",
     "PnP.PowerShell"
   ],
   "supportedEnvironments": [
@@ -75,6 +76,12 @@
   ],
   "mode": "Configuration",
   "commands": [
+    {
+      "module": "MSCloudLoginAssistant",
+      "cmdlets": [
+        "Get-MSCloudLoginConnectionProfile"
+      ]
+    },
     {
       "module": "PnP.PowerShell",
       "cmdlets": [

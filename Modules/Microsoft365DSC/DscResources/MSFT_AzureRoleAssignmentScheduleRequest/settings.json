@@ -58,8 +58,8 @@
       "cmdlets": [
         "Connect-AzAccount",
         "Get-AzSubscription",
-        "Register-AzModule",
-        "Set-AzContext"
+        "Invoke-AzRestMethod",
+        "Register-AzModule"
       ]
     },
     {
@@ -69,7 +69,6 @@
         "Get-AzADServicePrincipal",
         "Get-AzADUser",
         "Get-AzManagementGroup",
-        "Get-AzResourceGroup",
         "Get-AzRoleAssignmentSchedule",
         "Get-AzRoleDefinition",
         "New-AzRoleAssignmentScheduleRequest"

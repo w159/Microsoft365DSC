@@ -59,8 +59,8 @@
         "Connect-AzAccount",
         "Get-AzSubscription",
         "Get-AzTenant",
-        "Register-AzModule",
-        "Set-AzContext"
+        "Invoke-AzRestMethod",
+        "Register-AzModule"
       ]
     },
     {
@@ -70,7 +70,6 @@
         "Get-AzADServicePrincipal",
         "Get-AzADUser",
         "Get-AzManagementGroup",
-        "Get-AzResourceGroup",
         "Get-AzRoleDefinition",
         "Get-AzRoleEligibilitySchedule",
         "New-AzRoleEligibilityScheduleRequest"
