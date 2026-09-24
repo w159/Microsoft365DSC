@@ -111,7 +111,7 @@ class TeamsMeetingBroadcastPolicy : M365DSCResourceBase
                     ApplicationId                   = $this.ApplicationId
                     TenantId                        = $this.TenantId
                     CertificateThumbprint           = $this.CertificateThumbprint
-                    ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity                 = $this.ManagedIdentity
                     AccessTokens                    = $this.AccessTokens
                 })
             }
@@ -212,7 +212,7 @@ class TeamsMeetingBroadcastPolicy : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 Write-M365DSCHost -Message "    |---[$i/$($policies.Length)] $($policy.Identity)" -DeferWrite

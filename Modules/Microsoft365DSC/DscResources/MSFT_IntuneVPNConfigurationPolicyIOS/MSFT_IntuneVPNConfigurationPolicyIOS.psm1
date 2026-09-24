@@ -332,7 +332,7 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
                 CertificateThumbprint          = $this.CertificateThumbprint
                 CertificatePath                = $this.CertificatePath
                 CertificatePassword            = $this.CertificatePassword
-                ManagedIdentity                = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                = $this.ManagedIdentity
                 AccessTokens                   = $this.AccessTokens
                 loginGroupOrDomain             = $getValue.loginGroupOrDomain
                 role                           = $getValue.role
@@ -527,7 +527,7 @@ class IntuneVPNConfigurationPolicyIOS : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

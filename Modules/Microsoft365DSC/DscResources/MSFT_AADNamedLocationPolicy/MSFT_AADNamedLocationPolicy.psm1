@@ -154,7 +154,7 @@ class AADNamedLocationPolicy : M365DSCResourceBase
                 TenantId                          = $this.TenantId
                 CertificateThumbprint             = $this.CertificateThumbprint
                 Credential                        = $this.Credential
-                ManagedIdentity                   = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                   = $this.ManagedIdentity
                 AccessTokens                      = $this.AccessTokens
             }
 
@@ -322,7 +322,7 @@ class AADNamedLocationPolicy : M365DSCResourceBase
                     Credential            = $this.Credential
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $AADNamedLocation

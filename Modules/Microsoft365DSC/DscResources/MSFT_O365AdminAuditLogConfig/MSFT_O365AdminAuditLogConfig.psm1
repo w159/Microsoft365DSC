@@ -96,7 +96,7 @@ class O365AdminAuditLogConfig : M365DSCResourceBase
                     CertificateThumbprint           = $this.CertificateThumbprint
                     CertificatePath                 = $this.CertificatePath
                     CertificatePassword             = $this.CertificatePassword
-                    ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity                 = $this.ManagedIdentity
                     UnifiedAuditLogIngestionEnabled = $UnifiedAuditLogIngestionEnabledReturnValue
                     AccessTokens                    = $this.AccessTokens
                 }
@@ -203,7 +203,7 @@ class O365AdminAuditLogConfig : M365DSCResourceBase
                 CertificateThumbprint           = $this.CertificateThumbprint
                 CertificatePassword             = $this.CertificatePassword
                 CertificatePath                 = $this.CertificatePath
-                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                 = $this.ManagedIdentity
                 AccessTokens                    = $this.AccessTokens
             }
             $Results = $this.GetForExport($Params)

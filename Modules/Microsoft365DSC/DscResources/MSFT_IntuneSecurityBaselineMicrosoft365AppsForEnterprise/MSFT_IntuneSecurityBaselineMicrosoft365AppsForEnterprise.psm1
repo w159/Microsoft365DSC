@@ -624,7 +624,7 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 #endregion
             }
             $results += $policySettings
@@ -812,7 +812,7 @@ class IntuneSecurityBaselineMicrosoft365AppsForEnterprise : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

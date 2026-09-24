@@ -111,7 +111,7 @@ class AADGroupsNamingPolicy : M365DSCResourceBase
                     TenantId                      = $this.TenantId
                     ApplicationSecret             = $this.ApplicationSecret
                     CertificateThumbprint         = $this.CertificateThumbprint
-                    ManagedIdentity               = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity               = $this.ManagedIdentity
                     AccessTokens                  = $this.AccessTokens
                 }
 
@@ -223,7 +223,7 @@ class AADGroupsNamingPolicy : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
 

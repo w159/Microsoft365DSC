@@ -209,7 +209,7 @@ class ODSettings : M365DSCResourceBase
                 CertificatePath                           = $this.CertificatePath
                 CertificateThumbprint                     = $this.CertificateThumbprint
                 Credential                                = $this.Credential
-                ManagedIdentity                           = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                           = $this.ManagedIdentity
                 AccessTokens                              = $this.AccessTokens
             })
         }
@@ -374,7 +374,7 @@ class ODSettings : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 Credential            = $this.Credential
                 AccessTokens          = $this.AccessTokens
             }

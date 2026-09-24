@@ -237,7 +237,7 @@ class IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy : M365DSCResourceB
                 CertificateThumbprint             = $this.CertificateThumbprint
                 CertificatePath                   = $this.CertificatePath
                 CertificatePassword               = $this.CertificatePassword
-                ManagedIdentity                   = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                   = $this.ManagedIdentity
                 #endregion
             }
             $results += $policySettings
@@ -523,7 +523,7 @@ class IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy : M365DSCResourceB
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

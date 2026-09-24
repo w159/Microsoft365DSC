@@ -130,7 +130,7 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 TenantId              = $this.TenantId
                 AccessTokens          = $this.AccessTokens
             }
@@ -287,7 +287,7 @@ class EXOAvailabilityAddressSpace : M365DSCResourceBase
                     TenantId              = $this.TenantId
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     CertificatePath       = $this.CertificatePath
                     AccessTokens          = $this.AccessTokens
                 }

@@ -128,7 +128,7 @@ class SPOSiteScript : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             })
         }
@@ -319,7 +319,7 @@ class SPOSiteScript : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     Credential            = $this.Credential
                     AccessTokens          = $this.AccessTokens
                 }

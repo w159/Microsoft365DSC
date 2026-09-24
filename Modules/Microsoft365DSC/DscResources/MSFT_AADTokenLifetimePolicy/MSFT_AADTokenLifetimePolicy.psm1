@@ -138,7 +138,7 @@ class AADTokenLifetimePolicy : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
 
@@ -240,7 +240,7 @@ class AADTokenLifetimePolicy : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     DisplayName           = $AADPolicy.DisplayName
                     ID                    = $AADPolicy.ID
                     AccessTokens          = $this.AccessTokens

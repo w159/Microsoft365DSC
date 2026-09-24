@@ -271,7 +271,7 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
                 CertificateThumbprint           = $this.CertificateThumbprint
                 CertificatePath                 = $this.CertificatePath
                 CertificatePassword             = $this.CertificatePassword
-                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                 = $this.ManagedIdentity
                 #endregion
             }
             if ($results.PackageFileType -eq 'Pkg')
@@ -485,7 +485,7 @@ class IntuneMobileAppsBundleMacOS : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

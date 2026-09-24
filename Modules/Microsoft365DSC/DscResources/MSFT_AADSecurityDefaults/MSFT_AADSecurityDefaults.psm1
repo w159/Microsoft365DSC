@@ -96,7 +96,7 @@ class AADSecurityDefaults : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 Credential            = $this.Credential
                 AccessTokens          = $this.AccessTokens
             }
@@ -174,7 +174,7 @@ class AADSecurityDefaults : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 IsSingleInstance      = 'Yes'
                 ApplicationSecret     = $this.ApplicationSecret
                 Credential            = $this.Credential

@@ -469,7 +469,7 @@ class AzureRoleEligibilityScheduleSettings : M365DSCResourceBase
                 ApplicationSecret                                         = $this.ApplicationSecret
                 SubscriptionId                                            = $this.SubscriptionId
                 Credential                                                = $this.Credential
-                ManagedIdentity                                           = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                                           = $this.ManagedIdentity
                 AccessTokens                                              = $this.AccessTokens
             }
             return $this.AsResult($resultObj)
@@ -1245,7 +1245,7 @@ class AzureRoleEligibilityScheduleSettings : M365DSCResourceBase
                         CertificateThumbprint     = $this.CertificateThumbprint
                         CertificatePath           = $this.CertificatePath
                         CertificatePassword       = $this.CertificatePassword
-                        ManagedIdentity           = $this.ManagedIdentity.IsPresent
+                        ManagedIdentity           = $this.ManagedIdentity
                         AccessTokens              = $this.AccessTokens
                     }
 

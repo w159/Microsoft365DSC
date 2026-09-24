@@ -77,7 +77,7 @@ class TeamsGuestCallingConfiguration : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             return $this.AsResult($result)
@@ -145,7 +145,7 @@ class TeamsGuestCallingConfiguration : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             $Results = $this.GetForExport($Params)

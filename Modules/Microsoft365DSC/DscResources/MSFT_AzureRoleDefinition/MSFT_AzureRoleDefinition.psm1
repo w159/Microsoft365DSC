@@ -150,7 +150,7 @@ class AzureRoleDefinition : M365DSCResourceBase
                 TenantId              = $this.TenantId
                 ApplicationSecret     = $this.ApplicationSecret
                 CertificateThumbprint = $this.CertificateThumbprint
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             return $this.AsResult($result)
@@ -268,7 +268,7 @@ class AzureRoleDefinition : M365DSCResourceBase
                     TenantId              = $this.TenantId
                     ApplicationSecret     = $this.ApplicationSecret
                     CertificateThumbprint = $this.CertificateThumbprint
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $role

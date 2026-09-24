@@ -158,7 +158,7 @@ class SPOSiteGroup : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             })
         }
@@ -373,7 +373,7 @@ class SPOSiteGroup : M365DSCResourceBase
                         CertificatePassword   = $this.CertificatePassword
                         CertificatePath       = $this.CertificatePath
                         CertificateThumbprint = $this.CertificateThumbprint
-                        ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                        ManagedIdentity       = $this.ManagedIdentity
                         Credential            = $this.Credential
                         AccessTokens          = $this.AccessTokens
                     }

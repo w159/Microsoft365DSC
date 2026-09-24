@@ -1050,7 +1050,7 @@ class IntuneDeviceConfigurationPolicyiOS : M365DSCResourceBase
                 WiFiConnectOnlyToConfiguredNetworks            = $getValue.wiFiConnectOnlyToConfiguredNetworks
                 WiFiConnectToAllowedNetworksOnlyForced         = $getValue.wiFiConnectToAllowedNetworksOnlyForced
                 WifiPowerOnForced                              = $getValue.wifiPowerOnForced
-                ManagedIdentity                                = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                                = $this.ManagedIdentity
                 Ensure                                         = 'Present'
                 Credential                                     = $this.Credential
                 ApplicationId                                  = $this.ApplicationId
@@ -1322,7 +1322,7 @@ class IntuneDeviceConfigurationPolicyiOS : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

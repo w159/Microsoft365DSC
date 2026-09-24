@@ -230,7 +230,7 @@ class AADUser : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     ApplicationSecret     = $this.ApplicationSecret
                     Ensure                = 'Absent'
                     AccessTokens          = $this.AccessTokens
@@ -898,7 +898,7 @@ class AADUser : M365DSCResourceBase
                         ApplicationId         = $this.ApplicationId
                         TenantId              = $this.TenantId
                         CertificateThumbprint = $this.CertificateThumbprint
-                        ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                        ManagedIdentity       = $this.ManagedIdentity
                         ApplicationSecret     = $this.ApplicationSecret
                         AccessTokens          = $this.AccessTokens
                     }

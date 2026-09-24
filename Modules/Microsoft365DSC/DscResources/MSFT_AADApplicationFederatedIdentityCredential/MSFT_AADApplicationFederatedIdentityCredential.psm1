@@ -214,7 +214,7 @@ class AADApplicationFederatedIdentityCredential : M365DSCResourceBase
                 CertificateThumbprint  = $this.CertificateThumbprint
                 CertificatePath        = $this.CertificatePath
                 CertificatePassword    = $this.CertificatePassword
-                ManagedIdentity        = $this.ManagedIdentity.IsPresent
+                ManagedIdentity        = $this.ManagedIdentity
                 AccessTokens           = $this.AccessTokens
             }
 
@@ -357,7 +357,7 @@ class AADApplicationFederatedIdentityCredential : M365DSCResourceBase
                         CertificateThumbprint = $this.CertificateThumbprint
                         CertificatePath       = $this.CertificatePath
                         CertificatePassword   = $this.CertificatePassword
-                        ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                        ManagedIdentity       = $this.ManagedIdentity
                         ApplicationDisplayName = $application.DisplayName
                         ApplicationObjectId   = $application.Id
                         Name                  = $federatedIdentityCredential.Name

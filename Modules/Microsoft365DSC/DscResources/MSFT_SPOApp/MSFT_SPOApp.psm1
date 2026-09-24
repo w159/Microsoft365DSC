@@ -110,7 +110,7 @@ class SPOApp : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 Credential            = $this.Credential
                 AccessTokens          = $this.AccessTokens
             })
@@ -193,7 +193,7 @@ class SPOApp : M365DSCResourceBase
                 {
                     # mlh
                     [array]$filesToDownload = Get-AllSPOPackages -ApplicationId $this.ApplicationId -CertificateThumbprint $this.CertificateThumbprint `
-                        -CertificatePassword $this.CertificatePassword -TenantId $this.TenantId -CertificatePath $this.CertificatePath -ManagedIdentity:$this.ManagedIdentity.IsPresent
+                        -CertificatePassword $this.CertificatePassword -TenantId $this.TenantId -CertificatePath $this.CertificatePath -ManagedIdentity:$this.ManagedIdentity
                 }
                 $tenantAppCatalogPath = $tenantAppCatalogUrl.Replace('https://', '')
                 $tenantAppCatalogPath = $tenantAppCatalogPath.Replace($tenantAppCatalogPath.Split('/')[0], '')
@@ -237,7 +237,7 @@ class SPOApp : M365DSCResourceBase
                             CertificatePassword   = $this.CertificatePassword
                             CertificatePath       = $this.CertificatePath
                             CertificateThumbprint = $this.CertificateThumbprint
-                            ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                            ManagedIdentity       = $this.ManagedIdentity
                             Credential            = $this.Credential
                             AccessTokens          = $this.AccessTokens
                         }
