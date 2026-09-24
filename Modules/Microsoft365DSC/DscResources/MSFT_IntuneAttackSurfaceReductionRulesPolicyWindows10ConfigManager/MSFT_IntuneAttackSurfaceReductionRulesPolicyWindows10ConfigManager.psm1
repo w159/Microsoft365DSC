@@ -267,7 +267,7 @@ class IntuneAttackSurfaceReductionRulesPolicyWindows10ConfigManager : M365DSCRes
             $returnHashtable.Add('TenantId', $this.TenantId)
             $returnHashtable.Add('ApplicationSecret', $this.ApplicationSecret)
             $returnHashtable.Add('CertificateThumbprint', $this.CertificateThumbprint)
-            $returnHashtable.Add('ManagedIdentity', $this.ManagedIdentity.IsPresent)
+            $returnHashtable.Add('ManagedIdentity', $this.ManagedIdentity)
             $returnHashtable.Add('AccessTokens', $this.AccessTokens)
 
             return $this.AsResult($returnHashtable)
@@ -433,7 +433,7 @@ class IntuneAttackSurfaceReductionRulesPolicyWindows10ConfigManager : M365DSCRes
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

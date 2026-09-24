@@ -430,7 +430,7 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
                 CertificateThumbprint                  = $this.CertificateThumbprint
                 CertificatePath                        = $this.CertificatePath
                 CertificatePassword                    = $this.CertificatePassword
-                ManagedIdentity                        = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                        = $this.ManagedIdentity
                 AccessTokens                           = $this.AccessTokens
                 #endregion
             }
@@ -596,7 +596,7 @@ class IntuneWindowsInformationProtectionPolicyWindows10MdmEnrolled : M365DSCReso
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

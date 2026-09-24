@@ -146,7 +146,7 @@ class AADCertificateBasedApplicationConfiguration : M365DSCResourceBase
                 CertificateThumbprint         = $this.CertificateThumbprint
                 CertificatePath               = $this.CertificatePath
                 CertificatePassword           = $this.CertificatePassword
-                ManagedIdentity               = $this.ManagedIdentity.IsPresent
+                ManagedIdentity               = $this.ManagedIdentity
                 AccessTokens                  = $this.AccessTokens
             }
             Write-Verbose -Message "GET: Returning results => $($results | ConvertTo-Json -Depth 6)"
@@ -490,7 +490,7 @@ class AADCertificateBasedApplicationConfiguration : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

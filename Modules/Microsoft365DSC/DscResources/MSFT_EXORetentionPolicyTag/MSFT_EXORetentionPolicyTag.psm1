@@ -128,7 +128,7 @@ class EXORetentionPolicyTag : M365DSCResourceBase
                 CertificateThumbprint     = $this.CertificateThumbprint
                 CertificatePath           = $this.CertificatePath
                 CertificatePassword       = $this.CertificatePassword
-                ManagedIdentity           = $this.ManagedIdentity.IsPresent
+                ManagedIdentity           = $this.ManagedIdentity
                 AccessTokens              = $this.AccessTokens
             }
             if (-not [System.String]::IsNullOrEmpty($instance.AgeLimitForRetention))
@@ -234,7 +234,7 @@ class EXORetentionPolicyTag : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $config

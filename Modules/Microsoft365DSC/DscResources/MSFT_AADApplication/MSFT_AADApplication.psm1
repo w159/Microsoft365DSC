@@ -680,7 +680,7 @@ class AADApplication : M365DSCResourceBase
                 CertificateThumbprint           = $this.CertificateThumbprint
                 CertificatePath                 = $this.CertificatePath
                 CertificatePassword             = $this.CertificatePassword
-                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                 = $this.ManagedIdentity
                 AccessTokens                    = $this.AccessTokens
             }
 
@@ -1473,7 +1473,7 @@ class AADApplication : M365DSCResourceBase
                     Credential            = $this.Credential
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 try

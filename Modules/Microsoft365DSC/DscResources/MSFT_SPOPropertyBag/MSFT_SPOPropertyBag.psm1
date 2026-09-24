@@ -138,7 +138,7 @@ class SPOPropertyBag : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 
@@ -268,7 +268,7 @@ class SPOPropertyBag : M365DSCResourceBase
                             CertificatePassword   = $this.CertificatePassword
                             CertificatePath       = $this.CertificatePath
                             CertificateThumbprint = $this.CertificateThumbprint
-                            ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                            ManagedIdentity       = $this.ManagedIdentity
                             Credential            = $this.Credential
                             AccessTokens          = $this.AccessTokens
                         }

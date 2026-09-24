@@ -115,7 +115,7 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
                     ApplicationSecret           = $this.ApplicationSecret
                     TenantId                    = $this.TenantId
                     CertificateThumbprint       = $this.CertificateThumbprint
-                    ManagedIdentity             = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity             = $this.ManagedIdentity
                     AccessTokens                = $this.AccessTokens
                 }
 
@@ -226,7 +226,7 @@ class AADGroupLifecyclePolicy : M365DSCResourceBase
                 CertificateThumbprint       = $this.CertificateThumbprint
                 CertificatePath             = $this.CertificatePath
                 CertificatePassword         = $this.CertificatePassword
-                ManagedIdentity             = $this.ManagedIdentity.IsPresent
+                ManagedIdentity             = $this.ManagedIdentity
                 AccessTokens                = $this.AccessTokens
             }
             $Results = $this.GetForExport($Params)

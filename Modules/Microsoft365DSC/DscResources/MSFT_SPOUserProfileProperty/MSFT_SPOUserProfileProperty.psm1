@@ -122,7 +122,7 @@ class SPOUserProfileProperty : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 Ensure                = 'Present'
                 AccessTokens          = $this.AccessTokens
             }
@@ -210,7 +210,7 @@ class SPOUserProfileProperty : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     Credential            = $this.Credential
                     AccessTokens          = $this.AccessTokens
                 }

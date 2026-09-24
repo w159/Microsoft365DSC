@@ -160,7 +160,7 @@ class TeamsClientConfiguration : M365DSCResourceBase
                 CertificateThumbprint            = $this.CertificateThumbprint
                 CertificatePath                  = $this.CertificatePath
                 CertificatePassword              = $this.CertificatePassword
-                ManagedIdentity                  = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                  = $this.ManagedIdentity
                 AccessTokens                     = $this.AccessTokens
             }
             if ([System.String]::IsNullOrEmpty($Config.RestrictedSenderList))
@@ -240,7 +240,7 @@ class TeamsClientConfiguration : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
 

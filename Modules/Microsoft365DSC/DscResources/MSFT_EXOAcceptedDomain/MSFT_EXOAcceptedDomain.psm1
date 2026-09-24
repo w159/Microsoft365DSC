@@ -110,7 +110,7 @@ class EXOAcceptedDomain : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
 
@@ -211,7 +211,7 @@ class EXOAcceptedDomain : M365DSCResourceBase
                     CertificatePassword   = $this.CertificatePassword
                     CertificatePath       = $this.CertificatePath
                     Credential            = $this.Credential
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $domain

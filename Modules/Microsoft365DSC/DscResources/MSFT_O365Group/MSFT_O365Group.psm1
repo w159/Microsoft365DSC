@@ -164,7 +164,7 @@ class O365Group : M365DSCResourceBase
                     ApplicationSecret     = $this.ApplicationSecret
                     TenantId              = $this.TenantId
                     CertificateThumbprint = $this.CertificateThumbprint
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     Ensure                = 'Present'
                     AccessTokens          = $this.AccessTokens
                 }
@@ -448,7 +448,7 @@ class O365Group : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
                 $this.ExportedInstance = $group

@@ -235,7 +235,7 @@ class EXOManagementRoleEntry : M365DSCResourceBase
                     TenantId              = $this.TenantId
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     CertificatePath       = $this.CertificatePath
                     AccessTokens          = $this.AccessTokens
                 }

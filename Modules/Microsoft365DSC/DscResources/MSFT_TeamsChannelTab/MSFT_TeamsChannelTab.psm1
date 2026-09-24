@@ -193,7 +193,7 @@ class TeamsChannelTab : M365DSCResourceBase
                 TenantId              = $this.TenantID
                 CertificateThumbprint = $this.CertificateThumbprint
                 Ensure                = 'Present'
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             })
         }
@@ -352,7 +352,7 @@ class TeamsChannelTab : M365DSCResourceBase
                             CertificateThumbprint = $this.CertificateThumbprint
                             CertificatePath       = $this.CertificatePath
                             CertificatePassword   = $this.CertificatePassword
-                            ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                            ManagedIdentity       = $this.ManagedIdentity
                             AccessTokens          = $this.AccessTokens
                         }
 

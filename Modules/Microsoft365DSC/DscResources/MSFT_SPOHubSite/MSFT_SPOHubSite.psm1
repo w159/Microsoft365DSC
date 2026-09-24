@@ -169,7 +169,7 @@ class SPOHubSite : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             return $this.AsResult($result)
@@ -449,7 +449,7 @@ class SPOHubSite : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePassword   = $this.CertificatePassword
                     CertificatePath       = $this.CertificatePath
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

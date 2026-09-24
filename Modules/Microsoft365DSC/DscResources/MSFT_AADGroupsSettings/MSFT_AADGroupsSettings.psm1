@@ -153,7 +153,7 @@ class AADGroupsSettings : M365DSCResourceBase
                     ApplicationSecret         = $this.ApplicationSecret
                     CertificateThumbprint     = $this.CertificateThumbprint
                     Credential                = $this.Credential
-                    ManagedIdentity           = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity           = $this.ManagedIdentity
                     AccessTokens              = $this.AccessTokens
                 }
                 if (-not [System.String]::IsNullOrEmpty($valueNewUnifiedGroupWritebackDefault.Value))
@@ -326,7 +326,7 @@ class AADGroupsSettings : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             $dscContent = [System.Text.StringBuilder]::new()

@@ -110,7 +110,7 @@ class EXOEmailTenantSettings : M365DSCResourceBase
                 CertificateThumbprint           = $this.CertificateThumbprint
                 CertificatePath                 = $this.CertificatePath
                 CertificatePassword             = $this.CertificatePassword
-                ManagedIdentity                 = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                 = $this.ManagedIdentity
                 TenantId                        = $this.TenantId
                 AccessTokens                    = $this.AccessTokens
             }
@@ -200,7 +200,7 @@ class EXOEmailTenantSettings : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePassword   = $this.CertificatePassword
                 CertificatePath       = $this.CertificatePath
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             $this.ExportedInstance = $EmailTenantSettings

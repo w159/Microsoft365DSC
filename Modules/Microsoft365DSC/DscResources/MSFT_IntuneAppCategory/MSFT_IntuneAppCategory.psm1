@@ -120,7 +120,7 @@ class IntuneAppCategory : M365DSCResourceBase
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
                 ApplicationSecret     = $this.ApplicationSecret
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             return $this.AsResult($results)
@@ -218,7 +218,7 @@ class IntuneAppCategory : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

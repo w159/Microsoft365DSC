@@ -122,7 +122,7 @@ class AADUserFlowAttribute : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 ApplicationSecret     = $this.ApplicationSecret
                 Credential            = $this.Credential
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
             return $this.AsResult($result)
@@ -225,7 +225,7 @@ class AADUserFlowAttribute : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     ApplicationSecret     = $this.ApplicationSecret
                     Credential            = $this.Credential
                     AccessTokens          = $this.AccessTokens

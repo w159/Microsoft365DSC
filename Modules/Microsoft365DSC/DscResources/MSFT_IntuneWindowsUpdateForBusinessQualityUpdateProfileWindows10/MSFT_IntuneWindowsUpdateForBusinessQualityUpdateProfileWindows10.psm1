@@ -160,7 +160,7 @@ class IntuneWindowsUpdateForBusinessQualityUpdateProfileWindows10 : M365DSCResou
                 CertificateThumbprint   = $this.CertificateThumbprint
                 CertificatePath         = $this.CertificatePath
                 CertificatePassword     = $this.CertificatePassword
-                ManagedIdentity         = $this.ManagedIdentity.IsPresent
+                ManagedIdentity         = $this.ManagedIdentity
                 #endregion
             }
 
@@ -328,7 +328,7 @@ class IntuneWindowsUpdateForBusinessQualityUpdateProfileWindows10 : M365DSCResou
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

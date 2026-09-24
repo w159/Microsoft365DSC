@@ -147,7 +147,7 @@ class SPOAccessControlSettings : M365DSCResourceBase
                 CertificateThumbprint         = $this.CertificateThumbprint
                 CertificatePath               = $this.CertificatePath
                 CertificatePassword           = $this.CertificatePassword
-                ManagedIdentity               = $this.ManagedIdentity.IsPresent
+                ManagedIdentity               = $this.ManagedIdentity
                 Ensure                        = 'Present'
                 AccessTokens                  = $this.AccessTokens
             })
@@ -249,7 +249,7 @@ class SPOAccessControlSettings : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
-                ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                ManagedIdentity       = $this.ManagedIdentity
                 Credential            = $this.Credential
                 ApplicationSecret     = $this.ApplicationSecret
                 AccessTokens          = $this.AccessTokens

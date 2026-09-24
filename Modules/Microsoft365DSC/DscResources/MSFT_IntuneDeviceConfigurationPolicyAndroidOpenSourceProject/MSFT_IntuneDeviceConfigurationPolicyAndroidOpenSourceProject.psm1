@@ -209,7 +209,7 @@ class IntuneDeviceConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceB
                 CertificateThumbprint                          = $this.CertificateThumbprint
                 CertificatePath                                = $this.CertificatePath
                 CertificatePassword                            = $this.CertificatePassword
-                ManagedIdentity                                = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                                = $this.ManagedIdentity
                 AccessTokens                                   = $this.AccessTokens
             }
 
@@ -365,7 +365,7 @@ class IntuneDeviceConfigurationPolicyAndroidOpenSourceProject : M365DSCResourceB
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

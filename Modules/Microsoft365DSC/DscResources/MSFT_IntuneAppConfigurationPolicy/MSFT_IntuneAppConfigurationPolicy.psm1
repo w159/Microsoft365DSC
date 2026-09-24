@@ -199,7 +199,7 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
                 CertificateThumbprint       = $this.CertificateThumbprint
                 CertificatePath             = $this.CertificatePath
                 CertificatePassword         = $this.CertificatePassword
-                ManagedIdentity             = $this.ManagedIdentity.IsPresent
+                ManagedIdentity             = $this.ManagedIdentity
                 AccessTokens                = $this.AccessTokens
                 RoleScopeTagIds             = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $configPolicy.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
                 TargetedAppManagementLevels = [String]$configPolicy.TargetedAppManagementLevels
@@ -450,7 +450,7 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 

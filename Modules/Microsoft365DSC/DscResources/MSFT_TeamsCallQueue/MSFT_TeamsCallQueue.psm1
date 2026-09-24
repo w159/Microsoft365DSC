@@ -620,7 +620,7 @@ class TeamsCallQueue : M365DSCResourceBase
                 CertificateThumbprint                         = $this.CertificateThumbprint
                 CertificatePath                               = $this.CertificatePath
                 CertificatePassword                           = $this.CertificatePassword
-                ManagedIdentity                               = $this.ManagedIdentity.IsPresent
+                ManagedIdentity                               = $this.ManagedIdentity
                 AccessTokens                                  = $this.AccessTokens
             }
 
@@ -796,7 +796,7 @@ class TeamsCallQueue : M365DSCResourceBase
                     CertificateThumbprint = $this.CertificateThumbprint
                     CertificatePath       = $this.CertificatePath
                     CertificatePassword   = $this.CertificatePassword
-                    ManagedIdentity       = $this.ManagedIdentity.IsPresent
+                    ManagedIdentity       = $this.ManagedIdentity
                     AccessTokens          = $this.AccessTokens
                 }
 
