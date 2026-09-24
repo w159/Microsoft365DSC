@@ -27,7 +27,7 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.String] $AuthenticationFailAction
 
     [DscProperty()]
-    [System.ComponentModel.Description('The TargetedUserProtectionAction parameter specifies the action to take on detected user impersonation messages for the users specified by the TargetedUsersToProtect parameter.')]
+    [System.ComponentModel.Description('The TargetedUserProtectionAction parameter specifies the action to take on detected user impersonation messages for the users specified by the TargetedUsersToProtect parameter.')]
     [ValidateSet('BccMessage', 'Delete', 'MoveToJmf', 'NoAction', 'Quarantine', 'Redirect')]
     [System.String] $TargetedUserProtectionAction
 
@@ -48,15 +48,15 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $EnableMailboxIntelligenceProtection
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableOrganizationDomainsProtection parameter specifies whether to enable domain impersonation protection for all registered domains in the Office 365 organization.')]
+    [System.ComponentModel.Description('The EnableOrganizationDomainsProtection parameter specifies whether to enable domain impersonation protection for all registered domains in the Office 365 organization.')]
     [System.Nullable[System.Boolean]] $EnableOrganizationDomainsProtection
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableSimilarDomainsSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for domain impersonation detections.')]
+    [System.ComponentModel.Description('The EnableSimilarDomainsSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for domain impersonation detections.')]
     [System.Nullable[System.Boolean]] $EnableSimilarDomainsSafetyTips
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableSimilarUsersSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for user impersonation detections.')]
+    [System.ComponentModel.Description('The EnableSimilarUsersSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for user impersonation detections.')]
     [System.Nullable[System.Boolean]] $EnableSimilarUsersSafetyTips
 
     [DscProperty()]
@@ -64,23 +64,23 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $EnableSpoofIntelligence
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableTargetedDomainsProtection parameter specifies whether to enable domain impersonation protection for a list of specified domains.')]
+    [System.ComponentModel.Description('The EnableTargetedDomainsProtection parameter specifies whether to enable domain impersonation protection for a list of specified domains.')]
     [System.Nullable[System.Boolean]] $EnableTargetedDomainsProtection
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableTargetedUserProtection parameter specifies whether to enable user impersonation protection for the users specified by the TargetedUsersToProtect parameter')]
+    [System.ComponentModel.Description('The EnableTargetedUserProtection parameter specifies whether to enable user impersonation protection for the users specified by the TargetedUsersToProtect parameter')]
     [System.Nullable[System.Boolean]] $EnableTargetedUserProtection
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableUnauthenticatedSender parameter enables or disables unauthenticated sender identification in Outlook.')]
+    [System.ComponentModel.Description('The EnableUnauthenticatedSender parameter enables or disables unauthenticated sender identification in Outlook.')]
     [System.Nullable[System.Boolean]] $EnableUnauthenticatedSender
 
     [DscProperty()]
-    [System.ComponentModel.Description('The EnableUnusualCharactersSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for unusual characters in domain and user impersonation detections.')]
+    [System.ComponentModel.Description('The EnableUnusualCharactersSafetyTips parameter specifies whether to enable safety tips that are shown to recipients in messages for unusual characters in domain and user impersonation detections.')]
     [System.Nullable[System.Boolean]] $EnableUnusualCharactersSafetyTips
 
     [DscProperty()]
-    [System.ComponentModel.Description('This setting is part of spoof protection. The EnableViaTag parameter enables or disables adding the via tag to the From address in Outlook.')]
+    [System.ComponentModel.Description('This setting is part of spoof protection. The EnableViaTag parameter enables or disables adding the via tag to the From address in Outlook.')]
     [System.Nullable[System.Boolean]] $EnableViaTag
 
     [DscProperty()]
@@ -88,11 +88,11 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.Nullable[System.Boolean]] $MakeDefault
 
     [DscProperty()]
-    [System.ComponentModel.Description('The ExcludedDomains parameter specifies trusted domains that are excluded from scanning by antiphishing protection. You can specify multiple domains separated by commas.')]
+    [System.ComponentModel.Description('The ExcludedDomains parameter specifies trusted domains that are excluded from scanning by antiphishing protection. You can specify multiple domains separated by commas.')]
     [System.String[]] $ExcludedDomains
 
     [DscProperty()]
-    [System.ComponentModel.Description('The ExcludedSenders parameter specifies a list of trusted sender email addresses that are excluded from scanning by antiphishing protection. You can specify multiple email addresses separated by commas.')]
+    [System.ComponentModel.Description('The ExcludedSenders parameter specifies a list of trusted sender email addresses that are excluded from scanning by antiphishing protection. You can specify multiple email addresses separated by commas.')]
     [System.String[]] $ExcludedSenders
 
     [DscProperty()]
@@ -108,7 +108,7 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.String] $MailboxIntelligenceProtectionAction
 
     [DscProperty()]
-    [System.ComponentModel.Description('The MailboxIntelligenceProtectionActionRecipients parameter specifies the recipients to add to detected messages when the MailboxIntelligenceProtectionAction parameter is set to the value Redirect or BccMessage.')]
+    [System.ComponentModel.Description('The MailboxIntelligenceProtectionActionRecipients parameter specifies the recipients to add to detected messages when the MailboxIntelligenceProtectionAction parameter is set to the value Redirect or BccMessage.')]
     [System.String[]] $MailboxIntelligenceProtectionActionRecipients
 
     [DscProperty()]
@@ -120,7 +120,7 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.String] $SpoofQuarantineTag
 
     [DscProperty()]
-    [System.ComponentModel.Description('The TargetedDomainActionRecipients parameter specifies the recipients to add to detected domain impersonation messages when the TargetedDomainProtectionAction parameter is set to the value Redirect or BccMessage. A valid value for this parameter is an email address. You can specify multiple email addresses separated by commas.')]
+    [System.ComponentModel.Description('The TargetedDomainActionRecipients parameter specifies the recipients to add to detected domain impersonation messages when the TargetedDomainProtectionAction parameter is set to the value Redirect or BccMessage. A valid value for this parameter is an email address. You can specify multiple email addresses separated by commas.')]
     [System.String[]] $TargetedDomainActionRecipients
 
     [DscProperty()]
@@ -137,7 +137,7 @@ class EXOAntiPhishPolicy : M365DSCResourceBase
     [System.String] $TargetedDomainQuarantineTag
 
     [DscProperty()]
-    [System.ComponentModel.Description('The TargetedUserActionRecipients parameter specifies the replacement or additional recipients for detected user impersonation messages when the TargetedUserProtectionAction parameter is set to the value Redirect or BccMessage. A valid value for this parameter is an email address. You can specify multiple email addresses separated by commas.')]
+    [System.ComponentModel.Description('The TargetedUserActionRecipients parameter specifies the replacement or additional recipients for detected user impersonation messages when the TargetedUserProtectionAction parameter is set to the value Redirect or BccMessage. A valid value for this parameter is an email address. You can specify multiple email addresses separated by commas.')]
     [System.String[]] $TargetedUserActionRecipients
 
     [DscProperty()]

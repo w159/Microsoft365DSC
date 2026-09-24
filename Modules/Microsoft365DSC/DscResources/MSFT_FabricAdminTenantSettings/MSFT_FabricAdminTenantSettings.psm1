@@ -737,6 +737,10 @@ class FabricAdminTenantSettings : M365DSCResourceBase
     [System.String] $CertificatePath
 
     [DscProperty()]
+    [System.ComponentModel.Description('Managed ID being used for authentication.')]
+    [System.Nullable[System.Boolean]] $ManagedIdentity
+
+    [DscProperty()]
     [System.ComponentModel.Description('Access token used for authentication.')]
     [System.String[]] $AccessTokens
 
@@ -970,6 +974,7 @@ class FabricAdminTenantSettings : M365DSCResourceBase
                 CertificateThumbprint                                                 = $this.CertificateThumbprint
                 CertificatePath                                                       = $this.CertificatePath
                 CertificatePassword                                                   = $this.CertificatePassword
+                ManagedIdentity                                                       = $this.ManagedIdentity
                 AccessTokens                                                          = $this.AccessTokens
             }
             return $this.AsResult($results)
@@ -1030,6 +1035,7 @@ class FabricAdminTenantSettings : M365DSCResourceBase
                 CertificateThumbprint = $this.CertificateThumbprint
                 CertificatePath       = $this.CertificatePath
                 CertificatePassword   = $this.CertificatePassword
+                ManagedIdentity       = $this.ManagedIdentity
                 AccessTokens          = $this.AccessTokens
             }
 
