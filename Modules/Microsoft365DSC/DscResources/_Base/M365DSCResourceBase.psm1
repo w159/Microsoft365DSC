@@ -122,8 +122,6 @@ class M365DSCResourceInfo
 
     hidden static [System.UInt32] $SerializationDepth = 25
 
-    hidden static [ConcurrentDictionary[Type, bool]] $_depthRegistered = [ConcurrentDictionary[Type, bool]]::new()
-
     hidden static [void] RegisterSerializationDepth([Type] $Type)
     {
         $element = $Type
@@ -137,7 +135,7 @@ class M365DSCResourceInfo
             return
         }
 
-        if (-not [M365DSCResourceInfo]::_depthRegistered.TryAdd($element, $true))
+        if (-not [M365DSCResourceBase]::GetRunspaceTypeCache('DepthRegistered').TryAdd($element, $true))
         {
             return
         }
@@ -222,13 +220,32 @@ class M365DSCResourceBase
     # $Script:AllSchedules, $Script:exportedGroups, ...).
     hidden [Hashtable] $ResourceCache = @{}
 
-    hidden static [ConcurrentDictionary[Type, M365DSCResourceInfo]] $_initialized = `
-        [ConcurrentDictionary[Type, M365DSCResourceInfo]]::new()
+    # Each runspace compiles its own class types. A PowerShell class instance references only the session
+    # state it was created in.
+    hidden static [System.Runtime.CompilerServices.ConditionalWeakTable[Runspace, ConcurrentDictionary[String, ConcurrentDictionary[Type, System.Object]]]] $_runspaceTypeCaches = `
+        [System.Runtime.CompilerServices.ConditionalWeakTable[Runspace, ConcurrentDictionary[String, ConcurrentDictionary[Type, System.Object]]]]::new()
 
-    # Per-complex-type property metadata (ValidateSet presence, nested complex types),
-    # built lazily for SanitizeComplexValue.
-    hidden static [ConcurrentDictionary[Type, System.Object]] $_complexMetadata = `
-        [ConcurrentDictionary[Type, System.Object]]::new()
+    hidden static [ConcurrentDictionary[String, ConcurrentDictionary[Type, System.Object]]] $_processTypeCaches = `
+        [ConcurrentDictionary[String, ConcurrentDictionary[Type, System.Object]]]::new()
+
+    hidden static [ConcurrentDictionary[Type, System.Object]] GetRunspaceTypeCache([System.String] $Name)
+    {
+        $caches = [M365DSCResourceBase]::_processTypeCaches
+        $runspace = [Runspace]::DefaultRunspace
+        if ($null -ne $runspace -and -not [M365DSCResourceBase]::_runspaceTypeCaches.TryGetValue($runspace, [ref] $caches))
+        {
+            $caches = [ConcurrentDictionary[String, ConcurrentDictionary[Type, System.Object]]]::new()
+            [M365DSCResourceBase]::_runspaceTypeCaches.Add($runspace, $caches)
+        }
+
+        $cache = $null
+        if (-not $caches.TryGetValue($Name, [ref] $cache))
+        {
+            $cache = $caches.GetOrAdd($Name, [ConcurrentDictionary[Type, System.Object]]::new())
+        }
+
+        return $cache
+    }
 
     hidden [M365DSCResourceInfo] $_info
 
@@ -301,11 +318,12 @@ class M365DSCResourceBase
     {
         $type = $this.GetType()
 
+        $initialized = [M365DSCResourceBase]::GetRunspaceTypeCache('Initialized')
         $info = $null
-        if (-not [M365DSCResourceBase]::_initialized.TryGetValue($type, [ref] $info))
+        if (-not $initialized.TryGetValue($type, [ref] $info))
         {
             $info = [M365DSCResourceInfo]::new($type)
-            [M365DSCResourceBase]::_initialized[$type] = $info
+            $initialized[$type] = $info
         }
 
         $this._info = $info
@@ -499,7 +517,8 @@ class M365DSCResourceBase
     hidden static [System.Object] GetComplexPropertyMetadata([Type] $Type)
     {
         $metadata = $null
-        if ([M365DSCResourceBase]::_complexMetadata.TryGetValue($Type, [ref] $metadata))
+        $complexMetadata = [M365DSCResourceBase]::GetRunspaceTypeCache('ComplexMetadata')
+        if ($complexMetadata.TryGetValue($Type, [ref] $metadata))
         {
             return $metadata
         }
@@ -519,7 +538,7 @@ class M365DSCResourceBase
             }
         }
 
-        [M365DSCResourceBase]::_complexMetadata[$Type] = $table
+        $complexMetadata[$Type] = $table
         return $table
     }
 

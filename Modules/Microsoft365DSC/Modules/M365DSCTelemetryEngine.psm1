@@ -542,6 +542,55 @@ function Add-M365DSCTelemetryEvent
 
 <#
 .SYNOPSIS
+    Returns the telemetry values resolved in the current runspace.
+
+.DESCRIPTION
+    Returns the directory roles, operating system caption, administrator flag and LCM settings that
+    telemetry events add. A parallel export resolves them once and hands them to its workers.
+
+.OUTPUTS
+    System.Collections.Hashtable
+#>
+function Get-M365DSCTelemetryContext
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param ()
+
+    return @{
+        CurrentRolesResolved    = $Script:M365DSCCurrentRolesResolved
+        CurrentRoles            = $Script:M365DSCCurrentRoles
+        OSInfo                  = $Script:M365DSCOSInfo
+        CurrentPrincipalIsAdmin = $Script:M365DSCCurrentPrincipalIsAdmin
+        LCMInfo                 = $Script:LCMInfo
+    }
+}
+
+<#
+.SYNOPSIS
+    Applies telemetry values resolved in another runspace.
+
+.PARAMETER Context
+    Specifies the values returned by Get-M365DSCTelemetryContext.
+#>
+function Set-M365DSCTelemetryContext
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $Context
+    )
+
+    $Script:M365DSCCurrentRolesResolved = [System.Boolean]$Context.CurrentRolesResolved
+    $Script:M365DSCCurrentRoles = @($Context.CurrentRoles)
+    $Script:M365DSCOSInfo = $Context.OSInfo
+    $Script:M365DSCCurrentPrincipalIsAdmin = $Context.CurrentPrincipalIsAdmin
+    $Script:LCMInfo = $Context.LCMInfo
+}
+
+<#
+.SYNOPSIS
     Configures machine-scoped telemetry options.
 
 .DESCRIPTION
@@ -733,7 +782,9 @@ function Format-M365DSCTelemetryParameters
 Export-ModuleMember -Function @(
     'Add-M365DSCTelemetryEvent',
     'Format-M365DSCTelemetryParameters',
+    'Get-M365DSCTelemetryContext',
     'Get-M365DSCTelemetryOption',
+    'Set-M365DSCTelemetryContext',
     'Set-M365DSCTelemetryOption',
     'Set-M365DSCLCMConfiguration',
     'Test-IsM365DSCTelemetryEnabled',

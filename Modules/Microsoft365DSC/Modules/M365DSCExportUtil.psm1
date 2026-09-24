@@ -144,6 +144,9 @@ Register-ArgumentCompleter -CommandName Export-M365DSCConfiguration -ParameterNa
 .PARAMETER Parallel
     Indicates whether export should execute in parallel.
 
+.PARAMETER ThrottleLimit
+    Specifies the number of parallel workers. Requires Parallel. Default: 5.
+
 .PARAMETER TokenReplacement
     Specifies token replacement mappings applied to exported content.
 
@@ -171,6 +174,9 @@ Register-ArgumentCompleter -CommandName Export-M365DSCConfiguration -ParameterNa
 .EXAMPLE
     PS> Export-M365DSCConfiguration -Workloads @("SPO") -ApplicationId $clientId -TenantId $tenantName -CertificateThumbprint $certThumbprint -IncludeDependencies
 
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Workloads @("SPO") -ApplicationId $clientId -TenantId $tenantName -CertificateThumbprint $certThumbprint -IncludeDependencies -Parallel -ThrottleLimit 2
+
 .FUNCTIONALITY
     Public
 #>
@@ -184,48 +190,59 @@ function Export-M365DSCConfiguration
         $LaunchWebUI,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $Path,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $FileName,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $ConfigurationName,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String[]]
         $Components,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String[]]
         $ExcludeComponents,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [ValidateSet('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS', 'VIVA')]
         [System.String[]]
         $Workloads,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [ValidateSet('Default', 'Full')]
         [System.String]
         $Mode = 'Default',
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.Boolean]
         $GenerateInfo = $false,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.Collections.Hashtable]
         $Filters,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $ApplicationId,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [ValidateScript({
                 $invalid = $false
                 if ([System.Guid]::TryParse($_, [ref][System.Guid]::Empty))
@@ -244,54 +261,72 @@ function Export-M365DSCConfiguration
 
         # TODO: Change to PSCredential during next breaking change
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $ApplicationSecret,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $CertificateThumbprint,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.Management.Automation.PSCredential]
         $Credential,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.Management.Automation.PSCredential]
         $CertificatePassword,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $CertificatePath,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [Switch]
         $ManagedIdentity,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String[]]
         $AccessTokens,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.String]
         $SubscriptionId,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [Switch]
         $Validate,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel', Mandatory = $true)]
         [Switch]
         $Parallel,
 
+        [Parameter(ParameterSetName = 'ExportParallel')]
+        [ValidateRange(1, [System.Int32]::MaxValue)]
+        [System.Int32]
+        $ThrottleLimit = 5,
+
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [System.Collections.Hashtable]
         $TokenReplacement,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [Switch]
         $WithStatistics,
 
         [Parameter(ParameterSetName = 'Export')]
+        [Parameter(ParameterSetName = 'ExportParallel')]
         [Switch]
         $IncludeDependencies
     )
@@ -318,6 +353,9 @@ function Export-M365DSCConfiguration
     # Clear performance caches for fresh export
     $Script:M365DSCMandatoryKeyCache = @{}
     $Script:M365DSCCompiledRegexCache = @{}
+    Set-M365DSCStringReplacementMap -Clear
+    $Global:M365DSCStringReplacementMap = $null
+    Clear-ConfigurationDataContent
 
     # Track cross-resource relations only when the caller asked for DependsOn output.
     [Microsoft365DSC.Relations.ExportRelationSession]::Reset()
@@ -488,6 +526,7 @@ function Export-M365DSCConfiguration
                 -Filters $Filters `
                 -Validate:$Validate.IsPresent `
                 -Parallel:$Parallel.IsPresent `
+                -ThrottleLimit $ThrottleLimit `
                 -ResourceSettings $resourceSettings `
                 -ErrorAction $ErrorActionPreference `
                 -WithStatistics:$WithStatistics.IsPresent `
@@ -514,6 +553,7 @@ function Export-M365DSCConfiguration
                 -Filters $Filters `
                 -Validate:$Validate.IsPresent `
                 -Parallel:$Parallel.IsPresent `
+                -ThrottleLimit $ThrottleLimit `
                 -ResourceSettings $resourceSettings `
                 -ErrorAction $ErrorActionPreference `
                 -WithStatistics:$WithStatistics.IsPresent `
@@ -541,6 +581,7 @@ function Export-M365DSCConfiguration
                 -Filters $Filters `
                 -Validate:$Validate.IsPresent `
                 -Parallel:$Parallel.IsPresent `
+                -ThrottleLimit $ThrottleLimit `
                 -ResourceSettings $resourceSettings `
                 -ErrorAction $ErrorActionPreference `
                 -WithStatistics:$WithStatistics.IsPresent `
@@ -2006,7 +2047,7 @@ function Initialize-M365DSCExportCollectionCache
     [Microsoft365DSC.Intune.IntuneGroupCache]::Reset()
     [Microsoft365DSC.Intune.SettingTemplateCache]::Reset()
     [Microsoft365DSC.Intune.RoleScopeTagCache]::Reset()
-    $Script:IntuneAssignmentFilters = $null
+    Clear-M365DSCIntuneAssignmentFilterCache
     [Microsoft365DSC.Cache.ExportCollectionCache]::Enable()
 }
 
@@ -2022,7 +2063,7 @@ function Reset-M365DSCExportCollectionCache
     [CmdletBinding()]
     param ()
 
-    $Script:IntuneAssignmentFilters = $null
+    Clear-M365DSCIntuneAssignmentFilterCache
     if ($null -ne ('Microsoft365DSC.Cache.ExportCollectionCache' -as [System.Type]))
     {
         [Microsoft365DSC.Cache.ExportCollectionCache]::Reset()

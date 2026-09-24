@@ -33,4 +33,30 @@ Describe 'M365DSCResourceBase registry' {
             $runspace.Dispose()
         }
     }
+
+    It 'releases a disposed runspace that created resource instances' {
+        $weakRunspace = & {
+            $runspace = [System.Management.Automation.Runspaces.RunspaceFactory]::CreateRunspace()
+            $runspace.Open()
+            $powershell = [System.Management.Automation.PowerShell]::Create()
+            $powershell.Runspace = $runspace
+            $null = $powershell.AddScript({
+                    param ($Path)
+                    Import-Module $Path -WarningAction SilentlyContinue
+                    $null = New-M365DSCResourceInstance -ResourceName 'AADGroup'
+                }).AddArgument($Script:ModulePath)
+            $null = $powershell.Invoke()
+            $powershell.Dispose()
+            $runspace.Dispose()
+            [System.WeakReference]::new($runspace)
+        }
+
+        foreach ($attempt in 1..3)
+        {
+            [System.GC]::Collect()
+            [System.GC]::WaitForPendingFinalizers()
+        }
+
+        $weakRunspace.IsAlive | Should -BeFalse
+    }
 }

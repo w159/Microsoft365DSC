@@ -8,7 +8,7 @@ $Global:M365DSCPushNotificationsHeaders = $null
 $Global:M365DSCPushNotificationsBody = $null
 #endregion
 
-$Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS')
+$Script:M365DSCWorkloads = @('AAD', 'ADO', 'AZURE', 'COMMERCE', 'DEFENDER', 'EXO', 'FABRIC', 'INTUNE', 'O365', 'OD', 'PLANNER', 'PP', 'SC', 'SENTINEL', 'SH', 'SPO', 'TEAMS', 'VIVA')
 $Script:M365DSCMgxBatchCommand = $null
 $Script:M365DSCMgxBatchCommandResolved = $false
 
@@ -1295,6 +1295,9 @@ function Remove-NullEntriesFromHashtable
 .PARAMETER Parallel
     Indicates that export should run in parallel.
 
+.PARAMETER ThrottleLimit
+    Specifies the number of parallel workers. Requires Parallel. Default: 5.
+
 .EXAMPLE
     PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html'
 
@@ -1306,6 +1309,9 @@ function Remove-NullEntriesFromHashtable
 
 .EXAMPLE
     PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html' -KeepExport $true
+
+.EXAMPLE
+    PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html' -KeepExport $true -Parallel -ThrottleLimit 2
 
 .FUNCTIONALITY
     Public
@@ -1403,7 +1409,12 @@ function Assert-M365DSCBlueprint
 
         [Parameter()]
         [Switch]
-        $Parallel
+        $Parallel,
+
+        [Parameter()]
+        [ValidateRange(1, [System.Int32]::MaxValue)]
+        [System.Int32]
+        $ThrottleLimit = 5
     )
 
     #Ensure the proper dependencies are installed in the current environment.
@@ -1487,9 +1498,17 @@ function Assert-M365DSCBlueprint
         Write-Host "Selected BluePrint contains ($($ResourcesInBluePrint.Length)) components to assess."
 
         # Call the Export-M365DSCConfiguration cmdlet to extract only the resource
-        # types contained within the BluePrint;
+        # types contained within the BluePrint
         Write-Host "Initiating the Export of those ($($ResourcesInBluePrint.Length)) components from the tenant..."
         $TempExportName = 'TempExport_' + (New-Guid).ToString() + '.ps1'
+
+        $additionalParams = @{}
+        if ($Parallel.IsPresent)
+        {
+            $additionalParams = @{
+                ThrottleLimit = $ThrottleLimit
+            }
+        }
         Export-M365DSCConfiguration -Components $ResourcesInBluePrint `
             -Path $env:TEMP `
             -FileName $TempExportName `
@@ -1502,7 +1521,7 @@ function Assert-M365DSCBlueprint
             -CertificatePath $CertificatePath `
             -CertificatePassword $CertificatePassword `
             -ManagedIdentity:$ManagedIdentity.IsPresent `
-            -AccessTokens $AccessTokens
+            -AccessTokens $AccessTokens @additionalParams
 
         # Call the New-M365DSCDeltaReport configuration to generate the Delta Report between
         # the BluePrint and the extracted resources;
