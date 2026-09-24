@@ -795,6 +795,12 @@
     next export in the same session.
   * Fixed the cached Intune assignment filters not being cleared between exports.
   * Fixed VIVA resources being skipped in a parallel export without `Workloads`.
+  * Changed the partial export file to be written under a lock inside the process instead of a
+    machine-wide mutex.
+  * Changed a parallel export to reuse the telemetry details resolved at the start of the export
+    instead of resolving them again in every worker.
+  * Reduced the memory used by the module by loading the full resource settings only when needed.
+  * Fixed a sequential export leaving dependency validation disabled for the rest of the session.
   * Added handling of a workload connection that fails during connect. It is reported
     once and skipped for the rest of the export.
   * Added `Absent` as an accepted value for `Ensure` to several resources to make them work

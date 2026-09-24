@@ -27,3 +27,31 @@ Describe 'Get-M365DSCWorkloadForResource' {
         Get-M365DSCWorkloadForResource -ResourceName 'VivaEngagementRoleMember' | Should -Be 'VIVA'
     }
 }
+
+Describe 'Telemetry context' {
+    It 'applies the values resolved in another runspace' {
+        $context = @{
+            CurrentRolesResolved    = $true
+            CurrentRoles            = @('Global Reader|/')
+            OSInfo                  = 'Test OS'
+            CurrentPrincipalIsAdmin = $false
+            LCMInfo                 = $null
+        }
+
+        Set-M365DSCTelemetryContext -Context $context
+        $result = Get-M365DSCTelemetryContext
+
+        $result.CurrentRolesResolved | Should -BeTrue
+        $result.CurrentRoles | Should -Be @('Global Reader|/')
+        $result.OSInfo | Should -Be 'Test OS'
+        $result.CurrentPrincipalIsAdmin | Should -BeFalse
+    }
+}
+
+Describe 'Get-M365DSCResourceSetting' {
+    It 'loads the settings of a resource on first use' {
+        $settings = Get-M365DSCResourceSetting -ResourceName 'MSFT_AADGroup'
+        $settings | Should -Not -BeNullOrEmpty
+        $settings.permissions | Should -Not -BeNullOrEmpty
+    }
+}

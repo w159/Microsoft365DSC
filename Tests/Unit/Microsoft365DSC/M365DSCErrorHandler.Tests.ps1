@@ -297,3 +297,47 @@ Describe 'Invoke-M365DSCCommand' {
         }
     }
 }
+
+Describe 'Save-M365DSCPartialExport' {
+    BeforeAll {
+        Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCDllLoader.psm1" -Force -Global
+        Initialize-M365DSCDllLoader
+        $Script:ErrorHandlerPath = (Resolve-Path -Path "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCErrorHandler.psm1").Path
+    }
+
+    It 'keeps every instance written concurrently by several runspaces' {
+        $fileName = "$(New-Guid).partial.ps1"
+        $filePath = Join-Path -Path $env:TEMP -ChildPath $fileName
+        $workers = foreach ($worker in 1..4)
+        {
+            $powershell = [System.Management.Automation.PowerShell]::Create()
+            $null = $powershell.AddScript({
+                    param ($ModulePath, $FileName, $Worker)
+                    Import-Module $ModulePath
+                    foreach ($instance in 1..50)
+                    {
+                        Save-M365DSCPartialExport -Content "worker $Worker instance $instance`r`n" -FileName $FileName
+                    }
+                }).AddArgument($Script:ErrorHandlerPath).AddArgument($fileName).AddArgument($worker)
+            [pscustomobject]@{ PowerShell = $powershell; Handle = $powershell.BeginInvoke() }
+        }
+
+        try
+        {
+            foreach ($entry in $workers)
+            {
+                $entry.PowerShell.EndInvoke($entry.Handle)
+                $entry.PowerShell.Streams.Error | Should -BeNullOrEmpty
+            }
+
+            $lines = @(Get-Content -Path $filePath)
+            $lines.Count | Should -Be 200
+            @($lines | Sort-Object -Unique).Count | Should -Be 200
+        }
+        finally
+        {
+            $workers | ForEach-Object -Process { $_.PowerShell.Dispose() }
+            Remove-Item -Path $filePath -Force -ErrorAction SilentlyContinue
+        }
+    }
+}

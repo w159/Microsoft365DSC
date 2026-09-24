@@ -797,6 +797,7 @@ function Start-M365DSCConfigurationExtract
         $M365DSCStringReplacementMap = Get-M365DSCStringReplacementMap
         $m365dscModulePath = (Get-Module -Name 'Microsoft365DSC').Path
         $workQueue = [System.Collections.Concurrent.ConcurrentQueue[System.Object]]::new()
+        $telemetryContext = Get-M365DSCTelemetryContext
         $exportScriptBlock = {
             if ($null -eq (Get-Module -Name 'Microsoft365DSC'))
             {
@@ -804,10 +805,14 @@ function Start-M365DSCConfigurationExtract
             }
             $Global:MaximumFunctionCount = 32768
             $Global:PartialExportFileName = $using:partialExportName
-            $Global:M365DSCSkipDependenciesValidation = $true
+            if ($using:Parallel)
+            {
+                $Global:M365DSCSkipDependenciesValidation = $true
+                $Global:M365DSCStringReplacementMap = $using:M365DSCStringReplacementMap
+            }
             $Global:M365DSCExportInProgress = $true
-            $Global:M365DSCStringReplacementMap = $using:M365DSCStringReplacementMap
             Set-M365DSCResourcesDictionary -DscResourceDictionary $using:resourceDictionary
+            Set-M365DSCTelemetryContext -Context $using:telemetryContext
             $sharedState = $using:synchronizedHashtable
             $workQueue = $using:workQueue
             [System.Threading.Monitor]::Enter($sharedState)
@@ -1075,6 +1080,7 @@ function Start-M365DSCConfigurationExtract
         {
             [void]$DSCContent.Append($synchronizedHashtable.ResourcesResult[$resource])
         }
+        $synchronizedHashtable.ResourcesResult.Clear()
 
         # Post-process: inject DependsOn declarations and generate stub blocks
         if ($IncludeDependencies.IsPresent)

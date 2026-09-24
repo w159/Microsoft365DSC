@@ -89,9 +89,9 @@ function Initialize-M365DSCModuleMgmt
 
         $commandToModuleMap = @{}
         $Script:M365DSCResourceSettings = [System.Collections.Generic.Dictionary[System.String, System.Object]]::new([System.StringComparer]::OrdinalIgnoreCase)
-        $Script:M365DSCAllResourceSettings = Import-M365DSCResourceSettings
+        $allResourceSettings = Import-M365DSCResourceSettings
 
-        foreach ($entry in $Script:M365DSCAllResourceSettings.GetEnumerator()) {
+        foreach ($entry in $allResourceSettings.GetEnumerator()) {
             $jsonContent = $entry.Value
             foreach ($commandMap in ($jsonContent.commands | Where-Object -Property module -NotIn $Script:M365DSCDevDependencies.Keys)) {
                 $commandToModuleMap[$commandMap.module] += @($commandMap.cmdlets)
@@ -159,6 +159,11 @@ function Get-M365DSCResourceSetting
         [System.String]
         $ResourceName
     )
+
+    if ($null -eq $Script:M365DSCAllResourceSettings)
+    {
+        $Script:M365DSCAllResourceSettings = Import-M365DSCResourceSettings
+    }
 
     $settings = $null
     $null = $Script:M365DSCAllResourceSettings.TryGetValue($ResourceName.Replace('MSFT_', ''), [ref] $settings)
