@@ -1295,6 +1295,9 @@ function Remove-NullEntriesFromHashtable
 .PARAMETER Parallel
     Indicates that export should run in parallel.
 
+.PARAMETER ThrottleLimit
+    Specifies the number of parallel workers. Requires Parallel. Default: 5.
+
 .EXAMPLE
     PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html'
 
@@ -1306,6 +1309,9 @@ function Remove-NullEntriesFromHashtable
 
 .EXAMPLE
     PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html' -KeepExport $true
+
+.EXAMPLE
+    PS> Assert-M365DSCBlueprint -BluePrintUrl 'C:\DS\blueprint.m365' -OutputReportPath 'C:\DSC\BlueprintReport.html' -KeepExport $true -Parallel -ThrottleLimit 2
 
 .FUNCTIONALITY
     Public

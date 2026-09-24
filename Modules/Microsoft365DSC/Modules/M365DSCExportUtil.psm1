@@ -174,6 +174,9 @@ Register-ArgumentCompleter -CommandName Export-M365DSCConfiguration -ParameterNa
 .EXAMPLE
     PS> Export-M365DSCConfiguration -Workloads @("SPO") -ApplicationId $clientId -TenantId $tenantName -CertificateThumbprint $certThumbprint -IncludeDependencies
 
+.EXAMPLE
+    PS> Export-M365DSCConfiguration -Workloads @("SPO") -ApplicationId $clientId -TenantId $tenantName -CertificateThumbprint $certThumbprint -IncludeDependencies -Parallel -ThrottleLimit 2
+
 .FUNCTIONALITY
     Public
 #>
