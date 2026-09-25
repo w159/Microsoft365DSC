@@ -2148,6 +2148,7 @@ function Set-M365DSCAuthenticationParameterMask
     )
 
     $keysToReplace = @(
+        'AccessTokens',
         'ApplicationSecret',
         'Credential',
         'CertificatePassword',

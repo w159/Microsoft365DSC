@@ -131,6 +131,7 @@ class SPOSearchResultSource : M365DSCResourceBase
             if (-not $this.ResourceCache['exportMode'])
             {
                 $null = $this.Connect('PnP')
+                $null = $this.Connect('PnP', (Get-MSCloudLoginConnectionProfile -Workload PnP).AdminUrl)
 
                 Confirm-M365DSCDependencies
 
@@ -215,6 +216,7 @@ class SPOSearchResultSource : M365DSCResourceBase
         $this.AddTelemetry('Set')
 
         $null = $this.Connect('PnP')
+        $null = $this.Connect('PnP', (Get-MSCloudLoginConnectionProfile -Workload PnP).AdminUrl)
 
         if ($this.Ensure -eq 'Absent')
         {
@@ -375,6 +377,7 @@ class SPOSearchResultSource : M365DSCResourceBase
         try
         {
             $ConnectionMode = $this.Connect('PnP')
+            $ConnectionMode = $this.Connect('PnP', (Get-MSCloudLoginConnectionProfile -Workload PnP).AdminUrl)
 
             #Ensure the proper dependencies are installed in the current environment.
             Confirm-M365DSCDependencies

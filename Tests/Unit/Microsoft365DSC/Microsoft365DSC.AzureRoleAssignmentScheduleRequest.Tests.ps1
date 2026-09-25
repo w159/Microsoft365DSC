@@ -485,6 +485,80 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $result | Should -Not -BeNullOrEmpty
             }
         }
+
+        Context -Name 'ReverseDSC Tests - Resource groups of all subscriptions' -Fixture {
+            BeforeAll {
+                $Script:RoleDefinitions = $null
+                $Script:AllSchedules = $null
+                $Global:CurrentModeIsExport = $true
+                $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
+                $testParams = @{
+                    SubscriptionId = "00000000-0000-0000-0000-000000000000"
+                    Credential     = $Credential
+                }
+
+                Mock -CommandName Get-AzManagementGroup -MockWith {
+                    return @()
+                }
+
+                Mock -CommandName Get-AzSubscription -MockWith {
+                    return @(
+                        @{ Id = 'sub-001' }
+                    )
+                }
+
+                Mock -CommandName Set-AzContext -MockWith {}
+
+                Mock -CommandName Invoke-AzRestMethod -ParameterFilter { $Path -eq '/subscriptions/sub-001/resourcegroups?api-version=2021-04-01' } -MockWith {
+                    return @{ StatusCode = 200; Content = '{"value":[{"name":"rg-001"}],"nextLink":"https://management.azure.com/next"}' }
+                }
+
+                Mock -CommandName Invoke-AzRestMethod -ParameterFilter { $Uri -eq 'https://management.azure.com/next' } -MockWith {
+                    return @{ StatusCode = 200; Content = '{"value":[{"name":"rg-002"}]}' }
+                }
+            }
+
+            It 'Should query the resource groups of every page without changing the Azure context' {
+                Invoke-M365DSCResourceMethod -ResourceName 'AzureRoleAssignmentScheduleRequest' -MethodName 'Export' -Parameters $testParams
+                Should -Invoke -CommandName Get-AzRoleAssignmentSchedule -ParameterFilter {
+                    $Scope -eq '/subscriptions/sub-001/resourceGroups/rg-001'
+                } -Exactly 1
+                Should -Invoke -CommandName Get-AzRoleAssignmentSchedule -ParameterFilter {
+                    $Scope -eq '/subscriptions/sub-001/resourceGroups/rg-002'
+                } -Exactly 1
+                Should -Invoke -CommandName Set-AzContext -Exactly 0
+            }
+        }
+
+        Context -Name 'ReverseDSC Tests - Unresolved principal' -Fixture {
+            BeforeAll {
+                $Script:RoleDefinitions = $null
+                $Script:AllSchedules = $null
+                $Global:CurrentModeIsExport = $true
+                $Global:PartialExportFileName = "$(New-Guid).partial.ps1"
+                $testParams = @{
+                    SubscriptionId = "00000000-0000-0000-0000-000000000000"
+                    Credential     = $Credential
+                }
+
+                Mock -CommandName Get-AzManagementGroup -MockWith {
+                    return @()
+                }
+
+                Mock -CommandName Get-AzSubscription -MockWith {
+                    return @()
+                }
+
+                Mock -CommandName Get-AzADUser -MockWith {
+                    return $null
+                }
+            }
+
+            It 'Should skip the instance instead of failing' {
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'AzureRoleAssignmentScheduleRequest' -MethodName 'Export' -Parameters $testParams
+                $result | Should -Not -BeLike '*12345-12345-12345-12345-12345*'
+            }
+        }
     }
 }
 

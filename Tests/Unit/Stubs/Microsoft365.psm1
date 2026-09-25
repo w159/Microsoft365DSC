@@ -190,6 +190,10 @@ function Invoke-AzRestMethod
     param(
         [Parameter()]
         [System.String]
+        $Path,
+
+        [Parameter()]
+        [System.String]
         $Uri,
 
         [Parameter()]

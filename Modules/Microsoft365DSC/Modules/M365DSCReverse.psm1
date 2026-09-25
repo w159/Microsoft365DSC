@@ -929,7 +929,6 @@ function Start-M365DSCConfigurationExtract
 
                         # Check for ErrorAction Preference
                         $parameters.Add('ErrorAction', $using:ErrorActionPreference)
-                        $Global:M365DSCExportResourceTypes += $resourceName
 
                         $Global:M365DSCExportInstanceTally = 0
                         try
@@ -1073,6 +1072,7 @@ function Start-M365DSCConfigurationExtract
         }
 
         $Global:M365DSCExportResourceInstancesCount = [System.Int32]($synchronizedHashtable.InstanceCounts.Values | Measure-Object -Sum).Sum
+        $Global:M365DSCExportResourceTypes = @($synchronizedHashtable.ResourceStatus.Keys | Sort-Object)
         $synchronizedHashtable['SuccessfulResources'] = @($synchronizedHashtable.ResourceStatus.Values | Where-Object -FilterScript { $_ -eq 'Succeeded' }).Count
         $synchronizedHashtable['FailedResources'] = @($synchronizedHashtable.ResourceStatus.Values | Where-Object -FilterScript { $_ -eq 'Failed' }).Count
 

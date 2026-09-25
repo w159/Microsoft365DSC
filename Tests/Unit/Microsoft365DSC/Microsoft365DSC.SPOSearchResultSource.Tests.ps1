@@ -180,11 +180,22 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Get-PnPSearchConfiguration -MockWith {
                     return $existingValueXML
                 }
+
+                Mock -CommandName Get-MSCloudLoginConnectionProfile -MockWith {
+                    return @{ AdminUrl = 'https://contoso-admin.sharepoint.com' }
+                }
             }
 
             It 'Should Reverse Engineer resource from the Export method' {
                 $result = Invoke-M365DSCResourceMethod -ResourceName 'SPOSearchResultSource' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Should connect to the tenant administration site' {
+                Invoke-M365DSCResourceMethod -ResourceName 'SPOSearchResultSource' -MethodName 'Export' -Parameters $testParams
+                Should -Invoke -CommandName New-M365DSCConnection -ModuleName '_Shared' -ParameterFilter {
+                    $Workload -eq 'PnP' -and $Url -eq 'https://contoso-admin.sharepoint.com'
+                }
             }
         }
     }

@@ -537,12 +537,20 @@ class AzureRoleEligibilityScheduleRequest : M365DSCResourceBase
                 $SubScope = "/subscriptions/$($Subscription.Id)"
                 & $CollectSchedules -Scope $SubScope
 
-                $null = Set-AzContext -Subscription $Subscription.Id -ErrorAction SilentlyContinue
-                $ResourceGroups = Get-AzResourceGroup -ErrorAction SilentlyContinue
-                foreach ($ResourceGroup in $ResourceGroups)
+                $response = Invoke-AzRestMethod -Path "$SubScope/resourcegroups?api-version=2021-04-01" -Method GET -ErrorAction SilentlyContinue
+                while ($null -ne $response -and $response.StatusCode -eq 200)
                 {
-                    $RgScope = "$SubScope/resourceGroups/$($ResourceGroup.ResourceGroupName)"
-                    & $CollectSchedules -Scope $RgScope
+                    $page = ConvertFrom-Json -InputObject $response.Content
+                    foreach ($ResourceGroup in $page.value)
+                    {
+                        $RgScope = "$SubScope/resourceGroups/$($ResourceGroup.name)"
+                        & $CollectSchedules -Scope $RgScope
+                    }
+                    $response = $null
+                    if (-not [System.String]::IsNullOrEmpty($page.nextLink))
+                    {
+                        $response = Invoke-AzRestMethod -Uri $page.nextLink -Method GET -ErrorAction SilentlyContinue
+                    }
                 }
             }
 
@@ -614,34 +622,38 @@ class AzureRoleEligibilityScheduleRequest : M365DSCResourceBase
                     $PrincipalValue = $principalInfo.DisplayName
                 }
 
-                if ($null -ne $PrincipalValue)
+                if ([System.String]::IsNullOrEmpty($PrincipalValue))
                 {
-                    $roleDefinitionGuid = $request.RoleDefinitionId.Split('/')[-1]
-                    $currentRoleDefinition = $this.ResourceCache['RoleDefinitions'][$roleDefinitionGuid]
-                    if ($null -eq $currentRoleDefinition)
-                    {
-                        $currentRoleDefinition = Get-AzRoleDefinition -Id $roleDefinitionGuid `
-                            -ErrorAction SilentlyContinue
-                        $this.ResourceCache['RoleDefinitions'].Add($roleDefinitionGuid, $currentRoleDefinition)
-                    }
-                    $params = @{
-                        Id                    = $request.Name
-                        Principal             = $PrincipalValue
-                        PrincipalType         = $requestPrincipalType
-                        DirectoryScopeId      = $request.Scope
-                        RoleDefinition        = $currentRoleDefinition.Name
-                        Ensure                = 'Present'
-                        SubscriptionId        = $this.SubscriptionId
-                        Credential            = $this.Credential
-                        ApplicationId         = $this.ApplicationId
-                        TenantId              = $this.TenantId
-                        ApplicationSecret     = $this.ApplicationSecret
-                        CertificateThumbprint = $this.CertificateThumbprint
-                        CertificatePath       = $this.CertificatePath
-                        CertificatePassword   = $this.CertificatePassword
-                        ManagedIdentity       = $this.ManagedIdentity
-                        AccessTokens          = $this.AccessTokens
-                    }
+                    Write-M365DSCHost -Message "$($Global:M365DSCEmojiYellowCircle) Principal {$($request.PrincipalId)} of type {$requestPrincipalType} could not be resolved. Skipping." -CommitWrite
+                    $i++
+                    continue
+                }
+
+                $roleDefinitionGuid = $request.RoleDefinitionId.Split('/')[-1]
+                $currentRoleDefinition = $this.ResourceCache['RoleDefinitions'][$roleDefinitionGuid]
+                if ($null -eq $currentRoleDefinition)
+                {
+                    $currentRoleDefinition = Get-AzRoleDefinition -Id $roleDefinitionGuid -Scope $request.Scope `
+                        -ErrorAction SilentlyContinue
+                    $this.ResourceCache['RoleDefinitions'][$roleDefinitionGuid] = $currentRoleDefinition
+                }
+                $Params = @{
+                    Id                    = $request.Name
+                    Principal             = $PrincipalValue
+                    PrincipalType         = $requestPrincipalType
+                    DirectoryScopeId      = $request.Scope
+                    RoleDefinition        = $currentRoleDefinition.Name
+                    Ensure                = 'Present'
+                    SubscriptionId        = $this.SubscriptionId
+                    Credential            = $this.Credential
+                    ApplicationId         = $this.ApplicationId
+                    TenantId              = $this.TenantId
+                    ApplicationSecret     = $this.ApplicationSecret
+                    CertificateThumbprint = $this.CertificateThumbprint
+                    CertificatePath       = $this.CertificatePath
+                    CertificatePassword   = $this.CertificatePassword
+                    ManagedIdentity       = $this.ManagedIdentity
+                    AccessTokens          = $this.AccessTokens
                 }
 
                 $this.ExportedInstance = $request

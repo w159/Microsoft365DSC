@@ -248,7 +248,7 @@ function New-M365DSCConnection
     }
 
     Write-Verbose -Message "Attempting connection to {$Workload} with:"
-    Write-Verbose -Message "$($InboundParameters | Out-String)"
+    Write-Verbose -Message "$(Set-M365DSCAuthenticationParameterMask -BoundParameters $InboundParameters.Clone() | Out-String)"
 
     #region Telemetry
     $data = [System.Collections.Generic.Dictionary[[System.String], [System.Object]]]::new()

@@ -164,6 +164,16 @@
     `LicenseAssignment` was emptied to strip every license.
   * Added support for the `AgeGroup`, `EmployeeHireDate`, `EmployeeLeaveDateTime`
     and `EmployeeType` properties.
+* AzureRoleAssignmentScheduleRequest
+  * Fixed the export switching the Azure subscription of the session to the last
+    subscription it read.
+  * Fixed the export failing or reusing the previous principal when a principal could not
+    be resolved. The instance is now skipped.
+* AzureRoleEligibilityScheduleRequest
+  * Fixed the export switching the Azure subscription of the session to the last
+    subscription it read.
+  * Fixed the export failing or reusing the previous principal when a principal could not
+    be resolved. The instance is now skipped.
 * EXOAntiPhishPolicy
   * Fixed an issue where the property description contained an invalid character.
 * EXOAvailabilityAddressSpace
@@ -616,6 +626,9 @@
     FIXES [#5081](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5081)
 * SPOAccessControlSettings
   * Added property `RestrictResourceAccountAccess`.
+* SPOSearchResultSource
+  * Fixed the resource failing with "Current site is not a tenant administration site" by
+    connecting to the tenant administration site.
 * SPOSharingSettings
   * Added properties `AllowGuestUserShareToUsersNotInSiteCollection`,
     `CoreDefaultShareLinkRole`, `CoreDefaultShareLinkScope`,
@@ -810,6 +823,9 @@
     instead of resolving them again in every worker.
   * Reduced the memory used by the module by loading the full resource settings only when needed.
   * Fixed a sequential export leaving dependency validation disabled for the rest of the session.
+  * Fixed the exported resource types missing from the telemetry of a parallel export.
+  * Fixed the application secret and access tokens being written to the verbose output when
+    connecting to a workload.
   * Added handling of a workload connection that fails during connect. It is reported
     once and skipped for the rest of the export.
   * Added `Absent` as an accepted value for `Ensure` to several resources to make them work

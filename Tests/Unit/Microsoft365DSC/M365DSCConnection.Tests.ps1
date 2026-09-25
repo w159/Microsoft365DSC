@@ -1,5 +1,10 @@
 BeforeAll {
     Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCConnection.psm1" -Force
+    $Script:UtilModule = $null
+    if ($null -eq (Get-Module -Name 'Microsoft365DSC'))
+    {
+        $Script:UtilModule = Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1" -DisableNameChecking -PassThru
+    }
 
     function global:Test-IsM365DSCRequiredModulesLoaded
     {
@@ -14,7 +19,7 @@ BeforeAll {
     function global:Connect-M365Tenant
     {
         [CmdletBinding()]
-        param ($Workload, $EnableSearchOnlySession, $ApplicationId, $TenantId, $CertificateThumbprint, $ApplicationSecret, $Url, $SubscriptionId)
+        param ($Workload, $EnableSearchOnlySession, $ApplicationId, $TenantId, $CertificateThumbprint, $ApplicationSecret, $AccessTokens, $Url, $SubscriptionId)
     }
 
     $Script:SpThumbprint = @{
@@ -43,6 +48,31 @@ Describe 'New-M365DSCConnection' {
         $Global:M365DSCExportInProgress = $false
         Reset-M365DSCConnectionFailureCache
         Remove-Module -Name M365DSCConnection -Force -ErrorAction SilentlyContinue
+        if ($null -ne $Script:UtilModule)
+        {
+            Remove-Module -ModuleInfo $Script:UtilModule -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    Context 'Verbose output' {
+        It 'masks the application secret' {
+            $parameters = $Script:SpSecret.Clone()
+            $parameters.ApplicationSecret = 'plain-secret-value'
+            $verboseRecords = New-M365DSCConnection -Workload 'MicrosoftGraph' -InboundParameters $parameters -Verbose 4>&1 |
+                Where-Object -FilterScript { $_ -is [System.Management.Automation.VerboseRecord] }
+            ($verboseRecords.Message -join "`n") | Should -Not -BeLike '*plain-secret-value*'
+            ($verboseRecords.Message -join "`n") | Should -BeLike '*ApplicationSecret*`*`*`**'
+        }
+
+        It 'masks access tokens' {
+            $parameters = @{
+                TenantId     = 'contoso.onmicrosoft.com'
+                AccessTokens = @('plain-token-value')
+            }
+            $verboseRecords = New-M365DSCConnection -Workload 'MicrosoftGraph' -InboundParameters $parameters -Verbose 4>&1 |
+                Where-Object -FilterScript { $_ -is [System.Management.Automation.VerboseRecord] }
+            ($verboseRecords.Message -join "`n") | Should -Not -BeLike '*plain-token-value*'
+        }
     }
 
     Context 'Successful connections' {
