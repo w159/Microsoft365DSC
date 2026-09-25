@@ -209,7 +209,7 @@ Describe 'Markdown report values' {
         @{ Parameter = 'Pipe'; Expected = 'a%PIPE%b' }
         @{ Parameter = 'Quote'; Expected = "it's" }
         @{ Parameter = 'List'; Expected = 'a%COMMA%b,c,%NULL%' }
-        @{ Parameter = 'Single'; Expected = 'a,b' }
+        @{ Parameter = 'Single'; Expected = 'a%COMMA%b' }
         @{ Parameter = 'Empty'; Expected = '%NULL%' }
         @{ Parameter = 'NullText'; Expected = '%NULL%' }
         @{ Parameter = 'Flag'; Expected = 'True' }

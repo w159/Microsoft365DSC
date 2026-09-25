@@ -63,14 +63,10 @@ namespace Microsoft365DSC.Reporting.Configuration
         {
             string[] encoded = items
                 .Select(item => IsBlankItem(item) ? NullToken : EncodeScalar(item, escapeLineBreaks))
+                .Select(item => item.Replace(",", CommaToken))
                 .ToArray();
 
-            return encoded.Length switch
-            {
-                0 => NullToken,
-                1 => encoded[0],
-                _ => string.Join(",", encoded.Select(item => item.Replace(",", CommaToken)))
-            };
+            return encoded.Length == 0 ? NullToken : string.Join(",", encoded);
         }
 
         private string EncodeString(string text, bool escapeLineBreaks)
