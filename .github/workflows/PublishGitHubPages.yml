@@ -18,7 +18,7 @@ jobs:
     if: github.repository == 'Microsoft365DSC/Microsoft365DSC'
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Modules
         shell: pwsh
@@ -53,7 +53,7 @@ jobs:
           New-M365DSCCmdletDocumentation
 
       - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: docs-generation
           path: ./docs  # the folder containing the mkdocs.yml and generated docs
@@ -70,7 +70,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.x'
 
@@ -80,7 +80,7 @@ jobs:
           pip install mkdocs-rss-plugin
 
       - name: Download generated docs
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: docs-generation
           path: ./docs
@@ -90,7 +90,7 @@ jobs:
         run: mkdocs build --site-dir ../site
 
       - name: Upload built site
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./site
 

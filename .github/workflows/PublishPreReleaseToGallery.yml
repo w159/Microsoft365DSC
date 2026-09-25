@@ -44,7 +44,7 @@ jobs:
               throw "Only maintainers can publish a pre-release. '$env:ACTOR' has the role '$role'."
           }
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: Dev
 

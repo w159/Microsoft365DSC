@@ -256,6 +256,120 @@ function Get-M365DSCTestCoverageScope
     }
 }
 
+function Export-M365DSCCoverageData
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Object]
+        $TestResult,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Path
+    )
+
+    $repoDir = (Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath '..')).Path
+    $coverage = $TestResult.CodeCoverage
+
+    $commands = foreach ($command in @($coverage.CommandsExecuted) + @($coverage.CommandsMissed))
+    {
+        if ($null -eq $command)
+        {
+            continue
+        }
+
+        [ordered]@{
+            File        = [System.IO.Path]::GetRelativePath($repoDir, $command.File) -replace '\\', '/'
+            Class       = $command.Class
+            Function    = $command.Function
+            StartLine   = $command.StartLine
+            EndLine     = $command.EndLine
+            StartColumn = $command.StartColumn
+            EndColumn   = $command.EndColumn
+            HitCount    = [System.Int32] $command.HitCount
+        }
+    }
+
+    [ordered]@{
+        TotalMilliseconds = [System.Int64] $TestResult.Duration.TotalMilliseconds
+        Commands          = @($commands)
+    } | ConvertTo-Json -Depth 3 -Compress | Set-Content -Path $Path -Encoding utf8
+}
+
+function Merge-M365DSCCoverageData
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSObject])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $Path,
+
+        [Parameter()]
+        [System.String]
+        $OutputPath = 'coverage.xml'
+    )
+
+    $repoDir = (Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath '..')).Path
+    $resolvedOutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
+    $merged = [System.Collections.Specialized.OrderedDictionary]::new()
+    $totalMilliseconds = 0
+
+    foreach ($file in $Path)
+    {
+        $data = Get-Content -Path $file -Raw | ConvertFrom-Json
+        $totalMilliseconds = [System.Math]::Max($totalMilliseconds, $data.TotalMilliseconds)
+
+        foreach ($command in $data.Commands)
+        {
+            $key = '{0}:{1}:{2}' -f $command.File, $command.StartLine, $command.StartColumn
+            if ($merged.Contains($key))
+            {
+                $merged[$key].Breakpoint.HitCount += $command.HitCount
+                continue
+            }
+
+            $merged[$key] = [PSCustomObject]@{
+                File        = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($repoDir, $command.File))
+                Class       = $command.Class
+                Function    = $command.Function
+                StartLine   = $command.StartLine
+                EndLine     = $command.EndLine
+                StartColumn = $command.StartColumn
+                EndColumn   = $command.EndColumn
+                Command     = ''
+                Breakpoint  = @{ HitCount = $command.HitCount }
+            }
+        }
+    }
+
+    # Pester builds the JaCoCo report only at the end of a run. Its internal report functions are the
+    # only way to turn command hits from several runs into one report.
+    $pester = Get-Module -Name Pester | Sort-Object -Property Version -Descending | Select-Object -First 1
+    if ($null -eq $pester)
+    {
+        $pester = Import-Module -Name Pester -MinimumVersion 6.0.0 -PassThru -ErrorAction Stop
+    }
+
+    & $pester {
+        param ($CommandCoverage, $TotalMilliseconds, $ReportRoot, $OutputPath)
+
+        $report = Get-CoverageReport -CommandCoverage $CommandCoverage
+        $xml = Get-JaCoCoReportXml -CommandCoverage $CommandCoverage -CoverageReport $report `
+            -TotalMilliseconds $TotalMilliseconds -ReportRoot $ReportRoot
+        ([xml] $xml).Save($OutputPath)
+
+        [PSCustomObject]@{
+            CoveragePercent       = $report.CoveragePercent
+            CommandsAnalyzedCount = $report.NumberOfCommandsAnalyzed
+            CommandsExecutedCount = $report.NumberOfCommandsExecuted
+        }
+    } @($merged.Values) $totalMilliseconds $repoDir $resolvedOutputPath
+}
+
 function Get-M365DSCAllGraphPermissionsList
 {
     [CmdletBinding()]

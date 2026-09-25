@@ -87,7 +87,7 @@ jobs:
           "finding-id=$env:INPUT_FINDING" | Add-Content -Path $env:GITHUB_OUTPUT
 
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: Dev
           fetch-depth: 0
