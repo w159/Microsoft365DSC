@@ -20,7 +20,7 @@ runs:
         }
 
         Install-PSResource -Name ReverseDSC -Scope AllUsers -TrustRepository
-        Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
+        Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.2.0
         # New-M365DSCAdaptedResourceManifest.ps1 requires 0.3.0 or later, which is not on the
         # gallery yet. Until it is, a missing tool only skips the manifests.
         try

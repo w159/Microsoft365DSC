@@ -351,7 +351,7 @@ function Merge-M365DSCCoverageData
     $pester = Get-Module -Name Pester | Sort-Object -Property Version -Descending | Select-Object -First 1
     if ($null -eq $pester)
     {
-        $pester = Import-Module -Name Pester -MinimumVersion 6.0.0 -PassThru -ErrorAction Stop
+        $pester = Import-Module -Name Pester -MinimumVersion 6.2.0 -PassThru -ErrorAction Stop
     }
 
     & $pester {

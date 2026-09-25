@@ -145,7 +145,7 @@ jobs:
       - name: Install Pester
         shell: pwsh
         run: |
-          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.0.0
+          Install-PSResource -Name Pester -Scope AllUsers -TrustRepository -Version 6.2.0
 
       - name: Download Shard Coverage Data
         uses: actions/download-artifact@v8
@@ -157,7 +157,7 @@ jobs:
       - name: Merge Code Coverage
         shell: pwsh
         run: |
-          Import-Module -Name Pester -RequiredVersion 6.0.0
+          Import-Module -Name Pester -RequiredVersion 6.2.0
           Import-Module './Tests/TestHarness.psm1' -Force
 
           $shardFiles = @(Get-ChildItem -Path './coverage-data' -Filter 'coverage-shard-*.json').FullName
