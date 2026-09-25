@@ -11,6 +11,14 @@ on:
         description: 'Pre-release suffix, e.g. preview1. Derived from the gallery when empty.'
         required: false
         type: string
+      whatif:
+        description: 'Resolve the version, build and validate the module without publishing it.'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 concurrency:
   group: publish-prerelease-to-gallery
@@ -23,6 +31,19 @@ jobs:
     if: github.repository == 'Microsoft365DSC/Microsoft365DSC'
 
     steps:
+      - name: Authorize Actor
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          ACTOR: ${{ github.triggering_actor }}
+        run: |
+          $role = gh api "repos/$env:REPOSITORY/collaborators/$env:ACTOR/permission" --jq '.role_name'
+          if ($role -notin @('admin', 'maintain'))
+          {
+              throw "Only maintainers can publish a pre-release. '$env:ACTOR' has the role '$role'."
+          }
+
       - uses: actions/checkout@v6
         with:
           ref: Dev
@@ -182,7 +203,29 @@ jobs:
           Install-PSResource -Name $engine.ModuleName -Version $engine.RequiredVersion -Scope AllUsers -Reinstall -TrustRepository
           & ./Utilities/New-M365DSCDscSchemaCache.ps1
 
+      - name: Validate Module Manifest
+        shell: powershell
+        env:
+          MODULE_VERSION: ${{ steps.version.outputs.version }}
+          MODULE_PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          WHATIF: ${{ inputs.whatif }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $manifest = Test-ModuleManifest -Path './Modules/Microsoft365DSC/Microsoft365DSC.psd1'
+          $packageVersion = '{0}-{1}' -f $manifest.Version, $manifest.PrivateData.PSData.Prerelease
+          if ($packageVersion -ne "$env:MODULE_VERSION-$env:MODULE_PRERELEASE")
+          {
+              throw "The built manifest holds $packageVersion instead of $env:MODULE_VERSION-$env:MODULE_PRERELEASE."
+          }
+
+          if ($env:WHATIF -eq 'true')
+          {
+              "WhatIf is set. ``Microsoft365DSC $packageVersion`` passed validation. It would have been published." |
+                  Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+
       - name: Publish
+        if: ${{ !inputs.whatif }}
         shell: powershell
         env:
           PUBLIC_NUGETAPIKEY: ${{ secrets.NugetAPIKey }}
