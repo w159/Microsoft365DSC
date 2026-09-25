@@ -1,6 +1,10 @@
 BeforeAll {
     Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCConnection.psm1" -Force
-    Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1" -Force -DisableNameChecking
+    $Script:UtilModule = $null
+    if ($null -eq (Get-Module -Name 'Microsoft365DSC'))
+    {
+        $Script:UtilModule = Import-Module "$PSScriptRoot/../../../Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1" -DisableNameChecking -PassThru
+    }
 
     function global:Test-IsM365DSCRequiredModulesLoaded
     {
@@ -44,7 +48,10 @@ Describe 'New-M365DSCConnection' {
         $Global:M365DSCExportInProgress = $false
         Reset-M365DSCConnectionFailureCache
         Remove-Module -Name M365DSCConnection -Force -ErrorAction SilentlyContinue
-        Remove-Module -Name M365DSCUtil -Force -ErrorAction SilentlyContinue
+        if ($null -ne $Script:UtilModule)
+        {
+            Remove-Module -ModuleInfo $Script:UtilModule -Force -ErrorAction SilentlyContinue
+        }
     }
 
     Context 'Verbose output' {
