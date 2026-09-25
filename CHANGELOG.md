@@ -735,6 +735,8 @@
     removal of special characters from resource instance names.
 * M365DSCGraphShim
   * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
+* M365DSCReport
+  * Updated the `Markdown` configuration report layout and content generation.
 * M365DSCPermissions
   * Fixed an issue where `Get-M365DSCCompiledPermissionList` skips any that is not one of the
     default `graph`, `sharepoint`, `exchange` and `purview`.
