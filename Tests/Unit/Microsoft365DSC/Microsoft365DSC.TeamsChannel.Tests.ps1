@@ -141,10 +141,37 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Renames existing channel in the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'TeamsChannel' -Property $testParams).Set()
+                Should -Invoke -CommandName Set-TeamChannel -Exactly 1 -ParameterFilter {
+                    $CurrentDisplayName -eq 'Test Channel' -and $NewDisplayName -eq 'Test Channel Updated'
+                }
             }
 
             It 'Should return true from the Test method' {
                 (New-M365DSCResourceInstance -ResourceName 'TeamsChannel' -Property $testParams).Test() | Should -Be $true
+            }
+        }
+
+        Context -Name 'Description of existing channel is not in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    TeamName    = 'TestTeam'
+                    DisplayName = 'Test Channel'
+                    Description = 'Updated description'
+                    Ensure      = 'Present'
+                    Credential  = $Credential
+                }
+            }
+
+            It 'Should return false from the Test method' {
+                (New-M365DSCResourceInstance -ResourceName 'TeamsChannel' -Property $testParams).Test() | Should -Be $false
+            }
+
+            It 'Updates the description in the Set method' {
+                (New-M365DSCResourceInstance -ResourceName 'TeamsChannel' -Property $testParams).Set()
+                Should -Invoke -CommandName Set-TeamChannel -Exactly 1 -ParameterFilter {
+                    $CurrentDisplayName -eq 'Test Channel' -and $Description -eq 'Updated description'
+                }
+                Should -Invoke -CommandName New-TeamChannel -Exactly 0
             }
         }
 

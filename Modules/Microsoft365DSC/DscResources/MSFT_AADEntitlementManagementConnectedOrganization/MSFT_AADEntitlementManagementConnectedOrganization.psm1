@@ -349,18 +349,12 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
             $createParameters.Remove('InternalSponsors') | Out-Null
 
             Write-Verbose -Message "Create Parameters: $(Convert-M365DscHashtableToString -Hashtable $createParameters)"
-            $TenantIdValue = $createParameters.IdentitySources.TenantId
-            $url = "/beta/tenantRelationships/microsoft.graph.findTenantInformationByTenantId(tenantId='$TenantIdValue')"
-            $DomainName = (Invoke-M365DSCGraphRequest -Method 'GET' -Uri $url).defaultDomainName
-            $newConnectedOrganization = New-MgBetaEntitlementManagementConnectedOrganization -Description $createParameters.Description -DisplayName $createParameters.DisplayName -State $createParameters.State -DomainName $DomainName
+            $newConnectedOrganization = New-MgBetaEntitlementManagementConnectedOrganization -BodyParameter $createParameters
 
             foreach ($sponsor in $ExternalSponsorsValues)
             {
-                $directoryObject = Get-MgBetaDirectoryObject -DirectoryObjectId $sponsor
-                $directoryObjectType = $directoryObject.'@odata.type'
-                $directoryObjectType = ($directoryObject.'@odata.type').Split('.') | Select-Object -Last 1
                 $directoryObjectRef = @{
-                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/$($directoryObjectType)s/$($sponsor)"
+                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/directoryObjects/$($sponsor)"
                 }
 
                 New-MgBetaEntitlementManagementConnectedOrganizationExternalSponsorByRef `
@@ -370,10 +364,8 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
 
             foreach ($sponsor in $InternalSponsorsValues)
             {
-                $directoryObject = Get-MgBetaDirectoryObject -DirectoryObjectId $sponsor
-                $directoryObjectType = ($directoryObject.'@odata.type').Split('.') | Select-Object -Last 1
                 $directoryObjectRef = @{
-                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/$($directoryObjectType)s/$($sponsor)"
+                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/directoryObjects/$($sponsor)"
                 }
 
                 New-MgBetaEntitlementManagementConnectedOrganizationInternalSponsorByRef `
@@ -400,10 +392,10 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
                 $currentExternalSponsors = @()
                 foreach ($sponsor in $CurrentInstance.ExternalSponsors)
                 {
-                    $user = Get-MgUser -UserId $sponsor -ErrorAction SilentlyContinue
-                    if ($user)
+                    $sponsorId = $this.ResolveSponsorId($sponsor)
+                    if ($sponsorId)
                     {
-                        $currentExternalSponsors += $user.Id
+                        $currentExternalSponsors += $sponsorId
                     }
                 }
                 $currentInstance.ExternalSponsors = $currentExternalSponsors
@@ -413,11 +405,8 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
             $sponsorsToRemove = ($sponsorsDifferences | Where-Object -FilterScript { $_.SideIndicator -eq '=>' }).InputObject
             foreach ($sponsor in $sponsorsToAdd)
             {
-                $directoryObject = Get-MgBetaDirectoryObject -DirectoryObjectId $sponsor
-                $directoryObjectType = $directoryObject.'@odata.type'
-                $directoryObjectType = ($directoryObject.'@odata.type').Split('.') | Select-Object -Last 1
                 $directoryObjectRef = @{
-                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/$($directoryObjectType)s/$($sponsor)"
+                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/directoryObjects/$($sponsor)"
                 }
 
                 New-MgBetaEntitlementManagementConnectedOrganizationExternalSponsorByRef `
@@ -438,10 +427,10 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
                 $currentInternalSponsors = @()
                 foreach ($sponsor in $CurrentInstance.InternalSponsors)
                 {
-                    $user = Get-MgUser -UserId $sponsor -ErrorAction SilentlyContinue
-                    if ($user)
+                    $sponsorId = $this.ResolveSponsorId($sponsor)
+                    if ($sponsorId)
                     {
-                        $currentInternalSponsors += $user.Id
+                        $currentInternalSponsors += $sponsorId
                     }
                 }
                 $currentInstance.InternalSponsors = $currentInternalSponsors
@@ -451,11 +440,8 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
             $sponsorsToRemove = ($sponsorsDifferences | Where-Object -FilterScript { $_.SideIndicator -eq '=>' }).InputObject
             foreach ($sponsor in $sponsorsToAdd)
             {
-                $directoryObject = Get-MgBetaDirectoryObject -DirectoryObjectId $sponsor
-                $directoryObjectType = $directoryObject.'@odata.type'
-                $directoryObjectType = ($directoryObject.'@odata.type').Split('.') | Select-Object -Last 1
                 $directoryObjectRef = @{
-                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/$($directoryObjectType)s/$($sponsor)"
+                    '@odata.id' = (Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl + "beta/directoryObjects/$($sponsor)"
                 }
 
                 New-MgBetaEntitlementManagementConnectedOrganizationInternalSponsorByRef `
@@ -588,6 +574,23 @@ class AADEntitlementManagementConnectedOrganization : M365DSCResourceBase
                 throw
             }
         }
+    }
+
+    hidden [System.String] ResolveSponsorId([System.String] $Sponsor)
+    {
+        $user = Get-MgUser -UserId $Sponsor -ErrorAction SilentlyContinue
+        if ($null -ne $user)
+        {
+            return $user.Id
+        }
+
+        $group = Get-MgGroup -Filter "displayName eq '$($Sponsor -replace "'", "''")'" -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($null -ne $group)
+        {
+            return $group.Id
+        }
+
+        return $null
     }
 
     hidden [AADEntitlementManagementConnectedOrganization] AsResult([System.Object] $Values)

@@ -32,6 +32,11 @@ Configuration Example
                     intent   = "available"
                 }
             );
+            Categories                      = @(
+                MSFT_DeviceManagementMobileAppCategory{
+                    DisplayName = "Productivity"
+                }
+            );
             Description                     = "A file archiver with a high compression ratio, kept up to date for all staff"; # Updated Property
             Developer                       = "Igor Pavlov";
             DisplayName                     = "7-Zip (x64) automatic updates";

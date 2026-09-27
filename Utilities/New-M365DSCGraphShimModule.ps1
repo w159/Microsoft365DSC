@@ -775,6 +775,37 @@ function ConvertTo-M365DSCGraphShimUri
 
 <#
 .SYNOPSIS
+    Converts a PascalCase property name to the camelCase name Graph expects. A leading run of
+    capitals is lowered up to the last one that starts a word. Keys that do not start with a
+    capital, such as @odata.type, are returned unchanged.
+#>
+function ConvertTo-M365DSCGraphShimPropertyName
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name
+    )
+
+    if ($Name -cnotmatch '^[A-Z]')
+    {
+        return $Name
+    }
+    if ($Name -cmatch '^[A-Z0-9]+$')
+    {
+        return $Name.ToLower()
+    }
+    if ($Name -cmatch '^([A-Z]+)(?=[A-Z][a-z])')
+    {
+        return $Matches[1].ToLower() + $Name.Substring($Matches[1].Length)
+    }
+    return $Name.Substring(0, 1).ToLower() + $Name.Substring(1)
+}
+
+<#
+.SYNOPSIS
     Assembles a request body from bound parameters, merging AdditionalProperties.
 #>
 function ConvertTo-M365DSCGraphShimBody
@@ -815,6 +846,12 @@ function ConvertTo-M365DSCGraphShimBody
             }
             $ht
         }
+        $camelBody = @{}
+        foreach ($entry in $body.GetEnumerator())
+        {
+            $camelBody[(ConvertTo-M365DSCGraphShimPropertyName -Name $entry.Key)] = $entry.Value
+        }
+        $body = $camelBody
     }
     else
     {
@@ -824,20 +861,7 @@ function ConvertTo-M365DSCGraphShimBody
         {
             if ($entry.Key -notin $ExcludeParams -and $null -ne $entry.Value)
             {
-                # Convert PascalCase param name to camelCase for Graph API
-                $key = if ($entry.Key -cmatch '^[A-Z0-9]+$')
-                {
-                    $entry.Key.ToLower()
-                }
-                elseif ($entry.Key -cmatch '^([A-Z]+)(?=[A-Z][a-z])')
-                {
-                    $Matches[1].ToLower() + $entry.Key.Substring($Matches[1].Length)
-                }
-                else
-                {
-                    $entry.Key.Substring(0, 1).ToLower() + $entry.Key.Substring(1)
-                }
-                $body[$key] = $entry.Value
+                $body[(ConvertTo-M365DSCGraphShimPropertyName -Name $entry.Key)] = $entry.Value
             }
         }
     }
@@ -929,7 +953,8 @@ function Invoke-M365DSCGraphShimGetResource
         $paramSplat['NoPageSize'] = $true
     }
 
-    $retrieveAllPages = $BoundParameters.ContainsKey('All') -and $BoundParameters['All']
+    $retrieveAllPages = ($BoundParameters.ContainsKey('All') -and $BoundParameters['All']) -or
+        (-not [System.String]::IsNullOrEmpty($BoundParameters['Filter']) -and -not $BoundParameters.ContainsKey('Top'))
     if ($retrieveAllPages)
     {
         # All reads the whole collection. In this case, the Top parameter caps a single page
@@ -1190,6 +1215,7 @@ foreach ($cmdletName in $cmdletNames) {
                 }
 
                 $lastIdParam = $identityParamNames[-1]
+                [void]$bodyLines.AppendLine("    if (`$PSBoundParameters.ContainsKey('$lastIdParam') -and [System.String]::IsNullOrEmpty(`$$lastIdParam)) { Write-Error -Message `"Cannot bind argument to parameter '$lastIdParam' because it is an empty string.`" -ErrorAction `$ErrorActionPreference; return }")
                 [void]$bodyLines.AppendLine("    `$singleItemUri = if (`$PSBoundParameters.ContainsKey('$lastIdParam') -and -not [System.String]::IsNullOrEmpty(`$$lastIdParam)) { `"$singleUriExpr`" } else { `$null }")
             }
 

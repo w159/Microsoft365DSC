@@ -142,7 +142,7 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')" `
                             -ErrorAction SilentlyContinue | Where-Object -FilterScript {
                                 $_.isSystemApp -eq $false
@@ -257,9 +257,13 @@ class IntuneMobileAppsManagedGooglePlayApp : M365DSCResourceBase
 
             #region resource generator code
             Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp -ProductIds @("app:$($this.PackageId)")
-            $policy = Get-MgBetaDeviceAppManagementMobileApp -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')" -ErrorAction Stop
+            $policy = Get-MgBetaDeviceAppManagementMobileApp -All -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')" -ErrorAction Stop
 
-            if ($policy.Id)
+            if (-not $policy.Id)
+            {
+                throw "The package {$($this.PackageId)} was approved, but Intune has no Managed Google Play app named {$($this.DisplayName)}. The DisplayName must match the name of the app in the store."
+            }
+            else
             {
                 # The store sync seeds the app, so any metadata the configuration carries has to be written afterwards.
                 if ($createParameters.Count -gt 0)

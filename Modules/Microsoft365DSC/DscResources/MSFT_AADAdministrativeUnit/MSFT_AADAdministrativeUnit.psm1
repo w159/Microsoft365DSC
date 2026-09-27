@@ -503,6 +503,7 @@ class AADAdministrativeUnit : M365DSCResourceBase
             $updateParameters = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
             $updateParameters = Rename-M365DSCCimInstanceParameter -Properties $updateParameters
             $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('IsMemberManagementRestricted') | Out-Null
 
             $requestedMembers = $updateParameters.Members
             $updateParameters.Remove('Members') | Out-Null

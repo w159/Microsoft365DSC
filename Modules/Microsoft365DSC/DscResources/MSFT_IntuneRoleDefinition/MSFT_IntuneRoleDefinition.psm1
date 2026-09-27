@@ -189,40 +189,44 @@ class IntuneRoleDefinition : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating Role Definition {$($this.DisplayName)}"
-            if ($null -ne $resolvedRoleScopeTagIds)
+            $ScopeRoleTags = @()
+            foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
             {
-                $ScopeRoleTags = @()
-                foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
+                $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
+                if ($null -ne $Tag)
                 {
-                    $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
-                    if ($null -ne $Tag)
-                    {
-                        $ScopeRoleTags += $Tag.Id
-                    }
+                    $ScopeRoleTags += $Tag.Id
                 }
             }
+
             $resourceActions = @{
                 '@odata.type'             = 'microsoft.graph.resourceAction'
             }
+
             if ($this.GetBoundParameters().ContainsKey('allowedResourceActions'))
             {
                 $resourceActions.Add('allowedResourceActions', $this.allowedResourceActions)
             }
+
             if ($this.GetBoundParameters().ContainsKey('notAllowedResourceActions'))
             {
                 $resourceActions.Add('notAllowedResourceActions', $this.notAllowedResourceActions)
             }
+
             $rolepermission = @{
                 '@odata.type'   = 'microsoft.graph.rolePermission'
                 resourceActions = @($resourceActions)
             }
-            $ScopeTagIds = $ScopeRoleTags
             $createParameters = @{
                 '@odata.type'   = '#microsoft.graph.roleDefinition'
                 displayName     = $this.DisplayName
                 description     = $this.Description
                 rolePermissions = @($rolepermission)
-                roleScopeTagIds = $ScopeTagIds
+            }
+
+            if ($ScopeRoleTags.Count -gt 0)
+            {
+                $createParameters.Add('roleScopeTagIds', $ScopeRoleTags)
             }
 
             $policy = New-MgBetaDeviceManagementRoleDefinition -BodyParameter $createParameters
@@ -230,40 +234,44 @@ class IntuneRoleDefinition : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Role Definition {$($this.DisplayName)}"
-            if ($null -ne $resolvedRoleScopeTagIds)
+            $ScopeRoleTags = @()
+            foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
             {
-                $ScopeRoleTags = @()
-                foreach ($roleScopeTagId in $resolvedRoleScopeTagIds)
+                $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
+                if ($null -ne $Tag)
                 {
-                    $Tag = Get-MgBetaDeviceManagementRoleScopeTag -RoleScopeTagId $roleScopeTagId -ErrorAction SilentlyContinue
-                    if ($null -ne $Tag)
-                    {
-                        $ScopeRoleTags += $Tag.Id
-                    }
+                    $ScopeRoleTags += $Tag.Id
                 }
             }
+
             $resourceActions = @{
                 '@odata.type'             = 'microsoft.graph.resourceAction'
             }
+
             if ($this.GetBoundParameters().ContainsKey('allowedResourceActions'))
             {
                 $resourceActions.Add('allowedResourceActions', $this.allowedResourceActions)
             }
+
             if ($this.GetBoundParameters().ContainsKey('notAllowedResourceActions'))
             {
                 $resourceActions.Add('notAllowedResourceActions', $this.notAllowedResourceActions)
             }
+
             $rolepermission = @{
                 '@odata.type'   = 'microsoft.graph.rolePermission'
                 resourceActions = @($resourceActions)
             }
-            $ScopeTagIds = $ScopeRoleTags
             $updateParameters = @{
                 '@odata.type'   = '#microsoft.graph.roleDefinition'
                 displayName     = $this.DisplayName
                 description     = $this.Description
                 rolePermissions = @($rolepermission)
-                roleScopeTagIds = $ScopeTagIds
+            }
+
+            if ($ScopeRoleTags.Count -gt 0)
+            {
+                $updateParameters.Add('roleScopeTagIds', $ScopeRoleTags)
             }
 
             Update-MgBetaDeviceManagementRoleDefinition -BodyParameter $updateParameters `

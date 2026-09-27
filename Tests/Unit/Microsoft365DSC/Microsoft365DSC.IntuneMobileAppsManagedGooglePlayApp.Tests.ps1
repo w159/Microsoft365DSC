@@ -127,7 +127,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Credential = $Credential;
                 }
 
+                $Script:PackageApproved = $false
+                Mock -CommandName Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp -MockWith {
+                    $Script:PackageApproved = $true
+                }
+
                 Mock -CommandName Get-MgBetaDeviceAppManagementMobileApp -MockWith {
+                    if ($Script:PackageApproved)
+                    {
+                        return @{
+                            '@odata.type' = '#microsoft.graph.androidManagedStoreApp'
+                            displayName   = 'FakeStringValue'
+                            Id            = 'FakeStringValue'
+                            packageId     = 'FakeStringValue'
+                        }
+                    }
                     return $null
                 }
             }
@@ -140,6 +154,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should Create the group from the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsManagedGooglePlayApp' -Property $testParams).Set()
                 Should -Invoke -CommandName Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp -Exactly 1
+                Should -Invoke -CommandName Update-MgBetaDeviceAppManagementMobileApp -Exactly 1
+            }
+            It 'Throws when the approved package has no app with the DisplayName' {
+                $Script:PackageApproved = $false
+                Mock -CommandName Add-MgBetaDeviceManagementAndroidManagedStoreAccountEnterpriseSettingApp -MockWith {
+                }
+
+                { (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsManagedGooglePlayApp' -Property $testParams).Set() } |
+                    Should -Throw -ExpectedMessage '*DisplayName must match the name of the app in the store*'
             }
         }
 

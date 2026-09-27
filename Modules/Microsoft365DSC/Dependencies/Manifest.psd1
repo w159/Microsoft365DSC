@@ -34,7 +34,7 @@
         },
         @{
             ModuleName      = 'M365DSC.mgx'
-            RequiredVersion = '2.1.7'
+            RequiredVersion = '2.1.8'
             PowerShellCore  = $true
         },
         @{
@@ -51,7 +51,7 @@
         },
         @{
             ModuleName      = "MSCloudLoginAssistant"
-            RequiredVersion = "1.2.8"
+            RequiredVersion = "1.2.9"
         },
         @{
             ModuleName      = 'PnP.PowerShell'

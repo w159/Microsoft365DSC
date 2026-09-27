@@ -151,7 +151,23 @@ Describe 'M365DSCResourceBase complex-type hydration' {
         }
 
         $instance.Assignments.Count | Should -Be 1
-        $instance.Assignments[0].groupId | Should -BeNullOrEmpty
+        $instance.Assignments[0].groupId | Should -BeNull
+    }
+
+    It 'Keeps $null string members of a PSCustomObject element instead of turning them into empty strings' {
+        $instance = & $Script:NewInstance @{
+            Assignments = @(
+                [PSCustomObject] @{
+                    dataType = '#microsoft.graph.allDevicesAssignmentTarget'
+                    groupDisplayName = $null
+                    groupId = $null
+                }
+            )
+        }
+
+        $instance.Assignments.Count | Should -Be 1
+        $instance.Assignments[0].groupDisplayName | Should -BeNull
+        $instance.Assignments[0].groupId | Should -BeNull
     }
 
     It 'Throws on an out-of-set value and names the offending member' {

@@ -407,6 +407,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should return true from the test method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Test() | Should -Be $true
             }
+
+            It 'Should ignore PasswordCredentials in the test method' {
+                $params = $testParams.Clone()
+                $params.PasswordCredentials = @(
+                    [MSFT_MicrosoftGraphpasswordCredential] @{
+                        KeyId       = 'otherkeyid'
+                        DisplayName = 'Rotated Secret'
+                        Hint        = 'Abc'
+                    }
+                )
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $params).Test() | Should -Be $true
+            }
         }
 
         Context -Name 'Values are not in the desired state' -Fixture {
@@ -469,6 +481,59 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should call the set method' {
                 (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1
+            }
+        }
+
+        Context -Name 'AppRoles are not in the desired state' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    DisplayName = 'App1'
+                    AppRoles    = @(
+                        [MSFT_MicrosoftGraphappRole] @{
+                            AllowedMemberTypes = @('Application')
+                            Id                 = 'Task Reader'
+                            IsEnabled          = $True
+                            Origin             = 'Application'
+                            Description        = 'Readers have ability to read and list tasks'
+                            Value              = 'Task.Read'
+                            DisplayName        = 'Readers'
+                        }
+                    )
+                    Ensure      = 'Present'
+                    Credential  = $Credential
+                }
+
+                Mock -CommandName Get-MgBetaApplication -MockWith {
+                    return @{
+                        DisplayName = 'App1'
+                        Id          = '5dcb2237-c61b-4258-9c85-eae2aaeba9d6'
+                        AppId       = '5dcb2237-c61b-4258-9c85-eae2aaeba9d6'
+                        AppRoles    = $Script:CurrentAppRoles
+                    }
+                }
+            }
+
+            It 'Disables only the roles to remove before removing them' {
+                $Script:CurrentAppRoles = @(
+                    @{ AllowedMemberTypes = @('Application'); Id = 'Task Reader'; IsEnabled = $true; Origin = 'Application'; Description = 'Readers have ability to read task'; Value = 'Task.Read'; DisplayName = 'Readers' }
+                    @{ AllowedMemberTypes = @('Application'); Id = 'Task Writer'; IsEnabled = $true; Origin = 'Application'; Description = 'Writers have ability to write task'; Value = 'Task.Write'; DisplayName = 'Writers' }
+                )
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1 -ParameterFilter {
+                    $AppRoles.Count -eq 2 -and ($AppRoles | Where-Object { $_.displayName -eq 'Readers' }).isEnabled -and
+                    -not ($AppRoles | Where-Object { $_.displayName -eq 'Writers' }).isEnabled
+                }
+                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1 -ParameterFilter {
+                    $AppRoles.Count -eq 1 -and $AppRoles[0].displayName -eq 'Readers' -and $AppRoles[0].isEnabled
+                }
+            }
+
+            It 'Updates the roles in a single call when no role is removed' {
+                $Script:CurrentAppRoles = @(
+                    @{ AllowedMemberTypes = @('Application'); Id = 'Task Reader'; IsEnabled = $true; Origin = 'Application'; Description = 'Readers have ability to read task'; Value = 'Task.Read'; DisplayName = 'Readers' }
+                )
+                (New-M365DSCResourceInstance -ResourceName 'AADApplication' -Property $testParams).Set()
+                Should -Invoke -CommandName 'Update-MgBetaApplication' -Exactly 1 -ParameterFilter { $null -ne $AppRoles }
             }
         }
 

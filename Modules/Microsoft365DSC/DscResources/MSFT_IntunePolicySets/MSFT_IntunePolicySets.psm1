@@ -248,7 +248,7 @@ class IntunePolicySets : M365DSCResourceBase
                 $itemsHash += @{
                     payloadId            = $this.GetPayloadIdFromItem($item)
                     '@odata.type'        = $item.dataType
-                    guidedDeploymentTags = $item.guidedDeploymentTags
+                    guidedDeploymentTags = @($item.guidedDeploymentTags | Where-Object -FilterScript { $null -ne $_ })
                 }
             }
             $createParameters.Add('items', $itemsHash)
@@ -455,7 +455,7 @@ class IntunePolicySets : M365DSCResourceBase
                 $ItemsModificationTemplate.addedPolicySetItems += @{
                     payloadId            = $this.GetPayloadIdFromItem($_)
                     '@odata.type'        = $_.dataType
-                    guidedDeploymentTags = $_.guidedDeploymentTags
+                    guidedDeploymentTags = @($_.guidedDeploymentTags | Where-Object -FilterScript { $null -ne $_ })
                 }
                 $nullreturn = $false
             }

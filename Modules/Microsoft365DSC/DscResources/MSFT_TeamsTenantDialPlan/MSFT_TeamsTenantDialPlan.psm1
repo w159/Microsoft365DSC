@@ -171,7 +171,11 @@ class TeamsTenantDialPlan : M365DSCResourceBase
                 $AllRules += $ruleObject
             }
 
-            $createParameters.NormalizationRules = @{ Add = $AllRules }
+            $createParameters.Remove('NormalizationRules') | Out-Null
+            if ($AllRules.Count -gt 0)
+            {
+                $createParameters.NormalizationRules = @{ Add = $AllRules }
+            }
             New-CsTenantDialPlan @createParameters
         }
         elseif ($this.Ensure -eq 'Present' -and $CurrentValues.Ensure -eq 'Present')

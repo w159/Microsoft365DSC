@@ -979,9 +979,9 @@ class AADApplication : M365DSCResourceBase
             {
                 Write-Verbose -Message 'Waiting for 10 seconds'
                 Start-Sleep -Seconds 10
-                $appEntity = Get-MgBetaApplication -ApplicationId $currentAADApp.AppId -ErrorAction SilentlyContinue
+                $appEntity = Get-MgBetaApplication -ApplicationId $currentAADApp.Id -ErrorAction SilentlyContinue
                 $tries++
-            } until ($null -eq $appEntity -or $tries -le 12)
+            } until ($null -ne $appEntity -or $tries -gt 12)
         }
 
         if ($this.Ensure -eq 'Present' -and $currentAADApp.Ensure -eq 'Absent' -and -not $skipToUpdate)
@@ -1011,7 +1011,7 @@ class AADApplication : M365DSCResourceBase
                 Start-Sleep -Seconds 10
                 $appEntity = Get-MgBetaApplication -ApplicationId $currentAADApp.Id -ErrorAction SilentlyContinue
                 $tries++
-            } until ($null -eq $appEntity -or $tries -le 12)
+            } until ($null -ne $appEntity -or $tries -gt 12)
         }
         # App should exist and will be configured to desired state
         elseif (($this.Ensure -eq 'Present' -and $currentAADApp.Ensure -eq 'Present') -or $skipToUpdate)
@@ -1036,40 +1036,34 @@ class AADApplication : M365DSCResourceBase
             {
                 Write-Verbose -Message 'AppRoles were specified.'
 
-                # Find roles to Remove
-                $fixedRoles = @()
+                # Graph deletes only disabled roles. Disabling kept roles races the PATCH that re-enables them.
+                $disabledRoles = @()
                 $rolesToRemove = @()
                 foreach ($currentRole in $currentAADApp.AppRoles)
                 {
                     $associatedDesiredRoleEntry = $this.AppRoles | Where-Object -FilterScript { $_.DisplayName -eq $currentRole.DisplayName }
+                    $disabledRoles += @{
+                        allowedMemberTypes = $currentRole.AllowedMemberTypes
+                        id                 = $currentRole.Id
+                        isEnabled          = $currentRole.IsEnabled -and $null -ne $associatedDesiredRoleEntry
+                        origin             = $currentRole.Origin
+                        value              = $currentRole.Value
+                        displayName        = $currentRole.DisplayName
+                        description        = $currentRole.Description
+                    }
                     if ($null -eq $associatedDesiredRoleEntry)
                     {
                         Write-Verbose -Message "Could not find matching AppRole entry in Desired values for {$($currentRole.DisplayName)}. Will remove role."
-                        $fixedRole = $currentRole
-                        $fixedRole.IsEnabled = $false
-                        $fixedRoles += $fixedRole
                         $rolesToRemove += $currentRole.DisplayName
-                    }
-                    else
-                    {
-                        Write-Verbose -Message "Found matching AppRole entry in Desired values for {$($currentRole.DisplayName)}. Keeping same value as current, but setting to disable."
-                        $entry = @{
-                            allowedMemberTypes = $currentRole.AllowedMemberTypes
-                            id                 = $currentRole.Id
-                            isEnabled          = $false
-                            origin             = $currentRole.Origin
-                            value              = $currentRole.Value
-                            displayName        = $currentRole.DisplayName
-                            description        = $currentRole.Description
-                        }
-                        $fixedRoles += $entry
                     }
                 }
 
-                Write-Verbose -Message "Updating AppRoles with the disabled roles to remove: {$($rolesToRemove -join ',')}"
-                Update-MgBetaApplication -ApplicationId $currentAADApp.ObjectId -AppRoles $fixedRoles
+                if ($rolesToRemove.Count -gt 0)
+                {
+                    Write-Verbose -Message "Disabling the AppRoles to remove: {$($rolesToRemove -join ',')}"
+                    Update-MgBetaApplication -ApplicationId $currentAADApp.ObjectId -AppRoles $disabledRoles
+                }
 
-                Write-Verbose -Message "Updating the app a second time, this time removing the app roles {$($rolesToRemove -join ',')} and updating the others."
                 $resultingAppRoles = @()
                 foreach ($currentAppRole in $this.AppRoles)
                 {
@@ -1084,7 +1078,8 @@ class AADApplication : M365DSCResourceBase
                     }
                     $resultingAppRoles += $entry
                 }
-                Update-MgBetaApplication -ApplicationId $currentAADApp.ObjectId -AppRoles $resultingAppRoles
+                Write-Verbose -Message 'Updating the AppRoles.'
+                $this.UpdateAppRoles($currentAADApp.ObjectId, $resultingAppRoles)
             }
         }
         # App exists but should not
@@ -1753,7 +1748,7 @@ class AADApplication : M365DSCResourceBase
     [System.Collections.Hashtable] GetCompareParameters()
     {
         return @{
-            ExcludedProperties = @('AppId', 'ObjectId', 'ApplicationTemplateId', 'AdminConsentGranted')
+            ExcludedProperties = @('AppId', 'ObjectId', 'ApplicationTemplateId', 'AdminConsentGranted', 'PasswordCredentials')
         }
     }
 
@@ -1887,6 +1882,26 @@ class AADApplication : M365DSCResourceBase
                 })
         }
         $this.ResourceCache['NavigationCache'] = $cache
+    }
+
+    hidden [void] UpdateAppRoles([System.String] $ObjectId, [System.Object[]] $AppRoles)
+    {
+        for ($attempt = 1; ; $attempt++)
+        {
+            try
+            {
+                Update-MgBetaApplication -ApplicationId $ObjectId -AppRoles $AppRoles -ErrorAction Stop
+                return
+            }
+            catch
+            {
+                if ($attempt -ge 6 -or "$($_.Exception.Message) $($_.ErrorDetails.Message)" -notlike '*CannotDeleteOrUpdateEnabledEntitlement*')
+                {
+                    throw
+                }
+                Start-Sleep -Seconds 10
+            }
+        }
     }
 
     hidden [System.Object] GetAzureADAppPermissions([System.Object] $App)

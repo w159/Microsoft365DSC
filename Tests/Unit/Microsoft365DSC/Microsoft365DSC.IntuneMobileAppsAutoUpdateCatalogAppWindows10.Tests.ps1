@@ -44,6 +44,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             Mock -CommandName New-MgBetaDeviceAppManagementMobileApp -MockWith {
+                return @{
+                    Id = 'FakeStringValue'
+                }
             }
 
             Mock -CommandName Update-MgBetaDeviceAppManagementMobileApp -MockWith {
@@ -54,6 +57,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             Mock -CommandName Get-MgBetaDeviceAppManagementMobileApp -MockWith {
                 return @{
+                    Categories                      = @(
+                        @{
+                            id          = 'FakeCategoryId'
+                            displayName = 'Productivity'
+                        }
+                    )
                     Assignments                     = @(
                         @{
                             dataType = '#microsoft.graph.allLicensedUsersAssignmentTarget'
@@ -86,6 +95,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             Mock -CommandName Get-MgBetaDeviceAppManagementMobileAppAssignment -MockWith {
+            }
+
+            Mock -CommandName Update-DeviceAppManagementAppCategory -MockWith {
             }
 
             Mock -CommandName Update-DeviceAppManagementPolicyAssignment -MockWith {
@@ -134,6 +146,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl           = 'FakeStringValue'
                     Publisher                       = 'FakeStringValue'
                     RoleScopeTagIds                 = @('FakeStringArrayValue1', 'FakeStringArrayValue2')
+                    Categories                      = @(
+                        [MSFT_DeviceManagementMobileAppCategory] @{
+                            DisplayName = 'Productivity'
+                        }
+                    )
                     Ensure                          = 'Present'
                     Credential                      = $Credential
                 }
@@ -155,6 +172,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should create the instance from the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsAutoUpdateCatalogAppWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName 'New-MgBetaDeviceAppManagementMobileApp' -Exactly 1
+                Should -Invoke -CommandName 'Update-DeviceAppManagementAppCategory' -Exactly 1
             }
         }
 
@@ -205,6 +223,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl           = 'FakeStringValue'
                     Publisher                       = 'FakeStringValue'
                     RoleScopeTagIds                 = @('FakeStringArrayValue1', 'FakeStringArrayValue2')
+                    Categories                      = @(
+                        [MSFT_DeviceManagementMobileAppCategory] @{
+                            DisplayName = 'Productivity'
+                        }
+                    )
                     Ensure                          = 'Present'
                     Credential                      = $Credential
                 }
@@ -214,6 +237,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 $result = (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsAutoUpdateCatalogAppWindows10' -Property $testParams).Get().ToHashtable()
                 $result.Ensure | Should -Be 'Present'
                 $result.Description | Should -Be 'FakeStringValue'
+                $result.Categories.DisplayName | Should -Be 'Productivity'
                 $result.Developer | Should -Be 'FakeStringValue'
                 $result.DisplayName | Should -Be 'FakeStringValue'
                 $result.Id | Should -Be 'FakeStringValue'
@@ -256,6 +280,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     PrivacyInformationUrl           = 'FakeStringValue'
                     Publisher                       = 'FakeStringValue'
                     RoleScopeTagIds                 = @('FakeStringArrayValue1', 'FakeStringArrayValue2')
+                    Categories                      = @(
+                        [MSFT_DeviceManagementMobileAppCategory] @{
+                            DisplayName = 'Business'
+                        }
+                    )
                     Ensure                          = 'Present'
                     Credential                      = $Credential
                 }
@@ -273,6 +302,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should update the instance from the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneMobileAppsAutoUpdateCatalogAppWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName 'Update-MgBetaDeviceAppManagementMobileApp' -Exactly 1
+                Should -Invoke -CommandName 'Update-DeviceAppManagementAppCategory' -Exactly 1 -ParameterFilter { $Compare }
             }
         }
 

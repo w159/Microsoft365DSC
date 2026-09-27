@@ -1023,13 +1023,11 @@ class SCSensitivityLabel : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Absent' -and $label.Ensure -eq 'Present')
         {
-            # If the label exists and it shouldn't, simply remove it;Need to force deletoion
             Write-Verbose -Message "Deleting Sensitivity label $($this.Name)."
 
             try
             {
                 Remove-Label -Identity $this.Name -Confirm:$false -ErrorAction Stop
-                Remove-Label -Identity $this.Name -Confirm:$false -forcedeletion:$true -ErrorAction Stop
             }
             catch
             {

@@ -338,7 +338,7 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
                 }
                 else
                 {
-                    $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -Filter "DisplayName eq '$($category.DisplayName -replace "'", "''")'"
+                    $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -All -Filter "DisplayName eq '$($category.DisplayName -replace "'", "''")'"
                 }
 
                 if ($null -eq $currentCategory)
@@ -367,6 +367,16 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
 
             $updateParameters.Remove('Id') | Out-Null
             $updateParameters.Remove('OfficePlatformArchitecture') | Out-Null
+
+            if (-not [System.String]::IsNullOrEmpty($currentInstance.OfficeConfigurationXml))
+            {
+                foreach ($designerProperty in @('AutoAcceptEula', 'ProductIds', 'UseSharedComputerActivation', 'UpdateChannel',
+                        'OfficeSuiteAppDefaultFileFormat', 'LocalesToInstall', 'InstallProgressDisplayLevel',
+                        'ShouldUninstallOlderVersionsOfOffice', 'TargetVersion', 'UpdateVersion', 'ExcludedApps'))
+                {
+                    $updateParameters.Remove($designerProperty) | Out-Null
+                }
+            }
 
             $updateParameters.Add('@odata.type', '#microsoft.graph.officeSuiteApp')
             Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters
@@ -399,7 +409,7 @@ class IntuneMobileAppsWindowsOfficeSuiteApp : M365DSCResourceBase
                     }
                     else
                     {
-                        $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -Filter "DisplayName eq '$($category.DisplayName -replace "'", "''")'"
+                        $currentCategory = Get-MgBetaDeviceAppManagementMobileAppCategory -All -Filter "DisplayName eq '$($category.DisplayName -replace "'", "''")'"
                     }
 
                     if ($null -eq $currentCategory)

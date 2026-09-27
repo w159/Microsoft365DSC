@@ -271,6 +271,7 @@ $payload = & $module {
         }
         catch
         {
+            [Console]::Out.WriteLine("WARNING: $($Type.Name).GetCompareParameters() failed. Its comparison parameters are missing from SchemaDefinition.json: $($_.Exception.Message)")
             return @{}
         }
 
@@ -434,6 +435,11 @@ try
                         '-PropertyDescriptionPath', $propertyDescriptionFile)
 
     $json = if (Test-Path -Path $outputFile) { Get-Content -Path $outputFile } else { $null }
+
+    foreach ($line in @($json | Where-Object { $_.StartsWith('WARNING: ') }))
+    {
+        Write-Warning -Message $line.Substring('WARNING: '.Length)
+    }
 
     if ($process.ExitCode -ne 0 -or [string]::IsNullOrWhiteSpace(($json -join '')))
     {

@@ -52,15 +52,17 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     IsViewingBeforeAcceptanceRequired    = $true
                     IsPerDeviceAcceptanceRequired        = $false
                     UserReacceptRequiredFrequency        = 'P90D'
-                    File                                 = @{
-                        Data     = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('Terms content'))
-                        Name     = 'terms.txt'
-                        Language = 'en-US'
-                    }
                     TermsExpiration                      = @{
                         Frequency     = 'P365D'
                         StartDateTime = [System.DateTime]::new(2026, 1, 1, 0, 0, 0, [System.DateTimeKind]::Utc)
                     }
+                }
+            }
+
+            Mock -CommandName Invoke-M365DSCGraphRequest -ParameterFilter { $Method -eq 'GET' -and $Uri -like '*/termsOfUse/agreements/*/file' } -MockWith {
+                return @{
+                    fileName = 'terms.txt'
+                    language = 'en-US'
                 }
             }
 

@@ -9,10 +9,6 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
     [System.String] $IsSingleInstance
 
     [DscProperty()]
-    [System.ComponentModel.Description('The Identity parameter specifies the ATP policy that you want to modify. There''s only one policy named Default.')]
-    [System.String] $Identity
-
-    [DscProperty()]
     [System.ComponentModel.Description('The AllowSafeDocsOpen parameter specifies whether users can click through and bypass the Protected View container even when Safe Documents identifies a file as malicious.')]
     [System.Nullable[System.Boolean]] $AllowSafeDocsOpen
 
@@ -65,7 +61,7 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
             return $remote
         }
 
-        Write-Verbose -Message "Getting configuration of AtpPolicyForO365 for $($this.Identity)"
+        Write-Verbose -Message 'Getting configuration of the EXO AtpPolicyForO365'
 
         try
         {
@@ -81,10 +77,10 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
                     IsSingleInstance = 'Yes'
                 }
 
-                $AtpPolicyForO365 = Get-AtpPolicyForO365 -Identity $this.Identity -ErrorAction SilentlyContinue
+                $AtpPolicyForO365 = Get-AtpPolicyForO365 -Identity 'Default' -ErrorAction SilentlyContinue
                 if (-not $AtpPolicyForO365)
                 {
-                    Write-Verbose -Message "AtpPolicyForO365 $($this.Identity) does not exist."
+                    Write-Verbose -Message 'AtpPolicyForO365 Default does not exist.'
                     return $this.AsResult($nullReturn)
                 }
             }
@@ -93,11 +89,10 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
                 $AtpPolicyForO365 = $this.ExportedInstance
             }
 
-            Write-Verbose -Message "Found AtpPolicyForO365 $($this.Identity)"
+            Write-Verbose -Message 'Found the EXO AtpPolicyForO365 Default'
 
             $result = @{
                 IsSingleInstance        = 'Yes'
-                Identity                = $AtpPolicyForO365.Identity
                 AllowSafeDocsOpen       = $AtpPolicyForO365.AllowSafeDocsOpen
                 EnableATPForSPOTeamsODB = $AtpPolicyForO365.EnableATPForSPOTeamsODB
                 EnableSafeDocs          = $AtpPolicyForO365.EnableSafeDocs
@@ -128,22 +123,18 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
             return
         }
 
-        Write-Verbose -Message "Setting configuration of AtpPolicyForO365 for $($this.Identity)"
+        Write-Verbose -Message 'Setting configuration of the EXO AtpPolicyForO365'
 
         Confirm-M365DSCDependencies
 
         $this.AddTelemetry('Set')
 
-        if ('Default' -ne $this.Identity)
-        {
-            throw "EXOAtpPolicyForO365 configurations MUST specify Identity value of 'Default'"
-        }
-
         $null = $this.Connect('ExchangeOnline')
 
         $AtpPolicyParams = Remove-M365DSCAuthenticationParameter -BoundParameters $this.GetBoundParameters()
         $AtpPolicyParams.Remove('IsSingleInstance') | Out-Null
-        Write-Verbose -Message "Setting AtpPolicyForO365 $($this.Identity) with values: $(Convert-M365DscHashtableToString -Hashtable $AtpPolicyParams)"
+        $AtpPolicyParams.Add('Identity', 'Default')
+        Write-Verbose -Message "Setting configuration of the EXO AtpPolicyForO365 Default"
 
         Set-AtpPolicyForO365 @AtpPolicyParams
     }
@@ -194,7 +185,6 @@ class EXOAtpPolicyForO365 : M365DSCResourceBase
 
                     $Params = @{
                         IsSingleInstance      = 'Yes'
-                        Identity              = $atpPolicy.Identity
                         Credential            = $this.Credential
                         ApplicationId         = $this.ApplicationId
                         TenantId              = $this.TenantId

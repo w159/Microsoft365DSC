@@ -221,26 +221,6 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
 
                 New-MgBetaPolicyPermissionGrantPolicy -BodyParameter $createParameters | Out-Null
 
-                $attempt = 1
-                while ($true)
-                {
-                    try
-                    {
-                        $null = Get-MgBetaPolicyPermissionGrantPolicy -PermissionGrantPolicyId $this.Id -ErrorAction Stop
-                        break
-                    }
-                    catch
-                    {
-                        if ($attempt -ge 5 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
-                        {
-                            throw
-                        }
-
-                        $attempt++
-                        Start-Sleep -Seconds 5
-                    }
-                }
-
                 # Add Includes
                 if ($null -ne $this.Includes -and $this.Includes.Count -gt 0)
                 {
@@ -248,7 +228,7 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
                     {
                         Write-Verbose -Message "Adding include condition set {$($include.Id)}"
                         $includeParams = $this.GetPermissionGrantConditionSetAsParameters($this.ResourceCache, $include)
-                        New-MgBetaPolicyPermissionGrantPolicyInclude -PermissionGrantPolicyId $this.Id -BodyParameter $includeParams | Out-Null
+                        $this.AddConditionSetToNewPolicy('Include', $includeParams)
                     }
                 }
 
@@ -259,7 +239,7 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
                     {
                         Write-Verbose -Message "Adding exclude condition set {$($exclude.Id)}"
                         $excludeParams = $this.GetPermissionGrantConditionSetAsParameters($this.ResourceCache, $exclude)
-                        New-MgBetaPolicyPermissionGrantPolicyExclude -PermissionGrantPolicyId $this.Id -BodyParameter $excludeParams | Out-Null
+                        $this.AddConditionSetToNewPolicy('Exclude', $excludeParams)
                     }
                 }
             }
@@ -513,8 +493,9 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
 
     [System.Collections.Hashtable] GetCompareParameters()
     {
-        # Normalize condition sets in desired values so that permission names
-        # compare correctly against the current values.
+        # Normalize condition sets so that permission names compare correctly against the current
+        # values. Condition set ids are assigned by the service and Set matches sets by content,
+        # so they are left out of the comparison.
         return @{
             PostProcessing = {
                 param($DesiredValues, $CurrentValues, $ValuesToCheck, $PostProcessingArgs)
@@ -526,16 +507,57 @@ class AADPermissionGrantPolicy : M365DSCResourceBase
                         $normalizedSets = @()
                         foreach ($conditionSet in $ValuesToCheck[$propertyName])
                         {
-                            $normalizedSets += [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($PostProcessingArgs[0], $conditionSet)
+                            $normalizedSet = [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($PostProcessingArgs[0], $conditionSet)
+                            $normalizedSet.Remove('Id')
+                            $normalizedSets += $normalizedSet
                         }
                         $ValuesToCheck[$propertyName] = [Array]$normalizedSets
                         $DesiredValues[$propertyName] = [Array]$normalizedSets
+                    }
+
+                    if ($null -ne $CurrentValues[$propertyName])
+                    {
+                        $currentSets = @()
+                        foreach ($conditionSet in $CurrentValues[$propertyName])
+                        {
+                            $currentSet = [AADPermissionGrantPolicy]::GetPermissionGrantConditionSetAsHashtable($PostProcessingArgs[0], $conditionSet)
+                            $currentSet.Remove('Id')
+                            $currentSets += $currentSet
+                        }
+                        $CurrentValues[$propertyName] = [Array]$currentSets
                     }
                 }
 
                 return [System.Tuple[Hashtable, Hashtable, Hashtable]]::new($DesiredValues, $CurrentValues, $ValuesToCheck)
             }
             PostProcessingArgs = @($this.ResourceCache)
+        }
+    }
+
+    hidden [void] AddConditionSetToNewPolicy([System.String] $Kind, [System.Collections.Hashtable] $Parameters)
+    {
+        for ($attempt = 1; ; $attempt++)
+        {
+            try
+            {
+                if ($Kind -eq 'Include')
+                {
+                    New-MgBetaPolicyPermissionGrantPolicyInclude -PermissionGrantPolicyId $this.Id -BodyParameter $Parameters -ErrorAction Stop | Out-Null
+                }
+                else
+                {
+                    New-MgBetaPolicyPermissionGrantPolicyExclude -PermissionGrantPolicyId $this.Id -BodyParameter $Parameters -ErrorAction Stop | Out-Null
+                }
+                return
+            }
+            catch
+            {
+                if ($attempt -ge 6 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                {
+                    throw
+                }
+                Start-Sleep -Seconds 5
+            }
         }
     }
 

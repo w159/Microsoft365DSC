@@ -176,34 +176,46 @@ class SPOStorageEntity : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present')
         {
+            $storageSiteUrl = $this.SiteUrl
+            if ($this.EntityScope -ne 'Site')
+            {
+                $storageSiteUrl = Get-PnPTenantAppCatalogUrl
+                if ([System.String]::IsNullOrEmpty($storageSiteUrl))
+                {
+                    throw "Storage entity {$($this.Key)} cannot be created: tenant-scoped storage entities are stored in the tenant app catalog, and the tenant has none."
+                }
+            }
+
+            $storageSite = Get-PnPTenantSite -Identity $storageSiteUrl
+            $resetSecurity = $false
             try
             {
                 Write-Verbose -Message "Adding new storage entity $($this.Key)"
-                $currentTenantSite = Get-PnPTenantSite -Identity $this.SiteUrl
-                $resetSecurity = $false
-                if ($currentTenantSite.DenyAddAndCustomizePages -eq 'Enabled')
+                if ($storageSite.DenyAddAndCustomizePages -eq 'Enabled')
                 {
-                    Set-PnPTenantSite -Identity $this.SiteUrl -NoScriptSite:$false -ErrorAction Stop
+                    Set-PnPTenantSite -Identity $storageSiteUrl -NoScriptSite:$false -ErrorAction Stop
                     $resetSecurity = $true
                 }
                 Set-PnPStorageEntity @CurrentParameters -ErrorAction Stop
-
-                if ($resetSecurity)
-                {
-                    Write-Verbose -Message "Resetting security for $($this.SiteUrl)"
-                    Set-PnPTenantSite -Identity $this.SiteUrl -NoScriptSite:$true
-                }
             }
             catch
             {
                 if ($_.Exception.Message -like '*Access denied*' -or $_.Exception.Message -like '*Access is denied*')
                 {
-                    throw "It appears that the account doesn't have access to create an SPO Storage " + `
-                        'Entity or that an App Catalog was not created for the specified location. ' + `
-                        'Additionally, make sure that the site is allowed for custom scripts.'
+                    throw "Access denied while writing storage entity {$($this.Key)} to {$storageSiteUrl}. " + `
+                        "Storage entities can only be written while custom script is allowed on that site; DenyAddAndCustomizePages was {$($storageSite.DenyAddAndCustomizePages)}. " + `
+                        'Allow it with Set-PnPTenantSite -Url <site> -DenyAddAndCustomizePages:$false, and make sure the account is a site collection administrator there or the application has Sites.FullControl.All.'
                 }
 
                 throw
+            }
+            finally
+            {
+                if ($resetSecurity)
+                {
+                    Write-Verbose -Message "Resetting security for $storageSiteUrl"
+                    Set-PnPTenantSite -Identity $storageSiteUrl -NoScriptSite:$true
+                }
             }
         }
     }

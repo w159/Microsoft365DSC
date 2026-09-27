@@ -160,6 +160,8 @@ class EXOOfflineAddressBook : M365DSCResourceBase
             IsDefault            = $this.IsDefault
             Confirm              = $false
         }
+        $NewOfflineAddressBookParams = Remove-NullEntriesFromHashtable -Hash $NewOfflineAddressBookParams
+        $SetOfflineAddressBookParams = Remove-NullEntriesFromHashtable -Hash $SetOfflineAddressBookParams
 
         # CASE: Offline Address Book doesn't exist but should;
         if ($this.Ensure -eq 'Present' -and $currentOfflineAddressBookConfig.Ensure -eq 'Absent')
