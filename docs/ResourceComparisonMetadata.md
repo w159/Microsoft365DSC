@@ -78,25 +78,38 @@ This lives with the other class entry points because PowerShell classes do not c
 * Caches the result per resource for the lifetime of the session
 * Delegates to `Get-M365DSCResourceCompareParameters`
 
-### 3. Integration with New-M365DSCDeltaReport
+### 3. Offline Comparison Data in `SchemaDefinition.json`
 
-Report generation asks every resource for its parameters and merges them with the report's own exclusions:
+The delta report compares configurations without loading every resource class. The comparison parameters it needs are stored in `Modules/Microsoft365DSC/SchemaDefinition.json`, next to each resource's parameters:
 
-```powershell
-$customCompareParams = Get-M365DSCResourceComparisonParameters -ResourceName $resource.ResourceName
-
-# Merge with global exclusions
-if ($customCompareParams.ContainsKey('ExcludedProperties'))
+```json
 {
-    $resourceCompareParams.ExcludedProperties = $ExcludedProperties + $customCompareParams.ExcludedProperties | Select-Object -Unique
+    "ClassName": "MSFT_AADAgreement",
+    "Parameters": [ ... ],
+    "CompareParameters": { "ExcludedProperties": [ "FileData" ] }
 }
-
-# Add PostProcessing, IncludedProperties, etc.
-# ...
-
-# Perform comparison with resource-specific parameters
-$compareResult = Compare-M365DSCResourceState @resourceCompareParams
 ```
+
+* `CompareParameters` contains the `ExcludedProperties` and `IncludedProperties` a resource returns. Empty lists as well as resources without a `GetCompareParameters()` implementation result in no `CompareParameters` entry.
+* `HasPostProcessing` is `true` when the resource returns a `PostProcessing` scriptblock. A scriptblock cannot be stored in JSON. The flag tells the report to ask the resource class at runtime.
+
+`Utilities/New-M365DSCSchemaFromClasses.ps1` generates the file from the built class-based resources: for every registered resource it creates an instance with no properties set and reads its `GetCompareParameters()`. `Utilities/Build-Microsoft365DSC.ps1` runs it on every build. The file is not checked in. An override takes effect with the next build.
+
+A `GetCompareParameters()` method that throws during generation leaves the resource without comparison data. The generator reports it and continues:
+
+```text
+WARNING: SPOTenantSettings.GetCompareParameters() failed. Its comparison parameters are missing from SchemaDefinition.json: <message>
+```
+
+The offline comparison then skips the resource-specific parameters for that resource. To prevent this, fix the override before relying on the report.
+
+### 4. Integration with New-M365DSCDeltaReport
+
+`New-M365DSCDeltaReport` loads `SchemaDefinition.json` through `Initialize-M365DSCSchemaCache` and compares with `Microsoft365DSC.Compare.ConfigurationComparer`:
+
+* `SchemaIndex.GetCompareParameters()` reads `CompareParameters` from the schema entry.
+* For every resource in the compared configurations whose schema entry has `HasPostProcessing`, the report calls `Get-M365DSCResourceComparisonParameters` and passes the returned `PostProcessing`, `PostProcessingArgs`, `ExcludedProperties` and `IncludedProperties` to the comparer. `IsReport = $true` is appended to `PostProcessingArgs`. A callback uses it to tell a report from `Test()` (`[M365DSCResourceBase]::IsReportContext()`) and skip anything that needs a workload connection.
+* The report's own `-ExcludedProperties` and `-ExcludedResources` apply on top of the resource parameters.
 
 ## Implementation Guide
 
@@ -121,7 +134,7 @@ $compareResult = Compare-M365DSCResourceState @resourceCompareParams
    * Run your resource's `Test()` - should work as before
    * Run `Assert-M365DSCBlueprint` - should now use the same comparison logic
 
-No registration step is needed: the report path resolves the class and calls the method, so an override is picked up on its own.
+No registration step is needed because the next build writes the override into `SchemaDefinition.json`  and the report resolves the class for `PostProcessing`. An override is picked up on its own. Check the build output for a `GetCompareParameters() failed` warning.
 
 ### PostProcessing Script Pattern
 
@@ -168,6 +181,8 @@ Note that the report path constructs the instance with no properties set, so any
 * **Base Class:** `Modules/Microsoft365DSC/DscResources/_Base/M365DSCResourceBase.psm1`
 * **Class Entry Points:** `Modules/Microsoft365DSC/DscResources/_Base/M365DSCResourceFactory.psm1`
 * **Helper Functions:** `Modules/Microsoft365DSC/Modules/M365DSCUtil.psm1`
-* **Comparison Engine:** `Modules/Microsoft365DSC/Modules/M365DSCCompare.psm1`
+* **Comparison Engine:** `Modules/Microsoft365DSC/Modules/M365DSCCompare.psm1`, `src/Microsoft365DSC.Compare/ConfigurationComparer.cs`
+* **Offline Comparison Data:** `Modules/Microsoft365DSC/SchemaDefinition.json` (generated), read by `src/Microsoft365DSC.Compare/SchemaIndex.cs`
+* **Offline Data Generator:** `Utilities/New-M365DSCSchemaFromClasses.ps1`
 * **Report Generator:** `Modules/Microsoft365DSC/Modules/M365DSCReport.psm1`
 * **Resource Example:** `Modules/Microsoft365DSC/DscResources/MSFT_AADRoleAssignmentScheduleRequest/MSFT_AADRoleAssignmentScheduleRequest.psm1`

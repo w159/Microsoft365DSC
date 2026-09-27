@@ -354,7 +354,7 @@ class IntuneMobileAppsMacOSLobApp : M365DSCResourceBase
 
             if ($this.GetBoundParameters().ContainsKey('Categories'))
             {
-                Update-DeviceAppManagementAppCategory -App $currentInstance -Categories $this.Categories
+                Update-DeviceAppManagementAppCategory -App $currentInstance -Categories $this.Categories -Compare
             }
 
             #Assignments

@@ -149,7 +149,7 @@ class IntuneMobileAppsMicrosoftStoreAppWindows10 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.winGetApp')" `
                             -ErrorAction SilentlyContinue
                     }

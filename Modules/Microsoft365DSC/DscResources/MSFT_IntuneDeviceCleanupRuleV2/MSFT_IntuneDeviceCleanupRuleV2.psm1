@@ -107,7 +107,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule `
+                        $getValue = Get-MgBetaDeviceManagementManagedDeviceCleanupRule -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }

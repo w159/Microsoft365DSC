@@ -159,7 +159,7 @@ class IntuneDeviceCategory : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentCategory.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating Device Category {$($this.DisplayName)}"
-            $category = Get-MgBetaDeviceManagementDeviceCategory -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'"
+            $category = Get-MgBetaDeviceManagementDeviceCategory -All -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'"
             $updateParameters = @{
                 DeviceCategoryId = $category.id
                 DisplayName      = $this.DisplayName
@@ -174,7 +174,7 @@ class IntuneDeviceCategory : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Absent' -and $currentCategory.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Removing Device Category {$($this.DisplayName)}"
-            $category = Get-MgBetaDeviceManagementDeviceCategory -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'"
+            $category = Get-MgBetaDeviceManagementDeviceCategory -All -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'"
             Remove-MgBetaDeviceManagementDeviceCategory -DeviceCategoryId $category.id
         }
     }

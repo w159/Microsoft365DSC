@@ -114,7 +114,7 @@ class IntuneRoleAssignmentWindows365 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaRoleManagementCloudPcRoleAssignment `
+                        $getValue = Get-MgBetaRoleManagementCloudPcRoleAssignment -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }
@@ -240,7 +240,7 @@ class IntuneRoleAssignmentWindows365 : M365DSCResourceBase
 
         if ($boundParameters.ContainsKey('RoleDefinition'))
         {
-            $roleDef = Get-MgBetaRoleManagementCloudPcRoleDefinition -Filter "DisplayName eq '$($this.RoleDefinition -replace "'", "''")'" -ErrorAction Stop
+            $roleDef = Get-MgBetaRoleManagementCloudPcRoleDefinition -All -Filter "DisplayName eq '$($this.RoleDefinition -replace "'", "''")'" -ErrorAction Stop
             if ($null -eq $roleDef)
             {
                 throw "The IntuneRoleDefinitionWindows365 with name '$($this.RoleDefinition)' was not found for {$($this.DisplayName)}."

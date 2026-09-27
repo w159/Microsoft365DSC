@@ -134,7 +134,7 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
                 #region resource generator code
                 if ($null -eq $getValue)
                 {
-                    $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -Filter "DisplayName eq '$($this.Displayname -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreAppConfiguration')" -ErrorAction SilentlyContinue
+                    $getValue = Get-MgBetaDeviceAppManagementMobileAppConfiguration -All -Filter "DisplayName eq '$($this.Displayname -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreAppConfiguration')" -ErrorAction SilentlyContinue
                 }
                 #endregion
 
@@ -261,7 +261,7 @@ class IntuneAndroidManagedStoreAppConfiguration : M365DSCResourceBase
                 }
                 else
                 {
-                    $appId = (Get-MgBetaDeviceAppManagementMobileApp -Filter "DisplayName eq '$($app -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')").id
+                    $appId = (Get-MgBetaDeviceAppManagementMobileApp -All -Filter "DisplayName eq '$($app -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')").id
                     if ($null -eq $appId)
                     {
                         throw "Could not find an Android Managed Store App in Intune with the display name {$app} that is being targeted by this policy. Please ensure the app exists."

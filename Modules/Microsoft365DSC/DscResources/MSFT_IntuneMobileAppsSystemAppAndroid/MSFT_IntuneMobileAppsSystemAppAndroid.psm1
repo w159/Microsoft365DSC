@@ -142,7 +142,7 @@ class IntuneMobileAppsSystemAppAndroid : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.androidManagedStoreApp')" `
                             -ErrorAction SilentlyContinue | Where-Object -FilterScript {
                                 $_.isSystemApp -eq $true

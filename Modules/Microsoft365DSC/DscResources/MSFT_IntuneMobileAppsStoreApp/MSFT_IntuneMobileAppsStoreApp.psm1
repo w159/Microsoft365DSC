@@ -180,7 +180,7 @@ class IntuneMobileAppsStoreApp : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and (isof('microsoft.graph.androidStoreApp') or isof('microsoft.graph.iosStoreApp'))" `
                             -ErrorAction SilentlyContinue
                     }

@@ -122,7 +122,7 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointUserSetting `
+                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointUserSetting -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ExpandProperty 'assignments' `
                             -ErrorAction SilentlyContinue
@@ -263,7 +263,7 @@ class IntuneUserSettingsPolicyWindows365 : M365DSCResourceBase
 
         if (-not [System.String]::IsNullOrEmpty($boundParameters.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.OnPremisesConnectionId))
         {
-            $onPremisesConnection = Get-MgBetaDeviceManagementVirtualEndpointOnPremiseConnection -Filter "DisplayName eq '$($boundParameters.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.OnPremisesConnectionId -replace "'", "''")'" -ErrorAction SilentlyContinue
+            $onPremisesConnection = Get-MgBetaDeviceManagementVirtualEndpointOnPremiseConnection -All -Filter "DisplayName eq '$($boundParameters.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.OnPremisesConnectionId -replace "'", "''")'" -ErrorAction SilentlyContinue
             if ($null -ne $onPremisesConnection)
             {
                 $boundParameters.CrossRegionDisasterRecoverySetting.DisasterRecoveryNetworkSetting.OnPremisesConnectionId = $onPremisesConnection.Id

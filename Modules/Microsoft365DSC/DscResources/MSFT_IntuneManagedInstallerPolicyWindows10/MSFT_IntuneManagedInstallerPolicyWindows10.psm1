@@ -251,7 +251,7 @@ class IntuneManagedInstallerPolicyWindows10 : M365DSCResourceBase
             {
                 Write-Warning -Message 'Received an error while creating Intune Managed Installer Policy for Windows10.'
                 Write-Verbose -Message 'Check if policy was created despite the error.'
-                $policy = Get-MgBetaDeviceManagementDeviceHealthScript -Filter "displayName eq '$($this.DisplayName)' and deviceHealthScriptType eq 'managedInstallerScript'" -ErrorAction SilentlyContinue
+                $policy = Get-MgBetaDeviceManagementDeviceHealthScript -All -Filter "displayName eq '$($this.DisplayName)' and deviceHealthScriptType eq 'managedInstallerScript'" -ErrorAction SilentlyContinue
 
                 if ($null -eq $policy)
                 {

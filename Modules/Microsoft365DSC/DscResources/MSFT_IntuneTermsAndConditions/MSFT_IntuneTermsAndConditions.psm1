@@ -117,7 +117,7 @@ class IntuneTermsAndConditions : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementTermAndCondition `
+                        $getValue = Get-MgBetaDeviceManagementTermAndCondition -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }

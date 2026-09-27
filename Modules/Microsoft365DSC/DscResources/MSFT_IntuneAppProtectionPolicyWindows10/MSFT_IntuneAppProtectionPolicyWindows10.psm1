@@ -196,7 +196,7 @@ class IntuneAppProtectionPolicyWindows10 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementWindowsManagedAppProtection `
+                        $getValue = Get-MgBetaDeviceAppManagementWindowsManagedAppProtection -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }

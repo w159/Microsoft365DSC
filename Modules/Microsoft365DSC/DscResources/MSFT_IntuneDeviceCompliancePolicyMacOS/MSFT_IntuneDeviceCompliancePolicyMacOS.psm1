@@ -404,7 +404,7 @@ class IntuneDeviceCompliancePolicyMacOS : M365DSCResourceBase
             {
                 foreach ($group in $scheduledAction.NotificationMessageCCList)
                 {
-                    $groupObject = Get-MgGroup -Filter "displayName eq '$group'" -ErrorAction SilentlyContinue
+                    $groupObject = Get-MgGroup -All -Filter "displayName eq '$group'" -ErrorAction SilentlyContinue
                     if ($null -eq $groupObject)
                     {
                         throw "The referenced Intune Group with DisplayName {$group} was not found for NotificationMessageCCList"

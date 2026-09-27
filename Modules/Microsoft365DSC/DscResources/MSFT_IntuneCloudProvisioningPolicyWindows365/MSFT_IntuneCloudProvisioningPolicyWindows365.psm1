@@ -163,7 +163,7 @@ class IntuneCloudProvisioningPolicyWindows365 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointProvisioningPolicy `
+                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointProvisioningPolicy -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ExpandProperty 'Assignments' `
                             -ErrorAction SilentlyContinue

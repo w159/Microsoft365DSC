@@ -120,7 +120,7 @@ class IntuneDeviceConfigurationCustomPolicyMacOS : M365DSCResourceBase
 
                 if ($null -eq $getValue -and -not [System.String]::IsNullOrEmpty($this.DisplayName))
                 {
-                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All `
                         -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.macOSCustomConfiguration')" `
                         -ErrorAction SilentlyContinue | Select-Object -First 1
                 }

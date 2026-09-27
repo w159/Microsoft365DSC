@@ -181,7 +181,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
                 if (-not [string]::IsNullOrEmpty($this.DisplayName))
                 {
                     # There is no API which searches MobileThreatDefenseConnector by its DisplayName so the below code is commented out.
-                    # $instance = Get-MgBetaDeviceManagementMobileThreatDefenseConnector `
+                    # $instance = Get-MgBetaDeviceManagementMobileThreatDefenseConnector -All `
                     #       -Filter "DisplayName eq '$($DisplayName -replace "'", "''")'" `
 
                     # The DisplayName property is not supported by the any API of this resource, hence hard-coded in below function for convenience.
@@ -309,7 +309,7 @@ class IntuneMobileThreatDefenseConnector : M365DSCResourceBase
 
         try
         {
-            [array] $getValue = Get-MgBetaDeviceManagementMobileThreatDefenseConnector -Filter $this.Filter -ErrorAction Stop
+            [array] $getValue = Get-MgBetaDeviceManagementMobileThreatDefenseConnector -All -Filter $this.Filter -ErrorAction Stop
 
             $i = 1
             $dscContent = [System.Text.StringBuilder]::new()

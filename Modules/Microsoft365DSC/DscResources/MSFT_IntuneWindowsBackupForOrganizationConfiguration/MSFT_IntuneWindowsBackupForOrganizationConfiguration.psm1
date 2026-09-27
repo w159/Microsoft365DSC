@@ -74,7 +74,7 @@ class IntuneWindowsBackupForOrganizationConfiguration : M365DSCResourceBase
             $nullResult = $this.GetBoundParameters()
             $nullResult.Ensure = 'Absent'
 
-            $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration `
+            $getValue = Get-MgBetaDeviceManagementDeviceEnrollmentConfiguration -All `
                 -Filter "deviceEnrollmentConfigurationType eq 'WindowsRestore'" `
                 -ErrorAction SilentlyContinue
             #endregion

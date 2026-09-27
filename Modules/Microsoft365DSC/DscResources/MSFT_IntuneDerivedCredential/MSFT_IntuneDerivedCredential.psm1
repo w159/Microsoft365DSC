@@ -206,7 +206,7 @@ class IntuneDerivedCredential : M365DSCResourceBase
 
         try
         {
-            [array] $getValue = Get-MgBetaDeviceManagementDerivedCredential -Filter $this.Filter -ErrorAction Stop
+            [array] $getValue = Get-MgBetaDeviceManagementDerivedCredential -All -Filter $this.Filter -ErrorAction Stop
 
             $i = 1
             $dscContent = [System.Text.StringBuilder]::new()

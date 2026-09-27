@@ -113,7 +113,7 @@ class IntuneDeviceComplianceNotificationMessageTemplate : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementNotificationMessageTemplate `
+                        $getValue = Get-MgBetaDeviceManagementNotificationMessageTemplate -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ExpandProperty 'localizedNotificationMessages' `
                             -ErrorAction SilentlyContinue
