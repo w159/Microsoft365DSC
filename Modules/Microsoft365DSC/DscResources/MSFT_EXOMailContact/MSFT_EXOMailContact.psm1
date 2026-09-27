@@ -314,7 +314,7 @@ class EXOMailContact : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentContact.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "The Mail Contact '$($this.Name)' does not exist but it should. Creating Mail Contact."
-            $createParameters = @{}
+            $createParameters = @{ Name = $this.Name }
             $updateParameters = @{}
             foreach ($param in $this.ResourceCache['NewParameters'])
             {
@@ -341,7 +341,7 @@ class EXOMailContact : M365DSCResourceBase
             $updateParameters = @{}
             foreach ($param in $this.ResourceCache['SetParameters'])
             {
-                if ($updateParameters.ContainsKey($param) -and $boundParameters.ContainsKey($param))
+                if (-not $updateParameters.ContainsKey($param) -and $boundParameters.ContainsKey($param))
                 {
                     $updateParameters.Add($param, $this.GetBoundParameters()[$param])
                 }

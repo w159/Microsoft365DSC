@@ -359,8 +359,8 @@ class EXOActiveSyncMailboxPolicy : M365DSCResourceBase
                 MaxEmailBodyTruncationSize               = [System.String]$instance.MaxEmailBodyTruncationSize
                 MaxEmailHTMLBodyTruncationSize           = [System.String]$instance.MaxEmailHTMLBodyTruncationSize
                 MaxInactivityTimeLock                    = [System.String]$instance.MaxInactivityTimeLock
-                MinPasswordComplexCharacters             = $instance.MinPasswordComplexCharacters
-                MinPasswordLength                        = $instance.MinPasswordLength
+                MinPasswordComplexCharacters             = [System.Int32]$instance.MinPasswordComplexCharacters
+                MinPasswordLength                        = [System.Int32]$instance.MinPasswordLength
                 PasswordRecoveryEnabled                  = [System.Boolean]$instance.PasswordRecoveryEnabled
                 RequireDeviceEncryption                  = [System.Boolean]$instance.RequireDeviceEncryption
                 RequireEncryptedSMIMEMessages            = [System.Boolean]$instance.RequireEncryptedSMIMEMessages

@@ -287,7 +287,7 @@ class IntuneWifiConfigurationPolicyWindows10 : M365DSCResourceBase
 
         $this.ValidateBoundParameters()
 
-        if ($this.WiFiSecurityType -eq 'wpaPersonal' -and [string]::IsNullOrEmpty($this.PreSharedKey))
+        if ($this.Ensure -ne 'Absent' -and $this.WiFiSecurityType -eq 'wpaPersonal' -and [string]::IsNullOrEmpty($this.PreSharedKey))
         {
             throw 'PreSharedKey is required but was not set.'
         }

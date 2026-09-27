@@ -17,6 +17,10 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
     [MSFT_DeviceManagementWin32CatalogMobileAppAssignment[]] $Assignments
 
     [DscProperty()]
+    [System.ComponentModel.Description('The list of categories for this app.')]
+    [MSFT_DeviceManagementMobileAppCategory[]] $Categories
+
+    [DscProperty()]
     [System.ComponentModel.Description('The description of the app.')]
     [System.String] $Description
 
@@ -205,22 +209,38 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 if ($null -eq $getValue -and -not [System.String]::IsNullOrEmpty($this.DisplayName))
                 {
                     $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        -All `
                         -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.win32CatalogApp')" `
                         -ErrorAction SilentlyContinue | Select-Object -First 1
                 }
+
+                if ($null -eq $getValue)
+                {
+                    Write-Verbose -Message "No Intune Mobile Apps Win32 Catalog App for Windows10 with Id {$($this.Id)} was found"
+                    return $this.AsResult($nullResult)
+                }
+
+                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $getValue.Id `
+                    -ExpandProperty 'categories'
             }
             else
             {
-                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $this.ExportedInstance.Id -ErrorAction SilentlyContinue
+                $getValue = Get-MgBetaDeviceAppManagementMobileApp -MobileAppId $this.ExportedInstance.Id `
+                    -ExpandProperty 'categories' `
+                    -ErrorAction SilentlyContinue
             }
 
-            if ($null -eq $getValue)
-            {
-                Write-Verbose -Message "No Intune Mobile Apps Win32 Catalog App for Windows10 with Id {$($this.Id)} was found"
-                return $this.AsResult($nullResult)
-            }
 
             Write-Verbose -Message "Found Intune Mobile Apps Win32 Catalog App for Windows10 with Id {$($this.Id)}"
+
+            $complexCategories = @()
+            foreach ($category in $getValue.Categories)
+            {
+                $myCategory = [ordered]@{}
+                $myCategory.Add('Id', $category.id)
+                $myCategory.Add('DisplayName', $category.displayName)
+                $complexCategories += $myCategory
+            }
 
             $complexInstallExperience = [ordered]@{}
             $complexInstallExperience.Add('DeviceRestartBehavior', $getValue.installExperience.deviceRestartBehavior)
@@ -301,6 +321,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
             $result = @{
                 AllowAvailableUninstall        = $getValue.allowAvailableUninstall
                 AllowedArchitectures           = $getValue.allowedArchitectures
+                Categories                     = $complexCategories
                 Description                    = $getValue.Description
                 Developer                      = $getValue.Developer
                 DisplayName                    = $getValue.DisplayName
@@ -398,6 +419,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 })
             $boundParameters.Remove('Id') | Out-Null
             $boundParameters.Remove('Assignments') | Out-Null
+            $boundParameters.Remove('Categories') | Out-Null
             $boundParameters.Add('@odata.type', '#microsoft.graph.win32CatalogApp')
 
             if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
@@ -406,6 +428,11 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
 
                 $createParameters = $boundParameters
                 $createdInstance = New-MgBetaDeviceAppManagementMobileApp -BodyParameter $createParameters
+
+                if ($this.GetBoundParameters().ContainsKey('Categories'))
+                {
+                    Update-DeviceAppManagementAppCategory -App $createdInstance -Categories $this.Categories
+                }
 
                 $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
                 if ($createdInstance.Id)
@@ -422,6 +449,11 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                 $updateParameters = $boundParameters
                 $updateParameters.Remove('MobileAppCatalogPackageId') | Out-Null
                 Update-MgBetaDeviceAppManagementMobileApp -MobileAppId $currentInstance.Id -BodyParameter $updateParameters | Out-Null
+
+                if ($this.GetBoundParameters().ContainsKey('Categories'))
+                {
+                    Update-DeviceAppManagementAppCategory -App $currentInstance -Categories $this.Categories -Compare
+                }
 
                 $assignmentsHash = ConvertTo-IntuneMobileAppAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
                 if ($currentInstance.Id)
@@ -557,6 +589,21 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                     }
                 }
 
+                if ($null -ne $Results.Categories)
+                {
+                    $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
+                        -ComplexObject $Results.Categories `
+                        -CIMInstanceName 'DeviceManagementMobileAppCategory'
+                    if (-not [System.String]::IsNullOrWhiteSpace($complexTypeStringResult))
+                    {
+                        $Results.Categories = $complexTypeStringResult
+                    }
+                    else
+                    {
+                        $Results.Remove('Categories') | Out-Null
+                    }
+                }
+
                 if ($null -ne $Results.InstallExperience)
                 {
                     $complexTypeStringResult = Get-M365DSCDRGComplexTypeToString `
@@ -636,7 +683,7 @@ class IntuneMobileAppsWin32CatalogAppWindows10 : M365DSCResourceBase
                     -ModulePath $this.GetModulePath() `
                     -Results $Results `
                     -Credential $this.Credential `
-                    -NoEscape @('Assignments', 'InstallExperience', 'LargeIcon', 'MsiInformation', 'ReturnCodes', 'Rules')
+                    -NoEscape @('Assignments', 'Categories', 'InstallExperience', 'LargeIcon', 'MsiInformation', 'ReturnCodes', 'Rules')
                 [void]$dscContent.Append($currentDSCBlock)
                 Save-M365DSCPartialExport -Content $currentDSCBlock `
                     -FileName $Global:PartialExportFileName
@@ -785,6 +832,17 @@ class MSFT_DeviceManagementWin32CatalogMobileAppAssignmentSettingsRestartSetting
     [DscProperty()]
     [System.ComponentModel.Description('The number of minutes to snooze the restart notification dialog when the snooze button is selected.')]
     [System.Nullable[System.Int32]] $restartNotificationSnoozeDurationInMinutes
+}
+
+class MSFT_DeviceManagementMobileAppCategory
+{
+    [DscProperty(Mandatory)]
+    [System.ComponentModel.Description('The name of the app category.')]
+    [System.String] $DisplayName
+
+    [DscProperty()]
+    [System.ComponentModel.Description('The unique identifier for an entity. Read-only.')]
+    [System.String] $Id
 }
 
 class MSFT_MicrosoftGraphWin32LobAppInstallExperience1

@@ -187,8 +187,9 @@ class O365Group : M365DSCResourceBase
 
     [void] Set()
     {
-        $existingO365Group = $null
         $ADGroup = $null
+        $groupCreated = $false
+        $newGroup = $null
         if ($this.RequiresPowerShellCore())
         {
             $null = $this.InvokeInPowerShellCore('Set')
@@ -229,27 +230,48 @@ class O365Group : M365DSCResourceBase
                 Write-Verbose -Message "Owner = $($groupParams.Owners)"
                 Write-Verbose -Message "Creating New Group with values: $(Convert-M365DscHashtableToString -Hashtable $groupParams)"
                 $groupParams.Add('GroupTypes', @('Unified'))
-                New-MgGroup -BodyParameter $groupParams | Out-Null
+                $newGroup = New-MgGroup -BodyParameter $groupParams
                 Write-Verbose -Message 'Group Created'
+                $groupCreated = $true
             }
 
-            [array]$ADGroup = Get-MgGroup -All | Where-Object -FilterScript { $_.MailNickName -eq $this.MailNickName }
+            [array]$ADGroup = @()
+            if ($groupCreated -and $null -ne $newGroup.Id)
+            {
+                $ADGroup = @($newGroup)
+            }
+            else
+            {
+                $ADGroup = $this.FindGroups()
+            }
+
             if ($null -eq $ADGroup)
             {
-                Write-Verbose -Message "Retrieving AzureADGroup by DisplayName {$($this.DisplayName)}"
-                [array]$ADGroup = Get-MgGroup -All | Where-Object -FilterScript { $_.DisplayName -eq $this.DisplayName }
-                if ($null -eq $ADGroup)
-                {
-                    Write-Verbose -Message "Office 365 Group {$($this.DisplayName)} was not found."
-                    return
-                }
-                elseif ($ADGroup.Length -gt 1)
-                {
-                    $Message = "Multiple O365 groups were found with DisplayName {$($this.DisplayName)}. Please specify the MailNickName parameter to uniquely identify the group."
-                    $this.LogError($_, $Message)
-                }
+                Write-Verbose -Message "Office 365 Group {$($this.DisplayName)} was not found."
+                return
             }
+            elseif ($ADGroup.Length -gt 1)
+            {
+                $Message = "Multiple O365 groups were found with DisplayName {$($this.DisplayName)}. Please specify the MailNickName parameter to uniquely identify the group."
+                $this.LogError($_, $Message)
+            }
+
             Write-Verbose -Message "Found Existing Instance of Group {$($ADGroup.DisplayName)}"
+
+            $groupUpdate = @{}
+            if ($currentGroup.Ensure -eq 'Present' -and $this.DisplayName -ne $ADGroup[0].DisplayName)
+            {
+                $groupUpdate.displayName = $this.DisplayName
+            }
+            if ($currentGroup.Ensure -eq 'Present' -and $null -ne $this.Description -and $this.Description -ne $ADGroup[0].Description)
+            {
+                $groupUpdate.description = $this.Description
+            }
+            if ($groupUpdate.Count -gt 0)
+            {
+                Write-Verbose -Message "Updating Group {$($ADGroup[0].DisplayName)} with $(Convert-M365DscHashtableToString -Hashtable $groupUpdate)"
+                Invoke-M365DSCGraphRequest -Method PATCH -Uri "/v1.0/groups/$($ADGroup[0].Id)" -Body $groupUpdate | Out-Null
+            }
 
             #region Theme
             if (-not [System.String]::IsNullOrEmpty($this.Theme) -and $this.Theme -ne $currentGroup.Theme)
@@ -261,7 +283,23 @@ class O365Group : M365DSCResourceBase
             #endregion
 
             #region Members
-            $membersList = Get-MgGroupMember -GroupId $ADGroup[0].Id
+            $membersList = $null
+            for ($attempt = 1; ; $attempt++)
+            {
+                try
+                {
+                    $membersList = Get-MgGroupMember -GroupId $ADGroup[0].Id -ErrorAction Stop
+                    break
+                }
+                catch
+                {
+                    if (-not $groupCreated -or $attempt -ge 6 -or -not (Test-M365DSCNotFoundError -ErrorRecord $_))
+                    {
+                        throw
+                    }
+                    Start-Sleep -Seconds 5
+                }
+            }
 
             $curMembers = @()
             foreach ($member in $membersList)
@@ -358,7 +396,7 @@ class O365Group : M365DSCResourceBase
                         Write-Verbose -Message "Adding Owner {$owner}"
                         $userId = (Get-MgUser -UserId $owner).Id
                         $newGroupOwner = @{
-                            '@odata.id' = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)v1.0/users/{$userId}"
+                            '@odata.id' = "$((Get-MSCloudLoginConnectionProfile -Workload MicrosoftGraph).ResourceUrl)v1.0/directoryObjects/$userId"
                         }
 
                         New-MgGroupOwnerByRef -GroupId $ADGroup[0].Id -BodyParameter $newGroupOwner
@@ -379,9 +417,14 @@ class O365Group : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Absent')
         {
-            if ($ADGroup.Length -eq 1)
+            [array]$ADGroup = $this.FindGroups()
+            if ($null -eq $ADGroup -or $ADGroup.Count -eq 0)
             {
-                Write-Verbose -Message "Removing O365Group $($existingO365Group.Name)"
+                Write-Verbose -Message "Office 365 Group {$($this.DisplayName)} was not found."
+            }
+            elseif ($ADGroup.Count -eq 1)
+            {
+                Write-Verbose -Message "Removing O365Group $($ADGroup[0].DisplayName)"
                 Remove-MgGroup -GroupId $ADGroup[0].Id | Out-Null
             }
             else
@@ -390,6 +433,17 @@ class O365Group : M365DSCResourceBase
                 Write-Verbose -Message 'No action taken. Please remove the group manually.'
             }
         }
+    }
+
+    hidden [System.Object[]] FindGroups()
+    {
+        [array]$groups = Get-MgGroup -All | Where-Object -Property MailNickName -EQ $this.MailNickName
+        if ($null -eq $groups)
+        {
+            Write-Verbose -Message "Retrieving AzureADGroup by DisplayName {$($this.DisplayName)}"
+            [array]$groups = Get-MgGroup -All | Where-Object -FilterScript { $_.DisplayName -eq $this.DisplayName }
+        }
+        return $groups
     }
 
     [bool] Test()

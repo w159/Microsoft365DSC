@@ -27,7 +27,6 @@ Configuration Example
         EXOAtpPolicyForO365 'EXOAtpPolicyForO365-Example'
         {
             IsSingleInstance        = "Yes"
-            Identity                = "Default"
             EnableATPForSPOTeamsODB = $true
             EnableSafeDocs          = $false
             AllowSafeDocsOpen       = $false

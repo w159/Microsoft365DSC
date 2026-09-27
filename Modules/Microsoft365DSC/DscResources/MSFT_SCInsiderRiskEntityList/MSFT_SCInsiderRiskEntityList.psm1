@@ -488,7 +488,7 @@ class SCInsiderRiskEntityList : M365DSCResourceBase
                     $value += "{`"Ext`":`"$fileType`"}"
                 }
                 Write-Verbose -Message "Creating new FileType Group {$($this.Name)} with values {$($value -join ',')}"
-                New-InsiderRiskEntityList -Type 'CustomFileTypeLists ' `
+                New-InsiderRiskEntityList -Type 'CustomFileTypeLists' `
                     -Name $this.Name `
                     -DisplayName $this.DisplayName `
                     -Description $this.Description `
@@ -674,7 +674,7 @@ class SCInsiderRiskEntityList : M365DSCResourceBase
                     -RemoveEntities $entitiesToRemove | Out-Null
             }
             # Update SIT Group
-            elseif ($this.ListType -eq 'CustomSensitiveInformationTypeLists' -or $this.Name -eq 'IrmCustomExSensitiveTypes ' -or `
+            elseif ($this.ListType -eq 'CustomSensitiveInformationTypeLists' -or $this.Name -eq 'IrmCustomExSensitiveTypes' -or `
                     $this.Name -eq 'IrmDsbldSysExSensitiveTypes')
             {
                 $entitiesToAdd = @()

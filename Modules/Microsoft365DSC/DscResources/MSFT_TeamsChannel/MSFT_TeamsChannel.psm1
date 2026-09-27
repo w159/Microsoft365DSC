@@ -199,12 +199,9 @@ class TeamsChannel : M365DSCResourceBase
             # Remap attribute from DisplayName to current display name for Set-TeamChannel cmdlet
             if ($channel.Ensure -eq 'Present')
             {
-                if ($CurrentParameters.ContainsKey('NewDisplayName'))
-                {
-                    Write-Verbose -Message "Updating team channel to new channel name $($this.NewDisplayName)"
-                    $CurrentParameters.Remove('DisplayName') | Out-Null
-                    Set-TeamChannel @CurrentParameters -CurrentDisplayName $this.DisplayName
-                }
+                Write-Verbose -Message "Updating team channel $($this.DisplayName)"
+                $CurrentParameters.Remove('DisplayName') | Out-Null
+                Set-TeamChannel @CurrentParameters -CurrentDisplayName $this.DisplayName
             }
             else
             {

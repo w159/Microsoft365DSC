@@ -196,6 +196,10 @@ class EXOPartnerApplication : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentPartnerApplicationConfig.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Partner Application '$($this.Name)' already exists, but needs updating."
+            if ($this.ApplicationIdentifier -eq $currentPartnerApplicationConfig.ApplicationIdentifier)
+            {
+                $SetPartnerApplicationParams.Remove('ApplicationIdentifier') | Out-Null
+            }
             Write-Verbose -Message "Setting Partner Application $($this.Name) with values: $(Convert-M365DscHashtableToString -Hashtable $SetPartnerApplicationParams)"
             Set-PartnerApplication @SetPartnerApplicationParams
         }

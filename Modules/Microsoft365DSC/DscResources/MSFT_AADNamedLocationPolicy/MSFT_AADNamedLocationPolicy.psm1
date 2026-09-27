@@ -259,6 +259,7 @@ class AADNamedLocationPolicy : M365DSCResourceBase
         {
             Write-Verbose -Message "Removing AAD Named Location {$($this.Displayname)} with id {$($currentAADNamedLocation.ID)}"
 
+            $attempts = 1
             if ($currentAADNamedLocation.IsTrusted)
             {
                 Update-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $currentAADNamedLocation.Id `
@@ -266,9 +267,25 @@ class AADNamedLocationPolicy : M365DSCResourceBase
                         '@odata.type' = $currentAADNamedLocation.OdataType
                         isTrusted     = $false
                     } | Out-Null
+                $attempts = 6
             }
 
-            Remove-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $currentAADNamedLocation.ID
+            for ($attempt = 1; $attempt -le $attempts; $attempt++)
+            {
+                try
+                {
+                    Remove-MgBetaIdentityConditionalAccessNamedLocation -NamedLocationId $currentAADNamedLocation.ID -ErrorAction Stop
+                    break
+                }
+                catch
+                {
+                    if ($attempt -eq $attempts -or $_.Exception.Message -notlike '*marked as a Trusted location*')
+                    {
+                        throw
+                    }
+                    Start-Sleep -Seconds 5
+                }
+            }
         }
     }
 

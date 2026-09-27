@@ -20,7 +20,58 @@
       "Teams Administrator"
     ]
   },
-  "permissions": {},
+  "permissions": {
+    "graph": {
+      "delegated": {
+        "read": [
+          {
+            "name": "ChannelSettings.Read.All"
+          },
+          {
+            "name": "GroupMember.Read.All"
+          }
+        ],
+        "update": [
+          {
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "Channel.Create"
+          },
+          {
+            "name": "ChannelSettings.ReadWrite.All"
+          },
+          {
+            "name": "Channel.Delete.All"
+          }
+        ]
+      },
+      "application": {
+        "read": [
+          {
+            "name": "ChannelSettings.Read.All"
+          },
+          {
+            "name": "GroupMember.Read.All"
+          }
+        ],
+        "update": [
+          {
+            "name": "GroupMember.Read.All"
+          },
+          {
+            "name": "Channel.Create"
+          },
+          {
+            "name": "ChannelSettings.ReadWrite.All"
+          },
+          {
+            "name": "Channel.Delete.All"
+          }
+        ]
+      }
+    }
+  },
   "requiredModules": [
     "MicrosoftTeams"
   ],

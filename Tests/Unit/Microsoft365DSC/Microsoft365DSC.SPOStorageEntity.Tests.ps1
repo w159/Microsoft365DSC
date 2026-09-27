@@ -180,6 +180,42 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
         }
 
+        Context -Name 'Adding a tenant storage entity is denied' -Fixture {
+            BeforeAll {
+                $testParams = @{
+                    Key         = 'DSCKey'
+                    Value       = 'Test storage entity'
+                    EntityScope = 'Tenant'
+                    Ensure      = 'Present'
+                    SiteUrl     = 'https://contoso-admin.sharepoint.com'
+                    Credential  = $Credential
+                }
+                Mock -CommandName New-M365DSCConnection -ModuleName '_Shared' -MockWith {
+                    return 'Credentials'
+                }
+
+                Mock -CommandName Get-PnPStorageEntity -MockWith {
+                    return $null
+                }
+
+                Mock -CommandName Get-PnPTenantAppCatalogUrl -MockWith {
+                    return 'https://contoso.sharepoint.com/sites/appcatalog'
+                }
+
+                Mock -CommandName Set-PnPStorageEntity -MockWith {
+                    throw 'Access is denied. (Exception from HRESULT: 0x80070005 (E_ACCESSDENIED))'
+                }
+            }
+
+            It 'Names the app catalog and its custom script setting, and restores the setting' {
+                { (New-M365DSCResourceInstance -ResourceName 'SPOStorageEntity' -Property $testParams).Set() } |
+                    Should -Throw -ExpectedMessage '*https://contoso.sharepoint.com/sites/appcatalog*DenyAddAndCustomizePages was {Enabled}*'
+                Should -Invoke -CommandName Set-PnPTenantSite -Exactly -Times 1 -ParameterFilter {
+                    $Identity -eq 'https://contoso.sharepoint.com/sites/appcatalog' -and $NoScriptSite -eq $true
+                }
+            }
+        }
+
         Context -Name 'Removing a storage entity' -Fixture {
             BeforeAll {
                 $testParams = @{

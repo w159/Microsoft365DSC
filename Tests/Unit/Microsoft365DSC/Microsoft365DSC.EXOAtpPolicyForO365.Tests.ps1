@@ -68,7 +68,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     IsSingleInstance        = 'Yes'
-                    Identity                = 'Default'
                     Credential              = $Credential
                     AllowSafeDocsOpen       = $false
                     EnableATPForSPOTeamsODB = $true
@@ -84,7 +83,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     IsSingleInstance        = 'Yes'
-                    Identity                = 'Default'
                     Credential              = $Credential
                     AllowSafeDocsOpen       = $true # Drift
                     EnableATPForSPOTeamsODB = $true
@@ -97,7 +95,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should call the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'EXOAtpPolicyForO365' -Property $testParams).Set()
-                Should -Invoke -CommandName Set-AtpPolicyForO365 -Exactly 1
+                Should -Invoke -CommandName Set-AtpPolicyForO365 -Exactly 1 -ParameterFilter { $Identity -eq 'Default' }
             }
         }
 
@@ -105,7 +103,6 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             BeforeAll {
                 $testParams = @{
                     IsSingleInstance        = 'Yes'
-                    Identity                = 'Invalid'
                     Credential              = $Credential
                     AllowSafeDocsOpen       = $false
                     EnableATPForSPOTeamsODB = $true
@@ -119,8 +116,9 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'EXOAtpPolicyForO365' -Property $testParams).Test() | Should -Be $false
             }
 
-            It 'Should throw an Error from the Set method' {
-                { (New-M365DSCResourceInstance -ResourceName 'EXOAtpPolicyForO365' -Property $testParams).Set() } | Should -Throw "EXOAtpPolicyForO365 configurations MUST specify Identity value of 'Default'"
+            It 'Should call the Set method with the Default policy' {
+                (New-M365DSCResourceInstance -ResourceName 'EXOAtpPolicyForO365' -Property $testParams).Set()
+                Should -Invoke -CommandName Set-AtpPolicyForO365 -Exactly 1 -ParameterFilter { $Identity -eq 'Default' }
             }
         }
 

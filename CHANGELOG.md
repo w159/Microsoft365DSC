@@ -176,6 +176,8 @@
     be resolved. The instance is now skipped.
 * EXOAntiPhishPolicy
   * Fixed an issue where the property description contained an invalid character.
+* EXOAtpPolicyForO365
+  * [BREAKING CHANGE] Removed `Identity` property.
 * EXOAvailabilityAddressSpace
   * [BREAKING CHANGE] Changed type for `Credentials` from String
     to PSCredential and removed it from the export output.
@@ -419,8 +421,6 @@
   * [BREAKING CHANGE] Removed resource. Please use the resource
     `IntuneDiskEncryptionFileVaultPolicyMacOS` instead.
 * IntuneMobileAppsAutoUpdateCatalogAppWindows10
-  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphMimeContent2` to
-    `MSFT_MicrosoftGraphMimeContent`.
   * Initial release.
 * IntuneMobileAppsBundleMacOS
   * [BREAKING CHANGE] Made `PackageFileType` mandatory, matching the other app resources
@@ -446,8 +446,6 @@
   * Added support for the `Relationships` property, which carries the dependency and
     supersedence relationships of the app.
 * IntuneMobileAppsWin32CatalogAppWindows10
-  * [BREAKING CHANGE] Renamed the embedded class `MSFT_MicrosoftGraphMimeContent2` to
-    `MSFT_MicrosoftGraphMimeContent`.
   * Initial release.
 * IntuneMobileAppsWindowsOfficeSuiteApp
   * Removed unused class reference `MSFT_DeviceManagementMimeContent`.
@@ -696,6 +694,8 @@
     FIXES [#5379](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/5379)
 * TeamsCallQueue
   * Added GUID resolution to `AuthorizedUsers` and `Users`.
+* TeamsChannel
+  * Added the missing Graph permissions to manage Teams channels.
 * TeamsChannelTab
   * [BREAKING CHANGE] Changed `SortOrderIndex` to a string to match the type Microsoft
     Graph declares. A numeric value in an existing configuration keeps working.
@@ -734,7 +734,9 @@
   * Added switch to `Get-M365DSCExportContentForResource` to allow skipping
     removal of special characters from resource instance names.
 * M365DSCGraphShim
-  * Added handling for PowerShell 7.5 with Mgx to improve Graph calls.
+  * Added handling for PowerShell 7.6 with Mgx to improve Graph calls.
+  * Improved handling of query parameters and paging for collection retrieval.
+  * Improved handling of omitting parameters from the request body.
 * M365DSCReport
   * Updated the `Markdown` configuration report layout and content generation.
 * M365DSCPermissions
@@ -760,11 +762,11 @@
   * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
     resource origin id to the display name of the object behind it.
 * DEPENDENCIES
-  * Added `M365DSC.Mgx` with version 2.1.1.
-  * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.8.
+  * Added `M365DSC.Mgx` with version 2.1.8.
+  * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.9.
   * Updated `DSCParser` to version 3.1.0.5.
   * Updated `Microsoft.Graph.*` to version 2.39.0.
-  * Updated `MSCloudLoginAssistant` to version 1.2.7.
+  * Updated `MSCloudLoginAssistant` to version 1.2.9.
   * Updated `PnP.PowerShell` to version 3.3.0.
     FIXES [#7414](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/7414)
   * Updated `PSParallelPipeline` to version 1.3.0.

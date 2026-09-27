@@ -607,17 +607,20 @@ class M365DSCResourceBase
         foreach ($key in $entries.Keys)
         {
             $item = $entries[$key]
+            if ($null -eq $item)
+            {
+                continue
+            }
 
             $meta = $null
             if ($metadata.TryGetValue($key, [ref] $meta))
             {
-                if ($meta.HasValidateSet -and
-                    ($null -eq $item -or ($item -is [System.String] -and $item -eq '')))
+                if ($meta.HasValidateSet -and $item -is [System.String] -and $item -eq '')
                 {
                     continue
                 }
 
-                if ($meta.IsComplex -and $null -ne $item)
+                if ($meta.IsComplex)
                 {
                     $item = [M365DSCResourceBase]::SanitizeComplexValue($item, $meta.Type)
                 }

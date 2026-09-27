@@ -132,12 +132,9 @@ class AADAgreement : M365DSCResourceBase
                 $instance = $this.ExportedInstance
             }
 
-            # Get the file data
-            $fileContent = $null
-            if ($null -ne $instance.File -and $null -ne $instance.File.Data)
-            {
-                $fileContent = $this.DecodeTextPayload($instance.File.Data)
-            }
+            $file = Invoke-M365DSCGraphRequest -Method GET `
+                -Uri "/beta/identityGovernance/termsOfUse/agreements/$($instance.Id)/file" `
+                -ErrorAction SilentlyContinue
 
             $complexTermsExpiration = $null
             if ($null -ne $instance.TermsExpiration)
@@ -159,9 +156,8 @@ class AADAgreement : M365DSCResourceBase
                 IsViewingBeforeAcceptanceRequired = $instance.IsViewingBeforeAcceptanceRequired
                 IsPerDeviceAcceptanceRequired     = $instance.IsPerDeviceAcceptanceRequired
                 UserReacceptRequiredFrequency     = $instance.UserReacceptRequiredFrequency
-                FileData                          = $fileContent
-                FileName                          = $instance.File.Name
-                Language                          = $instance.File.Language
+                FileName                          = $file.fileName
+                Language                          = $file.language
                 TermsExpiration                   = $complexTermsExpiration
                 Ensure                            = 'Present'
                 Credential                        = $this.Credential
@@ -282,6 +278,13 @@ class AADAgreement : M365DSCResourceBase
     [bool] Test()
     {
         return ([M365DSCResourceBase] $this).Test()
+    }
+
+    [System.Collections.Hashtable] GetCompareParameters()
+    {
+        return @{
+            ExcludedProperties = @('FileData')
+        }
     }
 
     [string] Export()
