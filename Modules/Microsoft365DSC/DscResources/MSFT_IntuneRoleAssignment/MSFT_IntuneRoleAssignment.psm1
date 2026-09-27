@@ -265,7 +265,7 @@ class IntuneRoleAssignment : M365DSCResourceBase
             foreach ($membersDisplayName in $this.MembersDisplayNames)
             {
                 $memberFilter = "displayName eq '$($membersDisplayName -replace "'", "''")'"
-                $memberId = Get-MgGroup -Filter $memberFilter -ErrorAction SilentlyContinue
+                $memberId = Get-MgGroup -All -Filter $memberFilter -ErrorAction SilentlyContinue
                 if ($null -ne $memberId)
                 {
                     if ($membersValue -notcontains $memberId.Id)
@@ -290,7 +290,7 @@ class IntuneRoleAssignment : M365DSCResourceBase
             foreach ($resourceScopesDisplayName in $this.ResourceScopesDisplayNames)
             {
                 $resourceScopeFilter = "DisplayName eq '$($resourceScopesDisplayName -replace "'", "''")'"
-                $resourceScopeId = Get-MgGroup -Filter $resourceScopeFilter -ErrorAction SilentlyContinue
+                $resourceScopeId = Get-MgGroup -All -Filter $resourceScopeFilter -ErrorAction SilentlyContinue
                 if ($null -ne $resourceScopeId)
                 {
                     if ($resourceScopesValue -notcontains $resourceScopeId.Id)

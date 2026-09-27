@@ -375,7 +375,7 @@ class IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy : M365DSCResourceB
             {
                 if (-not [System.String]::IsNullOrEmpty($this.AssignmentTarget))
                 {
-                    $groupId = Get-MgGroup -Filter "displayName eq '$($this.AssignmentTarget)'" -Property "id" -ErrorAction Stop
+                    $groupId = Get-MgGroup -All -Filter "displayName eq '$($this.AssignmentTarget)'" -Property "id" -ErrorAction Stop
                     Set-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget `
                         -DeviceManagementConfigurationPolicyId $policy.Id `
                         -BodyParameter @{
@@ -424,7 +424,7 @@ class IntuneWindowsAutopilotDevicePreparationUserDrivenPolicy : M365DSCResourceB
             {
                 if (-not [System.String]::IsNullOrEmpty($this.AssignmentTarget))
                 {
-                    $group = Get-MgGroup -Filter "displayName eq '$($this.AssignmentTarget)'" -Property "id" -ErrorAction Stop
+                    $group = Get-MgGroup -All -Filter "displayName eq '$($this.AssignmentTarget)'" -Property "id" -ErrorAction Stop
                     Set-MgBetaDeviceManagementConfigurationPolicyEnrollmentTimeDeviceMembershipTarget `
                         -DeviceManagementConfigurationPolicyId $currentInstance.Id `
                         -BodyParameter @{

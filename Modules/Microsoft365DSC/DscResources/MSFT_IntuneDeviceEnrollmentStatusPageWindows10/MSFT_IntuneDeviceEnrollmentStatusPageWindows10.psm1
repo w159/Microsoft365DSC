@@ -287,7 +287,7 @@ class IntuneDeviceEnrollmentStatusPageWindows10 : M365DSCResourceBase
             Write-Verbose -Message 'Converting SelectedMobileAppNames to SelectedMobileAppIds'
             if ($boundParameters.SelectedMobileAppNames.Count -ne 0)
             {
-                [Array]$mobileAppIds = $boundParameters.SelectedMobileAppNames | ForEach-Object { (Get-MgBetaDeviceAppManagementMobileApp -Filter "DisplayName eq '$($_ -replace "'", "''")'").Id }
+                [Array]$mobileAppIds = $boundParameters.SelectedMobileAppNames | ForEach-Object { (Get-MgBetaDeviceAppManagementMobileApp -All -Filter "DisplayName eq '$($_ -replace "'", "''")'").Id }
                 $boundParameters.SelectedMobileAppIds = $mobileAppIds
             }
             else

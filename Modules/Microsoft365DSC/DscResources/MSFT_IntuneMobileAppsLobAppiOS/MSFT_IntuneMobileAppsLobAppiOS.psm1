@@ -170,7 +170,7 @@ class IntuneMobileAppsLobAppiOS : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.iosLobApp')" `
                             -ErrorAction SilentlyContinue
                     }
@@ -378,6 +378,7 @@ class IntuneMobileAppsLobAppiOS : M365DSCResourceBase
             $updateParameters.Remove('Assignments') | Out-Null
 
             $updateParameters.Remove('Id') | Out-Null
+            $updateParameters.Remove('AppleDeviceAppDeliveryProtocolType') | Out-Null
 
             #region resource generator code
             $updateParameters.Add('@odata.type', '#microsoft.graph.iosLobApp')

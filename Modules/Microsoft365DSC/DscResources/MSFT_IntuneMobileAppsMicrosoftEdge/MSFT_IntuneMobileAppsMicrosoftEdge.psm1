@@ -161,7 +161,7 @@ class IntuneMobileAppsMicrosoftEdge : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceAppManagementMobileApp `
+                        $getValue = Get-MgBetaDeviceAppManagementMobileApp -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and (isof('microsoft.graph.windowsMicrosoftEdgeApp') or isof('microsoft.graph.macOSMicrosoftEdgeApp'))" `
                             -ErrorAction SilentlyContinue
                     }

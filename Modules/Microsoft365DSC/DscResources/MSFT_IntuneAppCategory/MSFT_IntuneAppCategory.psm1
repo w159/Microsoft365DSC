@@ -191,7 +191,7 @@ class IntuneAppCategory : M365DSCResourceBase
 
         try
         {
-            [array] $getValue = Get-MgBetaDeviceAppManagementMobileAppCategory -Filter $this.Filter -ErrorAction Stop
+            [array] $getValue = Get-MgBetaDeviceAppManagementMobileAppCategory -All -Filter $this.Filter -ErrorAction Stop
 
             $i = 1
             $dscContent = [System.Text.StringBuilder]::new()

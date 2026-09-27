@@ -111,7 +111,7 @@ class IntuneRoleDefinitionWindows365 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaRoleManagementCloudPcRoleDefinition `
+                        $getValue = Get-MgBetaRoleManagementCloudPcRoleDefinition -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }

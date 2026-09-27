@@ -135,7 +135,7 @@ class IntuneAzureNetworkConnectionWindows365 : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointOnPremiseConnection `
+                        $getValue = Get-MgBetaDeviceManagementVirtualEndpointOnPremiseConnection -All `
                             -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }

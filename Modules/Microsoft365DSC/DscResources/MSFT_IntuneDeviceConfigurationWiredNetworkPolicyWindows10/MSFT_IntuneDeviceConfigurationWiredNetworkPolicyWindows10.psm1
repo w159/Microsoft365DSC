@@ -827,7 +827,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyWindows10 : M365DSCResourceBase
         {
             Write-Verbose -Message "Could not find certificate with Id {$CertificateId}, searching by display name {$CertificateDisplayName}"
 
-            $Certificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+            $Certificate = Get-MgBetaDeviceManagementDeviceConfiguration -All `
                 -Filter "DisplayName eq '$($CertificateDisplayName -replace "'", "''")'" `
                 -ErrorAction SilentlyContinue | `
                     Where-Object -FilterScript {

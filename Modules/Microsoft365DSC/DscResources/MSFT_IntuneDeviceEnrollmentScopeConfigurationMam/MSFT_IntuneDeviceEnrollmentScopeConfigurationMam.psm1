@@ -183,7 +183,7 @@ class IntuneDeviceEnrollmentScopeConfigurationMam : M365DSCResourceBase
             Write-Verbose -Message "Updating the IncludedGroups of the Intune Device Enrollment Scope Configuration Mam"
             foreach ($diff in $diffs)
             {
-                $group = Get-MgGroup -Filter "displayName eq '$($diff.InputObject)'" -Property id
+                $group = Get-MgGroup -All -Filter "displayName eq '$($diff.InputObject)'" -Property id
                 if ($null -eq $group)
                 {
                     throw "Failed to find group '$($diff.InputObject)' in the tenant. Please make sure it exists."

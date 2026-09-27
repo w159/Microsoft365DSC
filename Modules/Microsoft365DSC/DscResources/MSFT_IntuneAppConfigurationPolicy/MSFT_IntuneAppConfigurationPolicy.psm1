@@ -114,7 +114,7 @@ class IntuneAppConfigurationPolicy : M365DSCResourceBase
                 $configPolicy = $null
                 if (-not [string]::IsNullOrEmpty($this.Id))
                 {
-                    $configPolicy = Get-MgBetaDeviceAppManagementTargetedManagedAppConfiguration -Filter "Id eq '$($this.Id)'" -ExpandProperty 'Apps' `
+                    $configPolicy = Get-MgBetaDeviceAppManagementTargetedManagedAppConfiguration -All -Filter "Id eq '$($this.Id)'" -ExpandProperty 'Apps' `
                         -ErrorAction SilentlyContinue
                 }
 

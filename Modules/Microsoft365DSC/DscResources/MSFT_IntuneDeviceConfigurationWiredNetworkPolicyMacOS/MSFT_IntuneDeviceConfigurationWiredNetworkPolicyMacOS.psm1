@@ -145,7 +145,7 @@ class IntuneDeviceConfigurationWiredNetworkPolicyMacOS : M365DSCResourceBase
 
                 if ($null -eq $getValue -and -not [System.String]::IsNullOrEmpty($this.DisplayName))
                 {
-                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration `
+                    $getValue = Get-MgBetaDeviceManagementDeviceConfiguration -All `
                         -Filter "DisplayName eq '$($this.DisplayName -replace "'", "''")' and isof('microsoft.graph.macOSWiredNetworkConfiguration')" `
                         -ErrorAction SilentlyContinue | Select-Object -First 1
                 }

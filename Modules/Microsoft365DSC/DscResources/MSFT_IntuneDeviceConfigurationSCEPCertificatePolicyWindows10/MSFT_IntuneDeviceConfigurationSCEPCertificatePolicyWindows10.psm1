@@ -384,7 +384,7 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
             {
                 Write-Verbose -Message "Could not find trusted root certificate with Id {$rootCertificateIdValue}, searching by display name {$($this.RootCertificateDisplayName)}"
 
-                $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+                $RootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration -All `
                     -Filter "DisplayName eq '$($this.RootCertificateDisplayName -replace "'", "''")' and isof('microsoft.graph.windows81TrustedRootCertificate')" `
                     -ErrorAction SilentlyContinue
 
@@ -453,7 +453,7 @@ class IntuneDeviceConfigurationSCEPCertificatePolicyWindows10 : M365DSCResourceB
             {
                 Write-Verbose -Message "Could not find trusted root certificate with Id {$rootCertificateIdValue}, searching by display name {$($this.RootCertificateDisplayName)}"
 
-                $rootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration `
+                $rootCertificate = Get-MgBetaDeviceManagementDeviceConfiguration -All `
                     -Filter "DisplayName eq '$($this.RootCertificateDisplayName -replace "'", "''")'" `
                     -ErrorAction SilentlyContinue | `
                         Where-Object -FilterScript {

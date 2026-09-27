@@ -196,7 +196,7 @@ class IntuneCustomizationBrandingProfile : M365DSCResourceBase
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Get-MgBetaDeviceManagementIntuneBrandingProfile `
+                        $getValue = Get-MgBetaDeviceManagementIntuneBrandingProfile -All `
                             -Filter "ProfileName eq '$($this.ProfileName -replace "'", "''")'" `
                             -ErrorAction SilentlyContinue
                     }
