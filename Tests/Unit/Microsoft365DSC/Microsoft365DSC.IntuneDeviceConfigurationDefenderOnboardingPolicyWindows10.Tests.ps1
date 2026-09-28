@@ -222,6 +222,31 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Should return true from the Test method' {
                 (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10' -Property $testParams).Test() | Should -Be $true
             }
+
+            It 'Should return only direct assignments from the Get method' {
+                Mock -CommandName Get-MgBetaDeviceManagementDeviceConfigurationAssignment -MockWith {
+                    return @(
+                        @{
+                            id     = 'FakeStringValue_12345'
+                            source = 'direct'
+                            target = @{
+                                '@odata.type' = '#microsoft.graph.allDevicesAssignmentTarget'
+                            }
+                        }
+                        @{
+                            id     = 'FakeStringValue_12345_67890'
+                            source = 'policySets'
+                            target = @{
+                                '@odata.type' = '#microsoft.graph.allDevicesAssignmentTarget'
+                            }
+                        }
+                    )
+                }
+
+                $result = (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10' -Property $testParams).Get().ToHashtable()
+                @($result.Assignments).Count | Should -Be 1
+                $result.Assignments[0].dataType | Should -Be '#microsoft.graph.allDevicesAssignmentTarget'
+            }
         }
 
         Context -Name "The IntuneDeviceConfigurationDefenderOnboardingPolicyWindows10 exists and values are NOT in the desired state" -Fixture {

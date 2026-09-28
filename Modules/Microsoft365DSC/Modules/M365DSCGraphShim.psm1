@@ -230,12 +230,29 @@ function Invoke-M365DSCGraphShimRequestV76
         $invokeParams['ErrorAction'] = 'SilentlyContinue'
     }
 
+    $pageSizeLimitPattern = "The limit of '(\d+)' for Top query has been exceeded"
     try
     {
-        return Invoke-MgxRequest @invokeParams
+        $response = Invoke-MgxRequest @invokeParams -ErrorVariable mgxErrors
+        if ($All -and $mgxErrors.Count -gt 0 -and "$($mgxErrors[0])" -match $pageSizeLimitPattern)
+        {
+            Write-Warning -Message "The limit for Top query has been exceeded. Retrying with PageSize set to $Matches[1]."
+            $invokeParams.Remove('NoPageSize') | Out-Null
+            $invokeParams['PageSize'] = [int]$Matches[1]
+            $response = Invoke-MgxRequest @invokeParams
+        }
+        return $response
     }
     catch
     {
+        if ($All -and $_.Exception.Message -match $pageSizeLimitPattern)
+        {
+            Write-Warning -Message "The limit for Top query has been exceeded. Retrying with PageSize set to $Matches[1]."
+            $invokeParams.Remove('NoPageSize') | Out-Null
+            $invokeParams['PageSize'] = [int]$Matches[1]
+            return Invoke-MgxRequest @invokeParams
+        }
+
         $statusCode = $null
         if ($_.Exception)
         {

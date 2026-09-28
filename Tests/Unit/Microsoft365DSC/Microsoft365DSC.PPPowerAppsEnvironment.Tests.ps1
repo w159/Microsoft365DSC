@@ -69,6 +69,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'PPPowerAppsEnvironment' -Property $testParams).Set()
                 Should -Invoke -CommandName Invoke-M365DSCPowerPlatformRESTWebRequest -Exactly 2
             }
+
+            It 'Should throw when a database is provisioned without a currency' {
+                $params = $testParams.Clone()
+                $params.ProvisionDatabase = $true
+                $params.LanguageName = '1033'
+
+                { (New-M365DSCResourceInstance -ResourceName 'PPPowerAppsEnvironment' -Property $params).Set() } |
+                    Should -Throw '*requires CurrencyName and LanguageName*'
+            }
         }
 
         Context -Name 'Environment already exists but IS ALREADY in the Desired State' -Fixture {
@@ -118,6 +127,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 Mock -CommandName Invoke-M365DSCPowerPlatformRESTWebRequest -MockWith {
                     return @{
                         value = @{
+                            name       = 'a1b2c3d4-0000-0000-0000-000000000001'
                             properties = @{
                                 displayName     = 'Test Environment'
                                 environmentType = 'production'
@@ -139,7 +149,12 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Should delete the environment in the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'PPPowerAppsEnvironment' -Property $testParams).Set()
-                Should -Invoke -CommandName Invoke-M365DSCPowerPlatformRESTWebRequest -Exactly 2
+                Should -Invoke -CommandName Invoke-M365DSCPowerPlatformRESTWebRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'POST' -and $Uri -like '*/environments/a1b2c3d4-0000-0000-0000-000000000001/validateDelete?*'
+                }
+                Should -Invoke -CommandName Invoke-M365DSCPowerPlatformRESTWebRequest -Exactly 1 -ParameterFilter {
+                    $Method -eq 'DELETE' -and $Uri -like '*/environments/a1b2c3d4-0000-0000-0000-000000000001?api-version=*'
+                }
             }
         }
 

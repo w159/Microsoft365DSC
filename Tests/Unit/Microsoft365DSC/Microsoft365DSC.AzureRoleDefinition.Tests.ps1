@@ -86,6 +86,21 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 (New-M365DSCResourceInstance -ResourceName 'AzureRoleDefinition' -Property $testParams).Set()
                 Should -Invoke -CommandName New-AzRoleDefinition -Exactly 1
             }
+
+            It 'Should create a role without a description through the REST API' {
+                Mock -CommandName Invoke-AzRestMethod -MockWith {
+                    return @{ StatusCode = 201 }
+                }
+                $params = $testParams.Clone()
+                $params.Description = ''
+
+                (New-M365DSCResourceInstance -ResourceName 'AzureRoleDefinition' -Property $params).Set()
+                Should -Invoke -CommandName New-AzRoleDefinition -Exactly 0
+                Should -Invoke -CommandName Invoke-AzRestMethod -Exactly 1 -ParameterFilter {
+                    $Method -eq 'PUT' -and $Path -like '/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/roleDefinitions/*' -and
+                    ($Payload | ConvertFrom-Json).properties.roleName -eq 'My Custom Role'
+                }
+            }
         }
 
         Context -Name "The AzureRoleDefinition exists but it SHOULD NOT" -Fixture {
