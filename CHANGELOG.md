@@ -174,6 +174,9 @@
     subscription it read.
   * Fixed the export failing or reusing the previous principal when a principal could not
     be resolved. The instance is now skipped.
+* EXOActiveSyncOrganizationSettings
+  * Initial release.
+    FIXES [#4425](https://github.com/Microsoft365DSC/Microsoft365DSC/issues/4425)
 * EXOAntiPhishPolicy
   * Fixed an issue where the property description contained an invalid character.
 * EXOAtpPolicyForO365

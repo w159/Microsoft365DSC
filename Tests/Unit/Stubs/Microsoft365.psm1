@@ -1,4 +1,4 @@
-﻿#region Azure
+#region Azure
 
 function Get-AzSentinelSetting
 {
@@ -225,6 +225,17 @@ function Enable-ATPProtectionPolicyRule
     param(
         [Parameter()]
         [System.String]
+        $Identity
+    )
+}
+
+function Get-ActiveSyncOrganizationSettings
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
         $Identity
     )
 }
@@ -718,6 +729,53 @@ function Remove-TenantAllowBlockListSpoofItems
         [Parameter()]
         [System.String[]]
         $Ids
+    )
+}
+
+function Set-ActiveSyncOrganizationSettings
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.Object]
+        $AdminMailRecipients,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowAccessForUnSupportedPlatform,
+
+        [Parameter()]
+        [System.Boolean]
+        $AllowRMSSupportForUnenlightenedApps,
+
+        [Parameter()]
+        [System.Object]
+        $DefaultAccessLevel,
+
+        [Parameter()]
+        [System.Boolean]
+        $EnableMobileMailboxPolicyWhenCAInplace,
+
+        [Parameter()]
+        [System.Object]
+        $Identity,
+
+        [Parameter()]
+        [System.String]
+        $OtaNotificationMailInsert,
+
+        [Parameter()]
+        [System.Object]
+        $TenantAdminPreference,
+
+        [Parameter()]
+        [System.String]
+        $UserMailInsert,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Confirm
     )
 }
 

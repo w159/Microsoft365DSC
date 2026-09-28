@@ -251,6 +251,7 @@
     'EXOAcceptedDomain',
     'EXOActiveSyncDeviceAccessRule',
     'EXOActiveSyncMailboxPolicy',
+    'EXOActiveSyncOrganizationSettings',
     'EXOAddressBookPolicy',
     'EXOAddressList',
     'EXOAntiPhishPolicy',
