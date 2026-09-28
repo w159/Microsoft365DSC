@@ -13,7 +13,11 @@
     "generatorVersion": "0.0"
   },
   "excludedProperties": [
-    "AllowAccessForUnSupportedPlatform"
+    {
+      "name": "AllowAccessForUnSupportedPlatform",
+      "reason": "NotConfigurable",
+      "note": "MS internal only"
+    }
   ],
   "description": "This resource configures a EXO Active Sync Organization Settings.",
   "roles": {
