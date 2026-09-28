@@ -104,18 +104,7 @@ class PPPowerAppsEnvironment : M365DSCResourceBase
                 $nullReturn = $this.GetBoundParameters()
                 $nullReturn.Ensure = 'Absent'
 
-                $uri = 'https://' + (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').BapEndpoint + `
-                    "/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?`$expand=permissions&api-version=2016-11-01"
-
-                $environments = (Invoke-M365DSCPowerPlatformRESTWebRequest -Uri $uri -Method 'GET').value
-                foreach ($environmentInfo in $environments)
-                {
-                    if ($environmentInfo.properties.displayName -eq $this.DisplayName)
-                    {
-                        $environment = $environmentInfo
-                        break
-                    }
-                }
+                $environment = $this.FindEnvironment()
             }
             else
             {
@@ -209,14 +198,15 @@ class PPPowerAppsEnvironment : M365DSCResourceBase
 
                 if ($this.ProvisionDatabase)
                 {
-                    if ($null -ne $this.CurrencyName -and
-                        $null -ne $this.LanguageName)
+                    if ([System.String]::IsNullOrEmpty($this.CurrencyName) -or [System.String]::IsNullOrEmpty($this.LanguageName))
                     {
-                        $newParameters.properties['linkedEnvironmentMetadata'] = @{
-                            baseLanguage = $this.LanguageName
-                            currency     = @{
-                                code = $this.CurrencyName
-                            }
+                        throw "Provisioning a Dataverse database for {$($this.DisplayName)} requires CurrencyName and LanguageName."
+                    }
+
+                    $newParameters.properties['linkedEnvironmentMetadata'] = @{
+                        baseLanguage = $this.LanguageName
+                        currency     = @{
+                            code = $this.CurrencyName
                         }
                     }
                     $newParameters.properties['databaseType'] = 'CommonDataService'
@@ -240,10 +230,12 @@ class PPPowerAppsEnvironment : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Absent' -and $CurrentValues.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Removing existing instance of PowerApps environment {$($this.DisplayName)}"
-            $uri = 'https://' + (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').BapEndpoint + `
-                "/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/$($this.DisplayName)/validateDelete?api-version=2018-01-01"
+            $environment = $this.FindEnvironment()
+            $environmentUri = 'https://' + (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').BapEndpoint + `
+                "/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/$($environment.name)"
 
-            Invoke-M365DSCPowerPlatformRESTWebRequest -Uri $uri -Method 'DELETE'
+            Invoke-M365DSCPowerPlatformRESTWebRequest -Uri "$environmentUri/validateDelete?api-version=2018-01-01" -Method 'POST'
+            Invoke-M365DSCPowerPlatformRESTWebRequest -Uri "$environmentUri`?api-version=2018-01-01" -Method 'DELETE'
         }
     }
 
@@ -348,6 +340,23 @@ class PPPowerAppsEnvironment : M365DSCResourceBase
         return @{
             ExcludedProperties = @('CurrencyName')
         }
+    }
+
+    hidden [System.Object] FindEnvironment()
+    {
+        $uri = 'https://' + (Get-MSCloudLoginConnectionProfile -Workload 'PowerPlatformREST').BapEndpoint + `
+            "/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?`$expand=permissions&api-version=2016-11-01"
+
+        $environments = (Invoke-M365DSCPowerPlatformRESTWebRequest -Uri $uri -Method 'GET').value
+        foreach ($environmentInfo in $environments)
+        {
+            if ($environmentInfo.properties.displayName -eq $this.DisplayName)
+            {
+                return $environmentInfo
+            }
+        }
+
+        return $null
     }
 
     hidden [PPPowerAppsEnvironment] AsResult([System.Object] $Values)

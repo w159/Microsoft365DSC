@@ -144,8 +144,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Queryable                   = $false
                     Retrievable                 = $false
                     AllowMultipleValues         = $false
-                    Refinable                   = 'Yes'
-                    Sortable                    = 'Yes'
+                    Refinable                   = 'No'
+                    Sortable                    = 'No'
                     Safe                        = $false
                     Aliases                     = @('Alias1')
                     TokenNormalization          = $true
@@ -179,6 +179,14 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
 
             It 'Creates the managed property in the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'SPOSearchManagedProperty' -Property $testParams).Set()
+                Should -Invoke -CommandName Set-PnPSearchConfiguration
+            }
+
+            It 'Throws when a new managed property is refinable or sortable' {
+                $params = $testParams.Clone()
+                $params.Refinable = 'Yes'
+                { (New-M365DSCResourceInstance -ResourceName 'SPOSearchManagedProperty' -Property $params).Set() } |
+                    Should -Throw '*only creates managed properties of type Text or YesNo*'
             }
         }
 
@@ -226,6 +234,16 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             It 'Update the managed property in the Set method' {
                 (New-M365DSCResourceInstance -ResourceName 'SPOSearchManagedProperty' -Property $testParams).Set()
             }
+
+            It 'Returns No for Refinable and Sortable when the schema has false' {
+                Mock -CommandName Get-PnPSearchConfiguration -MockWith {
+                    return ($existingValueXML -replace '<d3p1:Refinable>true', '<d3p1:Refinable>false' -replace '<d3p1:Sortable>true', '<d3p1:Sortable>false')
+                }
+
+                $result = (New-M365DSCResourceInstance -ResourceName 'SPOSearchManagedProperty' -Property $testParams).Get().ToHashtable()
+                $result.Refinable | Should -Be 'No'
+                $result.Sortable | Should -Be 'No'
+            }
         }
 
         Context -Name 'When Invalid values are used' -Fixture {
@@ -239,8 +257,8 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                     Queryable                   = $false
                     Retrievable                 = $false
                     AllowMultipleValues         = $false
-                    Refinable                   = 'Yes'
-                    Sortable                    = 'Yes'
+                    Refinable                   = 'No'
+                    Sortable                    = 'No'
                     Safe                        = $false
                     Aliases                     = @('Alias1')
                     TokenNormalization          = $true

@@ -229,6 +229,11 @@ function ConvertFrom-IntunePolicyAssignment
     $assignmentResult = @()
     foreach ($assignment in $Assignments)
     {
+        if (-not [System.String]::IsNullOrEmpty($assignment.source) -and $assignment.source -ne 'direct')
+        {
+            continue
+        }
+
         $groupDisplayName = $null
         $hashAssignment = [ordered]@{}
         if ($null -ne $assignment.Target.'@odata.type')

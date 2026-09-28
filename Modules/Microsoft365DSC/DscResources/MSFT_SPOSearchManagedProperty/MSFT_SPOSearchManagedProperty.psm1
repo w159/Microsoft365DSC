@@ -172,13 +172,13 @@ class SPOSearchManagedProperty : M365DSCResourceBase
                 $companyNameExtractionValue = $true
             }
             $fullTextIndexValue = $null
-            if ([string] $property.Value.FullTextIndex -ne 'System.Xml.XmlElement')
+            if ([System.String] $property.Value.FullTextIndex -ne 'System.Xml.XmlElement')
             {
-                $fullTextIndexValue = [string] $property.Value.FullTextIndex
+                $fullTextIndexValue = [System.String] $property.Value.FullTextIndex
             }
 
             # Get Mapped Crawled Properties
-            $currentManagedPID = [string] $property.Value.Pid
+            $currentManagedPID = [System.String] $property.Value.Pid
             $mappedProperties = $this.ResourceCache['RecentMPExtract'].SearchConfigurationSettings.SearchSchemaConfigurationSettings.Mappings.dictionary.KeyValueOfstringMappingInfoy6h3NzC8 `
             | Where-Object -FilterScript { $_.Value.ManagedPid -eq $currentManagedPID }
 
@@ -189,35 +189,35 @@ class SPOSearchManagedProperty : M365DSCResourceBase
             }
 
             $fixedRefinable = 'No'
-            if ([boolean] $property.Value.Refinable)
+            if ([System.Boolean]::Parse($property.Value.Refinable))
             {
                 $fixedRefinable = 'Yes'
             }
 
             $fixedSortable = 'No'
-            if ([boolean] $property.Value.Sortable)
+            if ([System.Boolean]::Parse($property.Value.Sortable))
             {
                 $fixedSortable = 'Yes'
             }
             Write-Verbose -Message 'Retrieved Property'
             return $this.AsResult(@{
-                Name                        = [string] $property.Value.Name
-                Type                        = [string] $property.Value.ManagedType
-                Description                 = [string] $property.Value.Description
-                Searchable                  = [boolean]::Parse($property.Value.Searchable)
+                Name                        = [System.String] $property.Value.Name
+                Type                        = [System.String] $property.Value.ManagedType
+                Description                 = [System.String] $property.Value.Description
+                Searchable                  = [System.Boolean]::Parse($property.Value.Searchable)
                 FullTextIndex               = $fullTextIndexValue
                 FullTextContext             = [UInt32] $property.Value.Context
-                Queryable                   = [boolean]::Parse($property.Value.Queryable)
-                Retrievable                 = [boolean]::Parse($property.Value.Retrievable)
-                AllowMultipleValues         = [boolean]::Parse($property.Value.HasMultipleValues)
+                Queryable                   = [System.Boolean]::Parse($property.Value.Queryable)
+                Retrievable                 = [System.Boolean]::Parse($property.Value.Retrievable)
+                AllowMultipleValues         = [System.Boolean]::Parse($property.Value.HasMultipleValues)
                 Refinable                   = $fixedRefinable
                 Sortable                    = $fixedSortable
-                Safe                        = [boolean]::Parse($property.Value.SafeForAnonymous)
+                Safe                        = [System.Boolean]::Parse($property.Value.SafeForAnonymous)
                 Aliases                     = $aliasesValue.Value.Name
-                TokenNormalization          = [boolean]::Parse($property.Value.TokenNormalization)
-                CompleteMatching            = [boolean]::Parse($property.Value.CompleteMatching)
-                LanguageNeutralTokenization = [boolean]::Parse($property.Value.LanguageNeutralWordBreaker)
-                FinerQueryTokenization      = [boolean]::Parse($property.Value.ExpandSegments)
+                TokenNormalization          = [System.Boolean]::Parse($property.Value.TokenNormalization)
+                CompleteMatching            = [System.Boolean]::Parse($property.Value.CompleteMatching)
+                LanguageNeutralTokenization = [System.Boolean]::Parse($property.Value.LanguageNeutralWordBreaker)
+                FinerQueryTokenization      = [System.Boolean]::Parse($property.Value.ExpandSegments)
                 MappedCrawledProperties     = $mappings
                 CompanyNameExtraction       = $companyNameExtractionValue
                 Ensure                      = 'Present'
@@ -252,6 +252,7 @@ class SPOSearchManagedProperty : M365DSCResourceBase
 
         $this.AddTelemetry('Set')
 
+        $null = $this.Connect('PnP')
         $null = $this.Connect('PnP', (Get-MSCloudLoginConnectionProfile -Workload PnP).AdminUrl)
 
         if ($this.Ensure -eq 'Absent')
@@ -279,6 +280,13 @@ class SPOSearchManagedProperty : M365DSCResourceBase
         }
         else
         {
+            if ($this.Type -notin @('Text', 'YesNo') -or `
+                (-not [System.String]::IsNullOrEmpty($this.Refinable) -and $this.Refinable -ne 'No') -or `
+                (-not [System.String]::IsNullOrEmpty($this.Sortable) -and $this.Sortable -ne 'No'))
+            {
+                throw "SharePoint Online only creates managed properties of type Text or YesNo that are neither refinable nor sortable. Use one of the built-in Refinable managed properties with an alias for {$($this.Name)} instead."
+            }
+
             $randomizer = [System.Random]::new()
             $currentPID = $randomizer.Next(1000, 9999)
         }
@@ -583,11 +591,11 @@ class SPOSearchManagedProperty : M365DSCResourceBase
         return ([M365DSCResourceBase] $this).Test()
     }
 
-    [string] Export()
+    [System.String] Export()
     {
         if ($this.RequiresPowerShellCore())
         {
-            return [string] $this.InvokeInPowerShellCore('Export')
+            return [System.String] $this.InvokeInPowerShellCore('Export')
         }
 
         try

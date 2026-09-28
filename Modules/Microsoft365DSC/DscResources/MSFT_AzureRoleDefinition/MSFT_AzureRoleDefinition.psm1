@@ -183,6 +183,14 @@ class AzureRoleDefinition : M365DSCResourceBase
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
             Write-Verbose -Message "Creating new Azure Role Definition {$($this.CustomRoleName)}"
+
+            # Create role definition through the REST API if description is empty
+            if ([System.String]::IsNullOrWhiteSpace($this.Description))
+            {
+                $this.PutRoleDefinition([System.Guid]::NewGuid().ToString())
+                return
+            }
+
             $roleObject = @{
                 Name             = $this.CustomRoleName
                 Description      = $this.Description
@@ -198,6 +206,13 @@ class AzureRoleDefinition : M365DSCResourceBase
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
             Write-Verbose -Message "Updating existing Azure Role Definition {$($this.CustomRoleName)}"
+
+            if ([System.String]::IsNullOrWhiteSpace($this.Description))
+            {
+                $this.PutRoleDefinition($currentInstance.Id)
+                return
+            }
+
             $roleObject = @{
                 Id               = $currentInstance.Id
                 Name             = $this.CustomRoleName
@@ -303,6 +318,33 @@ class AzureRoleDefinition : M365DSCResourceBase
     {
         return @{
             ExcludedProperties = @('SubscriptionId')
+        }
+    }
+
+    hidden [void] PutRoleDefinition([System.String] $RoleDefinitionId)
+    {
+        $body = @{
+            properties = @{
+                roleName         = $this.CustomRoleName
+                description      = ''
+                type             = 'CustomRole'
+                permissions      = @(
+                    @{
+                        actions        = @($this.Actions | Where-Object -FilterScript { $_ })
+                        notActions     = @($this.NotActions | Where-Object -FilterScript { $_ })
+                        dataActions    = @($this.DataActions | Where-Object -FilterScript { $_ })
+                        notDataActions = @($this.NotDataActions | Where-Object -FilterScript { $_ })
+                    }
+                )
+                assignableScopes = @($this.AssignableScopes)
+            }
+        } | ConvertTo-Json -Depth 6
+
+        $path = "$($this.AssignableScopes[0])/providers/Microsoft.Authorization/roleDefinitions/$($RoleDefinitionId)?api-version=2022-04-01"
+        $response = Invoke-AzRestMethod -Method PUT -Path $path -Payload $body
+        if ($response.StatusCode -ge 300)
+        {
+            throw "Saving the role definition {$($this.CustomRoleName)} failed with status $($response.StatusCode): $($response.Content)"
         }
     }
 
