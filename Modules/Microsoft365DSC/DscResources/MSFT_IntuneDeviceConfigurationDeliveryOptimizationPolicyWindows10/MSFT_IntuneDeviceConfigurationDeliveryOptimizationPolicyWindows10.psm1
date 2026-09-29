@@ -1,7 +1,7 @@
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
-class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
+class IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 : M365DSCResourceBase
 {
     [DscProperty()]
     [System.ComponentModel.Description('Policy description')]
@@ -20,28 +20,177 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
     [System.String] $Id
 
     [DscProperty()]
-    [System.ComponentModel.Description('Policy creation type (0: XML upload, 1: Built-in controls)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $ConfigureApplicationControlOptions
+    [System.ComponentModel.Description('DO Download Mode (0: HTTP only, no peering, 1: HTTP blended with peering behind the same NAT, 2: HTTP blended with peering across a private group, 3: HTTP blended with Internet peering, 99: HTTP only, no peering, no use of DO cloud service, 100: Bypass mode, deprecated in Windows 11)')]
+    [ValidateSet('0', '1', '2', '3', '99', '100')]
+    [System.Nullable[System.Int32]] $DODownloadMode
 
     [DscProperty()]
-    [System.ComponentModel.Description('XML upload - Depends on ConfigureApplicationControlOptions')]
-    [System.String] $ConfigureApplicationControlsXMLUpload
+    [System.ComponentModel.Description('DO Restrict Peer Selection By (0: None, 1: Subnet mask, 2: Local discovery (DNS-SD))')]
+    [ValidateSet('0', '1', '2')]
+    [System.Nullable[System.Int32]] $DORestrictPeerSelectionBy
 
     [DscProperty()]
-    [System.ComponentModel.Description('Audit mode - Depends on ConfigureApplicationControlOptions (0: Disabled, 1: Enabled)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $ConfigureApplicationControlsAuditMode
+    [System.ComponentModel.Description('DO Group Id Source (0: Not Set, 1: AD site, 2: Authenticated domain SID, 3: DHCP Option ID, 4: DNS Suffix, 5: Entra ID Tenant ID)')]
+    [ValidateSet('0', '1', '2', '3', '4', '5')]
+    [System.Nullable[System.Int32]] $DOGroupIdSource
 
     [DscProperty()]
-    [System.ComponentModel.Description('Trust apps from managed installer - Depends on ConfigureApplicationControlOptions (0: Disabled, 1: Enabled)')]
-    [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $ConfigureApplicationControlsTrustAppsFromManagedInstaller
+    [System.ComponentModel.Description('DO Group Id')]
+    [System.String] $DOGroupId
 
     [DscProperty()]
-    [System.ComponentModel.Description('Trust apps with good reputation - Depends on ConfigureApplicationControlOptions (0: Disabled, 1: Enabled)')]
+    [System.ComponentModel.Description('DO Max Foreground Download Bandwidth')]
+    [System.Nullable[System.Int32]] $DOMaxForegroundDownloadBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Max Background Download Bandwidth')]
+    [System.Nullable[System.Int32]] $DOMaxBackgroundDownloadBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Percentage Max Foreground Bandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $DOPercentageMaxForegroundBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Percentage Max Background Bandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $DOPercentageMaxBackgroundBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Set Business Hours to Limit Foreground Download Bandwidth (0: Disabled, 1: Enabled)')]
     [ValidateSet('0', '1')]
-    [System.Nullable[System.Int32]] $ConfigureApplicationControlsTrustAppsWithGoodReputation
+    [System.Nullable[System.Int32]] $SetHoursToLimitForegroundDownloadBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('To: (Device) - Depends on SetHoursToLimitForegroundDownloadBandwidth (0: 12 AM, 1: 1 AM, 2: 2 AM, 3: 3 AM, 4: 4 AM, 5: 5 AM, 6: 6 AM, 7: 7 AM, 8: 8 AM, 9: 9 AM, 10: 10 AM, 11: 11 AM, 12: 12 PM, 13: 1 PM, 14: 2 PM, 15: 3 PM, 16: 4 PM, 17: 5 PM, 18: 6 PM, 19: 7 PM, 20: 8 PM, 21: 9 PM, 22: 10 PM, 23: 11 PM)')]
+    [ValidateSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23')]
+    [System.String] $SetHoursToLimitForegroundDownloadBandwidthTo
+
+    [DscProperty()]
+    [System.ComponentModel.Description('From: (Device) - Depends on SetHoursToLimitForegroundDownloadBandwidth (0: 12 AM, 1: 1 AM, 2: 2 AM, 3: 3 AM, 4: 4 AM, 5: 5 AM, 6: 6 AM, 7: 7 AM, 8: 8 AM, 9: 9 AM, 10: 10 AM, 11: 11 AM, 12: 12 PM, 13: 1 PM, 14: 2 PM, 15: 3 PM, 16: 4 PM, 17: 5 PM, 18: 6 PM, 19: 7 PM, 20: 8 PM, 21: 9 PM, 22: 10 PM, 23: 11 PM)')]
+    [ValidateSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23')]
+    [System.String] $SetHoursToLimitForegroundDownloadBandwidthFrom
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Maximum Foreground Download Bandwidth (percentage) during Business Hours: - Depends on SetHoursToLimitForegroundDownloadBandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $SetHoursToLimitForegroundDownloadBandwidthIn
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Maximum Foreground Download Bandwidth (percentage) outside of Business Hours: - Depends on SetHoursToLimitForegroundDownloadBandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $SetHoursToLimitForegroundDownloadBandwidthOut
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Set Business Hours to Limit Background Download Bandwidth (0: Disabled, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $SetHoursToLimitBackgroundDownloadBandwidth
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Maximum Background Download Bandwidth (percentage) outside of Business Hours: - Depends on SetHoursToLimitBackgroundDownloadBandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $SetHoursToLimitBackgroundDownloadBandwidthOut
+
+    [DscProperty()]
+    [System.ComponentModel.Description('From: (Device) - Depends on SetHoursToLimitBackgroundDownloadBandwidth (0: 12 AM, 1: 1 AM, 2: 2 AM, 3: 3 AM, 4: 4 AM, 5: 5 AM, 6: 6 AM, 7: 7 AM, 8: 8 AM, 9: 9 AM, 10: 10 AM, 11: 11 AM, 12: 12 PM, 13: 1 PM, 14: 2 PM, 15: 3 PM, 16: 4 PM, 17: 5 PM, 18: 6 PM, 19: 7 PM, 20: 8 PM, 21: 9 PM, 22: 10 PM, 23: 11 PM)')]
+    [ValidateSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23')]
+    [System.String] $SetHoursToLimitBackgroundDownloadBandwidthFrom
+
+    [DscProperty()]
+    [System.ComponentModel.Description('Maximum Background Download Bandwidth (percentage) during Business Hours: - Depends on SetHoursToLimitBackgroundDownloadBandwidth')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $SetHoursToLimitBackgroundDownloadBandwidthIn
+
+    [DscProperty()]
+    [System.ComponentModel.Description('To: (Device) - Depends on SetHoursToLimitBackgroundDownloadBandwidth (0: 12 AM, 1: 1 AM, 2: 2 AM, 3: 3 AM, 4: 4 AM, 5: 5 AM, 6: 6 AM, 7: 7 AM, 8: 8 AM, 9: 9 AM, 10: 10 AM, 11: 11 AM, 12: 12 PM, 13: 1 PM, 14: 2 PM, 15: 3 PM, 16: 4 PM, 17: 5 PM, 18: 6 PM, 19: 7 PM, 20: 8 PM, 21: 9 PM, 22: 10 PM, 23: 11 PM)')]
+    [ValidateSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23')]
+    [System.String] $SetHoursToLimitBackgroundDownloadBandwidthTo
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Delay Foreground Download From Http')]
+    [System.Nullable[System.Int32]] $DODelayForegroundDownloadFromHttp
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Delay Background Download From Http')]
+    [System.Nullable[System.Int32]] $DODelayBackgroundDownloadFromHttp
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Min RAM Allowed To Peer')]
+    [ValidateRange(1, 100000)]
+    [System.Nullable[System.Int32]] $DOMinRAMAllowedToPeer
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Min Disk Size Allowed To Peer')]
+    [ValidateRange(1, 100000)]
+    [System.Nullable[System.Int32]] $DOMinDiskSizeAllowedToPeer
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Min File Size To Cache')]
+    [ValidateRange(1, 100000)]
+    [System.Nullable[System.Int32]] $DOMinFileSizeToCache
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Min Battery Percentage Allowed To Upload')]
+    [ValidateRange(0, 100)]
+    [System.Nullable[System.Int32]] $DOMinBatteryPercentageAllowedToUpload
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Modify Cache Drive')]
+    [System.String] $DOModifyCacheDrive
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Max Cache Age')]
+    [System.Nullable[System.Int32]] $DOMaxCacheAge
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Absolute Max Cache Size')]
+    [System.Nullable[System.Int32]] $DOAbsoluteMaxCacheSize
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Max Cache Size')]
+    [ValidateRange(1, 100)]
+    [System.Nullable[System.Int32]] $DOMaxCacheSize
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Allow VPN Peer Caching (0: Not allowed, 1: Allowed)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $DOAllowVPNPeerCaching
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Cache Host')]
+    [System.String[]] $DOCacheHost
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Cache Host Source')]
+    [ValidateRange(1, 2)]
+    [System.Nullable[System.Int32]] $DOCacheHostSource
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Disallow Cache Server Downloads On VPN (0: Not Set, 1: Enabled)')]
+    [ValidateSet('0', '1')]
+    [System.Nullable[System.Int32]] $DODisallowCacheServerDownloadsOnVPN
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Delay Cache Server Fallback Foreground')]
+    [ValidateRange(0, 2592000)]
+    [System.Nullable[System.Int32]] $DODelayCacheServerFallbackForeground
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Delay Cache Server Fallback Background')]
+    [ValidateRange(0, 2592000)]
+    [System.Nullable[System.Int32]] $DODelayCacheServerFallbackBackground
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Min Background Qos')]
+    [System.Nullable[System.Int32]] $DOMinBackgroundQos
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Monthly Upload Data Cap')]
+    [System.Nullable[System.Int32]] $DOMonthlyUploadDataCap
+
+    [DscProperty()]
+    [System.ComponentModel.Description('DO Vpn Keywords')]
+    [System.String[]] $DOVpnKeywords
 
     [DscProperty()]
     [System.ComponentModel.Description('Represents the assignment to the Intune policy.')]
@@ -91,21 +240,22 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
     # Export-only. Not part of the resource schema.
     [System.String] $Filter
 
-    [IntuneAppControlForBusinessPolicyWindows10V2] Get()
+    [IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10] Get()
     {
         if ($this.RequiresPowerShellCore())
         {
-            $remote = [IntuneAppControlForBusinessPolicyWindows10V2]::new()
+            $remote = [IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10]::new()
             $remote.FromHashtable($this.InvokeInPowerShellCore('Get'))
             return $remote
         }
 
-        Write-Verbose -Message "Getting configuration for the Intune App Control For Business Policy for Windows10 V2 with Id {$($this.Id)} and Name {$($this.DisplayName)}"
+        Write-Verbose -Message "Getting configuration for the Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($this.Id)} and Name {$($this.DisplayName)}"
 
         try
         {
             if (-not $this.ExportedInstance -or $this.ExportedInstance.Name -ne $this.DisplayName)
             {
+
                 $null = $this.Connect('MicrosoftGraph')
 
                 Confirm-M365DSCDependencies
@@ -120,31 +270,27 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 #region resource generator code
                 if (-not [System.String]::IsNullOrEmpty($this.Id))
                 {
-                    $getValue = Invoke-M365DSCCommand -ScriptBlock {
-                        Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $this.Id  -ErrorAction Stop `
-                            -ExpandProperty 'settings($expand=settingDefinitions)'
-                    } -SuppressNotFoundError
+                    $getValue = Get-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $this.Id -ErrorAction SilentlyContinue `
+                        -ExpandProperty 'settings($expand=settingDefinitions)'
                     $settings = $getValue.settings
                 }
 
                 if ($null -eq $getValue)
                 {
-                    Write-Verbose -Message "Could not find an Intune App Control For Business Policy for Windows10 V2 with Id {$($this.Id)}"
+                    Write-Verbose -Message "Could not find an Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($this.Id)}"
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
-                        $getValue = Invoke-M365DSCCommand -ScriptBlock {
-                            Get-MgBetaDeviceManagementConfigurationPolicy `
-                                -All `
-                                -Filter "Name eq '$($this.DisplayName -replace "'", "''")'" `
-                                -ErrorAction SilentlyContinue
-                        }
+                        $getValue = Get-MgBetaDeviceManagementConfigurationPolicy `
+                            -All `
+                            -Filter "Name eq '$($this.DisplayName)'" `
+                            -ErrorAction SilentlyContinue
                     }
                 }
                 #endregion
                 if ($null -eq $getValue)
                 {
-                    Write-Verbose -Message "Could not find an Intune App Control For Business Policy for Windows10 V2 with Name {$($this.DisplayName)}."
+                    Write-Verbose -Message "Could not find an Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Name {$($this.DisplayName)}."
                     return $this.AsResult($nullResult)
                 }
             }
@@ -154,7 +300,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 $settings = $getValue.settings
             }
             $resolvedId = $getValue.Id
-            Write-Verbose -Message "An Intune App Control For Business Policy for Windows10 V2 with Id {$($resolvedId)} and Name {$($this.DisplayName)} was found"
+            Write-Verbose -Message "An Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($resolvedId)} and Name {$($this.DisplayName)} was found"
 
             # Retrieve policy specific settings
             if ($null -eq $settings)
@@ -171,19 +317,19 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
 
             $results = @{
                 #region resource generator code
-                Description                       = $getValue.Description
-                DisplayName                       = $getValue.Name
-                RoleScopeTagIds                   = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
-                Id                                = $getValue.Id
-                Ensure                            = 'Present'
-                Credential                        = $this.Credential
-                ApplicationId                     = $this.ApplicationId
-                TenantId                          = $this.TenantId
-                ApplicationSecret                 = $this.ApplicationSecret
-                CertificateThumbprint             = $this.CertificateThumbprint
-                CertificatePath                   = $this.CertificatePath
-                CertificatePassword               = $this.CertificatePassword
-                ManagedIdentity                   = $this.ManagedIdentity
+                Description           = $getValue.Description
+                DisplayName           = $getValue.Name
+                RoleScopeTagIds       = Resolve-M365DSCIntuneRoleScopeTagNames -CurrentValues $getValue.RoleScopeTagIds -DesiredValues $this.RoleScopeTagIds
+                Id                    = $getValue.Id
+                Ensure                = 'Present'
+                Credential            = $this.Credential
+                ApplicationId         = $this.ApplicationId
+                TenantId              = $this.TenantId
+                ApplicationSecret     = $this.ApplicationSecret
+                CertificateThumbprint = $this.CertificateThumbprint
+                CertificatePath       = $this.CertificatePath
+                CertificatePassword   = $this.CertificatePassword
+                ManagedIdentity       = $this.ManagedIdentity
                 #endregion
             }
             $results += $policySettings
@@ -218,7 +364,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
             return
         }
 
-        Write-Verbose -Message "Setting configuration of the Intune App Control For Business Policy for Windows10 V2 with Id {$($this.Id)} and Name {$($this.DisplayName)}"
+        Write-Verbose -Message "Setting configuration of the Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($this.Id)} and Name {$($this.DisplayName)}"
 
         Confirm-M365DSCDependencies
 
@@ -233,14 +379,14 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
             $resolvedRoleScopeTagIds = Resolve-M365DSCIntuneRoleScopeTagIds -RoleScopeTagIds $this.RoleScopeTagIds
         }
 
-        $templateReferenceId = 'd3849ba8-bf95-467c-9640-aa2334eae9e3_1'
+        $templateReferenceId = '132f1027-0325-45e0-854a-6955cd3c68c0_1'
         $platforms = 'windows10'
         $technologies = 'mdm'
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            Write-Verbose -Message "Creating an Intune App Control For Business Policy for Windows10 V2 with Name {$($this.DisplayName)}"
-            $boundParameters.Remove("Assignments") | Out-Null
+            Write-Verbose -Message "Creating an Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Name {$($this.DisplayName)}"
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
                 -DSCParams ([System.Collections.Hashtable]$boundParameters) `
@@ -253,6 +399,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 platforms         = $platforms
                 technologies      = $technologies
                 settings          = $settings
+                roleScopeTagIds   = $resolvedRoleScopeTagIds
             }
 
             #region resource generator code
@@ -270,8 +417,8 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-Verbose -Message "Updating the Intune App Control For Business Policy for Windows10 V2 with Id {$($currentInstance.Id)}"
-            $boundParameters.Remove("Assignments") | Out-Null
+            Write-Verbose -Message "Updating the Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($currentInstance.Id)}"
+            $boundParameters.Remove('Assignments') | Out-Null
 
             $settings = Get-IntuneSettingCatalogPolicySetting `
                 -DSCParams ([System.Collections.Hashtable]$boundParameters) `
@@ -288,7 +435,6 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
                 -RoleScopeTagIds $resolvedRoleScopeTagIds
 
             #region resource generator code
-
             $assignmentsHash = ConvertTo-IntunePolicyAssignment -IncludeDeviceFilter:$true -Assignments $this.Assignments
             Update-DeviceConfigurationPolicyAssignment `
                 -DeviceConfigurationPolicyId $currentInstance.Id `
@@ -298,7 +444,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-Verbose -Message "Removing the Intune App Control For Business Policy for Windows10 V2 with Id {$($currentInstance.Id)}"
+            Write-Verbose -Message "Removing the Intune Device Configuration Delivery Optimization Policy for Windows10 Setting Catalog with Id {$($currentInstance.Id)}"
             #region resource generator code
             Remove-MgBetaDeviceManagementConfigurationPolicy -DeviceManagementConfigurationPolicyId $currentInstance.Id
             #endregion
@@ -326,7 +472,7 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
         try
         {
             #region resource generator code
-            $policyTemplateID = 'd3849ba8-bf95-467c-9640-aa2334eae9e3_1'
+            $policyTemplateID = '132f1027-0325-45e0-854a-6955cd3c68c0_1'
             $baseFilter = "templateReference/templateId eq '$policyTemplateID'"
             $mergedFilter = $baseFilter
             if (-not [System.String]::IsNullOrEmpty($this.Filter))
@@ -351,11 +497,11 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
             foreach ($config in $getValue)
             {
                 $displayedKey = $config.Id
-                if (-not [System.String]::IsNullOrEmpty($config.displayName))
+                if (-not [String]::IsNullOrEmpty($config.displayName))
                 {
                     $displayedKey = $config.displayName
                 }
-                elseif (-not [System.String]::IsNullOrEmpty($config.name))
+                elseif (-not [string]::IsNullOrEmpty($config.name))
                 {
                     $displayedKey = $config.name
                 }
@@ -416,14 +562,19 @@ class IntuneAppControlForBusinessPolicyWindows10V2 : M365DSCResourceBase
         }
     }
 
-    hidden [IntuneAppControlForBusinessPolicyWindows10V2] AsResult([System.Object] $Values)
+    [System.Collections.Hashtable] GetCompareParameters()
     {
-        if ($Values -is [IntuneAppControlForBusinessPolicyWindows10V2])
+        return $this.GetSettingsCatalogCompareParameters()
+    }
+
+    hidden [IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10] AsResult([System.Object] $Values)
+    {
+        if ($Values -is [IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10])
         {
             return $Values
         }
 
-        $result = [IntuneAppControlForBusinessPolicyWindows10V2]::new()
+        $result = [IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10]::new()
         $result.ClearNonSchemaProperties()
         if ($Values -is [System.Collections.Hashtable])
         {

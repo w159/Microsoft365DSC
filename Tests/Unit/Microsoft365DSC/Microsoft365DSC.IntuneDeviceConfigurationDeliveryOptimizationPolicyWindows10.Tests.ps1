@@ -15,7 +15,7 @@ Import-Module -Name (Join-Path -Path $M365DSCTestFolder `
         -Resolve)
 
 $Global:DscHelper = New-M365DscUnitTestHelper -StubModule $CmdletModule `
-    -DscResource "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2" -GenericStubModule $GenericStubPath
+    -DscResource "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10" -GenericStubModule $GenericStubPath
 Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
     InModuleScope -ModuleName $Global:DscHelper.ModuleName -ScriptBlock {
         Invoke-Command -ScriptBlock $Global:DscHelper.InitializeScript -NoNewScope
@@ -192,7 +192,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
         }
 
         # Test contexts
-        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 should exist but it DOES NOT" -Fixture {
+        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 should exist but it DOES NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = @(
@@ -219,18 +219,18 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
                 }
             }
             It 'Should return Values from the Get method' {
-                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
+                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Absent'
             }
             It 'Should return false from the Test method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Test() | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
             It 'Should Create the group from the Set method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Set()
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName New-MgBetaDeviceManagementConfigurationPolicy -Exactly 1
             }
         }
 
-        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 exists but it SHOULD NOT" -Fixture {
+        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 exists but it SHOULD NOT" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = @(
@@ -254,20 +254,20 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the Get method' {
-                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
 
             It 'Should return false from the Test method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Test() | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should Remove the group from the Set method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Set()
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName Remove-MgBetaDeviceManagementConfigurationPolicy -Exactly 1
             }
         }
 
-        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 Exists and Values are already in the desired state" -Fixture {
+        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 Exists and Values are already in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = @(
@@ -291,11 +291,11 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return true from the Test method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Test() | Should -Be $true
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Test() | Should -Be $true
             }
         }
 
-        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 exists and values are NOT in the desired state" -Fixture {
+        Context -Name "The IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 exists and values are NOT in the desired state" -Fixture {
             BeforeAll {
                 $testParams = @{
                     Assignments = @(
@@ -319,15 +319,15 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should return Values from the Get method' {
-                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
+                ((New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Get().ToHashtable()).Ensure | Should -Be 'Present'
             }
 
             It 'Should return false from the Test method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Test() | Should -Be $false
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Test() | Should -Be $false
             }
 
             It 'Should call the Set method' {
-                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -Property $testParams).Set()
+                (New-M365DSCResourceInstance -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -Property $testParams).Set()
                 Should -Invoke -CommandName Update-IntuneDeviceConfigurationPolicy -Exactly 1
             }
         }
@@ -342,7 +342,7 @@ Describe -Name $Global:DscHelper.DescribeHeader -Fixture {
             }
 
             It 'Should Reverse Engineer resource from the Export method' {
-                $result = Invoke-M365DSCResourceMethod -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2' -MethodName 'Export' -Parameters $testParams
+                $result = Invoke-M365DSCResourceMethod -ResourceName 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10' -MethodName 'Export' -Parameters $testParams
                 $result | Should -Not -BeNullOrEmpty
             }
         }

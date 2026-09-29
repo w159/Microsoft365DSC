@@ -1,5 +1,5 @@
 {
-  "resourceName": "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2",
+  "resourceName": "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10",
   "generatedFrom": {
     "workload": "Intune",
     "apiVersion": "beta",

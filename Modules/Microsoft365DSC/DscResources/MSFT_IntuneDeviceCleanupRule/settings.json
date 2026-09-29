@@ -1,5 +1,5 @@
 {
-  "resourceName": "IntuneDeviceCleanupRuleV2",
+  "resourceName": "IntuneDeviceCleanupRule",
   "generatedFrom": {
     "workload": "Intune",
     "apiVersion": "beta",
@@ -11,7 +11,7 @@
     "generatorVersion": "2.0.0"
   },
   "excludedProperties": [],
-  "description": "This resource configures an Intune Device Cleanup Rule V2.",
+  "description": "This resource configures an Intune Device Cleanup Rule.",
   "permissions": {
     "graph": {
       "application": {
