@@ -1,5 +1,5 @@
 {
-  "resourceName": "IntuneAppControlForBusinessPolicyWindows10V2",
+  "resourceName": "IntuneAppControlForBusinessPolicyWindows10",
   "generatedFrom": {
     "workload": "Intune",
     "apiVersion": "beta",
@@ -11,7 +11,7 @@
     "generatorVersion": "2.0.0"
   },
   "excludedProperties": [],
-  "description": "This resource configures an Intune App Control For Business Policy for Windows10 V2.",
+  "description": "This resource configures an Intune App Control For Business Policy for Windows10.",
   "permissions": {
     "graph": {
       "delegated": {

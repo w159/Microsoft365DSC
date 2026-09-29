@@ -1,7 +1,7 @@
 using module ..\_Base\M365DSCResourceBase.psm1
 
 [DscResource()]
-class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
+class IntuneDeviceCleanupRule : M365DSCResourceBase
 {
     [DscProperty()]
     [System.ComponentModel.Description('Indicates the description for the device clean up rule.')]
@@ -68,16 +68,16 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
     # Export-only. Not part of the resource schema.
     [System.String] $Filter
 
-    [IntuneDeviceCleanupRuleV2] Get()
+    [IntuneDeviceCleanupRule] Get()
     {
         if ($this.RequiresPowerShellCore())
         {
-            $remote = [IntuneDeviceCleanupRuleV2]::new()
+            $remote = [IntuneDeviceCleanupRule]::new()
             $remote.FromHashtable($this.InvokeInPowerShellCore('Get'))
             return $remote
         }
 
-        Write-Verbose -Message "Getting configuration for the Intune Device Cleanup Rule V2 with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
+        Write-Verbose -Message "Getting configuration for the Intune Device Cleanup Rule with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
 
         try
         {
@@ -103,7 +103,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
 
                 if ($null -eq $getValue)
                 {
-                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with Id {$($this.Id)}"
+                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule with Id {$($this.Id)}"
 
                     if (-not [System.String]::IsNullOrEmpty($this.DisplayName))
                     {
@@ -115,7 +115,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
                 #endregion
                 if ($null -eq $getValue)
                 {
-                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule V2 with DisplayName {$($this.DisplayName)}."
+                    Write-Verbose -Message "Could not find an Intune Device Cleanup Rule with DisplayName {$($this.DisplayName)}."
                     return $this.AsResult($nullResult)
                 }
             }
@@ -124,7 +124,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
                 $getValue = $this.ExportedInstance
             }
             $resolvedId = $getValue.Id
-            Write-Verbose -Message "An Intune Device Cleanup Rule V2 with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
+            Write-Verbose -Message "An Intune Device Cleanup Rule with Id {$($resolvedId)} and DisplayName {$($this.DisplayName)} was found"
 
             $results = @{
                 #region resource generator code
@@ -163,7 +163,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
             return
         }
 
-        Write-Verbose -Message "Setting configuration of the Intune Device Cleanup Rule V2 with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
+        Write-Verbose -Message "Setting configuration of the Intune Device Cleanup Rule with Id {$($this.Id)} and DisplayName {$($this.DisplayName)}"
 
         Confirm-M365DSCDependencies
 
@@ -175,7 +175,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
 
         if ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Absent')
         {
-            Write-Verbose -Message "Creating an Intune Device Cleanup Rule V2 with DisplayName {$($this.DisplayName)}"
+            Write-Verbose -Message "Creating an Intune Device Cleanup Rule with DisplayName {$($this.DisplayName)}"
 
             $createParameters = $boundParameters
             $createParameters.Remove('Id') | Out-Null
@@ -187,7 +187,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Present' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-Verbose -Message "Updating the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
+            Write-Verbose -Message "Updating the Intune Device Cleanup Rule with Id {$($currentInstance.Id)}"
 
             $updateParameters = $boundParameters
             $updateParameters.Remove('Id') | Out-Null
@@ -202,7 +202,7 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
         }
         elseif ($this.Ensure -eq 'Absent' -and $currentInstance.Ensure -eq 'Present')
         {
-            Write-Verbose -Message "Removing the Intune Device Cleanup Rule V2 with Id {$($currentInstance.Id)}"
+            Write-Verbose -Message "Removing the Intune Device Cleanup Rule with Id {$($currentInstance.Id)}"
             #region resource generator code
             Remove-MgBetaDeviceManagementManagedDeviceCleanupRule -ManagedDeviceCleanupRuleId $currentInstance.Id
             #endregion
@@ -298,14 +298,14 @@ class IntuneDeviceCleanupRuleV2 : M365DSCResourceBase
         }
     }
 
-    hidden [IntuneDeviceCleanupRuleV2] AsResult([System.Object] $Values)
+    hidden [IntuneDeviceCleanupRule] AsResult([System.Object] $Values)
     {
-        if ($Values -is [IntuneDeviceCleanupRuleV2])
+        if ($Values -is [IntuneDeviceCleanupRule])
         {
             return $Values
         }
 
-        $result = [IntuneDeviceCleanupRuleV2]::new()
+        $result = [IntuneDeviceCleanupRule]::new()
         $result.ClearNonSchemaProperties()
         if ($Values -is [System.Collections.Hashtable])
         {

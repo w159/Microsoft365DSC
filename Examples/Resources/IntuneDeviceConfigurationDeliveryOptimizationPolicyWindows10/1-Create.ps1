@@ -24,7 +24,7 @@ Configuration Example
 
     Node localhost
     {
-        IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2-Example'
+        IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10-Example'
         {
             Assignments                                    = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{
@@ -37,7 +37,7 @@ Configuration Example
                 }
             );
             Description                                    = "";
-            DisplayName                                    = "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2_1";
+            DisplayName                                    = "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10_1";
             DOAbsoluteMaxCacheSize                         = 4;
             DOAllowVPNPeerCaching                          = "1";
             DOCacheHost                                    = @("Cache Host");

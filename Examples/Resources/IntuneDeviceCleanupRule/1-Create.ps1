@@ -1,5 +1,5 @@
 <#
-This example updates a device cleanup rule.
+This example creates a device cleanup rule.
 #>
 
 Configuration Example
@@ -23,12 +23,12 @@ Configuration Example
 
     Node localhost
     {
-        IntuneDeviceCleanupRuleV2 'IntuneDeviceCleanupRuleV2-Example'
+        IntuneDeviceCleanupRule 'IntuneDeviceCleanupRule-Example'
         {
             DisplayName                            = "Rule 1";
             Description                            = "";
             DeviceCleanupRulePlatformType          = "all";
-            DeviceInactivityBeforeRetirementInDays = 25; # Updated Property
+            DeviceInactivityBeforeRetirementInDays = 30;
             Ensure                                 = 'Present';
             ApplicationId                          = $ApplicationId;
             TenantId                               = $TenantId;

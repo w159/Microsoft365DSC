@@ -1,6 +1,5 @@
 <#
-This example is used to test new resources and showcase the usage of new resources being worked on.
-It is not meant to use as a production baseline.
+This example removes a device cleanup rule.
 #>
 
 Configuration Example
@@ -24,10 +23,10 @@ Configuration Example
 
     Node localhost
     {
-        IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2 'IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2-Example'
+        IntuneDeviceCleanupRule 'IntuneDeviceCleanupRule-Example'
         {
-            DisplayName           = "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2_1";
-            Ensure                = "Absent";
+            DisplayName           = "Rule 1";
+            Ensure                = 'Absent';
             ApplicationId         = $ApplicationId;
             TenantId              = $TenantId;
             CertificateThumbprint = $CertificateThumbprint;

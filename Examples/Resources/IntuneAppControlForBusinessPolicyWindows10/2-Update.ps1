@@ -24,7 +24,7 @@ Configuration Example
 
     Node localhost
     {
-        IntuneAppControlForBusinessPolicyWindows10V2 'IntuneAppControlForBusinessPolicyWindows10V2-Example'
+        IntuneAppControlForBusinessPolicyWindows10 'IntuneAppControlForBusinessPolicyWindows10-Example'
         {
             Assignments                                               = @(
                 MSFT_DeviceManagementConfigurationPolicyAssignments{

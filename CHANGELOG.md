@@ -217,8 +217,7 @@
 * IntuneAppConfigurationDevicePolicy
   * Added support for the `CredentialProviderRoleState` property.
 * IntuneAppControlForBusinessPolicyWindows10
-  * [BREAKING CHANGE] Removed resource. Please use the resource
-    `IntuneAppControlForBusinessPolicyWindows10V2` instead.
+  * [BREAKING CHANGE] Replaced resource by a newer version.
 * IntuneAppleMDMPushNotificationCertificate
   * [BREAKING CHANGE] Renamed the property `DataSharingConsetGranted` to
     `DataSharingConsentGranted` to correct the spelling.
@@ -271,6 +270,8 @@
   * Added support for the `RoleScopeTags` property.
 * IntuneDeviceCategory
   * Added support for the `RoleScopeTagIds` property.
+* IntuneDeviceCleanupRule
+  * [BREAKING CHANGE] Renamed from `IntuneDeviceCleanupRuleV2`
 * IntuneDeviceCompliancePolicyAndroidDeviceOwner
   * Added values `customPassword` and `required` to property `PasswordRequiredType`.
 * IntuneDeviceCompliancePolicyAndroidWorkProfile
@@ -296,8 +297,7 @@
     `DeviceManagementApplicabilityRuleOsVersion` and
     `DeviceManagementApplicabilityRuleDeviceMode` properties.
 * IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10
-  * [BREAKING CHANGE] Removed resource. Please use the resource
-    `IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2` instead.
+  * [BREAKING CHANGE] Replaced resource with a newer version.
 * IntuneDeviceConfigurationDomainJoinPolicyWindows10
   * Added support for the `DeviceManagementApplicabilityRuleOsEdition`,
     `DeviceManagementApplicabilityRuleOsVersion` and

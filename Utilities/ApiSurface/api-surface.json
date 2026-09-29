@@ -162587,7 +162587,7 @@
       },
       "132f1027-0325-45e0-854a-6955cd3c68c0_1": {
         "resources": [
-          "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10V2"
+          "IntuneDeviceConfigurationDeliveryOptimizationPolicyWindows10"
         ],
         "settings": {
           "device_vendor_msft_policy_config_deliveryoptimization_doabsolutemaxcachesize": {
@@ -186878,7 +186878,7 @@
       },
       "d3849ba8-bf95-467c-9640-aa2334eae9e3_1": {
         "resources": [
-          "IntuneAppControlForBusinessPolicyWindows10V2"
+          "IntuneAppControlForBusinessPolicyWindows10"
         ],
         "settings": {
           "device_vendor_msft_policy_config_applicationcontrolv2_auditmode": {
