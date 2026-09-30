@@ -457,7 +457,7 @@ function Test-M365DSCParameterState
             {
                 $Value = "`$null"
             }
-            $EventMessage.Append("        <Param Name =`"$key`">$Value</Param>`r`n") | Out-Null
+            $EventMessage.Append("        <Param Name=`"$key`">$Value</Param>`r`n") | Out-Null
             $DriftObject.DesiredValues.Add($key, $value)
         }
         $EventMessage.Append("    </DesiredValues>`r`n") | Out-Null
@@ -469,7 +469,7 @@ function Test-M365DSCParameterState
             {
                 $Value = "`$null"
             }
-            $EventMessage.Append("        <Param Name =`"$key`">$Value</Param>`r`n") | Out-Null
+            $EventMessage.Append("        <Param Name=`"$key`">$Value</Param>`r`n") | Out-Null
             $DriftObject.CurrentValues.Add($key, $value)
         }
         $EventMessage.Append("    </CurrentValues>`r`n") | Out-Null
@@ -503,7 +503,7 @@ function Test-M365DSCParameterState
             {
                 $Value = "`$null"
             }
-            $EventMessage.Append("        <Param Name =`"$key`">$Value</Param>`r`n") | Out-Null
+            $EventMessage.Append("        <Param Name=`"$key`">$Value</Param>`r`n") | Out-Null
         }
         $EventMessage.Append("    </DesiredValues>`r`n") | Out-Null
         $EventMessage.Append('</M365DSCEvent>') | Out-Null
