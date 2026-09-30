@@ -764,6 +764,8 @@
 * M365DSCUtil
   * Added `Get-M365DSCAccessPackageResourceOriginDisplayName` to resolve an access package
     resource origin id to the display name of the object behind it.
+  * Fixed XML output of `Test-M365DSCParameterState` so attribute `Name` no longer has
+    a trailing space in elements `<DesiredValues>` and `<CurrentValues>`.
 * DEPENDENCIES
   * Added `M365DSC.Mgx` with version 2.1.8.
   * Added `M365DSC.PSDesiredStateConfiguration` with version 3.1.9.
